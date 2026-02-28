@@ -1212,6 +1212,22 @@ export default defineSchema({
     .index('by_referrerId', ['referrerId'])
     .index('by_code', ['code']),
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // PARTNER ACTION LEDGER — Idempotency tracker for Partner Engine clientRefs
+  // Each action the AI proposes carries a clientRef. We record it here so that
+  // retries / duplicate submissions never create duplicate records.
+  // ─────────────────────────────────────────────────────────────────────────────
+  partnerActionLedger: defineTable({
+    userId: v.id('users'),
+    clientRef: v.string(),       // unique per action, format: "date:TYPE:N"
+    actionType: v.string(),      // e.g. "task.upsert"
+    appliedAt: v.number(),       // ms timestamp
+    entityId: v.optional(v.string()),  // resulting Convex _id (string) if created/updated
+    resultData: v.optional(v.string()), // JSON summary for the change feed
+  })
+    .index('by_userId_clientRef', ['userId', 'clientRef'])
+    .index('by_userId_appliedAt', ['userId', 'appliedAt']),
+
   // ───────────────────────────────────────────────────────────────────────────
   // PSYCH PROFILES — Psychology Engine (OCEAN + CBT + SDT)
   // Stores AI-inferred coaching style per user. NEVER shown to user.
