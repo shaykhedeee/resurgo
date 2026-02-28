@@ -644,7 +644,7 @@ export function LandingPage({ onGetStarted, onLogin }: LandingPageProps) {
               </div>
               <div className="text-xs text-ascend-400 font-semibold mb-2">Step 1</div>
               <h3 className="text-2xl font-bold mb-3">Set Your Ultimate Goal</h3>
-              <p className="text-white/70 text-base leading-relaxed">Tell us what you want to achieve. Whether it's launching a business, getting fit, or learning a new skill.</p>
+              <p className="text-white/70 text-base leading-relaxed">Tell us what you want to achieve. Whether it&apos;s launching a business, getting fit, or learning a new skill.</p>
             </div>
             {/* Animated connector */}
             <div className="hidden md:flex items-center justify-center">

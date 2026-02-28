@@ -158,7 +158,7 @@ export default function FocusPage() {
   };
 
   const isActive      = state === 'working' || state === 'break' || state === 'paused';
-  const todayMinutes  = todaySessions?.reduce((sum, s) => sum + (s.actualDuration ?? s.duration), 0) ?? 0;
+  const todayMinutes  = todaySessions?.reduce((sum: number, s: any) => sum + (s.actualDuration ?? s.duration), 0) ?? 0;
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
@@ -349,7 +349,7 @@ export default function FocusPage() {
                 </div>
               ) : (
                 <div className="space-y-px p-1">
-                  {todaySessions.map((s) => (
+                  {todaySessions.map((s: any) => (
                     <div key={s._id} className="flex items-center justify-between px-3 py-2 hover:bg-zinc-900">
                       <span className="font-mono text-[10px] tracking-widest text-zinc-400">
                         {s.type.toUpperCase()}

@@ -13,9 +13,9 @@ import { ConvexReactClient } from 'convex/react';
 import { useAuth } from '@clerk/nextjs';
 import React, { Component, ReactNode } from 'react';
 
-// ── Convex client (safe to instantiate at module level) ──────────────────────
-const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
-const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+// ── Convex client — always created (fallback URL prevents build-time throw) ──
+const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL ?? 'http://localhost:3210';
+const convex = new ConvexReactClient(convexUrl);
 
 // ── Error boundary: catches Clerk/Convex init crashes during hydration ───────
 class ConvexErrorBoundary extends Component<
@@ -47,12 +47,6 @@ export default function ConvexClientProvider({
 }: {
   children: ReactNode;
 }) {
-  // If Convex URL is missing, render children without provider (graceful degradation)
-  if (!convex) {
-    console.warn('[ConvexClientProvider] NEXT_PUBLIC_CONVEX_URL not set — running without Convex.');
-    return <>{children}</>;
-  }
-
   return (
     <ConvexErrorBoundary>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>

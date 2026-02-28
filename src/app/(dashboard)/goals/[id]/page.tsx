@@ -210,7 +210,7 @@ export default function GoalDetailPage() {
             <p className="px-4 py-6 font-mono text-xs tracking-widest text-zinc-400">No tasks linked to this goal yet.</p>
           ) : (
             <div className="divide-y divide-zinc-900">
-              {tasks.map((task) => (
+              {tasks.map((task: any) => (
                 <div key={task._id} className="flex items-center gap-3 px-4 py-3 transition hover:bg-zinc-900">
                   <div className={`h-3 w-3 border ${task.status === 'done' ? 'border-green-600 bg-green-950/40' : 'border-zinc-700'}`} />
                   <p className={`flex-1 font-mono text-xs ${task.status === 'done' ? 'text-zinc-400 line-through' : 'text-zinc-400'}`}>

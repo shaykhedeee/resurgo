@@ -162,7 +162,7 @@ export default function AnalyticsPage() {
             </div>
           ) : (
             <div className="grid gap-px p-1 sm:grid-cols-2 lg:grid-cols-3">
-              {profile.achievements.map((a) => {
+              {profile.achievements.map((a: any) => {
                 const rarityClass = RARITY_STYLES[a.rarity ?? 'common'] ?? RARITY_STYLES.common;
                 return (
                   <div key={a.id} className="flex items-start gap-3 border border-transparent p-3 transition hover:border-zinc-800 hover:bg-zinc-900">

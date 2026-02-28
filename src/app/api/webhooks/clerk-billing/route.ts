@@ -10,7 +10,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../../../convex/_generated/api';
 import { mapClerkPlanToUserPlan } from '@/lib/billing/plans';
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL ?? 'http://localhost:3210');
 const WEBHOOK_MAX_AGE_SECONDS = Number(process.env.CLERK_WEBHOOK_MAX_AGE_SECONDS ?? '300');
 const WEBHOOK_MAX_RETRIES = 3;
 

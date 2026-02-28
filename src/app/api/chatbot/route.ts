@@ -31,7 +31,7 @@ const CHATBOT_SYNC_SECRET = process.env.BILLING_WEBHOOK_SYNC_SECRET;
 // In production (Vercel) set OLLAMA_BASE_URL to an empty string or omit it to
 // skip Ollama and fall straight through to the cloud cascade.
 const OLLAMA_BASE_URL = process.env.OLLAMA_BASE_URL ?? 'http://localhost:11434';
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL ?? 'http://localhost:3210');
 
 const MODELS = {
   // ─── Ollama local models (C:\Users\USER\.ollama\models) ──────────────────

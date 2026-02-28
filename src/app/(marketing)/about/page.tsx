@@ -34,8 +34,8 @@ export default function AboutPage() {
               a clear vision, and just need a fancy to-do list. But what about everyone else?
             </p>
             <p>
-              What about the person who wakes up at noon feeling behind on life? The entrepreneur who can't stop 
-              procrastinating? The professional drowning in vague "someday" goals?
+              What about the person who wakes up at noon feeling behind on life? The entrepreneur who can&apos;t stop 
+              procrastinating? The professional drowning in vague &quot;someday&quot; goals?
             </p>
             <p>
               Resurgo was built for that person. Because we were that person.
@@ -84,7 +84,7 @@ export default function AboutPage() {
             </p>
             <div className="border border-dashed border-zinc-800 p-4 text-center">
               <p className="text-zinc-400 italic text-xs">
-                "The best project you'll ever work on is you."
+                &quot;The best project you&apos;ll ever work on is you.&quot;
               </p>
             </div>
           </section>

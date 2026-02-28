@@ -93,7 +93,7 @@ export default function CalendarPage() {
   const handleExportIcs = () => {
     if (!allTasks || allTasks.length === 0) return;
 
-    const exportableTasks = allTasks.filter((t) => t.scheduledDate || t.dueDate).map((t) => ({
+    const exportableTasks = allTasks.filter((t: any) => t.scheduledDate || t.dueDate).map((t: any) => ({
       _id: String(t._id),
       title: t.title,
       description: t.description,

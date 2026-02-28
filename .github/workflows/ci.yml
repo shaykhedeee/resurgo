@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    env:
+      # Stub public env vars so the build doesn't throw on missing values.
+      # These are non-secret client-side keys used only during the build phase.
+      NEXT_PUBLIC_CONVEX_URL: https://stub-project.convex.cloud
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2xlcmsuZXhhbXBsZS5jb20k
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4

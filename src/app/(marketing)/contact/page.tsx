@@ -58,7 +58,7 @@ export default function ContactPage() {
             Response time: <span className="text-zinc-300">Monday–Friday, 09:00–18:00 UTC</span>
           </p>
           <p className="mt-1 font-mono text-xs text-zinc-400">
-            For urgent issues, include "[URGENT]" in your subject line.
+            For urgent issues, include &quot;[URGENT]&quot; in your subject line.
           </p>
         </div>
       </div>

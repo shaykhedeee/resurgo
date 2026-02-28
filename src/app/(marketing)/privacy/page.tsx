@@ -15,7 +15,7 @@ export default function PrivacyPage() {
           </div>
           <div className="p-6">
             <h1 className="font-mono text-2xl font-bold text-zinc-100">Privacy Policy</h1>
-            <p className="mt-1 font-mono text-xs text-zinc-400">Your data, your rules. Here's exactly what we collect.</p>
+            <p className="mt-1 font-mono text-xs text-zinc-400">Your data, your rules. Here&apos;s exactly what we collect.</p>
           </div>
         </div>
         <div className="space-y-5 font-mono text-sm text-zinc-400">

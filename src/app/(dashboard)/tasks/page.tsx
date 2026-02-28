@@ -101,10 +101,10 @@ export default function TasksPage() {
     }
   };
 
-  const todoCount = (allTasks ?? []).filter((task) => task.status === 'todo').length;
-  const inProgressCount = (allTasks ?? []).filter((task) => task.status === 'in_progress').length;
-  const doneCount = (allTasks ?? []).filter((task) => task.status === 'done').length;
-  const urgentCount = (allTasks ?? []).filter((task) => task.priority === 'urgent').length;
+  const todoCount = (allTasks ?? []).filter((task: any) => task.status === 'todo').length;
+  const inProgressCount = (allTasks ?? []).filter((task: any) => task.status === 'in_progress').length;
+  const doneCount = (allTasks ?? []).filter((task: any) => task.status === 'done').length;
+  const urgentCount = (allTasks ?? []).filter((task: any) => task.priority === 'urgent').length;
 
   return (
     <div className="min-h-screen bg-black p-4 md:p-6">
@@ -177,7 +177,7 @@ export default function TasksPage() {
                 </button>
               </div>
             ) : (
-              tasks.map((task) => (
+              tasks.map((task: any) => (
                 <TaskItem key={task._id} task={task} onToggle={handleToggle} onDelete={handleDelete} />
               ))
             )}
@@ -188,7 +188,7 @@ export default function TasksPage() {
         {viewMode === 'eisenhower' && (
           <div className="grid gap-px md:grid-cols-2">
             {QUADRANT_OPTIONS.map((quad) => {
-              const quadTasks = (allTasks ?? []).filter(t => t.eisenhowerQuadrant === quad);
+              const quadTasks = (allTasks ?? []).filter((t: any) => t.eisenhowerQuadrant === quad);
               return (
                 <div key={quad} className={`min-h-[200px] border p-4 ${QUADRANT_COLORS[quad]}`}>
                   <div className="mb-3 flex items-center gap-2">
@@ -196,7 +196,7 @@ export default function TasksPage() {
                     <span className="font-mono text-[10px] text-zinc-400">:: {QUADRANT_LABELS[quad].toUpperCase()}</span>
                   </div>
                   <div className="space-y-px">
-                    {quadTasks.map((task) => (
+                    {quadTasks.map((task: any) => (
                       <TaskItem key={task._id} task={task} onToggle={handleToggle} onDelete={handleDelete} compact />
                     ))}
                     {quadTasks.length === 0 && (

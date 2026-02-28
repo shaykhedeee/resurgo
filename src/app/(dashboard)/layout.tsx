@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Dashboard Layout (Protected)
 // Sidebar + top-bar shell for all authenticated routes

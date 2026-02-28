@@ -18,7 +18,7 @@ const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://resurgo.life';
 const GROQ_API_KEY = process.env.GROQ_API_KEY;
 
 // ─── Convex client (server-to-server, no auth needed for public functions) ────
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL ?? 'http://localhost:3210');
 
 // ─── Telegram Bot ─────────────────────────────────────────────────────────────
 // The Bot object is created on first request (lazy initialization)
@@ -237,10 +237,10 @@ botInstance.command('habits', async (ctx) => {
   }
 
   const lines = summary.habitsToday.map(
-    (h) => `${h.completedToday ? '✅' : '⬜'} ${h.title}`
+    (h: any) => `${h.completedToday ? '✅' : '⬜'} ${h.title}`
   );
 
-  const done = summary.habitsToday.filter((h) => h.completedToday).length;
+  const done = summary.habitsToday.filter((h: any) => h.completedToday).length;
   const total = summary.habitsToday.length;
 
   await ctx.reply(
@@ -276,7 +276,7 @@ botInstance.command('goals', async (ctx) => {
   }
 
   const lines = summary.activeGoals.map(
-    (g) => `🎯 <b>${g.title}</b>\n   ${progressBar(g.progress)}`
+    (g: any) => `🎯 <b>${g.title}</b>\n   ${progressBar(g.progress)}`
   );
 
   await ctx.reply(
@@ -304,15 +304,15 @@ botInstance.command('digest', async (ctx) => {
   const summary = await convex.query(api.telegram.getUserSummary, { userId: user._id });
 
   const taskLines = summary.topTasks.length > 0
-    ? summary.topTasks.map((t, i) => `${i + 1}. ${t.title}`).join('\n')
+    ? summary.topTasks.map((t: any, i: number) => `${i + 1}. ${t.title}`).join('\n')
     : 'No pending tasks 🎯';
 
   const habitLines = summary.habitsToday.length > 0
-    ? summary.habitsToday.map((h) => `${h.completedToday ? '✅' : '⬜'} ${h.title}`).join('\n')
+    ? summary.habitsToday.map((h: any) => `${h.completedToday ? '✅' : '⬜'} ${h.title}`).join('\n')
     : 'No habits yet';
 
   const goalLines = summary.activeGoals.length > 0
-    ? summary.activeGoals.map((g) => `• ${g.title} — ${g.progress}%`).join('\n')
+    ? summary.activeGoals.map((g: any) => `• ${g.title} — ${g.progress}%`).join('\n')
     : 'No active goals';
 
   await ctx.reply(
@@ -380,7 +380,7 @@ botInstance.command('coach', async (ctx) => {
   });
 
   // Build message history for AI (last 10)
-  const history = contextMessages.slice(-10).map((m) => ({
+  const history = contextMessages.slice(-10).map((m: any) => ({
     role: m.role,
     content: m.content,
   }));

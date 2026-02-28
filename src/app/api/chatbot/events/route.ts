@@ -3,7 +3,7 @@ import { auth } from '@clerk/nextjs/server';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../../../convex/_generated/api';
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL ?? 'http://localhost:3210');
 const CHATBOT_SYNC_SECRET = process.env.BILLING_WEBHOOK_SYNC_SECRET;
 
 const ALLOWED_EVENT_NAMES = [

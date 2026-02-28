@@ -80,7 +80,7 @@ export default function FeaturesPage() {
           <div className="p-8 text-center">
             <h1 className="font-mono text-3xl font-bold tracking-tight text-zinc-100">
               Every tool you need.<br />
-              <span className="text-orange-500">Nothing you don't.</span>
+              <span className="text-orange-500">Nothing you don&apos;t.</span>
             </h1>
             <p className="mt-3 font-mono text-sm text-zinc-500">
               Built for serious people building serious lives.
@@ -109,7 +109,7 @@ export default function FeaturesPage() {
 
         <div className="mt-10 border border-orange-900/50 bg-orange-950/10 p-8 text-center">
           <h2 className="font-mono text-xl font-bold text-zinc-100">Ready to rise?</h2>
-          <p className="mt-2 font-mono text-sm text-zinc-400">Start free. Upgrade when you're ready.</p>
+          <p className="mt-2 font-mono text-sm text-zinc-400">Start free. Upgrade when you&apos;re ready.</p>
           <a href="/sign-up"
             className="mt-4 inline-block border border-orange-900 bg-orange-950/30 px-8 py-3 font-mono text-xs font-bold tracking-widest text-orange-500 transition hover:bg-orange-950/50">
             [START_FOR_FREE]

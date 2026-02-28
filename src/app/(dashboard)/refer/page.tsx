@@ -57,7 +57,7 @@ export default function ReferralPage() {
               <span className="text-2xl">🔥</span>
             </div>
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">
-              Help Shape Your<br />Homeboy's Life Too
+              Help Shape Your<br />Homeboy&apos;s Life Too
             </h1>
             <p className="mt-3 font-mono text-sm text-zinc-400">
               You started your comeback. Now pull someone else up.
@@ -158,8 +158,8 @@ export default function ReferralPage() {
         {/* Hustle quote */}
         <div className="mt-4 border border-dashed border-zinc-800 bg-zinc-950 p-4 text-center">
           <p className="font-mono text-xs italic text-zinc-400">
-            "Know someone who needs to get their shit together?<br />
-            Send them this link. It might change their life."
+            &quot;Know someone who needs to get their shit together?<br />
+            Send them this link. It might change their life.&quot;
           </p>
           <p className="mt-2 font-mono text-[9px] tracking-widest text-zinc-400">— Resurgo</p>
         </div>

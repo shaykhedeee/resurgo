@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import '@/lib/env'; // Env validation — runs at startup (server-side)
@@ -13,13 +12,6 @@ import ClerkProviderWrapper from '@/components/ClerkProviderWrapper';
 
 // Base URL for the application (update for production)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
-// Optimized font loading via next/font (eliminates render-blocking Google Fonts link)
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
 
 export const metadata: Metadata = {
   // ═══════════════════════════════════════════════════════════════════════════
@@ -314,7 +306,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         {/* JSON-LD Structured Data */}
         <script
