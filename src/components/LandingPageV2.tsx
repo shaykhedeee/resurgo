@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { ScrollToTop } from '@/components/ScrollToTop';
 
 const SYSTEM_SPECS = [
   {
@@ -656,6 +657,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </div>
       </footer>
+      <ScrollToTop />
     </div>
   );
 }
