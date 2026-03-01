@@ -12,7 +12,8 @@ import { useEffect, useState } from 'react';
 import { api } from '../../convex/_generated/api';
 
 export function useStoreUser() {
-  const { isAuthenticated } = useConvexAuth();
+  // isLoading from useConvexAuth() is true while Clerk+Convex are handshaking
+  const { isAuthenticated, isLoading: convexAuthLoading } = useConvexAuth();
   const { user: _clerkUser } = useUser();
   const storeUser = useMutation(api.users.store);
   const convexUser = useQuery(
@@ -35,9 +36,15 @@ export function useStoreUser() {
       });
   }, [isAuthenticated, storeUser]);
 
+  // Key fix: only treat "undefined convexUser" as loading when we ARE authenticated.
+  // When not authenticated, query is skipped (returns undefined) — that is NOT a loading state.
+  // Without this, unauthenticated visitors see the loading screen forever and never get
+  // redirected to /sign-in.
+  const isLoading = convexAuthLoading || syncing || (isAuthenticated && convexUser === undefined);
+
   return {
     user: convexUser,
-    isLoading: syncing || convexUser === undefined,
+    isLoading,
     isAuthenticated,
   };
 }

@@ -200,7 +200,7 @@ const jsonLd = {
         },
         {
           '@type': 'Offer',
-          'price': '12',
+          'price': '4.99',
           'priceCurrency': 'USD',
           'name': 'Pro Plan',
           'priceValidUntil': '2026-12-31',
@@ -208,7 +208,7 @@ const jsonLd = {
         },
         {
           '@type': 'Offer',
-          'price': '199',
+          'price': '49.99',
           'priceCurrency': 'USD',
           'name': 'Lifetime Access',
           'description': 'One-time payment for lifetime access to all features',

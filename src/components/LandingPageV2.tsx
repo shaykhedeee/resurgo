@@ -115,27 +115,35 @@ const BOOT_STEPS = [
 
 const ACCESS_TIERS = [
   {
-    tier: 'FREE_TIER',
+    tier: 'FREE',
     price: '$0',
-    period: '/PERPETUAL',
-    specs: ['10 NODES MAX', '3 OBJECTIVES', 'CORE TELEMETRY', 'BASIC UPTIME TRACKING'],
-    cta: '[INITIALIZE_FREE]',
+    period: 'forever',
+    specs: ['5 Brain dumps/day', '3 Goals max', '10 AI messages/day', 'Core habit tracking'],
+    cta: 'Start Free',
     highlight: false,
   },
   {
-    tier: 'PRO_ACCESS',
-    price: '$12',
-    period: '/CYCLE',
-    specs: ['UNLIMITED NODES', 'FULL AI_COACHING', 'ADVANCED TELEMETRY', 'PRIORITY COMMS'],
-    cta: '[UPGRADE_TO_PRO]',
+    tier: 'PRO',
+    price: '$4.99',
+    period: '/month',
+    specs: ['Unlimited everything', 'Full AI coaching', 'Advanced analytics', 'Priority support'],
+    cta: 'Go Pro',
     highlight: true,
   },
   {
-    tier: 'LIFETIME_LICENSE',
-    price: '$199',
-    period: '/ONE_TIME',
-    specs: ['ALL PRO_SPECS', 'FUTURE UPDATES', 'FOUNDER_ACCESS', 'NO RECURRING CHARGE'],
-    cta: '[SECURE_LIFETIME]',
+    tier: 'PRO YEARLY',
+    price: '$29.99',
+    period: '/year',
+    specs: ['Same as Pro (~$2.50/mo)', 'Unlock all features', 'Save 50% vs monthly', 'Cancel anytime'],
+    cta: 'Best Value',
+    highlight: false,
+  },
+  {
+    tier: 'LIFETIME',
+    price: '$49.99',
+    period: 'one-time',
+    specs: ['All Pro features', 'All future updates', 'Founder access', 'Pay once, own forever'],
+    cta: 'Get Lifetime',
     highlight: false,
   },
 ];
@@ -192,28 +200,26 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
 
       {/* HEADER */}
       <header className="sticky top-0 z-50 border-b border-zinc-900 bg-black">
-        <div className="mx-auto flex h-12 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <span className="animate-flicker font-mono text-sm font-bold tracking-widest text-orange-600">
-              RESURGO
-            </span>
-            <span className="hidden font-mono text-[10px] tracking-widest text-zinc-400 sm:block">
-              VITALITY_TERMINAL v1.0
+            <img src="/icons/pixel-logo.svg" alt="RESURGO logo" className="h-8 w-8" style={{imageRendering:'pixelated'}} />
+            <span className="font-mono text-base font-bold tracking-widest text-orange-500">
+              RESURGO.life
             </span>
           </div>
 
           <nav className="hidden items-center gap-1 lg:flex">
             {[
-              ['#system', 'SYSTEM'],
-              ['#specs', 'SPECS'],
-              ['#access', 'ACCESS'],
-              ['#logs', 'LOGS'],
+              ['#system', 'System'],
+              ['#specs', 'Features'],
+              ['#access', 'Pricing'],
+              ['#logs', 'Reviews'],
               ['#faq', 'FAQ'],
             ].map(([href, label]) => (
               <a
                 key={label}
                 href={href}
-                className="px-3 py-1.5 font-mono text-[11px] tracking-widest text-zinc-400 transition-colors hover:text-orange-500"
+                className="px-3 py-2 font-mono text-sm text-zinc-400 transition-colors hover:text-orange-500"
               >
                 {label}
               </a>
@@ -231,15 +237,15 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
             )}
             <Link
               href="/sign-in"
-              className="font-mono text-[11px] tracking-widest text-zinc-400 transition hover:text-zinc-300"
+              className="font-mono text-sm text-zinc-400 transition hover:text-zinc-200"
             >
-              [LOGIN]
+              Sign In
             </Link>
             <Link
               href="/sign-up"
-              className="border border-orange-600 bg-orange-950/30 px-4 py-1.5 font-mono text-[11px] tracking-widest text-orange-500 transition hover:bg-orange-600 hover:text-black"
+              className="border border-orange-600 bg-orange-950/30 px-5 py-2 font-mono text-sm font-bold text-orange-500 transition hover:bg-orange-600 hover:text-black"
             >
-              [ACCESS_TERMINAL]
+              Get Started
             </Link>
           </div>
         </div>
@@ -294,23 +300,23 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/sign-up"
-                    className="inline-flex min-h-[48px] items-center justify-center border border-orange-600 bg-orange-950/40 px-8 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-600 hover:text-black"
+                    className="inline-flex min-h-[52px] items-center justify-center border border-orange-600 bg-orange-950/40 px-8 font-mono text-base font-bold text-orange-500 transition hover:bg-orange-600 hover:text-black"
                   >
-                    [ ACCESS_TERMINAL ]
+                    Start Free →
                   </Link>
                   <a
                     href="#specs"
-                    className="inline-flex min-h-[48px] items-center justify-center border border-zinc-800 px-8 font-mono text-sm tracking-widest text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-400"
+                    className="inline-flex min-h-[52px] items-center justify-center border border-zinc-800 px-8 font-mono text-sm text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-300"
                   >
-                    [ VIEW_SYSTEM_SPECS ]
+                    See Features
                   </a>
                 </div>
 
-                <div className="mt-10 grid grid-cols-2 gap-px border border-zinc-900 sm:grid-cols-4">
+                <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                   {METRICS.map((m) => (
-                    <div key={m.label} className="border-r border-zinc-900 bg-zinc-950 px-4 py-4 last:border-r-0">
-                      <p className="font-mono text-xl font-bold text-zinc-100">{m.value}</p>
-                      <p className="mt-1 font-mono text-[9px] tracking-widest text-zinc-400">{m.label}</p>
+                    <div key={m.label} className="border border-zinc-900 bg-zinc-950 px-4 py-4">
+                      <p className="font-mono text-2xl font-bold text-zinc-100">{m.value}</p>
+                      <p className="mt-1 font-mono text-xs text-zinc-500">{m.label.replace(/_/g, ' ')}</p>
                     </div>
                   ))}
                 </div>
@@ -416,32 +422,32 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
         <section id="access" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <h2 className="text-center font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
-              ACCESS_TIER_MATRIX
+              Pricing
             </h2>
-            <p className="mx-auto mt-2 max-w-xl text-center font-mono text-xs text-zinc-400">
-              SELECT YOUR CLEARANCE LEVEL
+            <p className="mx-auto mt-2 max-w-xl text-center font-mono text-sm text-zinc-400">
+              Start free. Upgrade when you&apos;re ready.
             </p>
 
-            <div className="mt-10 grid gap-px border border-zinc-900 md:grid-cols-3">
+            <div className="mt-10 grid gap-4 md:grid-cols-4">
               {ACCESS_TIERS.map((plan) => (
                 <article
                   key={plan.tier}
                   className={cn('p-6', plan.highlight ? 'border border-orange-900 bg-orange-950/20' : 'bg-zinc-950')}
                 >
                   {plan.highlight && (
-                    <p className="mb-3 font-mono text-[9px] tracking-widest text-orange-500">
-                      RECOMMENDED_TIER
+                    <p className="mb-3 font-mono text-xs tracking-widest text-orange-500">
+                      ★ MOST POPULAR
                     </p>
                   )}
-                  <p className="font-mono text-xs tracking-widest text-zinc-500">{plan.tier}</p>
+                  <p className="font-mono text-sm font-bold tracking-widest text-zinc-300">{plan.tier}</p>
                   <p className="mt-3 font-mono text-4xl font-bold text-zinc-100">
                     {plan.price}
-                    <span className="font-mono text-xs text-zinc-400"> {plan.period}</span>
+                    <span className="font-mono text-sm text-zinc-400"> {plan.period}</span>
                   </p>
-                  <ul className="mt-6 space-y-2">
+                  <ul className="mt-6 space-y-2.5">
                     {plan.specs.map((spec) => (
-                      <li key={spec} className="flex items-center gap-2 font-mono text-xs text-zinc-500">
-                        <span className="text-green-600">&gt;</span>
+                      <li key={spec} className="flex items-center gap-2 font-mono text-sm text-zinc-400">
+                        <span className="text-green-500 text-base">✓</span>
                         {spec}
                       </li>
                     ))}
@@ -449,10 +455,10 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                   <Link
                     href="/sign-up"
                     className={cn(
-                      'mt-6 inline-flex min-h-[44px] w-full items-center justify-center font-mono text-xs tracking-widest transition',
+                      'mt-6 inline-flex min-h-[48px] w-full items-center justify-center font-mono text-sm font-bold tracking-widest transition',
                       plan.highlight
                         ? 'border border-orange-600 bg-orange-600 text-black hover:bg-orange-500'
-                        : 'border border-zinc-800 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300',
+                        : 'border border-zinc-700 text-zinc-300 hover:border-orange-600 hover:text-orange-500',
                     )}
                   >
                     {plan.cta}
@@ -466,9 +472,9 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
         {/* OPERATOR LOGS */}
         <section id="logs" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
-            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">OPERATOR_LOGS</h2>
-            <p className="mt-1 font-mono text-[10px] tracking-widest text-zinc-400">
-              VERIFIED FIELD REPORTS FROM ACTIVE USERS
+            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">What users say</h2>
+            <p className="mt-1 font-mono text-sm text-zinc-400">
+              Real results from real people
             </p>
 
             <div className="mt-8 border border-zinc-900">

@@ -91,28 +91,28 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto min-h-screen w-full max-w-6xl p-4 md:p-6">
 
-      {/* -- COMMAND CENTER HEADER -- */}
+      {/* -- HEADER -- */}
       <div className="mb-6 border border-zinc-900 bg-zinc-950">
-        <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-          <span className="font-mono text-[9px] tracking-widest text-orange-600">COMMAND_CTR :: AUTHENTICATED</span>
-          <span className="ml-auto font-mono text-[9px] tracking-widest text-zinc-400">
-            {today.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase()}
+        <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2.5">
+          <span className="h-2 w-2 animate-pulse rounded-full bg-orange-600" />
+          <span className="font-mono text-xs tracking-widest text-orange-600">TODAY</span>
+          <span className="ml-auto font-mono text-xs tracking-widest text-zinc-400">
+            {today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </span>
         </div>
-        <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-4 px-5 py-5 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100 md:text-3xl">
-              OPERATOR: {(user.name?.split(' ')[0] ?? 'USER').toUpperCase()}
+            <h1 className="font-mono text-3xl font-bold tracking-tight text-zinc-100 md:text-4xl">
+              Hey, {user.name?.split(' ')[0] ?? 'there'} 👋
             </h1>
-            <p className="mt-1 font-mono text-xs tracking-widest text-zinc-400">
-              CYCLE_ACTIVE :: {totalHabits} NODES TRACKED :: INTEGRITY_SCAN_COMPLETE
+            <p className="mt-1.5 font-mono text-sm text-zinc-400">
+              {totalHabits > 0 ? `You have ${totalHabits} habits tracked today.` : "Let's set up your first habit."}
             </p>
           </div>
-          <div className="flex flex-wrap gap-px">
-            {[['OBJECTIVES', '/goals'], ['NODES', '/habits'], ['TASK_QUEUE', '/tasks']].map(([label, href]) => (
-              <Link key={label} href={href} className="border border-zinc-900 bg-black px-3 py-2 font-mono text-[10px] tracking-widest text-zinc-400 transition hover:border-zinc-700 hover:text-zinc-300">
-                [{label}]
+          <div className="flex flex-wrap gap-2">
+            {[['Goals', '/goals'], ['Habits', '/habits'], ['Tasks', '/tasks']].map(([label, href]) => (
+              <Link key={label} href={href} className="border border-zinc-800 bg-zinc-900 px-4 py-2 font-mono text-xs text-zinc-300 transition hover:border-orange-700 hover:text-orange-400">
+                {label}
               </Link>
             ))}
           </div>
@@ -121,21 +121,21 @@ export default function DashboardPage() {
         {!user.onboardingComplete && (
           <div className="mx-5 mb-4 flex items-center gap-2 border border-orange-900 bg-orange-950/30 px-3 py-2">
             <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-            <span className="font-mono text-xs text-orange-500">
-              SETUP_INCOMPLETE &mdash;{' '}
-              <a href="/onboarding" className="underline hover:text-orange-400">RUN_ONBOARDING_SEQUENCE</a>
-            </span>
+            <span className="font-mono text-sm text-orange-400">
+            Setup incomplete —{' '}
+            <a href="/onboarding" className="underline hover:text-orange-300">Complete onboarding</a>
+          </span>
           </div>
         )}
       </div>
 
-      {/* -- STAT PANELS -- */}
-      <div className="mb-6 grid grid-cols-2 gap-px border border-zinc-900 md:grid-cols-5">
-        <TermStatCard label="ACTIVE_NODES" value={totalHabits} />
-        <TermStatCard label="OBJECTIVES" value={activeGoals.length} />
-        <TermStatCard label="TASK_QUEUE" value={openTasks.length} />
-        <TermStatCard label="INTEGRITY" value={`${avgGoalProgress}%`} />
-        <TermStatCard label="ACCESS_TIER" value={user.plan === 'free' ? 'FREE' : 'PRO'} highlight />
+      {/* -- STATS -- */}
+      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5">
+        <TermStatCard label="Habits" value={totalHabits} />
+        <TermStatCard label="Goals" value={activeGoals.length} />
+        <TermStatCard label="Tasks" value={openTasks.length} />
+        <TermStatCard label="Progress" value={`${avgGoalProgress}%`} />
+        <TermStatCard label="Plan" value={user.plan === 'free' ? 'FREE' : user.plan === 'lifetime' ? 'LIFETIME' : 'PRO'} highlight />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -144,7 +144,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">NODES :: TODAY</span>
+              <span className="font-mono text-sm font-bold text-zinc-200">Habits — Today</span>
             </div>
             <Link href="/habits" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -152,7 +152,7 @@ export default function DashboardPage() {
           </div>
 
           {!activeHabits.length ? (
-            <TermEmptyState label="NODE_OFFLINE" sub="No nodes tracked. Initialize first node to begin." href="/habits" action="INIT_NODE" />
+            <TermEmptyState label="No habits yet" sub="Start tracking a habit to build your streak." href="/habits" action="Add your first habit" />
           ) : (
             <div className="space-y-px p-1">
               {activeHabits.slice(0, 5).map((habit) => (
@@ -164,13 +164,13 @@ export default function DashboardPage() {
                 >
                   <Circle className="h-4 w-4 shrink-0 text-zinc-400" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-mono text-xs text-zinc-300">{habit.title.toUpperCase()}</p>
-                    <p className="font-mono text-[10px] text-zinc-400">
-                      {habit.category.toUpperCase()} :: UPTIME_{habit.streakCurrent}D
+                    <p className="truncate font-mono text-sm text-zinc-200">{habit.title}</p>
+                    <p className="font-mono text-xs text-zinc-500">
+                      {habit.category} · {habit.streakCurrent}d streak
                     </p>
                   </div>
-                  <span className={`border px-2 py-0.5 font-mono text-[9px] tracking-widest ${habit.streakCurrent > 0 ? 'border-orange-900 bg-orange-950/30 text-orange-500' : 'border-zinc-800 text-zinc-400'}`}>
-                    {habit.streakCurrent > 0 ? 'ACTIVE' : 'IDLE'}
+                  <span className={`rounded px-2 py-0.5 font-mono text-xs ${habit.streakCurrent > 0 ? 'bg-orange-950/50 text-orange-400' : 'bg-zinc-900 text-zinc-500'}`}>
+                    {habit.streakCurrent > 0 ? '🔥 Active' : 'Idle'}
                   </span>
                 </button>
               ))}
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-3.5 w-3.5 text-zinc-500" />
-              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">TASK_QUEUE</span>
+              <span className="font-mono text-sm font-bold text-zinc-200">Task Queue</span>
             </div>
             <Link href="/tasks" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -191,7 +191,7 @@ export default function DashboardPage() {
           </div>
 
           {!openTasks.length ? (
-            <TermEmptyState label="QUEUE_EMPTY" sub="No pending tasks. Queue is clear." href="/tasks" action="ADD_TASK" />
+            <TermEmptyState label="No tasks pending" sub="Your queue is clear. Add something to work on." href="/tasks" action="Add a task" />
           ) : (
             <div className="space-y-px p-1">
               {openTasks.slice(0, 5).map((task) => (
@@ -203,15 +203,15 @@ export default function DashboardPage() {
                 >
                   <Circle className="h-4 w-4 shrink-0 text-zinc-400" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-mono text-xs text-zinc-300">{task.title.toUpperCase()}</p>
+                    <p className="truncate font-mono text-sm text-zinc-200">{task.title}</p>
                     <div className="flex items-center gap-2">
                       <TermPriorityChip priority={task.priority} />
-                      {task.dueDate && <span className="font-mono text-[10px] text-zinc-400">DUE_{task.dueDate.replace(/-/g, '')}</span>}
+                      {task.dueDate && <span className="font-mono text-xs text-zinc-500">Due {task.dueDate}</span>}
                     </div>
                   </div>
                   {task.xpValue && (
-                    <span className="font-mono text-[10px] text-orange-600">
-                      <Zap className="inline h-3 w-3" /> {task.xpValue}XP
+                    <span className="font-mono text-xs text-orange-500">
+                      <Zap className="inline h-3.5 w-3.5" /> {task.xpValue}xp
                     </span>
                   )}
                 </button>
@@ -225,7 +225,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Target className="h-3.5 w-3.5 text-zinc-500" />
-              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">CORE_OBJECTIVES</span>
+              <span className="font-mono text-sm font-bold text-zinc-200">Goals</span>
             </div>
             <Link href="/goals" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -233,7 +233,7 @@ export default function DashboardPage() {
           </div>
 
           {!activeGoals.length ? (
-            <TermEmptyState label="NO_OBJECTIVES_SET" sub="Define a core objective to drive node behavior." href="/goals" action="DEFINE_OBJECTIVE" />
+            <TermEmptyState label="No goals set" sub="Define a goal to drive your daily habits." href="/goals" action="Create your first goal" />
           ) : (
             <div className="grid gap-px p-1 md:grid-cols-2">
               {activeGoals.map((goal) => (
@@ -243,8 +243,8 @@ export default function DashboardPage() {
                   className="border border-transparent p-3 transition hover:border-zinc-800 hover:bg-zinc-900"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <p className="truncate font-mono text-xs text-zinc-300">{goal.title.toUpperCase()}</p>
-                    <span className="shrink-0 font-mono text-xs font-bold text-orange-500">{goal.progress ?? 0}%</span>
+                    <p className="truncate font-mono text-sm text-zinc-200">{goal.title}</p>
+                    <span className="shrink-0 font-mono text-sm font-bold text-orange-400">{goal.progress ?? 0}%</span>
                   </div>
                   <div className="mt-2 h-px w-full bg-zinc-900">
                     <div
@@ -252,9 +252,9 @@ export default function DashboardPage() {
                       style={{ width: `${goal.progress ?? 0}%` }}
                     />
                   </div>
-                  <div className="mt-1.5 flex items-center justify-between font-mono text-[10px] text-zinc-400">
-                    <span>{goal.category.toUpperCase()}</span>
-                    {goal.targetDate && <span>TARGET_{goal.targetDate.replace(/-/g, '')}</span>}
+                  <div className="mt-1.5 flex items-center justify-between font-mono text-xs text-zinc-500">
+                    <span>{goal.category}</span>
+                    {goal.targetDate && <span>Target: {goal.targetDate}</span>}
                   </div>
                 </Link>
               ))}
@@ -266,25 +266,28 @@ export default function DashboardPage() {
         <section className="border border-zinc-900 bg-zinc-950 lg:col-span-2">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2.5">
             <Brain className="h-3.5 w-3.5 text-zinc-500" />
-            <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">AI_COMMS_BRIEF</span>
+            <span className="font-mono text-sm font-bold text-zinc-200">AI Insight</span>
             <span className="ml-auto border border-green-900 bg-green-950/30 px-2 py-0.5 font-mono text-[9px] tracking-widest text-green-600">LIVE</span>
           </div>
           <div className="p-4">
-            <p className="font-mono text-xs leading-relaxed text-zinc-500">
-              You are operating{' '}
-              <span className="text-zinc-300">{activeHabits.length} NODES</span> and targeting{' '}
-              <span className="text-zinc-300">{activeGoals.length} OBJECTIVES</span>. Prioritize task completion before noon to maximize streak stability and elevate weekly goal integrity.
+            <p className="font-mono text-sm leading-relaxed text-zinc-400">
+              You&apos;re tracking{' '}
+              <span className="text-zinc-200 font-bold">{activeHabits.length} habits</span> and working toward{' '}
+              <span className="text-zinc-200 font-bold">{activeGoals.length} goals</span>.
+              Complete your most important tasks before noon to protect your streak and keep momentum going.
             </p>
-            <div className="mt-3 flex flex-wrap gap-px">
-              <span className="border border-zinc-800 bg-zinc-900 px-2 py-1 font-mono text-[9px] tracking-widest text-zinc-500">
-                REC: 2_DEEP_BLOCKS
+            <div className="mt-4 flex flex-wrap gap-2">
+              <span className="rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-400">
+                💡 Try 2 deep work blocks
               </span>
-              <span className="border border-zinc-800 bg-zinc-900 px-2 py-1 font-mono text-[9px] tracking-widest text-zinc-500">
-                OPTIMAL_WINDOW: MORNING
+              <span className="rounded border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-xs text-zinc-400">
+                ⏰ Best focus window: morning
               </span>
-              <span className="border border-orange-900 bg-orange-950/20 px-2 py-1 font-mono text-[9px] tracking-widest text-orange-700">
-                RISK: CARRYOVER_TASKS
-              </span>
+              {openTasks.length > 3 && (
+                <span className="rounded border border-orange-900 bg-orange-950/20 px-3 py-1.5 font-mono text-xs text-orange-400">
+                  ⚠ {openTasks.length} tasks pending — clear the queue
+                </span>
+              )}
             </div>
           </div>
         </section>
@@ -306,37 +309,37 @@ export default function DashboardPage() {
 
 function TermStatCard({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
   return (
-    <div className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-      <p className="font-mono text-[9px] tracking-widest text-zinc-400">{label}</p>
-      <p className={`mt-1 font-mono text-lg font-bold ${highlight ? 'text-orange-500' : 'text-zinc-100'}`}>{value}</p>
+    <div className="border border-zinc-900 bg-zinc-950 px-4 py-4 transition hover:border-zinc-700 hover:bg-zinc-900">
+      <p className="font-mono text-xs text-zinc-500">{label}</p>
+      <p className={`mt-1.5 font-mono text-2xl font-bold ${highlight ? 'text-orange-400' : 'text-zinc-100'}`}>{value}</p>
     </div>
   );
 }
 
 function TermPriorityChip({ priority }: { priority: string }) {
   const map: Record<string, string> = {
-    urgent: 'border-red-900 bg-red-950/30 text-red-500',
-    high: 'border-orange-900 bg-orange-950/30 text-orange-500',
-    medium: 'border-yellow-900 bg-yellow-950/30 text-yellow-600',
-    low: 'border-zinc-800 text-zinc-400',
+    urgent: 'bg-red-950/50 text-red-400',
+    high: 'bg-orange-950/50 text-orange-400',
+    medium: 'bg-yellow-950/50 text-yellow-500',
+    low: 'bg-zinc-900 text-zinc-500',
   };
   return (
-    <span className={`border px-1.5 py-0.5 font-mono text-[9px] tracking-widest ${map[priority] ?? map.low}`}>
-      {priority.toUpperCase()}
+    <span className={`rounded px-2 py-0.5 font-mono text-xs ${map[priority] ?? map.low}`}>
+      {priority.charAt(0).toUpperCase() + priority.slice(1)}
     </span>
   );
 }
 
 function TermEmptyState({ label, sub, href, action }: { label: string; sub: string; href: string; action: string }) {
   return (
-    <div className="border border-dashed border-zinc-800 m-3 p-6 text-center">
-      <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
-      <p className="mt-1 font-mono text-[10px] text-zinc-400">{sub}</p>
+    <div className="border border-dashed border-zinc-800 m-4 p-8 text-center">
+      <p className="font-mono text-sm font-medium text-zinc-300">{label}</p>
+      <p className="mt-1.5 font-mono text-xs text-zinc-500">{sub}</p>
       <Link
         href={href}
-        className="mt-3 inline-flex items-center gap-1 border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-mono text-[10px] tracking-widest text-zinc-500 transition hover:border-orange-900 hover:text-orange-500"
+        className="mt-4 inline-flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-900 px-4 py-2 font-mono text-sm text-zinc-300 transition hover:border-orange-600 hover:text-orange-400"
       >
-        <Plus className="h-3 w-3" /> {action}
+        <Plus className="h-4 w-4" /> {action}
       </Link>
     </div>
   );

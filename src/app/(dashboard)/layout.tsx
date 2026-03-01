@@ -149,13 +149,13 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                   <Link
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-2.5 px-2.5 py-2 text-[11px] font-mono tracking-wider transition-colors',
-                      isActive
-                        ? 'border-l border-orange-600 bg-orange-950/30 text-orange-500 pl-2'
-                        : 'border-l border-transparent text-zinc-400 hover:bg-zinc-900 hover:text-zinc-300'
+                    'flex items-center gap-2.5 px-3 py-2.5 text-sm font-mono transition-colors',
+                    isActive
+                      ? 'border-l-2 border-orange-600 bg-orange-950/30 text-orange-400 pl-2.5'
+                      : 'border-l-2 border-transparent text-zinc-400 hover:bg-zinc-900 hover:text-zinc-200'
                     )}
                   >
-                    <item.icon className={cn('h-4 w-4 shrink-0', isActive ? 'text-orange-500' : 'text-zinc-400')} />
+                    <item.icon className={cn('h-5 w-5 shrink-0', isActive ? 'text-orange-400' : 'text-zinc-400')} />
                     {!collapsed && <span>{item.label}</span>}
                   </Link>
                 </li>
@@ -191,17 +191,17 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
               <>
                 {user && (
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-mono text-[10px] tracking-wider text-zinc-400">{user.name}</p>
-                    <p className="truncate font-mono text-[9px] tracking-wider text-zinc-500">
-                      {user.plan === 'free' ? 'FREE_TIER' : user.plan === 'lifetime' ? 'LIFETIME' : 'PRO_ACCESS'}
+                    <p className="truncate font-mono text-xs text-zinc-300">{user.name}</p>
+                    <p className="truncate font-mono text-[10px] text-zinc-500">
+                      {user.plan === 'free' ? 'Free plan' : user.plan === 'lifetime' ? 'Lifetime' : 'Pro'}
                     </p>
                   </div>
                 )}
                 <button
-                  className="font-mono text-[9px] tracking-widest text-zinc-400 hover:text-orange-600 transition-colors"
+                  className="font-mono text-xs text-zinc-400 hover:text-orange-600 transition-colors"
                   onClick={() => { void signOut({ redirectUrl: '/' }); }}
                 >
-                  [EXIT]
+                  Sign out
                 </button>
               </>
             )}
@@ -231,11 +231,11 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
       {/* -- Mobile bottom tab bar -- */}
       <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-center justify-around border-t border-zinc-900 bg-black pb-safe md:hidden">
         {[
-          { href: '/dashboard', label: 'HOME', icon: LayoutDashboard },
-          { href: '/goals', label: 'GOALS', icon: Target },
-          { href: '/habits', label: 'HABITS', icon: Sparkles },
-          { href: '/focus', label: 'FOCUS', icon: Timer },
-          { href: '/coach', label: 'COACH', icon: MessageSquare },
+          { href: '/dashboard', label: 'Home', icon: LayoutDashboard },
+          { href: '/goals', label: 'Goals', icon: Target },
+          { href: '/habits', label: 'Habits', icon: Sparkles },
+          { href: '/focus', label: 'Focus', icon: Timer },
+          { href: '/coach', label: 'Coach', icon: MessageSquare },
         ].map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
@@ -244,11 +244,11 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
               href={item.href}
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-1',
-                isActive ? 'text-orange-500' : 'text-zinc-400 hover:text-zinc-400'
+                isActive ? 'text-orange-400' : 'text-zinc-400 hover:text-zinc-300'
               )}
             >
-              <item.icon className="h-5 w-5" />
-              <span className="font-mono text-[8px] tracking-wider">{item.label}</span>
+              <item.icon className="h-6 w-6" />
+              <span className="font-mono text-xs">{item.label}</span>
             </Link>
           );
         })}

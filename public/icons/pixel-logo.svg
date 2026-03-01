@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#000000"/>
+  
+  <!-- Pixel art "R" flame/arrow mark -->
+  <!-- Outer glow layer (subtle orange aura) -->
+  <rect x="6" y="4" width="2" height="2" fill="#431407" opacity="0.6"/>
+  <rect x="24" y="4" width="2" height="2" fill="#431407" opacity="0.6"/>
+  <rect x="4" y="6" width="2" height="2" fill="#431407" opacity="0.6"/>
+  <rect x="26" y="6" width="2" height="2" fill="#431407" opacity="0.6"/>
+  
+  <!-- Main upward arrow / "R" body in orange pixels -->
+  <!-- Vertical left bar -->
+  <rect x="8" y="6" width="4" height="20" fill="#EA580C"/>
+  
+  <!-- Top horizontal bar -->
+  <rect x="8" y="6" width="14" height="4" fill="#EA580C"/>
+  
+  <!-- Right vertical for top curve -->
+  <rect x="18" y="6" width="4" height="4" fill="#EA580C"/>
+  
+  <!-- Mid horizontal bar (R crossbar) -->
+  <rect x="8" y="14" width="14" height="4" fill="#EA580C"/>
+  
+  <!-- Right bump -->
+  <rect x="18" y="10" width="4" height="4" fill="#EA580C"/>
+  
+  <!-- Diagonal leg of R (pixel staircase) -->
+  <rect x="18" y="18" width="4" height="4" fill="#C2410C"/>
+  <rect x="20" y="22" width="4" height="4" fill="#C2410C"/>
+  
+  <!-- Inner cutout (makes it look like letter R, not filled block) -->
+  <rect x="12" y="10" width="6" height="4" fill="#000000"/>
+  
+  <!-- Accent dots (pixel sparkle) -->
+  <rect x="26" y="8" width="2" height="2" fill="#FB923C"/>
+  <rect x="28" y="12" width="2" height="2" fill="#FDBA74" opacity="0.7"/>
+  <rect x="4" y="24" width="2" height="2" fill="#431407" opacity="0.6"/>
+  
+  <!-- Bottom base line for stability -->
+  <rect x="8" y="26" width="4" height="2" fill="#9A3412"/>
+</svg>
