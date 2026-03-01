@@ -3,7 +3,10 @@
 import { useState, useCallback } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
-import { CheckCircle, RefreshCw, Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePlanGating } from '@/hooks/usePlanGating';
+import { CheckCircle, RefreshCw, Sparkles, ChevronLeft, ChevronRight, Crown, Upload, Wand2 } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Types (mirrors VisionBoardConfig)
@@ -53,21 +56,41 @@ interface VisionBoardProps {
 }
 
 export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
+  const { isPro, plan } = usePlanGating();
+  const proUnlocked = isPro();
+
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [activePanelIndex, setActivePanelIndex] = useState<number | null>(null);
+  const [generationMode, setGenerationMode] = useState<'ai' | 'hybrid'>('ai');
+  const [stylePreset, setStylePreset] = useState<'pinterest-bold' | 'clean-minimal' | 'luxury-editorial' | 'cinematic-dream'>('pinterest-bold');
+  const [customImages, setCustomImages] = useState<string[]>([]);
+  const [uploading, setUploading] = useState(false);
 
-  const boardDoc = useQuery((api as any).visionBoards.getActive, {});
-  const board: VisionBoardConfig | null = boardDoc ? JSON.parse((boardDoc as any).config) : null;
+  const boardDoc = useQuery(api.visionBoards.getActive, {});
+  const board: VisionBoardConfig | null = boardDoc ? JSON.parse(boardDoc.config as string) : null;
 
   const handleGenerate = useCallback(async () => {
+    if (!proUnlocked) {
+      setError('Vision Board is a Pro feature. Upgrade to unlock premium generation.');
+      return;
+    }
+
     setGenerating(true);
     setError(null);
     try {
-      const res = await fetch('/api/vision-board/generate', { method: 'POST' });
+      const res = await fetch('/api/vision-board/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          mode: generationMode,
+          stylePreset,
+          customImages: generationMode === 'hybrid' ? customImages.slice(0, 6) : [],
+        }),
+      });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error((data as any).error ?? `HTTP ${res.status}`);
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error ?? `HTTP ${res.status}`);
       }
       // Board appears in real-time via Convex subscription (boardDoc will update)
     } catch (err) {
@@ -75,6 +98,28 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
     } finally {
       setGenerating(false);
     }
+  }, [customImages, generationMode, proUnlocked, stylePreset]);
+
+  const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files ?? []).slice(0, 6);
+    if (files.length === 0) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const converted = await Promise.all(files.map(fileToDataUrl));
+      setCustomImages((prev) => [...prev, ...converted].slice(0, 6));
+    } catch {
+      setError('Failed to process one or more uploaded images.');
+    } finally {
+      setUploading(false);
+      event.target.value = '';
+    }
+  }, []);
+
+  const removeCustomImage = useCallback((index: number) => {
+    setCustomImages((prev) => prev.filter((_, i) => i !== index));
   }, []);
 
   const activePanel = activePanelIndex !== null ? board?.panels[activePanelIndex] : null;
@@ -88,6 +133,49 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
     mosaic: 'grid grid-cols-3 gap-2',
   };
 
+  if (!proUnlocked) {
+    return (
+      <div className="border border-zinc-900 bg-zinc-950 p-6 rounded-xl">
+        <div className="flex items-center justify-center mb-3">
+          <div className="inline-flex items-center gap-2 border border-amber-800 bg-amber-950/20 px-3 py-1 rounded-full">
+            <Crown className="h-4 w-4 text-amber-400" />
+            <span className="text-[10px] tracking-widest font-mono text-amber-400">PRO_FEATURE</span>
+          </div>
+        </div>
+
+        <h2 className="text-xl font-bold text-zinc-100 text-center">Premium Vision Board Studio</h2>
+        <p className="text-zinc-400 text-sm text-center mt-2 max-w-xl mx-auto leading-relaxed">
+          Turn goals into a Pinterest-style, AI-generated mood board with custom layouts, archetype-aware affirmations,
+          and hybrid uploads. This feature is available on <span className="text-amber-400">Pro</span> and <span className="text-amber-400">Lifetime</span> plans.
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5 text-xs text-zinc-300">
+          {[
+            'AI-generated panel images (multi-provider free AI cascade)',
+            'Premium style presets (Pinterest bold, cinematic, editorial)',
+            'Hybrid mode: upload your own images + AI composition',
+            'Regeneration and design variations',
+          ].map((feature) => (
+            <div key={feature} className="border border-zinc-800 bg-black/40 p-3 rounded-lg">
+              <span className="text-orange-400 mr-1.5">•</span>{feature}
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 flex items-center justify-center gap-3">
+          <Link
+            href="/pricing"
+            className="inline-flex items-center gap-2 border border-amber-800 bg-amber-950/30 px-5 py-2.5 rounded-lg font-mono text-xs tracking-widest text-amber-400 hover:bg-amber-950/50 transition"
+          >
+            <Crown className="h-3.5 w-3.5" />
+            [UPGRADE_TO_PRO]
+          </Link>
+          <span className="font-mono text-[10px] text-zinc-500">Current plan: {plan.toUpperCase()}</span>
+        </div>
+      </div>
+    );
+  }
+
   // ── Empty state ─────────────────────────────────────────────────────────────
   if (!board) {
     return (
@@ -100,6 +188,79 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           profile, and personality type. Custom images. Personal affirmations.
           Real-time progress tracking.
         </p>
+
+        <div className="w-full max-w-xl space-y-3 mb-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setGenerationMode('ai')}
+              className={`border px-3 py-2 text-xs rounded-lg transition ${
+                generationMode === 'ai'
+                  ? 'border-orange-700 bg-orange-950/30 text-orange-400'
+                  : 'border-zinc-700 text-zinc-400 hover:border-zinc-600'
+              }`}
+            >
+              <Wand2 size={14} className="inline-block mr-1" /> AI Only
+            </button>
+            <button
+              type="button"
+              onClick={() => setGenerationMode('hybrid')}
+              className={`border px-3 py-2 text-xs rounded-lg transition ${
+                generationMode === 'hybrid'
+                  ? 'border-orange-700 bg-orange-950/30 text-orange-400'
+                  : 'border-zinc-700 text-zinc-400 hover:border-zinc-600'
+              }`}
+            >
+              <Upload size={14} className="inline-block mr-1" /> Hybrid Upload
+            </button>
+          </div>
+
+          <select
+            value={stylePreset}
+            onChange={(e) => setStylePreset(e.target.value as typeof stylePreset)}
+            className="w-full border border-zinc-700 bg-black px-3 py-2 text-xs text-zinc-300 rounded-lg"
+          >
+            <option value="pinterest-bold">Pinterest Bold (high contrast, dynamic)</option>
+            <option value="clean-minimal">Clean Minimal (airy, calm, elegant)</option>
+            <option value="luxury-editorial">Luxury Editorial (premium magazine look)</option>
+            <option value="cinematic-dream">Cinematic Dream (moody, dramatic lighting)</option>
+          </select>
+
+          {generationMode === 'hybrid' && (
+            <div className="border border-zinc-800 rounded-lg p-3 bg-black/40 space-y-2">
+              <label className="inline-flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-lg text-xs text-zinc-300 hover:border-zinc-600 cursor-pointer transition">
+                <Upload size={14} />
+                {uploading ? 'Processing images…' : 'Upload custom images (max 6)'}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+              </label>
+              {customImages.length > 0 && (
+                <div className="grid grid-cols-3 gap-2">
+                  {customImages.map((src, i) => (
+                    <div key={`${src}-${i}`} className="relative rounded-md overflow-hidden border border-zinc-700">
+                      <Image src={src} alt={`upload-${i}`} width={96} height={64} className="w-full h-16 object-cover" unoptimized />
+                      <button
+                        type="button"
+                        onClick={() => removeCustomImage(i)}
+                        className="absolute top-1 right-1 h-5 w-5 rounded-full bg-black/70 text-zinc-200 text-xs"
+                        aria-label="Remove uploaded image"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
         <button
           onClick={handleGenerate}
           disabled={generating}
@@ -142,7 +303,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         >
           {board.title}
         </h2>
-        <p className="text-zinc-300 text-base italic">"{board.centerAffirmation}"</p>
+        <p className="text-zinc-300 text-base italic">&ldquo;{board.centerAffirmation}&rdquo;</p>
         <p className="text-zinc-600 text-xs">
           Generated {new Date(board.generatedAt).toLocaleDateString()} · {board.theme.mood}
         </p>
@@ -162,9 +323,62 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           ))}
       </div>
 
-      {/* Regenerate (Pro only) */}
-      {canRegenerate && (
+      {/* Regenerate + controls (Pro only) */}
+      {(canRegenerate || proUnlocked) && (
         <div className="text-center pt-2">
+          <div className="mb-3 grid grid-cols-1 md:grid-cols-2 gap-2">
+            <button
+              type="button"
+              onClick={() => setGenerationMode('ai')}
+              className={`border px-3 py-2 text-xs rounded-lg transition ${
+                generationMode === 'ai'
+                  ? 'border-orange-700 bg-orange-950/30 text-orange-400'
+                  : 'border-zinc-700 text-zinc-400 hover:border-zinc-600'
+              }`}
+            >
+              AI Only
+            </button>
+            <button
+              type="button"
+              onClick={() => setGenerationMode('hybrid')}
+              className={`border px-3 py-2 text-xs rounded-lg transition ${
+                generationMode === 'hybrid'
+                  ? 'border-orange-700 bg-orange-950/30 text-orange-400'
+                  : 'border-zinc-700 text-zinc-400 hover:border-zinc-600'
+              }`}
+            >
+              Hybrid Upload
+            </button>
+          </div>
+
+          <select
+            value={stylePreset}
+            onChange={(e) => setStylePreset(e.target.value as typeof stylePreset)}
+            className="w-full max-w-lg mx-auto border border-zinc-700 bg-black px-3 py-2 text-xs text-zinc-300 rounded-lg mb-3"
+          >
+            <option value="pinterest-bold">Pinterest Bold</option>
+            <option value="clean-minimal">Clean Minimal</option>
+            <option value="luxury-editorial">Luxury Editorial</option>
+            <option value="cinematic-dream">Cinematic Dream</option>
+          </select>
+
+          {generationMode === 'hybrid' && (
+            <div className="mb-3">
+              <label className="inline-flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-lg text-xs text-zinc-300 hover:border-zinc-600 cursor-pointer transition">
+                <Upload size={14} />
+                {uploading ? 'Processing images…' : `Upload custom images (${customImages.length}/6)`}
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  className="hidden"
+                  disabled={uploading}
+                />
+              </label>
+            </div>
+          )}
+
           <button
             onClick={handleGenerate}
             disabled={generating}
@@ -216,11 +430,14 @@ function PanelCard({
     >
       {/* Image */}
       {panel.imageData ? (
-        <img
+        <Image
           src={panel.imageData}
           alt={panel.goalTitle}
+          fill
+          sizes="(max-width: 768px) 100vw, 33vw"
           className="w-full h-full object-cover"
           loading="lazy"
+          unoptimized
         />
       ) : (
         <div
@@ -249,7 +466,7 @@ function PanelCard({
           {panel.goalTitle}
         </h3>
         <p className="text-zinc-300 text-[10px] italic line-clamp-2">
-          "{panel.affirmation}"
+          &ldquo;{panel.affirmation}&rdquo;
         </p>
         {/* Progress bar */}
         <div className="mt-2">
@@ -301,7 +518,7 @@ function PanelModal({
         {/* Image */}
         <div className="aspect-square w-full">
           {panel.imageData ? (
-            <img src={panel.imageData} alt={panel.goalTitle} className="w-full h-full object-cover" />
+            <Image src={panel.imageData} alt={panel.goalTitle} width={720} height={720} className="w-full h-full object-cover" unoptimized />
           ) : (
             <div
               className="w-full h-full flex items-center justify-center"
@@ -320,7 +537,7 @@ function PanelModal({
             </span>
           </div>
           <h3 className="text-white font-bold text-lg">{panel.goalTitle}</h3>
-          <p className="text-zinc-300 italic text-sm">"{panel.affirmation}"</p>
+          <p className="text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
 
           {/* Progress */}
           <div>
@@ -372,3 +589,42 @@ function PanelModal({
 }
 
 export default VisionBoard;
+
+async function fileToDataUrl(file: File): Promise<string> {
+  const dataUrl = await readFileAsDataUrl(file);
+  return downscaleDataUrl(dataUrl, 1200, 0.85);
+}
+
+function readFileAsDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') resolve(reader.result);
+      else reject(new Error('Invalid file result'));
+    };
+    reader.onerror = () => reject(reader.error ?? new Error('File read failed'));
+    reader.readAsDataURL(file);
+  });
+}
+
+function downscaleDataUrl(dataUrl: string, maxSize: number, quality: number): Promise<string> {
+  return new Promise((resolve) => {
+    const img = document.createElement('img');
+    img.onload = () => {
+      const scale = Math.min(1, maxSize / Math.max(img.width, img.height));
+      const width = Math.max(1, Math.round(img.width * scale));
+      const height = Math.max(1, Math.round(img.height * scale));
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return resolve(dataUrl);
+
+      ctx.drawImage(img, 0, 0, width, height);
+      resolve(canvas.toDataURL('image/jpeg', quality));
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
+}

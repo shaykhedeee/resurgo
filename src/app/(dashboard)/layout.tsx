@@ -34,6 +34,7 @@ import {
   Map,
   Puzzle,
   Gift,
+  ImageIcon,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
@@ -48,6 +49,7 @@ const NAV_ITEMS = [
   { href: '/budget', label: 'Budget', icon: DollarSign, color: 'text-zinc-500' },
   { href: '/business', label: 'Business', icon: Briefcase, color: 'text-zinc-500' },
   { href: '/plan-builder', label: 'Plan Builder', icon: Map, color: 'text-zinc-500' },
+  { href: '/vision-board', label: 'Vision Board', icon: ImageIcon, color: 'text-zinc-500' },
   { href: '/coach', label: 'AI Coach', icon: MessageSquare, color: 'text-zinc-500' },
   { href: '/integrations', label: 'Integrations', icon: Puzzle, color: 'text-zinc-500' },
   { href: '/refer', label: 'Refer & Earn', icon: Gift, color: 'text-zinc-500' },

@@ -23,6 +23,7 @@ const FEATURES = {
     customThemes: false,
     dataExport: false,
     prioritySupport: false,
+    visionBoardStudio: false,
   },
   pro: {
     maxHabits: Infinity,
@@ -38,6 +39,7 @@ const FEATURES = {
     customThemes: true,
     dataExport: true,
     prioritySupport: true,
+    visionBoardStudio: true,
   },
   lifetime: {
     maxHabits: Infinity,
@@ -53,6 +55,7 @@ const FEATURES = {
     customThemes: true,
     dataExport: true,
     prioritySupport: true,
+    visionBoardStudio: true,
   },
 } as const;
 
