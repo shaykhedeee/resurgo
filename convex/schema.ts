@@ -151,12 +151,15 @@ export default defineSchema({
     archetypeConfidence: v.optional(v.number()),
     secondaryArchetype: v.optional(v.string()),
     onboardingData: v.optional(v.string()),     // JSON of onboarding answers
+    // ── Dodo Payments ──
+    dodoCustomerId: v.optional(v.string()), // Dodo Payments customer ID for checkout/portal
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index('by_clerkId', ['clerkId'])
     .index('by_email', ['email'])
-    .index('by_telegramChatId', ['telegramChatId']),
+    .index('by_telegramChatId', ['telegramChatId'])
+    .index('by_dodoCustomerId', ['dodoCustomerId']),
 
   // ─────────────────────────────────────────────────────────────────────────────
   // GOALS — Enhanced with decomposition engine (Module 2)

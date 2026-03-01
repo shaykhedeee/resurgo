@@ -3,7 +3,7 @@
 // Syncs Clerk users to Convex DB, manages plan status
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { mutation, query, internalMutation } from './_generated/server';
+import { mutation, query, internalMutation, internalQuery } from './_generated/server';
 import { internal } from './_generated/api';
 import { v } from 'convex/values';
 import { Id } from './_generated/dataModel';
@@ -857,6 +857,225 @@ export const setArchetype = mutation({
       onboardingComplete: true,
       updatedAt: Date.now(),
     });
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section 26 — Dodo Payments Internal Helpers
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Internal query used by convex/dodo.ts identify function */
+export const getByClerkIdInternal = internalQuery({
+  args: { clerkId: v.string() },
+  returns: v.union(
+    v.object({
+      _id: v.id('users'),
+      clerkId: v.string(),
+      email: v.string(),
+      dodoCustomerId: v.optional(v.string()),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, { clerkId }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+    if (!user) return null;
+    return {
+      _id: user._id,
+      clerkId: user.clerkId,
+      email: user.email,
+      dodoCustomerId: user.dodoCustomerId,
+    };
+  },
+});
+
+/** Internal mutation: stores dodoCustomerId on the user record after first checkout */
+export const storeDodoCustomerId = internalMutation({
+  args: {
+    clerkId: v.string(),
+    dodoCustomerId: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, { clerkId, dodoCustomerId }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+    if (!user) {
+      console.warn(`[storeDodoCustomerId] User not found for clerkId=${clerkId}`);
+      return null;
+    }
+    // Only store if not already set (idempotent)
+    if (!user.dodoCustomerId) {
+      await ctx.db.patch(user._id, {
+        dodoCustomerId,
+        updatedAt: Date.now(),
+      });
+    }
+    return null;
+  },
+});
+
+/** Internal query: look up user by email (fallback for webhooks without metadata) */
+export const getByEmailInternal = internalQuery({
+  args: { email: v.string() },
+  returns: v.union(
+    v.object({
+      _id: v.id('users'),
+      clerkId: v.string(),
+      email: v.string(),
+      plan: v.string(),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, { email }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', email))
+      .unique();
+    if (!user) return null;
+    return {
+      _id: user._id,
+      clerkId: user.clerkId,
+      email: user.email,
+      plan: user.plan,
+    };
+  },
+});
+
+/** Internal query: look up user by dodoCustomerId */
+export const getByDodoCustomerIdInternal = internalQuery({
+  args: { dodoCustomerId: v.string() },
+  returns: v.union(
+    v.object({
+      _id: v.id('users'),
+      clerkId: v.string(),
+      email: v.string(),
+      plan: v.string(),
+    }),
+    v.null()
+  ),
+  handler: async (ctx, { dodoCustomerId }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_dodoCustomerId', (q) => q.eq('dodoCustomerId', dodoCustomerId))
+      .first();
+    if (!user) return null;
+    return {
+      _id: user._id,
+      clerkId: user.clerkId,
+      email: user.email,
+      plan: user.plan,
+    };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Section 27 — Internal Plan Update (for Convex HTTP webhook handler)
+// No secret check — caller (http.ts) handles Dodo signature verification.
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const updatePlanFromWebhookInternal = internalMutation({
+  args: {
+    clerkId: v.string(),
+    plan: v.union(v.literal('free'), v.literal('pro'), v.literal('lifetime')),
+    eventId: v.string(),
+    eventType: v.string(),
+  },
+  returns: v.object({
+    applied: v.boolean(),
+    reason: v.string(),
+  }),
+  handler: async (ctx, { clerkId, plan, eventId, eventType }) => {
+    // Idempotency: check if this event was already processed
+    const existingEvent = await ctx.db
+      .query('billingWebhookEvents')
+      .withIndex('by_eventId', (q) => q.eq('eventId', eventId))
+      .unique();
+
+    if (existingEvent) {
+      return { applied: false, reason: 'duplicate_event' };
+    }
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+
+    if (!user) {
+      console.warn(`[updatePlanFromWebhookInternal] User not found for clerkId=${clerkId}`);
+      await ctx.db.insert('billingWebhookEvents', {
+        eventId,
+        eventType,
+        clerkId,
+        plan,
+        status: 'ignored',
+        reason: 'user_not_found',
+        processedAt: Date.now(),
+      });
+      return { applied: false, reason: 'user_not_found' };
+    }
+
+    const prevPlan = user.plan;
+    const now = Date.now();
+
+    await ctx.db.patch(user._id, {
+      plan,
+      planVersion: (user.planVersion ?? 0) + 1,
+      planUpdatedAt: now,
+      lastBillingEventId: eventId,
+      updatedAt: now,
+    });
+
+    // Downgrade/upgrade hooks
+    const isDowngrade = prevPlan !== 'free' && plan === 'free';
+    const isUpgrade = prevPlan === 'free' && plan !== 'free';
+
+    if (isDowngrade) {
+      try {
+        await ctx.runMutation((internal as any).habits.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+        await ctx.runMutation((internal as any).goals.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+      } catch (err) {
+        console.error('[Downgrade] Failed to archive excess items', err instanceof Error ? err.message : String(err));
+      }
+    }
+
+    if (isUpgrade) {
+      try {
+        await ctx.runMutation((internal as any).habits.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+        await ctx.runMutation((internal as any).goals.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+      } catch (err) {
+        console.error('[Upgrade] Failed to restore archived items', err instanceof Error ? err.message : String(err));
+      }
+    }
+
+    await ctx.db.insert('billingWebhookEvents', {
+      eventId,
+      eventType,
+      clerkId,
+      plan,
+      status: 'applied',
+      reason: 'ok',
+      processedAt: Date.now(),
+    });
+
+    await ctx.db.insert('billingEvents', {
+      userId: user._id,
+      clerkId,
+      eventId,
+      eventType,
+      source: 'webhook',
+      status: 'applied',
+      plan,
+      reason: 'ok',
+      createdAt: Date.now(),
+    });
+
+    console.log(`[updatePlanFromWebhookInternal] ${clerkId}: ${prevPlan} → ${plan} (event=${eventId})`);
+
+    return { applied: true, reason: 'ok' };
   },
 });
 

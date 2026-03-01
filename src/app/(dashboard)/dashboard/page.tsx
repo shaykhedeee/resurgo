@@ -89,13 +89,13 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-6xl p-4 md:p-6">
+    <div className="mx-auto min-h-screen w-full max-w-7xl px-4 py-4 md:px-6 md:py-6">
 
       {/* -- HEADER -- */}
-      <div className="mb-6 border border-zinc-900 bg-zinc-950">
+      <div className="mb-6 border border-zinc-900 bg-zinc-950 shadow-[0_0_0_1px_rgba(39,39,42,0.25)]">
         <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2.5">
           <span className="h-2 w-2 animate-pulse rounded-full bg-orange-600" />
-          <span className="font-mono text-xs tracking-widest text-orange-600">TODAY</span>
+            <span className="font-mono text-xs tracking-widest text-orange-500">TODAY</span>
           <span className="ml-auto font-mono text-xs tracking-widest text-zinc-400">
             {today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
           </span>
@@ -105,13 +105,13 @@ export default function DashboardPage() {
             <h1 className="font-mono text-3xl font-bold tracking-tight text-zinc-100 md:text-4xl">
               Hey, {user.name?.split(' ')[0] ?? 'there'} 👋
             </h1>
-            <p className="mt-1.5 font-mono text-sm text-zinc-400">
+            <p className="mt-2 font-mono text-sm text-zinc-300">
               {totalHabits > 0 ? `You have ${totalHabits} habits tracked today.` : "Let's set up your first habit."}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             {[['Goals', '/goals'], ['Habits', '/habits'], ['Tasks', '/tasks']].map(([label, href]) => (
-              <Link key={label} href={href} className="border border-zinc-800 bg-zinc-900 px-4 py-2 font-mono text-xs text-zinc-300 transition hover:border-orange-700 hover:text-orange-400">
+              <Link key={label} href={href} className="border border-zinc-800 bg-zinc-900 px-4 py-2 font-mono text-xs text-zinc-200 transition hover:border-orange-700 hover:text-orange-400">
                 {label}
               </Link>
             ))}
@@ -130,7 +130,7 @@ export default function DashboardPage() {
       </div>
 
       {/* -- STATS -- */}
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-5 lg:gap-4">
         <TermStatCard label="Habits" value={totalHabits} />
         <TermStatCard label="Goals" value={activeGoals.length} />
         <TermStatCard label="Tasks" value={openTasks.length} />
@@ -144,7 +144,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-              <span className="font-mono text-sm font-bold text-zinc-200">Habits — Today</span>
+              <span className="font-mono text-sm font-bold text-zinc-100">Habits — Today</span>
             </div>
             <Link href="/habits" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -183,7 +183,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-3.5 w-3.5 text-zinc-500" />
-              <span className="font-mono text-sm font-bold text-zinc-200">Task Queue</span>
+              <span className="font-mono text-sm font-bold text-zinc-100">Task Queue</span>
             </div>
             <Link href="/tasks" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -225,7 +225,7 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Target className="h-3.5 w-3.5 text-zinc-500" />
-              <span className="font-mono text-sm font-bold text-zinc-200">Goals</span>
+              <span className="font-mono text-sm font-bold text-zinc-100">Goals</span>
             </div>
             <Link href="/goals" className="font-mono text-[10px] tracking-widest text-zinc-400 transition hover:text-orange-500">
               [VIEW_ALL]
@@ -266,11 +266,11 @@ export default function DashboardPage() {
         <section className="border border-zinc-900 bg-zinc-950 lg:col-span-2">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2.5">
             <Brain className="h-3.5 w-3.5 text-zinc-500" />
-            <span className="font-mono text-sm font-bold text-zinc-200">AI Insight</span>
+            <span className="font-mono text-sm font-bold text-zinc-100">AI Insight</span>
             <span className="ml-auto border border-green-900 bg-green-950/30 px-2 py-0.5 font-mono text-[9px] tracking-widest text-green-600">LIVE</span>
           </div>
           <div className="p-4">
-            <p className="font-mono text-sm leading-relaxed text-zinc-400">
+            <p className="font-mono text-sm leading-relaxed text-zinc-300">
               You&apos;re tracking{' '}
               <span className="text-zinc-200 font-bold">{activeHabits.length} habits</span> and working toward{' '}
               <span className="text-zinc-200 font-bold">{activeGoals.length} goals</span>.
@@ -310,7 +310,7 @@ export default function DashboardPage() {
 function TermStatCard({ label, value, highlight }: { label: string; value: string | number; highlight?: boolean }) {
   return (
     <div className="border border-zinc-900 bg-zinc-950 px-4 py-4 transition hover:border-zinc-700 hover:bg-zinc-900">
-      <p className="font-mono text-xs text-zinc-500">{label}</p>
+      <p className="font-mono text-xs text-zinc-400">{label}</p>
       <p className={`mt-1.5 font-mono text-2xl font-bold ${highlight ? 'text-orange-400' : 'text-zinc-100'}`}>{value}</p>
     </div>
   );
@@ -333,8 +333,8 @@ function TermPriorityChip({ priority }: { priority: string }) {
 function TermEmptyState({ label, sub, href, action }: { label: string; sub: string; href: string; action: string }) {
   return (
     <div className="border border-dashed border-zinc-800 m-4 p-8 text-center">
-      <p className="font-mono text-sm font-medium text-zinc-300">{label}</p>
-      <p className="mt-1.5 font-mono text-xs text-zinc-500">{sub}</p>
+      <p className="font-mono text-sm font-medium text-zinc-200">{label}</p>
+      <p className="mt-1.5 font-mono text-xs text-zinc-400">{sub}</p>
       <Link
         href={href}
         className="mt-4 inline-flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-900 px-4 py-2 font-mono text-sm text-zinc-300 transition hover:border-orange-600 hover:text-orange-400"

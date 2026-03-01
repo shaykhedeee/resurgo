@@ -28,6 +28,15 @@ import {
   Users,
 } from 'lucide-react';
 
+const BillingCheckoutCTA = dynamic(
+  () => import('@/components/BillingCTA').then((m) => m.BillingCheckoutCTA),
+  { ssr: false }
+);
+const BillingPortalCTA = dynamic(
+  () => import('@/components/BillingCTA').then((m) => m.BillingPortalCTA),
+  { ssr: false }
+);
+
 export const metadata: Metadata = {
   title: 'Pricing & Billing — Plans That Grow With You',
   description:
@@ -245,19 +254,15 @@ export default async function BillingPage() {
               </div>
               {manageUrl ? (
                 <div className="flex items-center gap-4">
-                  <a
-                    href={manageUrl}
-                    className="shrink-0 inline-flex items-center gap-2 rounded-xl px-5 py-2.5 text-sm font-semibold bg-[var(--background)] border border-[var(--border)] hover:bg-[var(--surface-hover)] transition-colors"
-                  >
-                    Manage subscription <ArrowRight className="w-4 h-4" />
-                  </a>
+                  <BillingPortalCTA />
                   {/* Client-side restore CTA; dynamic import to keep page server-rendered */}
                   <RestoreArchivedCTA />
                 </div>
               ) : (
-                <span className="text-xs text-amber-400/80">
-                  Billing portal not configured yet
-                </span>
+                <div className="flex items-center gap-4">
+                  <BillingPortalCTA />
+                  <RestoreArchivedCTA />
+                </div>
               )}
             </div>
           )}
@@ -344,20 +349,14 @@ export default async function BillingPage() {
                         Get Started Free
                       </Link>
                     )
-                  ) : plan.checkoutUrl ? (
-                    <a
-                      href={plan.checkoutUrl}
-                      className={`block w-full text-center rounded-xl px-4 py-3 font-semibold transition-all mb-6 ${
-                        isHighlighted
-                          ? 'bg-gradient-to-r from-ascend-500 to-ascend-600 text-white hover:shadow-lg hover:shadow-ascend-500/25'
-                          : isLifetime
-                          ? 'bg-gradient-to-r from-gold-400 to-orange-500 text-white hover:shadow-lg hover:shadow-gold-400/25'
-                          : 'bg-ascend-500/10 text-ascend-400 hover:bg-ascend-500/20 border border-ascend-500/30'
-                      }`}
-                    >
-                      {plan.ctaLabel}
-                    </a>
-                  ) : !user ? (
+                  ) : user ? (
+                    <BillingCheckoutCTA
+                      planKey={plan.key}
+                      ctaLabel={plan.ctaLabel}
+                      isHighlighted={isHighlighted}
+                      isLifetime={isLifetime}
+                    />
+                  ) : (
                     <Link
                       href="/sign-up"
                       className={`block w-full text-center rounded-xl px-4 py-3 font-semibold transition-all mb-6 ${
@@ -370,32 +369,6 @@ export default async function BillingPage() {
                     >
                       {plan.ctaLabel}
                     </Link>
-                  ) : manageUrl ? (
-                    <a
-                      href={manageUrl}
-                      className={`block w-full text-center rounded-xl px-4 py-3 font-semibold transition-all mb-6 ${
-                        isHighlighted
-                          ? 'bg-gradient-to-r from-ascend-500 to-ascend-600 text-white hover:shadow-lg hover:shadow-ascend-500/25'
-                          : isLifetime
-                          ? 'bg-gradient-to-r from-gold-400 to-orange-500 text-white hover:shadow-lg hover:shadow-gold-400/25'
-                          : 'bg-ascend-500/10 text-ascend-400 hover:bg-ascend-500/20 border border-ascend-500/30'
-                      }`}
-                    >
-                      {plan.ctaLabel}
-                    </a>
-                  ) : (
-                    <a
-                      href="/help"
-                      className={`block w-full text-center rounded-xl px-4 py-3 font-semibold mb-6 ${
-                        isHighlighted
-                          ? 'bg-gradient-to-r from-ascend-500 to-ascend-600 text-white hover:from-ascend-400 hover:to-ascend-500'
-                          : isLifetime
-                          ? 'bg-gradient-to-r from-gold-400 to-orange-500 text-white hover:from-gold-300 hover:to-orange-400'
-                          : 'bg-ascend-500/10 text-ascend-400 border border-ascend-500/30 hover:bg-ascend-500/20'
-                      } transition-all`}
-                    >
-                      Contact Support
-                    </a>
                   )}
 
                   {/* Feature list */}

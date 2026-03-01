@@ -208,6 +208,14 @@ const jsonLd = {
         },
         {
           '@type': 'Offer',
+          'price': '29.99',
+          'priceCurrency': 'USD',
+          'name': 'Pro Yearly',
+          'priceValidUntil': '2026-12-31',
+          'description': 'Full Pro access billed yearly with 50% savings vs monthly',
+        },
+        {
+          '@type': 'Offer',
           'price': '49.99',
           'priceCurrency': 'USD',
           'name': 'Lifetime Access',
@@ -292,7 +300,7 @@ const jsonLd = {
           'name': 'Is Resurgo free to use?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Yes! Resurgo offers a free plan with up to 10 habits and basic analytics. Pro plans start at $12/month for unlimited features, and lifetime access is available for a one-time payment of $199.',
+            'text': 'Yes! Resurgo offers a free plan with core tracking and planning features. Paid plans are Pro at $4.99/month, Pro Yearly at $29.99/year, and Lifetime access at $49.99 one-time.',
           },
         },
         {

@@ -6,6 +6,7 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ScrollToTop } from '@/components/ScrollToTop';
 
 const NAV_LINKS = [
@@ -52,9 +53,11 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <img
+            <Image
               src="/icons/pixel-logo.svg"
               alt="RESURGO logo"
+              width={28}
+              height={28}
               className="h-7 w-7"
               style={{ imageRendering: 'pixelated' }}
             />
@@ -99,6 +102,21 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             RESURGO.life :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
           </span>
         </div>
+
+        {/* Mobile quick nav */}
+        <nav className="border-t border-zinc-900 bg-black px-3 py-2 lg:hidden">
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            {NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                className="shrink-0 border border-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-300 transition hover:border-zinc-600 hover:text-orange-400"
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
+        </nav>
       </header>
 
       {/* ── PAGE CONTENT ── */}
@@ -111,9 +129,11 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
             {/* Brand column */}
             <div className="space-y-4">
               <Link href="/" className="flex items-center gap-2">
-                <img
+                <Image
                   src="/icons/pixel-logo.svg"
                   alt="RESURGO logo"
+                  width={32}
+                  height={32}
                   className="h-8 w-8"
                   style={{ imageRendering: 'pixelated' }}
                 />

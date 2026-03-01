@@ -37,24 +37,24 @@ import {
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { href: '/dashboard', label: 'DASHBOARD', icon: LayoutDashboard, color: 'text-zinc-500' },
-  { href: '/goals', label: 'GOALS', icon: Target, color: 'text-zinc-500' },
-  { href: '/tasks', label: 'TASKS', icon: CheckSquare, color: 'text-zinc-500' },
-  { href: '/habits', label: 'HABITS', icon: Sparkles, color: 'text-zinc-500' },
-  { href: '/focus', label: 'FOCUS', icon: Timer, color: 'text-zinc-500' },
-  { href: '/analytics', label: 'ANALYTICS', icon: BarChart3, color: 'text-zinc-500' },
-  { href: '/calendar', label: 'CALENDAR', icon: Calendar, color: 'text-zinc-500' },
-  { href: '/wellness', label: 'WELLNESS', icon: Heart, color: 'text-zinc-500' },
-  { href: '/budget', label: 'BUDGET', icon: DollarSign, color: 'text-zinc-500' },
-  { href: '/business', label: 'BUSINESS', icon: Briefcase, color: 'text-zinc-500' },
-  { href: '/plan-builder', label: 'PLAN BUILDER', icon: Map, color: 'text-zinc-500' },
-  { href: '/coach', label: 'AI COACH', icon: MessageSquare, color: 'text-zinc-500' },
-  { href: '/integrations', label: 'INTEGRATIONS', icon: Puzzle, color: 'text-zinc-500' },
-  { href: '/refer', label: 'REFER & EARN', icon: Gift, color: 'text-zinc-500' },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-zinc-500' },
+  { href: '/goals', label: 'Goals', icon: Target, color: 'text-zinc-500' },
+  { href: '/tasks', label: 'Tasks', icon: CheckSquare, color: 'text-zinc-500' },
+  { href: '/habits', label: 'Habits', icon: Sparkles, color: 'text-zinc-500' },
+  { href: '/focus', label: 'Focus', icon: Timer, color: 'text-zinc-500' },
+  { href: '/analytics', label: 'Analytics', icon: BarChart3, color: 'text-zinc-500' },
+  { href: '/calendar', label: 'Calendar', icon: Calendar, color: 'text-zinc-500' },
+  { href: '/wellness', label: 'Wellness', icon: Heart, color: 'text-zinc-500' },
+  { href: '/budget', label: 'Budget', icon: DollarSign, color: 'text-zinc-500' },
+  { href: '/business', label: 'Business', icon: Briefcase, color: 'text-zinc-500' },
+  { href: '/plan-builder', label: 'Plan Builder', icon: Map, color: 'text-zinc-500' },
+  { href: '/coach', label: 'AI Coach', icon: MessageSquare, color: 'text-zinc-500' },
+  { href: '/integrations', label: 'Integrations', icon: Puzzle, color: 'text-zinc-500' },
+  { href: '/refer', label: 'Refer & Earn', icon: Gift, color: 'text-zinc-500' },
 ];
 
 const BOTTOM_ITEMS = [
-  { href: '/settings', label: 'SETTINGS', icon: Settings, color: 'text-zinc-500' },
+  { href: '/settings', label: 'Settings', icon: Settings, color: 'text-zinc-500' },
 ];
 
 function DashboardLayoutContent({ children }: { children: ReactNode }) {

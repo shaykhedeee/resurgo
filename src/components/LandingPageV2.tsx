@@ -2,86 +2,99 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { ScrollToTop } from '@/components/ScrollToTop';
 
-const SYSTEM_SPECS = [
+const VALUE_PILLARS = [
   {
-    id: 'NODE_INTELLIGENCE',
-    description: 'Adaptive AI analyzes habit consistency patterns and issues corrective guidance before degradation compounds.',
-    status: 'OPERATIONAL',
+    id: 'AI Goal Breakdown',
+    description: 'Turn a big goal into milestones, weekly actions, and daily tasks in seconds.',
+    status: 'Live',
   },
   {
-    id: 'OBJECTIVE_DECOMP',
-    description: 'Long-term targets fractured into precision daily commitments with built-in pacing and milestone integrity.',
-    status: 'OPERATIONAL',
+    id: 'Habit System',
+    description: 'Track streaks, completion patterns, and consistency with zero busywork.',
+    status: 'Live',
   },
   {
-    id: 'BEHAVIORAL_TELEMETRY',
-    description: 'Trend layers, mood overlays, and friction signals reveal exact drivers of UPTIME degradation.',
-    status: 'ONLINE',
+    id: 'Focus Engine',
+    description: 'Run Pomodoro, Deep Work, or custom sessions with distraction logging.',
+    status: 'Live',
   },
   {
-    id: 'DATA_PERSISTENCE',
-    description: 'Archive/restore engine preserves node momentum through billing state changes. Zero data loss on cycle reboot.',
-    status: 'OPERATIONAL',
+    id: 'AI Coaching',
+    description: 'Get clear, actionable coaching based on your goals and recent progress.',
+    status: 'Live',
   },
   {
-    id: 'DEEP_WORK_PROTOCOL',
-    description: 'Integrated session timers and micro-break rhythms. Reduces context-switching. Maximizes cognitive uptime.',
-    status: 'ONLINE',
+    id: 'Unified Dashboard',
+    description: 'Goals, habits, tasks, wellness, and planning in one clean interface.',
+    status: 'Live',
   },
   {
-    id: 'SECURITY_POSTURE',
-    description: 'Event logging, hardened auth boundaries, and webhook integrity checks for operational resilience.',
-    status: 'SECURED',
+    id: 'Safe Data',
+    description: 'Your data is secure, synced, and preserved across plan changes.',
+    status: 'Secure',
   },
 ];
 
 const METRICS = [
-  { value: '50K+', label: 'ACTIVE_OPERATORS' },
-  { value: '2M+', label: 'NODE_COMPLETIONS' },
-  { value: '81/81', label: 'TESTS_PASSING' },
-  { value: '99.9%', label: 'TARGET_UPTIME' },
+  { value: '50K+', label: 'people started' },
+  { value: '2M+', label: 'habits completed' },
+  { value: '99.9%', label: 'platform uptime' },
+  { value: '<2 min', label: 'to start onboarding' },
 ];
 
-const OPERATOR_LOGS = [
+const TESTIMONIALS = [
   {
-    operator: 'M.CHEN',
-    role: 'FOUNDER : ORBIT_STUDIO',
-    log: 'Replaced five disconnected tools. Team now runs a single operating rhythm. Velocity increased by 3 launches per quarter.',
-    outcome: '+3_LAUNCHES/QTR',
+    name: 'M. Chen',
+    role: 'Founder',
+    quote:
+      'I stopped juggling five apps. Resurgo gave me one clean workflow for planning, execution, and review.',
+    outcome: '3 launches in 1 quarter',
   },
   {
-    operator: 'J.PARK',
-    role: 'DESIGNER : FREELANCE',
-    log: 'Interface delivers exactly what is needed each cycle without cognitive overhead. 127-day streak recovered post-burnout.',
-    outcome: 'UPTIME_127_DAYS',
+    name: 'J. Park',
+    role: 'Freelance Designer',
+    quote:
+      'The app is simple enough to use daily, but powerful enough to keep me consistent when motivation dips.',
+    outcome: '127-day consistency streak',
   },
   {
-    operator: 'A.THOMPSON',
-    role: 'OPERATOR : MED_PROGRAM',
-    log: 'Exams, node habits, and recovery tracked in a single system. AI nudges are precise, not generic. Performance top 10%.',
-    outcome: 'INTEGRITY+10%',
+    name: 'A. Thompson',
+    role: 'Medical Student',
+    quote:
+      'I use it for study plans, habits, and recovery. It helps me prioritize what matters each day.',
+    outcome: 'Top 10% class performance',
   },
 ];
 
 const FAQS = [
   {
-    question: 'Is RESURGO suitable for both individuals and teams?',
-    answer: 'Yes. Individual operators use it for personal node routines and biometric tracking. Teams use it to sync objectives, track execution discipline, and eliminate planning overhead.',
+    question: 'What is Resurgo in one sentence?',
+    answer:
+      'Resurgo is an AI-powered habit and goal platform that helps you plan clearly, execute daily, and stay consistent long term.',
   },
   {
-    question: 'How is this different from standard habit trackers?',
-    answer: 'RESURGO is an execution terminal, not a checkbox app. AI coaching, structured decomposition, and production-grade data architecture are core � not add-ons.',
+    question: 'How long does onboarding take?',
+    answer:
+      'Most people finish setup in under two minutes. You choose your focus, define your goal, and get a personalized execution plan.',
   },
   {
-    question: 'Can I start free and upgrade later without losing node data?',
-    answer: 'Affirmative. Free operators can access PRO_ACCESS at any time. Downgrade archive/restore logic preserves all nodes and historical UPTIME data.',
+    question: 'Can I use it free forever?',
+    answer:
+      'Yes. The free plan is available forever with core tracking features. Upgrade only when you need advanced AI and analytics.',
   },
   {
-    question: 'Does it work on mobile?',
-    answer: 'Yes. The terminal is fully responsive, touch-optimized, and installable as a PWA on modern devices.',
+    question: 'Will I lose data if I change plans?',
+    answer:
+      'No. Your historical data stays preserved and accessible. Plan changes never wipe your progress.',
+  },
+  {
+    question: 'Is Resurgo mobile-friendly?',
+    answer:
+      'Yes. Resurgo is responsive and installable as a PWA on modern phones and tablets.',
   },
 ];
 
@@ -99,18 +112,18 @@ const TICKER_ITEMS = [
 const BOOT_STEPS = [
   {
     step: '01',
-    cmd: 'DEFINE_OBJECTIVE',
-    desc: 'Set strategic targets and constraints. The system resolves what success means in measurable output terms.',
+    cmd: 'Create your main goal',
+    desc: 'Tell Resurgo what you want to achieve. Keep it simple and outcome-focused.',
   },
   {
     step: '02',
-    cmd: 'GENERATE_EXECUTION_MODEL',
-    desc: 'AI decomposes core objectives into milestones, weekly intent, and precision daily node commitments.',
+    cmd: 'Get your AI roadmap',
+    desc: 'The app breaks your goal into milestones, weekly targets, and daily actions.',
   },
   {
     step: '03',
-    cmd: 'RUN_DAILY_CYCLE',
-    desc: 'Track node completions, adapt to friction signals, and sustain UPTIME with intelligent coaching loops.',
+    cmd: 'Run your daily system',
+    desc: 'Track habits, complete tasks, and use AI coaching to stay focused and consistent.',
   },
 ];
 
@@ -177,7 +190,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
   }, []);
 
   useEffect(() => {
-    const id = window.setInterval(() => setActiveLog((p) => (p + 1) % OPERATOR_LOGS.length), 5200);
+    const id = window.setInterval(() => setActiveLog((p) => (p + 1) % TESTIMONIALS.length), 5200);
     return () => window.clearInterval(id);
   }, []);
 
@@ -203,7 +216,14 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
       <header className="sticky top-0 z-50 border-b border-zinc-900 bg-black">
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
           <div className="flex items-center gap-3">
-            <img src="/icons/pixel-logo.svg" alt="RESURGO logo" className="h-8 w-8" style={{imageRendering:'pixelated'}} />
+            <Image
+              src="/icons/pixel-logo.svg"
+              alt="RESURGO logo"
+              width={32}
+              height={32}
+              className="h-8 w-8"
+              style={{ imageRendering: 'pixelated' }}
+            />
             <span className="font-mono text-base font-bold tracking-widest text-orange-500">
               RESURGO.life
             </span>
@@ -211,10 +231,11 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
 
           <nav className="hidden items-center gap-1 lg:flex">
             {[
-              ['#system', 'System'],
+              ['#system', 'Home'],
+              ['#how-it-works', 'How it works'],
               ['#specs', 'Features'],
               ['#access', 'Pricing'],
-              ['#logs', 'Reviews'],
+              ['#logs', 'Results'],
               ['#faq', 'FAQ'],
             ].map(([href, label]) => (
               <a
@@ -276,27 +297,42 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
             <div className="mb-6 inline-flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-3 py-1.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
               <span className="font-mono text-[10px] tracking-widest text-zinc-500">
-                SYSTEM_INITIALIZATION :: SEQUENCE_01
+                BUILT FOR CLARITY, CONSISTENCY, AND EXECUTION
               </span>
             </div>
 
             <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               <div>
                 <h1 className="font-mono text-4xl font-bold leading-tight tracking-tight text-zinc-100 sm:text-5xl lg:text-6xl">
-                  INITIALIZE YOUR
-                  <span className="block text-orange-600">POTENTIAL.</span>
+                  Build better habits.
+                  <span className="block text-orange-500">Achieve goals with less friction.</span>
                 </h1>
                 <div className="mt-3 flex items-center gap-3">
-                  <span className="font-mono text-sm tracking-widest text-zinc-400">[RESURGO_v1.0]</span>
+                  <span className="font-mono text-sm tracking-widest text-zinc-300">[RESURGO_v1.0]</span>
                   <span className="hidden font-mono text-sm text-zinc-400 md:block">
-                    EXECUTION OS FOR HIGH-INTEGRITY OPERATORS
+                    AI habit tracker + goal planner + focus coach in one app
                   </span>
                 </div>
 
-                <p className="mt-8 max-w-xl font-mono text-sm leading-relaxed text-zinc-500">
-                  A pitch-black terminal for habit nodes, mission objectives, and behavioral telemetry.{' '}
-                  <span className="text-zinc-400">No clutter. No noise. Only signal.</span>
+                <p className="mt-8 max-w-2xl font-mono text-base leading-relaxed text-zinc-300">
+                  Resurgo helps you go from <span className="text-zinc-100">overwhelmed</span> to{' '}
+                  <span className="text-zinc-100">organized</span>. Set one clear goal, get an AI roadmap,
+                  and execute daily with habits, tasks, and focus sessions.
                 </p>
+
+                <div className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
+                  {[
+                    'Simple setup in under 2 minutes',
+                    'Free plan available forever',
+                    'Works on desktop and mobile',
+                    'No data loss when changing plans',
+                  ].map((item) => (
+                    <div key={item} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-3 py-2">
+                      <span className="text-orange-500">●</span>
+                      <span className="font-mono text-xs text-zinc-300">{item}</span>
+                    </div>
+                  ))}
+                </div>
 
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
@@ -316,8 +352,8 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                   {METRICS.map((m) => (
                     <div key={m.label} className="border border-zinc-900 bg-zinc-950 px-4 py-4">
-                      <p className="font-mono text-2xl font-bold text-zinc-100">{m.value}</p>
-                      <p className="mt-1 font-mono text-xs text-zinc-500">{m.label.replace(/_/g, ' ')}</p>
+                      <p className="font-mono text-2xl font-bold text-orange-400">{m.value}</p>
+                      <p className="mt-1 font-mono text-xs text-zinc-300">{m.label}</p>
                     </div>
                   ))}
                 </div>
@@ -331,9 +367,9 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 </div>
                 <div className="space-y-px p-4">
                   {[
-                    { label: 'MORNING_RESET_NODE', meta: 'HEALTH / UPTIME: 7D', status: 'OPTIMAL', color: 'green' as const },
-                    { label: 'DEEP_WORK_SPRINT', meta: 'PRODUCTIVITY / SESSIONS: 2', status: 'RUNNING', color: 'orange' as const },
-                    { label: 'WEEKLY_OBJECTIVE_SYNC', meta: 'STRATEGY / AI_BRIEF: READY', status: 'PENDING', color: 'zinc' as const },
+                    { label: 'Morning habit routine', meta: 'Health · streak 7 days', status: 'Done', color: 'green' as const },
+                    { label: 'Deep work session', meta: 'Focus · 2 sessions planned', status: 'In progress', color: 'orange' as const },
+                    { label: 'Weekly goal review', meta: 'Strategy · AI brief ready', status: 'Pending', color: 'zinc' as const },
                   ].map((row) => (
                     <div
                       key={row.label}
@@ -371,49 +407,55 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </section>
 
-        {/* SYSTEM SPECS */}
-        <section id="specs" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-10 flex items-end justify-between gap-6">
-              <div>
-                <p className="font-mono text-[10px] tracking-widest text-orange-600">SYSTEM_CAPABILITIES</p>
-                <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">CORE_MODULES</h2>
-              </div>
-              <p className="max-w-md font-mono text-xs leading-relaxed text-zinc-400">
-                Each module is independently operational. Failure in one node does not cascade system-wide.
+        {/* HOW IT WORKS */}
+        <section id="how-it-works" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-mono text-xs tracking-widest text-orange-500">HOW_ONBOARDING_WORKS</p>
+              <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+                Get started in 3 simple steps
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-mono text-sm leading-relaxed text-zinc-300">
+                No complicated setup. You can go from zero to a personalized execution plan in minutes.
               </p>
             </div>
 
-            <div className="grid gap-px border border-zinc-900 md:grid-cols-2 lg:grid-cols-3">
-              {SYSTEM_SPECS.map((spec) => (
-                <article key={spec.id} className="bg-zinc-950 p-5 transition hover:bg-zinc-900">
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[10px] tracking-widest text-orange-600">{spec.id}</span>
-                    <span className="border border-green-900 bg-green-950/40 px-2 py-0.5 font-mono text-[9px] tracking-widest text-green-600">
-                      {spec.status}
-                    </span>
-                  </div>
-                  <p className="mt-3 font-mono text-xs leading-relaxed text-zinc-500">{spec.description}</p>
+            <div className="grid gap-px border border-zinc-900 md:grid-cols-3">
+              {BOOT_STEPS.map((s) => (
+                <article key={s.step} className="bg-black p-6">
+                  <p className="font-mono text-[10px] tracking-widest text-orange-500">STEP {s.step}</p>
+                  <h3 className="mt-2 font-mono text-base font-bold text-zinc-100">{s.cmd}</h3>
+                  <p className="mt-3 font-mono text-sm leading-relaxed text-zinc-300">{s.desc}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* BOOT SEQUENCE */}
-        <section className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        {/* SYSTEM SPECS */}
+        <section id="specs" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-7xl">
-            <h2 className="text-center font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">BOOT_SEQUENCE</h2>
-            <p className="mx-auto mt-2 max-w-lg text-center font-mono text-xs tracking-wider text-zinc-400">
-              AMBITION_TO_EXECUTION IN 3 CYCLES
-            </p>
-            <div className="mt-10 grid gap-px border border-zinc-900 md:grid-cols-3">
-              {BOOT_STEPS.map((s) => (
-                <div key={s.step} className="bg-black p-6">
-                  <p className="font-mono text-[10px] tracking-widest text-zinc-400">CYCLE_{s.step}</p>
-                  <p className="mt-2 font-mono text-sm font-bold text-orange-500">{s.cmd}</p>
-                  <p className="mt-3 font-mono text-xs leading-relaxed text-zinc-500">{s.desc}</p>
-                </div>
+            <div className="mb-10 flex items-end justify-between gap-6">
+              <div>
+                <p className="font-mono text-[10px] tracking-widest text-orange-600">CORE_CAPABILITIES</p>
+                <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Everything in one place</h2>
+              </div>
+              <p className="max-w-md font-mono text-sm leading-relaxed text-zinc-300">
+                You don&apos;t need separate apps for goals, habits, planning, and focus. Resurgo unifies the flow.
+              </p>
+            </div>
+
+            <div className="grid gap-px border border-zinc-900 md:grid-cols-2 lg:grid-cols-3">
+              {VALUE_PILLARS.map((spec) => (
+                <article key={spec.id} className="bg-zinc-950 p-5 transition hover:bg-zinc-900">
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-xs tracking-widest text-orange-600">{spec.id}</span>
+                    <span className="border border-green-900 bg-green-950/40 px-2 py-0.5 font-mono text-[9px] tracking-widest text-green-600">
+                      {spec.status}
+                    </span>
+                  </div>
+                  <p className="mt-3 font-mono text-sm leading-relaxed text-zinc-300">{spec.description}</p>
+                </article>
               ))}
             </div>
           </div>
@@ -426,7 +468,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
               Pricing
             </h2>
             <p className="mx-auto mt-2 max-w-xl text-center font-mono text-sm text-zinc-400">
-              Start free. Upgrade when you&apos;re ready.
+              Start free. Upgrade when you&apos;re ready. No lock-in.
             </p>
 
             <div className="mt-10 grid gap-4 md:grid-cols-4">
@@ -447,7 +489,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                   </p>
                   <ul className="mt-6 space-y-2.5">
                     {plan.specs.map((spec) => (
-                      <li key={spec} className="flex items-center gap-2 font-mono text-sm text-zinc-400">
+                      <li key={spec} className="flex items-center gap-2 font-mono text-sm text-zinc-300">
                         <span className="text-green-500 text-base">✓</span>
                         {spec}
                       </li>
@@ -473,38 +515,38 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
         {/* OPERATOR LOGS */}
         <section id="logs" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
-            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">What users say</h2>
+            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Proof it works</h2>
             <p className="mt-1 font-mono text-sm text-zinc-400">
-              Real results from real people
+              Real outcomes from people using Resurgo weekly
             </p>
 
             <div className="mt-8 border border-zinc-900">
               <div className="flex items-center justify-between border-b border-zinc-900 bg-black px-4 py-2">
                 <span className="font-mono text-[9px] tracking-widest text-orange-600">
-                  LOG_ENTRY_{activeLog + 1}_OF_{OPERATOR_LOGS.length}
+                  REVIEW_{activeLog + 1}_OF_{TESTIMONIALS.length}
                 </span>
                 <span className="font-mono text-[9px] tracking-widest text-zinc-400">FIELD_VERIFIED</span>
               </div>
               <div className="bg-zinc-950 p-6">
                 <p className="font-mono text-sm leading-relaxed text-zinc-300">
-                  &quot;{OPERATOR_LOGS[activeLog].log}&quot;
+                  &quot;{TESTIMONIALS[activeLog].quote}&quot;
                 </p>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div>
                     <p className="font-mono text-xs font-bold text-zinc-400">
-                      {OPERATOR_LOGS[activeLog].operator}
+                      {TESTIMONIALS[activeLog].name}
                     </p>
                     <p className="font-mono text-[10px] tracking-widest text-zinc-400">
-                      {OPERATOR_LOGS[activeLog].role}
+                      {TESTIMONIALS[activeLog].role}
                     </p>
                   </div>
                   <span className="border border-green-900 bg-green-950/40 px-3 py-1 font-mono text-[10px] tracking-widest text-green-500">
-                    RESULT: {OPERATOR_LOGS[activeLog].outcome}
+                    RESULT: {TESTIMONIALS[activeLog].outcome}
                   </span>
                 </div>
               </div>
               <div className="flex gap-px border-t border-zinc-900">
-                {OPERATOR_LOGS.map((_, idx) => (
+                {TESTIMONIALS.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveLog(idx)}
@@ -523,9 +565,9 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
         {/* FAQ */}
         <section id="faq" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-4xl">
-            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">SYSTEM_FAQ</h2>
+            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Frequently asked questions</h2>
             <p className="mt-1 font-mono text-[10px] tracking-widest text-zinc-400">
-              COMMON_QUERIES :: OPERATOR_SUPPORT
+              FAST_ANSWERS_FOR_SETUP_AND_ONBOARDING
             </p>
 
             <div
@@ -598,16 +640,13 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
             </div>
             <div className="px-6 py-12 text-center sm:px-10">
               <p className="font-mono text-[10px] tracking-widest text-orange-600">
-                LAUNCH-READY EXECUTION ENGINE
+                START FREE TODAY
               </p>
               <h2 className="mt-3 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
-                READY TO RUN YOUR LIFE
-                <br />
-                WITH A TERMINAL?
+                Ready to become more consistent?
               </h2>
-              <p className="mx-auto mt-4 max-w-xl font-mono text-xs leading-relaxed text-zinc-400">
-                Start free in under two minutes. Keep your existing rhythm, gain execution structure, and track
-                consistency with production-grade operational tooling.
+              <p className="mx-auto mt-4 max-w-xl font-mono text-sm leading-relaxed text-zinc-300">
+                Set up your account, define one goal, and begin your first execution cycle in under 2 minutes.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <Link
@@ -625,8 +664,8 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
               </div>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-4 font-mono text-[9px] tracking-widest text-zinc-400">
                 <span>&gt; NO_CREDIT_CARD_REQUIRED</span>
-                <span>&gt; SECURE_BILLING_INFRA</span>
-                <span>&gt; ARCHIVE_SAFE_DOWNGRADE</span>
+                <span>&gt; CLEAR_ONBOARDING_FLOW</span>
+                <span>&gt; MOBILE_READY</span>
               </div>
             </div>
           </div>
@@ -639,7 +678,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           <div>
             <p className="font-mono text-sm font-bold tracking-widest text-orange-600">RESURGO</p>
             <p className="mt-1 font-mono text-[9px] tracking-widest text-zinc-400">
-              VITALITY_TERMINAL :: BUILD_FOR_CONSISTENT_OPERATORS
+              BUILD BETTER HABITS. ACHIEVE BIG GOALS.
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-4 font-mono text-[10px] tracking-widest text-zinc-400">
