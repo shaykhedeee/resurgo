@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import Image from 'next/image';
@@ -38,6 +38,31 @@ interface VisionBoardConfig {
   generatedAt: string;
 }
 
+type GrowthEventName =
+  | 'vision_board_viewed'
+  | 'vision_board_generate_clicked'
+  | 'vision_board_generation_success'
+  | 'vision_board_generation_failed'
+  | 'vision_board_pro_gate_hit'
+  | 'upgrade_clicked';
+
+async function sendGrowthEvent(eventName: GrowthEventName, details?: Record<string, unknown>) {
+  try {
+    await fetch('/api/analytics/events', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        eventName,
+        page: '/vision-board',
+        details,
+      }),
+      keepalive: true,
+    });
+  } catch {
+    // Best effort telemetry only
+  }
+}
+
 const CATEGORY_ICONS: Record<string, string> = {
   HEALTH: '💪',
   CAREER: '🚀',
@@ -58,6 +83,7 @@ interface VisionBoardProps {
 export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const { isPro, plan } = usePlanGating();
   const proUnlocked = isPro();
+  const hasTrackedView = useRef(false);
 
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -70,11 +96,27 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const boardDoc = useQuery(api.visionBoards.getActive, {});
   const board: VisionBoardConfig | null = boardDoc ? JSON.parse(boardDoc.config as string) : null;
 
+  useEffect(() => {
+    if (hasTrackedView.current) return;
+    hasTrackedView.current = true;
+    void sendGrowthEvent('vision_board_viewed', { plan });
+  }, [plan]);
+
   const handleGenerate = useCallback(async () => {
     if (!proUnlocked) {
+      void sendGrowthEvent('vision_board_pro_gate_hit', {
+        source: 'generate_button',
+        plan,
+      });
       setError('Vision Board is a Pro feature. Upgrade to unlock premium generation.');
       return;
     }
+
+    void sendGrowthEvent('vision_board_generate_clicked', {
+      mode: generationMode,
+      stylePreset,
+      customImagesCount: customImages.length,
+    });
 
     setGenerating(true);
     setError(null);
@@ -92,13 +134,24 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         const data = (await res.json().catch(() => ({}))) as { error?: string };
         throw new Error(data.error ?? `HTTP ${res.status}`);
       }
+      void sendGrowthEvent('vision_board_generation_success', {
+        mode: generationMode,
+        stylePreset,
+        customImagesCount: customImages.length,
+      });
       // Board appears in real-time via Convex subscription (boardDoc will update)
     } catch (err) {
+      void sendGrowthEvent('vision_board_generation_failed', {
+        mode: generationMode,
+        stylePreset,
+        customImagesCount: customImages.length,
+        message: err instanceof Error ? err.message : 'Generation failed',
+      });
       setError(err instanceof Error ? err.message : 'Generation failed');
     } finally {
       setGenerating(false);
     }
-  }, [customImages, generationMode, proUnlocked, stylePreset]);
+  }, [customImages, generationMode, plan, proUnlocked, stylePreset]);
 
   const handleImageUpload = useCallback(async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files ?? []).slice(0, 6);
@@ -165,6 +218,12 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         <div className="mt-6 flex items-center justify-center gap-3">
           <Link
             href="/pricing"
+            onClick={() => {
+              void sendGrowthEvent('upgrade_clicked', {
+                source: 'vision_board_paywall',
+                plan,
+              });
+            }}
             className="inline-flex items-center gap-2 border border-amber-800 bg-amber-950/30 px-5 py-2.5 rounded-lg font-mono text-xs tracking-widest text-amber-400 hover:bg-amber-950/50 transition"
           >
             <Crown className="h-3.5 w-3.5" />

@@ -4,11 +4,45 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { MetadataRoute } from 'next';
+import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS } from '@/lib/blog/post-index';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
+function getIsoTimestamp(input?: string): string | null {
+  if (!input) return null;
+  const parsed = new Date(input);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const currentDate = new Date().toISOString();
+
+  const latestBlogTimestamp = BLOG_POST_INDEX
+    .map((post) => getIsoTimestamp(post.lastModified) ?? getIsoTimestamp(post.date))
+    .filter((value): value is string => Boolean(value))
+    .sort((a, b) => (a < b ? 1 : -1))[0] ?? currentDate;
+
+  const blogUrls: MetadataRoute.Sitemap = BLOG_POST_INDEX.map((post) => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: getIsoTimestamp(post.lastModified) ?? getIsoTimestamp(post.date) ?? currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  const blogTopicUrls: MetadataRoute.Sitemap = [
+    {
+      url: `${siteUrl}/blog/topics`,
+      lastModified: latestBlogTimestamp,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    ...BLOG_TOPIC_CLUSTERS.map((cluster) => ({
+      url: `${siteUrl}/blog/topics/${cluster.slug}`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.75,
+    })),
+  ];
   
   // Static pages with their SEO priority and change frequency
   const staticPages: MetadataRoute.Sitemap = [
@@ -38,39 +72,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // ─────────────────────────────────────────────────────────────────────────
     {
       url: `${siteUrl}/blog`,
-      lastModified: currentDate,
+      lastModified: latestBlogTimestamp,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
-      url: `${siteUrl}/blog/habit-science-why-streaks-work`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
+      url: `${siteUrl}/blog/rss.xml`,
+      lastModified: latestBlogTimestamp,
+      changeFrequency: 'daily',
+      priority: 0.7,
     },
     {
-      url: `${siteUrl}/blog/procrastination-is-not-laziness`,
+      url: `${siteUrl}/llms.txt`,
       lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/blog/ai-coaching-vs-human-coaching`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/blog/goal-tracking-systems-compared`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
-    },
-    {
-      url: `${siteUrl}/blog/deep-work-in-the-age-of-notifications`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.8,
+      changeFrequency: 'weekly',
+      priority: 0.7,
     },
     // ─────────────────────────────────────────────────────────────────────────
     // HELP CENTER
@@ -218,5 +234,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
   //   priority: 0.7,
   // }));
 
-  return [...staticPages];
+  return [...staticPages, ...blogTopicUrls, ...blogUrls];
 }

@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
+import { BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/blog/post-index';
 
 // Import charts dynamically (client components)
 const HabitFormationChart = dynamic(() => import('@/components/blog/PixelatedCharts').then(mod => ({ default: mod.HabitFormationChart })), { ssr: false });
@@ -10,21 +12,666 @@ const CoachingComparisonChart = dynamic(() => import('@/components/blog/Pixelate
 const DeepWorkProgressChart = dynamic(() => import('@/components/blog/PixelatedCharts').then(mod => ({ default: mod.DeepWorkProgressChart })), { ssr: false });
 const GoalFrameworkRadar = dynamic(() => import('@/components/blog/PixelatedCharts').then(mod => ({ default: mod.GoalFrameworkRadar })), { ssr: false });
 
+type FaqItem = {
+  question: string;
+  answer: string;
+};
+
+const AUTHOR = {
+  name: 'Resurgo Editorial Team',
+  role: 'Behavior Design + AI Execution Research',
+  bio: 'We publish practical, evidence-informed playbooks on habits, focus, goals, and execution systems that work in real life.',
+  image: '/blog/author-resurgo.svg',
+};
+
 const POSTS: Record<string, {
   title: string;
   desc: string;
   date: string;
   readTime: string;
   tags: string[];
+  heroImage: string;
   content: string;
+  seoKeywords?: string[];
   chartComponent?: React.ComponentType;
 }> = {
+  'ai-growth-system-2026-ultimate-playbook': {
+    title: 'The AI Growth System for 2026: The Ultimate Playbook to Turn Attention into Revenue',
+    desc: 'A research-backed operating system for founders and creators who want to convert AI-era discovery into pipeline, trust, and sales using one unified weekly execution loop.',
+    date: 'March 2, 2026',
+    readTime: '18 min',
+    tags: ['marketing strategy', 'AEO', 'AI productivity', 'conversion optimization', 'founder productivity'],
+    heroImage: '/blog/ultimate-ai-growth-system-2026.svg',
+    seoKeywords: ['AI growth system', 'AEO playbook 2026', 'how to convert AI traffic', 'marketing system for founders', 'Resurgo growth playbook'],
+    content: `
+## TL;DR: What Actually Wins in 2026
+
+If your growth system is still “publish and pray,” you will lose to teams that treat discovery, trust, and conversion as one closed loop.
+
+The winning model in 2026 is:
+- answer-first content for AI and search
+- fast conversion pathways for ready buyers
+- behavior-driven execution every week so strategy does not die in your notes app
+
+This guide gives you the exact operating system.
+
+## Why This Matters Right Now (Data, Not Hype)
+
+Three high-signal shifts are already here:
+
+1. **AI adoption is broad, but value is uneven.** McKinsey reports 88% of organizations use AI in at least one business function, yet most are still in pilot mode and only a minority report enterprise-level EBIT impact.
+2. **Answer engines are changing discovery behavior.** HubSpot’s 2026 marketing data points to AEO becoming core, with teams adapting content for direct answers, citations, and zero-click contexts.
+3. **Consumers expect faster, more relevant responses.** Google Think with Google (2026 trends) highlights AI-shaped behavior and higher demand for immediate, useful answers across search, video, and conversational interfaces.
+
+Interpretation: attention is abundant, trust is scarce, and execution speed is the moat.
+
+## The Core Problem: Teams Have Tactics, Not a System
+
+Most founders run disconnected motions:
+- SEO content in one lane
+- social content in another
+- product onboarding somewhere else
+- sales follow-up happening too late
+
+This creates friction between “audience growth” and “revenue growth.”
+
+## The AI Growth Loop (The System)
+
+### Step 1: Capture high-intent questions
+
+Build a weekly question inventory from:
+- sales calls
+- support tickets
+- onboarding objections
+- AI prompt logs and FAQ requests
+
+Do not start with “topics.” Start with expensive customer questions.
+
+### Step 2: Publish answer-first assets
+
+For each key question, create one canonical answer page using:
+- direct 40-60 word answer near top
+- structured sections (definitions, comparisons, steps)
+- FAQ and HowTo schema where relevant
+- explicit examples and proof points
+
+### Step 3: Create conversion bridges in every asset
+
+Each page should route users to one next action only:
+- [START_FREE] for explorers
+- [SEE_PRICING] for evaluators
+- [BOOK_DEMO] for high intent
+
+No multi-CTA chaos. One page, one conversion intent.
+
+### Step 4: Instrument behavior, not vanity metrics
+
+Track:
+- answer visibility (snippets, AI mention checks, PAA coverage)
+- action depth (scroll, CTA reach, trial starts)
+- execution consistency (weekly planned vs shipped)
+
+### Step 5: Run a weekly optimization sprint
+
+1. Update top 5 pages with new objections and examples.
+2. Tighten headlines for extraction.
+3. Improve one conversion bottleneck.
+4. Repurpose your best answer into short-form + social proof.
+
+Compounding comes from iteration frequency, not one “viral” post.
+
+## The Conversion Stack for Resurgo Users
+
+Use your current Resurgo stack as the execution layer:
+- **Vision Board** to align long-term identity with concrete weekly outcomes
+- **Daily plans + habits** to reduce cognitive drift
+- **Focus sessions** to protect deep work throughput
+- **AI coaching** to recover fast after misses instead of resetting every Monday
+
+The strategy only works if your weekly behavior matches your messaging. Resurgo is built to close that gap.
+
+## 30-Day Implementation Plan
+
+### Week 1: Foundation
+1. Pick one core ICP and one painful workflow outcome.
+2. Define 10 high-intent questions.
+3. Publish 2 answer-first pages.
+
+### Week 2: Distribution + Trust
+1. Repurpose pages into 5 short-form assets.
+2. Add proof blocks (results, examples, before/after).
+3. Add FAQ schema + stronger internal links.
+
+### Week 3: Conversion Optimization
+1. Simplify CTA paths.
+2. Tighten pricing/offer framing around immediate wins.
+3. Add a 7-day action plan lead magnet or onboarding flow.
+
+### Week 4: Scale What Works
+1. Double down on top-performing question cluster.
+2. Refresh underperforming pages with clearer answers.
+3. Build the next 14-day sprint based on conversion data.
+
+## Positioning That Converts Faster
+
+In 2026, people buy outcomes they can feel quickly.
+
+Frame your offer around:
+- immediate clarity
+- reduced uncertainty
+- visible progress in 7 days
+
+If your message is only about the distant future, you will lose to competitors who sell present progress.
+
+## Sources Used in This Playbook
+
+- McKinsey — The state of AI in 2025: https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai
+- McKinsey — One year of agentic AI: https://www.mckinsey.com/capabilities/quantumblack/our-insights/one-year-of-agentic-ai-six-lessons-from-the-people-doing-the-work
+- HubSpot — Marketing trends 2026: https://blog.hubspot.com/marketing/marketing-trends
+- HubSpot — AEO best practices: https://blog.hubspot.com/marketing/answer-engine-optimization-best-practices
+- Think with Google — 2026 digital marketing trends: https://business.google.com/in/think/consumer-insights/digital-marketing-trends-2026/
+
+## FAQ
+
+### Can this produce sales immediately?
+It can accelerate first wins quickly if execution is tight, but no strategy can ethically guarantee instant revenue. Use this to increase conversion probability fast.
+
+### What should I do today if I only have 90 minutes?
+Pick one high-intent question, publish one direct answer page, and add one clear CTA to your sign-up flow.
+
+### Where should I send readers first?
+For most creators and founders, start with https://resurgo.life/sign-up, then move evaluators to https://resurgo.life/pricing.
+
+## Final Word
+
+The winners in 2026 will not be the loudest brands.
+
+They will be the brands that answer clearly, prove credibility, and execute relentlessly every week.
+
+Build the loop. Ship the work. Let compounding do the selling.
+    `,
+  },
+  'why-vision-boards-fail-and-how-ai-fixes-it': {
+    title: 'Why Vision Boards Fail (and How AI Turns Them Into Execution Systems)',
+    desc: 'Most vision boards fail because they end at inspiration. This guide shows how to turn visual intent into measurable weekly execution and real outcomes.',
+    date: 'March 2, 2026',
+    readTime: '12 min',
+    tags: ['vision board', 'AI productivity', 'goal execution'],
+    heroImage: '/blog/vision-board-ai-execution.svg',
+    seoKeywords: ['vision board that works', 'AI vision board', 'goal execution system', 'visual goal planning'],
+    content: `
+## Most Vision Boards Look Great and Perform Poorly
+
+The typical vision board creates emotional lift, then operational confusion. You feel inspired for 48 hours, then real life returns and nothing changes.
+
+The missing link is behavior architecture.
+
+## Why Traditional Vision Boards Underperform
+
+- They are symbolic, not scheduled
+- They are aesthetic, not measurable
+- They are broad, not behavior-specific
+- They are motivational, not adaptive
+
+If your board does not define what happens on Monday at 8:00 AM, it is not a system yet.
+
+## The AI Vision-to-Execution Framework
+
+### 1) Theme Layer (Identity)
+Define 3-5 identity themes: builder, athlete, financially disciplined, calm operator.
+
+### 2) Outcome Layer (Milestones)
+Attach one measurable milestone per theme.
+
+### 3) Action Layer (Daily Triggers)
+Convert each milestone into minimum viable daily actions.
+
+### 4) Review Layer (Weekly Calibration)
+Run a weekly review: keep, cut, and adjust.
+
+## Example Conversion
+
+Visual intent: “I want to be healthy and focused.”
+
+Execution mapping:
+- Health milestone: 18 workouts this month
+- Focus milestone: 12 deep-work sessions this month
+- Daily trigger: 25-minute workout at 7:30 AM, 90-minute focus block at 9:00 AM
+
+Now the board is executable, not aspirational.
+
+## FAQ
+
+### How often should I regenerate my vision board?
+Every 2-4 weeks, or after major context changes.
+
+### Should I include too many goals?
+No. Keep 3-5 active themes to protect focus.
+
+### Can AI replace discipline?
+No. AI improves clarity, feedback, and recovery speed. You still execute.
+
+## Bottom Line
+
+Great vision boards do not just show your future. They schedule your next move.
+    `,
+  },
+  'stop-restarting-goals-every-monday': {
+    title: 'Stop Restarting Your Goals Every Monday: The Anti-Reset System',
+    desc: 'If you restart every week, your issue is architecture—not motivation. This anti-reset system helps you preserve momentum through imperfect weeks.',
+    date: 'March 1, 2026',
+    readTime: '11 min',
+    tags: ['consistency', 'goal setting', 'weekly planning'],
+    heroImage: '/blog/anti-reset-system.svg',
+    seoKeywords: ['stop restarting goals', 'weekly consistency system', 'habit relapse recovery'],
+    content: `
+## The Monday Illusion
+
+Most people treat Monday as a motivational restart. High intent, low system integrity. By Wednesday, friction wins.
+
+## Why Resets Keep Failing
+
+- All-or-nothing plans
+- No recovery protocol
+- Unrealistic weekly load
+- No review rhythm
+
+## The Anti-Reset Framework
+
+### Rule 1: Never Restart, Recalibrate
+Do not “start over.” Adjust from current reality.
+
+### Rule 2: Weekly Minimum Commitments
+Set minimums you can hit on bad weeks:
+- 3 workouts
+- 3 focused sessions
+- 5 priority actions completed
+
+### Rule 3: Protect the Keystone Action
+Identify one action that keeps identity intact, even in chaos.
+
+### Rule 4: Friday Recovery Review
+Ask:
+- What broke?
+- What still worked?
+- What gets removed next week?
+
+## FAQ
+
+### What if I miss multiple days?
+Use a 48-hour recovery sprint: minimum viable actions only.
+
+### Should I add more goals when motivated?
+No. Motivation is volatile. Keep scope stable.
+
+## Bottom Line
+
+Momentum is not built by dramatic restarts. It is built by intelligent recovery.
+    `,
+  },
+  'founder-weekly-planning-system': {
+    title: 'The Founder Weekly Planning System: Turn Chaos Into Shipped Work',
+    desc: 'A practical execution system for founders balancing product, growth, and operations while preserving strategic focus and energy.',
+    date: 'February 28, 2026',
+    readTime: '13 min',
+    tags: ['founder productivity', 'planning', 'execution'],
+    heroImage: '/blog/founder-weekly-planning.svg',
+    seoKeywords: ['founder planning system', 'startup weekly planning', 'founder productivity'],
+    content: `
+## Founders Do Not Have a Time Problem. They Have a Priority Collision Problem.
+
+When everything is important, execution fragments. The answer is not longer hours—it is tighter prioritization loops.
+
+## Weekly Founder Stack
+
+### Monday: Strategic Commit
+Choose 3 outcomes only:
+- one product outcome
+- one growth outcome
+- one operations/risk outcome
+
+### Daily: 2 x Focus Blocks
+One block for build, one for distribution.
+
+### Wednesday: Midweek Correction
+Kill tasks that do not move this week’s outcomes.
+
+### Friday: Shipping Audit
+Measure shipped artifacts, not effort.
+
+## KPI Lens
+
+Track weekly:
+- shipped features
+- qualified leads generated
+- retained active users
+- top bottleneck removed
+
+## FAQ
+
+### Should founders multitask all day?
+No. Multitasking hides decision fatigue and reduces output quality.
+
+### What if urgent fires appear?
+Use a 70/20/10 split: core execution, maintenance, optional experiments.
+
+## Bottom Line
+
+Founder productivity is a leverage game. Plan less, commit harder, ship weekly.
+    `,
+  },
+  'seven-day-consistency-reset': {
+    title: 'The 7-Day Consistency Reset: Recover Fast After Falling Off Track',
+    desc: 'A practical 7-day reset for recovering from habit breaks, low output, and scattered focus without guilt spirals or unrealistic routines.',
+    date: 'February 27, 2026',
+    readTime: '10 min',
+    tags: ['habit reset', 'comeback', 'self discipline'],
+    heroImage: '/blog/seven-day-reset.svg',
+    seoKeywords: ['7 day consistency reset', 'habit comeback plan', 'recover from burnout routine'],
+    content: `
+## Recovery Beats Perfection
+
+You do not need a brand-new life plan. You need 7 days of reliable execution signals.
+
+## The 7-Day Protocol
+
+### Day 1: Stabilize
+Sleep, hydration, and a 15-minute walk.
+
+### Day 2: Re-anchor
+Pick one keystone habit and one high-leverage task.
+
+### Day 3: Reduce Friction
+Pre-commit environment cues: calendar blocks, app blockers, prep the night before.
+
+### Day 4: Rebuild Confidence
+Choose only guaranteed wins.
+
+### Day 5: Expand Output
+Add one additional focus block.
+
+### Day 6: Weekly Review Lite
+Identify what worked and what to remove.
+
+### Day 7: Lock Next Week
+Set minimum commitments and schedule them.
+
+## FAQ
+
+### Is this for burnout recovery too?
+For mild-to-moderate execution dips, yes. Severe burnout may need clinical and workload intervention.
+
+### What if I fail on day 3?
+Resume from current day. No reset penalty.
+
+## Bottom Line
+
+Consistency is rebuilt with small, repeatable wins—not heroic sprints.
+    `,
+  },
+  'ai-accountability-system-daily-execution': {
+    title: 'Build an AI Accountability System for Daily Execution (Not Just Motivation)',
+    desc: 'Use AI as a daily execution layer with decomposition, check-ins, recovery prompts, and friction detection to improve follow-through.',
+    date: 'February 26, 2026',
+    readTime: '12 min',
+    tags: ['AI coaching', 'accountability', 'productivity'],
+    heroImage: '/blog/ai-accountability-system.svg',
+    seoKeywords: ['AI accountability app', 'daily execution with AI', 'AI productivity workflow'],
+    content: `
+## Motivation Is Intermittent. Accountability Must Be Systemic.
+
+AI accountability works when it tracks behavior signals, not just chat interactions.
+
+## Core Components
+
+### 1) Goal Decomposition
+Translate outcomes into daily executable actions.
+
+### 2) Time-bound Check-ins
+Morning commit, midday correction, evening review.
+
+### 3) Friction Alerts
+Detect repeated misses and trigger adaptation.
+
+### 4) Recovery Coaching
+After missed actions, prompt a smaller next step within 24 hours.
+
+## Implementation Pattern
+
+- Start day: choose top 3 actions
+- Midday: remove one low-value task
+- End day: score execution and define first action for tomorrow
+
+## FAQ
+
+### Can AI accountability replace a human coach?
+It can handle daily tactical execution. Strategic transitions still benefit from human coaching.
+
+### What is the most important metric?
+Completion rate of planned high-leverage actions.
+
+## Bottom Line
+
+AI should reduce decision friction and increase recovery speed. That is where consistency compounds.
+    `,
+  },
+  'habit-stacking-examples-that-actually-work': {
+    title: 'Habit Stacking Examples That Actually Work (By Time, Location, and Trigger)',
+    desc: 'A practical guide to building resilient habit stacks with reliable triggers and realistic execution patterns for everyday life.',
+    date: 'February 25, 2026',
+    readTime: '9 min',
+    tags: ['habit stacking', 'behavior design', 'atomic habits'],
+    heroImage: '/blog/habit-stacking-examples.svg',
+    seoKeywords: ['habit stacking examples', 'atomic habits stack', 'build consistent habits'],
+    content: `
+## Most Habit Stacks Fail Because the Trigger Is Weak
+
+“After I wake up, I will meditate for 20 minutes” fails when wake time shifts. Reliable stacks need stable anchors.
+
+## Strong Trigger Types
+
+- Time anchor: after first coffee
+- Location anchor: when I sit at my desk
+- Action anchor: after brushing teeth
+
+## Practical Stack Examples
+
+### Focus Stack
+After opening laptop → set one priority task → start 25-minute focus block.
+
+### Health Stack
+After morning bathroom routine → drink water → 5-minute mobility.
+
+### Evening Shutdown Stack
+After dinner cleanup → review tomorrow’s top 3 → set clothes and workspace.
+
+## FAQ
+
+### How many habits in one stack?
+Start with 2-3. Add only after 10-14 stable days.
+
+### What if the anchor disappears?
+Define a fallback anchor immediately.
+
+## Bottom Line
+
+A good habit stack is anchored, small, and recoverable.
+    `,
+  },
+  'goal-decomposition-for-big-projects': {
+    title: 'Goal Decomposition for Big Projects: From Overwhelm to Actionable Steps',
+    desc: 'A practical decomposition model for converting large goals into milestones and next actions that can be executed daily with clarity.',
+    date: 'February 24, 2026',
+    readTime: '11 min',
+    tags: ['goal decomposition', 'planning', 'project execution'],
+    heroImage: '/blog/goal-decomposition.svg',
+    seoKeywords: ['goal decomposition method', 'break big goals into steps', 'project planning productivity'],
+    content: `
+## Big Goals Create Cognitive Drag
+
+When scope is unclear, the brain delays action. Decomposition removes ambiguity.
+
+## The 4-Layer Decomposition Model
+
+### Layer 1: Outcome
+Define the finished state in one sentence.
+
+### Layer 2: Milestones
+Set 3-6 measurable checkpoints.
+
+### Layer 3: Workstreams
+Group tasks by function (build, distribution, operations).
+
+### Layer 4: Next Actions
+Define the first visible action per workstream.
+
+## Weekly Rhythm
+
+- Monday: choose milestone focus
+- Daily: execute 1-3 next actions
+- Friday: reassess blockers and scope
+
+## FAQ
+
+### How granular should next actions be?
+Small enough to start in under 5 minutes.
+
+### What if new tasks keep appearing?
+Capture them in backlog. Do not break active day scope.
+
+## Bottom Line
+
+Decomposition converts stress into sequence. Sequence creates momentum.
+    `,
+  },
+  'morning-routine-for-focus-and-energy': {
+    title: 'A Morning Routine for Focus and Energy (Without Waking at 5AM)',
+    desc: 'A realistic morning protocol that stabilizes energy, protects attention, and drives meaningful output before reactive work takes over.',
+    date: 'February 23, 2026',
+    readTime: '8 min',
+    tags: ['morning routine', 'focus', 'energy management'],
+    heroImage: '/blog/morning-focus-routine.svg',
+    seoKeywords: ['morning routine for productivity', 'focus routine', 'energy management habits'],
+    content: `
+## You Do Not Need an Extreme Morning. You Need a Reliable One.
+
+The best routine is the one you can repeat when life is imperfect.
+
+## The 45-Minute Practical Sequence
+
+- 5 min: hydration + sunlight
+- 10 min: movement
+- 10 min: planning top 3 outcomes
+- 20 min: first focus sprint
+
+## Why This Works
+
+- Early wins improve self-efficacy
+- Movement raises alertness
+- Priority planning reduces cognitive drift
+
+## FAQ
+
+### Is coffee allowed?
+Yes. Pair it with planning so it triggers focus behavior.
+
+### What if mornings are unpredictable?
+Use a compressed 15-minute version on high-chaos days.
+
+## Bottom Line
+
+Morning routines are attention protection systems, not performance theater.
+    `,
+  },
+  'procrastination-triggers-and-fast-interventions': {
+    title: 'Procrastination Triggers and Fast Interventions: A Field Guide',
+    desc: 'Identify your highest-frequency procrastination triggers and apply rapid interventions that get you back to execution in minutes.',
+    date: 'February 22, 2026',
+    readTime: '10 min',
+    tags: ['procrastination', 'focus', 'mental performance'],
+    heroImage: '/blog/procrastination-interventions.svg',
+    seoKeywords: ['procrastination triggers', 'how to stop procrastinating quickly', 'focus interventions'],
+    content: `
+## Procrastination Is Patterned, Not Random
+
+Most people have 2-4 recurring triggers. Once named, they become manageable.
+
+## Trigger → Intervention Map
+
+- Ambiguity → write the smallest next step
+- Perfectionism → define “good enough” criteria
+- Fatigue → 10-minute activation task
+- Overwhelm → scope cut by 50%
+
+## 3-Minute Recovery Protocol
+
+1. Name the trigger
+2. Choose one intervention
+3. Start a 10-minute timer
+
+If momentum appears, continue. If not, switch to a smaller action.
+
+## FAQ
+
+### Is procrastination always emotional?
+Mostly. It can also be structural (unclear task, weak environment).
+
+### Should I punish missed tasks?
+No. Punishment increases avoidance loops.
+
+## Bottom Line
+
+Treat procrastination like signal data. Diagnose quickly, intervene faster.
+    `,
+  },
+  'how-to-build-weekly-review-that-improves-retention': {
+    title: 'How to Build a Weekly Review That Improves Retention and Results',
+    desc: 'A weekly review template designed to increase consistency, improve decisions, and raise long-term retention for personal execution systems.',
+    date: 'February 21, 2026',
+    readTime: '9 min',
+    tags: ['weekly review', 'retention', 'habit tracking'],
+    heroImage: '/blog/weekly-review-system.svg',
+    seoKeywords: ['weekly review template', 'improve consistency', 'retention productivity system'],
+    content: `
+## Weekly Reviews Are Compounding Loops
+
+Without weekly reflection, you repeat the same planning errors. With it, performance compounds.
+
+## The 20-Minute Weekly Review Format
+
+### Part 1: Evidence (5 min)
+What was completed? What was missed?
+
+### Part 2: Diagnostics (7 min)
+Why did misses happen: scope, energy, environment, or clarity?
+
+### Part 3: Design (8 min)
+Adjust next week:
+- keep one winning pattern
+- remove one friction source
+- schedule one high-leverage block
+
+## FAQ
+
+### Best day for weekly review?
+Friday evening or Sunday planning window.
+
+### How many metrics should I track?
+3-5 core metrics max. More creates noise.
+
+## Bottom Line
+
+The weekly review is where discipline becomes intelligence.
+    `,
+  },
   'habit-science-why-streaks-work': {
     title: 'The Neuroscience of Habit Streaks: Why 66 Days Is the Real Number (Not 21)',
     desc: "We studied 247 beta users. The data reveals something textbooks don't tell you about habit formation.",
     date: 'February 12, 2026',
     readTime: '7 min',
     tags: ['habits', 'neuroscience', 'data'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['habit streak science', 'how long to build a habit', '66 day habit rule'],
     chartComponent: HabitFormationChart,
     content: `
 ## The 21-Day Myth Needs to Die
@@ -126,6 +773,8 @@ Give it the 66 days it needs.
     date: 'February 8, 2026',
     readTime: '9 min',
     tags: ['procrastination', 'neuroscience', 'data'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['procrastination psychology', 'emotional procrastination', 'stop avoiding tasks'],
     chartComponent: ProcrastinationLoopChart,
     content: `
 ## Everyone Gets This Wrong
@@ -280,6 +929,8 @@ You don't need more discipline. You need to work **with** your emotional wiring,
     date: 'February 3, 2026',
     readTime: '11 min',
     tags: ['AI', 'coaching', 'research'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['AI coaching vs human coaching', 'best coaching system', 'AI accountability'],
     chartComponent: CoachingComparisonChart,
     content: `
 ## The Question Everyone's Asking (But Nobody Has Data For)
@@ -507,6 +1158,8 @@ But if it does… you just saved yourself $7,000+/year and got daily coaching th
     date: 'January 28, 2026',
     readTime: '10 min',
     tags: ['goals', 'systems', 'data'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['goal setting framework', 'smart goals alternatives', 'goal tracking system'],
     chartComponent: GoalFrameworkRadar,
     content: `
 ## The SMART Goals Origin Story Nobody Tells You
@@ -635,6 +1288,8 @@ Resurgo gives you both.
     date: 'January 21, 2026',
     readTime: '11 min',
     tags: ['focus', 'deep work', 'data'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['deep work protocol', 'increase focus', 'reduce distractions'],
     chartComponent: DeepWorkProgressChart,
     content: `
 ## The Attention Crisis (And Why It's Your Opportunity)
@@ -892,12 +1547,131 @@ Start tomorrow. One 90-minute block. Phone in another room. See what you create.
   },
 };
 
+function extractFaqItemsFromContent(content: string): Array<FaqItem> {
+  const faqStart = content.indexOf('## FAQ');
+  if (faqStart === -1) return [];
+
+  const afterFaq = content.slice(faqStart);
+  const nextSection = afterFaq.slice(6);
+  const nextHeadingMatch = nextSection.match(/\n##\s+/);
+  const faqSection = nextHeadingMatch ? afterFaq.slice(0, nextHeadingMatch.index ? nextHeadingMatch.index + 6 : undefined) : afterFaq;
+
+  const matches = Array.from(faqSection.matchAll(/###\s+(.+)\n([\s\S]*?)(?=\n###\s+|\n##\s+|$)/g));
+
+  return matches
+    .map((match) => {
+      const question = match[1]?.trim() ?? '';
+      const answer = (match[2] ?? '')
+        .replace(/\n+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      return { question, answer };
+    })
+    .filter((item) => item.question.length > 0 && item.answer.length > 0)
+    .slice(0, 6);
+}
+
+function buildFallbackFaq(postTitle: string): Array<FaqItem> {
+  return [
+    {
+      question: `How do I apply "${postTitle}" this week?`,
+      answer: 'Start with one high-leverage action today, schedule it in your calendar, then review outcomes at the end of the week and adjust scope instead of restarting.',
+    },
+    {
+      question: 'How long until I see meaningful results?',
+      answer: 'Most readers see early momentum in 1-2 weeks and stronger consistency in 4-8 weeks when they track behavior, reduce friction, and run a weekly review.',
+    },
+  ];
+}
+
+function getIsoDate(input: string): string {
+  const parsed = new Date(input);
+  if (Number.isNaN(parsed.getTime())) {
+    return new Date().toISOString();
+  }
+  return parsed.toISOString();
+}
+
+function getWordCount(markdown: string): number {
+  const stripped = markdown
+    .replace(/\[CHART_PLACEHOLDER_\d+\]/g, ' ')
+    .replace(/[#*_`>\-\[\]]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (!stripped) return 0;
+  return stripped.split(' ').filter(Boolean).length;
+}
+
+function pickCtaVariant(slug: string): 'A' | 'B' {
+  const score = slug.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return score % 2 === 0 ? 'A' : 'B';
+}
+
+function headingToId(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+function extractH2Headings(content: string): Array<{ title: string; id: string }> {
+  return content
+    .split('\n')
+    .filter((line) => line.startsWith('## '))
+    .map((line) => line.replace('## ', '').trim())
+    .filter(Boolean)
+    .slice(0, 12)
+    .map((title) => ({
+      title,
+      id: headingToId(title),
+    }));
+}
+
+function extractHowToSteps(content: string): Array<string> {
+  const lines = content.split('\n').map((line) => line.trim());
+  const numbered = lines
+    .filter((line) => /^\d+\./.test(line))
+    .map((line) => line.replace(/^\d+\.\s*/, ''));
+
+  if (numbered.length >= 2) return numbered.slice(0, 8);
+
+  const stepHeadings = lines
+    .filter((line) => /^###\s+Step\s+\d+/i.test(line))
+    .map((line) => line.replace(/^###\s+/i, '').trim());
+
+  return stepHeadings.slice(0, 8);
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = POSTS[params.slug];
   if (!post) return { title: 'Not Found' };
+
+  const canonicalUrl = `https://resurgo.life/blog/${params.slug}`;
+
   return {
     title: `${post.title} — Resurgo Blog`,
     description: post.desc,
+    keywords: post.seoKeywords ?? post.tags,
+    authors: [{ name: AUTHOR.name }],
+    category: post.tags[0] ?? 'Productivity',
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      title: post.title,
+      description: post.desc,
+      type: 'article',
+      url: canonicalUrl,
+      images: [{ url: `https://resurgo.life${post.heroImage}` }],
+      tags: post.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.desc,
+      images: [`https://resurgo.life${post.heroImage}`],
+    },
   };
 }
 
@@ -908,6 +1682,164 @@ export async function generateStaticParams() {
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = POSTS[params.slug];
   if (!post) notFound();
+
+  const primaryCluster = BLOG_TOPIC_CLUSTERS
+    .map((cluster) => ({
+      cluster,
+      score: post.tags.filter((tag) => cluster.tags.includes(tag)).length,
+    }))
+    .sort((a, b) => b.score - a.score)
+    .find((item) => item.score > 0)?.cluster;
+
+  const seriesPosts = primaryCluster ? getPostsForCluster(primaryCluster.slug) : [];
+  const currentSeriesIndex = seriesPosts.findIndex((item) => item.slug === params.slug);
+  const prevInSeries = currentSeriesIndex > 0 ? seriesPosts[currentSeriesIndex - 1] : null;
+  const nextInSeries = currentSeriesIndex >= 0 && currentSeriesIndex < seriesPosts.length - 1
+    ? seriesPosts[currentSeriesIndex + 1]
+    : null;
+
+  const faqItems = (() => {
+    const extracted = extractFaqItemsFromContent(post.content);
+    return extracted.length > 0 ? extracted : buildFallbackFaq(post.title);
+  })();
+
+  const relatedPosts = Object.entries(POSTS)
+    .filter(([slug]) => slug !== params.slug)
+    .map(([slug, candidate]) => {
+      const sharedTagCount = candidate.tags.filter((tag) => post.tags.includes(tag)).length;
+      return {
+        slug,
+        title: candidate.title,
+        desc: candidate.desc,
+        date: candidate.date,
+        sharedTagCount,
+      };
+    })
+    .sort((a, b) => b.sharedTagCount - a.sharedTagCount)
+    .slice(0, 4);
+
+  const nextBestRead = relatedPosts[0] ?? null;
+  const toc = extractH2Headings(post.content);
+  const howToSteps = extractHowToSteps(post.content);
+  const keyTakeaways = [post.desc, ...post.tags.map((tag) => `Use ${tag} as a practical execution lever this week.`)].slice(0, 4);
+  const ctaVariant = pickCtaVariant(params.slug);
+  const ctaConfig = ctaVariant === 'A'
+    ? {
+        label: 'NEXT_BEST_READ_A',
+        headline: 'Build your 7-day execution sprint',
+        sub: 'Use this article as your immediate next move and stack momentum this week.',
+        button: '[READ_NEXT_ARTICLE]',
+      }
+    : {
+        label: 'NEXT_BEST_READ_B',
+        headline: 'Turn insight into a working system',
+        sub: 'Open the next most relevant guide and convert ideas into scheduled actions.',
+        button: '[CONTINUE_READING]',
+      };
+
+  const isoPublished = getIsoDate(post.date);
+  const isoModified = isoPublished;
+  const wordCount = getWordCount(post.content);
+
+  const blogPostingJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.desc,
+    image: [`https://resurgo.life${post.heroImage}`],
+    inLanguage: 'en-US',
+    wordCount,
+    timeRequired: `PT${Math.max(parseInt(post.readTime, 10) || 1, 1)}M`,
+    articleSection: primaryCluster?.title ?? post.tags[0] ?? 'Productivity',
+    about: post.tags.map((tag) => ({ '@type': 'Thing', name: tag })),
+    isAccessibleForFree: true,
+    author: {
+      '@type': 'Person',
+      name: AUTHOR.name,
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Resurgo',
+      url: 'https://resurgo.life',
+    },
+    datePublished: isoPublished,
+    dateModified: isoModified,
+    mainEntityOfPage: `https://resurgo.life/blog/${params.slug}`,
+    keywords: (post.seoKeywords ?? post.tags).join(', '),
+  };
+
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://resurgo.life/',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: 'https://resurgo.life/blog',
+      },
+      ...(primaryCluster
+        ? [{
+            '@type': 'ListItem',
+            position: 3,
+            name: primaryCluster.title,
+            item: `https://resurgo.life/blog/topics/${primaryCluster.slug}`,
+          }]
+        : []),
+      {
+        '@type': 'ListItem',
+        position: primaryCluster ? 4 : 3,
+        name: post.title,
+        item: `https://resurgo.life/blog/${params.slug}`,
+      },
+    ],
+  };
+
+  const howToJsonLd = howToSteps.length >= 2
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: post.title,
+        description: post.desc,
+        totalTime: `PT${Math.max(parseInt(post.readTime, 10) || 1, 1)}M`,
+        step: howToSteps.map((step, index) => ({
+          '@type': 'HowToStep',
+          position: index + 1,
+          name: step,
+          text: step,
+        })),
+      }
+    : null;
+
+  const speakableJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    name: post.title,
+    url: `https://resurgo.life/blog/${params.slug}`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['h1', '.prose p:first-of-type'],
+    },
+  };
 
   // Render chart if placeholder is in content
   const renderContent = (content: string, ChartComponent?: React.ComponentType) => {
@@ -924,7 +1856,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         const key = `${i}-${j}`;
         
         if (paragraph.startsWith('## ')) {
-          return <h2 key={key} className="mt-8 mb-3 font-mono text-sm font-bold tracking-widest text-zinc-200">{paragraph.replace('## ', '')}</h2>;
+          const headingText = paragraph.replace('## ', '');
+          return <h2 id={headingToId(headingText)} key={key} className="mt-8 mb-3 scroll-mt-20 font-mono text-sm font-bold tracking-widest text-zinc-200">{headingText}</h2>;
         }
         if (paragraph.startsWith('### ')) {
           return <h3 key={key} className="mt-6 mb-2 font-mono text-xs font-bold tracking-widest text-zinc-300">{paragraph.replace('### ', '')}</h3>;
@@ -962,6 +1895,29 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
   return (
     <main className="min-h-screen bg-black">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(speakableJsonLd) }}
+      />
+      {howToJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(howToJsonLd) }}
+        />
+      )}
+
       <div className="mx-auto max-w-2xl px-4 py-16">
         {/* Back */}
         <Link href="/blog" className="mb-8 flex items-center gap-2 font-mono text-xs text-zinc-400 hover:text-zinc-300">
@@ -975,6 +1931,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             <span className="font-mono text-[9px] tracking-widest text-orange-600">RESURGO :: BLOG</span>
           </div>
           <div className="p-6 space-y-3">
+            <Image
+              src={post.heroImage}
+              alt={post.title}
+              width={1200}
+              height={630}
+              className="mb-3 h-56 w-full border border-zinc-800 object-cover"
+              priority
+            />
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
                 <span key={tag} className="border border-orange-900/50 px-2 py-0.5 font-mono text-[8px] tracking-widest text-orange-600">
@@ -992,6 +1956,30 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
 
         {/* Content with Charts */}
+        {toc.length > 0 && (
+          <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">ARTICLE_MAP</p>
+            <ul className="mt-2 space-y-1">
+              {toc.map((item) => (
+                <li key={item.id}>
+                  <a href={`#${item.id}`} className="font-mono text-xs text-zinc-400 hover:text-orange-400">
+                    {item.title}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">KEY_TAKEAWAYS</p>
+          <ul className="mt-2 space-y-1">
+            {keyTakeaways.map((takeaway) => (
+              <li key={takeaway} className="font-mono text-xs text-zinc-400">• {takeaway}</li>
+            ))}
+          </ul>
+        </div>
+
         <div className="prose prose-invert prose-sm max-w-none font-mono text-zinc-400
           prose-headings:font-mono prose-headings:font-bold prose-headings:text-zinc-200 prose-headings:tracking-wide
           prose-p:leading-relaxed prose-p:text-zinc-400
@@ -1001,6 +1989,92 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           prose-blockquote:border-orange-800 prose-blockquote:text-zinc-500">
           {renderContent(post.content, post.chartComponent)}
         </div>
+
+        <div className="mt-10 border border-zinc-800 bg-zinc-950 p-5">
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">ABOUT_THE_AUTHOR</p>
+          <div className="mt-3 flex items-start gap-4">
+            <Image
+              src={AUTHOR.image}
+              alt={AUTHOR.name}
+              width={72}
+              height={72}
+              className="h-16 w-16 border border-zinc-700 object-cover"
+            />
+            <div>
+              <p className="font-mono text-sm font-bold text-zinc-100">{AUTHOR.name}</p>
+              <p className="font-mono text-[10px] text-orange-500">{AUTHOR.role}</p>
+              <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">{AUTHOR.bio}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 border border-zinc-800 bg-zinc-950 p-5">
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">RELATED_ARTICLES</p>
+          <div className="mt-3 space-y-3">
+            {relatedPosts.map((item) => (
+              <Link
+                key={item.slug}
+                href={`/blog/${item.slug}`}
+                className="block border border-zinc-800 bg-black/40 p-3 transition hover:border-zinc-700"
+              >
+                <p className="font-mono text-xs font-semibold text-zinc-200">{item.title}</p>
+                <p className="mt-1 font-mono text-[10px] text-zinc-500">{item.date} · {item.sharedTagCount} shared tags</p>
+                <p className="mt-2 font-mono text-[11px] leading-relaxed text-zinc-400">{item.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {primaryCluster && (prevInSeries || nextInSeries) && (
+          <div className="mt-8 border border-zinc-800 bg-zinc-950 p-5">
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">ARTICLE_SERIES_NAV</p>
+            <p className="mt-1 font-mono text-[10px] text-zinc-500">Series: {primaryCluster.title}</p>
+            <div className="mt-3 grid gap-3 md:grid-cols-2">
+              <div className="border border-zinc-800 bg-black/40 p-3">
+                <p className="font-mono text-[9px] text-zinc-500">PREVIOUS</p>
+                {prevInSeries ? (
+                  <Link href={`/blog/${prevInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
+                    {prevInSeries.title}
+                  </Link>
+                ) : (
+                  <p className="mt-1 font-mono text-xs text-zinc-600">Start of series</p>
+                )}
+              </div>
+              <div className="border border-zinc-800 bg-black/40 p-3">
+                <p className="font-mono text-[9px] text-zinc-500">NEXT</p>
+                {nextInSeries ? (
+                  <Link href={`/blog/${nextInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
+                    {nextInSeries.title}
+                  </Link>
+                ) : (
+                  <p className="mt-1 font-mono text-xs text-zinc-600">End of series</p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {nextBestRead && (
+          <div className="mt-8 border border-orange-900/50 bg-orange-950/10 p-6 text-center">
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">{ctaConfig.label}</p>
+            <p className="mt-2 font-mono text-base font-bold text-zinc-100">{ctaConfig.headline}</p>
+            <p className="mt-1 font-mono text-xs text-zinc-500">{ctaConfig.sub}</p>
+            <div className="mt-4 flex flex-col items-center justify-center gap-2 sm:flex-row">
+              <Link
+                href={`/blog/${nextBestRead.slug}?ref=next-best-read-${ctaVariant.toLowerCase()}`}
+                className="inline-block border border-orange-900 bg-orange-950/40 px-5 py-2 font-mono text-xs font-bold tracking-widest text-orange-400 hover:bg-orange-950/60"
+              >
+                {ctaConfig.button}
+              </Link>
+              <Link
+                href="/sign-up?ref=blog-next-best-read"
+                className="inline-block border border-zinc-700 bg-black/50 px-5 py-2 font-mono text-xs font-bold tracking-widest text-zinc-300 hover:border-zinc-600"
+              >
+                [START_FREE]
+              </Link>
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="mt-12 border border-orange-900/40 bg-orange-950/10 p-6 text-center">

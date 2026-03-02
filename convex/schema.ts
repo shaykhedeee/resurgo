@@ -929,6 +929,29 @@ export default defineSchema({
     .index('by_createdAt', ['createdAt']),
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // GROWTH EVENTS — Product-led growth instrumentation (vision board funnel)
+  // ─────────────────────────────────────────────────────────────────────────────
+  growthEvents: defineTable({
+    clerkId: v.string(),
+    eventName: v.union(
+      v.literal('vision_board_viewed'),
+      v.literal('vision_board_generate_clicked'),
+      v.literal('vision_board_generation_success'),
+      v.literal('vision_board_generation_failed'),
+      v.literal('vision_board_pro_gate_hit'),
+      v.literal('upgrade_clicked')
+    ),
+    source: v.union(v.literal('client'), v.literal('api'), v.literal('system')),
+    page: v.optional(v.string()),
+    conversationId: v.optional(v.string()),
+    details: v.optional(v.any()),
+    createdAt: v.number(),
+  })
+    .index('by_clerkId_and_createdAt', ['clerkId', 'createdAt'])
+    .index('by_eventName_and_createdAt', ['eventName', 'createdAt'])
+    .index('by_createdAt', ['createdAt']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
   // CHATBOT FOLLOW-UPS — Scheduled 24h/72h checkbacks
   // ─────────────────────────────────────────────────────────────────────────────
   chatbotFollowUps: defineTable({

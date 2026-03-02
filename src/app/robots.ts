@@ -39,12 +39,12 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'GPTBot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       {
         userAgent: 'PerplexityBot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       // Block aggressive crawlers

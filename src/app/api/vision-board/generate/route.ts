@@ -14,6 +14,7 @@ import type { PsychologicalProfile } from '@/lib/ai/psychology/profile-schema';
 import type { UserArchetype } from '@/lib/ai/onboarding/archetypes';
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+const ANALYTICS_SYNC_SECRET = process.env.BILLING_WEBHOOK_SYNC_SECRET;
 
 type VisionGenerationMode = 'ai' | 'hybrid';
 type VisionStylePreset = 'pinterest-bold' | 'clean-minimal' | 'luxury-editorial' | 'cinematic-dream';
@@ -40,7 +41,16 @@ type ApiShape = {
     list?: unknown;
     getActiveGoals?: unknown;
   };
+  growthAnalytics?: {
+    logGrowthEvent?: unknown;
+  };
 };
+
+type GrowthEventName =
+  | 'vision_board_generate_clicked'
+  | 'vision_board_generation_success'
+  | 'vision_board_generation_failed'
+  | 'vision_board_pro_gate_hit';
 
 const STYLE_SUFFIX: Record<VisionStylePreset, string> = {
   'pinterest-bold': 'pinterest-style collage aesthetic, bold composition, high contrast, dynamic framing, premium lifestyle editorial',
@@ -48,6 +58,39 @@ const STYLE_SUFFIX: Record<VisionStylePreset, string> = {
   'luxury-editorial': 'luxury editorial photography style, polished premium textures, elegant composition, magazine-grade visuals',
   'cinematic-dream': 'cinematic dreamlike look, dramatic lighting, shallow depth of field, emotionally rich scene',
 };
+
+async function logGrowthEvent(
+  eventName: GrowthEventName,
+  clerkId: string,
+  source: 'api' | 'system',
+  details?: Record<string, unknown>
+) {
+  if (!ANALYTICS_SYNC_SECRET) return;
+
+  try {
+    const apiRef = (api as unknown as ApiShape).growthAnalytics?.logGrowthEvent;
+    if (!apiRef) return;
+
+    const invokeMutation = convex.mutation as unknown as (
+      functionReference: unknown,
+      mutationArgs: Record<string, unknown>
+    ) => Promise<unknown>;
+
+    await invokeMutation(apiRef, {
+      clerkId,
+      eventName,
+      source,
+      page: '/vision-board',
+      details,
+      syncSecret: ANALYTICS_SYNC_SECRET,
+    });
+  } catch (error) {
+    console.warn('[GrowthTelemetry] Vision board event logging failed', {
+      eventName,
+      error: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
 
 export async function POST(req: NextRequest) {
   const { userId, getToken } = await auth();
@@ -92,6 +135,12 @@ export async function POST(req: NextRequest) {
   const userRecord = convexUser as CurrentUserRecord;
   const userPlan = userRecord.plan ?? 'free';
   if (userPlan === 'free') {
+    await logGrowthEvent('vision_board_pro_gate_hit', userId, 'api', {
+      mode,
+      stylePreset,
+      customImagesCount: customImages.length,
+    });
+
     return NextResponse.json(
       {
         error: 'Vision Board Studio is a Pro feature. Upgrade to Pro or Lifetime to unlock premium generation.',
@@ -140,6 +189,12 @@ export async function POST(req: NextRequest) {
   });
 
   if (!config) {
+    await logGrowthEvent('vision_board_generation_failed', userId, 'system', {
+      stage: 'config_generation',
+      mode,
+      stylePreset,
+      customImagesCount: customImages.length,
+    });
     return NextResponse.json({ error: 'Board config generation failed' }, { status: 500 });
   }
 
@@ -168,14 +223,34 @@ export async function POST(req: NextRequest) {
 
   // ── 6. Save to Convex ──────────────────────────────────────────────────────
   try {
+    await logGrowthEvent('vision_board_generate_clicked', userId, 'api', {
+      mode,
+      stylePreset,
+      customImagesCount: customImages.length,
+    });
+
     await convex.mutation(api.visionBoards.save, {
       config: JSON.stringify(boardWithImages),
       version: boardWithImages.version,
     });
   } catch (err) {
     console.error('[VisionBoard] Failed to save board:', err);
+    await logGrowthEvent('vision_board_generation_failed', userId, 'system', {
+      stage: 'save',
+      mode,
+      stylePreset,
+      customImagesCount: customImages.length,
+      message: err instanceof Error ? err.message : String(err),
+    });
     // Still return the generated board even if save fails
   }
+
+  await logGrowthEvent('vision_board_generation_success', userId, 'api', {
+    mode,
+    stylePreset,
+    customImagesCount: customImages.length,
+    panelCount: boardWithImages.panels.length,
+  });
 
   return NextResponse.json({ success: true, board: boardWithImages });
 }
