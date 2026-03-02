@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - AI Goal Decomposition Engine
+// RESURGO - AI Goal Decomposition Engine
 // Breaks ultimate goals into milestones → weekly objectives → daily tasks
 // ═══════════════════════════════════════════════════════════════════════════════
 

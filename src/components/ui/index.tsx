@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Design System UI Components
+// RESURGO - Design System UI Components
 // Export all reusable UI components
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Push Notification Service
+// RESURGO - Push Notification Service
 // Web Push Notifications for reminders and motivation
 // ═══════════════════════════════════════════════════════════════════════════════
 

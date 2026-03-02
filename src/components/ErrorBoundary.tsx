@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Enhanced Error Boundary Component
+// RESURGO - Enhanced Error Boundary Component
 // Catches and reports React component errors gracefully
 // ═══════════════════════════════════════════════════════════════════════════════
 

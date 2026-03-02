@@ -1,7 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY — usePlanGating Hook
+// RESURGO — usePlanGating Hook
 // Check user's plan and gate features accordingly
 // ═══════════════════════════════════════════════════════════════════════════════
 

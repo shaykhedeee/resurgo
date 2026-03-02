@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Weekly Review System
+// RESURGO - Weekly Review System
 // Structured weekly check-in for reflection, planning, and goal adjustment
 // ═══════════════════════════════════════════════════════════════════════════════
 

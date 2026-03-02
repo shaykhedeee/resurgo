@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - AI-Powered Life Transformation System
+// RESURGO - AI-Powered Life Transformation System
 // Core Type Definitions
 // ═══════════════════════════════════════════════════════════════════════════════
 

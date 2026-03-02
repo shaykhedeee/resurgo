@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Goal Countdown Widget
+// RESURGO - Goal Countdown Widget
 // Visual countdown to goal deadline with calendar view
 // ═══════════════════════════════════════════════════════════════════════════════
 

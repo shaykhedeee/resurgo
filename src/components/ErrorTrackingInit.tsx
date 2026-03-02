@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Error Tracking Initializer
+// RESURGO - Error Tracking Initializer
 // Client-side component to initialize error tracking
 // ═══════════════════════════════════════════════════════════════════════════════
 

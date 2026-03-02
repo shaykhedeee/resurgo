@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Sidebar Navigation Component
+// RESURGO - Sidebar Navigation Component
 // Modern sidebar navigation inspired by professional SaaS apps
 // ═══════════════════════════════════════════════════════════════════════════════
 

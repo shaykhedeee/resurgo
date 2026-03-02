@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - AI Habit Suggestions Component
+// RESURGO - AI Habit Suggestions Component
 // Smart habit recommendations based on user's goals
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Gentle Mode Settings Component
+// RESURGO - Gentle Mode Settings Component
 // ADHD & Anxiety-friendly configuration options
 // Features: Flexible streaks, reduced notifications, self-compassion prompts
 // ═══════════════════════════════════════════════════════════════════════════════

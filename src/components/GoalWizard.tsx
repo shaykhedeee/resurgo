@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Goal Creation Wizard with AI Decomposition
+// RESURGO - Goal Creation Wizard with AI Decomposition
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use client';

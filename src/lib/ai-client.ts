@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Secure AI Client
+// RESURGO - Secure AI Client
 // Client-side AI service that calls server-side API routes (no exposed API keys)
 // With caching and rate limiting for efficient API usage
 // ═══════════════════════════════════════════════════════════════════════════════

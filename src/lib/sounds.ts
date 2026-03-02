@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Sound Effects System
+// RESURGO - Sound Effects System
 // Premium audio feedback for task completion and achievements
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Unified Today View
+// RESURGO - Unified Today View
 // Single task stream combining habits, goals, and manual tasks
 // ═══════════════════════════════════════════════════════════════════════════════
 

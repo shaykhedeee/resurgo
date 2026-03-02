@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY — Comprehensive Billing System Integration Tests
+// RESURGO — Comprehensive Billing System Integration Tests
 // End-to-End QA Testing: Signup → Payment → Webhook → Feature Gating
 // ═══════════════════════════════════════════════════════════════════════════════
 

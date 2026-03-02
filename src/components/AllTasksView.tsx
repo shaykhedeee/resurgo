@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - All Tasks View with Filtering
+// RESURGO - All Tasks View with Filtering
 // Complete task management with filters, sorting, and multiple views
 // ═══════════════════════════════════════════════════════════════════════════════
 

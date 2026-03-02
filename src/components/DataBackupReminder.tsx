@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Data Backup Reminder Component
+// RESURGO - Data Backup Reminder Component
 // Prompts users to export their data periodically
 // ═══════════════════════════════════════════════════════════════════════════════
 

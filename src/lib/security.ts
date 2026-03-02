@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Security Middleware & Utilities
+// RESURGO - Security Middleware & Utilities
 // Rate limiting, input sanitization, CSRF protection
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,7 +1,7 @@
 'use client';
 
 // -----------------------------------------------------------------------------
-// Ascendify � Goals Command Center
+// Resurgo � Goals Command Center
 // -----------------------------------------------------------------------------
 
 import { useQuery, useMutation } from 'convex/react';

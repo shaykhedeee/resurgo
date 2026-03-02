@@ -7,7 +7,8 @@
 export const dynamic = 'force-dynamic';
 
 import type { Metadata } from 'next';
-import { LandingPageV2 as LandingPage } from '@/components/LandingPageV2';
+import LandingPageV2 from '@/components/LandingPageV2';
+const LandingPage = LandingPageV2;
 
 export const metadata: Metadata = {
   title: 'Resurgo — Free AI Habit Tracker & Goal Planner | Build Better Habits',

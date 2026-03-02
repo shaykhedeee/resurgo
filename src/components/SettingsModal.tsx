@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Settings Modal Component
+// RESURGO - Settings Modal Component
 // App settings, data export, and profile management
 // ═══════════════════════════════════════════════════════════════════════════════
 

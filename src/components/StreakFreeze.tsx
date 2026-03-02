@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Streak Freeze Component
+// RESURGO - Streak Freeze Component
 // Shows and allows users to use streak freezes
 // ═══════════════════════════════════════════════════════════════════════════════
 

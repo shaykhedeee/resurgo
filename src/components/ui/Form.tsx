@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Form Components
+// RESURGO - Form Components
 // Beautiful form validation UI with animations and accessibility
 // ═══════════════════════════════════════════════════════════════════════════════
 

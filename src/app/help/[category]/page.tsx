@@ -20,18 +20,18 @@ const categoriesData: Record<string, {
 }> = {
   'getting-started': {
     title: 'Getting Started',
-    description: 'New to ASCEND? Start here to learn the basics and set up your first habits and goals.',
+    description: 'New to RESURGO? Start here to learn the basics and set up your first habits and goals.',
     icon: 'GS',
     articles: [
       {
         id: 'first-habit',
         title: 'Creating Your First Habit',
-        summary: 'Learn how to create and track your first habit in ASCEND',
+        summary: 'Learn how to create and track your first habit in RESURGO',
         readTime: 3,
         content: `
 ## Creating Your First Habit
 
-Welcome to ASCEND! Creating your first habit is simple and takes less than a minute.
+Welcome to RESURGO! Creating your first habit is simple and takes less than a minute.
 
 ### Step 1: Open the Add Menu
 Tap the **+** button in the bottom navigation bar to open the add menu.
@@ -70,11 +70,11 @@ Habit stacking is one of the most powerful techniques from James Clear's Atomic 
 - After I sit down at my desk, I will write my top 3 priorities
 - After I finish dinner, I will go for a 10-minute walk
 
-### How to Use Habit Stacking in ASCEND
+### How to Use Habit Stacking in RESURGO
 
 1. Create a new habit
 2. In the "Trigger Habit" field, select an existing habit
-3. ASCEND will remind you to complete the new habit right after the trigger
+3. RESURGO will remind you to complete the new habit right after the trigger
 
 ### Why It Works
 Your brain is already primed to perform the trigger habit. By linking the new behavior to it, you're essentially "hitching a ride" on an existing neural pathway.
@@ -88,12 +88,12 @@ Your brain is already primed to perform the trigger habit. By linking the new be
       {
         id: 'ai-goals',
         title: 'Setting Up Goals with AI',
-        summary: 'Let ASCEND AI break down your big goals into achievable milestones',
+        summary: 'Let RESURGO AI break down your big goals into achievable milestones',
         readTime: 5,
         content: `
 ## Setting Up Goals with AI Decomposition
 
-ASCEND's AI uses Atomic Habits principles to transform your big goals into actionable daily tasks.
+RESURGO's AI uses Atomic Habits principles to transform your big goals into actionable daily tasks.
 
 ### How It Works
 
@@ -123,12 +123,12 @@ ASCEND's AI uses Atomic Habits principles to transform your big goals into actio
       {
         id: 'navigation',
         title: 'Navigating the App',
-        summary: 'A tour of ASCEND main screens and features',
+        summary: 'A tour of RESURGO main screens and features',
         readTime: 3,
         content: `
-## Navigating ASCEND
+## Navigating RESURGO
 
-Let's take a quick tour of the main areas in ASCEND.
+Let's take a quick tour of the main areas in RESURGO.
 
 ### Bottom Navigation
 - **Home**: Your daily dashboard with today's habits and tasks
@@ -160,7 +160,7 @@ Let's take a quick tour of the main areas in ASCEND.
   },
   'features': {
     title: 'Features Guide',
-    description: 'Learn how to use every ASCEND feature to maximize your productivity.',
+    description: 'Learn how to use every RESURGO feature to maximize your productivity.',
     icon: 'FG',
     articles: [
       {
@@ -187,7 +187,7 @@ The Pomodoro Technique helps you work in focused bursts with regular breaks.
 6. Repeat!
 
 ### Automatic Tracking
-When you link a task to your Pomodoro session, ASCEND automatically:
+When you link a task to your Pomodoro session, RESURGO automatically:
 - Logs time spent on the task
 - Marks the task complete when you finish
 - Awards bonus XP for focused work
@@ -202,9 +202,9 @@ Pro users can customize timer durations and sounds in Settings.
         summary: 'Understand how XP, levels, and achievements work',
         readTime: 4,
         content: `
-## Gamification in ASCEND
+## Gamification in RESURGO
 
-ASCEND uses game mechanics to make habit building fun and rewarding.
+RESURGO uses game mechanics to make habit building fun and rewarding.
 
 ### Earning XP
 - Complete a habit: 10-50 XP (based on difficulty)
@@ -241,36 +241,36 @@ Compete with friends or the global community on weekly and monthly leaderboards.
       {
         id: 'four-laws',
         title: 'The Four Laws of Behavior Change',
-        summary: 'The core framework from Atomic Habits that powers ASCEND',
+        summary: 'The core framework from Atomic Habits that powers RESURGO',
         readTime: 6,
         content: `
 ## The Four Laws of Behavior Change
 
-ASCEND is built on James Clear's Four Laws from Atomic Habits. Here's how each applies:
+RESURGO is built on James Clear's Four Laws from Atomic Habits. Here's how each applies:
 
 ### Law 1: Make It Obvious (Cue)
-- **ASCEND Feature**: Trigger habits, notifications, calendar reminders
+- **RESURGO Feature**: Trigger habits, notifications, calendar reminders
 - **How to Apply**: 
   - Set specific times for habits
   - Use habit stacking
   - Enable smart notifications
 
 ### Law 2: Make It Attractive (Craving)
-- **ASCEND Feature**: XP rewards, streaks, achievements, temptation bundling
+- **RESURGO Feature**: XP rewards, streaks, achievements, temptation bundling
 - **How to Apply**:
   - Pair habits with things you enjoy
   - Join the community for accountability
   - Celebrate your wins
 
 ### Law 3: Make It Easy (Response)
-- **ASCEND Feature**: Two-Minute Rule, habit simplification, environment priming
+- **RESURGO Feature**: Two-Minute Rule, habit simplification, environment priming
 - **How to Apply**:
   - Start with tiny habits
   - Reduce friction (prepare the night before)
   - Use the 2-minute version first
 
 ### Law 4: Make It Satisfying (Reward)
-- **ASCEND Feature**: Immediate XP, visual streaks, achievement unlocks
+- **RESURGO Feature**: Immediate XP, visual streaks, achievement unlocks
 - **How to Apply**:
   - Check off your habits (dopamine hit!)
   - Watch your streak grow
@@ -298,7 +298,7 @@ The hardest part of any habit is starting. The Two-Minute Rule removes the barri
 | Study for 2 hours | Open my notes |
 | Run 5 miles | Put on running shoes |
 
-### In ASCEND
+### In RESURGO
 When AI decomposes your goals, it automatically creates Two-Minute versions:
 - "Start small: [2-min version]"
 - "Full: [complete task]"
@@ -323,7 +323,7 @@ Master showing up before you optimize performance. Consistency beats intensity.
         summary: 'Step-by-step guide to unlocking premium features',
         readTime: 2,
         content: `
-## Upgrading to ASCEND Pro
+## Upgrading to RESURGO Pro
 
 ### What You Get with Pro
 - Unlimited habits and goals
@@ -348,7 +348,7 @@ We accept all major credit cards, Apple Pay, and Google Pay.
 ### Billing FAQ
 - Cancel anytime - no questions asked
 - 14-day money-back guarantee
-- Charges appear as "ASCEND" on your statement
+- Charges appear as "RESURGO" on your statement
         `,
       },
       {
@@ -407,7 +407,7 @@ Streaks reset at midnight in YOUR timezone.
 Your daily streak counts consecutive days where you completed ALL active habits, not just some.
 
 ### Grace Period
-ASCEND uses a "never miss twice" approach:
+RESURGO uses a "never miss twice" approach:
 - Miss 1 day: Streak pauses (not reset)
 - Miss 2 days: Streak resets
 
@@ -425,25 +425,25 @@ ASCEND uses a "never miss twice" approach:
         content: `
 ## Fixing Notification Issues
 
-### Step 1: Check ASCEND Settings
+### Step 1: Check RESURGO Settings
 1. Go to **Settings** > **Notifications**
 2. Ensure notifications are **enabled**
 3. Set your preferred reminder times
 
 ### Step 2: Check Device Settings
 **iPhone/iPad:**
-1. Settings > ASCEND > Notifications > Allow
+1. Settings > RESURGO > Notifications > Allow
 
 **Android:**
-1. Settings > Apps > ASCEND > Notifications > Enable
+1. Settings > Apps > RESURGO > Notifications > Enable
 
 **Web/Desktop:**
 1. Click the lock icon in your browser address bar
-2. Allow notifications for ASCEND
+2. Allow notifications for RESURGO
 
 ### Step 3: PWA Installation
-For best results, install ASCEND as a PWA:
-1. Open ASCEND in your browser
+For best results, install RESURGO as a PWA:
+1. Open RESURGO in your browser
 2. Tap "Add to Home Screen"
 3. Launch from your home screen
 
@@ -472,10 +472,10 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${data.title} - ASCEND Help Center`,
+    title: `${data.title} - RESURGO Help Center`,
     description: data.description,
     openGraph: {
-      title: `${data.title} - ASCEND Help Center`,
+      title: `${data.title} - RESURGO Help Center`,
       description: data.description,
     },
   };

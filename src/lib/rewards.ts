@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Reward System
+// RESURGO - Reward System
 // Heartwarming messages, badges, and meaningful recognition
 // Focus on genuine self-satisfaction, not fake dopamine
 // ═══════════════════════════════════════════════════════════════════════════════

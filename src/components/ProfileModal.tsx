@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Profile Modal Component
+// RESURGO - Profile Modal Component
 // User profile, stats, badges, and account settings
 // ═══════════════════════════════════════════════════════════════════════════════
 

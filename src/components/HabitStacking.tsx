@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Habit Stacking Component
+// RESURGO - Habit Stacking Component
 // "After I [CURRENT HABIT], I will [NEW HABIT]" - Atomic Habits
 // ═══════════════════════════════════════════════════════════════════════════════
 

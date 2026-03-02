@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Atomic Habits Knowledge Base
+// RESURGO - Atomic Habits Knowledge Base
 // Comprehensive teachings from James Clear's Atomic Habits
 // For AI coaching and user guidance
 // ═══════════════════════════════════════════════════════════════════════════════

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Goal Card Component with Edit/Delete Actions
+// RESURGO - Goal Card Component with Edit/Delete Actions
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use client';

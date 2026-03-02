@@ -1,7 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Ascendify — ConvexClientProvider
+// Resurgo — ConvexClientProvider
 // Wraps the app with Convex + Clerk auth integration.
 // Must be nested inside <ClerkProvider> — handled by root layout.
 // Includes error boundary so a Convex/Clerk init failure doesn't freeze the

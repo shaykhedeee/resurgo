@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Accessibility Utilities
+// RESURGO - Accessibility Utilities
 // Skip links, focus management, and a11y helpers
 // ═══════════════════════════════════════════════════════════════════════════════
 

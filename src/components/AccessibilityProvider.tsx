@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Accessibility Components
+// RESURGO - Accessibility Components
 // Skip links, screen reader announcer, and focus management components
 // ═══════════════════════════════════════════════════════════════════════════════
 

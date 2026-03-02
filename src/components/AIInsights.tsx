@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - AI Insights Component
+// RESURGO - AI Insights Component
 // Pattern analysis and predictive insights using AI
 // ═══════════════════════════════════════════════════════════════════════════════
 

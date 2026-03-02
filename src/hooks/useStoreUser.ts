@@ -1,7 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Ascendify — useStoreUser Hook
+// Resurgo — useStoreUser Hook
 // Automatically syncs Clerk user to Convex on sign-in
 // Use in any component that needs the current user
 // ═══════════════════════════════════════════════════════════════════════════════

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - User Onboarding Flow with Goal Setup
+// RESURGO - User Onboarding Flow with Goal Setup
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use client';

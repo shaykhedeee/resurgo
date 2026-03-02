@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Design System Button Components
+// RESURGO - Design System Button Components
 // Standardized button styles with consistent interactions
 // ═══════════════════════════════════════════════════════════════════════════════
 

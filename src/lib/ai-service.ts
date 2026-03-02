@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - AI Service Provider
+// RESURGO - AI Service Provider
 // Multi-provider AI service using FREE/cheap APIs (Groq, Gemini, OpenAI fallback)
 // ═══════════════════════════════════════════════════════════════════════════════
 

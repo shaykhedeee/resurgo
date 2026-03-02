@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Notification Settings Component
+// RESURGO - Notification Settings Component
 // Configure push notifications and reminders
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Calendar View Component
+// RESURGO - Calendar View Component
 // Monthly calendar showing habit completions, tasks, and progress
 // ═══════════════════════════════════════════════════════════════════════════════
 

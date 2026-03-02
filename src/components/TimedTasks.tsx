@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Timed Tasks Component
+// RESURGO - Timed Tasks Component
 // Time-based task system with timers, progress bars, and rewards
 // ═══════════════════════════════════════════════════════════════════════════════
 

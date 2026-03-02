@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Smart AI Coach Component
+// RESURGO - Smart AI Coach Component
 // Displays contextual Atomic Habits wisdom and coaching
 // ═══════════════════════════════════════════════════════════════════════════════
 

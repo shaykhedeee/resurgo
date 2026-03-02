@@ -235,6 +235,94 @@ export const getOrCreateCoachMemory = query({
   },
 });
 
+// ─── Action: Send greeting from AI coach ──────────────────────────────────────
+
+export const greetUser = action({
+  args: {
+    coachId: v.union(
+      v.literal('MARCUS'),
+      v.literal('AURORA'),
+      v.literal('TITAN'),
+      v.literal('SAGE'),
+      v.literal('PHOENIX'),
+      v.literal('NOVA'),
+    ),
+    userName: v.optional(v.string()),
+  },
+  returns: v.object({
+    coachMessageId: v.id('coachMessages'),
+    greeting: v.string(),
+  }),
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
+
+    const persona = COACH_PERSONAS[args.coachId];
+    const name = args.userName || identity.name || 'Operator';
+
+    const greetingPrompt = `The user "${name}" just opened your chat for the first time. Write a short, punchy welcome message (2-3 sentences) that introduces who you are, what you help with, and asks one opening question to get the conversation started. Stay fully in character.`;
+
+    let greeting = '';
+    try {
+      const groqKey = process.env.GROQ_API_KEY;
+      if (groqKey) {
+        const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${groqKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            model: 'llama-3.1-8b-instant',
+            messages: [
+              { role: 'system', content: persona.systemPrompt },
+              { role: 'user', content: greetingPrompt },
+            ],
+            max_tokens: 200,
+            temperature: 0.8,
+          }),
+        });
+        if (res.ok) {
+          const json: any = await res.json();
+          greeting = json?.choices?.[0]?.message?.content ?? '';
+        }
+      }
+    } catch {
+      // fall through to static greeting
+    }
+
+    if (!greeting) {
+      greeting = buildGreeting(args.coachId, name);
+    }
+
+    // Persist only the coach greeting (no user message)
+    const coachMessageId: string = await ctx.runMutation(
+      internal.coachAI.persistGreeting,
+      {
+        coachContent: greeting,
+        coachId: args.coachId,
+      },
+    );
+
+    return {
+      coachMessageId: coachMessageId as any,
+      greeting,
+    };
+  },
+});
+
+function buildGreeting(coachId: string, name: string): string {
+  const greetings: Record<string, string> = {
+    MARCUS: `OPERATOR ${name.toUpperCase()} — welcome to the arena. I'm Marcus, your Stoic strategist. I deal in clarity, discipline, and execution. No fluff, no excuses. What's the single most important thing you need to conquer right now?`,
+    AURORA: `Welcome, ${name}. I'm Aurora — your guide to inner clarity and sustainable performance. Neuroscience meets mindfulness here. Before we dive in, take one deep breath with me. Now tell me: how are you really feeling right now?`,
+    TITAN: `${name.toUpperCase()}! TITAN online. I'm your physical performance engine — fitness, nutrition, energy optimization. Your body is the vehicle for everything else in your life. First question: did you move your body today?`,
+    SAGE: `${name}, welcome. I'm Sage — your financial strategist and wealth architect. Every decision you make has a financial consequence. Let's make them intentional. What's your biggest money question right now?`,
+    PHOENIX: `Hey ${name}. I'm Phoenix — I specialize in comebacks, resilience, and rebuilding from the ground up. No judgment here, only forward. What's weighing on you the most right now?`,
+    NOVA: `${name} — Nova here. I think in systems, connections, and possibilities. Creativity isn't a gift, it's an algorithm. What's the problem you've been trying to solve that keeps resisting?`,
+  };
+  return greetings[coachId] ?? greetings['MARCUS'];
+}
+
 // ─── Action: Send message with AI persona reply ───────────────────────────────
 
 export const sendWithPersona = action({
@@ -471,6 +559,63 @@ export const persistMessages = internalMutation({
     }
 
     return { userMessageId, coachMessageId };
+  },
+});
+
+export const persistGreeting = internalMutation({
+  args: {
+    coachContent: v.string(),
+    coachId: v.union(
+      v.literal('MARCUS'),
+      v.literal('AURORA'),
+      v.literal('TITAN'),
+      v.literal('SAGE'),
+      v.literal('PHOENIX'),
+      v.literal('NOVA'),
+    ),
+  },
+  returns: v.id('coachMessages'),
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .unique();
+    if (!user) throw new Error('User not found');
+
+    const context = `coach:${args.coachId}`;
+    const now = Date.now();
+
+    const coachMessageId = await ctx.db.insert('coachMessages', {
+      userId: user._id,
+      role: 'coach',
+      content: args.coachContent,
+      touchpoint: 'on_demand',
+      context,
+      createdAt: now,
+    });
+
+    // Initialize coach memory
+    const mem = await ctx.db
+      .query('coachMemory')
+      .withIndex('by_userId_coachId', (q: any) =>
+        q.eq('userId', user._id).eq('coachId', args.coachId)
+      )
+      .unique();
+
+    if (!mem) {
+      await ctx.db.insert('coachMemory', {
+        userId: user._id,
+        coachId: args.coachId,
+        insights: [],
+        patterns: [],
+        messageCount: 0,
+        updatedAt: now,
+      });
+    }
+
+    return coachMessageId;
   },
 });
 

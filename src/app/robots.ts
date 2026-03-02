@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Robots.txt Configuration
+// RESURGO - Robots.txt Configuration
 // SEO-optimized robots configuration for Next.js
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Celebration Components
+// RESURGO - Celebration Components
 // Beautiful animations for achievements, level ups, and milestones
 // ═══════════════════════════════════════════════════════════════════════════════
 

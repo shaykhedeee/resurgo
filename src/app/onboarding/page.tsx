@@ -28,6 +28,22 @@ import {
   Moon,
 } from 'lucide-react';
 
+// Map of habit template IDs to their Convex-compatible data
+const HABIT_TEMPLATE_DATA: Record<string, { title: string; description: string; category: string; frequency: 'daily' | 'weekdays'; timeOfDay: 'morning' | 'afternoon' | 'evening' | 'anytime'; estimatedMinutes: number }> = {
+  'morning-routine': { title: 'Morning Routine', description: 'Start your day with intention', category: 'productivity', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 30 },
+  'exercise-30': { title: 'Exercise 30 min', description: 'Move your body every day', category: 'health', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 30 },
+  'read-20': { title: 'Read 20 pages', description: 'Build a reading habit', category: 'learning', frequency: 'daily', timeOfDay: 'evening', estimatedMinutes: 20 },
+  'meditate': { title: 'Meditate 10 min', description: 'Find your calm center', category: 'wellness', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 10 },
+  'journal': { title: 'Daily Journal', description: 'Reflect and grow', category: 'wellness', frequency: 'daily', timeOfDay: 'evening', estimatedMinutes: 15 },
+  'water-8': { title: 'Drink 8 glasses of water', description: 'Stay hydrated all day', category: 'health', frequency: 'daily', timeOfDay: 'anytime', estimatedMinutes: 1 },
+  'no-phone-bed': { title: 'No phone in bed', description: 'Better sleep starts here', category: 'wellness', frequency: 'daily', timeOfDay: 'evening', estimatedMinutes: 1 },
+  'learn-new': { title: 'Learn something new', description: '15 min of skill building', category: 'learning', frequency: 'daily', timeOfDay: 'afternoon', estimatedMinutes: 15 },
+  'gratitude': { title: 'Gratitude practice', description: 'Write 3 things grateful for', category: 'wellness', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 5 },
+  'walk-10k': { title: 'Walk 10,000 steps', description: 'Keep moving through the day', category: 'health', frequency: 'daily', timeOfDay: 'anytime', estimatedMinutes: 60 },
+  'meal-prep': { title: 'Eat healthy meals', description: 'Nourish your body', category: 'health', frequency: 'daily', timeOfDay: 'anytime', estimatedMinutes: 30 },
+  'deep-work': { title: 'Deep work session', description: '90 min focused work block', category: 'productivity', frequency: 'weekdays', timeOfDay: 'morning', estimatedMinutes: 90 },
+};
+
 // â”€â”€â”€ Types â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 type Step = 'welcome' | 'goal' | 'focus' | 'habits' | 'schedule' | 'ready';
@@ -113,6 +129,8 @@ export default function OnboardingPage() {
   const { user: clerkUser } = useUser();
   const router = useRouter();
   const completeOnboarding = useMutation(api.users.completeOnboarding);
+  const createGoal = useMutation(api.goals.create);
+  const createHabit = useMutation(api.habits.create);
 
   const [step, setStep] = useState<Step>('welcome');
   const [saving, setSaving] = useState(false);
@@ -164,6 +182,8 @@ export default function OnboardingPage() {
     setSaving(true);
     try {
       const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      // 1. Save onboarding preferences
       await completeOnboarding({
         primaryGoal: primaryGoal.trim() || undefined,
         primaryGoalReason: primaryGoalReason.trim() || undefined,
@@ -174,13 +194,55 @@ export default function OnboardingPage() {
         preferredTime: preferredTime || undefined,
         timezone: tz,
       });
+
+      // 2. Create the primary goal in Convex
+      let goalId: any = undefined;
+      if (primaryGoal.trim()) {
+        try {
+          const deadlineMap: Record<string, string> = {
+            '1m': new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+            '3m': new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
+            '6m': new Date(Date.now() + 180 * 86400000).toISOString().split('T')[0],
+            '1y': new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0],
+          };
+          goalId = await createGoal({
+            title: primaryGoal.trim(),
+            description: primaryGoalReason.trim() || undefined,
+            category: selectedFocus[0] || 'personal_growth',
+            targetDate: deadlineMap[primaryGoalDeadline] || undefined,
+            whyImportant: primaryGoalReason.trim() || undefined,
+            deadlineType: primaryGoalDeadline === 'ongoing' ? 'ongoing' : 'flexible',
+          });
+        } catch (err) {
+          console.warn('Goal creation failed:', err);
+        }
+      }
+
+      // 3. Create selected habits in Convex
+      for (const habitId of selectedHabits) {
+        const template = HABIT_TEMPLATE_DATA[habitId];
+        if (!template) continue;
+        try {
+          await createHabit({
+            title: template.title,
+            description: template.description,
+            category: template.category,
+            frequency: template.frequency,
+            timeOfDay: template.timeOfDay,
+            estimatedMinutes: template.estimatedMinutes,
+            goalId: goalId || undefined,
+          });
+        } catch (err) {
+          console.warn(`Habit creation failed for ${habitId}:`, err);
+        }
+      }
     } catch (err) {
       // Non-fatal: log but always proceed to dashboard
       console.warn('Onboarding save failed, proceeding anyway:', err);
     }
     // Always navigate regardless of mutation success
     router.replace('/dashboard');
-  }, [saving, completeOnboarding, primaryGoal, primaryGoalReason, primaryGoalDeadline, lifeVision, selectedFocus, selectedHabits, preferredTime, router]);
+  }, [saving, completeOnboarding, createGoal, createHabit, primaryGoal, primaryGoalReason, primaryGoalDeadline, lifeVision, selectedFocus, selectedHabits, preferredTime, router]);
 
   // Skip: save whatever we have and go straight to dashboard
   const handleSkip = useCallback(() => {

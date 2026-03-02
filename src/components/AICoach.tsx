@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - AI Coach Component
+// RESURGO - AI Coach Component
 // Real-time AI coaching messages using secure server-side API routes
 // ═══════════════════════════════════════════════════════════════════════════════
 

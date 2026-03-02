@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Global State Store (Zustand)
+// RESURGO - Global State Store (Zustand)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { create } from 'zustand';

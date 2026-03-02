@@ -1,7 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Ascendify — Goal Detail Page
+// Resurgo — Goal Detail Page
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useQuery, useMutation } from 'convex/react';

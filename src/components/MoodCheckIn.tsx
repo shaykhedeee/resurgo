@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Mood Check-In Component
+// RESURGO - Mood Check-In Component
 // Quick and gentle mood logging with factors and notes
 // Designed for anxiety-friendly, low-pressure tracking
 // ═══════════════════════════════════════════════════════════════════════════════

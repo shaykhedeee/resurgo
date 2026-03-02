@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - AI Response Caching & Rate Limiting
+// RESURGO - AI Response Caching & Rate Limiting
 // Reduces API calls and prevents abuse
 // ═══════════════════════════════════════════════════════════════════════════════
 

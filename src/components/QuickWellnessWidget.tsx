@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Quick Wellness Widget
+// RESURGO - Quick Wellness Widget
 // Small sidebar widget for quick access to wellness features
 // ═══════════════════════════════════════════════════════════════════════════════
 

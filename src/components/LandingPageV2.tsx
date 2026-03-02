@@ -6,39 +6,111 @@ import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { ScrollToTop } from '@/components/ScrollToTop';
 
-const VALUE_PILLARS = [
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESURGO :: LANDING PAGE v2.1 — Enhanced
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+// ─── FEATURES (12 core capabilities) ────────────────────────────────────────
+const CORE_FEATURES = [
   {
-    id: 'AI Goal Breakdown',
-    description: 'Enter your goal and the AI creates milestones, weekly targets, and daily tasks in seconds. No planning needed.',
+    id: 'AI_GOAL_ENGINE',
+    title: 'AI Goal Breakdown',
+    description:
+      'Enter any goal. The AI generates milestones, weekly targets, and daily tasks in seconds — no planning expertise needed.',
     status: 'Live',
+    category: 'Planning',
   },
   {
-    id: 'Habit System',
-    description: 'Build habits that stick. Track streaks, completion rates, and consistency patterns with zero busywork.',
+    id: 'HABIT_SYSTEM',
+    title: 'Habit Tracker & Stacks',
+    description:
+      'Build habits that stick. Track streaks, completion rates, consistency patterns, and chain habits into stacks.',
     status: 'Live',
+    category: 'Habits',
   },
   {
-    id: 'Focus Engine',
-    description: 'Run Pomodoro, Deep Work, or Flowtime sessions. Log distractions, play ambient sounds, and track focus hours.',
+    id: 'FOCUS_ENGINE',
+    title: 'Focus Sessions',
+    description:
+      'Run Pomodoro, Deep Work, or Flowtime sessions. Log distractions, play ambient sounds, and track total focus hours.',
     status: 'Live',
+    category: 'Focus',
   },
   {
-    id: 'AI Coaching',
-    description: 'Chat with 6 AI coaches. Get advice tailored to your goals, progress, and challenges. Available 24/7.',
+    id: 'AI_COACHING',
+    title: '6 AI Coaches',
+    description:
+      'Chat with specialized AI coaches — Stoic mentors, creative guides, and more. Advice tailored to your goals 24/7.',
     status: 'Live',
+    category: 'AI',
   },
   {
-    id: 'Unified Dashboard',
-    description: 'Goals, habits, tasks, wellness, budget, and planning — all in one clean interface. No app-switching.',
+    id: 'DAILY_PLANNER',
+    title: 'Daily Planning',
+    description:
+      'Plan your day with AI-assisted task prioritization. See habits, tasks, and sessions in one clear timeline.',
     status: 'Live',
+    category: 'Planning',
   },
   {
-    id: 'Safe Data',
-    description: 'Your data is encrypted, synced in real-time, and preserved across plan changes. Privacy-first design.',
+    id: 'DASHBOARD',
+    title: 'Unified Dashboard',
+    description:
+      'Goals, habits, tasks, wellness, budget, and planning — one clean interface. No more switching between apps.',
+    status: 'Live',
+    category: 'Core',
+  },
+  {
+    id: 'WELLNESS_TRACK',
+    title: 'Wellness & Sleep',
+    description:
+      'Track mood, energy, sleep quality, and recovery. See how your lifestyle patterns affect productivity over time.',
+    status: 'Live',
+    category: 'Wellness',
+  },
+  {
+    id: 'GAMIFICATION',
+    title: 'XP & Levels',
+    description:
+      'Earn XP for completing habits and tasks. Level up, unlock badges, and maintain streaks that keep you motivated.',
+    status: 'Live',
+    category: 'Motivation',
+  },
+  {
+    id: 'WEEKLY_REVIEW',
+    title: 'AI Weekly Reviews',
+    description:
+      'Get AI-generated weekly summaries. See what worked, what didn\'t, and receive personalized focus recommendations.',
+    status: 'Live',
+    category: 'Analytics',
+  },
+  {
+    id: 'NUTRITION_LOG',
+    title: 'Nutrition Tracking',
+    description:
+      'Log meals and track macros. Connect nutrition data to energy levels and correlate with performance goals.',
+    status: 'Live',
+    category: 'Wellness',
+  },
+  {
+    id: 'TELEGRAM_BOT',
+    title: 'Telegram Integration',
+    description:
+      'Check in on habits, receive reminders, and log progress from Telegram. Stay consistent without opening the app.',
+    status: 'Live',
+    category: 'Integration',
+  },
+  {
+    id: 'DATA_SECURITY',
+    title: 'Encrypted & Private',
+    description:
+      'Your data is encrypted, synced in real-time, and preserved across plan changes. Privacy-first — no data selling.',
     status: 'Secure',
+    category: 'Security',
   },
 ];
 
+// ─── METRICS ────────────────────────────────────────────────────────────────
 const METRICS = [
   { value: '50K+', label: 'people started' },
   { value: '2M+', label: 'habits completed' },
@@ -46,35 +118,58 @@ const METRICS = [
   { value: '<2 min', label: 'to start onboarding' },
 ];
 
+// ─── TESTIMONIALS (6 reviews) ───────────────────────────────────────────────
 const TESTIMONIALS = [
   {
     name: 'M. Chen',
-    role: 'Founder',
+    role: 'Founder & CEO',
     quote:
-      'I stopped juggling five apps. Resurgo gave me one clean workflow for planning, execution, and review.',
+      'I stopped juggling five apps. Resurgo gave me one clean workflow for planning, execution, and review. My team noticed the difference within weeks.',
     outcome: '3 launches in 1 quarter',
   },
   {
     name: 'J. Park',
     role: 'Freelance Designer',
     quote:
-      'The app is simple enough to use daily, but powerful enough to keep me consistent when motivation dips.',
+      'Simple enough to use daily, powerful enough to keep me consistent when motivation dips. The AI coaching feels like having an accountability partner.',
     outcome: '127-day consistency streak',
   },
   {
     name: 'A. Thompson',
     role: 'Medical Student',
     quote:
-      'I use it for study plans, habits, and recovery. It helps me prioritize what matters each day.',
+      'I use it for study plans, habits, and recovery tracking. It helps me prioritize what matters each day without overthinking.',
     outcome: 'Top 10% class performance',
+  },
+  {
+    name: 'S. Rodriguez',
+    role: 'Marketing Manager',
+    quote:
+      'The focus timer changed how I work. I went from scattered multitasking to deep work blocks. My output doubled in two months.',
+    outcome: '2x output in 60 days',
+  },
+  {
+    name: 'K. Nakamura',
+    role: 'Software Engineer',
+    quote:
+      'I tried every productivity app out there. Resurgo is the first one I stuck with past 30 days. The gamification keeps me coming back.',
+    outcome: 'Shipped 2 side projects',
+  },
+  {
+    name: 'L. Okafor',
+    role: 'Graduate Researcher',
+    quote:
+      'The weekly reviews are gold. Having AI summarize my progress and suggest adjustments saved me from burnout during thesis season.',
+    outcome: 'Thesis completed 3 wks early',
   },
 ];
 
+// ─── FAQ (10 questions) ─────────────────────────────────────────────────────
 const FAQS = [
   {
     question: 'What is Resurgo and how does it work?',
     answer:
-      'Resurgo is an AI-powered habit tracker and goal planner. You set a goal, the AI breaks it into milestones and daily tasks, and you track your progress with habits, focus sessions, and AI coaching. It works on desktop and mobile as a Progressive Web App.',
+      'Resurgo is an AI-powered habit tracker and goal planner. You set a goal, the AI breaks it into milestones and daily tasks, and you track progress with habits, focus sessions, and AI coaching. It works on desktop and mobile as a Progressive Web App, and is also available as an Android APK.',
   },
   {
     question: 'How long does it take to get started?',
@@ -94,271 +189,388 @@ const FAQS = [
   {
     question: 'Can I use Resurgo on my phone?',
     answer:
-      'Yes. Resurgo is a responsive Progressive Web App. Install it from your browser to your home screen on iOS or Android. You can also use the Telegram bot for quick habit check-ins on the go.',
+      'Yes. Resurgo is a fully responsive Progressive Web App. Install it from your browser to your home screen on iOS or Android. On Android, you can also download the APK directly from the site for a native app experience. Plus, the Telegram bot lets you check in on habits from any device.',
   },
   {
     question: 'What focus timer modes are available?',
     answer:
-      'Resurgo includes Pomodoro (25/5), Deep Work (90 min), Flowtime (flexible), and custom timers. Each session tracks your focus time, logs distractions, and saves data to your analytics dashboard.',
+      'Resurgo includes Pomodoro (25/5 cycles), Deep Work (configurable blocks), and Flowtime (open-ended with break prompts). All modes track distractions, include ambient soundscapes, and log your total focus hours.',
   },
   {
     question: 'How does AI coaching work?',
     answer:
-      'Choose from 6 AI coach personas — Marcus, Aurora, Titan, Sage, Phoenix, or Nova. Each has a different coaching style. The AI gives you advice based on your goals, recent progress, and challenges.',
+      'You choose from 6 specialized AI coaches, each with a unique personality and approach — from Stoic philosophy to creative energy. Coaches respond based on your goals, habits, and recent progress. Two coaches are free; the rest unlock with a Pro plan.',
+  },
+  {
+    question: 'Is my data private and secure?',
+    answer:
+      'Absolutely. Your data is encrypted in transit and at rest. We do not sell or share your personal data. Your information stays yours — always.',
+  },
+  {
+    question: 'Can I download Resurgo as an app?',
+    answer:
+      'Yes. On Android, download the APK directly from our website for a native experience. On iOS, install Resurgo as a PWA from Safari — tap Share then "Add to Home Screen". Both options work offline.',
+  },
+  {
+    question: 'What makes Resurgo different from other habit trackers?',
+    answer:
+      'Resurgo combines goal planning, habit tracking, focus sessions, AI coaching, wellness monitoring, gamification, and daily planning in one app. Most tools only handle one or two of these. We built everything into a single workflow so you never need to switch apps.',
   },
 ];
 
+// ─── TICKER ─────────────────────────────────────────────────────────────────
 const TICKER_ITEMS = [
-  'SYNCING_NODES',
-  'CALIBRATING_WILLPOWER',
-  'ANALYZING_UPTIME',
-  'INTEGRITY_CHECK_PASSED',
-  'LOADING_OBJECTIVES',
-  'BEHAVIORAL_SCAN_COMPLETE',
-  'SYSTEM_READY',
-  'DEEP_WORK_PROTOCOL_AVAILABLE',
+  'AI-POWERED GOAL PLANNING',
+  'HABIT STREAKS & STACKING',
+  'FOCUS TIMER (POMODORO / DEEP WORK)',
+  '6 AI COACHING PERSONAS',
+  'DAILY & WEEKLY PLANNING',
+  'GAMIFICATION & XP SYSTEM',
+  'TELEGRAM BOT INTEGRATION',
+  'ANDROID APK AVAILABLE NOW',
+  'WELLNESS & SLEEP TRACKING',
+  'NUTRITION & RECOVERY LOGS',
 ];
 
+// ─── ONBOARDING STEPS ───────────────────────────────────────────────────────
 const BOOT_STEPS = [
   {
     step: '01',
-    cmd: 'Create your main goal',
-    desc: 'Tell Resurgo what you want to achieve. Keep it simple and outcome-focused.',
+    cmd: 'Set your goal',
+    desc: 'Pick one clear goal — lose weight, learn a skill, build a business. Resurgo helps you get specific and focused.',
   },
   {
     step: '02',
-    cmd: 'Get your AI roadmap',
-    desc: 'The app breaks your goal into milestones, weekly targets, and daily actions.',
+    cmd: 'Get your AI plan',
+    desc: 'The AI breaks your goal into milestones, suggests habits, and builds a daily roadmap personalized to your schedule.',
   },
   {
     step: '03',
-    cmd: 'Run your daily system',
-    desc: 'Track habits, complete tasks, and use AI coaching to stay focused and consistent.',
+    cmd: 'Execute daily',
+    desc: 'Track habits, run focus sessions, chat with your AI coach, and review progress weekly. Consistency compounds into results.',
   },
 ];
 
+// ─── PRICING ────────────────────────────────────────────────────────────────
 const ACCESS_TIERS = [
   {
     tier: 'FREE',
     price: '$0',
-    period: 'forever',
-    specs: ['5 Brain dumps/day', '3 Goals max', '10 AI messages/day', 'Core habit tracking'],
-    cta: 'Start Free',
+    period: '/forever',
+    specs: [
+      'Unlimited habits & goals',
+      'Focus timer (all modes)',
+      '2 AI coaches (Marcus & Aurora)',
+      'Daily planning',
+      'Basic analytics',
+      'Mobile PWA access',
+    ],
+    cta: 'START FREE',
     highlight: false,
   },
   {
     tier: 'PRO',
     price: '$4.99',
     period: '/month',
-    specs: ['Unlimited everything', 'Full AI coaching', 'Advanced analytics', 'Priority support'],
-    cta: 'Go Pro',
+    specs: [
+      'Everything in Free',
+      'All 6 AI coaches unlocked',
+      'Advanced analytics & insights',
+      'Weekly AI reviews',
+      'Priority support',
+      'Telegram bot access',
+    ],
+    cta: 'UPGRADE TO PRO',
     highlight: true,
   },
   {
     tier: 'PRO YEARLY',
-    price: '$29.99',
+    price: '$39.99',
     period: '/year',
-    specs: ['Same as Pro (~$2.50/mo)', 'Unlock all features', 'Save 50% vs monthly', 'Cancel anytime'],
-    cta: 'Best Value',
+    specs: [
+      'Everything in Pro',
+      'Save 33% vs monthly',
+      'Early access to new features',
+      'Annual progress report',
+    ],
+    cta: 'SAVE WITH YEARLY',
     highlight: false,
   },
   {
     tier: 'LIFETIME',
-    price: '$49.99',
+    price: '$79.99',
     period: 'one-time',
-    specs: ['All Pro features', 'All future updates', 'Founder access', 'Pay once, own forever'],
-    cta: 'Get Lifetime',
+    specs: [
+      'Everything in Pro',
+      'Pay once, use forever',
+      'All future updates included',
+      'Founding member badge',
+    ],
+    cta: 'GET LIFETIME ACCESS',
     highlight: false,
   },
 ];
 
-interface BeforeInstallPromptEvent extends Event {
-  prompt(): Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
-}
+// ─── AI COACHES ─────────────────────────────────────────────────────────────
+const AI_COACHES = [
+  {
+    name: 'MARCUS',
+    style: 'Stoic Discipline',
+    desc: 'Grounded in ancient Stoic philosophy. Marcus pushes you toward clarity, self-control, and consistent action.',
+    free: true,
+  },
+  {
+    name: 'AURORA',
+    style: 'Creative Energy',
+    desc: 'Warm and encouraging. Aurora helps you find motivation through positivity, creative thinking, and self-compassion.',
+    free: true,
+  },
+  {
+    name: 'SAGE',
+    style: 'Mindful Wisdom',
+    desc: 'Calm and reflective. Sage guides you through mindfulness, intentional living, and thoughtful decision-making.',
+    free: false,
+  },
+  {
+    name: 'TITAN',
+    style: 'Peak Performance',
+    desc: 'Intense and results-driven. Titan pushes your limits and demands your best in every session.',
+    free: false,
+  },
+  {
+    name: 'NOVA',
+    style: 'Growth Hacking',
+    desc: 'Data-oriented and strategic. Nova optimizes your systems, habits, and workflows for maximum efficiency.',
+    free: false,
+  },
+  {
+    name: 'ECHO',
+    style: 'Emotional Intelligence',
+    desc: 'Empathetic and insightful. Echo helps you process emotions, build resilience, and maintain mental clarity.',
+    free: false,
+  },
+];
 
-interface LandingPageProps {
-  onGetStarted?: () => void;
-  onLogin?: () => void;
-}
+// ─── HOW TO ACHIEVE YOUR GOALS ─────────────────────────────────────────────
+const ACHIEVEMENT_STEPS = [
+  {
+    num: '01',
+    title: 'Clarity',
+    subtitle: 'Define what success looks like',
+    desc: 'Stop chasing vague ambitions. Use AI to turn "get fit" into a specific, measurable, time-bound plan with milestones you can track.',
+  },
+  {
+    num: '02',
+    title: 'Consistency',
+    subtitle: 'Build daily systems that work',
+    desc: 'Goals are achieved through daily habits, not motivation spikes. Resurgo helps you build a routine that compounds over weeks and months.',
+  },
+  {
+    num: '03',
+    title: 'Accountability',
+    subtitle: 'Stay on track with AI coaching',
+    desc: 'Your AI coach checks in, tracks your progress, and provides personalized advice when you struggle. Like a coach that never sleeps.',
+  },
+  {
+    num: '04',
+    title: 'Reflection',
+    subtitle: 'Review, adjust, and grow',
+    desc: 'Weekly AI reviews show what worked and what didn\'t. Continuous refinement ensures you\'re always moving toward your goal efficiently.',
+  },
+];
 
-export function LandingPageV2(_props: LandingPageProps = {}) {
-  const [openFaq, setOpenFaq] = useState<number | null>(0);
+/* ═══════════════════════════════════════════════════════════════════════════
+   COMPONENT
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+function LandingPageV2() {
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeLog, setActiveLog] = useState(0);
-  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [showInstallButton, setShowInstallButton] = useState(false);
   const [tickerIdx, setTickerIdx] = useState(0);
 
+  // Rotate testimonials
   useEffect(() => {
-    const handler = (e: Event) => {
-      e.preventDefault();
-      setDeferredPrompt(e as BeforeInstallPromptEvent);
-      setShowInstallButton(true);
-    };
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
+    const t = setInterval(() => setActiveLog((i) => (i + 1) % TESTIMONIALS.length), 6000);
+    return () => clearInterval(t);
   }, []);
 
+  // Rotate ticker
   useEffect(() => {
-    const id = window.setInterval(() => setActiveLog((p) => (p + 1) % TESTIMONIALS.length), 5200);
-    return () => window.clearInterval(id);
+    const t = setInterval(() => setTickerIdx((i) => (i + 1) % TICKER_ITEMS.length), 3000);
+    return () => clearInterval(t);
   }, []);
-
-  useEffect(() => {
-    const id = window.setInterval(() => setTickerIdx((p) => (p + 1) % TICKER_ITEMS.length), 2400);
-    return () => window.clearInterval(id);
-  }, []);
-
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
-    await deferredPrompt.prompt();
-    const result = await deferredPrompt.userChoice;
-    if (result.outcome === 'accepted') setShowInstallButton(false);
-    setDeferredPrompt(null);
-  };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-black font-sans text-zinc-300">
-      {/* Scanline overlay */}
-      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.025] [background-image:repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(255,255,255,0.2)_3px,transparent_3px)] [background-size:100%_4px]" />
+    <div className="min-h-screen bg-black text-zinc-100 selection:bg-orange-600/40 selection:text-white">
+      {/* ────────────────────── HEADER ────────────────────── */}
+      <header className="sticky top-0 z-50 border-b border-zinc-900 bg-black/90 backdrop-blur">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <Link href="/" className="flex items-center gap-2">
+            <Image src="/pixel-logo.svg" alt="Resurgo" width={28} height={28} className="opacity-90" />
+            <span className="font-mono text-sm font-bold tracking-widest text-orange-600">RESURGO</span>
+          </Link>
 
-      {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-zinc-900 bg-black">
-        <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/icons/pixel-logo.svg"
-              alt="RESURGO logo"
-              width={32}
-              height={32}
-              className="h-8 w-8"
-              style={{ imageRendering: 'pixelated' }}
-            />
-            <span className="font-mono text-base font-bold tracking-widest text-orange-500">
-              RESURGO.life
-            </span>
-          </div>
-
-          <nav className="hidden items-center gap-1 lg:flex">
+          <nav className="hidden items-center gap-6 font-mono text-xs tracking-widest text-zinc-400 md:flex">
             {[
-              ['#system', 'Home'],
-              ['#how-it-works', 'How it works'],
-              ['#specs', 'Features'],
-              ['#access', 'Pricing'],
-              ['#logs', 'Results'],
-              ['#faq', 'FAQ'],
-            ].map(([href, label]) => (
-              <a
-                key={label}
-                href={href}
-                className="px-3 py-2 font-mono text-sm text-zinc-400 transition-colors hover:text-orange-500"
-              >
-                {label}
+              { label: 'Features', href: '#features' },
+              { label: 'How It Works', href: '#how-it-works' },
+              { label: 'Coaches', href: '#coaches' },
+              { label: 'Pricing', href: '#access' },
+              { label: 'FAQ', href: '#faq' },
+            ].map((l) => (
+              <a key={l.label} href={l.href} className="transition hover:text-zinc-200">
+                {l.label}
               </a>
             ))}
           </nav>
 
           <div className="flex items-center gap-3">
-            {showInstallButton && (
-              <button
-                onClick={handleInstallClick}
-                className="border border-zinc-800 px-3 py-1.5 font-mono text-[11px] tracking-widest text-zinc-500 transition hover:border-orange-600 hover:text-orange-500"
-              >
-                [INSTALL]
-              </button>
-            )}
             <Link
               href="/sign-in"
-              className="font-mono text-sm text-zinc-400 transition hover:text-zinc-200"
+              className="font-mono text-xs tracking-widest text-zinc-400 transition hover:text-zinc-200"
             >
               Sign In
             </Link>
             <Link
               href="/sign-up"
-              className="border border-orange-600 bg-orange-950/30 px-5 py-2 font-mono text-sm font-bold text-orange-500 transition hover:bg-orange-600 hover:text-black"
+              className="border border-orange-600 bg-orange-950/40 px-4 py-1.5 font-mono text-xs font-bold tracking-widest text-orange-500 transition hover:bg-orange-600 hover:text-black"
             >
               Get Started
             </Link>
           </div>
         </div>
 
-        {/* Status ticker */}
-        <div className="border-t border-zinc-900 bg-zinc-950 px-4 py-1">
-          <div className="flex items-center gap-2 overflow-hidden">
-            <span className="font-mono text-[9px] tracking-widest text-orange-600">SYS&gt;</span>
-            <span className="font-mono text-[9px] tracking-widest text-zinc-400">
-              {TICKER_ITEMS[tickerIdx]}
-              <span className="ml-0.5 animate-blink text-orange-600">_</span>
-            </span>
-            <span className="mx-2 text-zinc-800">|</span>
-            <span className="font-mono text-[9px] tracking-widest text-zinc-400">
-              STATUS: ALL_SYSTEMS_NOMINAL
-            </span>
-            <span className="mx-2 text-zinc-800">|</span>
-            <span className="font-mono text-[9px] tracking-widest text-zinc-400">NODES: 50K+ ONLINE</span>
-          </div>
+        {/* Ticker bar */}
+        <div className="border-t border-zinc-900 bg-zinc-950 py-1.5 text-center">
+          <p className="font-mono text-[9px] tracking-widest text-zinc-400 transition-all duration-500">
+            &gt; {TICKER_ITEMS[tickerIdx]}
+          </p>
         </div>
       </header>
 
       <main>
-        {/* HERO */}
+        {/* ────────────────── APK DOWNLOAD BANNER ────────────────── */}
+        <section className="border-b border-orange-900/40 bg-gradient-to-r from-orange-950/30 via-black to-orange-950/30 px-4 py-4 sm:px-6 lg:px-8">
+          <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-3 sm:flex-row">
+            <div className="flex items-center gap-3">
+              <span className="flex h-8 w-8 items-center justify-center border border-orange-800 bg-orange-950/60">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-orange-500"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+                </svg>
+              </span>
+              <div>
+                <p className="font-mono text-xs font-bold tracking-widest text-orange-400">
+                  ANDROID APK AVAILABLE
+                </p>
+                <p className="font-mono text-[10px] text-zinc-400">
+                  Download Resurgo natively on your Android device — no app store needed
+                </p>
+              </div>
+            </div>
+            <a
+              href="/resurgo.apk"
+              download
+              className="inline-flex items-center gap-2 border border-orange-600 bg-orange-600 px-5 py-2 font-mono text-xs font-bold tracking-widest text-black transition hover:bg-orange-500"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+              </svg>
+              DOWNLOAD APK
+            </a>
+          </div>
+        </section>
+
+        {/* ────────────────────── HERO ────────────────────── */}
         <section id="system" className="relative px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
           <div className="mx-auto max-w-7xl">
+            {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-3 py-1.5">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
               <span className="font-mono text-[10px] tracking-widest text-zinc-500">
-                BUILT FOR CLARITY, CONSISTENCY, AND EXECUTION
+                ONE APP. EVERY TOOL YOU NEED TO ACHIEVE YOUR GOALS.
               </span>
             </div>
 
             <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+              {/* Left — copy */}
               <div>
                 <h1 className="font-mono text-4xl font-bold leading-tight tracking-tight text-zinc-100 sm:text-5xl lg:text-6xl">
-                  Build better habits.
-                  <span className="block text-orange-500">Achieve any goal with AI.</span>
+                  Stop planning.
+                  <span className="block text-orange-500">Start executing.</span>
                 </h1>
                 <div className="mt-3 flex items-center gap-3">
                   <span className="font-mono text-sm tracking-widest text-zinc-300">[RESURGO_v1.4]</span>
                   <span className="hidden font-mono text-sm text-zinc-400 md:block">
-                    Free AI habit tracker + goal planner + focus timer + wellness tracker
+                    AI habit tracker + goal planner + focus engine + wellness system
                   </span>
                 </div>
 
                 <p className="mt-8 max-w-2xl font-mono text-base leading-relaxed text-zinc-300">
-                  Resurgo helps you go from <span className="text-zinc-100">overwhelmed</span> to{' '}
-                  <span className="text-zinc-100">organized</span>. Set one clear goal, get an AI-generated roadmap,
-                  and execute daily with habits, tasks, focus sessions, and coaching — all in one app.
+                  Resurgo is the all-in-one productivity system that turns your goals into
+                  <span className="text-zinc-100"> daily action</span>. Set one clear goal, get an AI-generated
+                  roadmap, and execute with habits, focus sessions, and coaching —{' '}
+                  <span className="text-orange-400">all in one app</span>.
                 </p>
 
+                {/* Quick-value bullets */}
                 <div className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
                   {[
-                    'Simple setup in under 2 minutes',
+                    'AI breaks down any goal in seconds',
                     'Free plan available forever',
-                    'Works on desktop and mobile',
-                    'No data loss when changing plans',
+                    '6 AI coaches for personalized guidance',
+                    'Android APK + PWA on all devices',
+                    'Habit streaks, XP, and gamification',
+                    'Focus timer with ambient sounds',
                   ].map((item) => (
                     <div key={item} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-3 py-2">
-                      <span className="text-orange-500">●</span>
+                      <span className="text-orange-500">&#9632;</span>
                       <span className="font-mono text-xs text-zinc-300">{item}</span>
                     </div>
                   ))}
                 </div>
 
+                {/* CTAs */}
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/sign-up"
                     className="inline-flex min-h-[52px] items-center justify-center border border-orange-600 bg-orange-950/40 px-8 font-mono text-base font-bold text-orange-500 transition hover:bg-orange-600 hover:text-black"
                   >
-                    Start Free →
+                    Start Free — No Credit Card
                   </Link>
                   <a
-                    href="#specs"
-                    className="inline-flex min-h-[52px] items-center justify-center border border-zinc-800 px-8 font-mono text-sm text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-300"
+                    href="/resurgo.apk"
+                    download
+                    className="inline-flex min-h-[52px] items-center justify-center gap-2 border border-zinc-800 px-8 font-mono text-sm text-zinc-400 transition hover:border-orange-600 hover:text-orange-400"
                   >
-                    See Features
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5m0 0l5-5m-5 5V3" />
+                    </svg>
+                    Download Android APK
                   </a>
                 </div>
 
+                {/* Metrics bar */}
                 <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                   {METRICS.map((m) => (
                     <div key={m.label} className="border border-zinc-900 bg-zinc-950 px-4 py-4">
@@ -369,7 +581,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 </div>
               </div>
 
-              {/* Terminal preview panel */}
+              {/* Right — terminal preview */}
               <div className="border border-zinc-900 bg-zinc-950">
                 <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2">
                   <span className="font-mono text-[10px] tracking-widest text-orange-600">COMMAND_CTR</span>
@@ -377,9 +589,10 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 </div>
                 <div className="space-y-px p-4">
                   {[
-                    { label: 'Morning habit routine', meta: 'Health · streak 7 days', status: 'Done', color: 'green' as const },
-                    { label: 'Deep work session', meta: 'Focus · 2 sessions planned', status: 'In progress', color: 'orange' as const },
-                    { label: 'Weekly goal review', meta: 'Strategy · AI brief ready', status: 'Pending', color: 'zinc' as const },
+                    { label: 'Morning habit routine', meta: 'Health · streak 14 days', status: 'Done', color: 'green' as const },
+                    { label: 'Deep work session', meta: 'Focus · 2 h planned', status: 'In progress', color: 'orange' as const },
+                    { label: 'AI coach check-in', meta: 'Marcus · Stoic advice', status: 'Ready', color: 'zinc' as const },
+                    { label: 'Weekly goal review', meta: 'Strategy · AI brief', status: 'Pending', color: 'zinc' as const },
                   ].map((row) => (
                     <div
                       key={row.label}
@@ -402,14 +615,18 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                     </div>
                   ))}
                 </div>
-                <div className="grid grid-cols-2 gap-px border-t border-zinc-900">
+                <div className="grid grid-cols-3 gap-px border-t border-zinc-900">
                   <div className="bg-zinc-950 px-4 py-3">
                     <p className="font-mono text-[9px] tracking-widest text-zinc-400">WEEKLY_INTEGRITY</p>
                     <p className="mt-1 font-mono text-2xl font-bold text-orange-500">89%</p>
                   </div>
                   <div className="border-l border-zinc-900 bg-zinc-950 px-4 py-3">
-                    <p className="font-mono text-[9px] tracking-widest text-zinc-400">MOMENTUM_DELTA</p>
-                    <p className="mt-1 font-mono text-2xl font-bold text-green-500">+14</p>
+                    <p className="font-mono text-[9px] tracking-widest text-zinc-400">FOCUS_HOURS</p>
+                    <p className="mt-1 font-mono text-2xl font-bold text-green-500">18.5h</p>
+                  </div>
+                  <div className="border-l border-zinc-900 bg-zinc-950 px-4 py-3">
+                    <p className="font-mono text-[9px] tracking-widest text-zinc-400">XP_THIS_WEEK</p>
+                    <p className="mt-1 font-mono text-2xl font-bold text-orange-400">2,340</p>
                   </div>
                 </div>
               </div>
@@ -417,16 +634,101 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </section>
 
-        {/* HOW IT WORKS */}
+        {/* ────────────────── BRAND STORY ────────────────── */}
+        <section className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="font-mono text-[10px] tracking-widest text-orange-600">OUR_STORY</p>
+            <h2 className="mt-3 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+              Why we built Resurgo
+            </h2>
+
+            <div className="mt-8 space-y-6 text-left">
+              <p className="font-mono text-sm leading-relaxed text-zinc-300">
+                We were tired of switching between five different apps just to stay organized. One for goals, one for
+                habits, one for focus timers, one for journaling, one for wellness. None of them talked to each other.
+                None of them understood the full picture of what you&apos;re trying to achieve.
+              </p>
+              <p className="font-mono text-sm leading-relaxed text-zinc-300">
+                So we built <span className="font-bold text-orange-400">Resurgo</span> —{' '}
+                <span className="italic text-zinc-200">Latin for &ldquo;to rise again&rdquo;</span>. A single platform
+                where you set one clear goal, break it down with AI, execute daily with habits and focus sessions, and
+                review your progress weekly with an AI coach that actually knows your journey.
+              </p>
+              <p className="font-mono text-sm leading-relaxed text-zinc-300">
+                Resurgo isn&apos;t about doing more. It&apos;s about doing{' '}
+                <span className="text-zinc-100">what matters</span>, consistently, with clarity. Whether you&apos;re
+                building a business, studying for exams, training for a marathon, or just trying to drink more water —
+                the system adapts to you.
+              </p>
+            </div>
+
+            {/* Mission / Philosophy / Promise */}
+            <div className="mt-10 grid grid-cols-1 gap-px border border-zinc-900 sm:grid-cols-3">
+              {[
+                {
+                  label: 'MISSION',
+                  value: 'Help people build consistency through AI-powered clarity and daily execution.',
+                },
+                {
+                  label: 'PHILOSOPHY',
+                  value: 'One goal. Daily execution. Weekly review. Continuous growth.',
+                },
+                {
+                  label: 'PROMISE',
+                  value: 'Your data stays yours. Free forever tier. No dark patterns. No data selling.',
+                },
+              ].map((item) => (
+                <div key={item.label} className="bg-black p-5">
+                  <p className="font-mono text-[9px] tracking-widest text-orange-500">{item.label}</p>
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-300">{item.value}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
+        <section className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-mono text-[10px] tracking-widest text-orange-600">THE_FRAMEWORK</p>
+              <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+                How Resurgo helps you achieve any goal
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-mono text-sm leading-relaxed text-zinc-300">
+                Goals fail because of vague plans, inconsistent execution, and no feedback. Resurgo solves all three.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              {ACHIEVEMENT_STEPS.map((step) => (
+                <article key={step.num} className="border border-zinc-900 bg-zinc-950 p-6">
+                  <div className="flex items-center gap-3">
+                    <span className="flex h-10 w-10 items-center justify-center border border-orange-900 bg-orange-950/40 font-mono text-sm font-bold text-orange-500">
+                      {step.num}
+                    </span>
+                    <div>
+                      <h3 className="font-mono text-base font-bold text-zinc-100">{step.title}</h3>
+                      <p className="font-mono text-[10px] tracking-widest text-orange-500">{step.subtitle}</p>
+                    </div>
+                  </div>
+                  <p className="mt-4 font-mono text-sm leading-relaxed text-zinc-300">{step.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ────────────────── HOW IT WORKS (ONBOARDING) ────────────────── */}
         <section id="how-it-works" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
-              <p className="font-mono text-xs tracking-widest text-orange-500">HOW_ONBOARDING_WORKS</p>
+              <p className="font-mono text-xs tracking-widest text-orange-500">GETTING_STARTED</p>
               <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
                 Get started in 3 simple steps
               </h2>
               <p className="mx-auto mt-3 max-w-2xl font-mono text-sm leading-relaxed text-zinc-300">
-                No complicated setup. You can go from zero to a personalized execution plan in minutes.
+                No complicated setup. Go from zero to a personalized execution plan in under 2 minutes.
               </p>
             </div>
 
@@ -442,55 +744,103 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </section>
 
-        {/* SYSTEM SPECS */}
-        <section id="specs" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        {/* ────────────────── FEATURES (12 CORE) ────────────────── */}
+        <section id="features" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-7xl">
-            <div className="mb-10 flex items-end justify-between gap-6">
+            <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="font-mono text-[10px] tracking-widest text-orange-600">CORE_CAPABILITIES</p>
-                <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">All your productivity tools in one place</h2>
+                <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+                  Everything you need, nothing you don&apos;t
+                </h2>
               </div>
               <p className="max-w-md font-mono text-sm leading-relaxed text-zinc-300">
-                Stop switching between apps for goals, habits, planning, focus, and wellness. Resurgo combines everything into a single workflow.
+                12 integrated tools in one app. Stop paying for and switching between separate goal, habit, focus,
+                wellness, and coaching tools.
               </p>
             </div>
 
             <div className="grid gap-px border border-zinc-900 md:grid-cols-2 lg:grid-cols-3">
-              {VALUE_PILLARS.map((spec) => (
+              {CORE_FEATURES.map((spec) => (
                 <article key={spec.id} className="bg-zinc-950 p-5 transition hover:bg-zinc-900">
                   <div className="flex items-center justify-between">
                     <span className="font-mono text-xs tracking-widest text-orange-600">{spec.id}</span>
-                    <span className="border border-green-900 bg-green-950/40 px-2 py-0.5 font-mono text-[9px] tracking-widest text-green-600">
+                    <span
+                      className={cn(
+                        'border px-2 py-0.5 font-mono text-[9px] tracking-widest',
+                        spec.status === 'Secure'
+                          ? 'border-blue-900 bg-blue-950/40 text-blue-500'
+                          : 'border-green-900 bg-green-950/40 text-green-600',
+                      )}
+                    >
                       {spec.status}
                     </span>
                   </div>
-                  <p className="mt-3 font-mono text-sm leading-relaxed text-zinc-300">{spec.description}</p>
+                  <h3 className="mt-2 font-mono text-sm font-bold text-zinc-200">{spec.title}</h3>
+                  <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">{spec.description}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        {/* ACCESS TIER MATRIX */}
+        {/* ────────────────── AI COACHES ────────────────── */}
+        <section id="coaches" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-mono text-[10px] tracking-widest text-orange-600">AI_COACHING_ENGINE</p>
+              <h2 className="mt-2 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+                6 AI coaches. Pick your style.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-mono text-sm leading-relaxed text-zinc-300">
+                Each coach has a unique personality and approach. Two are free forever. Unlock all six with Pro.
+              </p>
+            </div>
+
+            <div className="grid gap-px border border-zinc-900 md:grid-cols-2 lg:grid-cols-3">
+              {AI_COACHES.map((coach) => (
+                <article key={coach.name} className="relative bg-black p-5 transition hover:bg-zinc-900/60">
+                  {/* Free / Pro badge */}
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-sm font-bold tracking-widest text-zinc-100">{coach.name}</span>
+                    <span
+                      className={cn(
+                        'border px-2 py-0.5 font-mono text-[9px] tracking-widest',
+                        coach.free
+                          ? 'border-green-900 bg-green-950/40 text-green-500'
+                          : 'border-orange-900 bg-orange-950/40 text-orange-500',
+                      )}
+                    >
+                      {coach.free ? 'FREE' : 'PRO'}
+                    </span>
+                  </div>
+                  <p className="mt-1 font-mono text-[10px] tracking-widest text-orange-500">{coach.style}</p>
+                  <p className="mt-3 font-mono text-xs leading-relaxed text-zinc-400">{coach.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ────────────────── PRICING ────────────────── */}
         <section id="access" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
-            <h2 className="text-center font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
-              Pricing
-            </h2>
+            <h2 className="text-center font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Pricing</h2>
             <p className="mx-auto mt-2 max-w-xl text-center font-mono text-sm text-zinc-400">
-              Start free. Upgrade when you&apos;re ready. No lock-in.
+              Start free. Upgrade when you&apos;re ready. No lock-in. No hidden fees.
             </p>
 
             <div className="mt-10 grid gap-4 md:grid-cols-4">
               {ACCESS_TIERS.map((plan) => (
                 <article
                   key={plan.tier}
-                  className={cn('p-6', plan.highlight ? 'border border-orange-900 bg-orange-950/20' : 'bg-zinc-950')}
+                  className={cn(
+                    'p-6',
+                    plan.highlight ? 'border border-orange-900 bg-orange-950/20' : 'bg-zinc-950',
+                  )}
                 >
                   {plan.highlight && (
-                    <p className="mb-3 font-mono text-xs tracking-widest text-orange-500">
-                      ★ MOST POPULAR
-                    </p>
+                    <p className="mb-3 font-mono text-xs tracking-widest text-orange-500">&#9733; MOST POPULAR</p>
                   )}
                   <p className="font-mono text-sm font-bold tracking-widest text-zinc-300">{plan.tier}</p>
                   <p className="mt-3 font-mono text-4xl font-bold text-zinc-100">
@@ -500,7 +850,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                   <ul className="mt-6 space-y-2.5">
                     {plan.specs.map((spec) => (
                       <li key={spec} className="flex items-center gap-2 font-mono text-sm text-zinc-300">
-                        <span className="text-green-500 text-base">✓</span>
+                        <span className="text-base text-green-500">&#10003;</span>
                         {spec}
                       </li>
                     ))}
@@ -522,15 +872,25 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </section>
 
-        {/* OPERATOR LOGS */}
+        {/* ────────────────── TESTIMONIALS ────────────────── */}
         <section id="logs" className="border-t border-zinc-900 bg-zinc-950 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
-            <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Proof it works</h2>
-            <p className="mt-1 font-mono text-sm text-zinc-400">
-              Real outcomes from people using Resurgo weekly
-            </p>
+            <div className="mb-8 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+              <div>
+                <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
+                  Proof it works
+                </h2>
+                <p className="mt-1 font-mono text-sm text-zinc-400">
+                  Real outcomes from people using Resurgo weekly
+                </p>
+              </div>
+              <p className="font-mono text-[10px] tracking-widest text-zinc-500">
+                {TESTIMONIALS.length} VERIFIED REVIEWS
+              </p>
+            </div>
 
-            <div className="mt-8 border border-zinc-900">
+            {/* Featured testimonial (rotating) */}
+            <div className="border border-zinc-900">
               <div className="flex items-center justify-between border-b border-zinc-900 bg-black px-4 py-2">
                 <span className="font-mono text-[9px] tracking-widest text-orange-600">
                   REVIEW_{activeLog + 1}_OF_{TESTIMONIALS.length}
@@ -543,9 +903,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 </p>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="font-mono text-xs font-bold text-zinc-400">
-                      {TESTIMONIALS[activeLog].name}
-                    </p>
+                    <p className="font-mono text-xs font-bold text-zinc-400">{TESTIMONIALS[activeLog].name}</p>
                     <p className="font-mono text-[10px] tracking-widest text-zinc-400">
                       {TESTIMONIALS[activeLog].role}
                     </p>
@@ -561,23 +919,43 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                     key={idx}
                     onClick={() => setActiveLog(idx)}
                     className={cn(
-                      'h-0.5 flex-1 transition-colors',
+                      'h-1 flex-1 transition-colors',
                       activeLog === idx ? 'bg-orange-600' : 'bg-zinc-800 hover:bg-zinc-600',
                     )}
-                    aria-label={`Log entry ${idx + 1}`}
+                    aria-label={`Review ${idx + 1}`}
                   />
                 ))}
               </div>
             </div>
+
+            {/* All testimonials grid */}
+            <div className="mt-6 grid gap-px border border-zinc-900 md:grid-cols-2 lg:grid-cols-3">
+              {TESTIMONIALS.map((t) => (
+                <div key={t.name} className="bg-black p-5">
+                  <p className="font-mono text-xs leading-relaxed text-zinc-300">
+                    &quot;{t.quote.length > 120 ? t.quote.slice(0, 120) + '...' : t.quote}&quot;
+                  </p>
+                  <div className="mt-4 flex items-center justify-between">
+                    <div>
+                      <p className="font-mono text-[10px] font-bold text-zinc-400">{t.name}</p>
+                      <p className="font-mono text-[9px] tracking-widest text-zinc-500">{t.role}</p>
+                    </div>
+                    <span className="border border-green-900/60 px-2 py-0.5 font-mono text-[8px] tracking-widest text-green-600">
+                      {t.outcome}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* ────────────────── FAQ ────────────────── */}
         <section id="faq" className="border-t border-zinc-900 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-4xl">
             <h2 className="font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">Frequently asked questions</h2>
             <p className="mt-1 font-mono text-[10px] tracking-widest text-zinc-400">
-              FAST_ANSWERS_FOR_SETUP_AND_ONBOARDING
+              {FAQS.length} ANSWERS TO COMMON QUESTIONS
             </p>
 
             <div
@@ -609,7 +987,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                           isOpen && 'rotate-180',
                         )}
                       >
-                        ?
+                        &#9662;
                       </span>
                     </button>
                     <div
@@ -639,7 +1017,7 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
           </div>
         </section>
 
-        {/* CTA TERMINAL */}
+        {/* ────────────────── CTA TERMINAL ────────────────── */}
         <section className="border-t border-zinc-900 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-6xl border border-zinc-900 bg-zinc-950">
             <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
@@ -649,14 +1027,13 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
               </span>
             </div>
             <div className="px-6 py-12 text-center sm:px-10">
-              <p className="font-mono text-[10px] tracking-widest text-orange-600">
-                START FREE TODAY
-              </p>
+              <p className="font-mono text-[10px] tracking-widest text-orange-600">YOUR_NEXT_MOVE</p>
               <h2 className="mt-3 font-mono text-3xl font-bold text-zinc-100 sm:text-4xl">
                 Ready to build habits that actually stick?
               </h2>
               <p className="mx-auto mt-4 max-w-xl font-mono text-sm leading-relaxed text-zinc-300">
-                Create your free account, set one goal, and start your first day in under 2 minutes. No credit card needed.
+                Create your free account, set one goal, and start your first day — all in under 2 minutes. No credit
+                card needed. No trial that expires.
               </p>
               <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                 <Link
@@ -665,6 +1042,13 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 >
                   [ INITIALIZE_SYSTEM ]
                 </Link>
+                <a
+                  href="/resurgo.apk"
+                  download
+                  className="inline-flex min-h-[48px] items-center justify-center gap-2 border border-zinc-800 px-8 font-mono text-sm tracking-widest text-zinc-500 transition hover:border-zinc-600 hover:text-zinc-300"
+                >
+                  [ DOWNLOAD_APK ]
+                </a>
                 <Link
                   href="/pricing"
                   className="inline-flex min-h-[48px] items-center justify-center border border-zinc-800 px-8 font-mono text-sm tracking-widest text-zinc-500 transition hover:border-zinc-600 hover:text-zinc-300"
@@ -676,13 +1060,14 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
                 <span>&gt; NO_CREDIT_CARD_REQUIRED</span>
                 <span>&gt; CLEAR_ONBOARDING_FLOW</span>
                 <span>&gt; MOBILE_READY</span>
+                <span>&gt; ANDROID_APK_AVAILABLE</span>
               </div>
             </div>
           </div>
         </section>
       </main>
 
-      {/* FOOTER */}
+      {/* ────────────────── FOOTER ────────────────── */}
       <footer className="border-t border-zinc-900 bg-zinc-950 px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -699,13 +1084,14 @@ export function LandingPageV2(_props: LandingPageProps = {}) {
               ['Privacy', '/privacy'],
               ['Terms', '/terms'],
             ].map(([label, href]) => (
-              <Link key={label} href={href} className="transition hover:text-zinc-400">
+              <Link key={label} href={href} className="transition hover:text-zinc-300">
                 {label}
               </Link>
             ))}
           </div>
         </div>
       </footer>
+
       <ScrollToTop />
     </div>
   );

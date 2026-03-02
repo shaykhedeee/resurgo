@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Template Library
+// RESURGO - Template Library
 // Pre-built habit and goal templates for quick start
 // ═══════════════════════════════════════════════════════════════════════════════
 

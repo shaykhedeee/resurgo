@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Goal Decomposition API Route (Cost-Optimized)
+// RESURGO - Goal Decomposition API Route (Cost-Optimized)
 // Server-side AI endpoint for breaking down goals using Atomic Habits principles
 // ═══════════════════════════════════════════════════════════════════════════════
 

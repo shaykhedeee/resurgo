@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Keyboard Shortcuts System
+// RESURGO - Keyboard Shortcuts System
 // Professional keyboard navigation like Notion/Linear
 // ═══════════════════════════════════════════════════════════════════════════════
 

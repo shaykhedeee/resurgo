@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Deep Onboarding Wizard
+// RESURGO - Deep Onboarding Wizard
 // Comprehensive user profiling for personalized goal achievement
 // ═══════════════════════════════════════════════════════════════════════════════
 

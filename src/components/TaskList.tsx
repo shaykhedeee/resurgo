@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - TaskList Component (TickTick-inspired)
+// RESURGO - TaskList Component (TickTick-inspired)
 // Comprehensive task management with priorities, due dates, subtasks, smart lists
 // ═══════════════════════════════════════════════════════════════════════════════
 

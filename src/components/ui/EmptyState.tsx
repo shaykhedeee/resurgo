@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Empty State Components
+// RESURGO - Empty State Components
 // Beautiful empty state illustrations and messaging
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Voice Input Hook
+// RESURGO - Voice Input Hook
 // Web Speech API integration for voice-to-text
 // ═══════════════════════════════════════════════════════════════════════════════
 

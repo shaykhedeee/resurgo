@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Habit Tracking Grid Component
+// RESURGO - Habit Tracking Grid Component
 // ═══════════════════════════════════════════════════════════════════════════════
 
 'use client';

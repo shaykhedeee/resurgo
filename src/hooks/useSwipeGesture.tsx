@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY - Swipe Gesture Hook
+// RESURGO - Swipe Gesture Hook
 // Touch gesture handling for mobile experience
 // ═══════════════════════════════════════════════════════════════════════════════
 

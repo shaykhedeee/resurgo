@@ -1,7 +1,7 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// Ascendify — ClerkProviderWrapper
+// Resurgo — ClerkProviderWrapper
 // Wraps children with ClerkProvider only when a valid key is configured.
 // Falls back to rendering children without auth during build / keyless dev.
 // ═══════════════════════════════════════════════════════════════════════════════

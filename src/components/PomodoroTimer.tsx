@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Pomodoro Timer Component
+// RESURGO - Pomodoro Timer Component
 // Focus timer with work/break intervals
 // ═══════════════════════════════════════════════════════════════════════════════
 

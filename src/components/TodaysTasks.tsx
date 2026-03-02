@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Today's Tasks Component
+// RESURGO - Today's Tasks Component
 // Shows daily tasks from goals with interactive completion
 // ═══════════════════════════════════════════════════════════════════════════════
 

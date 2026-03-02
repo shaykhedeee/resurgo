@@ -8,8 +8,9 @@
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles } from 'lucide-react';
+import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useStoreUser } from '@/hooks/useStoreUser';
 
 type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'NOVA';
 
@@ -46,16 +47,36 @@ export default function CoachPage() {
   const [selectedCoach, setSelectedCoach] = useState<CoachId>('MARCUS');
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [isGreeting, setIsGreeting] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const greetedRef = useRef<Set<string>>(new Set());
+
+  const { user } = useStoreUser();
+  const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
+  const FREE_COACHES: CoachId[] = ['MARCUS', 'AURORA'];
 
   const history = useQuery(api.coachMessages.getHistory, { limit: 100 });
   const sendWithPersona = useAction(api.coachAI.sendWithPersona);
+  const greetUser = useAction(api.coachAI.greetUser);
   const setCoachMutation = useMutation(api.coachAI.setSelectedCoach);
 
   const coachMessages = useMemo(() => {
     if (!history) return [];
     return history.filter((m: any) => m.context?.startsWith(`coach:${selectedCoach}`));
   }, [history, selectedCoach]);
+
+  // Auto-greet when switching to a coach with no messages
+  useEffect(() => {
+    if (!history || isGreeting || isSending) return;
+    const msgs = history.filter((m: any) => m.context?.startsWith(`coach:${selectedCoach}`));
+    if (msgs.length === 0 && !greetedRef.current.has(selectedCoach)) {
+      greetedRef.current.add(selectedCoach);
+      setIsGreeting(true);
+      greetUser({ coachId: selectedCoach, userName: user?.name })
+        .catch(() => {})
+        .finally(() => setIsGreeting(false));
+    }
+  }, [history, selectedCoach, isGreeting, isSending, greetUser, user?.name]);
 
   useEffect(() => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -78,6 +99,7 @@ export default function CoachPage() {
   const handleSubmit = (e: FormEvent) => { e.preventDefault(); handleSend(message); };
 
   const handleSwitchCoach = async (id: CoachId) => {
+    if (!isPro && !FREE_COACHES.includes(id)) return; // blocked for free users
     setSelectedCoach(id);
     await setCoachMutation({ coachId: id }).catch(() => {});
   };
@@ -108,19 +130,28 @@ export default function CoachPage() {
               {COACHES.map((c) => {
                 const Icon = c.Icon;
                 const isActive = c.id === selectedCoach;
+                const isLocked = !isPro && !FREE_COACHES.includes(c.id);
                 return (
                   <button key={c.id} onClick={() => handleSwitchCoach(c.id)}
                     className={cn('group w-full border px-3 py-2.5 text-left transition',
+                      isLocked ? 'cursor-not-allowed opacity-50 border-transparent' :
                       isActive ? 'border-zinc-700 bg-zinc-900' : 'border-transparent hover:border-zinc-800 hover:bg-zinc-900/50'
                     )}>
                     <div className="flex items-center gap-2">
-                      <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: isActive ? c.color : '#52525b' }} />
+                      <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: isActive && !isLocked ? c.color : '#52525b' }} />
                       <div className="min-w-0 flex-1">
-                        <p className="font-mono text-[10px] font-bold tracking-widest" style={{ color: isActive ? c.color : '#71717a' }}>{c.name}</p>
+                        <p className="font-mono text-[10px] font-bold tracking-widest" style={{ color: isActive && !isLocked ? c.color : '#71717a' }}>{c.name}</p>
                         <p className="truncate font-mono text-[8px] tracking-wider text-zinc-400">{c.title}</p>
                       </div>
-                      {isActive && <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.color }} />}
+                      {isLocked ? (
+                        <Lock className="h-3 w-3 shrink-0 text-zinc-600" />
+                      ) : isActive ? (
+                        <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.color }} />
+                      ) : null}
                     </div>
+                    {isLocked && (
+                      <p className="mt-1 font-mono text-[7px] tracking-widest text-amber-600/70">PRO ONLY</p>
+                    )}
                   </button>
                 );
               })}
@@ -159,11 +190,17 @@ export default function CoachPage() {
           {/* Messages */}
           <div className="flex-1 overflow-y-auto border border-zinc-900 bg-black" style={{ minHeight: '280px', maxHeight: 'calc(100vh - 400px)' }}>
             <div className="space-y-px p-2">
-              {coachMessages.length === 0 && (
+              {coachMessages.length === 0 && !isGreeting && (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <span className="mb-3 text-4xl">{coach.avatar}</span>
-                  <p className="font-mono text-[9px] tracking-widest text-zinc-400">AGENT_{coach.name}_STANDING_BY</p>
+                  <p className="font-mono text-[9px] tracking-widest text-zinc-400">AGENT_{coach.name}_INITIALIZING</p>
                   <p className="mt-2 font-mono text-[10px] text-zinc-400">{coach.shortBio}</p>
+                </div>
+              )}
+              {isGreeting && coachMessages.length === 0 && (
+                <div className="mr-6 border px-4 py-3" style={{ borderColor: `${coach.color}30` }}>
+                  <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: coach.color }}>AGENT_{coach.name}</p>
+                  <p className="font-mono text-[11px] text-zinc-500 animate-pulse">INITIALIZING_GREETING_</p>
                 </div>
               )}
               {coachMessages.map((m: any) => {

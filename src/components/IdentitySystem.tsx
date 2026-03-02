@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Identity System Component
+// RESURGO - Identity System Component
 // Based on Atomic Habits: Identity-based habit formation
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// ASCENDIFY — Clerk Billing Webhook
+// RESURGO — Clerk Billing Webhook
 // Handles subscription changes → updates user plan in Convex
 // POST /api/webhooks/clerk-billing
 // ═══════════════════════════════════════════════════════════════════════════════

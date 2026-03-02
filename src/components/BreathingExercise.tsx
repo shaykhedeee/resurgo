@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Breathing Exercise Component
+// RESURGO - Breathing Exercise Component
 // Animated, guided breathing exercises for anxiety and stress relief
 // Features: Visual animation, audio cues, multiple exercise types
 // ═══════════════════════════════════════════════════════════════════════════════

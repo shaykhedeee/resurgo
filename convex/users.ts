@@ -164,6 +164,37 @@ export const current = query({
       planVersion: v.optional(v.number()),
       planUpdatedAt: v.optional(v.number()),
       lastBillingEventId: v.optional(v.string()),
+      // Telegram integration
+      telegramChatId: v.optional(v.string()),
+      telegramLinked: v.optional(v.boolean()),
+      // Native push (FCM)
+      fcmToken: v.optional(v.string()),
+      fcmTokenUpdatedAt: v.optional(v.number()),
+      pushEnabled: v.optional(v.boolean()),
+      // Referral
+      referralCode: v.optional(v.string()),
+      // Coach selection
+      selectedCoach: v.optional(v.union(
+        v.literal('MARCUS'),
+        v.literal('AURORA'),
+        v.literal('TITAN'),
+        v.literal('SAGE'),
+        v.literal('PHOENIX'),
+        v.literal('NOVA'),
+      )),
+      // Emergency mode
+      emergencyMode: v.optional(v.boolean()),
+      emergencyModeReason: v.optional(v.string()),
+      emergencyModeActivatedAt: v.optional(v.number()),
+      // AI coach memory
+      summaryMemory: v.optional(v.string()),
+      // User archetype
+      archetype: v.optional(v.string()),
+      archetypeConfidence: v.optional(v.number()),
+      secondaryArchetype: v.optional(v.string()),
+      onboardingData: v.optional(v.string()),
+      // Dodo Payments
+      dodoCustomerId: v.optional(v.string()),
       createdAt: v.number(),
       updatedAt: v.number(),
     }),

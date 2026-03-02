@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Sitemap Configuration
+// RESURGO - Sitemap Configuration
 // Dynamic sitemap for SEO optimization
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Tutorial/Walkthrough Component
+// RESURGO - Tutorial/Walkthrough Component
 // First-time user guidance with step-by-step feature introduction
 // ═══════════════════════════════════════════════════════════════════════════════
 

@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Enhanced Template Library V2
+// RESURGO - Enhanced Template Library V2
 // Pre-built templates + Custom templates + Import/Export
 // ═══════════════════════════════════════════════════════════════════════════════
 

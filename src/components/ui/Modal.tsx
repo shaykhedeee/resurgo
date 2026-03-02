@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Design System Modal Component
+// RESURGO - Design System Modal Component
 // Accessible, animated modals with consistent styling
 // ═══════════════════════════════════════════════════════════════════════════════
 

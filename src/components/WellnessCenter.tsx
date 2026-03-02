@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// AscendifyIFY - Wellness Center Component
+// RESURGO - Wellness Center Component
 // Comprehensive mental health support hub
 // Features: Mood tracking, breathing exercises, gratitude, self-compassion
 // ═══════════════════════════════════════════════════════════════════════════════
