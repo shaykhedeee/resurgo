@@ -144,7 +144,7 @@ export default function CoachPage() {
                         <p className="truncate font-mono text-[8px] tracking-wider text-zinc-400">{c.title}</p>
                       </div>
                       {isLocked ? (
-                        <Lock className="h-3 w-3 shrink-0 text-zinc-600" />
+                        <Lock className="h-3 w-3 shrink-0 text-zinc-400" />
                       ) : isActive ? (
                         <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.color }} />
                       ) : null}

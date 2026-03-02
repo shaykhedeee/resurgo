@@ -99,7 +99,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
         {/* Terminal sub-bar */}
         <div className="border-t border-zinc-900 bg-zinc-950 px-5 py-1">
-          <span className="font-mono text-[10px] tracking-widest text-zinc-600">
+          <span className="font-mono text-[10px] tracking-widest text-zinc-400">
             RESURGO.life :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
           </span>
         </div>
@@ -188,10 +188,10 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
           {/* Bottom bar */}
           <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-zinc-900 pt-6 sm:flex-row">
-            <p className="font-mono text-[10px] text-zinc-600">
+            <p className="font-mono text-[10px] text-zinc-400">
               © {new Date().getFullYear()} RESURGO.life. All rights reserved.
             </p>
-            <p className="font-mono text-[10px] text-zinc-700">
+            <p className="font-mono text-[10px] text-zinc-500">
               Built with ❤ in TypeScript. Running on Vercel + Convex.
             </p>
           </div>

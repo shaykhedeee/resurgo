@@ -342,8 +342,8 @@ export default function OnboardingPage() {
             >
               [Get Started]
             </button>
-            <button onClick={handleSkip} className="font-mono text-[9px] tracking-widest text-zinc-500 transition hover:text-zinc-300">
-              Skip for now
+            <button onClick={handleSkip} className="font-mono text-[9px] tracking-widest text-zinc-600 hover:text-zinc-400 mt-2 transition">
+              I'll set this later →
             </button>
           </div>
         )}

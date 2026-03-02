@@ -467,7 +467,7 @@ export default function SettingsPage() {
                   <p className="font-mono text-[9px] tracking-widest text-zinc-400">{label}</p>
                   <p className="font-mono text-[10px] text-zinc-500">{desc}</p>
                 </div>
-                <ArrowRight className="h-3 w-3 text-zinc-600" />
+                <ArrowRight className="h-3 w-3 text-zinc-400" />
               </Link>
             ))}
           </div>
@@ -502,12 +502,12 @@ export default function SettingsPage() {
           <p className="font-mono text-[9px] tracking-widest text-zinc-500">
             RESURGO v1.4.0 &middot; NEXT.JS 14 &middot; CONVEX &middot; CLERK
           </p>
-          <p className="mt-1 font-mono text-[9px] text-zinc-600">
-            <Link href="/changelog" className="hover:text-zinc-400 transition">View changelog</Link>
+          <p className="mt-1 font-mono text-[9px] text-zinc-400">
+            <Link href="/changelog" className="hover:text-zinc-200 transition">View changelog</Link>
             {' · '}
-            <Link href="/privacy" className="hover:text-zinc-400 transition">Privacy</Link>
+            <Link href="/privacy" className="hover:text-zinc-200 transition">Privacy</Link>
             {' · '}
-            <Link href="/terms" className="hover:text-zinc-400 transition">Terms</Link>
+            <Link href="/terms" className="hover:text-zinc-200 transition">Terms</Link>
           </p>
         </div>
 

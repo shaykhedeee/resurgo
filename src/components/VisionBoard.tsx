@@ -363,7 +363,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           {board.title}
         </h2>
         <p className="text-zinc-300 text-base italic">&ldquo;{board.centerAffirmation}&rdquo;</p>
-        <p className="text-zinc-600 text-xs">
+        <p className="text-zinc-400 text-xs">
           Generated {new Date(board.generatedAt).toLocaleDateString()} · {board.theme.mood}
         </p>
       </div>
@@ -535,7 +535,7 @@ function PanelCard({
               style={{ width: `${panel.progress}%`, backgroundColor: accentColor }}
             />
           </div>
-          <span className="text-[10px] text-zinc-600 mt-0.5 block">{panel.progress}% complete</span>
+          <span className="text-[10px] text-zinc-400 mt-0.5 block">{panel.progress}% complete</span>
         </div>
       </div>
     </div>
@@ -625,7 +625,7 @@ function PanelModal({
           >
             <ChevronLeft size={16} className="text-zinc-300" />
           </button>
-          <span className="text-zinc-600 text-xs">{currentIndex + 1} / {panels.length}</span>
+          <span className="text-zinc-400 text-xs">{currentIndex + 1} / {panels.length}</span>
           <button
             onClick={onNext}
             disabled={currentIndex === panels.length - 1}

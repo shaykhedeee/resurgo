@@ -2037,7 +2037,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     {prevInSeries.title}
                   </Link>
                 ) : (
-                  <p className="mt-1 font-mono text-xs text-zinc-600">Start of series</p>
+                  <p className="mt-1 font-mono text-xs text-zinc-400">Start of series</p>
                 )}
               </div>
               <div className="border border-zinc-800 bg-black/40 p-3">
@@ -2047,7 +2047,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                     {nextInSeries.title}
                   </Link>
                 ) : (
-                  <p className="mt-1 font-mono text-xs text-zinc-600">End of series</p>
+                  <p className="mt-1 font-mono text-xs text-zinc-400">End of series</p>
                 )}
               </div>
             </div>
