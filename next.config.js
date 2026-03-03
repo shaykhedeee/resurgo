@@ -52,7 +52,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://fonts.googleapis.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://challenges.cloudflare.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob: https:",
-              "connect-src 'self' https://api.groq.com https://generativelanguage.googleapis.com https://openrouter.ai https://api.aimlapi.com https://js.puter.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://*.convex.cloud wss://*.convex.cloud wss: https://accounts.google.com https://api.notion.com https://challenges.cloudflare.com",
+              "connect-src 'self' https://api.groq.com https://generativelanguage.googleapis.com https://openrouter.ai https://api.aimlapi.com https://api.cerebras.ai https://api.together.xyz https://api.mistral.ai https://api.fireworks.ai https://api.scaleway.ai https://api.openai.com https://js.puter.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://*.convex.cloud wss://*.convex.cloud wss: https://accounts.google.com https://api.notion.com https://challenges.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com",
               "frame-src 'self' https://*.clerk.accounts.dev https://clerk.resurgo.life https://accounts.google.com https://www.notion.so https://challenges.cloudflare.com https://www.google.com https://www.recaptcha.net",
               "form-action 'self'",
               "worker-src 'self' blob:",

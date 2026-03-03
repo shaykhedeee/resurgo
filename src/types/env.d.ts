@@ -25,6 +25,11 @@ declare namespace NodeJS {
     OPENROUTER_API_KEY?: string;
     OPENAI_API_KEY?: string;
     AIML_API_KEY?: string;
+    CEREBRAS_API_KEY?: string;
+    TOGETHER_API_KEY?: string;
+    MISTRAL_API_KEY?: string;
+    FIREWORKS_API_KEY?: string;
+    SCALEWAY_API_KEY?: string;
 
     // App config
     NEXT_PUBLIC_APP_NAME?: string;
@@ -62,6 +67,14 @@ declare namespace NodeJS {
     NEXT_PUBLIC_DODO_CHECKOUT_PRO_YEARLY?: string;
     NEXT_PUBLIC_DODO_CHECKOUT_LIFETIME?: string;
     NEXT_PUBLIC_DODO_CUSTOMER_PORTAL_URL?: string;
+
+    // Email (Resend)
+    RESEND_API_KEY?: string;
+    RESEND_FROM_EMAIL?: string;
+    EMAIL_INTERNAL_SECRET?: string;
+
+    // App version
+    NEXT_PUBLIC_APP_VERSION?: string;
   }
 }
 

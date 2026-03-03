@@ -2,11 +2,12 @@
 // ASCEND - Service Worker for Push Notifications & Offline Support
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'ascend-v4';
+const CACHE_NAME = 'ascend-v5';
 
 // Assets to cache for offline use (only truly static assets)
 const STATIC_ASSETS = [
   '/manifest.json',
+  '/offline.html',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
 ];
@@ -52,10 +53,12 @@ self.addEventListener('fetch', (event) => {
   if (event.request.mode === 'navigate') {
     event.respondWith(
       fetch(event.request).catch(() => {
-        return new Response(
-          '<!DOCTYPE html><html><body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#111;color:#fff"><h1>You are offline</h1></body></html>',
-          { status: 503, headers: { 'Content-Type': 'text/html' } }
-        );
+        return caches.match('/offline.html').then((cached) => {
+          return cached || new Response(
+            '<!DOCTYPE html><html><body style="font-family:system-ui;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0A0A0B;color:#fff"><h1>Offline</h1></body></html>',
+            { status: 503, headers: { 'Content-Type': 'text/html' } }
+          );
+        });
       })
     );
     return;

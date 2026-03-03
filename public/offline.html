@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Resurgo — Offline</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0A0A0B;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #E4E4E7;
+      padding: 24px;
+    }
+    .card {
+      max-width: 400px;
+      width: 100%;
+      border: 1px solid #27272A;
+      background: #09090B;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border-bottom: 1px solid #27272A;
+    }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #F97316; }
+    .tag { font-size: 9px; letter-spacing: 0.15em; color: #F97316; }
+    .body { padding: 24px 16px; text-align: center; }
+    .icon { font-size: 48px; margin-bottom: 16px; }
+    h1 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+    p { font-size: 13px; color: #71717A; line-height: 1.6; margin-bottom: 20px; }
+    .btn {
+      display: inline-block;
+      padding: 10px 24px;
+      background: #F97316;
+      color: #000;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .btn:active { opacity: 0.8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="header">
+      <span class="dot"></span>
+      <span class="tag">RESURGO :: OFFLINE</span>
+    </div>
+    <div class="body">
+      <div class="icon">📡</div>
+      <h1>You're Offline</h1>
+      <p>Resurgo needs an internet connection to sync your data. Check your Wi-Fi or mobile data and try again.</p>
+      <button class="btn" onclick="location.reload()">RETRY CONNECTION</button>
+    </div>
+  </div>
+</body>
+</html>

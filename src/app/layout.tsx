@@ -10,6 +10,7 @@ import { ErrorTrackingInit } from '@/components/ErrorTrackingInit';
 import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import ConvexClientProvider from '@/components/ConvexClientProvider';
 import ClerkProviderWrapper from '@/components/ClerkProviderWrapper';
+import { CookieConsent } from '@/components/CookieConsent';
 
 // Base URL for the application (update for production)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -460,7 +461,7 @@ export default function RootLayout({
 
                   // On all hosts: clear old (non-current) SW caches to prevent stale pages
                   if (!isLocal && 'caches' in window) {
-                    var CURRENT_CACHE = 'ascend-v4';
+                    var CURRENT_CACHE = 'ascend-v5';
                     caches.keys().then(function(keys) {
                       return Promise.all(keys.filter(function(k) { return k !== CURRENT_CACHE; }).map(function(k) { return caches.delete(k); }));
                     }).catch(function() {});
@@ -496,6 +497,7 @@ export default function RootLayout({
             <ThemeProvider>
               <AccessibilityProvider>
                 {children}
+                <CookieConsent />
               </AccessibilityProvider>
             </ThemeProvider>
           </ConvexClientProvider>
