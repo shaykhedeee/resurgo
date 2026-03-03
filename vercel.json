@@ -1,0 +1,28 @@
+{
+  "projectName": "resurgo",
+  "buildCommand": "next build",
+  "devCommand": "next dev",
+  "public": false,
+  "env": {
+    "NEXT_PUBLIC_CONVEX_URL": "@resurgo_convex_url",
+    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "@resurgo_clerk_pub_key",
+    "NEXT_PUBLIC_SITE_URL": "https://resurgo.life",
+    "NEXT_PUBLIC_GA_ID": "G-F1VLMSS8FB",
+    "NODE_ENV": "production"
+  },
+  "build": {
+    "env": {
+      "CLERK_SECRET_KEY": "@resurgo_clerk_secret",
+      "CLERK_WEBHOOK_SECRET": "@resurgo_clerk_webhook",
+      "CONVEX_DEPLOY_KEY": "@resurgo_convex_deploy_key",
+      "RESEND_API_KEY": "@resurgo_resend_api_key",
+      "EMAIL_INTERNAL_SECRET": "@resurgo_email_internal_secret",
+      "GROQ_API_KEY": "@resurgo_groq_api_key"
+    }
+  },
+  "functions": {
+    "src/app/api/**/*.ts": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
