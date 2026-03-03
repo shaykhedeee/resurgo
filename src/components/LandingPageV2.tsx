@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { LogoMark } from '@/components/Logo';
 import { ScrollToTop } from '@/components/ScrollToTop';
+import { TerminalDemo } from '@/components/TerminalDemo';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    RESURGO :: LANDING PAGE v2.1 — Enhanced
@@ -621,6 +622,9 @@ function LandingPageV2() {
             </div>
           </div>
         </section>
+
+        {/* ────────────────── INTERACTIVE TERMINAL DEMO ──────────────── */}
+        <TerminalDemo />
 
         {/* ────────────────── BRAND STORY ────────────────── */}
         <section className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">

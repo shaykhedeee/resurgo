@@ -1271,6 +1271,114 @@ export default defineSchema({
   })
     .index('by_user', ['userId']),
 
+  // ─────────────────────────────────────────────────────────────────────────────
+  // DEEP SCAN — Enhanced onboarding data (5-stage Deep Scan Protocol)
+  // ─────────────────────────────────────────────────────────────────────────────
+  deepScans: defineTable({
+    userId: v.id('users'),
+    // ── Stage 1: Identity Scan ──
+    nickname: v.optional(v.string()),
+    age: v.optional(v.number()),
+    occupation: v.optional(v.string()),
+    lifeStage: v.optional(v.string()),          // e.g. student, early_career, mid_career, transition, retirement
+    // ── Stage 2: Life Pillar Assessment ──
+    pillarScores: v.optional(v.object({
+      health: v.number(),       // 1-10
+      career: v.number(),
+      finance: v.number(),
+      relationships: v.number(),
+      mindset: v.number(),
+      creativity: v.number(),
+      fun: v.number(),
+      environment: v.number(),
+    })),
+    pillarPriorities: v.optional(v.array(v.string())),  // top 3 pillars to focus
+    // ── Stage 3: Root Cause Analysis ──
+    biggestChallenge: v.optional(v.string()),
+    failedBefore: v.optional(v.string()),       // what they've tried before
+    whatStopped: v.optional(v.string()),         // what stopped them
+    sabotagePatterns: v.optional(v.array(v.string())), // self-sabotage patterns
+    // ── Stage 4: Behavioral Fingerprint ──
+    chronotype: v.optional(v.string()),         // early_bird, night_owl, variable
+    energyPattern: v.optional(v.string()),      // steady, burst, slow_start
+    motivationStyle: v.optional(v.string()),    // intrinsic, extrinsic, social, competitive
+    accountabilityStyle: v.optional(v.string()),// self, partner, public, consequences
+    stressResponse: v.optional(v.string()),     // fight, flight, freeze, fawn
+    decisionStyle: v.optional(v.string()),      // analytical, intuitive, collaborative, decisive
+    // ── Stage 5: Commitment Calibration ──
+    commitmentLevel: v.optional(v.number()),    // 1-10
+    dailyTimeAvailable: v.optional(v.number()), // minutes per day
+    biggestFear: v.optional(v.string()),
+    ninetyDayVision: v.optional(v.string()),
+    startingDifficulty: v.optional(v.string()), // gentle, moderate, intense
+    // ── AI-Generated Results ──
+    aiDiagnosis: v.optional(v.string()),        // AI summary of findings
+    aiRecommendations: v.optional(v.string()),  // JSON of recommended approach
+    archetype: v.optional(v.string()),
+    archetypeConfidence: v.optional(v.number()),
+    // ── Meta ──
+    completedStages: v.array(v.number()),       // [1,2,3,4,5]
+    currentStage: v.number(),
+    completedAt: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_userId', ['userId']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // DAILY CHECK-INS — Morning briefing + Evening debrief
+  // ─────────────────────────────────────────────────────────────────────────────
+  dailyCheckIns: defineTable({
+    userId: v.id('users'),
+    date: v.string(),             // YYYY-MM-DD
+    // ── Morning Check-in ──
+    morningMood: v.optional(v.number()),        // 1-5
+    morningEnergy: v.optional(v.number()),      // 1-5
+    sleepQuality: v.optional(v.number()),       // 1-5
+    morningIntention: v.optional(v.string()),
+    topThreePriorities: v.optional(v.array(v.string())),
+    morningAiBriefing: v.optional(v.string()),  // AI-generated morning briefing
+    morningCompletedAt: v.optional(v.number()),
+    // ── Evening Check-in ──
+    eveningMood: v.optional(v.number()),
+    eveningEnergy: v.optional(v.number()),
+    dayRating: v.optional(v.number()),          // 1-5
+    biggestWin: v.optional(v.string()),
+    biggestChallenge: v.optional(v.string()),
+    gratitude: v.optional(v.array(v.string())),
+    tomorrowFocus: v.optional(v.string()),
+    eveningAiReflection: v.optional(v.string()), // AI-generated evening reflection
+    eveningCompletedAt: v.optional(v.number()),
+    // ── Stats (auto-populated) ──
+    tasksCompleted: v.optional(v.number()),
+    habitsCompleted: v.optional(v.number()),
+    focusMinutes: v.optional(v.number()),
+    xpEarned: v.optional(v.number()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_date', ['userId', 'date']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // AI GREETINGS — First Contact briefing after onboarding
+  // ─────────────────────────────────────────────────────────────────────────────
+  aiGreetings: defineTable({
+    userId: v.id('users'),
+    greeting: v.string(),           // Full AI-generated personalized greeting
+    systemPlan: v.optional(v.string()),  // Personalized system configuration summary
+    recommendations: v.optional(v.array(v.object({
+      title: v.string(),
+      description: v.string(),
+      action: v.string(),           // href or action identifier
+      priority: v.number(),
+    }))),
+    viewed: v.boolean(),
+    viewedAt: v.optional(v.number()),
+    createdAt: v.number(),
+  })
+    .index('by_userId', ['userId']),
+
   // ───────────────────────────────────────────────────────────────────────────
   // VISION BOARDS — AI-generated personalized vision boards (Section 24)
   // ───────────────────────────────────────────────────────────────────────────

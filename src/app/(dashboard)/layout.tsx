@@ -46,6 +46,7 @@ const NAV_SECTIONS = [
       { href: '/plan-builder', label: 'Plan Builder' },
       { href: '/vision-board', label: 'Vision Board' },
       { href: '/coach', label: 'AI Coach' },
+      { href: '/orchestrator', label: 'AI Orchestrator' },
       { href: '/integrations', label: 'Integrations' },
       { href: '/refer', label: 'Refer & Earn' },
     ],
