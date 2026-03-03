@@ -42,11 +42,10 @@ async function createMonitor() {
 
     if (data.stat === 'ok') {
       console.log('✅ Monitor created successfully!');
-      console.log(`   Monitor ID: ${data.data.monitor.id}`);
+      console.log(`   Monitor ID: ${data.monitor.id}`);
       console.log(`   URL: ${HEALTH_ENDPOINT}`);
       console.log(`   Interval: 5 minutes`);
-      console.log(`   Status: ${data.data.monitor.status}`);
-      return data.data.monitor.id;
+      return data.monitor.id;
     } else {
       console.error('❌ Failed to create monitor:');
       console.error(`   Error: ${data.error.message}`);
@@ -74,9 +73,9 @@ async function listMonitors() {
 
     const data = await response.json();
 
-    if (data.stat === 'ok' && data.data.monitors.length > 0) {
-      console.log(`Found ${data.data.monitors.length} monitor(s):\n`);
-      data.data.monitors.forEach((monitor) => {
+    if (data.stat === 'ok' && data.monitors && data.monitors.length > 0) {
+      console.log(`Found ${data.monitors.length} monitor(s):\n`);
+      data.monitors.forEach((monitor) => {
         const statusColor = monitor.status === 2 ? '🟢' : '🔴';
         console.log(`  ${statusColor} ${monitor.friendly_name}`);
         console.log(`     URL: ${monitor.url}`);
