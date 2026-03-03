@@ -12,7 +12,7 @@ export default function VisionBoardPage() {
         <div className="mb-5 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">AI_MODULE :: VISION_BOARD_STUDIO_v1</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">AI_MODULE :: VISION_BOARD_STUDIO_v1</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Vision Board Studio</h1>

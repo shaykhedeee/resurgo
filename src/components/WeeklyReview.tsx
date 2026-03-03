@@ -1,7 +1,7 @@
-﻿// ═══════════════════════════════════════════════════════════════════════════════
+// -------------------------------------------------------------------------------
 // RESURGO - Weekly Review System
 // Structured weekly check-in for reflection, planning, and goal adjustment
-// ═══════════════════════════════════════════════════════════════════════════════
+// -------------------------------------------------------------------------------
 
 'use client';
 
@@ -30,9 +30,9 @@ import {
 } from 'lucide-react';
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 interface WeeklyReviewProps {
   isOpen: boolean;
@@ -74,9 +74,9 @@ const REVIEW_STEPS: { id: ReviewStep; title: string; icon: React.ElementType }[]
   { id: 'summary', title: 'Summary', icon: Star },
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // WEEKLY REVIEW COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
   const {
@@ -225,9 +225,9 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
 
   if (!isOpen) return null;
 
-  // ─────────────────────────────────────────────────────────────────────────
+  // -------------------------------------------------------------------------
   // STEP RENDERERS
-  // ─────────────────────────────────────────────────────────────────────────
+  // -------------------------------------------------------------------------
 
   const renderOverview = () => (
     <div className="space-y-6">
@@ -690,15 +690,15 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
             <p className="text-2xl font-bold text-ascend-400">{weeklyStats.habitsCompletionRate}%</p>
-            <p className="text-[11px] text-themed-muted">Completion</p>
+            <p className="text-xs text-themed-muted">Completion</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-amber-400">{weeklyStats.daysActive}/7</p>
-            <p className="text-[11px] text-themed-muted">Active Days</p>
+            <p className="text-xs text-themed-muted">Active Days</p>
           </div>
           <div>
             <p className="text-2xl font-bold text-green-400">{weeklyStats.totalTasksCompleted}</p>
-            <p className="text-[11px] text-themed-muted">Tasks Done</p>
+            <p className="text-xs text-themed-muted">Tasks Done</p>
           </div>
         </div>
 
@@ -835,9 +835,9 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // SUB-COMPONENTS
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 function StatCard({
   icon: Icon,
@@ -859,7 +859,7 @@ function StatCard({
         <span className="text-xs text-themed-muted">{label}</span>
       </div>
       <p className="text-xl font-bold text-themed">{value}</p>
-      <p className="text-[11px] text-themed-muted mt-0.5">{subtitle}</p>
+      <p className="text-xs text-themed-muted mt-0.5">{subtitle}</p>
     </div>
   );
 }

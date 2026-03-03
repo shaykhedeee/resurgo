@@ -19,7 +19,7 @@ export function StatCard({ label, value, change, trend, color = '#f97316' }: Sta
   return (
     <div className="border-2 border-zinc-800 bg-zinc-950 p-4 font-mono">
       <div className="mb-1 flex items-center justify-between">
-        <span className="text-[11px] tracking-widest text-zinc-400">{label}</span>
+        <span className="text-xs tracking-widest text-zinc-400">{label}</span>
         {change && (
           <div className="flex items-center gap-1">
             {trend === 'up' ? (
@@ -27,7 +27,7 @@ export function StatCard({ label, value, change, trend, color = '#f97316' }: Sta
             ) : (
               <TrendingDown className="h-3 w-3 text-red-500" />
             )}
-            <span className={`text-[11px] ${trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+            <span className={`text-xs ${trend === 'up' ? 'text-green-500' : 'text-red-500'}`}>
               {change}
             </span>
           </div>
@@ -71,7 +71,7 @@ export function PixelChart({ title, data, maxValue, height = 120 }: PixelChartPr
           
           return (
             <div key={i}>
-              <div className="mb-1 flex items-center justify-between text-[11px]">
+              <div className="mb-1 flex items-center justify-between text-xs">
                 <span className="text-zinc-400">{point.label}</span>
                 <span className="font-bold text-zinc-200">{point.value}%</span>
               </div>
@@ -166,7 +166,7 @@ export function ComparisonTable({ title, rows }: ComparisonTableProps) {
         <h3 className="text-xs font-bold tracking-widest text-orange-500">{title}</h3>
       </div>
       <div className="divide-y divide-zinc-900">
-        <div className="grid grid-cols-3 gap-2 bg-zinc-900 p-2 text-[11px] font-bold tracking-widest text-zinc-400">
+        <div className="grid grid-cols-3 gap-2 bg-zinc-900 p-2 text-xs font-bold tracking-widest text-zinc-400">
           <div>METRIC</div>
           <div className="text-red-500">BEFORE</div>
           <div className="text-green-500">AFTER</div>
@@ -265,7 +265,7 @@ export function StatGrid({ stats }: StatGridProps) {
           >
             {stat.value}
           </div>
-          <div className="text-[11px] tracking-wider text-zinc-500">{stat.label}</div>
+          <div className="text-xs tracking-wider text-zinc-500">{stat.label}</div>
         </div>
       ))}
     </div>

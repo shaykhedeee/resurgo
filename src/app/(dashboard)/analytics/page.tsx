@@ -51,7 +51,7 @@ export default function AnalyticsPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">TELEMETRY :: GROWTH_PROFILE_READOUT</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">TELEMETRY :: GROWTH_PROFILE_READOUT</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Analytics</h1>
@@ -98,7 +98,7 @@ export default function AnalyticsPage() {
         <div className="mb-6 grid grid-cols-2 gap-px border border-zinc-900 sm:grid-cols-4">
           {statCards.map(({ label, value, sub }) => (
             <div key={label} className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-              <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label.replace(/ /g, '_').toUpperCase()}</p>
+              <p className="font-mono text-xs tracking-widest text-zinc-400">{label.replace(/ /g, '_').toUpperCase()}</p>
               <p className="mt-0.5 font-mono text-xl font-bold text-zinc-100">{value}</p>
               {sub && <p className="mt-0.5 font-mono text-xs text-zinc-400">{sub}</p>}
             </div>
@@ -151,7 +151,7 @@ export default function AnalyticsPage() {
         <div className="border border-zinc-900 bg-zinc-950">
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">ACHIEVEMENT_LOG</span>
-            <span className="border border-orange-900 bg-orange-950/30 px-2 py-0.5 font-mono text-[11px] tracking-widest text-orange-600">
+            <span className="border border-orange-900 bg-orange-950/30 px-2 py-0.5 font-mono text-xs tracking-widest text-orange-600">
               {profile.achievements.length}_UNLOCKED
             </span>
           </div>
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
                       <p className="truncate font-mono text-xs text-zinc-200">{a.name.toUpperCase()}</p>
                       <p className="mt-0.5 line-clamp-2 font-mono text-xs text-zinc-400">{a.description}</p>
                       {a.rarity && (
-                        <span className={`mt-1 inline-block border px-1.5 py-0.5 font-mono text-[11px] tracking-widest ${rarityClass}`}>
+                        <span className={`mt-1 inline-block border px-1.5 py-0.5 font-mono text-xs tracking-widest ${rarityClass}`}>
                           {a.rarity.toUpperCase()}
                         </span>
                       )}

@@ -136,7 +136,7 @@ export default function WellnessPage() {
         <div className="mb-5 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">BIOMETRICS :: WELLNESS_SUITE</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">BIOMETRICS :: WELLNESS_SUITE</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Health & Wellness</h1>
@@ -145,7 +145,7 @@ export default function WellnessPage() {
           <div className="flex border-t border-zinc-900">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button key={id} onClick={() => setTab(id)}
-                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 px-2 py-2.5 font-mono text-[11px] tracking-widest transition',
+                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 px-2 py-2.5 font-mono text-xs tracking-widest transition',
                   tab === id ? 'border-orange-600 bg-orange-950/10 text-orange-500' : 'border-transparent text-zinc-400 hover:text-zinc-400'
                 )}>
                 <Icon className="h-3 w-3" /> {label}
@@ -161,7 +161,7 @@ export default function WellnessPage() {
                 <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">{todayMood ? 'UPDATE_TODAY_MOOD' : 'LOG_TODAY_MOOD'}</span>
               </div>
               <div className="p-4">
-                <p className="mb-3 font-mono text-[11px] tracking-widest text-zinc-400">SCORE_SELECTION</p>
+                <p className="mb-3 font-mono text-xs tracking-widest text-zinc-400">SCORE_SELECTION</p>
                 <div className="mb-4 flex gap-2">
                   {[1,2,3,4,5].map((score) => {
                     const Icon = MOOD_ICONS[score] || Meh;
@@ -176,11 +176,11 @@ export default function WellnessPage() {
                     );
                   })}
                 </div>
-                <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">QUALIFIER_TAGS</p>
+                <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">QUALIFIER_TAGS</p>
                 <div className="mb-4 flex flex-wrap gap-1.5">
                   {MOOD_TAGS.map((tag) => (
                     <button key={tag} onClick={() => toggleTag(tag)}
-                      className={cn('border px-2.5 py-1 font-mono text-[11px] tracking-widest transition',
+                      className={cn('border px-2.5 py-1 font-mono text-xs tracking-widest transition',
                         moodTags.includes(tag) ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
                       )}>
                       {tag.toUpperCase()}
@@ -217,7 +217,7 @@ export default function WellnessPage() {
                           </div>
                           {entry.notes && <p className="mt-0.5 font-mono text-xs text-zinc-400">{entry.notes}</p>}
                         </div>
-                        <span className="flex shrink-0 items-center gap-1 font-mono text-[11px] text-zinc-400"><Calendar className="h-3 w-3" />{entry.date}</span>
+                        <span className="flex shrink-0 items-center gap-1 font-mono text-xs text-zinc-400"><Calendar className="h-3 w-3" />{entry.date}</span>
                       </div>
                     );
                   })}
@@ -244,7 +244,7 @@ export default function WellnessPage() {
                   <div className="mb-4 flex flex-wrap gap-1.5">
                     {JOURNAL_TYPES.map((t) => (
                       <button key={t.id} onClick={() => setJournalType(t.id)}
-                        className={cn('border px-3 py-1.5 font-mono text-[11px] tracking-widest transition',
+                        className={cn('border px-3 py-1.5 font-mono text-xs tracking-widest transition',
                           journalType === t.id ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
                         )}>
                         {t.label.toUpperCase().replace(' ','_')}
@@ -277,12 +277,12 @@ export default function WellnessPage() {
                 {journalEntries.map((entry: any) => (
                   <div key={entry._id} className="border border-zinc-900 bg-zinc-950 p-4 transition hover:bg-zinc-900">
                     <div className="mb-2 flex items-center justify-between">
-                      <span className={cn('border px-2 py-0.5 font-mono text-[11px] tracking-widest',
+                      <span className={cn('border px-2 py-0.5 font-mono text-xs tracking-widest',
                         entry.type === 'gratitude'  ? 'border-green-900 text-green-600' :
                         entry.type === 'reflection' ? 'border-blue-900 text-blue-600'  :
                         entry.type === 'goal_note'  ? 'border-purple-900 text-purple-600' : 'border-zinc-800 text-zinc-400'
                       )}>{(entry.type ?? 'freeform').toUpperCase()}</span>
-                      <span className="font-mono text-[11px] text-zinc-400">{entry.date}</span>
+                      <span className="font-mono text-xs text-zinc-400">{entry.date}</span>
                     </div>
                     <p className="font-mono text-xs leading-relaxed text-zinc-400 whitespace-pre-wrap">{entry.content}</p>
                   </div>
@@ -302,7 +302,7 @@ export default function WellnessPage() {
                   { label: 'NIGHTS LOGGED', value: String(sleepStats.totalLogs) },
                 ].map(({ label, value }) => (
                   <div key={label} className="border border-zinc-900 bg-zinc-950 p-4">
-                    <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                    <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                     <p className="mt-2 font-mono text-lg font-bold text-blue-400">{value}</p>
                   </div>
                 ))}
@@ -315,18 +315,18 @@ export default function WellnessPage() {
               <form onSubmit={handleSleepSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <p className="mb-1 font-mono text-[11px] tracking-widest text-zinc-400">BEDTIME</p>
+                    <p className="mb-1 font-mono text-xs tracking-widest text-zinc-400">BEDTIME</p>
                     <input type="time" value={sleepBedtime} onChange={(e) => setSleepBedtime(e.target.value)}
                       className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-blue-800 focus:outline-none" />
                   </div>
                   <div>
-                    <p className="mb-1 font-mono text-[11px] tracking-widest text-zinc-400">WAKE_TIME</p>
+                    <p className="mb-1 font-mono text-xs tracking-widest text-zinc-400">WAKE_TIME</p>
                     <input type="time" value={sleepWake} onChange={(e) => setSleepWake(e.target.value)}
                       className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-blue-800 focus:outline-none" />
                   </div>
                 </div>
                 <div>
-                  <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">SLEEP_QUALITY (1-5)</p>
+                  <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">SLEEP_QUALITY (1-5)</p>
                   <div className="flex gap-2">
                     {[1,2,3,4,5].map((q) => (
                       <button key={q} type="button" onClick={() => setSleepQuality(q)}
@@ -353,11 +353,11 @@ export default function WellnessPage() {
                 <div className="divide-y divide-zinc-900">
                   {sleepLogs.map((log: any) => (
                     <div key={log._id} className="flex items-center gap-4 px-4 py-2.5">
-                      <span className="font-mono text-[11px] text-zinc-400">{log.date}</span>
+                      <span className="font-mono text-xs text-zinc-400">{log.date}</span>
                       <span className="font-mono text-xs text-zinc-300">
                         {log.bedtime} → {log.wakeTime}{log.durationMinutes ? ` (${fmtDuration(log.durationMinutes)})` : ''}
                       </span>
-                      {log.quality && <span className="ml-auto font-mono text-[11px] tracking-widest text-blue-500">Q:{log.quality}/5</span>}
+                      {log.quality && <span className="ml-auto font-mono text-xs tracking-widest text-blue-500">Q:{log.quality}/5</span>}
                     </div>
                   ))}
                 </div>
@@ -377,7 +377,7 @@ export default function WellnessPage() {
                   { label: 'STEPS',    value: todayNutrition.steps ? todayNutrition.steps.toLocaleString() : '--', color: 'text-green-400' },
                 ].map(({ label, value, color }) => (
                   <div key={label} className="border border-zinc-900 bg-zinc-950 p-4">
-                    <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                    <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                     <p className={cn('mt-2 font-mono text-lg font-bold', color)}>{value}</p>
                   </div>
                 ))}
@@ -437,11 +437,11 @@ export default function WellnessPage() {
                     <div key={i} className="flex items-center gap-3 px-4 py-2.5">
                       <Apple className="h-3.5 w-3.5 shrink-0 text-amber-500" />
                       <div className="flex-1">
-                        <p className="font-mono text-[11px] text-zinc-300">{meal.name}</p>
-                        {meal.time && <p className="font-mono text-[11px] text-zinc-400">{meal.time}</p>}
+                        <p className="font-mono text-xs text-zinc-300">{meal.name}</p>
+                        {meal.time && <p className="font-mono text-xs text-zinc-400">{meal.time}</p>}
                       </div>
                       <p className="font-mono text-xs font-bold text-amber-400">{meal.calories} kcal</p>
-                      {meal.protein && <p className="font-mono text-[11px] text-blue-500">{meal.protein}g P</p>}
+                      {meal.protein && <p className="font-mono text-xs text-blue-500">{meal.protein}g P</p>}
                     </div>
                   ))}
                 </div>

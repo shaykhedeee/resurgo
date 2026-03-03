@@ -536,14 +536,14 @@ function LandingPageV2() {
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
                     href="/sign-up"
-                    className="inline-flex min-h-[52px] items-center justify-center border-2 border-orange-600 bg-orange-600 px-8 font-pixel text-[0.55rem] tracking-wider text-black shadow-[3px_3px_0px_rgba(0,0,0,0.8)] transition-all duration-100 hover:bg-orange-500 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.8)]"
+                    className="inline-flex min-h-[56px] items-center justify-center border-2 border-orange-600 bg-orange-600 px-8 font-mono text-sm font-bold tracking-wider text-black shadow-[3px_3px_0px_rgba(0,0,0,0.8)] transition-all duration-100 hover:bg-orange-500 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.8)]"
                   >
                     Start Free — No Credit Card
                   </Link>
                   <a
                     href="/resurgo.apk"
                     download
-                    className="inline-flex min-h-[52px] items-center justify-center gap-2 border-2 border-zinc-800 px-8 font-pixel text-[0.45rem] tracking-wider text-zinc-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition-all duration-100 hover:border-orange-600 hover:text-orange-400 active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
+                    className="inline-flex min-h-[56px] items-center justify-center gap-2 border-2 border-zinc-800 px-8 font-mono text-sm tracking-wider text-zinc-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition-all duration-100 hover:border-orange-600 hover:text-orange-400 active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"

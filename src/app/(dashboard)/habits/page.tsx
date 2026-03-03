@@ -123,7 +123,7 @@ export default function HabitsPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">NODE_TRACKER :: BEHAVIORAL_SUBSYSTEM</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">NODE_TRACKER :: BEHAVIORAL_SUBSYSTEM</span>
           </div>
           <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -187,12 +187,12 @@ export default function HabitsPage() {
                   <button
                     onClick={() => handleToggle(habit._id)}
                     disabled={toggling === habit._id}
-                    className="flex h-8 w-8 shrink-0 items-center justify-center border border-zinc-800 text-zinc-400 transition hover:border-orange-600 hover:text-orange-500 disabled:opacity-50"
+                    className="flex h-11 w-11 shrink-0 items-center justify-center border border-zinc-800 text-zinc-400 transition hover:border-orange-600 hover:text-orange-500 disabled:opacity-50"
                   >
                     {toggling === habit._id ? (
-                      <div className="h-3.5 w-3.5 animate-spin border border-orange-600 border-t-transparent" />
+                      <div className="h-4 w-4 animate-spin border border-orange-600 border-t-transparent" />
                     ) : (
-                      <Check className="h-3.5 w-3.5" />
+                      <Check className="h-4 w-4" />
                     )}
                   </button>
 
@@ -200,7 +200,7 @@ export default function HabitsPage() {
                     <div className="flex items-center gap-2">
                       <p className="truncate font-mono text-sm text-zinc-200">{habit.title.toUpperCase()}</p>
                       {habit.habitType && habit.habitType !== 'yes_no' && (
-                        <span className="border border-zinc-800 px-1.5 py-0.5 font-mono text-[11px] text-zinc-400">
+                        <span className="border border-zinc-800 px-1.5 py-0.5 font-mono text-xs text-zinc-400">
                           {habit.habitType.replace('_', '/').toUpperCase()}
                         </span>
                       )}
@@ -222,10 +222,10 @@ export default function HabitsPage() {
                     </div>
                     <button
                       onClick={() => handleSkip(habit._id)}
-                      className="border border-transparent p-1.5 font-mono text-xs text-zinc-400 transition hover:border-zinc-800 hover:text-zinc-400"
+                      className="flex h-10 w-10 items-center justify-center border border-transparent font-mono text-xs text-zinc-400 transition hover:border-zinc-800 hover:text-zinc-400"
                       title="Skip today"
                     >
-                      <SkipForward className="h-3.5 w-3.5" />
+                      <SkipForward className="h-4 w-4" />
                     </button>
                   </div>
                 </div>
@@ -352,7 +352,7 @@ export default function HabitsPage() {
 function NodeMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-          <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+          <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
       <p className="mt-0.5 font-mono text-lg font-bold text-zinc-100">{value}</p>
     </div>
   );

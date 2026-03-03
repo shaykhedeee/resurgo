@@ -178,7 +178,7 @@ export default function AdaptiveDifficultyWidget() {
               <p className="font-pixel text-[0.35rem] tracking-widest text-zinc-500 mb-2">INSIGHTS</p>
               <div className="space-y-1.5">
                 {assessment.insights.map((insight, i) => (
-                  <p key={i} className="font-terminal text-[11px] text-zinc-400 leading-relaxed pl-3 border-l border-zinc-800">
+                  <p key={i} className="font-terminal text-xs text-zinc-400 leading-relaxed pl-3 border-l border-zinc-800">
                     {insight}
                   </p>
                 ))}

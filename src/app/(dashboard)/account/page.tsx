@@ -50,7 +50,7 @@ export default function AccountPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">OPERATOR_ACCOUNT :: SYSTEM_PANEL</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">OPERATOR_ACCOUNT :: SYSTEM_PANEL</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">OPERATOR_ACCOUNT</h1>

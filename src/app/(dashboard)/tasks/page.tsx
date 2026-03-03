@@ -114,7 +114,7 @@ export default function TasksPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">TASK_QUEUE :: EXECUTION_SUBSYSTEM</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">TASK_QUEUE :: EXECUTION_SUBSYSTEM</span>
           </div>
           <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -290,20 +290,20 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
   };
   return (
     <div className={`group flex items-center gap-3 border border-zinc-900 bg-zinc-950 px-4 py-3 transition hover:border-zinc-700 hover:bg-zinc-900 ${compact ? 'py-2' : ''}`}>
-      <button onClick={() => onToggle(task._id)} className="shrink-0">
+      <button onClick={() => onToggle(task._id)} className="flex h-11 w-11 shrink-0 items-center justify-center -m-1.5 rounded-sm">
         {isDone ? (
-          <CheckCircle2 className="h-4 w-4 text-orange-600" />
+          <CheckCircle2 className="h-5 w-5 text-orange-600" />
         ) : (
-          <Circle className="h-4 w-4 text-zinc-400 transition hover:text-orange-500" />
+          <Circle className="h-5 w-5 text-zinc-400 transition hover:text-orange-500" />
         )}
       </button>
       <div className="min-w-0 flex-1">
-        <p className={`truncate font-mono text-xs ${isDone ? 'text-zinc-400 line-through' : 'text-zinc-200'}`}>
+        <p className={`truncate font-mono text-sm ${isDone ? 'text-zinc-400 line-through' : 'text-zinc-200'}`}>
           {task.title.toUpperCase()}
         </p>
         {!compact && (
           <div className="mt-0.5 flex items-center gap-2">
-            <span className={`border px-1.5 py-0.5 font-mono text-[11px] tracking-widest ${priorityMap[task.priority] ?? priorityMap.low}`}>
+            <span className={`border px-1.5 py-0.5 font-mono text-xs tracking-widest ${priorityMap[task.priority] ?? priorityMap.low}`}>
               {task.priority.toUpperCase()}
             </span>
             {task.dueDate && (
@@ -319,8 +319,8 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
           </div>
         )}
       </div>
-      <button onClick={() => onDelete(task._id)} className="shrink-0 text-zinc-800 opacity-0 transition hover:text-red-600 group-hover:opacity-100">
-        <Trash2 className="h-3.5 w-3.5" />
+      <button onClick={() => onDelete(task._id)} className="flex h-10 w-10 shrink-0 items-center justify-center text-zinc-800 opacity-0 transition hover:text-red-600 group-hover:opacity-100">
+        <Trash2 className="h-4 w-4" />
       </button>
     </div>
   );
@@ -329,7 +329,7 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
 function QMetric({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <div className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-          <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+          <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
       <p className={`mt-0.5 font-mono text-lg font-bold ${highlight ? 'text-orange-500' : 'text-zinc-100'}`}>{value}</p>
     </div>
   );

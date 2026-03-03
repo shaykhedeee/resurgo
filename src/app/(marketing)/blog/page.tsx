@@ -218,7 +218,7 @@ export default function BlogPage() {
         <div className="mb-10 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: BLOG</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: BLOG</span>
           </div>
           <div className="p-6">
             <h1 className="font-mono text-2xl font-bold text-zinc-100">Dispatches from the Grind</h1>
@@ -267,7 +267,7 @@ export default function BlogPage() {
               </div>
               <h2 className="font-mono text-base font-bold text-zinc-100 leading-snug">{post.title}</h2>
               <p className="mt-2 font-mono text-xs text-zinc-500 leading-relaxed">{post.desc}</p>
-              <div className="mt-4 flex items-center gap-4 font-mono text-[11px] text-zinc-400">
+              <div className="mt-4 flex items-center gap-4 font-mono text-xs text-zinc-400">
                 <span>{post.date}</span>
                 <span>&middot;</span>
                 <span>{post.readTime} read</span>

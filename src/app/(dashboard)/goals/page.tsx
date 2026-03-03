@@ -108,7 +108,7 @@ export default function GoalsPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">CORE_OBJECTIVES :: STRATEGIC_PLANNING</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">CORE_OBJECTIVES :: STRATEGIC_PLANNING</span>
           </div>
           <div className="flex flex-col gap-4 px-5 py-4 md:flex-row md:items-center md:justify-between">
             <div>
@@ -241,8 +241,8 @@ export default function GoalsPage() {
                 <textarea value={whyImportant} onChange={(e) => setWhyImportant(e.target.value)} placeholder="Your motivation will anchor execution..." rows={2} className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
               </div>
               <div className="flex gap-px pt-1">
-                <button type="button" onClick={() => setShowCreate(false)} className="flex-1 border border-zinc-800 bg-zinc-900 py-2.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:text-zinc-300">[CANCEL]</button>
-                <button type="submit" disabled={creating || !title.trim()} className="flex-1 border border-orange-800 bg-orange-950/40 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/70 disabled:opacity-40">
+                <button type="button" onClick={() => setShowCreate(false)} className="flex-1 border border-zinc-800 bg-zinc-900 py-3 font-mono text-sm tracking-widest text-zinc-500 transition hover:text-zinc-300 min-h-[48px]">[CANCEL]</button>
+                <button type="submit" disabled={creating || !title.trim()} className="flex-1 border border-orange-800 bg-orange-950/40 py-3 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/70 disabled:opacity-40 min-h-[48px]">
                   {creating ? 'DEFINING...' : '[DEPLOY_OBJECTIVE]'}
                 </button>
               </div>
@@ -257,7 +257,7 @@ export default function GoalsPage() {
 function ObjMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-          <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+          <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
       <p className="mt-0.5 font-mono text-lg font-bold text-zinc-100">{value}</p>
     </div>
   );
@@ -297,11 +297,11 @@ function GoalCard({ goal }: { goal: GoalItem }) {
         <div className="h-px bg-orange-600 transition-all duration-700" style={{ width: `${Math.min(progress, 100)}%` }} />
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <span className={`border px-2 py-0.5 font-mono text-[11px] tracking-widest ${chipClass}`}>
+        <span className={`border px-2 py-0.5 font-mono text-xs tracking-widest ${chipClass}`}>
           {domainKey.replace('_', '_').toUpperCase()}
         </span>
         {goal.goalType && (
-          <span className="border border-zinc-800 px-2 py-0.5 font-mono text-[11px] tracking-widest text-zinc-400">
+          <span className="border border-zinc-800 px-2 py-0.5 font-mono text-xs tracking-widest text-zinc-400">
             {goal.goalType.replace('_', '_').toUpperCase()}
           </span>
         )}

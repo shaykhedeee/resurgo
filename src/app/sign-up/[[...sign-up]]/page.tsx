@@ -8,9 +8,9 @@ export default function Page() {
         <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">AUTH_TERMINAL :: NEW_OPERATOR</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">AUTH_TERMINAL :: NEW_OPERATOR</span>
           </div>
-          <Link href="/" className="font-mono text-[11px] tracking-widest text-zinc-400 transition-colors hover:text-zinc-300">
+          <Link href="/" className="font-mono text-xs tracking-widest text-zinc-400 transition-colors hover:text-zinc-300">
             [← HOME]
           </Link>
         </div>

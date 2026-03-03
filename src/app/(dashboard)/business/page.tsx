@@ -82,7 +82,7 @@ export default function BusinessPage() {
         <div className="mb-5 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">ENTERPRISE :: BUSINESS_COMMAND_CENTER</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">ENTERPRISE :: BUSINESS_COMMAND_CENTER</span>
           </div>
           <div className="flex items-start justify-between px-5 py-4">
             <div>
@@ -103,7 +103,7 @@ export default function BusinessPage() {
                 { label: 'TOTAL', value: goals.length },
               ].map(({ label, value }) => (
                 <div key={label} className="border-r border-zinc-900 px-5 py-3 last:border-r-0">
-                  <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                  <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                   <p className="mt-1 font-mono text-xl font-bold text-orange-500">{value}</p>
                 </div>
               ))}
@@ -123,7 +123,7 @@ export default function BusinessPage() {
               <div className="flex flex-wrap gap-1.5">
                 {GOAL_TYPES.map(({ id, label, icon }) => (
                   <button key={id} type="button" onClick={() => setForm({ ...form, type: id })}
-                    className={cn('border px-3 py-1 font-mono text-[11px] tracking-widest transition',
+                    className={cn('border px-3 py-1 font-mono text-xs tracking-widest transition',
                       form.type === id ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
                     )}>
                     {icon} {label.toUpperCase()}
@@ -161,7 +161,7 @@ export default function BusinessPage() {
           <div className="border border-dashed border-zinc-800 bg-zinc-950 py-16 text-center">
             <Briefcase className="mx-auto mb-3 h-8 w-8 text-zinc-400" />
             <p className="font-mono text-xs tracking-widest text-zinc-400">NO_BUSINESS_GOALS_YET</p>
-            <p className="mt-1 font-mono text-[11px] text-zinc-800">Create your first goal to get AI-generated action tasks</p>
+            <p className="mt-1 font-mono text-xs text-zinc-800">Create your first goal to get AI-generated action tasks</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -188,10 +188,10 @@ export default function BusinessPage() {
                       {goal.target && (
                         <div className="mt-1">
                           <div className="flex items-center justify-between">
-                            <span className="font-mono text-[11px] text-zinc-400">
+                            <span className="font-mono text-xs text-zinc-400">
                               {goal.current ?? 0} / {goal.target} {goal.unit ?? ''}
                             </span>
-                            <span className="font-mono text-[11px] font-bold text-orange-500">{progress}%</span>
+                            <span className="font-mono text-xs font-bold text-orange-500">{progress}%</span>
                           </div>
                           <div className="mt-1 h-1 w-full bg-zinc-900">
                             <div className="h-1 bg-orange-600 transition-all" style={{ width: `${progress}%` }} />
@@ -199,7 +199,7 @@ export default function BusinessPage() {
                         </div>
                       )}
                       {goal.deadline && (
-                        <p className="mt-1 font-mono text-[11px] text-zinc-400">DEADLINE: {goal.deadline}</p>
+                        <p className="mt-1 font-mono text-xs text-zinc-400">DEADLINE: {goal.deadline}</p>
                       )}
                     </div>
                     <div className="flex gap-1 shrink-0">
@@ -219,23 +219,23 @@ export default function BusinessPage() {
                       {/* Update current value */}
                       {goal.target && (
                         <div className="flex items-center gap-2">
-                          <span className="font-mono text-[11px] tracking-widest text-zinc-400">UPDATE_PROGRESS:</span>
+                          <span className="font-mono text-xs tracking-widest text-zinc-400">UPDATE_PROGRESS:</span>
                           <input type="number" defaultValue={goal.current ?? ''} placeholder="Current value"
                             className="h-7 w-28 border border-zinc-800 bg-black px-2 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
                             onBlur={(e) => {
                               const val = parseFloat(e.target.value);
                               if (!isNaN(val)) updateGoal({ id: goal._id, current: val });
                             }} />
-                          <span className="font-mono text-[11px] text-zinc-400">{goal.unit}</span>
+                          <span className="font-mono text-xs text-zinc-400">{goal.unit}</span>
                         </div>
                       )}
 
                       {/* AI Tasks */}
                       <div>
                         <div className="mb-2 flex items-center justify-between">
-                          <span className="font-mono text-[11px] tracking-widest text-zinc-500">AI_ACTION_TASKS</span>
+                          <span className="font-mono text-xs tracking-widest text-zinc-500">AI_ACTION_TASKS</span>
                           <button onClick={() => handleGenerate(goal._id)} disabled={generatingFor === goal._id}
-                            className="flex items-center gap-1 border border-orange-900 px-2.5 py-1 font-mono text-[11px] tracking-widest text-orange-600 transition hover:bg-orange-950/20 disabled:opacity-40">
+                            className="flex items-center gap-1 border border-orange-900 px-2.5 py-1 font-mono text-xs tracking-widest text-orange-600 transition hover:bg-orange-950/20 disabled:opacity-40">
                             <Zap className="h-3 w-3" />
                             {generatingFor === goal._id ? 'GENERATING_' : '[GENERATE]'}
                           </button>
@@ -245,7 +245,7 @@ export default function BusinessPage() {
                             {goal.aiTasks.map((task: string, i: number) => (
                               <li key={i} className="flex items-start gap-2">
                                 <TrendingUp className="mt-0.5 h-3 w-3 shrink-0 text-orange-600" />
-                                <span className="font-mono text-[11px] text-zinc-400">{task}</span>
+                                <span className="font-mono text-xs text-zinc-400">{task}</span>
                               </li>
                             ))}
                           </ul>
@@ -258,19 +258,19 @@ export default function BusinessPage() {
                       <div className="flex gap-2">
                         {goal.status !== 'completed' && (
                           <button onClick={() => updateGoal({ id: goal._id, status: 'completed' })}
-                            className="flex items-center gap-1 border border-green-900 px-3 py-1.5 font-mono text-[11px] tracking-widest text-green-600 transition hover:bg-green-950/20">
+                            className="flex items-center gap-1 border border-green-900 px-3 py-1.5 font-mono text-xs tracking-widest text-green-600 transition hover:bg-green-950/20">
                             <CheckCircle className="h-3 w-3" /> [MARK_COMPLETE]
                           </button>
                         )}
                         {goal.status === 'active' && (
                           <button onClick={() => updateGoal({ id: goal._id, status: 'paused' })}
-                            className="flex items-center gap-1 border border-zinc-800 px-3 py-1.5 font-mono text-[11px] tracking-widest text-zinc-400 transition hover:border-zinc-700">
+                            className="flex items-center gap-1 border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-400 transition hover:border-zinc-700">
                             [PAUSE]
                           </button>
                         )}
                         {goal.status === 'paused' && (
                           <button onClick={() => updateGoal({ id: goal._id, status: 'active' })}
-                            className="flex items-center gap-1 border border-blue-900 px-3 py-1.5 font-mono text-[11px] tracking-widest text-blue-600 transition hover:bg-blue-950/20">
+                            className="flex items-center gap-1 border border-blue-900 px-3 py-1.5 font-mono text-xs tracking-widest text-blue-600 transition hover:bg-blue-950/20">
                             [RESUME]
                           </button>
                         )}

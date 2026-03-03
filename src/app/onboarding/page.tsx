@@ -292,7 +292,7 @@ export default function OnboardingPage() {
               <ArrowLeft className="h-4 w-4" />
             </button>
             <div className="flex-1">
-              <div className="mb-1 flex justify-between font-mono text-[11px] tracking-widest text-zinc-400">
+              <div className="mb-1 flex justify-between font-mono text-xs tracking-widest text-zinc-400">
                 <span>Setup</span>
                 <span>Step {stepIndex} of {STEPS.length - 1}</span>
               </div>
@@ -300,7 +300,7 @@ export default function OnboardingPage() {
                 <div className="h-full bg-orange-600 transition-all duration-500 ease-out" style={{ width: `${progress}%` }} />
               </div>
             </div>
-            <button onClick={handleSkip} disabled={saving} className="shrink-0 font-mono text-[11px] tracking-widest text-zinc-400 transition hover:text-zinc-200 disabled:opacity-40">
+            <button onClick={handleSkip} disabled={saving} className="shrink-0 font-mono text-xs tracking-widest text-zinc-400 transition hover:text-zinc-200 disabled:opacity-40">
               Skip
             </button>
           </div>
@@ -320,7 +320,7 @@ export default function OnboardingPage() {
             <div className="mb-8 w-full max-w-sm border border-zinc-900 bg-zinc-950 p-6">
               <div className="mb-4 flex items-center gap-2">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-                <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO · GETTING STARTED</span>
+                <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO · GETTING STARTED</span>
               </div>
               <div className="space-y-1 text-left">
                 {['Loading modules...', 'Initialising habit engine...', 'Calibrating AI coach...', 'Profile ready'].map((msg, i) => (
@@ -346,7 +346,7 @@ export default function OnboardingPage() {
                 { text: 'Smart Analytics' },
                 { text: 'AI Coaching' },
               ].map((f) => (
-                <div key={f.text} className="border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-[11px] tracking-widest text-zinc-400">
+                <div key={f.text} className="border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-400">
                   {f.text}
                 </div>
               ))}
@@ -354,11 +354,11 @@ export default function OnboardingPage() {
 
             <button
               onClick={next}
-              className="mb-3 border border-orange-800 bg-orange-950/30 px-8 py-3 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50"
+              className="mb-3 border border-orange-800 bg-orange-950/30 px-8 py-3.5 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[52px]"
             >
               [Get Started]
             </button>
-            <button onClick={handleSkip} className="font-mono text-[11px] tracking-widest text-zinc-600 hover:text-zinc-400 mt-2 transition">
+            <button onClick={handleSkip} className="font-mono text-xs tracking-widest text-zinc-600 hover:text-zinc-400 mt-2 transition min-h-[40px]">
               I'll set this later →
             </button>
           </div>
@@ -370,7 +370,7 @@ export default function OnboardingPage() {
             <div className="mb-6 border border-zinc-900 bg-zinc-950">
               <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[11px] tracking-widest text-orange-600">STEP 1 · YOUR GOAL</span>
+                <span className="font-mono text-xs tracking-widest text-orange-600">STEP 1 · YOUR GOAL</span>
               </div>
               <div className="px-4 py-4">
                 <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">What&apos;s your #1 goal?</h2>
@@ -385,7 +385,7 @@ export default function OnboardingPage() {
                   key={ex}
                   onClick={() => setPrimaryGoal(ex)}
                   className={cn(
-                    'border px-2.5 py-1 font-mono text-[11px] tracking-widest transition',
+                    'border px-2.5 py-1 font-mono text-xs tracking-widest transition',
                     primaryGoal === ex
                       ? 'border-orange-800 bg-orange-950/30 text-orange-500'
                       : 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-400'
@@ -401,12 +401,12 @@ export default function OnboardingPage() {
               onChange={(e) => setPrimaryGoal(e.target.value)}
               placeholder="e.g. Get fit and feel more energetic every day..."
               rows={3}
-              className="mb-4 w-full border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
+              className="mb-4 w-full border border-zinc-800 bg-black px-4 py-3 font-mono text-sm text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
             />
 
             {/* Deadline */}
             <div className="mb-4">
-              <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">Target deadline</p>
+              <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">Target deadline</p>
               <div className="grid grid-cols-5 gap-1">
                 {DEADLINE_OPTIONS.map((d) => (
                   <button
@@ -428,21 +428,21 @@ export default function OnboardingPage() {
 
             {/* Why */}
             <div className="mb-6">
-              <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">Why this matters <span className="text-zinc-400">(optional)</span></p>
+              <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">Why this matters <span className="text-zinc-400">(optional)</span></p>
               <textarea
                 value={primaryGoalReason}
                 onChange={(e) => setPrimaryGoalReason(e.target.value)}
                 placeholder="Your 'why' is your most powerful motivator..."
                 rows={2}
-                className="w-full border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
+                className="w-full border border-zinc-800 bg-black px-4 py-3 font-mono text-sm text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
               />
             </div>
 
             <div className="flex flex-col items-center gap-3">
-              <button onClick={next} disabled={!primaryGoal.trim()} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50 disabled:cursor-not-allowed disabled:opacity-40">
+              <button onClick={next} disabled={!primaryGoal.trim()} className="border border-orange-800 bg-orange-950/30 px-8 py-3.5 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[52px] disabled:cursor-not-allowed disabled:opacity-40">
                 [Set My Goal]
               </button>
-              <button onClick={next} className="font-mono text-[11px] tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll set this later →</button>
+              <button onClick={next} className="font-mono text-xs tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll set this later →</button>
             </div>
           </div>
         )}
@@ -453,7 +453,7 @@ export default function OnboardingPage() {
             <div className="mb-6 border border-zinc-900 bg-zinc-950">
               <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[11px] tracking-widest text-orange-600">STEP 2 · FOCUS AREAS</span>
+                <span className="font-mono text-xs tracking-widest text-orange-600">STEP 2 · FOCUS AREAS</span>
               </div>
               <div className="flex items-center justify-between px-4 py-4">
                 <div>
@@ -495,7 +495,7 @@ export default function OnboardingPage() {
                   >
                     <div className="flex-1">
                       <div className="font-mono text-xs font-semibold tracking-wider">{area.label}</div>
-                      <div className="font-mono text-[11px] text-zinc-400">{area.description}</div>
+                      <div className="font-mono text-xs text-zinc-400">{area.description}</div>
                     </div>
                     {isSelected && <Check className="h-3 w-3 shrink-0 text-orange-500" />}
                   </button>
@@ -504,28 +504,28 @@ export default function OnboardingPage() {
             </div>
 
             {atMaxFocus && (
-              <p className="mb-3 font-mono text-[11px] tracking-wider text-amber-500 text-center">
+              <p className="mb-3 font-mono text-xs tracking-wider text-amber-500 text-center">
                 Max 3 areas selected — deselect one to choose another.
               </p>
             )}
             {/* Life vision */}
             <div className="mb-6 border border-zinc-900 bg-zinc-950 p-4">
-              <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">1-year vision <span className="text-zinc-400">(optional)</span></p>
+              <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">1-year vision <span className="text-zinc-400">(optional)</span></p>
               <textarea
                 value={lifeVision}
                 onChange={(e) => setLifeVision(e.target.value)}
                 placeholder="Paint a vivid picture of where you'll be in 1 year..."
                 rows={3}
-                className="w-full border border-zinc-800 bg-black px-3 py-2.5 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2.5 font-mono text-sm text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
               />
-              <p className="mt-1.5 font-mono text-[11px] text-zinc-400">Your AI coach uses this for tailored advice</p>
+              <p className="mt-1.5 font-mono text-xs text-zinc-400">Your AI coach uses this for tailored advice</p>
             </div>
 
             <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
+              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-3.5 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[52px]">
                 {selectedFocus.length > 0 ? `[Confirm ${selectedFocus.length} Area${selectedFocus.length !== 1 ? 's' : ''}]` : '[Continue]'}
               </button>
-              <button onClick={next} className="font-mono text-[11px] tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll decide later →</button>
+              <button onClick={next} className="font-mono text-xs tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll decide later →</button>
             </div>
           </div>
         )}
@@ -536,7 +536,7 @@ export default function OnboardingPage() {
             <div className="mb-6 border border-zinc-900 bg-zinc-950">
               <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[11px] tracking-widest text-orange-600">STEP 3 · STARTER HABITS</span>
+                <span className="font-mono text-xs tracking-widest text-orange-600">STEP 3 · STARTER HABITS</span>
               </div>
               <div className="px-4 py-4">
                 <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">Pick your starter habits</h2>
@@ -565,7 +565,7 @@ export default function OnboardingPage() {
                     <div className={cn('h-3 w-3 shrink-0 border', isSelected ? 'border-orange-600 bg-orange-950/60' : 'border-zinc-700')} />
                     <div className="flex-1">
                       <p className={cn('font-mono text-xs', isSelected ? 'text-orange-400' : 'text-zinc-400')}>{habit.name}</p>
-                      <p className="font-mono text-[11px] text-zinc-400">{habit.description}</p>
+                      <p className="font-mono text-xs text-zinc-400">{habit.description}</p>
                     </div>
                     <span className="shrink-0 border border-zinc-800 px-1.5 py-0.5 font-mono text-xs text-zinc-400">{habit.frequency.toUpperCase()}</span>
                   </button>
@@ -582,10 +582,10 @@ export default function OnboardingPage() {
             )}
 
             <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
+              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-3.5 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[52px]">
                 {selectedHabits.length > 0 ? `[Add ${selectedHabits.length} Habit${selectedHabits.length !== 1 ? 's' : ''}]` : '[Continue]'}
               </button>
-              <button onClick={next} className="font-mono text-[11px] tracking-widest text-zinc-400 transition hover:text-zinc-500">[I&apos;ll add habits later]</button>
+              <button onClick={next} className="font-mono text-xs tracking-widest text-zinc-400 transition hover:text-zinc-500">[I&apos;ll add habits later]</button>
             </div>
           </div>
         )}
@@ -596,7 +596,7 @@ export default function OnboardingPage() {
             <div className="mb-6 border border-zinc-900 bg-zinc-950">
               <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[11px] tracking-widest text-orange-600">STEP 4 · DAILY RHYTHM</span>
+                <span className="font-mono text-xs tracking-widest text-orange-600">STEP 4 · DAILY RHYTHM</span>
               </div>
               <div className="px-4 py-4">
                 <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">When are you most productive?</h2>
@@ -619,17 +619,17 @@ export default function OnboardingPage() {
                     )}
                   >
                     <div className="font-mono text-xs font-bold tracking-widest">{time.label}</div>
-                    <div className="font-mono text-[11px] text-zinc-400">{time.description}</div>
+                    <div className="font-mono text-xs text-zinc-400">{time.description}</div>
                   </button>
                 );
               })}
             </div>
 
             <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
+              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-3.5 font-mono text-sm tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[52px]">
                 [Confirm Schedule]
               </button>
-              <button onClick={next} className="font-mono text-[11px] tracking-widest text-zinc-400 transition hover:text-zinc-500">[Any time is fine]</button>
+              <button onClick={next} className="font-mono text-xs tracking-widest text-zinc-400 transition hover:text-zinc-500">[Any time is fine]</button>
             </div>
           </div>
         )}
@@ -640,7 +640,7 @@ export default function OnboardingPage() {
             <div className="mb-8 text-center">
               <div className="mb-4 flex items-center justify-center gap-2">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-                <span className="font-mono text-[11px] tracking-widest text-green-600">ALL SET</span>
+                <span className="font-mono text-xs tracking-widest text-green-600">ALL SET</span>
               </div>
               <h2 className="font-mono text-3xl font-black tracking-tight text-zinc-100">
                 You&apos;re ready, <span className="text-orange-500">{firstName}</span>
@@ -652,11 +652,11 @@ export default function OnboardingPage() {
             <div className="mx-auto mb-8 w-full max-w-md space-y-px">
               {primaryGoal && (
                 <div className="border border-zinc-900 bg-zinc-950 p-4">
-                  <p className="mb-1.5 font-mono text-[11px] tracking-widest text-zinc-400">YOUR GOAL</p>
+                  <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">YOUR GOAL</p>
                   <p className="font-mono text-xs text-zinc-300">{primaryGoal}</p>
-                  {primaryGoalReason && <p className="mt-1 font-mono text-[11px] text-zinc-400">Why: {primaryGoalReason}</p>}
+                  {primaryGoalReason && <p className="mt-1 font-mono text-xs text-zinc-400">Why: {primaryGoalReason}</p>}
                   {primaryGoalDeadline && (
-                    <span className="mt-1.5 inline-block border border-orange-900 bg-orange-950/20 px-2 py-0.5 font-mono text-[11px] text-orange-600">
+                    <span className="mt-1.5 inline-block border border-orange-900 bg-orange-950/20 px-2 py-0.5 font-mono text-xs text-orange-600">
                       {DEADLINE_OPTIONS.find(d => d.id === primaryGoalDeadline)?.label.toUpperCase()}
                     </span>
                   )}
@@ -665,12 +665,12 @@ export default function OnboardingPage() {
 
               {selectedFocus.length > 0 && (
                 <div className="border border-zinc-900 bg-zinc-950 p-4">
-                  <p className="mb-1.5 font-mono text-[11px] tracking-widest text-zinc-400">FOCUS AREAS</p>
+                  <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">FOCUS AREAS</p>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedFocus.map(id => {
                       const area = FOCUS_AREAS.find(a => a.id === id);
                       return area ? (
-                        <span key={id} className="border border-zinc-800 px-2 py-0.5 font-mono text-[11px] text-zinc-500">
+                        <span key={id} className="border border-zinc-800 px-2 py-0.5 font-mono text-xs text-zinc-500">
                           {area.label}
                         </span>
                       ) : null;
@@ -681,7 +681,7 @@ export default function OnboardingPage() {
 
               {selectedHabits.length > 0 && (
                 <div className="border border-zinc-900 bg-zinc-950 p-4">
-                  <p className="mb-1.5 font-mono text-[11px] tracking-widest text-zinc-400">HABITS ({selectedHabits.length})</p>
+                  <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">HABITS ({selectedHabits.length})</p>
                   <div className="flex flex-wrap gap-x-4 gap-y-0.5">
                     {selectedHabits.slice(0, 5).map(id => {
                       const h = HABIT_TEMPLATES.find(t => t.id === id);
@@ -693,7 +693,7 @@ export default function OnboardingPage() {
               )}
 
               <div className="border border-zinc-900 bg-zinc-950 p-4">
-                <p className="mb-1 font-mono text-[11px] tracking-widest text-zinc-400">DAILY RHYTHM</p>
+                <p className="mb-1 font-mono text-xs tracking-widest text-zinc-400">DAILY RHYTHM</p>
                 <p className="font-mono text-xs text-zinc-400">
                   {TIME_OPTIONS.find(t => t.id === preferredTime)?.label} ·{' '}
                   {TIME_OPTIONS.find(t => t.id === preferredTime)?.description}
@@ -715,7 +715,7 @@ export default function OnboardingPage() {
               >
                 {saving ? '[Launching...]' : '[Start My Journey]'}
               </button>
-              <p className="font-mono text-[11px] text-zinc-400">You can update your preferences any time in Settings</p>
+              <p className="font-mono text-xs text-zinc-400">You can update your preferences any time in Settings</p>
             </div>
           </div>
         )}

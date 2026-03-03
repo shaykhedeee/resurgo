@@ -1928,7 +1928,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="mb-8 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: BLOG</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: BLOG</span>
           </div>
           <div className="p-6 space-y-3">
             <Image
@@ -1947,7 +1947,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               ))}
             </div>
             <h1 className="font-mono text-xl font-bold leading-snug text-zinc-100">{post.title}</h1>
-            <div className="flex items-center gap-3 font-mono text-[11px] text-zinc-400">
+            <div className="flex items-center gap-3 font-mono text-xs text-zinc-400">
               <span>{post.date}</span>
               <span>·</span>
               <span>{post.readTime} read</span>
@@ -2019,7 +2019,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               >
                 <p className="font-mono text-xs font-semibold text-zinc-200">{item.title}</p>
                 <p className="mt-1 font-mono text-xs text-zinc-500">{item.date} · {item.sharedTagCount} shared tags</p>
-                <p className="mt-2 font-mono text-[11px] leading-relaxed text-zinc-400">{item.desc}</p>
+                <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">{item.desc}</p>
               </Link>
             ))}
           </div>
@@ -2031,7 +2031,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             <p className="mt-1 font-mono text-xs text-zinc-500">Series: {primaryCluster.title}</p>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               <div className="border border-zinc-800 bg-black/40 p-3">
-                <p className="font-mono text-[11px] text-zinc-500">PREVIOUS</p>
+                <p className="font-mono text-xs text-zinc-500">PREVIOUS</p>
                 {prevInSeries ? (
                   <Link href={`/blog/${prevInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
                     {prevInSeries.title}
@@ -2041,7 +2041,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 )}
               </div>
               <div className="border border-zinc-800 bg-black/40 p-3">
-                <p className="font-mono text-[11px] text-zinc-500">NEXT</p>
+                <p className="font-mono text-xs text-zinc-500">NEXT</p>
                 {nextInSeries ? (
                   <Link href={`/blog/${nextInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
                     {nextInSeries.title}

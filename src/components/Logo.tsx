@@ -1,7 +1,7 @@
-﻿// ═══════════════════════════════════════════════════════════════════════════════
+// -------------------------------------------------------------------------------
 // RESURGO - Pixel Art Logo Component
-// Standalone pixelated ascending arrow — no box, no border, pure arrow + glow
-// ═══════════════════════════════════════════════════════════════════════════════
+// Standalone pixelated ascending arrow � no box, no border, pure arrow + glow
+// -------------------------------------------------------------------------------
 
 'use client';
 
@@ -30,7 +30,7 @@ const textSizeClasses = {
   xl: 'text-[1rem]',
 };
 
-// Redesigned pixel arrow — 16x16 grid, left-lit shading, no box
+// Redesigned pixel arrow � 16x16 grid, left-lit shading, no box
 function PixelArrowSVG({
   className,
   animated,
@@ -53,13 +53,13 @@ function PixelArrowSVG({
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* TIP — brightest highlight */}
+      {/* TIP � brightest highlight */}
       <rect x="7" y="0" width="2" height="2" fill="#FFEDD5" />
 
       {/* ROW 2 */}
       <rect x="6" y="2" width="4" height="2" fill="#FB923C" />
 
-      {/* ROW 3 — shoulder start */}
+      {/* ROW 3 � shoulder start */}
       <rect x="5" y="4" width="1" height="2" fill="#FB923C" />
       <rect x="6" y="4" width="4" height="2" fill="#F97316" />
       <rect x="10" y="4" width="1" height="2" fill="#EA580C" />
@@ -71,14 +71,14 @@ function PixelArrowSVG({
       <rect x="10" y="6" width="1" height="2" fill="#C2410C" />
       <rect x="11" y="6" width="1" height="2" fill="#9A3412" />
 
-      {/* ROW 5 — widest point of arrowhead */}
+      {/* ROW 5 � widest point of arrowhead */}
       <rect x="2" y="8" width="2" height="2" fill="#FED7AA" />
       <rect x="4" y="8" width="2" height="2" fill="#FB923C" />
       <rect x="6" y="8" width="4" height="2" fill="#EA580C" />
       <rect x="10" y="8" width="2" height="2" fill="#C2410C" />
       <rect x="12" y="8" width="2" height="2" fill="#7C2D12" />
 
-      {/* SHAFT — progressively darker left-to-right and top-to-bottom */}
+      {/* SHAFT � progressively darker left-to-right and top-to-bottom */}
       <rect x="6" y="10" width="1" height="2" fill="#FB923C" />
       <rect x="7" y="10" width="2" height="2" fill="#EA580C" />
       <rect x="9" y="10" width="1" height="2" fill="#C2410C" />
@@ -91,7 +91,7 @@ function PixelArrowSVG({
       <rect x="7" y="14" width="2" height="2" fill="#9A3412" />
       <rect x="9" y="14" width="1" height="2" fill="#7C2D12" />
 
-      {/* SPECULAR GLINT — top-left corner pixels */}
+      {/* SPECULAR GLINT � top-left corner pixels */}
       <rect x="7" y="0" width="1" height="1" fill="white" opacity="0.65" />
       <rect x="6" y="2" width="1" height="1" fill="white" opacity="0.25" />
       <rect x="4" y="8" width="1" height="1" fill="white" opacity="0.12" />
@@ -123,7 +123,7 @@ export function Logo({
 }: LogoProps) {
   return (
     <div className={cn('flex items-center gap-3', className)}>
-      {/* Standalone pixel arrow — no box, no border */}
+      {/* Standalone pixel arrow � no box, no border */}
       <PixelArrowSVG
         className={sizeClasses[size]}
         animated={animated}
@@ -141,7 +141,7 @@ export function Logo({
           >
             RESURGO
           </span>
-          <span className="text-[11px] text-zinc-500 tracking-[0.12em] uppercase mt-1 font-mono">
+          <span className="text-xs text-zinc-500 tracking-[0.12em] uppercase mt-1 font-mono">
             by WEBNESS
           </span>
         </div>
@@ -150,12 +150,12 @@ export function Logo({
   );
 }
 
-// Compact standalone arrow mark — no outer box
+// Compact standalone arrow mark � no outer box
 export function LogoMark({ className, glow = true }: { className?: string; glow?: boolean }) {
   return <PixelArrowSVG className={cn('pixel-render', className)} glow={glow} />;
 }
 
-// Loading spinner — arrow with bounce animation
+// Loading spinner � arrow with bounce animation
 export function LogoSpinner({ className }: { className?: string }) {
   return (
     <PixelArrowSVG

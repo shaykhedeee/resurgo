@@ -229,7 +229,7 @@ export function LandingPage({ onGetStarted, onLogin }: LandingPageProps) {
               <Logo size="md" />
               <div className="flex flex-col">
                 <span className="text-xl font-bold tracking-tight">RESURGO</span>
-                <span className="text-[11px] text-white/50 tracking-[0.2em] uppercase">by WEBNESS</span>
+                <span className="text-xs text-white/50 tracking-[0.2em] uppercase">by WEBNESS</span>
               </div>
             </div>
 

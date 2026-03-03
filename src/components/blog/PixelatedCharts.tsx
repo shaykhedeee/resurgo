@@ -8,7 +8,7 @@ export function HabitFormationChart() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">HABIT_FORMATION_TIMELINE</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">HABIT_FORMATION_TIMELINE</span>
       </div>
       
       <div className="space-y-6">
@@ -111,7 +111,7 @@ export function ProcrastinationLoopChart() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">PROCRASTINATION_CYCLE</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">PROCRASTINATION_CYCLE</span>
       </div>
 
       <div className="flex flex-col gap-4">
@@ -144,7 +144,7 @@ export function ProcrastinationLoopChart() {
           <div className="mt-6 border-t-2 border-green-900 pt-4">
             <div className="text-center">
               <div className="font-mono text-xs font-bold text-green-500">BREAK THE LOOP ↓</div>
-              <div className="mt-2 font-mono text-[11px] text-zinc-400">
+              <div className="mt-2 font-mono text-xs text-zinc-400">
                 Name the emotion → 2-minute commitment → Start before motivation
               </div>
             </div>
@@ -179,7 +179,7 @@ export function CoachingComparisonChart() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">AI_VS_HUMAN_COACHING</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">AI_VS_HUMAN_COACHING</span>
       </div>
 
       <div className="space-y-4">
@@ -198,7 +198,7 @@ export function CoachingComparisonChart() {
         {/* Comparison bars */}
         {features.map((item) => (
           <div key={item.feature} className="space-y-2">
-            <div className="font-mono text-[11px] tracking-wider text-zinc-400">{item.feature.toUpperCase()}</div>
+            <div className="font-mono text-xs tracking-wider text-zinc-400">{item.feature.toUpperCase()}</div>
             <div className="flex gap-2">
               {/* AI bar */}
               <div className="flex-1">
@@ -249,7 +249,7 @@ export function DeepWorkProgressChart() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">30_DAY_DEEP_WORK_PROTOCOL</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">30_DAY_DEEP_WORK_PROTOCOL</span>
       </div>
 
       <div className="space-y-6">
@@ -257,16 +257,16 @@ export function DeepWorkProgressChart() {
         <div className="space-y-3">
           {weeks.map((w) => (
             <div key={w.week} className="space-y-1">
-              <div className="font-mono text-[11px] text-zinc-500">Week {w.week}</div>
+              <div className="font-mono text-xs text-zinc-500">Week {w.week}</div>
               <div className="flex h-8 overflow-hidden border border-zinc-800">
                 <div
-                  className="flex items-center justify-center bg-orange-600 font-mono text-[11px] font-bold text-black"
+                  className="flex items-center justify-center bg-orange-600 font-mono text-xs font-bold text-black"
                   style={{ width: `${(w.deepWork / 40) * 100}%` }}
                 >
                   {w.deepWork}h
                 </div>
                 <div
-                  className="flex items-center justify-center bg-zinc-800 font-mono text-[11px] text-zinc-500"
+                  className="flex items-center justify-center bg-zinc-800 font-mono text-xs text-zinc-500"
                   style={{ width: `${(w.shallowWork / 40) * 100}%` }}
                 >
                   {w.shallowWork}h
@@ -297,7 +297,7 @@ export function DeepWorkProgressChart() {
             </div>
             <div className="font-mono text-3xl font-bold text-green-500">9x</div>
           </div>
-          <div className="mt-3 font-mono text-[11px] leading-relaxed text-zinc-500">
+          <div className="mt-3 font-mono text-xs leading-relaxed text-zinc-500">
             Hours of deep work correlates with output quality at r=0.89. 
             Not time spent, but depth of focus. (Newport, 2025 study, n=342)
           </div>
@@ -313,13 +313,13 @@ export function GoalFrameworkRadar() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">GOAL_FRAMEWORK_EFFECTIVENESS</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">GOAL_FRAMEWORK_EFFECTIVENESS</span>
       </div>
 
       <div className="space-y-6">
         {/* Comparison table */}
         <div className="overflow-hidden border border-zinc-800">
-          <table className="w-full font-mono text-[11px]">
+          <table className="w-full font-mono text-xs">
             <thead>
               <tr className="border-b border-zinc-800 bg-zinc-900">
                 <th className="p-2 text-left text-zinc-400">Framework</th>
@@ -360,13 +360,13 @@ export function GoalFrameworkRadar() {
         {/* The Resurgo Difference */}
         <div className="border-l-2 border-orange-600 bg-zinc-900/50 p-3 space-y-2">
           <p className="font-mono text-xs font-bold text-orange-500">WHY RESURGO OUTPERFORMS:</p>
-          <ul className="space-y-1 font-mono text-[11px] leading-relaxed text-zinc-400">
+          <ul className="space-y-1 font-mono text-xs leading-relaxed text-zinc-400">
             <li className="flex gap-2"><span className="text-orange-600">›</span>AI decomposes big goals into daily actions</li>
             <li className="flex gap-2"><span className="text-orange-600">›</span>Adaptive difficulty based on streak performance</li>
             <li className="flex gap-2"><span className="text-orange-600">›</span>Emotional coaching when motivation drops</li>
             <li className="flex gap-2"><span className="text-orange-600">›</span>Recovery protocols for setbacks (never miss twice)</li>
           </ul>
-          <p className="mt-2 font-mono text-[11px] italic text-zinc-500">
+          <p className="mt-2 font-mono text-xs italic text-zinc-500">
             Data: Internal beta testing (n=247, Dec 2025 - Feb 2026). 82% completion rate for 30-day goals.
           </p>
         </div>
@@ -388,7 +388,7 @@ export function DistractionVisualization() {
     <div className="my-8 border border-orange-900/40 bg-zinc-950 p-6">
       <div className="mb-4 flex items-center gap-2 border-b border-zinc-900 pb-3">
         <span className="h-1.5 w-1.5 bg-orange-600" />
-        <span className="font-mono text-[11px] tracking-widest text-orange-600">TYPICAL_DAY_DISTRACTION_LOG</span>
+        <span className="font-mono text-xs tracking-widest text-orange-600">TYPICAL_DAY_DISTRACTION_LOG</span>
       </div>
 
       <div className="space-y-3">
@@ -400,7 +400,7 @@ export function DistractionVisualization() {
             }`}
           >
             <div className="space-y-1">
-              <div className="font-mono text-[11px] text-zinc-500">{d.time}</div>
+              <div className="font-mono text-xs text-zinc-500">{d.time}</div>
               <div className="font-mono text-xs text-zinc-300">{d.trigger}</div>
             </div>
             <div className="text-right">
@@ -421,7 +421,7 @@ export function DistractionVisualization() {
             </div>
             <div className="font-mono text-3xl font-bold text-red-500">84m</div>
           </div>
-          <div className="mt-3 font-mono text-[11px] leading-relaxed text-zinc-500">
+          <div className="mt-3 font-mono text-xs leading-relaxed text-zinc-500">
             Average refocus time: 23 minutes (Mark et al., 2024). Most knowledge workers lose 2-3 hours daily to context switching.
           </div>
         </div>
@@ -429,7 +429,7 @@ export function DistractionVisualization() {
         {/* Solution */}
         <div className="border border-green-900/40 bg-green-950/10 p-3">
           <p className="font-mono text-xs font-bold text-green-500">RESURGO FOCUS SESSIONS:</p>
-          <p className="mt-1 font-mono text-[11px] text-zinc-400">
+          <p className="mt-1 font-mono text-xs text-zinc-400">
             Log every distraction. Track patterns. AI coach suggests optimal focus windows based on your data.
           </p>
         </div>

@@ -198,7 +198,7 @@ export default function PricingPage() {
         <div className="mb-14 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">
+            <span className="font-mono text-xs tracking-widest text-orange-600">
               RESURGO :: PRICING
             </span>
           </div>
@@ -230,7 +230,7 @@ export default function PricingPage() {
                 }`}
               >
                 {badge && (
-                  <p className="mb-1 font-mono text-[11px] font-bold tracking-widest text-orange-500">
+                  <p className="mb-1 font-mono text-xs font-bold tracking-widest text-orange-500">
                     {badge}
                   </p>
                 )}
@@ -292,7 +292,7 @@ export default function PricingPage() {
             <details key={i} className="group border border-zinc-900 bg-zinc-950">
               <summary className="flex cursor-pointer select-none items-center justify-between px-5 py-4 font-mono text-sm font-bold text-zinc-200 hover:text-zinc-100">
                 {q}
-                <span className="ml-4 shrink-0 font-mono text-[11px] text-zinc-500 transition group-open:text-orange-600">
+                <span className="ml-4 shrink-0 font-mono text-xs text-zinc-500 transition group-open:text-orange-600">
                   ▼
                 </span>
               </summary>

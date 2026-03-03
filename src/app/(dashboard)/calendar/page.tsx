@@ -116,7 +116,7 @@ export default function CalendarPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">
+            <span className="font-mono text-xs tracking-widest text-orange-600">
               MISSION_TIMELINE :: TEMPORAL_VIEW
             </span>
           </div>
@@ -154,7 +154,7 @@ export default function CalendarPage() {
               </h2>
               <button
                 onClick={goToday}
-                className="font-mono text-[11px] tracking-widest text-orange-600 hover:underline"
+                className="font-mono text-xs tracking-widest text-orange-600 hover:underline"
               >
                 [TODAY]
               </button>
@@ -171,7 +171,7 @@ export default function CalendarPage() {
             {/* Days of week header */}
             <div className="mb-1 grid grid-cols-7 gap-px">
               {DAYS.map((d) => (
-                <div key={d} className="py-1.5 text-center font-mono text-[11px] tracking-widest text-zinc-400">
+                <div key={d} className="py-1.5 text-center font-mono text-xs tracking-widest text-zinc-400">
                   {d.toUpperCase()}
                 </div>
               ))}
@@ -214,10 +214,10 @@ export default function CalendarPage() {
 
             {/* Legend */}
             <div className="flex items-center gap-4">
-              <span className="flex items-center gap-1.5 font-mono text-[11px] tracking-widest text-zinc-400">
+              <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-green-500" /> NODES_COMPLETED
               </span>
-              <span className="flex items-center gap-1.5 font-mono text-[11px] tracking-widest text-zinc-400">
+              <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-blue-500" /> TASKS_COMPLETED
               </span>
             </div>

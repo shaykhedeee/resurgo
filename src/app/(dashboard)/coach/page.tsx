@@ -256,12 +256,12 @@ export default function CoachPage() {
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: AI_COMMAND_CENTER</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: AI_COMMAND_CENTER</span>
           </div>
           <div className="flex items-center gap-3">
             <span className="font-mono text-xs tracking-widest text-zinc-600">ACTION-CAPABLE</span>
             <span className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="font-mono text-[11px] tracking-widest text-zinc-400">ACTIVE: {selectedCoach}</span>
+            <span className="font-mono text-xs tracking-widest text-zinc-400">ACTIVE: {selectedCoach}</span>
           </div>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function CoachPage() {
         <aside className="w-full md:w-72 shrink-0 space-y-3">
           <div className="border border-zinc-900 bg-zinc-950">
             <div className="border-b border-zinc-900 px-3 py-2">
-              <p className="font-mono text-[11px] tracking-widest text-zinc-400">SELECT_AGENT</p>
+              <p className="font-mono text-xs tracking-widest text-zinc-400">SELECT_AGENT</p>
             </div>
             <div className="space-y-px p-1">
               {COACHES.map((c) => {
@@ -313,12 +313,12 @@ export default function CoachPage() {
           {/* Quick prompts */}
           <div className="border border-zinc-900 bg-zinc-950">
             <div className="border-b border-zinc-900 px-3 py-2">
-              <p className="font-mono text-[11px] tracking-widest text-zinc-400">QUICK_COMMANDS</p>
+              <p className="font-mono text-xs tracking-widest text-zinc-400">QUICK_COMMANDS</p>
             </div>
             <div className="space-y-px p-1">
               {QUICK_PROMPTS[selectedCoach].map((q) => (
                 <button key={q} onClick={() => handleSend(q)} disabled={isSending}
-                  className="w-full border border-transparent px-3 py-2 text-left font-mono text-[11px] leading-relaxed tracking-wider text-zinc-500 transition hover:border-zinc-800 hover:text-zinc-300 disabled:opacity-40">
+                  className="w-full border border-transparent px-3 py-2 text-left font-mono text-xs leading-relaxed tracking-wider text-zinc-500 transition hover:border-zinc-800 hover:text-zinc-300 disabled:opacity-40">
                   <span className="text-zinc-600">{'>'}</span> {q}
                 </button>
               ))}
@@ -329,7 +329,7 @@ export default function CoachPage() {
           <div className="border border-zinc-900 bg-zinc-950">
             <div className="border-b border-zinc-900 px-3 py-2 flex items-center gap-2">
               <Terminal className="h-3 w-3 text-zinc-500" />
-              <p className="font-mono text-[11px] tracking-widest text-zinc-400">SLASH_COMMANDS</p>
+              <p className="font-mono text-xs tracking-widest text-zinc-400">SLASH_COMMANDS</p>
             </div>
             <div className="space-y-px p-1">
               {SLASH_COMMANDS.map((cmd) => (
@@ -372,7 +372,7 @@ export default function CoachPage() {
               </div>
               <div className="flex-1">
                 <p className="font-mono text-xs font-bold tracking-widest" style={{ color: coach.color }}>{coach.name} — {coach.title}</p>
-                <p className="font-mono text-[11px] tracking-wider text-zinc-500">{coach.domain}</p>
+                <p className="font-mono text-xs tracking-wider text-zinc-500">{coach.domain}</p>
                 <p className="mt-0.5 font-mono text-xs text-zinc-400">{coach.shortBio}</p>
                 <p className="mt-0.5 font-mono text-xs tracking-wider text-zinc-600 italic">{coach.specialty}</p>
               </div>
@@ -395,7 +395,7 @@ export default function CoachPage() {
                   <p className="mb-1 font-mono text-xs tracking-widest" style={{ color: coach.color }}>AGENT_{coach.name}</p>
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: coach.color }} />
-                    <p className="font-mono text-[11px] text-zinc-500 animate-pulse">INITIALIZING_</p>
+                    <p className="font-mono text-xs text-zinc-500 animate-pulse">INITIALIZING_</p>
                   </div>
                 </div>
               )}
@@ -412,7 +412,7 @@ export default function CoachPage() {
                       <p className="mb-1 font-mono text-xs tracking-widest" style={isCoach ? { color: coach.color } : { color: '#52525b' }}>
                         {isCoach ? `AGENT_${coach.name}` : 'YOU'}
                       </p>
-                      <p className="font-mono text-[11px] leading-relaxed text-zinc-300 whitespace-pre-wrap">{text}</p>
+                      <p className="font-mono text-sm leading-relaxed text-zinc-300 whitespace-pre-wrap">{text}</p>
                     </div>
 
                     {/* Action results */}
@@ -424,7 +424,7 @@ export default function CoachPage() {
                           return (
                             <div key={i} className="flex items-center gap-2">
                               <AIcon className={cn('h-3 w-3 shrink-0', a.success ? 'text-emerald-500' : 'text-red-500')} />
-                              <span className={cn('font-mono text-[11px] tracking-wider', a.success ? 'text-emerald-400' : 'text-red-400')}>
+                              <span className={cn('font-mono text-xs tracking-wider', a.success ? 'text-emerald-400' : 'text-red-400')}>
                                 {a.message}
                               </span>
                             </div>
@@ -440,7 +440,7 @@ export default function CoachPage() {
                   <p className="mb-1 font-mono text-xs tracking-widest" style={{ color: coach.color }}>AGENT_{coach.name}</p>
                   <div className="flex items-center gap-2">
                     <span className="h-1.5 w-1.5 rounded-full animate-pulse" style={{ backgroundColor: coach.color }} />
-                    <p className="font-mono text-[11px] text-zinc-500 animate-pulse">PROCESSING_</p>
+                    <p className="font-mono text-xs text-zinc-500 animate-pulse">PROCESSING_</p>
                   </div>
                 </div>
               )}
@@ -476,14 +476,14 @@ export default function CoachPage() {
               </div>
             )}
             <form onSubmit={handleSubmit} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 p-3">
-              <span className="hidden font-mono text-[11px] tracking-widest text-zinc-500 md:block">{'>'}</span>
+              <span className="hidden font-mono text-xs tracking-widest text-zinc-500 md:block">{'>'}</span>
               <input ref={inputRef} value={message} onChange={(e) => handleInputChange(e.target.value)}
                 onKeyDown={handleInputKeyDown}
                 placeholder={`Type / for commands or ask ${coach.name} anything...`}
                 disabled={isSending}
-                className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none disabled:opacity-50" />
+                className="h-11 flex-1 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none disabled:opacity-50" />
               <button type="submit" disabled={isSending || !message.trim()}
-                className="flex h-9 items-center gap-1.5 border px-4 font-mono text-xs tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                className="flex h-11 items-center gap-1.5 border px-4 font-mono text-xs tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                 style={{ borderColor: `${coach.color}60`, color: coach.color, backgroundColor: `${coach.color}15` }}>
                 <Send className="h-3 w-3" />
                 {isSending ? 'SENDING_' : 'SEND'}

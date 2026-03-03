@@ -217,7 +217,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
         <div className="mb-5 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">AI_MODULE :: PLAN_BUILDER_v3</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">AI_MODULE :: PLAN_BUILDER_v3</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Plan Builder</h1>
@@ -249,7 +249,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                 className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
               />
               <div>
-                <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">COACH_PERSPECTIVE</p>
+                <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">COACH_PERSPECTIVE</p>
                 <div className="grid grid-cols-2 gap-1.5">
                   {COACHES.map(({ id, label, desc, icon }) => (
                     <button
@@ -286,7 +286,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
           <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
             <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-orange-600" />
             <p className="font-mono text-xs tracking-widest text-zinc-500">ANALYZING_GOAL_CONTEXT_</p>
-            <p className="mt-1 font-mono text-[11px] text-zinc-400">Building a unique plan with milestones, tasks & habits...</p>
+            <p className="mt-1 font-mono text-xs text-zinc-400">Building a unique plan with milestones, tasks & habits...</p>
           </div>
         )}
 
@@ -298,7 +298,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
               <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
                 <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">PLAN_GENERATED</span>
                 {activated && (
-                  <span className="flex items-center gap-1.5 font-mono text-[11px] tracking-widest text-green-500">
+                  <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-green-500">
                     <CheckCircle className="h-3 w-3" /> ACTIVATED
                   </span>
                 )}
@@ -334,8 +334,8 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                 {/* Progress bar */}
                 <div className="mt-3">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-mono text-[11px] text-zinc-500">REVIEW PROGRESS</span>
-                    <span className="font-mono text-[11px] text-orange-500">{overallProgress}%</span>
+                    <span className="font-mono text-xs text-zinc-500">REVIEW PROGRESS</span>
+                    <span className="font-mono text-xs text-orange-500">{overallProgress}%</span>
                   </div>
                   <div className="h-1 w-full bg-zinc-900">
                     <div className="h-1 bg-orange-600 transition-all duration-500" style={{ width: `${overallProgress}%` }} />
@@ -361,7 +361,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                     <button
                       onClick={handleActivatePlan}
                       disabled={activating}
-                      className="mt-3 flex items-center gap-2 border border-orange-600 bg-orange-600/20 px-6 py-2.5 font-mono text-[11px] font-bold tracking-widest text-orange-400 transition hover:bg-orange-600/30 disabled:opacity-50"
+                      className="mt-3 flex items-center gap-2 border border-orange-600 bg-orange-600/20 px-6 py-2.5 font-mono text-xs font-bold tracking-widest text-orange-400 transition hover:bg-orange-600/30 disabled:opacity-50"
                     >
                       {activating ? (
                         <>
@@ -440,10 +440,10 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
               <div className="border border-zinc-900 bg-zinc-950">
                 <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
                   <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">SUGGESTED_HABITS</span>
-                  <span className="font-mono text-[11px] text-zinc-400">{selectedHabits.size} selected</span>
+                  <span className="font-mono text-xs text-zinc-400">{selectedHabits.size} selected</span>
                 </div>
                 <div className="p-3 space-y-1">
-                  <p className="mb-2 font-mono text-[11px] text-zinc-400 px-1">
+                  <p className="mb-2 font-mono text-xs text-zinc-400 px-1">
                     These habits will be auto-created when you activate the plan. Toggle any off if you don&apos;t want them.
                   </p>
                   {plan.suggestedHabits.map((habit, i) => {
@@ -465,7 +465,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                           <p className={cn('font-mono text-xs truncate', isSelected ? 'text-orange-400' : 'text-zinc-500')}>
                             {habit.title}
                           </p>
-                          <p className="font-mono text-[11px] text-zinc-500 truncate">{habit.description}</p>
+                          <p className="font-mono text-xs text-zinc-500 truncate">{habit.description}</p>
                         </div>
                         <div className="shrink-0 flex gap-1.5">
                           <span className="border border-zinc-800 px-1.5 py-0.5 font-mono text-xs text-zinc-400">
@@ -497,26 +497,26 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                     </button>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="font-mono text-[11px] tracking-widest text-zinc-400">{step.phase}</span>
+                        <span className="font-mono text-xs tracking-widest text-zinc-400">{step.phase}</span>
                         <ChevronRight className="h-3 w-3 text-zinc-400" />
                         <span className={cn('font-mono text-sm font-bold', done ? 'text-green-500 line-through' : 'text-zinc-200')}>
                           {step.title}
                         </span>
                       </div>
                       <p className="mt-1 font-mono text-xs text-zinc-500">{step.description}</p>
-                      <p className="mt-0.5 font-mono text-[11px] text-zinc-400">~{step.estimatedDays} days</p>
+                      <p className="mt-0.5 font-mono text-xs text-zinc-400">~{step.estimatedDays} days</p>
                       <ul className="mt-2 space-y-1">
                         {step.subTasks.map((task, j) => (
                           <li key={j} className="flex items-start gap-1.5">
                             <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-orange-600" />
-                            <span className="font-mono text-[11px] text-zinc-400">{task}</span>
+                            <span className="font-mono text-xs text-zinc-400">{task}</span>
                           </li>
                         ))}
                       </ul>
                       {activated && (
                         <div className="mt-2 flex items-center gap-1.5">
                           <CheckCircle className="h-3 w-3 text-green-600" />
-                          <span className="font-mono text-[11px] text-green-600">
+                          <span className="font-mono text-xs text-green-600">
                             {step.subTasks.length} tasks created · milestone tracked
                           </span>
                         </div>
@@ -553,7 +553,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                 <button
                   key={ex}
                   onClick={() => setGoalTitle(ex)}
-                  className="border border-zinc-800 px-2.5 py-1.5 font-mono text-[11px] text-zinc-400 transition hover:border-orange-800 hover:text-orange-500"
+                  className="border border-zinc-800 px-2.5 py-1.5 font-mono text-xs text-zinc-400 transition hover:border-orange-800 hover:text-orange-500"
                 >
                   {ex}
                 </button>

@@ -132,7 +132,7 @@ export default function BudgetPage() {
         <div className="border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-600" />
-            <span className="font-mono text-[11px] tracking-widest text-green-600">RESURGO :: FINANCE_MODULE</span>
+            <span className="font-mono text-xs tracking-widest text-green-600">RESURGO :: FINANCE_MODULE</span>
           </div>
           <div className="flex items-center justify-between px-5 py-4">
             <div>
@@ -164,7 +164,7 @@ export default function BudgetPage() {
                 key={t}
                 onClick={() => setTab(t)}
                 className={cn(
-                  'border-r border-zinc-900 px-5 py-2.5 font-mono text-[11px] tracking-widest transition',
+                  'border-r border-zinc-900 px-5 py-2.5 font-mono text-xs tracking-widest transition',
                   tab === t ? 'bg-zinc-900 text-green-500' : 'text-zinc-400 hover:text-zinc-300'
                 )}
               >
@@ -187,7 +187,7 @@ export default function BudgetPage() {
               ].map(({ label, value, icon: Icon, color, border }) => (
                 <div key={label} className={cn('border bg-zinc-950 p-4', border)}>
                   <div className="flex items-center justify-between">
-                    <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                    <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                     <Icon className={cn('h-3.5 w-3.5', color)} />
                   </div>
                   <p className={cn('mt-2 font-mono text-lg font-bold', color)}>{value}</p>
@@ -199,7 +199,7 @@ export default function BudgetPage() {
             {summary && summary.byCategory.length > 0 && (
               <div className="border border-zinc-900 bg-zinc-950">
                 <div className="border-b border-zinc-900 px-4 py-2">
-                  <p className="font-mono text-[11px] tracking-widest text-zinc-400">SPENDING_BY_CATEGORY</p>
+                  <p className="font-mono text-xs tracking-widest text-zinc-400">SPENDING_BY_CATEGORY</p>
                 </div>
                 <div className="divide-y divide-zinc-900">
                   {summary.byCategory.map((cat: CategorySummary) => {
@@ -214,7 +214,7 @@ export default function BudgetPage() {
                           </div>
                         </div>
                         <p className="w-16 text-right font-mono text-xs text-zinc-400">{fmt(cat.amount)}</p>
-                        <p className="w-10 text-right font-mono text-[11px] text-zinc-400">{pct}%</p>
+                        <p className="w-10 text-right font-mono text-xs text-zinc-400">{pct}%</p>
                       </div>
                     );
                   })}
@@ -228,7 +228,7 @@ export default function BudgetPage() {
         {tab === 'transactions' && (
           <div className="border border-zinc-900 bg-zinc-950">
             <div className="border-b border-zinc-900 px-4 py-2">
-              <p className="font-mono text-[11px] tracking-widest text-zinc-400">
+              <p className="font-mono text-xs tracking-widest text-zinc-400">
                 TRANSACTIONS — {month} ({transactions?.length ?? 0} entries)
               </p>
             </div>
@@ -246,8 +246,8 @@ export default function BudgetPage() {
                       tx.type === 'income' ? 'bg-green-500' : 'bg-red-500'
                     )} />
                     <div className="min-w-0 flex-1">
-                      <p className="font-mono text-[11px] text-zinc-300">{tx.description}</p>
-                      <p className="font-mono text-[11px] text-zinc-400">{tx.category} · {tx.date}</p>
+                      <p className="font-mono text-xs text-zinc-300">{tx.description}</p>
+                      <p className="font-mono text-xs text-zinc-400">{tx.category} · {tx.date}</p>
                     </div>
                     <p className={cn(
                       'font-mono text-sm font-bold',
@@ -293,13 +293,13 @@ export default function BudgetPage() {
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="font-mono text-sm font-bold text-zinc-200">{g.title}</p>
-                        <p className="mt-0.5 font-mono text-[11px] text-zinc-400">
+                        <p className="mt-0.5 font-mono text-xs text-zinc-400">
                           {fmt(g.currentAmount)} / {fmt(g.targetAmount)} · {pct}% complete
                           {g.deadline && ` · Due ${g.deadline}`}
                         </p>
                       </div>
                       <span className={cn(
-                        'font-mono text-[11px] tracking-widest px-2 py-0.5 border',
+                        'font-mono text-xs tracking-widest px-2 py-0.5 border',
                         g.status === 'completed' ? 'border-green-800 text-green-500' :
                         g.status === 'active' ? 'border-amber-800 text-amber-500' : 'border-zinc-800 text-zinc-500'
                       )}>
@@ -325,7 +325,7 @@ export default function BudgetPage() {
                       {g.status === 'active' && (
                         <button
                           onClick={() => updateFinancialGoal({ goalId: g._id as Id<'financialGoals'>, status: 'completed' })}
-                          className="border border-green-900 px-3 font-mono text-[11px] text-green-600 hover:bg-green-950/30"
+                          className="border border-green-900 px-3 font-mono text-xs text-green-600 hover:bg-green-950/30"
                         >
                           MARK_DONE
                         </button>

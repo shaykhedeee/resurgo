@@ -179,7 +179,7 @@ export default function SettingsPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">
+            <span className="font-mono text-xs tracking-widest text-orange-600">
               CONFIGURATION_MATRIX :: SYSTEM_PREFERENCES
             </span>
           </div>
@@ -195,24 +195,24 @@ export default function SettingsPage() {
         <SettingsSection title="OPERATOR_PROFILE">
           <div className="space-y-4">
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">DISPLAY_NAME</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">DISPLAY_NAME</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">EMAIL_ADDRESS</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">EMAIL_ADDRESS</label>
               <p className="font-mono text-xs text-zinc-500">{clerkUser?.primaryEmailAddress?.emailAddress ?? 'N/A'}</p>
             </div>
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">TIMEZONE</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">TIMEZONE</label>
               <select
                 value={timezone}
                 onChange={(e) => setTimezone(e.target.value)}
-                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
               >
                 {Intl.supportedValuesOf('timeZone').map((tz) => (
                   <option key={tz} value={tz}>{tz}</option>
@@ -220,8 +220,8 @@ export default function SettingsPage() {
               </select>
             </div>
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">ACCESS_TIER</label>
-              <span className={`inline-block border px-2.5 py-0.5 font-mono text-[11px] tracking-widest ${
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">ACCESS_TIER</label>
+              <span className={`inline-block border px-2.5 py-0.5 font-mono text-xs tracking-widest ${
                 currentUser.plan === 'lifetime' ? 'border-purple-900 text-purple-500' :
                 currentUser.plan === 'pro'      ? 'border-orange-900 text-orange-500' :
                 'border-zinc-800 text-zinc-400'
@@ -263,30 +263,30 @@ export default function SettingsPage() {
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">WAKE_TIME</label>
+                <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">WAKE_TIME</label>
                 <input
                   type="time"
                   value={wakeTime}
                   onChange={(e) => setWakeTime(e.target.value)}
-                  className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                  className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">SLEEP_TIME</label>
+                <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">SLEEP_TIME</label>
                 <input
                   type="time"
                   value={sleepTime}
                   onChange={(e) => setSleepTime(e.target.value)}
-                  className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                  className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
                 />
               </div>
             </div>
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">PEAK_PRODUCTIVITY_WINDOW</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">PEAK_PRODUCTIVITY_WINDOW</label>
               <select
                 value={peakTime}
                 onChange={(e) => setPeakTime(e.target.value)}
-                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
               >
                 <option value="morning">MORNING</option>
                 <option value="afternoon">AFTERNOON</option>
@@ -337,32 +337,32 @@ export default function SettingsPage() {
             {quietHoursEnabled && (
               <div className="grid grid-cols-2 gap-4 border border-zinc-800 bg-black p-3">
                 <div>
-                  <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">QUIET_START</label>
+                  <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">QUIET_START</label>
                   <input
                     type="time"
                     value={quietHoursStart}
                     onChange={(e) => setQuietHoursStart(e.target.value)}
-                    className="w-full border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                    className="w-full border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">QUIET_END</label>
+                  <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">QUIET_END</label>
                   <input
                     type="time"
                     value={quietHoursEnd}
                     onChange={(e) => setQuietHoursEnd(e.target.value)}
-                    className="w-full border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                    className="w-full border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
                   />
                 </div>
               </div>
             )}
 
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">REMINDER_STYLE</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">REMINDER_STYLE</label>
               <select
                 value={reminderStyle}
                 onChange={(e) => setReminderStyle(e.target.value as typeof reminderStyle)}
-                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
               >
                 <option value="gentle">GENTLE</option>
                 <option value="supportive">SUPPORTIVE</option>
@@ -372,11 +372,11 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label className="mb-1 block font-mono text-[11px] tracking-widest text-zinc-400">COACHING_FREQUENCY</label>
+              <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-400">COACHING_FREQUENCY</label>
               <select
                 value={coachingFrequency}
                 onChange={(e) => setCoachingFrequency(e.target.value as typeof coachingFrequency)}
-                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none"
               >
                 <option value="daily">DAILY</option>
                 <option value="weekly">WEEKLY</option>
@@ -404,7 +404,7 @@ export default function SettingsPage() {
 
             {archivedHabits.length > 0 && (
               <div className="mb-3">
-                <p className="mb-1.5 font-mono text-[11px] tracking-widest text-zinc-400">
+                <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">
                   NODES ({archivedHabits.length})
                 </p>
                 <div className="space-y-px">
@@ -412,7 +412,7 @@ export default function SettingsPage() {
                     <div key={h._id} className="flex items-center gap-2 border border-zinc-900 bg-black px-3 py-2">
                       <Archive className="h-3 w-3 shrink-0 text-zinc-400" />
                       <span className="flex-1 truncate font-mono text-xs text-zinc-500">{h.title}</span>
-                      <span className="font-mono text-[11px] text-zinc-400">{h.category?.toUpperCase()}</span>
+                      <span className="font-mono text-xs text-zinc-400">{h.category?.toUpperCase()}</span>
                     </div>
                   ))}
                 </div>
@@ -421,7 +421,7 @@ export default function SettingsPage() {
 
             {archivedGoals.length > 0 && (
               <div className="mb-3">
-                <p className="mb-1.5 font-mono text-[11px] tracking-widest text-zinc-400">
+                <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">
                   OBJECTIVES ({archivedGoals.length})
                 </p>
                 <div className="space-y-px">
@@ -429,7 +429,7 @@ export default function SettingsPage() {
                     <div key={g._id} className="flex items-center gap-2 border border-zinc-900 bg-black px-3 py-2">
                       <Archive className="h-3 w-3 shrink-0 text-zinc-400" />
                       <span className="flex-1 truncate font-mono text-xs text-zinc-500">{g.title}</span>
-                      <span className="font-mono text-[11px] text-zinc-400">{g.category?.toUpperCase()}</span>
+                      <span className="font-mono text-xs text-zinc-400">{g.category?.toUpperCase()}</span>
                     </div>
                   ))}
                 </div>
@@ -464,7 +464,7 @@ export default function SettingsPage() {
                 className="flex items-center justify-between border border-zinc-800 px-3 py-2.5 transition hover:border-zinc-700 hover:bg-zinc-900"
               >
                 <div>
-                  <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                  <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                   <p className="font-mono text-xs text-zinc-500">{desc}</p>
                 </div>
                 <ArrowRight className="h-3 w-3 text-zinc-400" />
@@ -499,10 +499,10 @@ export default function SettingsPage() {
 
         {/* -- APP INFO -- */}
         <div className="mb-4 border border-dashed border-zinc-900 p-4 text-center">
-          <p className="font-mono text-[11px] tracking-widest text-zinc-500">
+          <p className="font-mono text-xs tracking-widest text-zinc-500">
             RESURGO v1.4.0 &middot; NEXT.JS 14 &middot; CONVEX &middot; CLERK
           </p>
-          <p className="mt-1 font-mono text-[11px] text-zinc-400">
+          <p className="mt-1 font-mono text-xs text-zinc-400">
             <Link href="/changelog" className="hover:text-zinc-200 transition">View changelog</Link>
             {' · '}
             <Link href="/privacy" className="hover:text-zinc-200 transition">Privacy</Link>

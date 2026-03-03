@@ -52,10 +52,10 @@ export default function Error({ error, reset }: ErrorProps) {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
-            <span className="font-mono text-[11px] tracking-widest text-red-600">RESURGO_OS :: RUNTIME_EXCEPTION</span>
+            <span className="font-mono text-xs tracking-widest text-red-600">RESURGO_OS :: RUNTIME_EXCEPTION</span>
           </div>
           <div className="px-4 py-4">
-            <p className="font-mono text-[11px] tracking-widest text-zinc-400">FAULT_HANDLER v2.1.0</p>
+            <p className="font-mono text-xs tracking-widest text-zinc-400">FAULT_HANDLER v2.1.0</p>
             <h1 className="mt-1 font-mono text-xl font-bold tracking-tight text-zinc-100">UNHANDLED_ERROR_DETECTED</h1>
             <p className="mt-1 font-mono text-xs text-zinc-400">
               EXCEPTION_LOGGED :: DATA_INTEGRITY_MAINTAINED :: RECOVERY_OPTIONS_BELOW
@@ -78,13 +78,13 @@ export default function Error({ error, reset }: ErrorProps) {
           </button>
         </div>
 
-        <p className="mb-4 text-center font-mono text-[11px] tracking-widest text-zinc-400">
+        <p className="mb-4 text-center font-mono text-xs tracking-widest text-zinc-400">
           PERSISTENT_ERROR &rarr; CLEAR_BROWSER_CACHE &rarr; CONTACT_SUPPORT
         </p>
 
         {errorId && (
           <div className="mb-4 flex items-center justify-between border border-zinc-900 bg-zinc-950 px-4 py-2">
-            <span className="font-mono text-[11px] text-zinc-400">ERR_ID: {errorId}</span>
+            <span className="font-mono text-xs text-zinc-400">ERR_ID: {errorId}</span>
             <button
               onClick={handleCopyErrorId}
               className="border border-zinc-800 p-1 text-zinc-400 transition hover:border-zinc-700 hover:text-zinc-400"
@@ -97,7 +97,7 @@ export default function Error({ error, reset }: ErrorProps) {
 
         {process.env.NODE_ENV === 'development' && error?.message && (
           <div className="border border-red-900 bg-red-950/10 p-4">
-            <p className="mb-1 font-mono text-[11px] tracking-widest text-red-700">DEV_STACK_TRACE</p>
+            <p className="mb-1 font-mono text-xs tracking-widest text-red-700">DEV_STACK_TRACE</p>
             <p className="break-all font-mono text-xs text-red-500">{error.message}</p>
           </div>
         )}

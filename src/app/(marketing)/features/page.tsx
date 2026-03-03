@@ -158,7 +158,7 @@ export default function FeaturesPage() {
         <div className="mb-12 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: FEATURES</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: FEATURES</span>
           </div>
           <div className="p-8 text-center">
             <h1 className="font-mono text-3xl font-bold tracking-tight text-zinc-100">
@@ -199,7 +199,7 @@ export default function FeaturesPage() {
             <details key={i} className="group border border-zinc-900 bg-zinc-950">
               <summary className="flex cursor-pointer select-none items-center justify-between px-5 py-4 font-mono text-sm font-bold text-zinc-200 hover:text-zinc-100">
                 {q}
-                <span className="ml-4 shrink-0 font-mono text-[11px] text-zinc-500 transition group-open:text-orange-600">
+                <span className="ml-4 shrink-0 font-mono text-xs text-zinc-500 transition group-open:text-orange-600">
                   ▼
                 </span>
               </summary>

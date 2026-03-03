@@ -89,7 +89,7 @@ export default function IntegrationsPage() {
         <div className="mb-5 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">DEVELOPER :: INTEGRATIONS_HUB</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">DEVELOPER :: INTEGRATIONS_HUB</span>
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Integrations</h1>
@@ -101,7 +101,7 @@ export default function IntegrationsPage() {
               { id: 'api' as const, label: 'API_KEYS', icon: Key },
             ].map(({ id, label, icon: Icon }) => (
               <button key={id} onClick={() => setTab(id)}
-                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 py-2.5 font-mono text-[11px] tracking-widest transition',
+                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 py-2.5 font-mono text-xs tracking-widest transition',
                   tab === id ? 'border-orange-600 bg-orange-950/10 text-orange-500' : 'border-transparent text-zinc-400 hover:text-zinc-400'
                 )}>
                 <Icon className="h-3 w-3" /> {label}
@@ -134,11 +134,11 @@ export default function IntegrationsPage() {
                   <input value={webhookUrl} onChange={(e) => setWebhookUrl(e.target.value)} placeholder="Endpoint URL (https://...)" required
                     className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                   <div>
-                    <p className="mb-2 font-mono text-[11px] tracking-widest text-zinc-400">SELECT_EVENTS ({selectedEvents.length} selected)</p>
+                    <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">SELECT_EVENTS ({selectedEvents.length} selected)</p>
                     <div className="flex flex-wrap gap-1.5">
                       {SUPPORTED_EVENTS.map((evt) => (
                         <button key={evt} type="button" onClick={() => toggleEvent(evt)}
-                          className={cn('border px-2.5 py-1 font-mono text-[11px] tracking-widest transition',
+                          className={cn('border px-2.5 py-1 font-mono text-xs tracking-widest transition',
                             selectedEvents.includes(evt) ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
                           )}>
                           {evt}
@@ -210,14 +210,14 @@ export default function IntegrationsPage() {
             {/* New key display */}
             {newKey && (
               <div className="border border-green-900 bg-green-950/10 p-4">
-                <p className="mb-2 font-mono text-[11px] tracking-widest text-green-500">KEY_GENERATED — COPY_NOW_NOT_SHOWN_AGAIN</p>
+                <p className="mb-2 font-mono text-xs tracking-widest text-green-500">KEY_GENERATED — COPY_NOW_NOT_SHOWN_AGAIN</p>
                 <div className="flex items-center gap-2">
                   <code className="flex-1 font-mono text-xs text-zinc-300 break-all">{newKey}</code>
                   <button onClick={copyKey} className="shrink-0 border border-green-900 p-1.5 text-green-600 transition hover:bg-green-950/20">
                     {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
                   </button>
                 </div>
-                <button onClick={() => setNewKey(null)} className="mt-2 font-mono text-[11px] text-zinc-400 transition hover:text-zinc-400">[DISMISS]</button>
+                <button onClick={() => setNewKey(null)} className="mt-2 font-mono text-xs text-zinc-400 transition hover:text-zinc-400">[DISMISS]</button>
               </div>
             )}
 
@@ -245,13 +245,13 @@ export default function IntegrationsPage() {
                     <Key className="h-4 w-4 shrink-0 text-zinc-400" />
                     <div className="flex-1">
                       <p className="font-mono text-xs text-zinc-300">{key.name}</p>
-                      <p className="font-mono text-[11px] text-zinc-400">{key.keyPrefix}••••••••••••••••••••••••</p>
+                      <p className="font-mono text-xs text-zinc-400">{key.keyPrefix}••••••••••••••••••••••••</p>
                       {key.lastUsedAt && (
                         <p className="font-mono text-xs text-zinc-400">Last used: {new Date(key.lastUsedAt).toLocaleDateString()}</p>
                       )}
                     </div>
                     <button onClick={() => revokeKey({ id: key._id })}
-                      className="border border-red-900 px-2.5 py-1 font-mono text-[11px] text-red-600 transition hover:bg-red-950/20">
+                      className="border border-red-900 px-2.5 py-1 font-mono text-xs text-red-600 transition hover:bg-red-950/20">
                       [REVOKE]
                     </button>
                   </div>
@@ -279,7 +279,7 @@ export default function IntegrationsPage() {
                       method === 'GET' ? 'border-green-900 text-green-600' : 'border-blue-900 text-blue-600'
                     )}>{method}</span>
                     <code className="font-mono text-xs text-zinc-400">{endpoint}</code>
-                    <span className="font-mono text-[11px] text-zinc-400">{desc}</span>
+                    <span className="font-mono text-xs text-zinc-400">{desc}</span>
                   </div>
                 ))}
               </div>

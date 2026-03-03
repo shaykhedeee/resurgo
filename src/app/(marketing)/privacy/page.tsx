@@ -23,7 +23,7 @@ export default function PrivacyPage() {
         <div className="mb-8 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: PRIVACY_POLICY</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: PRIVACY_POLICY</span>
           </div>
           <div className="p-6">
             <h1 className="font-mono text-2xl font-bold text-zinc-100">Privacy Policy</h1>

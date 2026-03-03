@@ -224,8 +224,8 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 17px;
+  line-height: 1.6;
   /* DO NOT set overscroll-behavior-y: contain on body — it breaks trackpad momentum scrolling.
      Apply it only to inner scroll containers that need it. */
   cursor: auto;
@@ -433,12 +433,12 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--text-primary);
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 2rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1rem; }
-h6 { font-size: 0.875rem; }
+h1 { font-size: 2.75rem; }
+h2 { font-size: 2.25rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.375rem; }
+h5 { font-size: 1.125rem; }
+h6 { font-size: 1rem; }
 
 /* ─────────────────────────────────────────────────────────────────────────────────
    Component Styles
@@ -525,7 +525,7 @@ h6 { font-size: 0.875rem; }
   .btn-primary {
     @apply px-6 py-3 font-semibold text-white
            transition-all duration-300 ease-out
-           min-h-[44px] min-w-[44px]
+           min-h-[48px] min-w-[48px]
            focus-visible:ring-2 focus-visible:ring-ascend-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
            disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
     border-radius: 2px;
@@ -535,7 +535,7 @@ h6 { font-size: 0.875rem; }
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-family: var(--font-inter, 'Inter'), system-ui, sans-serif;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1.25;
   }
@@ -554,7 +554,7 @@ h6 { font-size: 0.875rem; }
   .btn-secondary {
     @apply px-6 py-3 font-semibold
            transition-all duration-300 ease-out
-           min-h-[44px] min-w-[44px]
+           min-h-[48px] min-w-[48px]
            focus-visible:ring-2 focus-visible:ring-white/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
            disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
     border-radius: 2px;
@@ -565,7 +565,7 @@ h6 { font-size: 0.875rem; }
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-family: var(--font-inter, 'Inter'), system-ui, sans-serif;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1.25;
   }
@@ -607,7 +607,7 @@ h6 { font-size: 0.875rem; }
   .btn-danger {
     @apply px-6 py-3 font-semibold text-white
            transition-all duration-300 ease-out
-           min-h-[44px] min-w-[44px]
+           min-h-[48px] min-w-[48px]
            focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
            disabled:opacity-50 disabled:cursor-not-allowed;
     border-radius: 2px;
@@ -617,7 +617,7 @@ h6 { font-size: 0.875rem; }
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-family: var(--font-inter, 'Inter'), system-ui, sans-serif;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1.25;
   }
@@ -637,7 +637,7 @@ h6 { font-size: 0.875rem; }
   .btn-outline {
     @apply px-6 py-3 font-semibold
            transition-all duration-300 ease-out
-           min-h-[44px] min-w-[44px] bg-transparent
+           min-h-[48px] min-w-[48px] bg-transparent
            focus-visible:ring-2 focus-visible:ring-ascend-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
            disabled:opacity-50 disabled:cursor-not-allowed;
     border-radius: 2px;
@@ -647,7 +647,7 @@ h6 { font-size: 0.875rem; }
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-family: var(--font-inter, 'Inter'), system-ui, sans-serif;
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 700;
     line-height: 1.25;
   }

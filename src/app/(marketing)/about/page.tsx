@@ -63,7 +63,7 @@ export default function AboutPage() {
         <div className="mb-10 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: ABOUT</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: ABOUT</span>
           </div>
           <div className="p-8 text-center">
             <h1 className="font-mono text-3xl font-bold tracking-tight text-zinc-100">
@@ -125,7 +125,7 @@ export default function AboutPage() {
                 <div key={tech} className="flex gap-2 border border-zinc-800 p-2">
                   <span className="text-orange-600">&gt;</span>
                   <div>
-                    <p className="text-[11px] tracking-widest text-zinc-400">{tech}</p>
+                    <p className="text-xs tracking-widest text-zinc-400">{tech}</p>
                     <p className="text-xs text-zinc-300">{desc}</p>
                   </div>
                 </div>

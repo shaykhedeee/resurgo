@@ -97,7 +97,7 @@ export default function ChangelogPage() {
         <div className="mb-10 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: CHANGELOG</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: CHANGELOG</span>
           </div>
           <div className="p-6">
             <h1 className="font-mono text-2xl font-bold text-zinc-100">Product Changelog</h1>
@@ -115,7 +115,7 @@ export default function ChangelogPage() {
                     {release.type}
                   </span>
                 </div>
-                <span className="font-mono text-[11px] text-zinc-400">{release.date}</span>
+                <span className="font-mono text-xs text-zinc-400">{release.date}</span>
               </div>
               <ul className="divide-y divide-zinc-900/50">
                 {release.changes.map((change, i) => (

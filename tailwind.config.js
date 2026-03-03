@@ -57,14 +57,29 @@ module.exports = {
         mono: ['"VT323"', '"JetBrains Mono"', '"Fira Code"', '"Cascadia Code"', 'Consolas', 'monospace'],
       },
       fontSize: {
-        // Pixel font sizes (Press Start 2P needs smaller sizes)
+        // ── Standard scale — bumped for readability ──
+        // (overrides Tailwind defaults: xs=12→14, sm=14→15, base=16→17, lg=18→19)
+        'xs':   ['14px', { lineHeight: '1.5' }],
+        'sm':   ['15px', { lineHeight: '1.5' }],
+        'base': ['17px', { lineHeight: '1.6' }],
+        'lg':   ['19px', { lineHeight: '1.5' }],
+        'xl':   ['22px', { lineHeight: '1.4' }],
+        '2xl':  ['26px', { lineHeight: '1.3' }],
+        '3xl':  ['32px', { lineHeight: '1.2' }],
+        '4xl':  ['40px', { lineHeight: '1.1' }],
+        '5xl':  ['52px', { lineHeight: '1.05' }],
+        '6xl':  ['64px', { lineHeight: '1' }],
+        '7xl':  ['80px', { lineHeight: '1' }],
+        '8xl':  ['96px', { lineHeight: '1' }],
+        '9xl':  ['128px', { lineHeight: '1' }],
+        // ── Pixel font sizes (Press Start 2P needs smaller sizes) ──
         'pixel-xs': ['0.625rem', { lineHeight: '1.6' }],
         'pixel-sm': ['0.7rem', { lineHeight: '1.5' }],
         'pixel-md': ['0.8rem', { lineHeight: '1.4' }],
         'pixel-lg': ['0.9rem', { lineHeight: '1.3' }],
         'pixel-xl': ['1rem', { lineHeight: '1.3' }],
         'pixel-2xl': ['1.25rem', { lineHeight: '1.2' }],
-        // Terminal sizes (VT323 is taller)
+        // ── Terminal sizes (VT323 is taller) ──
         'terminal-sm': ['1rem', { lineHeight: '1.3' }],
         'terminal-md': ['1.2rem', { lineHeight: '1.3' }],
         'terminal-lg': ['1.5rem', { lineHeight: '1.2' }],

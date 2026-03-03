@@ -169,7 +169,7 @@ export default function FocusPage() {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">
+            <span className="font-mono text-xs tracking-widest text-orange-600">
               DEEP_WORK_PROTOCOL :: FOCUS_ENGINE
             </span>
           </div>
@@ -190,7 +190,7 @@ export default function FocusPage() {
               ['ALL_TIME_SESSIONS',  stats?.totalSessions ?? 0],
             ] as [string, number][]).map(([label, val]) => (
               <div key={label} className="bg-zinc-950 px-4 py-3 transition hover:bg-zinc-900">
-                <p className="font-mono text-[11px] tracking-widest text-zinc-400">{label}</p>
+                <p className="font-mono text-xs tracking-widest text-zinc-400">{label}</p>
                 <p className="mt-0.5 font-mono text-xl font-bold text-zinc-100">{val}</p>
               </div>
             ))}
@@ -389,7 +389,7 @@ export default function FocusPage() {
               <div className="border border-orange-900 bg-orange-950/20 px-4 py-3">
                 <div className="mb-1 flex items-center gap-1.5">
                   <Trophy className="h-3 w-3 text-orange-600" />
-                  <p className="font-mono text-[11px] tracking-widest text-orange-600">PROTOCOL_INSIGHT</p>
+                  <p className="font-mono text-xs tracking-widest text-orange-600">PROTOCOL_INSIGHT</p>
                 </div>
                 <p className="font-mono text-xs text-zinc-400">
                   {stats.totalSessions >= 100

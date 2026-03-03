@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import { useEffect, useState, useMemo } from 'react';
 import { differenceInDays, format } from 'date-fns';
@@ -19,9 +19,9 @@ import {
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // TYPES
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 interface DemoPlanGeneratorProps {
   onStartDay1: () => void;
@@ -29,9 +29,9 @@ interface DemoPlanGeneratorProps {
   onClose: () => void;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // CONFETTI BURST
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 function ConfettiBurst() {
   const [particles, setParticles] = useState<
@@ -73,9 +73,9 @@ function ConfettiBurst() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // CATEGORY ICONS & COLORS
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 const CATEGORY_MAP: Record<string, { emoji: string; label: string }> = {
   health: { emoji: 'HL', label: 'Health' },
@@ -92,9 +92,9 @@ const CATEGORY_MAP: Record<string, { emoji: string; label: string }> = {
   custom: { emoji: 'CU', label: 'Custom' },
 };
 
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 // MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────────────────────────
+// ---------------------------------------------------------------------------------
 
 export function DemoPlanGenerator({
   onStartDay1,
@@ -140,7 +140,7 @@ export function DemoPlanGenerator({
     }
   }, [goal?.celebrationMessage]);
 
-  // ─── No-Goal State ───────────────────────────────────────────────────────────
+  // --- No-Goal State -----------------------------------------------------------
 
   if (!goal) {
     return (
@@ -185,7 +185,7 @@ export function DemoPlanGenerator({
     );
   }
 
-  // ─── Main Plan Preview ────────────────────────────────────────────────────────
+  // --- Main Plan Preview --------------------------------------------------------
 
   const categoryInfo = CATEGORY_MAP[goal.category] ?? CATEGORY_MAP.general;
 
@@ -200,7 +200,7 @@ export function DemoPlanGenerator({
             'border-[var(--border)] bg-[var(--surface)]',
           )}
         >
-          {/* ── Close Button ─────────────────────────────────────────────── */}
+          {/* -- Close Button ----------------------------------------------- */}
           <button
             onClick={onClose}
             className="absolute right-4 top-4 z-10 rounded-lg p-1.5 text-themed-muted transition-colors hover:bg-white/10 hover:text-themed"
@@ -209,7 +209,7 @@ export function DemoPlanGenerator({
             <X size={20} />
           </button>
 
-          {/* ── Scrollable Content ───────────────────────────────────────── */}
+          {/* -- Scrollable Content ----------------------------------------- */}
           <div className="flex-1 overflow-y-auto p-6 sm:p-8">
             {/* Header */}
             <div className="mb-6 text-center">
@@ -230,7 +230,7 @@ export function DemoPlanGenerator({
                   </span>
                   {user.gamification?.level != null && (
                     <span className="ml-1 text-themed-muted">
-                      · Level {user.gamification.level}
+                      � Level {user.gamification.level}
                     </span>
                   )}
                 </p>
@@ -292,7 +292,7 @@ export function DemoPlanGenerator({
               </div>
             )}
 
-            {/* ── Milestone Timeline ─────────────────────────────────────── */}
+            {/* -- Milestone Timeline --------------------------------------- */}
             {milestones.length > 0 && (
               <div className="mb-6">
                 <h3 className="mb-4 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-themed-muted">
@@ -349,7 +349,7 @@ export function DemoPlanGenerator({
 
                           {/* Milestone date */}
                           {msDate && (
-                            <span className="mt-1 inline-flex items-center gap-1 text-[11px] text-themed-muted">
+                            <span className="mt-1 inline-flex items-center gap-1 text-xs text-themed-muted">
                               <Calendar size={10} />
                               {format(msDate, 'MMM d, yyyy')}
                             </span>
@@ -379,7 +379,7 @@ export function DemoPlanGenerator({
                                 </div>
                               ))}
                               {ms.weeklyObjectives.length > 3 && (
-                                <p className="pl-2.5 text-[11px] text-themed-muted">
+                                <p className="pl-2.5 text-xs text-themed-muted">
                                   +{ms.weeklyObjectives.length - 3} more week
                                   {ms.weeklyObjectives.length - 3 !== 1
                                     ? 's'
@@ -396,7 +396,7 @@ export function DemoPlanGenerator({
               </div>
             )}
 
-            {/* ── Linked Habits ──────────────────────────────────────────── */}
+            {/* -- Linked Habits -------------------------------------------- */}
             {linkedHabits.length > 0 && (
               <div className="mb-2">
                 <h3 className="mb-3 flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-themed-muted">
@@ -418,7 +418,7 @@ export function DemoPlanGenerator({
                           <p className="truncate text-sm font-medium text-themed">
                             {habit.name}
                           </p>
-                          <p className="text-[11px] text-themed-muted">
+                          <p className="text-xs text-themed-muted">
                             {hCat.label}
                           </p>
                         </div>
@@ -430,7 +430,7 @@ export function DemoPlanGenerator({
             )}
           </div>
 
-          {/* ── Action Buttons ────────────────────────────────────────────── */}
+          {/* -- Action Buttons ---------------------------------------------- */}
           <div className="border-t border-[var(--border)] bg-[var(--background)] px-6 py-4 sm:px-8">
             <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center sm:justify-between">
               <button

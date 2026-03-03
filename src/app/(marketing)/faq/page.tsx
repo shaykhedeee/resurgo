@@ -110,7 +110,7 @@ export default function FAQPage() {
         <div className="mb-10 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-[11px] tracking-widest text-orange-600">RESURGO :: FAQ</span>
+            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: FAQ</span>
           </div>
           <div className="p-6 text-center">
             <h1 className="font-mono text-2xl font-bold text-zinc-100">Frequently Asked Questions</h1>
@@ -125,8 +125,8 @@ export default function FAQPage() {
             <details key={i} className="group border border-zinc-900 bg-zinc-950">
               <summary className="flex cursor-pointer items-center justify-between px-5 py-4 font-mono text-sm font-bold text-zinc-200 hover:text-zinc-100 select-none">
                 {q}
-                <span className="ml-4 shrink-0 font-mono text-[11px] text-zinc-400 group-open:hidden">▼</span>
-                <span className="ml-4 shrink-0 font-mono text-[11px] text-orange-600 hidden group-open:inline">▲</span>
+                <span className="ml-4 shrink-0 font-mono text-xs text-zinc-400 group-open:hidden">▼</span>
+                <span className="ml-4 shrink-0 font-mono text-xs text-orange-600 hidden group-open:inline">▲</span>
               </summary>
               <div className="border-t border-zinc-900 px-5 py-4 font-mono text-sm text-zinc-400 leading-relaxed">
                 {a}
