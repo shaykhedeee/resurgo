@@ -9,7 +9,7 @@
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, Zap, Dumbbell, TrendingUp, Flame, Lock, CheckCircle2, XCircle, Target, ListTodo, Repeat } from 'lucide-react';
+import { Send, Zap, Dumbbell, TrendingUp, Flame, Lock, CheckCircle2, XCircle, Target, ListTodo, Repeat, Terminal, Command } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 
@@ -61,6 +61,18 @@ const COACHES: CoachDef[] = [
     specialty: 'Ask me to build recovery plans, gentle restart routines, or micro-step momentum systems.',
     Icon: Flame,
   },
+];
+
+// ── Slash Commands ──
+const SLASH_COMMANDS: { cmd: string; label: string; description: string; expand: (coach: CoachId) => string }[] = [
+  { cmd: '/plan', label: '/plan', description: 'Generate a full plan for your top goal', expand: () => 'Build me a complete 30-day plan for my most important goal right now. Include phases, tasks, and milestones.' },
+  { cmd: '/today', label: '/today', description: 'Create today\'s task list', expand: () => 'Look at my goals, habits, and pending tasks. Create an optimized task list for today with priorities and time blocks.' },
+  { cmd: '/review', label: '/review', description: 'Weekly review & analysis', expand: () => 'Run a weekly review of my progress. Analyze my habits, goals, and completed tasks. Identify what\'s working, what\'s not, and suggest adjustments.' },
+  { cmd: '/habits', label: '/habits', description: 'Design a habit stack', expand: (coach) => coach === 'TITAN' ? 'Design a complete morning and evening habit stack focused on physical performance, energy, and discipline.' : 'Design a habit stack of 3-5 keystone habits that would create the biggest compound effect for my situation.' },
+  { cmd: '/motivate', label: '/motivate', description: 'Get a personalized pep talk', expand: (coach) => coach === 'PHOENIX' ? 'I need real encouragement right now. Not generic platitudes — speak to MY situation and help me find my fire again.' : 'Give me a powerful, personalized motivational message based on my current progress and goals.' },
+  { cmd: '/unstuck', label: '/unstuck', description: 'Break through a block', expand: () => 'I\'m stuck and can\'t make progress. Help me identify what\'s blocking me and give me a concrete next action to break through.' },
+  { cmd: '/deep-dive', label: '/deep-dive', description: 'Deep analysis of a life area', expand: () => 'Do a deep dive analysis of my overall situation. Look at my goals, habits, tasks, and streaks. What patterns do you see? What\'s the #1 thing I should change?' },
+  { cmd: '/reset', label: '/reset', description: 'Fresh start protocol', expand: (coach) => coach === 'PHOENIX' ? 'I need a fresh start. Help me design a gentle restart protocol — wipe the mental slate and rebuild with micro-steps starting today.' : 'Help me reset my system. Archive stale goals, clean up tasks, and design a fresh 7-day kickstart plan.' },
 ];
 
 const QUICK_PROMPTS: Record<CoachId, string[]> = {
@@ -118,8 +130,12 @@ export default function CoachPage() {
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isGreeting, setIsGreeting] = useState(false);
+  const [showSlashMenu, setShowSlashMenu] = useState(false);
+  const [slashFilter, setSlashFilter] = useState('');
+  const [slashSelectedIdx, setSlashSelectedIdx] = useState(0);
   const bottomRef = useRef<HTMLDivElement>(null);
   const greetedRef = useRef<Set<string>>(new Set());
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
@@ -155,10 +171,25 @@ export default function CoachPage() {
   const handleSend = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
+
+    // Slash command expansion
+    let expandedText = trimmed;
+    const slashMatch = trimmed.match(/^\/(\S+)/);
+    if (slashMatch) {
+      const cmd = SLASH_COMMANDS.find(c => c.cmd === `/${slashMatch[1]}`);
+      if (cmd) {
+        // If user typed just the command, expand it
+        // If user typed /cmd + extra text, append the extra as context
+        const extra = trimmed.slice(slashMatch[0].length).trim();
+        expandedText = extra ? `${cmd.expand(selectedCoach)} Context: ${extra}` : cmd.expand(selectedCoach);
+      }
+    }
+
     setMessage('');
+    setShowSlashMenu(false);
     setIsSending(true);
     try {
-      await sendWithPersona({ content: trimmed, coachId: selectedCoach, touchpoint: 'on_demand' });
+      await sendWithPersona({ content: expandedText, coachId: selectedCoach, touchpoint: 'on_demand' });
     } catch (e) {
       console.error(e);
     } finally {
@@ -167,6 +198,48 @@ export default function CoachPage() {
   };
 
   const handleSubmit = (e: FormEvent) => { e.preventDefault(); handleSend(message); };
+
+  // Slash command palette logic
+  const filteredSlashCommands = useMemo(() => {
+    if (!showSlashMenu) return [];
+    if (!slashFilter) return SLASH_COMMANDS;
+    return SLASH_COMMANDS.filter(c =>
+      c.cmd.includes(slashFilter.toLowerCase()) || c.description.toLowerCase().includes(slashFilter.toLowerCase())
+    );
+  }, [showSlashMenu, slashFilter]);
+
+  const handleInputChange = (val: string) => {
+    setMessage(val);
+    if (val.startsWith('/')) {
+      setShowSlashMenu(true);
+      setSlashFilter(val.slice(1).split(' ')[0]);
+      setSlashSelectedIdx(0);
+    } else {
+      setShowSlashMenu(false);
+      setSlashFilter('');
+    }
+  };
+
+  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showSlashMenu || filteredSlashCommands.length === 0) return;
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSlashSelectedIdx(i => Math.min(i + 1, filteredSlashCommands.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSlashSelectedIdx(i => Math.max(i - 1, 0));
+    } else if (e.key === 'Tab' || (e.key === 'Enter' && showSlashMenu)) {
+      e.preventDefault();
+      const cmd = filteredSlashCommands[slashSelectedIdx];
+      if (cmd) {
+        setMessage(cmd.cmd + ' ');
+        setShowSlashMenu(false);
+        inputRef.current?.focus();
+      }
+    } else if (e.key === 'Escape') {
+      setShowSlashMenu(false);
+    }
+  };
 
   const handleSwitchCoach = async (id: CoachId) => {
     if (!isPro && !FREE_COACHES.includes(id)) return;
@@ -247,6 +320,23 @@ export default function CoachPage() {
                 <button key={q} onClick={() => handleSend(q)} disabled={isSending}
                   className="w-full border border-transparent px-3 py-2 text-left font-mono text-[9px] leading-relaxed tracking-wider text-zinc-500 transition hover:border-zinc-800 hover:text-zinc-300 disabled:opacity-40">
                   <span className="text-zinc-600">{'>'}</span> {q}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Slash commands reference */}
+          <div className="border border-zinc-900 bg-zinc-950">
+            <div className="border-b border-zinc-900 px-3 py-2 flex items-center gap-2">
+              <Terminal className="h-3 w-3 text-zinc-500" />
+              <p className="font-mono text-[9px] tracking-widest text-zinc-400">SLASH_COMMANDS</p>
+            </div>
+            <div className="space-y-px p-1">
+              {SLASH_COMMANDS.map((cmd) => (
+                <button key={cmd.cmd} onClick={() => { setMessage(cmd.cmd + ' '); inputRef.current?.focus(); }} disabled={isSending}
+                  className="w-full flex items-center gap-2 border border-transparent px-3 py-1.5 text-left transition hover:border-zinc-800 disabled:opacity-40 group">
+                  <span className="font-mono text-[10px] tracking-wider text-orange-600/70 group-hover:text-orange-500">{cmd.label}</span>
+                  <span className="flex-1 truncate font-mono text-[8px] tracking-wider text-zinc-600 group-hover:text-zinc-400">{cmd.description}</span>
                 </button>
               ))}
             </div>
@@ -359,19 +449,47 @@ export default function CoachPage() {
           </div>
 
           {/* Input */}
-          <form onSubmit={handleSubmit} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 p-3">
-            <span className="hidden font-mono text-[9px] tracking-widest text-zinc-500 md:block">{'>'}</span>
-            <input value={message} onChange={(e) => setMessage(e.target.value)}
-              placeholder={`Ask ${coach.name} anything... or request an action`}
-              disabled={isSending}
-              className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none disabled:opacity-50" />
-            <button type="submit" disabled={isSending || !message.trim()}
-              className="flex h-9 items-center gap-1.5 border px-4 font-mono text-[10px] tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
-              style={{ borderColor: `${coach.color}60`, color: coach.color, backgroundColor: `${coach.color}15` }}>
-              <Send className="h-3 w-3" />
-              {isSending ? 'SENDING_' : 'SEND'}
-            </button>
-          </form>
+          <div className="relative">
+            {/* Slash command palette */}
+            {showSlashMenu && filteredSlashCommands.length > 0 && (
+              <div className="absolute bottom-full left-0 right-0 mb-1 border border-zinc-800 bg-zinc-950 shadow-lg shadow-black/50 z-50 max-h-64 overflow-y-auto">
+                <div className="border-b border-zinc-900 px-3 py-1.5 flex items-center gap-2">
+                  <Command className="h-3 w-3 text-zinc-500" />
+                  <span className="font-mono text-[8px] tracking-widest text-zinc-500">SLASH_COMMANDS</span>
+                  <span className="ml-auto font-mono text-[7px] text-zinc-700">TAB to select · ESC to close</span>
+                </div>
+                {filteredSlashCommands.map((cmd, idx) => (
+                  <button key={cmd.cmd}
+                    onMouseDown={(e) => { e.preventDefault(); setMessage(cmd.cmd + ' '); setShowSlashMenu(false); inputRef.current?.focus(); }}
+                    className={cn(
+                      'w-full flex items-center gap-3 px-3 py-2 text-left transition',
+                      idx === slashSelectedIdx ? 'bg-zinc-900 border-l-2' : 'border-l-2 border-transparent hover:bg-zinc-900/50',
+                    )}
+                    style={idx === slashSelectedIdx ? { borderColor: coach.color } : {}}>
+                    <Terminal className="h-3.5 w-3.5 shrink-0" style={{ color: idx === slashSelectedIdx ? coach.color : '#52525b' }} />
+                    <div className="min-w-0 flex-1">
+                      <p className="font-mono text-[10px] tracking-wider" style={{ color: idx === slashSelectedIdx ? coach.color : '#a1a1aa' }}>{cmd.label}</p>
+                      <p className="font-mono text-[8px] tracking-wider text-zinc-600 truncate">{cmd.description}</p>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+            <form onSubmit={handleSubmit} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 p-3">
+              <span className="hidden font-mono text-[9px] tracking-widest text-zinc-500 md:block">{'>'}</span>
+              <input ref={inputRef} value={message} onChange={(e) => handleInputChange(e.target.value)}
+                onKeyDown={handleInputKeyDown}
+                placeholder={`Type / for commands or ask ${coach.name} anything...`}
+                disabled={isSending}
+                className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-zinc-600 focus:outline-none disabled:opacity-50" />
+              <button type="submit" disabled={isSending || !message.trim()}
+                className="flex h-9 items-center gap-1.5 border px-4 font-mono text-[10px] tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                style={{ borderColor: `${coach.color}60`, color: coach.color, backgroundColor: `${coach.color}15` }}>
+                <Send className="h-3 w-3" />
+                {isSending ? 'SENDING_' : 'SEND'}
+              </button>
+            </form>
+          </div>
         </div>
       </div>
     </div>
