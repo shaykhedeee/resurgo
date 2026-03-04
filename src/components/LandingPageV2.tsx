@@ -435,21 +435,21 @@ function LandingPageV2() {
   const heroContent =
     heroVariant === 'clarity'
       ? {
-          headingMain: 'From brain dump to clear today plan.',
-          headingAccent: 'Know your next step in 5 seconds.',
+          headingMain: 'Stop planning.',
+          headingAccent: 'Start executing._',
           subcopy:
             'Go from mental clutter to crystal-clear action in under 5 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
         }
       : heroVariant === 'adhd'
         ? {
-            headingMain: 'Built for overwhelmed brains.',
-            headingAccent: 'Gentle accountability, every day.',
+            headingMain: 'Stop planning.',
+            headingAccent: 'Start executing._',
             subcopy:
               'When everything feels loud, Resurgo gives you one calm next step. Gentle accountability, flexible structure, and momentum that meets you where you are.',
           }
         : {
-            headingMain: 'The free AI habit tracker',
-            headingAccent: 'that makes goals unstoppable.',
+            headingMain: 'Stop planning.',
+            headingAccent: 'Start executing._',
             subcopy:
               'Resurgo turns any goal into a daily action plan — automatically. Enter one goal, get your AI-generated habit roadmap in seconds, and start executing with focus timers, streaks, and 24/7 AI coaching.',
           };
@@ -471,12 +471,12 @@ function LandingPageV2() {
       {/* ────────────────────── HEADER ────────────────────── */}
       <header className="sticky top-0 z-50 border-b-2 border-zinc-800 bg-black/95">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <LogoMark className="w-7 h-7" />
-            <span className="font-pixel text-[0.55rem] tracking-widest text-orange-500">RESURGO</span>
+          <Link href="/" className="flex items-center gap-2.5">
+            <LogoMark className="w-8 h-8" />
+            <span className="font-pixel text-[0.7rem] tracking-[0.2em] text-orange-500">RESURGO</span>
           </Link>
 
-          <nav className="hidden items-center gap-6 font-pixel text-[0.45rem] tracking-widest text-zinc-500 md:flex">
+          <nav className="hidden items-center gap-6 md:flex">
             {[
               { label: 'Features', href: '#features' },
               { label: 'How It Works', href: '#how-it-works' },
@@ -485,7 +485,11 @@ function LandingPageV2() {
               { label: 'Blog', href: '/learn' },
               { label: 'FAQ', href: '#faq' },
             ].map((l) => (
-              <a key={l.label} href={l.href} className="transition-colors duration-100 hover:text-orange-400">
+              <a
+                key={l.label}
+                href={l.href}
+                className="font-terminal text-sm font-medium tracking-wide text-zinc-400 transition-colors duration-100 hover:text-orange-400"
+              >
                 {l.label}
               </a>
             ))}
@@ -494,13 +498,13 @@ function LandingPageV2() {
           <div className="flex items-center gap-3">
             <Link
               href="/sign-in"
-              className="font-pixel text-[0.45rem] tracking-widest text-zinc-500 transition-colors duration-100 hover:text-zinc-200"
+              className="font-terminal text-sm font-medium text-zinc-400 transition-colors hover:text-zinc-100"
             >
               Sign In
             </Link>
             <Link
               href="/sign-up"
-              className="border-2 border-orange-600 bg-orange-950/40 px-4 py-1.5 font-pixel text-[0.45rem] tracking-widest text-orange-500 shadow-[2px_2px_0px_rgba(0,0,0,0.7)] transition-all duration-100 hover:bg-orange-600 hover:text-black active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.7)]"
+              className="border-2 border-orange-600 bg-orange-950/40 px-5 py-2 font-terminal text-sm font-semibold text-orange-400 shadow-[2px_2px_0px_rgba(0,0,0,0.7)] transition-all hover:bg-orange-600 hover:text-black active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.7)]"
             >
               Get Started
             </Link>
@@ -547,7 +551,18 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────────── HERO ────────────────────── */}
-        <section id="system" className="relative px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <section id="system" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+          {/* Pixel dot-grid background */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.04]">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <pattern id="hero-pixel-grid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+                  <rect x="0" y="0" width="2" height="2" fill="#ea580c" />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#hero-pixel-grid)" />
+            </svg>
+          </div>
           <div className="mx-auto max-w-7xl">
             {/* Badge */}
             <div className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2 border-2 border-zinc-800 bg-black px-3 py-1.5 shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">
@@ -560,40 +575,29 @@ function LandingPageV2() {
             <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               {/* Left — copy */}
               <div>
-                <h1 className="font-pixel text-xl leading-relaxed tracking-tight text-zinc-100 sm:text-2xl lg:text-3xl">
+                {/* Pixel art streak bars */}
+                <div aria-hidden="true" className="mb-6 flex items-end gap-px">
+                  {[4,5,4,7,6,9,7,11,9,13,11,15,13,17,15,19,17,20,20,20,20,20,20,20].map((h, i) => (
+                    <div
+                      key={i}
+                      style={{ height: `${h}px` }}
+                      className={i < 18 ? 'w-2 bg-orange-600/70' : 'w-2 bg-zinc-800'}
+                    />
+                  ))}
+                  <span className="ml-3 self-end font-pixel text-[0.4rem] tracking-widest text-zinc-600">
+                    CONSISTENCY_RISING
+                  </span>
+                </div>
+
+                <h1 className="font-pixel text-4xl leading-[1.1] tracking-tight text-zinc-100 sm:text-5xl lg:text-6xl xl:text-7xl">
                   {heroContent.headingMain}
                   <span className="block text-orange-500">
                     {heroContent.headingAccent}
-                    <span className="animate-blink">_</span>
                   </span>
                 </h1>
-                <div className="mt-3 flex items-center gap-3">
-                  <span className="font-pixel text-[0.6rem] tracking-widest text-zinc-400">[RESURGO_v1.4]</span>
-                  <span className="hidden font-terminal text-base text-zinc-500 md:block">
-                    AI habit tracker + goal planner + focus engine + wellness system
-                  </span>
-                </div>
-
-                <p className="mt-8 max-w-2xl font-terminal text-xl leading-relaxed text-zinc-300">
+                <p className="mt-6 max-w-xl font-terminal text-lg leading-relaxed text-zinc-400 sm:text-xl">
                   {heroContent.subcopy}
                 </p>
-
-                {/* Quick-value bullets */}
-                <div className="mt-6 grid gap-2 text-sm sm:grid-cols-2">
-                  {[
-                    'AI breaks down any goal in seconds',
-                    'Free plan — no credit card, no expiry',
-                    '4 AI coaches for personalized guidance',
-                    'PWA — install on iOS & Android instantly',
-                    'Habit streaks, XP levels, and badges',
-                    'Pomodoro, Deep Work & Flowtime timers',
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-2 border-2 border-zinc-800 bg-black px-3 py-2">
-                      <span className="text-orange-500">&#9632;</span>
-                      <span className="font-terminal text-base text-zinc-300">{item}</span>
-                    </div>
-                  ))}
-                </div>
 
                 {/* CTAs */}
                 <div className="mt-8 flex flex-col gap-3 sm:flex-row">

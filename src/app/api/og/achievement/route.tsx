@@ -36,7 +36,7 @@ export async function GET(req: Request) {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ color: '#3f3f46', fontSize: 20 }}>Organized by RESURGO.life</div>
+          <div style={{ color: '#3f3f46', fontSize: 20 }}>Organized by RESURGO</div>
           <div style={{ color: '#52525b', fontSize: 18 }}>#build-with-consistency</div>
         </div>
       </div>

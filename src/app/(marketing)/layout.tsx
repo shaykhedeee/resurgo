@@ -34,7 +34,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
           <Link href="/" className="flex items-center gap-2.5">
             <LogoMark className="h-7 w-7" />
             <span className="font-mono text-sm font-bold tracking-widest text-orange-500">
-              RESURGO.life
+              RESURGO
             </span>
           </Link>
 
@@ -71,7 +71,7 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
         {/* Terminal sub-bar */}
         <div className="border-t border-zinc-900 bg-zinc-950 px-5 py-1">
           <span className="font-mono text-xs tracking-widest text-zinc-400">
-            RESURGO.life :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
+            RESURGO :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
           </span>
         </div>
 
