@@ -2,12 +2,13 @@
 // ASCEND - Service Worker for Push Notifications & Offline Support
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const CACHE_NAME = 'ascend-v5';
+const CACHE_NAME = 'ascend-v7';
 
 // Assets to cache for offline use (only truly static assets)
 const STATIC_ASSETS = [
   '/manifest.json',
   '/offline.html',
+  '/icons/icon.svg',
   '/icons/icon-192x192.png',
   '/icons/icon-512x512.png',
 ];

@@ -130,9 +130,9 @@ export default function IntegrationsPage() {
                 </div>
                 <form onSubmit={handleCreateWebhook} className="p-4 space-y-3">
                   <input value={webhookName} onChange={(e) => setWebhookName(e.target.value)} placeholder="Name (optional, e.g. Zapier Integration)"
-                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                   <input value={webhookUrl} onChange={(e) => setWebhookUrl(e.target.value)} placeholder="Endpoint URL (https://...)" required
-                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                   <div>
                     <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">SELECT_EVENTS ({selectedEvents.length} selected)</p>
                     <div className="flex flex-wrap gap-1.5">
@@ -228,7 +228,7 @@ export default function IntegrationsPage() {
               </div>
               <form onSubmit={handleGenerateKey} className="flex gap-3 p-4">
                 <input value={keyName} onChange={(e) => setKeyName(e.target.value)} placeholder="Key name (e.g. My App, Zapier)" required
-                  className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                  className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                 <button type="submit" disabled={generatingKey || !keyName}
                   className="flex items-center gap-1.5 border border-orange-800 bg-orange-950/30 px-5 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">
                   <Zap className="h-3 w-3" />

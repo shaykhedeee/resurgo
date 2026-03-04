@@ -188,7 +188,7 @@ export default function WellnessPage() {
                   ))}
                 </div>
                 <textarea value={moodNotes} onChange={(e) => setMoodNotes(e.target.value)} placeholder="OPTIONAL_NOTES..."
-                  className="mb-4 w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" rows={3} />
+                  className="mb-4 w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" rows={3} />
                 <button onClick={handleMoodSubmit} disabled={moodSaving}
                   className="border border-orange-800 bg-orange-950/30 px-6 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">
                   {todayMood ? '[UPDATE_MOOD]' : '[LOG_MOOD]'}
@@ -253,7 +253,7 @@ export default function WellnessPage() {
                   </div>
                   <textarea value={journalContent} onChange={(e) => setJournalContent(e.target.value)}
                     placeholder={journalType === 'gratitude' ? 'WHAT ARE YOU GRATEFUL FOR...' : journalType === 'reflection' ? 'REFLECT ON YOUR DAY...' : 'WRITE YOUR THOUGHTS...'}
-                    className="mb-4 w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" rows={6} />
+                    className="mb-4 w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" rows={6} />
                   <div className="flex gap-2">
                     <button onClick={handleJournalSubmit} disabled={!journalContent.trim() || journalSaving}
                       className="border border-orange-800 bg-orange-950/30 px-6 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">
@@ -338,7 +338,7 @@ export default function WellnessPage() {
                 </div>
                 <textarea value={sleepNotes} onChange={(e) => setSleepNotes(e.target.value)}
                   placeholder="Notes (optional)..." rows={2}
-                  className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-blue-800 focus:outline-none" />
+                  className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-blue-800 focus:outline-none" />
                 <button type="submit" disabled={sleepSaving}
                   className="border border-blue-800 bg-blue-950/30 px-6 py-2 font-mono text-xs tracking-widest text-blue-500 transition hover:bg-blue-950/60 disabled:opacity-40">
                   {sleepSaving ? 'SAVING_' : '[LOG_SLEEP]'}
@@ -390,15 +390,15 @@ export default function WellnessPage() {
               <form onSubmit={handleMealSubmit} className="p-4 space-y-3">
                 <div className="grid grid-cols-2 gap-3">
                   <input value={mealName} onChange={(e) => setMealName(e.target.value)} placeholder="Meal name" required
-                    className="h-9 col-span-2 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
+                    className="h-9 col-span-2 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
                   <input type="number" value={mealCals} onChange={(e) => setMealCals(e.target.value)} placeholder="Calories (kcal)" required
-                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
+                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
                   <input type="number" value={mealProtein} onChange={(e) => setMealProtein(e.target.value)} placeholder="Protein (g)"
-                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
+                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
                   <input type="number" value={mealCarbs} onChange={(e) => setMealCarbs(e.target.value)} placeholder="Carbs (g)"
-                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
+                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
                   <input type="number" value={mealFat} onChange={(e) => setMealFat(e.target.value)} placeholder="Fat (g)"
-                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
+                    className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-amber-800 focus:outline-none" />
                 </div>
                 <button type="submit" disabled={mealSaving}
                   className="border border-amber-800 bg-amber-950/30 px-6 py-2 font-mono text-xs tracking-widest text-amber-500 transition hover:bg-amber-950/60 disabled:opacity-40">
@@ -414,12 +414,12 @@ export default function WellnessPage() {
                 <div className="flex items-center gap-2">
                   <Droplets className="h-4 w-4 text-cyan-500" />
                   <input type="number" value={waterMl} onChange={(e) => setWaterMl(e.target.value)} placeholder="Water (ml)"
-                    className="h-9 w-32 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-cyan-800 focus:outline-none" />
+                    className="h-9 w-32 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-cyan-800 focus:outline-none" />
                 </div>
                 <div className="flex items-center gap-2">
                   <Zap className="h-4 w-4 text-green-500" />
                   <input type="number" value={stepCount} onChange={(e) => setStepCount(e.target.value)} placeholder="Steps"
-                    className="h-9 w-32 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none" />
+                    className="h-9 w-32 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none" />
                 </div>
                 <button onClick={handleHydration}
                   className="border border-cyan-800 bg-cyan-950/20 px-4 py-2 font-mono text-xs tracking-widest text-cyan-500 transition hover:bg-cyan-950/40">

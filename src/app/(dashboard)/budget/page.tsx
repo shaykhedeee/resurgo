@@ -370,7 +370,7 @@ export default function BudgetPage() {
                   <input
                     type="number" step="0.01" value={txAmount} onChange={(e) => setTxAmount(e.target.value)}
                     placeholder="Amount" required
-                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
                   />
                   <select
                     value={txCurrency} onChange={(e) => setTxCurrency(e.target.value)}
@@ -391,7 +391,7 @@ export default function BudgetPage() {
                 <input
                   type="text" value={txDesc} onChange={(e) => setTxDesc(e.target.value)}
                   placeholder="Description" required
-                  className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                  className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
                 />
                 <input
                   type="date" value={txDate} onChange={(e) => setTxDate(e.target.value)}
@@ -422,18 +422,18 @@ export default function BudgetPage() {
                 <input
                   type="text" value={goalTitle} onChange={(e) => setGoalTitle(e.target.value)}
                   placeholder="Goal title (e.g. Emergency Fund)" required
-                  className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                  className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
                 />
                 <div className="flex gap-2">
                   <input
                     type="number" step="0.01" value={goalTarget} onChange={(e) => setGoalTarget(e.target.value)}
                     placeholder="Target amount" required
-                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
                   />
                   <input
                     type="number" step="0.01" value={goalCurrent} onChange={(e) => setGoalCurrent(e.target.value)}
                     placeholder="Current saved"
-                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                    className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
                   />
                 </div>
                 <input

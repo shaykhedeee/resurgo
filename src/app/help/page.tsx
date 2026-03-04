@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { KaiChatbot } from '@/components/KaiChatbot';
+import { HelpSearchBar } from '@/components/HelpSearchBar';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SEO METADATA
@@ -188,21 +189,14 @@ export default function HelpCenterPage() {
           </p>
           
           {/* Search Bar */}
-          <div className="max-w-xl mx-auto relative">
-            <input
-              type="search"
-              placeholder="Search for help articles..."
-              className="w-full px-6 py-4 pl-14 rounded-2xl bg-white/10 border border-white/20 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/20 transition-all"
-            />
-            <svg 
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
+          <HelpSearchBar
+            categories={helpCategories.map((c) => ({
+              id: c.id,
+              title: c.title,
+              description: c.description,
+              articles: c.articles,
+            }))}
+          />
         </div>
       </section>
 

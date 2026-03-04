@@ -1,25 +1,40 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import { useAscendStore } from '@/lib/store';
+import { useQuery } from 'convex/react';
+import { api } from '../../../../convex/_generated/api';
 import { useState } from 'react';
 
 export default function AccountPage() {
   const router = useRouter();
-  const { user, logout, resetStore } = useAscendStore();
+  const convexUser = useQuery(api.users.current, {});
   const [exporting, setExporting] = useState(false);
 
-  const handleSignOut = () => {
-    try { logout(); } catch (e) {}
-    router.push('/');
+  const handleSignOut = async () => {
+    try {
+      await window.Clerk?.signOut?.();
+    } catch (e) {
+      console.error('Sign out error', e);
+    }
+    window.location.href = '/';
   };
 
   const handleExport = async () => {
     setExporting(true);
     try {
-      // Grab persisted store if available
-      const raw = localStorage.getItem('ascend-storage') || JSON.stringify(useAscendStore.getState());
-      const blob = new Blob([raw], { type: 'application/json' });
+      // Export what we know from Convex
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        user: convexUser ? {
+          name: convexUser.name,
+          email: convexUser.email,
+          plan: convexUser.plan,
+          timezone: convexUser.timezone,
+          createdAt: convexUser._creationTime,
+          onboardingComplete: convexUser.onboardingComplete,
+        } : null,
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -36,11 +51,14 @@ export default function AccountPage() {
   };
 
   const handleDeleteAccount = () => {
-    if (!confirm('Delete your account and all local data? This cannot be undone.')) return;
-    try { resetStore(); } catch (e) {}
-    try { logout(); } catch (e) {}
-    router.push('/');
+    if (!confirm('Delete your account and all local data? This cannot be undone.\n\nNote: To fully delete your account data, please also contact support@resurgo.life.')) return;
+    try { localStorage.clear(); } catch (e) {}
+    handleSignOut();
   };
+
+  const userName = convexUser?.name ?? '...';
+  const userEmail = convexUser?.email ?? '...';
+  const userPlan = convexUser?.plan ?? 'free';
 
   return (
     <div className="min-h-screen bg-black p-4 md:p-6">
@@ -65,11 +83,11 @@ export default function AccountPage() {
           </div>
           <div className="flex items-center gap-4 px-4 py-4">
             <div className="flex h-12 w-12 items-center justify-center border border-zinc-800 bg-black font-mono text-xl font-bold text-orange-600">
-              {user?.name?.[0] ?? 'U'}
+              {userName[0]?.toUpperCase() ?? 'U'}
             </div>
             <div>
-              <p className="font-mono text-sm font-semibold text-zinc-200">{user?.name}</p>
-              <p className="font-mono text-xs text-zinc-400">{user?.email}</p>
+              <p className="font-mono text-sm font-semibold text-zinc-200">{userName}</p>
+              <p className="font-mono text-xs text-zinc-400">{userEmail}</p>
             </div>
           </div>
         </div>
@@ -81,13 +99,13 @@ export default function AccountPage() {
           </div>
           <div className="flex items-center justify-between px-4 py-4">
             <span className="font-mono text-xs tracking-widest text-zinc-400">
-              PLAN :: <span className="text-orange-500">{(user?.plan === 'free' ? 'FREE_TIER' : user?.plan ?? 'FREE_TIER').toUpperCase()}</span>
+              PLAN :: <span className="text-orange-500">{(userPlan === 'free' ? 'FREE_TIER' : userPlan).toUpperCase()}</span>
             </span>
             <div className="flex gap-2">
-              <button onClick={() => router.push('/pricing')} className="border border-orange-800 bg-orange-950/30 px-3 py-1.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
+              <button onClick={() => router.push('/pricing')} className="border border-orange-800 bg-orange-950/30 px-3 py-1.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50 min-h-[40px]">
                 [CHANGE_PLAN]
               </button>
-              <button onClick={() => alert('Manage billing (server integration required)')} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700">
+              <button onClick={() => router.push('/billing')} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700 min-h-[40px]">
                 [BILLING]
               </button>
             </div>
@@ -100,9 +118,9 @@ export default function AccountPage() {
             <span className="font-mono text-xs font-bold tracking-widest text-zinc-400">SECURITY_SESSIONS</span>
           </div>
           <div className="flex items-center justify-between px-4 py-4">
-            <p className="font-mono text-xs text-zinc-400">ACTIVE_SESSION_MANAGEMENT :: COMING_SOON</p>
-            <button onClick={() => alert('Sign out from other devices (server required)')} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700">
-              [REVOKE_SESSIONS]
+            <p className="font-mono text-xs text-zinc-400">SESSION_MANAGEMENT</p>
+            <button onClick={handleSignOut} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700 min-h-[40px]">
+              [SIGN_OUT_ALL]
             </button>
           </div>
         </div>
@@ -115,10 +133,10 @@ export default function AccountPage() {
           <div className="flex items-center justify-between px-4 py-4">
             <p className="font-mono text-xs text-zinc-400">EXPORT_OR_PURGE_OPERATOR_DATA</p>
             <div className="flex gap-2">
-              <button onClick={handleExport} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700">
+              <button onClick={handleExport} className="border border-zinc-800 px-3 py-1.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700 min-h-[40px]">
                 {exporting ? '[EXPORTING...]' : '[EXPORT_DATA]'}
               </button>
-              <button onClick={handleDeleteAccount} className="border border-red-900 bg-red-950/20 px-3 py-1.5 font-mono text-xs tracking-widest text-red-500 transition hover:bg-red-950/40">
+              <button onClick={handleDeleteAccount} className="border border-red-900 bg-red-950/20 px-3 py-1.5 font-mono text-xs tracking-widest text-red-500 transition hover:bg-red-950/40 min-h-[40px]">
                 [DELETE_ACCOUNT]
               </button>
             </div>
@@ -127,8 +145,8 @@ export default function AccountPage() {
 
         {/* ── SIGN OUT ── */}
         <button
-          onClick={() => { window.Clerk?.signOut?.(); window.location.href = '/'; }}
-          className="border border-zinc-800 px-4 py-2 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700 hover:text-zinc-300"
+          onClick={handleSignOut}
+          className="border border-zinc-800 px-4 py-2 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-zinc-700 hover:text-zinc-300 min-h-[44px]"
         >
           [SIGN_OUT]
         </button>

@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { GuideSubscribeForm } from '@/components/GuideSubscribeForm';
+import { GuidesSearchBar } from '@/components/GuidesSearchBar';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SEO-OPTIMIZED BLOG/GUIDES HUB - Pillar Content Strategy
@@ -152,21 +154,14 @@ export default function GuidesPage() {
           </p>
           
           {/* Search */}
-          <div className="max-w-xl relative">
-            <input
-              type="search"
-              placeholder="Search guides..."
-              className="w-full px-6 py-4 pl-14 rounded-2xl bg-white/10 border border-white/20 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] transition-all"
-            />
-            <svg 
-              className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </div>
+          <GuidesSearchBar
+            guides={pillarPages.map((p) => ({
+              slug: p.slug,
+              title: p.title,
+              subtitle: p.subtitle,
+              category: p.category,
+            }))}
+          />
         </div>
       </section>
 
@@ -264,14 +259,7 @@ export default function GuidesPage() {
               <p className="text-sm text-[var(--text-secondary)] mb-4">
                 Get one actionable habit tip every week. No spam, unsubscribe anytime.
               </p>
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:outline-none focus:border-[var(--accent)] mb-3"
-              />
-              <button className="w-full py-2 rounded-lg bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-white font-medium transition-colors">
-                Subscribe
-              </button>
+              <GuideSubscribeForm />
             </div>
 
             {/* CTA */}

@@ -119,7 +119,7 @@ export default function BusinessPage() {
             </div>
             <form onSubmit={handleSubmit} className="p-4 space-y-3">
               <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="Goal title *" required
-                className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
               <div className="flex flex-wrap gap-1.5">
                 {GOAL_TYPES.map(({ id, label, icon }) => (
                   <button key={id} type="button" onClick={() => setForm({ ...form, type: id })}
@@ -132,16 +132,16 @@ export default function BusinessPage() {
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <input value={form.businessName} onChange={(e) => setForm({ ...form, businessName: e.target.value })} placeholder="Business name (optional)"
-                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                 <input type="date" value={form.deadline} onChange={(e) => setForm({ ...form, deadline: e.target.value })}
                   className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none" />
                 <input type="number" value={form.target} onChange={(e) => setForm({ ...form, target: e.target.value })} placeholder="Target value (e.g. 10000)"
-                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                 <input value={form.unit} onChange={(e) => setForm({ ...form, unit: e.target.value })} placeholder="Unit (e.g. $, clients, users)"
-                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                  className="h-9 border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
               </div>
               <textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Description (optional)..." rows={2}
-                className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
               <div className="flex gap-2">
                 <button type="submit" disabled={savingGoal}
                   className="border border-orange-800 bg-orange-950/30 px-6 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">

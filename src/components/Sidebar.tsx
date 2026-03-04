@@ -6,10 +6,11 @@
 'use client';
 
 import { useState } from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useAscendStore } from '@/lib/store';
 import { useTheme } from '@/components/ThemeProvider';
 import { Logo } from '@/components/Logo';
-import { LEVELS } from '@/types';
 import { cn } from '@/lib/utils';
 import { 
   CalendarCheck, 
@@ -55,6 +56,7 @@ export function Sidebar({
   onCollapsedChange
 }: SidebarProps) {
   const { user } = useAscendStore();
+  const profile = useQuery(api.gamification.getProfile);
   const { theme, toggleTheme, mounted } = useTheme();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
   
@@ -68,10 +70,12 @@ export function Sidebar({
     }
   };
   
-  const currentLevel = LEVELS.find(l => l.level === user.gamification.level) || LEVELS[0];
-  const prevLevelXp = user.gamification.level > 1 ? LEVELS[user.gamification.level - 2]?.xpRequired || 0 : 0;
-  const nextLevelXp = currentLevel.xpRequired + 500;
-  const xpProgress = ((user.gamification.totalXP - prevLevelXp) / (nextLevelXp - prevLevelXp)) * 100;
+  // Use Convex profile for gamification data, fall back to local store
+  const level = profile?.level ?? user.gamification.level ?? 1;
+  const levelName = profile?.levelName ?? 'Seedling';
+  const totalXP = profile?.totalXP ?? user.gamification.totalXP ?? 0;
+  const xpProgress = profile ? Math.min(Math.round(profile.xpProgress * 100), 100) : 0;
+  const currentStreak = profile?.currentStreak ?? user.gamification.weeklyStreak ?? 0;
 
   const navSections = [
     {
@@ -159,12 +163,12 @@ export function Sidebar({
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gold-400 
                               flex items-center justify-center text-xs font-bold text-black
                               border-2 border-[var(--surface)]">
-                  {user.gamification.level}
+                  {level}
                 </div>
               </div>
               <div className="min-w-0 flex-1 text-left">
                 <p className="font-semibold text-themed text-sm truncate">{user.name}</p>
-                <p className="text-xs text-themed-muted truncate">{currentLevel.name}</p>
+                <p className="text-xs text-themed-muted truncate">{levelName}</p>
               </div>
               <ChevronRight className="w-4 h-4 text-themed-muted group-hover:text-themed transition-colors" />
             </button>
@@ -174,11 +178,11 @@ export function Sidebar({
               <div className="flex items-center justify-between text-xs">
                 <span className="text-themed-muted flex items-center gap-1">
                   <Zap className="w-3 h-3 text-gold-400" />
-                  {user.gamification.totalXP} XP
+                  {totalXP} XP
                 </span>
                 <span className="text-themed-muted flex items-center gap-1">
                   <Flame className="w-3 h-3 text-orange-400" />
-                  {user.gamification.weeklyStreak} day streak
+                  {currentStreak} day streak
                 </span>
               </div>
               <div className="h-1.5 rounded-full bg-[var(--border)] overflow-hidden">

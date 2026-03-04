@@ -246,7 +246,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                 onChange={(e) => setGoalContext(e.target.value)}
                 placeholder="Extra context (current situation, constraints, resources available)..."
                 rows={3}
-                className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
+                className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
               />
               <div>
                 <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">COACH_PERSPECTIVE</p>

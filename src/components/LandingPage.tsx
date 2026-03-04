@@ -1113,14 +1113,14 @@ export function LandingPage({ onGetStarted, onLogin }: LandingPageProps) {
                 </div>
               </div>
 
-              {/* Video Placeholder */}
+              {/* Interactive Preview */}
               <div className="aspect-video bg-gradient-to-br from-[#1a1a1c] to-[#0d0d0e] rounded-xl border border-white/5 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-full bg-ascend-500/20 flex items-center justify-center mx-auto mb-4 cursor-pointer hover:bg-ascend-500/30 transition-colors">
+                <div className="text-center px-6">
+                  <div className="w-16 h-16 rounded-full bg-ascend-500/20 flex items-center justify-center mx-auto mb-4">
                     <Play className="w-8 h-8 text-ascend-400 ml-1" />
                   </div>
-                  <p className="text-white/60 text-sm">Demo video coming soon</p>
-                  <p className="text-white/40 text-xs mt-1">Try the app to see it in action!</p>
+                  <p className="text-white/80 font-semibold mb-1">See it in action</p>
+                  <p className="text-white/40 text-sm">Sign up free and explore the full dashboard — habits, goals, AI coaching, and more.</p>
                 </div>
               </div>
 

@@ -210,7 +210,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
             'Regeneration and design variations',
           ].map((feature) => (
             <div key={feature} className="border border-zinc-800 bg-black/40 p-3 rounded-lg">
-              <span className="text-orange-400 mr-1.5">•</span>{feature}
+              <span className="text-orange-400 mr-1.5">-</span>{feature}
             </div>
           ))}
         </div>
@@ -289,7 +289,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
             <div className="border border-zinc-800 rounded-lg p-3 bg-black/40 space-y-2">
               <label className="inline-flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-lg text-xs text-zinc-300 hover:border-zinc-600 cursor-pointer transition">
                 <Upload size={14} />
-                {uploading ? 'Processing images…' : 'Upload custom images (max 6)'}
+                {uploading ? 'Processing images-' : 'Upload custom images (max 6)'}
                 <input
                   type="file"
                   accept="image/*"
@@ -310,7 +310,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
                         className="absolute top-1 right-1 h-5 w-5 rounded-full bg-black/70 text-zinc-200 text-xs"
                         aria-label="Remove uploaded image"
                       >
-                        ×
+                        -
                       </button>
                     </div>
                   ))}
@@ -328,14 +328,14 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           style={{ backgroundColor: primaryColor }}
         >
           {generating ? (
-            <><RefreshCw size={16} className="animate-spin" /> Generating your board…</>
+            <><RefreshCw size={16} className="animate-spin" /> Generating your board-</>
           ) : (
             <><Sparkles size={16} /> Generate My Vision Board</>
           )}
         </button>
         {generating && (
           <p className="text-zinc-500 text-xs mt-3 text-center">
-            Creating personalised images… this takes 30–60 seconds.
+            Creating personalised images- this takes 30-60 seconds.
           </p>
         )}
         {error && (
@@ -364,7 +364,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         </h2>
         <p className="text-zinc-300 text-base italic">&ldquo;{board.centerAffirmation}&rdquo;</p>
         <p className="text-zinc-400 text-xs">
-          Generated {new Date(board.generatedAt).toLocaleDateString()} · {board.theme.mood}
+          Generated {new Date(board.generatedAt).toLocaleDateString()} - {board.theme.mood}
         </p>
       </div>
 
@@ -425,7 +425,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
             <div className="mb-3">
               <label className="inline-flex items-center gap-2 border border-zinc-700 px-3 py-2 rounded-lg text-xs text-zinc-300 hover:border-zinc-600 cursor-pointer transition">
                 <Upload size={14} />
-                {uploading ? 'Processing images…' : `Upload custom images (${customImages.length}/6)`}
+                {uploading ? 'Processing images-' : `Upload custom images (${customImages.length}/6)`}
                 <input
                   type="file"
                   accept="image/*"
@@ -445,7 +445,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
                        hover:text-zinc-300 transition disabled:opacity-50"
           >
             <RefreshCw size={14} className={generating ? 'animate-spin' : ''} />
-            {generating ? 'Regenerating…' : 'Regenerate board'}
+            {generating ? 'Regenerating-' : 'Regenerate board'}
           </button>
           {error && <p className="text-red-400 text-xs mt-2">{error}</p>}
         </div>
