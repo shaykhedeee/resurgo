@@ -13,6 +13,8 @@ const FOOTER_SECTIONS = [
     links: [
       { href: '/features', label: 'Features' },
       { href: '/pricing', label: 'Pricing' },
+      { href: '/templates', label: 'Templates' },
+      { href: '/tools', label: 'Free Tools' },
       { href: '/download', label: 'Android App' },
       { href: '/changelog', label: 'Changelog' },
       { href: '/docs', label: 'API Docs' },
@@ -23,6 +25,10 @@ const FOOTER_SECTIONS = [
     links: [
       { href: '/about', label: 'About' },
       { href: '/blog', label: 'Blog' },
+      { href: '/use-cases', label: 'Use Cases' },
+      { href: '/compare', label: 'Compare' },
+      { href: '/roadmap', label: 'Roadmap' },
+      { href: '/learn', label: 'Learn' },
       { href: '/contact', label: 'Contact' },
       { href: '/faq', label: 'FAQ' },
     ],

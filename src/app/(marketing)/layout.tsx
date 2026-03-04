@@ -9,11 +9,17 @@ import Link from 'next/link';
 import { LogoMark } from '@/components/Logo';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { MarketingFooter } from '@/components/MarketingFooter';
+import StickyCTA from '@/components/marketing/StickyCTA';
+import ExitIntent from '@/components/marketing/ExitIntent';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
+  { href: '/templates', label: 'Templates' },
+  { href: '/use-cases', label: 'Use Cases' },
+  { href: '/tools', label: 'Tools' },
+  { href: '/compare', label: 'Compare' },
   { href: '/blog', label: 'Blog' },
   { href: '/docs', label: 'Docs' },
 ];
@@ -90,6 +96,9 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
       {/* ── FOOTER ── */}
       <MarketingFooter />
+
+      <StickyCTA />
+      <ExitIntent />
 
       {/* Scroll to top */}
       <ScrollToTop />

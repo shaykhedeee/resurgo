@@ -11,6 +11,7 @@ import { AccessibilityProvider } from '@/components/AccessibilityProvider';
 import ConvexClientProvider from '@/components/ConvexClientProvider';
 import ClerkProviderWrapper from '@/components/ClerkProviderWrapper';
 import { CookieConsent } from '@/components/CookieConsent';
+import { PWAInstallPrompt } from '@/components/PwaInstallPrompt';
 
 // Base URL for the application (update for production)
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
@@ -461,7 +462,7 @@ export default function RootLayout({
 
                   // On all hosts: clear old (non-current) SW caches to prevent stale pages
                   if (!isLocal && 'caches' in window) {
-                    var CURRENT_CACHE = 'ascend-v5';
+                    var CURRENT_CACHE = 'ascend-v7';
                     caches.keys().then(function(keys) {
                       return Promise.all(keys.filter(function(k) { return k !== CURRENT_CACHE; }).map(function(k) { return caches.delete(k); }));
                     }).catch(function() {});
@@ -473,6 +474,26 @@ export default function RootLayout({
         />
         {/* Google Analytics */}
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-F1VLMSS8FB" strategy="afterInteractive" />
+        <Script id="pwa-sw-registration" strategy="afterInteractive">
+          {`
+            (function() {
+              try {
+                var isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+                if (!isLocal && 'serviceWorker' in navigator) {
+                  window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/sw.js', { scope: '/' })
+                      .then(function(reg) {
+                        console.log('[PWA] Service worker registered:', reg.scope);
+                      })
+                      .catch(function(err) {
+                        console.warn('[PWA] Service worker registration failed:', err);
+                      });
+                  });
+                }
+              } catch (e) {}
+            })();
+          `}
+        </Script>
         <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -498,6 +519,7 @@ export default function RootLayout({
               <AccessibilityProvider>
                 {children}
                 <CookieConsent />
+                <PWAInstallPrompt />
               </AccessibilityProvider>
             </ThemeProvider>
           </ConvexClientProvider>

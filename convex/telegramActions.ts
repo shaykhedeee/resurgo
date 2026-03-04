@@ -7,6 +7,8 @@ import { internalAction } from './_generated/server';
 import { api } from './_generated/api';
 import { v } from 'convex/values';
 
+const TELEGRAM_FOOTER = '\n\n📊 Organized by RESURGO.life — AI life management';
+
 // ─── Telegram Bot API helper ──────────────────────────────────────────────────
 async function sendTelegramMessage(
   token: string,
@@ -66,7 +68,7 @@ export const sendMorningDigests = internalAction({
           goalLines,
           '',
           '<i>Use /digest for a fresh snapshot anytime • /help for all commands</i>',
-        ].join('\n');
+        ].join('\n') + TELEGRAM_FOOTER;
 
         await sendTelegramMessage(token, user.telegramChatId, message, 'HTML');
       } catch (err) {
@@ -97,7 +99,7 @@ export const deliverDueReminders = internalAction({
     for (const reminder of dueReminders) {
       try {
         if (reminder.telegramChatId) {
-          const text = `⏰ <b>Reminder</b>\n\n${reminder.text}`;
+          const text = `⏰ <b>Reminder</b>\n\n${reminder.text}${TELEGRAM_FOOTER}`;
           await sendTelegramMessage(token, reminder.telegramChatId, text, 'HTML');
         }
         await ctx.runMutation(api.reminders.markReminderSent, { reminderId: reminder._id });

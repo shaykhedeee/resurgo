@@ -337,9 +337,10 @@ Master showing up before you optimize performance. Consistency beats intensity.
 1. Go to **Settings** > **Subscription**
 2. Tap **"Upgrade to Pro"**
 3. Choose your plan:
-   - Monthly: $9/month
-   - Yearly: $89/year (save $19!)
-4. Complete payment via Stripe
+   - Monthly: $4.99/month
+   - Yearly: $29.99/year (save 50%!)
+   - Lifetime: $49.99 one-time
+4. Complete payment via Dodo Payments
 5. Enjoy instant access!
 
 ### Payment Methods

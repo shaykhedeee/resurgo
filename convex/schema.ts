@@ -1243,6 +1243,41 @@ export default defineSchema({
     .index('by_code', ['code']),
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // LEADS — Marketing lead capture
+  // ─────────────────────────────────────────────────────────────────────────────
+  leads: defineTable({
+    email: v.string(),
+    source: v.string(),
+    offer: v.union(v.string(), v.null()),
+    variant: v.union(v.string(), v.null()),
+    referrer: v.union(v.string(), v.null()),
+    userAgent: v.union(v.string(), v.null()),
+    utmSource: v.union(v.string(), v.null()),
+    utmMedium: v.union(v.string(), v.null()),
+    utmCampaign: v.union(v.string(), v.null()),
+    utmTerm: v.union(v.string(), v.null()),
+    utmContent: v.union(v.string(), v.null()),
+    capturedAt: v.number(),
+    convertedToUser: v.boolean(),
+    convertedAt: v.optional(v.number()),
+  })
+    .index('by_email', ['email'])
+    .index('by_source', ['source']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // MARKETING EVENTS — Marketing instrumentation events
+  // ─────────────────────────────────────────────────────────────────────────────
+  marketingEvents: defineTable({
+    event: v.string(),
+    path: v.union(v.string(), v.null()),
+    properties: v.optional(v.any()),
+    createdAt: v.number(),
+    sessionId: v.optional(v.string()),
+  })
+    .index('by_event', ['event'])
+    .index('by_createdAt', ['createdAt']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
   // PARTNER ACTION LEDGER — Idempotency tracker for Partner Engine clientRefs
   // Each action the AI proposes carries a clientRef. We record it here so that
   // retries / duplicate submissions never create duplicate records.

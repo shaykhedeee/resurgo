@@ -4,6 +4,9 @@
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import MarketingPageBeacon from '@/components/marketing/MarketingPageBeacon';
+import LandingChatWidget from '@/components/marketing/LandingChatWidget';
+import EmailCapture from '@/components/marketing/EmailCapture';
 
 export const metadata: Metadata = {
   title: 'Pricing — Resurgo Habit Tracker Plans | Free, Pro & Lifetime',
@@ -187,6 +190,11 @@ const pricingJsonLd = {
 export default function PricingPage() {
   return (
     <main className="min-h-screen bg-black">
+      <MarketingPageBeacon
+        event="pricing_viewed"
+        properties={{ placement: 'pricing_page' }}
+      />
+
       {/* JSON-LD Pricing + FAQ Schema */}
       <script
         type="application/ld+json"
@@ -301,6 +309,26 @@ export default function PricingPage() {
               </div>
             </details>
           ))}
+        </div>
+
+        <div className="mt-12 grid gap-4 md:grid-cols-2">
+          <section className="border border-zinc-900 bg-zinc-950 p-6">
+            <h3 className="mb-4 font-mono text-sm font-bold tracking-widest text-zinc-200">
+              Need help choosing?
+            </h3>
+            <LandingChatWidget />
+          </section>
+
+          <section className="border border-zinc-900 bg-zinc-950 p-6">
+            <h3 className="mb-4 font-mono text-sm font-bold tracking-widest text-zinc-200">
+              Get pricing updates
+            </h3>
+            <EmailCapture
+              variant="inline"
+              source="pricing_page"
+              offer="Pricing updates"
+            />
+          </section>
         </div>
 
         {/* Bottom CTA */}

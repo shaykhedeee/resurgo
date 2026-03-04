@@ -5,6 +5,11 @@
 
 import { MetadataRoute } from 'next';
 import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS } from '@/lib/blog/post-index';
+import { getAllTemplates } from '@/lib/marketing/templates';
+import { getAllComparisons } from '@/lib/marketing/compare';
+import { getAllUseCases } from '@/lib/marketing/useCases';
+import { getAllLearnTerms } from '@/lib/marketing/learn';
+import { getAllTools } from '@/lib/marketing/tools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
@@ -14,7 +19,7 @@ function getIsoTimestamp(input?: string): string | null {
   return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString();
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString();
 
   const latestBlogTimestamp = BLOG_POST_INDEX
@@ -43,6 +48,49 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     })),
   ];
+
+  const [templates, comparisons, useCases, learnTerms, tools] = await Promise.all([
+    getAllTemplates(),
+    getAllComparisons(),
+    getAllUseCases(),
+    getAllLearnTerms(),
+    getAllTools(),
+  ]);
+
+  const templateUrls: MetadataRoute.Sitemap = templates.map((template) => ({
+    url: `${siteUrl}/templates/${template.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.75,
+  }));
+
+  const comparisonUrls: MetadataRoute.Sitemap = comparisons.map((comparison) => ({
+    url: `${siteUrl}/compare/${comparison.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.72,
+  }));
+
+  const useCaseUrls: MetadataRoute.Sitemap = useCases.map((useCase) => ({
+    url: `${siteUrl}/use-cases/${useCase.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.74,
+  }));
+
+  const learnTermUrls: MetadataRoute.Sitemap = learnTerms.map((term) => ({
+    url: `${siteUrl}/learn/${term.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.68,
+  }));
+
+  const toolUrls: MetadataRoute.Sitemap = tools.map((tool) => ({
+    url: `${siteUrl}/tools/${tool.slug}`,
+    lastModified: currentDate,
+    changeFrequency: 'monthly',
+    priority: 0.76,
+  }));
   
   // Static pages with their SEO priority and change frequency
   const staticPages: MetadataRoute.Sitemap = [
@@ -155,6 +203,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/templates`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/compare`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.78,
+    },
+    {
+      url: `${siteUrl}/use-cases`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.79,
+    },
+    {
+      url: `${siteUrl}/learn`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.72,
+    },
+    {
+      url: `${siteUrl}/tools`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${siteUrl}/roadmap`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
       url: `${siteUrl}/faq`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
@@ -240,5 +324,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   //   priority: 0.7,
   // }));
 
-  return [...staticPages, ...blogTopicUrls, ...blogUrls];
+  return [
+    ...staticPages,
+    ...blogTopicUrls,
+    ...blogUrls,
+    ...templateUrls,
+    ...comparisonUrls,
+    ...useCaseUrls,
+    ...learnTermUrls,
+    ...toolUrls,
+  ];
 }

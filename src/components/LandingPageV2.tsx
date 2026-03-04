@@ -6,6 +6,15 @@ import { cn } from '@/lib/utils';
 import { LogoMark } from '@/components/Logo';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { TerminalDemo } from '@/components/TerminalDemo';
+import { MarketingFooter } from '@/components/MarketingFooter';
+import DemoSandbox from '@/components/marketing/DemoSandbox';
+import SocialProof from '@/components/marketing/SocialProof';
+import EmailCapture from '@/components/marketing/EmailCapture';
+import LandingChatWidget from '@/components/marketing/LandingChatWidget';
+import ExitIntent from '@/components/marketing/ExitIntent';
+import StickyCTA from '@/components/marketing/StickyCTA';
+import { captureUtmParams, trackMarketingEvent } from '@/lib/marketing/analytics';
+import { getExperimentVariant, trackExperimentExposure } from '@/lib/marketing/experiments';
 
 /* ═══════════════════════════════════════════════════════════════════════════
    RESURGO :: LANDING PAGE v2.1 — Enhanced
@@ -376,6 +385,46 @@ function LandingPageV2() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [activeLog, setActiveLog] = useState(0);
   const [tickerIdx, setTickerIdx] = useState(0);
+  const [heroVariant, setHeroVariant] = useState('control');
+
+  useEffect(() => {
+    captureUtmParams();
+    trackMarketingEvent('landing_viewed', { page: '/' });
+
+    const variant = getExperimentVariant(
+      'experiment_landing_hero_copy_v1',
+      [
+        { id: 'control', weight: 34 },
+        { id: 'clarity', weight: 33 },
+        { id: 'adhd', weight: 33 },
+      ],
+      'landing_hero',
+    );
+    setHeroVariant(variant);
+    trackExperimentExposure('experiment_landing_hero_copy_v1', variant, 'landing_hero');
+  }, []);
+
+  const heroContent =
+    heroVariant === 'clarity'
+      ? {
+          headingMain: 'From brain dump to clear today plan.',
+          headingAccent: 'Know your next step in 5 seconds.',
+          subcopy:
+            'Go from mental clutter to crystal-clear action in under 5 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
+        }
+      : heroVariant === 'adhd'
+        ? {
+            headingMain: 'Built for overwhelmed brains.',
+            headingAccent: 'Gentle accountability, every day.',
+            subcopy:
+              'When everything feels loud, Resurgo gives you one calm next step. Gentle accountability, flexible structure, and momentum that meets you where you are.',
+          }
+        : {
+            headingMain: 'Stop planning.',
+            headingAccent: 'Start executing.',
+            subcopy:
+              'Resurgo is the all-in-one productivity system that turns your goals into daily action. Set one clear goal, get an AI-generated roadmap, and execute with habits, focus sessions, and coaching — all in one app.',
+          };
 
   // Rotate testimonials
   useEffect(() => {
@@ -498,8 +547,11 @@ function LandingPageV2() {
               {/* Left — copy */}
               <div>
                 <h1 className="font-pixel text-xl leading-relaxed tracking-tight text-zinc-100 sm:text-2xl lg:text-3xl">
-                  Stop planning.
-                  <span className="block text-orange-500">Start executing.<span className="animate-blink">_</span></span>
+                  {heroContent.headingMain}
+                  <span className="block text-orange-500">
+                    {heroContent.headingAccent}
+                    <span className="animate-blink">_</span>
+                  </span>
                 </h1>
                 <div className="mt-3 flex items-center gap-3">
                   <span className="font-pixel text-[0.6rem] tracking-widest text-zinc-400">[RESURGO_v1.4]</span>
@@ -509,10 +561,7 @@ function LandingPageV2() {
                 </div>
 
                 <p className="mt-8 max-w-2xl font-terminal text-xl leading-relaxed text-zinc-300">
-                  Resurgo is the all-in-one productivity system that turns your goals into
-                  <span className="text-zinc-100"> daily action</span>. Set one clear goal, get an AI-generated
-                  roadmap, and execute with habits, focus sessions, and coaching —{' '}
-                  <span className="text-orange-400">all in one app</span>.
+                  {heroContent.subcopy}
                 </p>
 
                 {/* Quick-value bullets */}
@@ -1009,6 +1058,33 @@ function LandingPageV2() {
           </div>
         </section>
 
+        {/* ────────────────── BRAIN DUMP DEMO ────────────────── */}
+        <section id="demo" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-8 text-center">
+              <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600">BRAIN_DUMP_DEMO</p>
+            </div>
+
+            <DemoSandbox />
+
+            <div className="mt-8">
+              <SocialProof />
+            </div>
+
+            <div className="mt-8 border-2 border-zinc-800 bg-black p-5 shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
+              <EmailCapture
+                variant="inline"
+                source="landing_demo_section"
+                offer="7-Day Resurgo Reset"
+              />
+            </div>
+
+            <div className="mt-8">
+              <LandingChatWidget />
+            </div>
+          </div>
+        </section>
+
         {/* ────────────────── CTA TERMINAL ────────────────── */}
         <section className="border-t-2 border-zinc-800 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-6xl border-2 border-zinc-800 bg-black shadow-[4px_4px_0px_rgba(0,0,0,0.7)]">
@@ -1060,33 +1136,10 @@ function LandingPageV2() {
       </main>
 
       {/* ────────────────── FOOTER ────────────────── */}
-      <footer className="border-t-2 border-zinc-800 bg-black px-4 py-8 sm:px-6 lg:px-8">
-        <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex items-center gap-3">
-            <LogoMark className="h-7 w-7" />
-            <div>
-              <p className="font-pixel text-[0.55rem] tracking-widest text-orange-600">RESURGO</p>
-              <p className="mt-1 font-pixel text-[0.55rem] tracking-widest text-zinc-400">
-                BUILD BETTER HABITS. ACHIEVE BIG GOALS.
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-4 font-pixel text-[0.35rem] tracking-widest text-zinc-400">
-            {[
-              ['Guides', '/guides'],
-              ['Help', '/help'],
-              ['Support', '/support'],
-              ['Privacy', '/privacy'],
-              ['Terms', '/terms'],
-            ].map(([label, href]) => (
-              <Link key={label} href={href} className="transition hover:text-zinc-300">
-                {label}
-              </Link>
-            ))}
-          </div>
-        </div>
-      </footer>
+      <MarketingFooter />
 
+      <StickyCTA />
+      <ExitIntent />
       <ScrollToTop />
     </div>
   );

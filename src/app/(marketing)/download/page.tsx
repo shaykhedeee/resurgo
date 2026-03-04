@@ -1,23 +1,23 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// RESURGO.life — /download — Android APK Download Page
-// Replaces Telegram bot with a native Android experience
-// ─────────────────────────────────────────────────────────────────────────────
+﻿// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// RESURGO.life â€” /download â€” PWA Installation Guide
+// No app store required â€” install directly from the browser.
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Download Resurgo for Android — Free APK | AI Habit Tracker',
+  title: 'Install Resurgo â€” Free PWA App | AI Habit Tracker',
   description:
-    'Download the Resurgo Android app (APK). Get native push notifications for morning digests, habit reminders, and AI coaching nudges. Free download, no Play Store needed.',
+    'Install Resurgo on your phone or desktop in seconds â€” no app store needed. Add it to your home screen for a full native-app experience on any device.',
   keywords: [
-    'Resurgo APK', 'download Resurgo', 'Resurgo Android app', 'habit tracker APK',
-    'AI habit tracker Android', 'Resurgo mobile app', 'push notifications habit tracker',
+    'Resurgo install', 'Resurgo app', 'habit tracker PWA', 'add to home screen',
+    'AI habit tracker mobile', 'progressive web app habit tracker',
   ],
   alternates: { canonical: '/download' },
   openGraph: {
-    title: 'Download Resurgo for Android — AI Habit Tracker',
-    description: 'Native push notifications, offline quick-view, and the full Resurgo dashboard in your pocket.',
+    title: 'Install Resurgo â€” PWA App',
+    description: 'Add to your home screen in seconds. Works on Android, iPhone, and desktop. No app store needed.',
     type: 'website',
     url: '/download',
   },
@@ -25,293 +25,210 @@ export const metadata: Metadata = {
 
 const FEATURES = [
   {
-    icon: '🔔',
-    title: 'Native Push Notifications',
-    description: 'Morning digests, habit reminders, and AI coaching nudges delivered straight to your notification tray — even when the app is closed.',
+    icon: 'ðŸ””',
+    title: 'Push Notifications',
+    description: 'Morning digests, habit reminders, and AI coaching nudges â€” enabled from your browser settings after installing.',
   },
   {
-    icon: '⚡',
+    icon: 'âš¡',
     title: 'Instant Launch',
-    description: 'Tap the icon and you\'re in. No browser tabs, no URL bar — a full-screen dedicated experience.',
+    description: 'Tap the icon and you\'re in. No browser tabs, no URL bar â€” a full-screen dedicated experience from your home screen.',
   },
   {
-    icon: '📊',
+    icon: 'ðŸ“Š',
     title: 'Full Dashboard Access',
-    description: 'Every feature from the web app: habits, goals, tasks, AI coach, vision board, analytics, gamification — all in your pocket.',
+    description: 'Every feature from the web app: habits, goals, tasks, AI coach, vision board, analytics â€” always in your pocket.',
   },
   {
-    icon: '🔒',
+    icon: 'ðŸ”’',
     title: 'Secure Authentication',
-    description: 'Sign in with the same Clerk-powered account. Your data syncs in real-time via Convex — zero setup needed.',
+    description: 'Same Clerk-powered account across all devices. Your data syncs in real-time via Convex â€” zero setup needed.',
   },
   {
-    icon: '🎮',
-    title: 'Haptic Feedback',
-    description: 'Feel satisfying vibrations when you complete habits, earn XP, or hit streak milestones.',
+    icon: 'ðŸ“¶',
+    title: 'Works Offline',
+    description: 'Your cached data is available even when your connection drops. Changes sync when you\'re back online.',
   },
   {
-    icon: '🌙',
+    icon: 'ðŸŒ™',
     title: 'Smart Quiet Hours',
-    description: 'Set quiet hours and Resurgo will batch your notifications intelligently — no buzzing at 2 AM.',
+    description: 'Set quiet hours in Settings and Resurgo batches notifications intelligently â€” no buzzing at 2 AM.',
   },
 ];
 
-const INSTALL_STEPS = [
-  { step: 1, title: 'Download the APK', description: 'Tap the download button below to get the latest Resurgo APK file.' },
-  { step: 2, title: 'Allow Installation', description: 'Android will ask you to allow installs from this source. Tap "Allow" — this is safe.' },
-  { step: 3, title: 'Install & Launch', description: 'Open the downloaded APK and tap "Install". Once done, tap "Open" to start Resurgo.' },
-  { step: 4, title: 'Sign In & Enable Notifications', description: 'Sign in with your existing account. Allow push notifications when prompted.' },
+const INSTALL_ANDROID = [
+  { step: 1, title: 'Open resurgo.life in Chrome', description: 'Use Chrome or Samsung Internet on your Android device.' },
+  { step: 2, title: 'Tap the menu (â‹®) â†’ "Add to Home screen"', description: 'Or look for the install icon (âŠ•) that appears in the address bar.' },
+  { step: 3, title: 'Tap "Add"', description: 'Android adds the Resurgo icon to your home screen instantly.' },
+  { step: 4, title: 'Launch & allow notifications', description: 'Open Resurgo from your home screen and allow push notifications when prompted.' },
+];
+
+const INSTALL_IOS = [
+  { step: 1, title: 'Open resurgo.life in Safari', description: 'Must use Safari â€” Chrome on iOS cannot install PWAs.' },
+  { step: 2, title: 'Tap the Share button (â–¡â†‘)', description: 'Found at the bottom of the screen on iPhone.' },
+  { step: 3, title: 'Tap "Add to Home Screen"', description: 'Scroll down the share sheet if needed.' },
+  { step: 4, title: 'Tap "Add"', description: 'Safari adds Resurgo to your home screen like a native app.' },
 ];
 
 export default function DownloadPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-b from-[#0A0A0B] via-[#0d1117] to-[#0A0A0B] text-white">
+    <main className="min-h-screen bg-black text-white">
+
       {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(20,184,153,0.15),transparent_70%)]" />
-        <div className="relative mx-auto max-w-5xl px-6 pt-24 pb-16 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 text-sm text-emerald-400">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
-            Now Available — Android APK
+      <section className="border-b border-zinc-900">
+        <div className="mx-auto max-w-4xl px-6 pt-20 pb-16">
+          <div className="mb-4 font-mono text-xs tracking-widest text-orange-400">
+            INSTALL_RESURGO :: PROGRESSIVE_WEB_APP
           </div>
-
-          <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-            Resurgo for{' '}
-            <span className="bg-gradient-to-r from-emerald-400 to-teal-300 bg-clip-text text-transparent">
-              Android
-            </span>
+          <h1 className="font-mono text-4xl font-bold tracking-tight text-zinc-100 md:text-5xl">
+            Install on Any Device
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-zinc-400 leading-relaxed">
-            The full Resurgo experience in a native Android app. Get push notifications for morning digests,
-            habit reminders, and AI coaching — right on your home screen.
+          <p className="mt-4 max-w-xl font-mono text-sm text-zinc-400 leading-relaxed">
+            No app store. No APK. Just open resurgo.life in your browser and add it to your home screen.
+            Works on Android, iPhone, iPad, and desktop â€” in under 30 seconds.
           </p>
-
-          <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <a
-              href="/downloads/resurgo-latest.apk"
-              className="inline-flex items-center gap-3 rounded-xl bg-emerald-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-500 hover:shadow-emerald-500/40 active:scale-95"
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
+              href="/sign-up"
+              className="border border-orange-800 bg-orange-950/30 px-5 py-2.5 font-mono text-sm tracking-widest text-orange-400 transition hover:bg-orange-950/60"
             >
-              <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z" />
-              </svg>
-              Download APK
-            </a>
+              [GET_STARTED_FREE]
+            </Link>
             <Link
               href="/features"
-              className="inline-flex items-center gap-2 rounded-xl border border-zinc-700 px-8 py-4 text-lg font-semibold text-zinc-300 transition hover:border-zinc-500 hover:text-white"
+              className="border border-zinc-700 px-5 py-2.5 font-mono text-sm tracking-widest text-zinc-300 transition hover:border-zinc-500"
             >
-              View All Features →
+              [VIEW_FEATURES]
             </Link>
           </div>
+        </div>
+      </section>
 
-          <p className="mt-4 text-sm text-zinc-500">
-            Version 1.0.0 · 4.2 MB · Requires Android 8.0+
-          </p>
+      {/* Install Steps: Android + iOS */}
+      <section className="mx-auto max-w-5xl px-6 py-20">
+        <h2 className="mb-2 font-mono text-2xl font-bold text-zinc-100">How to Install</h2>
+        <p className="mb-12 font-mono text-sm text-zinc-400">
+          Pick your device and follow the steps. Takes under 30 seconds.
+        </p>
+
+        <div className="grid gap-10 md:grid-cols-2">
+          {/* Android */}
+          <div className="border border-zinc-800 bg-zinc-950 p-6">
+            <div className="mb-5 flex items-center gap-2">
+              <span className="font-mono text-xs tracking-widest text-orange-400">ANDROID_/_CHROME</span>
+              <span className="text-xs text-zinc-600">(also Samsung Internet, Edge)</span>
+            </div>
+            <ol className="space-y-5">
+              {INSTALL_ANDROID.map((s) => (
+                <li key={s.step} className="flex gap-4">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-orange-800 bg-orange-950/30 font-mono text-xs text-orange-400">
+                    {s.step}
+                  </span>
+                  <div>
+                    <p className="font-mono text-sm font-semibold text-zinc-200">{s.title}</p>
+                    <p className="mt-0.5 font-mono text-xs text-zinc-500 leading-relaxed">{s.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {/* iOS */}
+          <div className="border border-zinc-800 bg-zinc-950 p-6">
+            <div className="mb-5 flex items-center gap-2">
+              <span className="font-mono text-xs tracking-widest text-blue-400">IPHONE_/_IPAD_SAFARI</span>
+            </div>
+            <ol className="space-y-5">
+              {INSTALL_IOS.map((s) => (
+                <li key={s.step} className="flex gap-4">
+                  <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center border border-blue-800 bg-blue-950/30 font-mono text-xs text-blue-400">
+                    {s.step}
+                  </span>
+                  <div>
+                    <p className="font-mono text-sm font-semibold text-zinc-200">{s.title}</p>
+                    <p className="mt-0.5 font-mono text-xs text-zinc-500 leading-relaxed">{s.description}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+            <p className="mt-4 font-mono text-xs text-zinc-600">
+              Note: iOS 16.4+ supports push notifications for PWAs in Safari.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Features Grid */}
-      <section className="mx-auto max-w-6xl px-6 py-20">
-        <h2 className="mb-4 text-center text-3xl font-bold">Why Download the App?</h2>
-        <p className="mx-auto mb-12 max-w-xl text-center text-zinc-400">
-          Everything the web app does — plus native Android features you can&#39;t get in a browser.
-        </p>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      <section className="border-t border-zinc-900 mx-auto max-w-5xl px-6 py-20">
+        <h2 className="mb-2 font-mono text-2xl font-bold text-zinc-100">What You Get</h2>
+        <p className="mb-12 font-mono text-sm text-zinc-400">Everything the web app offers â€” delivered to your home screen.</p>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div
-              key={f.title}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6 transition hover:border-emerald-500/40 hover:bg-zinc-900/80"
-            >
-              <div className="mb-3 text-3xl">{f.icon}</div>
-              <h3 className="mb-2 text-lg font-semibold">{f.title}</h3>
-              <p className="text-sm text-zinc-400 leading-relaxed">{f.description}</p>
+            <div key={f.title} className="border border-zinc-800 bg-zinc-950 p-5">
+              <div className="mb-3 text-2xl">{f.icon}</div>
+              <h3 className="font-mono text-sm font-semibold text-zinc-200 mb-1">{f.title}</h3>
+              <p className="font-mono text-xs text-zinc-500 leading-relaxed">{f.description}</p>
             </div>
           ))}
-        </div>
-      </section>
-
-      {/* Installation Steps */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <h2 className="mb-4 text-center text-3xl font-bold">How to Install</h2>
-        <p className="mx-auto mb-12 max-w-xl text-center text-zinc-400">
-          It takes less than 60 seconds. No Play Store account or credit card needed.
-        </p>
-        <div className="space-y-6">
-          {INSTALL_STEPS.map((s) => (
-            <div key={s.step} className="flex gap-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-600/20 text-emerald-400 font-bold">
-                {s.step}
-              </div>
-              <div>
-                <h3 className="font-semibold">{s.title}</h3>
-                <p className="text-sm text-zinc-400">{s.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Comparison: App vs Telegram */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <h2 className="mb-4 text-center text-3xl font-bold">App vs. Telegram Bot</h2>
-        <p className="mx-auto mb-12 max-w-xl text-center text-zinc-400">
-          We&#39;re replacing the Telegram bot with a dedicated Android app. Here&#39;s why it&#39;s better.
-        </p>
-        <div className="overflow-hidden rounded-2xl border border-zinc-800">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="border-b border-zinc-800 bg-zinc-900/80">
-                <th className="px-6 py-4 font-semibold text-zinc-300">Feature</th>
-                <th className="px-6 py-4 font-semibold text-zinc-500">Telegram Bot</th>
-                <th className="px-6 py-4 font-semibold text-emerald-400">Android App</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-800">
-              {[
-                ['Push Notifications', '⚠️ Telegram required', '✅ Native FCM'],
-                ['Morning Digest', '✅ Text only', '✅ Rich + tappable'],
-                ['Habit Tracking', '⚠️ Text commands', '✅ Full visual UI'],
-                ['AI Coaching', '⚠️ Limited context', '✅ Full dashboard'],
-                ['Goal Management', '❌ Not available', '✅ Full access'],
-                ['Analytics', '❌ Basic stats', '✅ Charts & trends'],
-                ['Offline Support', '❌ Requires internet', '✅ Cached views'],
-                ['Haptic Feedback', '❌ None', '✅ Native vibrations'],
-                ['Vision Board', '❌ Not available', '✅ Full access'],
-              ].map(([feature, telegram, app]) => (
-                <tr key={feature} className="hover:bg-zinc-900/50">
-                  <td className="px-6 py-3 font-medium text-white">{feature}</td>
-                  <td className="px-6 py-3 text-zinc-500">{telegram}</td>
-                  <td className="px-6 py-3 text-emerald-400">{app}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
         </div>
       </section>
 
       {/* FAQ */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <h2 className="mb-8 text-center text-3xl font-bold">Frequently Asked Questions</h2>
-        <div className="space-y-6">
+      <section className="border-t border-zinc-900 mx-auto max-w-4xl px-6 py-20">
+        <h2 className="mb-8 font-mono text-2xl font-bold text-zinc-100">FAQ</h2>
+        <div className="space-y-1">
           {[
             {
-              q: 'Is the APK safe to install?',
-              a: 'Yes. The APK is signed with our official keystore and served directly from resurgo.life. It\'s a WebView wrapper around the same secure web app you already use.',
+              q: 'Do I need to create an account?',
+              a: 'Yes. Sign up free at resurgo.life â€” takes about 30 seconds. Your data is stored in the cloud and syncs across all your devices.',
             },
             {
-              q: 'Will I lose my data?',
-              a: 'No. All your data lives in the cloud (Convex). Sign in with the same account and everything syncs instantly.',
+              q: 'Is this a real app or just a bookmark?',
+              a: 'It\'s a Progressive Web App (PWA) â€” it launches in standalone mode (no browser UI), has its own icon, can receive push notifications, caches data, and works offline. It behaves like a native app on your device.',
             },
             {
-              q: 'Why not the Play Store?',
-              a: 'We\'re shipping direct-download first to move fast. A Play Store listing is planned for later. The APK auto-updates when we push new web features.',
+              q: 'Why not the Play Store or App Store?',
+              a: 'PWAs install instantly without any store approval process. Your app always runs the latest version automatically â€” no manual updates needed. For most use cases, the PWA experience is identical to a native app.',
             },
             {
-              q: 'What about iPhone / iOS?',
-              a: 'iOS support is on our roadmap. For now, iOS users can install the PWA from Safari (Add to Home Screen) for a similar experience.',
+              q: 'Does it work on desktop?',
+              a: 'Yes. Chrome and Edge on Windows/Mac/Linux support PWA installation. Click the install icon (âŠ•) in the browser address bar, or go to Settings â†’ Cast, Save, and Share â†’ Install page as app.',
             },
             {
-              q: 'What happens to the Telegram bot?',
-              a: 'The Telegram bot will continue working during a 30-day transition period. After that, all notifications will be delivered exclusively through the Android app (and web push for desktop).',
+              q: 'Will I lose my data if I uninstall the PWA?',
+              a: 'No. All your data lives in Convex (cloud). Uninstalling the PWA only removes the app icon. Log back in on any device or browser and everything is there.',
+            },
+            {
+              q: 'Does Telegram integration still work?',
+              a: 'Yes. Telegram remains available for quick habit check-ins, daily nudges, and coaching messages. The PWA handles the full interactive experience; Telegram handles quick on-the-go interactions.',
             },
           ].map((faq) => (
             <details
               key={faq.q}
-              className="group rounded-xl border border-zinc-800 bg-zinc-900/30 px-6 py-4"
+              className="group border border-zinc-800 bg-zinc-950"
             >
-              <summary className="cursor-pointer font-semibold text-white group-open:text-emerald-400 transition">
+              <summary className="cursor-pointer px-5 py-4 font-mono text-sm font-semibold text-zinc-200 group-open:text-orange-400 transition">
                 {faq.q}
               </summary>
-              <p className="mt-3 text-sm text-zinc-400 leading-relaxed">{faq.a}</p>
+              <p className="px-5 pb-4 font-mono text-xs text-zinc-400 leading-relaxed">{faq.a}</p>
             </details>
           ))}
         </div>
       </section>
 
-      {/* Security & Privacy */}
-      <section className="mx-auto max-w-4xl px-6 py-20">
-        <h2 className="mb-4 text-center text-3xl font-bold">Safe & Secure</h2>
-        <p className="mx-auto mb-12 max-w-xl text-center text-zinc-400">
-          Your data never leaves the secure pipeline. Here&apos;s how we protect you.
+      {/* CTA */}
+      <section className="border-t border-zinc-900 mx-auto max-w-3xl px-6 py-20 text-center">
+        <p className="font-mono text-xs tracking-widest text-orange-400 mb-3">READY_TO_BEGIN</p>
+        <h2 className="font-mono text-3xl font-bold text-zinc-100">Start building better habits today.</h2>
+        <p className="mt-3 font-mono text-sm text-zinc-400 max-w-md mx-auto">
+          Open resurgo.life in your browser, sign up free, then install it to your home screen.
         </p>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {[
-            {
-              icon: '🔐',
-              title: 'End-to-End Encryption',
-              desc: 'All traffic between the app and our servers uses HTTPS/TLS 1.3. No cleartext, ever.',
-            },
-            {
-              icon: '🛡️',
-              title: 'Clerk Authentication',
-              desc: 'Auth handled by Clerk with JWTs — your password is never stored on our servers.',
-            },
-            {
-              icon: '📱',
-              title: 'Signed APK',
-              desc: 'The APK is cryptographically signed with our release keystore. Android verifies integrity on install.',
-            },
-            {
-              icon: '🗑️',
-              title: 'Delete Anytime',
-              desc: 'Uninstall the app and your device data is gone. Cloud data is deletable from account settings.',
-            },
-          ].map((item) => (
-            <div
-              key={item.title}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-6 flex gap-4"
-            >
-              <div className="text-2xl shrink-0">{item.icon}</div>
-              <div>
-                <h3 className="font-semibold mb-1">{item.title}</h3>
-                <p className="text-sm text-zinc-400">{item.desc}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* System Requirements */}
-      <section className="mx-auto max-w-4xl px-6 py-12">
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-8">
-          <h3 className="mb-4 text-xl font-bold">System Requirements</h3>
-          <div className="grid gap-4 text-sm sm:grid-cols-2 lg:grid-cols-4">
-            <div>
-              <p className="text-zinc-500 mb-1">Android Version</p>
-              <p className="text-white font-medium">Android 8.0 (Oreo) +</p>
-            </div>
-            <div>
-              <p className="text-zinc-500 mb-1">Storage</p>
-              <p className="text-white font-medium">&lt; 10 MB</p>
-            </div>
-            <div>
-              <p className="text-zinc-500 mb-1">Internet</p>
-              <p className="text-white font-medium">Required (online-first)</p>
-            </div>
-            <div>
-              <p className="text-zinc-500 mb-1">Permissions</p>
-              <p className="text-white font-medium">Internet, Notifications, Vibration</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      <section className="mx-auto max-w-3xl px-6 py-20 text-center">
-        <h2 className="text-3xl font-bold">Ready to Level Up?</h2>
-        <p className="mt-4 text-zinc-400">
-          Download Resurgo for Android and start building lasting habits with native push notifications and AI coaching.
-        </p>
-        <a
-          href="/downloads/resurgo-latest.apk"
-          className="mt-8 inline-flex items-center gap-3 rounded-xl bg-emerald-600 px-8 py-4 text-lg font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-500 hover:shadow-emerald-500/40 active:scale-95"
+        <Link
+          href="/sign-up"
+          className="mt-8 inline-block border border-orange-800 bg-orange-950/30 px-8 py-3 font-mono text-sm tracking-widest text-orange-400 transition hover:bg-orange-950/60"
         >
-          <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M13 5v6h1.17L12 13.17 9.83 11H11V5h2m2-2H9v6H5l7 7 7-7h-4V3zm4 15H5v2h14v-2z" />
-          </svg>
-          Download APK — Free
-        </a>
+          [GET_STARTED_FREE]
+        </Link>
       </section>
 
       {/* Structured Data */}
@@ -322,17 +239,15 @@ export default function DownloadPage() {
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
             name: 'Resurgo',
-            operatingSystem: 'Android 8.0+',
+            operatingSystem: 'Android, iOS, Windows, macOS, Linux',
             applicationCategory: 'LifestyleApplication',
             offers: {
               '@type': 'Offer',
               price: '0',
               priceCurrency: 'USD',
             },
-            description: 'AI-powered habit tracker with native push notifications, goal decomposition, and gamified progress tracking.',
-            downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
-            softwareVersion: '1.0.0',
-            fileSize: '4.2MB',
+            description: 'AI-powered habit tracker with goal decomposition, push notifications, and gamified progress tracking. Install as a PWA on any device.',
+            url: 'https://resurgo.life',
             author: {
               '@type': 'Organization',
               name: 'Resurgo',
@@ -344,3 +259,4 @@ export default function DownloadPage() {
     </main>
   );
 }
+

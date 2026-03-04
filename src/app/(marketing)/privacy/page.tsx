@@ -63,7 +63,8 @@ export default function PrivacyPage() {
               items: [
                 'Data stored in Convex (EU-West-1)',
                 'Auth handled by Clerk (SOC2 compliant)',
-                'Payments handled by Stripe (PCI compliant)',
+                'Payments handled by Dodo Payments (Merchant of Record — PCI compliant)',
+                'Dodo Payments handles all taxes and VAT automatically',
                 'Data encrypted in transit (TLS 1.3) and at rest',
               ],
             },

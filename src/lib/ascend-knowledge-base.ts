@@ -191,7 +191,7 @@ export const FAQ = {
   account: [
     {
       q: 'How do I upgrade to Pro?',
-      a: 'Go to Settings > Subscription > Upgrade to Pro. You can choose monthly ($9/mo) or yearly ($89/yr - save $19). Payment is processed securely through Stripe. You get instant access to all Pro features.',
+      a: 'Go to Settings > Subscription > Upgrade to Pro. You can choose monthly ($4.99/mo) or yearly ($29.99/yr — save 50%) or Lifetime ($49.99 once). Payment is processed securely through Dodo Payments. You get instant access to all Pro features.',
     },
     {
       q: 'Can I cancel my subscription?',
