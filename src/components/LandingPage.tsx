@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/Logo';
+import { MarketingFooter } from '@/components/MarketingFooter';
 import { 
   Mountain, 
   Sparkles, 
@@ -1009,60 +1010,7 @@ export function LandingPage({ onGetStarted, onLogin }: LandingPageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-white/5 py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          {/* Footer Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 mb-12">
-            {/* Product */}
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-4">Product</h4>
-              <ul className="space-y-3 text-sm text-white/50">
-                <li><Link href="/features" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link href="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link href="/guides" className="hover:text-white transition-colors">Guides</Link></li>
-              </ul>
-            </div>
-            {/* Resources */}
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-4">Resources</h4>
-              <ul className="space-y-3 text-sm text-white/50">
-                <li><Link href="/help" className="hover:text-white transition-colors">Help Center</Link></li>
-                <li><Link href="/support" className="hover:text-white transition-colors">Support</Link></li>
-                <li><Link href="/about" className="hover:text-white transition-colors">About</Link></li>
-              </ul>
-            </div>
-            {/* Legal */}
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-4">Legal</h4>
-              <ul className="space-y-3 text-sm text-white/50">
-                <li><Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                <li><Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              </ul>
-            </div>
-            {/* Company */}
-            <div>
-              <h4 className="text-sm font-semibold text-white mb-4">Company</h4>
-              <ul className="space-y-3 text-sm text-white/50">
-                <li><a href="mailto:support@resurgo.life" className="hover:text-white transition-colors">Contact</a></li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Bottom bar */}
-          <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-ascend-500 to-ascend-600 
-                            flex items-center justify-center">
-                <Mountain className="w-4 h-4 text-white" />
-              </div>
-              <span className="font-bold">RESURGO</span>
-            </div>
-            <p className="text-sm text-white/40">
-              � 2026 Resurgo. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+      <MarketingFooter />
 
       {/* Demo Modal */}
       {showDemoModal && (
