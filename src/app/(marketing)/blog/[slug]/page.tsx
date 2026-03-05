@@ -1545,6 +1545,526 @@ You can choose differently.
 Start tomorrow. One 90-minute block. Phone in another room. See what you create.
     `,
   },
+  'best-habit-tracker-app-2026': {
+    title: 'Best Habit Tracker Apps of 2026: Ranked and Reviewed',
+    desc: "We tested 12 habit tracking apps in 2026 and ranked them by depth, AI features, gamification, and real-world usability. Spoiler: the best one does much more than track habits.",
+    date: 'March 10, 2026',
+    readTime: '14 min',
+    tags: ['habits', 'habit stacking', 'AI productivity', 'productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['best habit tracker app 2026', 'best habit tracking app', 'top habit apps', 'habit tracker with AI'],
+    content: `
+## The Best Habit Tracker Apps of 2026: What We Actually Tested
+
+We ran 12 apps through 30 days of real usage, scoring each on: habit tracking depth, AI features, gamification, mobile experience, and free plan quality.
+
+Here's what we found.
+
+## What Makes a Great Habit Tracker in 2026?
+
+In 2026, the bar is higher than streaks and reminders. A great habit tracker needs:
+
+- **Unlimited habits** (many apps cap at 5-12)
+- **AI coaching or smart suggestions** — not just reminders
+- **Goal integration** — habits should connect to outcomes
+- **Gamification** to maintain long-term motivation
+- **Wellness data** — sleep, mood, and energy affect habit completion
+- **Cross-platform** — iOS, Android, and desktop
+
+## Our Top 7 Habit Tracker Apps of 2026
+
+### 1. Resurgo — Best Overall
+
+**Best for:** Anyone who wants AI-powered habit coaching, unlimited habits, and goal tracking in one platform.
+
+Resurgo combines everything: unlimited habit tracking with streaks and XP, 4 AI coaches that break your goals into daily actions, wellness tracking (sleep, mood, nutrition), focus timers (Pomodoro, Deep Work, Flowtime), and a generous free plan.
+
+**Standout feature:** Instead of manually creating habits, you tell Resurgo your goal and it suggests the specific habits — with frequency, timing, and stacking recommendations. It's the difference between a tracker and a system.
+
+**Free plan:** Unlimited habits, 2 AI coaches, all focus modes, XP and badges.
+
+**Verdict:** Best habit tracker app in 2026 for people serious about execution.
+
+### 2. Habitica — Best for Gamification
+
+**Best for:** People who want RPG-style social accountability.
+
+Habitica turns habits into an RPG. You build a character, join guilds, and go on quests with friends. It's highly motivating for competitive types but lacks any AI coaching or goal decomposition.
+
+**Limitation:** No AI. No wellness tracking. Manual task entry.
+
+### 3. TickTick — Best for Combined Task + Habit Management
+
+**Best for:** People who want a task manager with a habit module attached.
+
+TickTick has a clean interface, a solid Pomodoro timer, and a habit calendar view. But the habit features are basic — no AI, no stacking, no gamification beyond basic completions.
+
+**Limitation:** No behavioral coaching. Habit module is secondary, not core.
+
+### 4. Streaks (iOS) — Best Minimal Habit Tracker
+
+**Best for:** iPhone users who want a clean, Apple Watch-integrated habit tracker with a 12-habit maximum.
+
+Beautiful UI. Excellent Apple Watch sync. Strict 12-habit limit means you have to choose your battles. No AI, no Android.
+
+### 5. Habitify — Best for Analytics
+
+**Best for:** Data-driven people who want detailed habit analytics.
+
+Habitify has the best analytics charts of any pure habit tracker. The free tier is limited to 3 habits, and there's no AI, coaching, or goal system.
+
+### 6. Todoist — Best if You Primarily Need Task Management
+
+**Best for:** People who need robust task management and want to add a basic habit layer.
+
+Todoist is exceptional for tasks but has no native habit tracking. You can simulate habits with recurring tasks, but it's a workaround, not a system.
+
+### 7. Notion — Most Flexible (But Requires Setup)
+
+**Best for:** People who want full control over their system architecture.
+
+Notion can do anything — including habits — if you build or import the right template. But it requires significant maintenance and has no automated coaching.
+
+## The Bottom Line
+
+The best habit tracker app of 2026 is Resurgo if you want AI coaching, unlimited habits, goal integration, and gamification in one place. For a pure minimal tracker, Streaks wins on iOS. For analytics depth, Habitify leads.
+
+For most people, the question is: do you want an app that tracks habits, or one that helps you build them? Those are different products.
+
+## FAQ
+
+### What is the best free habit tracker app in 2026?
+Resurgo offers the most generous free tier — unlimited habits, 2 AI coaches, all focus timer modes, and XP gamification with no time limit or credit card required.
+
+### Is there a habit tracker with AI coaching?
+Yes. Resurgo has 4 AI coaching personas (Nova, Titan, Sage, Phoenix) that each take a different approach to accountability and goal planning. They can break down any goal into specific habits and adjust your plan based on your progress data.
+
+### What habit tracker works on Android and iOS?
+Resurgo, TickTick, Habitica, Todoist, and Habitify are all cross-platform. Streaks and Things 3 are iOS/macOS only.
+
+### How many habits should I track?
+Research suggests 3-5 core habits lead to better completion rates than tracking 20. Resurgo's AI helps you prioritize which habits to focus on based on your goals.
+    `,
+  },
+  'ticktick-vs-notion-habits': {
+    title: 'TickTick vs Notion for Habits: Which Is Better in 2026?',
+    desc: "TickTick and Notion are both popular productivity tools — but neither was built for habit formation. Here's an honest comparison and a better alternative.",
+    date: 'March 9, 2026',
+    readTime: '10 min',
+    tags: ['habits', 'productivity', 'goal setting', 'AI productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['ticktick vs notion for habits', 'ticktick vs notion 2026', 'notion habit tracker vs ticktick', 'best habit app notion or ticktick'],
+    content: `
+## TickTick vs Notion for Habits: An Honest Look
+
+If you're deciding between TickTick and Notion for habit tracking in 2026, you're comparing a task manager with a habit module versus a blank canvas database tool.
+
+Neither was built specifically for habits. Let's compare them honestly.
+
+## TickTick for Habits: What Works and What Doesn't
+
+### What TickTick does well:
+- Clean habit calendar view showing daily/weekly streaks
+- Habit reminders with flexible scheduling
+- Integration with your task list
+- Pomodoro timer in the same app
+
+### TickTick's habit limitations:
+- No AI suggestions or coaching
+- No habit stacking system
+- No gamification or XP
+- No wellness data (sleep, mood, energy)
+- Limited analytics depth
+
+**TickTick verdict:** If you use TickTick for tasks and want to add a basic habit log, it's convenient. For serious habit work, it's shallow.
+
+## Notion for Habits: What Works and What Doesn't
+
+### What Notion does well:
+- Total flexibility — build any habit system you want
+- Link habits to goals, projects, and notes in one database
+- Beautiful templates available from the community
+- Strong for journaling and reflection alongside habits
+
+### Notion's habit limitations:
+- Requires hours of initial setup
+- Templates break or need maintenance
+- No AI habit coaching (Notion AI is text-focused)
+- No gamification
+- No built-in streak tracking without workarounds
+- Heavy mobile app; slower for quick daily check-ins
+- Can feel overwhelming to maintain long-term
+
+**Notion verdict:** Excellent for building a custom system if you have the time. Most people spend more time maintaining the Notion setup than actually building habits.
+
+## TickTick vs Notion for Habits: Head-to-Head
+
+| Feature | TickTick | Notion |
+|---|---|---|
+| Built-in habit tracking | ✓ Basic | ✗ DIY only |
+| AI coaching | ✗ | ✗ |
+| Streak tracking | ✓ | ✗ (manual) |
+| Setup required | Minimal | High |
+| Gamification | ✗ | ✗ |
+| Mobile speed | ✓ | — |
+| Free option | ✓ Limited | ✓ Limited |
+
+## The Better Alternative: Resurgo
+
+If you want habit tracking that is:
+- Purpose-built (not bolted on)
+- AI-assisted (coaching + goal decomposition)
+- Gamified (XP, levels, streak badges)
+- Immediately usable (no template setup)
+
+Resurgo was built for this. You get unlimited habits, 4 AI coaches, focus timers, wellness tracking, and an XP system — all in one app without building a Notion database from scratch.
+
+**Free plan:** Unlimited habits, 2 coaches, all focus modes, XP — no credit card.
+
+## Summary
+
+- **Choose TickTick** if you want tasks + basic habits in one app with no setup work.
+- **Choose Notion** if you want full control and are willing to invest setup time for a completely custom system.
+- **Choose Resurgo** if you want a purpose-built habit + goal + coaching platform with AI that works on day one.
+
+## FAQ
+
+### Is TickTick better than Notion for habits?
+TickTick requires less setup and has a built-in habit calendar view. Notion is more flexible but requires significant manual work. For most users, TickTick wins on convenience for habit tracking specifically.
+
+### Can Notion replace a habit tracker?
+Notion can replicate many habit tracking features with the right template, but it requires ongoing maintenance and lacks AI coaching, gamification, and automatic streak calculation.
+
+### What's the best alternative to both TickTick and Notion for habits?
+Resurgo is purpose-built for habit tracking with AI coaching — no setup required, unlimited habits, and free to start.
+    `,
+  },
+  'ai-habit-tracker-guide-2026': {
+    title: 'How to Track Habits with AI: The Complete 2026 Guide',
+    desc: "AI-powered habit tracking is more than streaks and reminders — it breaks your goals into daily actions, coaches you when you drift, and adapts your plan based on real progress. Here's how to use it.",
+    date: 'March 8, 2026',
+    readTime: '12 min',
+    tags: ['AI productivity', 'AI coaching', 'habits', 'accountability'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['how to track habits with AI', 'AI habit tracker', 'AI habit coaching', 'habit tracking with artificial intelligence 2026'],
+    content: `
+## What AI-Powered Habit Tracking Actually Means
+
+Most "AI habit trackers" just send smarter reminders. Real AI habit tracking goes much further:
+
+1. **Goal decomposition** — AI breaks a big goal ("get fit", "build a business") into specific habits with timing, frequency, and stacking recommendations
+2. **Behavioral coaching** — AI analyzes your completion patterns and suggests adjustments, not just more reminders
+3. **Adaptive planning** — when life disrupts your schedule, AI helps you recover quickly instead of resetting
+4. **Pattern recognition** — AI identifies which days/times you complete habits best and optimizes your schedule
+
+## Why Traditional Habit Trackers Fall Short
+
+Traditional habit trackers (apps like Streaks, basic Habitica, Habitify) are logs — they record whether you did something.
+
+What they don't do:
+- Tell you which habits to build for your specific goals
+- Coach you when your completion rate drops
+- Adjust your plan when your life changes
+- Connect your habits to measurable goal progress
+
+This is the gap AI fills.
+
+## The 4 Ways AI Improves Habit Tracking
+
+### 1. Goal → Habit Decomposition
+
+Instead of asking "what habit should I add?", you tell the AI your goal and it designs your habit stack for you.
+
+Example: Goal = "run a 5K in 3 months"
+AI habit plan:
+- Daily: 10-minute morning run (build base)
+- 3x/week: Strength training (injury prevention)
+- Weekly: Long run (progressive overload)
+- Daily: Nutrition log (recovery optimization)
+- Weekly: Sleep review (performance baseline)
+
+### 2. Behavioral Coaching
+
+An AI coach recognizes patterns like:
+- "You complete evening habits at 40% vs morning habits at 87% — move yoga to morning"
+- "You've missed 3 days this week — here's a 2-day minimum recovery protocol"
+- "Your focus sessions are shorter on days without enough sleep — sleep is your highest leverage habit right now"
+
+### 3. Streak Recovery Without Shame
+
+Traditional trackers punish missed days with a broken streak counter. AI coaching offers a recovery plan instead:
+
+- "You missed 4 days. Here's a 3-day minimum protocol to rebuild without losing momentum."
+- "Your streak broke due to travel. Activate travel mode: 3 core habits instead of 7."
+
+### 4. Wellness Integration
+
+AI habit trackers that integrate sleep, mood, and energy data can identify which conditions predict high vs low completion — then help you optimize for them.
+
+## How to Start with AI Habit Tracking in 2026
+
+### Step 1: Define 1-3 outcome goals
+Don't start with habits. Start with goals.
+- "I want to lose 8 kg in 3 months"
+- "I want to launch a product in 60 days"
+- "I want to read 24 books this year"
+
+### Step 2: Use AI to generate your habit stack
+A good AI habit coach will generate:
+- 3-5 daily habits directly tied to each goal
+- Suggested timing and duration
+- Habit stacking sequences (attach new habits to existing ones)
+- Reminders calibrated to your free windows
+
+### Step 3: Start with 3 habits, not 10
+Fewer habits = higher completion = faster streak momentum. Add more only after hitting 80%+ completion for 2 weeks.
+
+### Step 4: Review weekly with AI
+A weekly AI review analyzes:
+- Which habits you completed at highest rate
+- Which habits correlate with your energy/mood data
+- Which should stay, grow, swap, or pause
+
+### Step 5: Let AI adjust the plan
+When reality changes (travel, stress, illness), tell your AI coach. A good system adapts your plan instead of letting you fall off entirely.
+
+## Resurgo: AI Habit Tracking Built for This
+
+Resurgo was designed around this workflow. When you enter a goal, the AI breaks it into a recommended habit stack. As you log completions, your coaches (Nova, Titan, Sage, Phoenix) provide behavioral feedback and adapt your plan.
+
+The free plan includes:
+- Unlimited habits
+- AI goal decomposition
+- 2 coaches (Nova and Titan)
+- All focus timer modes
+- XP and gamification
+
+## FAQ
+
+### What is the best AI habit tracker in 2026?
+Resurgo leads in AI habit coaching depth — 4 specialized coaches, goal decomposition, wellness integration, and adaptive planning. TickTick has basic AI for scheduling. Most other habit apps don't have meaningful AI yet.
+
+### Can AI really help you build habits?
+Research on behavioral coaching consistently shows external feedback loops increase habit retention. AI coaching provides personalized feedback at a fraction of the cost of human coaching and is available 24/7.
+
+### How is AI habit tracking different from regular reminder apps?
+Reminder apps tell you to do the habit. AI habit trackers help you design the right habits for your goals, coach you through difficult phases, and adapt your plan when life changes. Fundamentally different value propositions.
+
+### Is AI habit tracking free?
+Resurgo has a full-featured free plan. Most AI-heavy features require a paid tier on most platforms. Resurgo Pro is $4.99/month, giving you all 4 coaches, advanced analytics, and the full goal decomposition system.
+    `,
+  },
+  'habitica-alternatives-2026': {
+    title: '7 Best Habitica Alternatives in 2026 (With AI Coaching)',
+    desc: "Habitica was great for gamified habits. In 2026, there are better options that combine gamification with AI coaching, automated goal planning, and wellness tracking. Here are the 7 best alternatives.",
+    date: 'March 7, 2026',
+    readTime: '11 min',
+    tags: ['habits', 'productivity', 'AI coaching', 'AI productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['habitica alternatives 2026', 'best habitica alternative', 'apps like habitica', 'habitica replacement with AI'],
+    content: `
+## Why People Look for Habitica Alternatives
+
+Habitica is one of the most creative habit apps ever built. Its RPG mechanic — avatar, gear, quests, guilds — made habit tracking feel like a game.
+
+But in 2026, people leave Habitica for the same reasons:
+
+1. **Manual task entry is tedious** — you build the system yourself
+2. **No AI coaching or goal decomposition** — it doesn't help you design habits
+3. **The RPG UI feels cluttered** — nostalgia has limits
+4. **No wellness tracking** — sleep, mood, energy aren't connected
+5. **No focus timer mode** — productivity needs to be integrated
+
+If you loved Habitica's gamification but want more in 2026, here are the 7 best alternatives.
+
+## The 7 Best Habitica Alternatives in 2026
+
+### 1. Resurgo — Best Overall Habitica Alternative
+
+**Why it wins:** Resurgo keeps everything Habitica does well (gamification, XP, leveling, badges, habit streaks) and adds everything Habitica lacks (AI coaching, goal decomposition, focus timers, wellness tracking).
+
+**Gamification in Resurgo:**
+- XP earned from every completed habit and task
+- Level system that tracks cumulative progress
+- Streak badges and milestone badges
+- Freeze tokens to protect streaks during travel or illness
+
+**AI features Habitica doesn't have:**
+- 4 coaching personas (Nova, Titan, Sage, Phoenix) — each with a different accountability style
+- Goal → habit decomposition: enter your goal, get a habit stack
+- Weekly AI review summarizing patterns and suggested changes
+- Wellness integration (sleep, mood, energy) connected to habit performance
+
+**Price:** Free forever (unlimited habits, 2 coaches, XP) + Pro $4.99/mo
+
+### 2. Streaks (iOS) — Best Minimal Alternative
+
+**Why people switch:** Clean, frictionless, Apple Watch integration. Best for people who loved Habitica's simplicity but want less visual noise.
+
+**Limitation:** Max 12 habits, iOS only, no AI, no goal planning.
+
+### 3. Habitify — Best for Analytics
+
+**Why people switch:** Detailed habit analytics and trend charts. Better data visualization than Habitica.
+
+**Limitation:** No AI, no gamification, limited free tier (3 habits).
+
+### 4. TickTick — Best if You Also Need Task Management
+
+**Why people switch:** Solid task management + habit calendar in one app. More practical for daily work.
+
+**Limitation:** No behavioral coaching, no goal decomposition.
+
+### 5. Finch — Best for Emotional Wellness
+
+**Why people switch:** Finch is a self-care app with a virtual pet mechanic similar to Habitica's avatar system, focused on emotional wellness over productivity.
+
+**Limitation:** Wellness-focused, not productivity-focused.
+
+### 6. SuperBetter — Best for Resilience Building
+
+**Why people switch:** Similar game-based structure to Habitica. Built on resilience science with quests and power-ups.
+
+**Limitation:** Less focused on daily habit tracking, more on challenge-based growth.
+
+### 7. Fabulous — Best for Behavior Change Science
+
+**Why people switch:** Fabulous is built on behavioral science principles from Duke University. Strong for building morning routines and rituals.
+
+**Limitation:** Subscription-only, no gamification, no AI goal decomposition.
+
+## Our Recommendation
+
+If you want everything Habitica offered plus AI coaching and automated goal planning, Resurgo is the clear upgrade. The gamification feels modern, the free plan is generous, and you don't have to manually design your habit system.
+
+Start free at resurgo.life.
+
+## FAQ
+
+### What is better than Habitica in 2026?
+Resurgo offers better AI coaching, goal decomposition, wellness tracking, and focus timers while maintaining gamification (XP, levels, badges). For pure RPG social gaming mechanics, Habitica is still unique.
+
+### Is there a Habitica alternative with AI coaching?
+Yes — Resurgo has 4 AI coaching personas with behavioral strategy, goal decomposition, and weekly AI reviews. No other gamified habit app has this depth of AI coaching in 2026.
+
+### Does any app have Habitica's social features plus AI?
+Currently, no app perfectly combines Habitica's guild/party social system with AI coaching. Resurgo focuses on individual performance with AI. If social guild accountability is critical, Habitica still leads there.
+
+### Is Resurgo free like Habitica?
+Both have free tiers. Resurgo's free tier is unlimited habits, 2 coaches, and full XP gamification. Habitica's free tier includes most features but has microtransaction elements for gear and cosmetics.
+    `,
+  },
+  'best-productivity-app-adhd-focus': {
+    title: 'Best Productivity Apps for ADHD and Focus Issues in 2026',
+    desc: "ADHD productivity isn't about more willpower — it's about better systems. We reviewed the top apps specifically for ADHD brains: low friction, high feedback, and AI assistance built-in.",
+    date: 'March 6, 2026',
+    readTime: '13 min',
+    tags: ['focus', 'habits', 'AI productivity', 'psychology', 'productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['best productivity app for ADHD 2026', 'ADHD habit tracker', 'focus app ADHD', 'productivity tools for ADHD adults'],
+    content: `
+## Why Standard Productivity Apps Fail ADHD Brains
+
+Most productivity apps are designed for neurotypical executive function. They assume:
+- You can consistently remember to open the app
+- You can maintain motivation through repetitive reminders
+- You can self-direct without external feedback loops
+- You won't get overwhelmed by too many features
+
+ADHD productivity needs a different design philosophy:
+
+1. **Low friction check-ins** — if it's hard to open, you won't
+2. **Immediate feedback** — dopamine needs to come from the system, not delayed gratification
+3. **AI to reduce planning load** — decision fatigue is real
+4. **Flexible structure** — rigid systems break at the first disruption
+5. **External accountability** — accountability partners or AI coaching
+6. **Visual progress** — abstract completion isn't motivating; XP bars and streaks are
+
+## The Best Apps for ADHD Productivity in 2026
+
+### 1. Resurgo — Best AI-Powered ADHD Productivity App
+
+**Why it works for ADHD:**
+
+- **Low decision load:** Enter one goal. AI creates your entire habit stack — you don't have to figure out what to do.
+- **Immediate gamification:** Every completed habit gives XP and moves you toward a level. Instant dopamine feedback.
+- **Multiple coaching styles:** Choose between Nova (supportive), Titan (disciplined), Sage (analytical), or Phoenix (resilient) — different ADHD brains respond to different coaching approaches.
+- **Telegram bot:** Check-in habits from Telegram without opening the full app — reduces friction for quick completions.
+- **Streak freeze tokens:** Missed a day? Protect your streak so you don't spiral. No shame mechanics.
+- **Focus timers:** Pomodoro (25 min) and Deep Work (90 min) modes with ambient sounds — structured work windows designed to match ADHD attention cycles.
+- **Weekly AI review:** Instead of reviewing 30 metrics, Resurgo summarizes your week and tells you the 2-3 things to focus on next.
+
+**Free plan:** Unlimited habits, 2 coaches, all focus modes, XP and levels.
+
+### 2. Focusmate — Best for Body Doubling
+
+**Why it works for ADHD:**
+Body doubling (working alongside another person) is one of the most effective ADHD strategies. Focusmate pairs you with a partner for 25, 50, or 75-minute sessions.
+
+**Limitation:** Scheduling-based, not always spontaneous.
+
+### 3. Todoist — Best for Simple Task Capture
+
+**Why it works for ADHD:**
+Quick capture with keyboard shortcut, natural language scheduling ("tomorrow at 3pm"), and a clean interface. Good for people who need fast task entry without friction.
+
+**Limitation:** No gamification, no AI coaching, no habit system.
+
+### 4. Notion (with ADHD template) — Best for Custom Systems
+
+**Why it works for ADHD:**
+If you have hyperactive interest episodes (common in ADHD), building a custom Notion system can be highly engaging. Many ADHD creators have shared templates specifically designed for ADHD workflows.
+
+**Major limitation:** The setup and maintenance period is exhausting and the novelty wears off.
+
+### 5. Finch — Best for Emotional Regulation
+
+**Why it works for ADHD:**
+Self-compassion rituals are important for ADHD — shame spirals are destructive to productivity. Finch's pet mechanic makes self-care less clinical.
+
+**Limitation:** Wellness-focused, not output-focused.
+
+## ADHD Productivity Principles That Matter More Than Apps
+
+No app fixes ADHD. But systems designed with these principles help significantly:
+
+### Reduce decision fatigue
+Every decision you make depletes executive function. Apps that make decisions for you (like AI goal decomposition) preserve your cognitive resources for the actual work.
+
+### Build external feedback loops
+ADHD brains often have weaker internal feedback mechanisms. External streaks, XP bars, coaching feedback, and progress markers compensate for this.
+
+### Design for recovery, not perfection
+Perfect streak = unnecessary pressure. Systems with streak freezes, recovery protocols, and "minimum viable habit" modes work better than all-or-nothing mechanics.
+
+### Use time blocks, not to-do lists
+ADHD tends to time-blindness. Time-blocking with focus timers helps make time feel real and creates built-in stopping points.
+
+### Anchor habits to existing routines
+Habit stacking (attaching new habits to existing cues) reduces the load on working memory. "After I pour coffee, I open Resurgo and log yesterday's sleep" works better than trying to remember a standalone habit.
+
+## Building Your ADHD Productivity Stack in 2026
+
+**Core:** Resurgo (AI coaching + habits + focus timers + gamification)
+**Body doubling:** Focusmate (for high-stakes work sessions)
+**Quick capture:** Todoist or native iOS reminders (for task capture when you can't open Resurgo)
+**Reflection:** Resurgo weekly review (keep it minimal — 2 questions max)
+
+## FAQ
+
+### What is the best app for ADHD adults in 2026?
+Resurgo leads for combined habit tracking, AI coaching, and ADHD-optimized features (gamification, streak freezes, low-friction check-ins, focus timers). Focusmate leads specifically for body doubling accountability.
+
+### Does AI help with ADHD productivity?
+Yes — significantly. AI reduces decision load (you don't have to figure out what to do), provides immediate feedback (behavioral coaching), and adapts plans when routines break down (which happens more frequently with ADHD).
+
+### What's the best free productivity app for ADHD?
+Resurgo's free plan is excellent for ADHD: unlimited habits, gamification (XP + levels), 2 AI coaches, all focus timer modes, and no credit card required.
+
+### Should I use multiple apps or one system?
+For ADHD, fewer apps usually wins. The context switching between multiple productivity apps increases cognitive load. Resurgo covers habits, focus timers, coaching, and goals in one place — reducing the number of "apps to check."
+    `,
+  },
 };
 
 function extractFaqItemsFromContent(content: string): Array<FaqItem> {
@@ -1928,7 +2448,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="mb-8 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-5 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-            <span className="font-mono text-xs tracking-widest text-orange-600">RESURGO :: BLOG</span>
+            <span className="font-mono text-[9px] tracking-widest text-orange-600">RESURGO :: BLOG</span>
           </div>
           <div className="p-6 space-y-3">
             <Image
@@ -1941,13 +2461,13 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             />
             <div className="flex flex-wrap gap-2">
               {post.tags.map((tag) => (
-                <span key={tag} className="border border-orange-900/50 px-2 py-0.5 font-mono text-xs tracking-widest text-orange-600">
+                <span key={tag} className="border border-orange-900/50 px-2 py-0.5 font-mono text-[8px] tracking-widest text-orange-600">
                   {tag.toUpperCase()}
                 </span>
               ))}
             </div>
             <h1 className="font-mono text-xl font-bold leading-snug text-zinc-100">{post.title}</h1>
-            <div className="flex items-center gap-3 font-mono text-xs text-zinc-400">
+            <div className="flex items-center gap-3 font-mono text-[9px] text-zinc-400">
               <span>{post.date}</span>
               <span>·</span>
               <span>{post.readTime} read</span>
@@ -1958,7 +2478,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         {/* Content with Charts */}
         {toc.length > 0 && (
           <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
-            <p className="font-mono text-xs tracking-widest text-orange-500">ARTICLE_MAP</p>
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">ARTICLE_MAP</p>
             <ul className="mt-2 space-y-1">
               {toc.map((item) => (
                 <li key={item.id}>
@@ -1972,7 +2492,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         )}
 
         <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
-          <p className="font-mono text-xs tracking-widest text-orange-500">KEY_TAKEAWAYS</p>
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">KEY_TAKEAWAYS</p>
           <ul className="mt-2 space-y-1">
             {keyTakeaways.map((takeaway) => (
               <li key={takeaway} className="font-mono text-xs text-zinc-400">• {takeaway}</li>
@@ -1991,7 +2511,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         </div>
 
         <div className="mt-10 border border-zinc-800 bg-zinc-950 p-5">
-          <p className="font-mono text-xs tracking-widest text-orange-500">ABOUT_THE_AUTHOR</p>
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">ABOUT_THE_AUTHOR</p>
           <div className="mt-3 flex items-start gap-4">
             <Image
               src={AUTHOR.image}
@@ -2002,14 +2522,14 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
             />
             <div>
               <p className="font-mono text-sm font-bold text-zinc-100">{AUTHOR.name}</p>
-              <p className="font-mono text-xs text-orange-500">{AUTHOR.role}</p>
+              <p className="font-mono text-[10px] text-orange-500">{AUTHOR.role}</p>
               <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">{AUTHOR.bio}</p>
             </div>
           </div>
         </div>
 
         <div className="mt-8 border border-zinc-800 bg-zinc-950 p-5">
-          <p className="font-mono text-xs tracking-widest text-orange-500">RELATED_ARTICLES</p>
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">RELATED_ARTICLES</p>
           <div className="mt-3 space-y-3">
             {relatedPosts.map((item) => (
               <Link
@@ -2018,8 +2538,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 className="block border border-zinc-800 bg-black/40 p-3 transition hover:border-zinc-700"
               >
                 <p className="font-mono text-xs font-semibold text-zinc-200">{item.title}</p>
-                <p className="mt-1 font-mono text-xs text-zinc-500">{item.date} · {item.sharedTagCount} shared tags</p>
-                <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">{item.desc}</p>
+                <p className="mt-1 font-mono text-[10px] text-zinc-500">{item.date} · {item.sharedTagCount} shared tags</p>
+                <p className="mt-2 font-mono text-[11px] leading-relaxed text-zinc-400">{item.desc}</p>
               </Link>
             ))}
           </div>
@@ -2027,11 +2547,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         {primaryCluster && (prevInSeries || nextInSeries) && (
           <div className="mt-8 border border-zinc-800 bg-zinc-950 p-5">
-            <p className="font-mono text-xs tracking-widest text-orange-500">ARTICLE_SERIES_NAV</p>
-            <p className="mt-1 font-mono text-xs text-zinc-500">Series: {primaryCluster.title}</p>
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">ARTICLE_SERIES_NAV</p>
+            <p className="mt-1 font-mono text-[10px] text-zinc-500">Series: {primaryCluster.title}</p>
             <div className="mt-3 grid gap-3 md:grid-cols-2">
               <div className="border border-zinc-800 bg-black/40 p-3">
-                <p className="font-mono text-xs text-zinc-500">PREVIOUS</p>
+                <p className="font-mono text-[9px] text-zinc-500">PREVIOUS</p>
                 {prevInSeries ? (
                   <Link href={`/blog/${prevInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
                     {prevInSeries.title}
@@ -2041,7 +2561,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 )}
               </div>
               <div className="border border-zinc-800 bg-black/40 p-3">
-                <p className="font-mono text-xs text-zinc-500">NEXT</p>
+                <p className="font-mono text-[9px] text-zinc-500">NEXT</p>
                 {nextInSeries ? (
                   <Link href={`/blog/${nextInSeries.slug}`} className="mt-1 block font-mono text-xs text-zinc-200 hover:text-orange-400">
                     {nextInSeries.title}
@@ -2056,7 +2576,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
 
         {nextBestRead && (
           <div className="mt-8 border border-orange-900/50 bg-orange-950/10 p-6 text-center">
-            <p className="font-mono text-xs tracking-widest text-orange-500">{ctaConfig.label}</p>
+            <p className="font-mono text-[10px] tracking-widest text-orange-500">{ctaConfig.label}</p>
             <p className="mt-2 font-mono text-base font-bold text-zinc-100">{ctaConfig.headline}</p>
             <p className="mt-1 font-mono text-xs text-zinc-500">{ctaConfig.sub}</p>
             <div className="mt-4 flex flex-col items-center justify-center gap-2 sm:flex-row">

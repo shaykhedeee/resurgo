@@ -202,7 +202,6 @@ export function TerminalDemo() {
                   onKeyDown={handleKeyDown}
                   placeholder={typedPlaceholder || 'Type your goal...'}
                   className="flex-1 border-none bg-transparent text-zinc-100 outline-none placeholder:text-zinc-600 font-terminal text-sm"
-                  autoFocus
                 />
                 <button
                   onClick={runScan}

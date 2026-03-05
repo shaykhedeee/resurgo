@@ -18,6 +18,8 @@ export interface ComparisonPage {
   competitor: string;
   summary: string;
   bestFor: string;
+  verdict?: string;
+  seoKeywords?: string[];
   categories: Array<{
     name: string;
     resurgo: string;
