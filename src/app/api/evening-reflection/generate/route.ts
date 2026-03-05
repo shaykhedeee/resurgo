@@ -57,13 +57,12 @@ Tone: Warm but real. Reflective, not preachy. Like a wise mentor at the end of a
 If they crushed it, celebrate genuinely. If they struggled, be compassionate but forward-looking.
 Do NOT use emojis. Keep it terminal-style clean.`;
 
-    const reflection = await callAI(prompt, {
-      taskType: 'coaching',
-      maxTokens: 350,
-      temperature: 0.7,
-    });
+    const result = await callAI(
+      [{ role: 'system', content: 'You are RESURGO, an elite AI life coach.' }, { role: 'user', content: prompt }],
+      { taskType: 'coaching', maxTokens: 350, temperature: 0.7 }
+    );
 
-    return NextResponse.json({ reflection });
+    return NextResponse.json({ reflection: result.content });
   } catch (error) {
     console.error('Evening reflection error:', error);
     return NextResponse.json(

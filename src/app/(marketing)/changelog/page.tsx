@@ -36,7 +36,7 @@ const RELEASES = [
     changes: [
       { type: 'NEW', text: 'Health Suite: Mood tracking, Journal, Sleep, Nutrition' },
       { type: 'NEW', text: 'Budget Tracker with category management and financial goals' },
-      { type: 'NEW', text: '4 Action-Capable AI Coaches (Nova, Titan, Sage, Phoenix) — can create tasks, goals, habits & plans from chat' },
+      { type: 'NEW', text: '6 Action-Capable AI Coaches (Marcus, Aurora, Titan, Sage, Phoenix, Nova) — can create tasks, goals, habits & plans from chat' },
       { type: 'IMPROVED', text: 'Focus session distraction logging with analysis' },
     ],
   },

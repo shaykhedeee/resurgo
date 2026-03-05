@@ -42,13 +42,12 @@ Generate a punchy, actionable morning briefing (3-5 paragraphs, ~150 words). Inc
 Tone: Direct, supportive, slightly tactical. Like a smart friend who's also a performance coach.
 Do NOT use emojis. Keep it terminal-style clean.`;
 
-    const briefing = await callAI(prompt, {
-      taskType: 'coaching',
-      maxTokens: 400,
-      temperature: 0.7,
-    });
+    const result = await callAI(
+      [{ role: 'system', content: 'You are RESURGO, an elite AI life coach.' }, { role: 'user', content: prompt }],
+      { taskType: 'coaching', maxTokens: 400, temperature: 0.7 }
+    );
 
-    return NextResponse.json({ briefing });
+    return NextResponse.json({ briefing: result.content });
   } catch (error) {
     console.error('Morning briefing error:', error);
     return NextResponse.json(

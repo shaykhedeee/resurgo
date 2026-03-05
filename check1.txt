@@ -1,2 +1,0 @@
-﻿10: import { useAscendStore } from '@/lib/store';
-71: } = useAscendStore();

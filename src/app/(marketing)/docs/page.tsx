@@ -395,7 +395,7 @@ Authorization: Bearer rsg_your_api_key_here`}</pre>
           <div className="p-5 space-y-3 font-mono text-sm text-zinc-400">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {[
-                { lang: 'JavaScript / Node.js', status: 'Available', code: 'npm install @resurgo/sdk' },
+                { lang: 'JavaScript / Node.js', status: 'Coming Soon', code: 'npm install @resurgo/sdk' },
                 { lang: 'Python', status: 'Coming Soon', code: 'pip install resurgo' },
                 { lang: 'cURL', status: 'Available', code: 'Works out of the box' },
                 { lang: 'Telegram Bot', status: 'Built-in', code: '@ResurgoBot on Telegram' },

@@ -1577,7 +1577,7 @@ In 2026, the bar is higher than streaks and reminders. A great habit tracker nee
 
 **Best for:** Anyone who wants AI-powered habit coaching, unlimited habits, and goal tracking in one platform.
 
-Resurgo combines everything: unlimited habit tracking with streaks and XP, 4 AI coaches that break your goals into daily actions, wellness tracking (sleep, mood, nutrition), focus timers (Pomodoro, Deep Work, Flowtime), and a generous free plan.
+Resurgo combines everything: unlimited habit tracking with streaks and XP, 6 AI coaches that break your goals into daily actions, wellness tracking (sleep, mood, nutrition), focus timers (Pomodoro, Deep Work, Flowtime), and a generous free plan.
 
 **Standout feature:** Instead of manually creating habits, you tell Resurgo your goal and it suggests the specific habits — with frequency, timing, and stacking recommendations. It's the difference between a tracker and a system.
 
@@ -1637,7 +1637,7 @@ For most people, the question is: do you want an app that tracks habits, or one 
 Resurgo offers the most generous free tier — unlimited habits, 2 AI coaches, all focus timer modes, and XP gamification with no time limit or credit card required.
 
 ### Is there a habit tracker with AI coaching?
-Yes. Resurgo has 4 AI coaching personas (Nova, Titan, Sage, Phoenix) that each take a different approach to accountability and goal planning. They can break down any goal into specific habits and adjust your plan based on your progress data.
+Yes. Resurgo has 6 AI coaching personas (Marcus, Aurora, Titan, Sage, Phoenix, Nova) that each take a different approach to accountability and goal planning. They can break down any goal into specific habits and adjust your plan based on your progress data.
 
 ### What habit tracker works on Android and iOS?
 Resurgo, TickTick, Habitica, Todoist, and Habitify are all cross-platform. Streaks and Things 3 are iOS/macOS only.
@@ -1717,7 +1717,7 @@ If you want habit tracking that is:
 - Gamified (XP, levels, streak badges)
 - Immediately usable (no template setup)
 
-Resurgo was built for this. You get unlimited habits, 4 AI coaches, focus timers, wellness tracking, and an XP system — all in one app without building a Notion database from scratch.
+Resurgo was built for this. You get unlimited habits, 6 AI coaches, focus timers, wellness tracking, and an XP system — all in one app without building a Notion database from scratch.
 
 **Free plan:** Unlimited habits, 2 coaches, all focus modes, XP — no credit card.
 
@@ -1945,7 +1945,7 @@ Start free at resurgo.life.
 Resurgo offers better AI coaching, goal decomposition, wellness tracking, and focus timers while maintaining gamification (XP, levels, badges). For pure RPG social gaming mechanics, Habitica is still unique.
 
 ### Is there a Habitica alternative with AI coaching?
-Yes — Resurgo has 4 AI coaching personas with behavioral strategy, goal decomposition, and weekly AI reviews. No other gamified habit app has this depth of AI coaching in 2026.
+Yes — Resurgo has 6 AI coaching personas with behavioral strategy, goal decomposition, and weekly AI reviews. No other gamified habit app has this depth of AI coaching in 2026.
 
 ### Does any app have Habitica's social features plus AI?
 Currently, no app perfectly combines Habitica's guild/party social system with AI coaching. Resurgo focuses on individual performance with AI. If social guild accountability is critical, Habitica still leads there.

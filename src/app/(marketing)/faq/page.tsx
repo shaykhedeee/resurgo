@@ -43,7 +43,7 @@ const FAQs = [
   },
   {
     q: 'How does AI coaching work?',
-    a: 'You choose from 4 elite AI coach personas — Nova (systems architect), Titan (performance engine), Sage (wealth architect), and Phoenix (resilience forge). Each coach can directly create tasks, goals, habits, and full plans for you from conversation. They remember your sessions and personalize advice based on your real data.'
+    a: 'You choose from 6 elite AI coach personas — Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Sage (financial alchemist), Phoenix (comeback specialist), and Nova (creative systems). Each coach can directly create tasks, goals, habits, and full plans for you from conversation. They remember your sessions and personalize advice based on your real data.'
   },
   {
     q: 'Is my data private?',

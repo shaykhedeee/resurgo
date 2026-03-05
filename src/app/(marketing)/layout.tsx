@@ -6,20 +6,14 @@
 
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import { LogoMark } from '@/components/Logo';
+import Image from 'next/image';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { MarketingFooter } from '@/components/MarketingFooter';
-import StickyCTA from '@/components/marketing/StickyCTA';
-import ExitIntent from '@/components/marketing/ExitIntent';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/about', label: 'About' },
-  { href: '/templates', label: 'Templates' },
-  { href: '/use-cases', label: 'Use Cases' },
-  { href: '/tools', label: 'Tools' },
-  { href: '/compare', label: 'Compare' },
   { href: '/blog', label: 'Blog' },
   { href: '/docs', label: 'Docs' },
 ];
@@ -32,9 +26,16 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <LogoMark className="h-7 w-7" />
+            <Image
+              src="/icons/pixel-logo.svg"
+              alt="RESURGO logo"
+              width={28}
+              height={28}
+              className="h-7 w-7"
+              style={{ imageRendering: 'pixelated' }}
+            />
             <span className="font-mono text-sm font-bold tracking-widest text-orange-500">
-              RESURGO
+              RESURGO.life
             </span>
           </Link>
 
@@ -70,8 +71,8 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
         {/* Terminal sub-bar */}
         <div className="border-t border-zinc-900 bg-zinc-950 px-5 py-1">
-          <span className="font-mono text-xs tracking-widest text-zinc-400">
-            RESURGO :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
+          <span className="font-mono text-[10px] tracking-widest text-zinc-400">
+            RESURGO.life :: {new Date().getFullYear()} :: ALL_SYSTEMS_NOMINAL
           </span>
         </div>
 
@@ -96,9 +97,6 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
 
       {/* ── FOOTER ── */}
       <MarketingFooter />
-
-      <StickyCTA />
-      <ExitIntent />
 
       {/* Scroll to top */}
       <ScrollToTop />

@@ -8,6 +8,9 @@ import { useState } from 'react';
 export default function AccountPage() {
   const router = useRouter();
   const convexUser = useQuery(api.users.current, {});
+  const tasks = useQuery(api.tasks.list, {});
+  const habits = useQuery(api.habits.listAll, {});
+  const goals = useQuery(api.goals.listAll, {});
   const [exporting, setExporting] = useState(false);
 
   const handleSignOut = async () => {
@@ -22,9 +25,9 @@ export default function AccountPage() {
   const handleExport = async () => {
     setExporting(true);
     try {
-      // Export what we know from Convex
       const exportData = {
         exportedAt: new Date().toISOString(),
+        version: '1.4.0',
         user: convexUser ? {
           name: convexUser.name,
           email: convexUser.email,
@@ -33,12 +36,15 @@ export default function AccountPage() {
           createdAt: convexUser._creationTime,
           onboardingComplete: convexUser.onboardingComplete,
         } : null,
+        tasks: tasks ?? [],
+        habits: habits ?? [],
+        goals: goals ?? [],
       };
       const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `resurgo-account-export-${Date.now()}.json`;
+      a.download = `resurgo-full-export-${Date.now()}.json`;
       document.body.appendChild(a);
       a.click();
       a.remove();

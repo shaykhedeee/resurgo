@@ -7,6 +7,9 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: 'img.clerk.com' },
     ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   
   // Production-grade security headers
