@@ -170,44 +170,44 @@ export function LevelUpModal({ level, levelName, onClose }: LevelUpModalProps) {
   }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative animate-scale-up">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+      <div className="relative animate-bounce-in">
         {/* Glow effect */}
-        <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-gold-400 to-ascend-500 blur-xl opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-yellow-600 to-orange-600 blur-xl opacity-30" />
         
-        <div className="relative glass-card p-8 text-center max-w-sm">
+        <div className="relative border-2 border-yellow-700 bg-zinc-950 p-8 text-center max-w-sm">
           {/* Stars decoration */}
           <div className="absolute -top-4 left-1/2 -translate-x-1/2 flex gap-2">
-            <Star className="w-6 h-6 text-gold-400 animate-pulse" fill="currentColor" />
-            <Star className="w-8 h-8 text-gold-400 animate-pulse delay-75" fill="currentColor" />
-            <Star className="w-6 h-6 text-gold-400 animate-pulse delay-150" fill="currentColor" />
+            <Star className="w-6 h-6 text-yellow-400 animate-pulse" fill="currentColor" />
+            <Star className="w-8 h-8 text-yellow-400 animate-pulse" fill="currentColor" />
+            <Star className="w-6 h-6 text-yellow-400 animate-pulse" fill="currentColor" />
           </div>
 
           {/* Level badge */}
-          <div className="w-24 h-24 rounded-full mx-auto mb-4 
-                        bg-gradient-to-br from-gold-400 to-orange-500
-                        flex items-center justify-center shadow-glow-md animate-level-up">
-            <span className="text-4xl font-bold text-white">{level}</span>
+          <div className="w-24 h-24 mx-auto mb-4 border-2 border-yellow-600
+                        bg-gradient-to-br from-yellow-700 to-orange-600
+                        flex items-center justify-center">
+            <span className="font-pixel text-3xl text-white">{level}</span>
           </div>
 
-          <h2 className="text-2xl font-bold text-gold-400 mb-2">Level Up!</h2>
-          <p className="text-white text-lg font-semibold mb-1">{levelName}</p>
-          <p className="text-white/60 text-sm mb-6">
+          <h2 className="font-pixel text-lg tracking-widest text-yellow-400 mb-2">LEVEL UP!</h2>
+          <p className="font-terminal text-xl font-semibold text-zinc-100 mb-1">{levelName}</p>
+          <p className="font-terminal text-sm text-zinc-400 mb-6">
             Keep pushing forward. You&apos;re making incredible progress!
           </p>
 
           <div className="flex items-center justify-center gap-4 mb-6">
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5">
-              <Trophy className="w-5 h-5 text-ascend-400" />
-              <span className="text-white/80 text-sm">New rewards unlocked</span>
+            <div className="flex items-center gap-2 px-4 py-2 border border-zinc-800 bg-zinc-900">
+              <Trophy className="w-5 h-5 text-orange-400" />
+              <span className="font-terminal text-sm text-zinc-300">New rewards unlocked</span>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="btn-primary w-full"
+            className="w-full border border-orange-600 bg-orange-900/30 px-4 py-2.5 font-pixel text-[0.6rem] tracking-widest text-orange-300 transition hover:bg-orange-900/50"
           >
-            Continue Ascending
+            CONTINUE_ASCENDING
           </button>
         </div>
       </div>

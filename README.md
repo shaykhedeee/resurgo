@@ -1,7 +1,7 @@
-# 🚀 Ascendify - AI-Powered Life Transformation System
+# 🚀 RESURGO - AI-Powered Life Transformation System
 
 <div align="center">
-  <img src="public/icons/icon.svg" alt="Ascendify Logo" width="120" height="120" />
+  <img src="public/icons/icon.svg" alt="RESURGO Logo" width="120" height="120" />
   <br />
   <strong>Rise to Your Potential</strong>
   <br />

@@ -12,11 +12,16 @@ import type { PixelIconName } from '@/components/PixelIcon';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import { DowngradePlanNotice } from '@/components/DowngradePlanNotice';
 import { OnboardingResume } from '@/components/OnboardingResume';
+import { Toast } from '@/components/Toast';
+import { GlobalSearch } from '@/components/GlobalSearch';
+import BrainDump from '@/components/BrainDump';
+import LevelUpDetector from '@/components/LevelUpDetector';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState, ReactNode } from 'react';
+import { useEffect, useState, useCallback, ReactNode } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { UserButton, useClerk } from '@clerk/nextjs';
+import { Search, Brain, Bell } from 'lucide-react';
 
 // ── Navigation Sections (ASCII-grouped) ──
 const NAV_SECTIONS = [
@@ -60,6 +65,20 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [brainDumpOpen, setBrainDumpOpen] = useState(false);
+
+  // Cmd+K / Ctrl+K to open command palette
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setSearchOpen(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   // Redirect unauthenticated users to sign-in
   useEffect(() => {
@@ -268,6 +287,55 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
             <PixelIcon name="menu" size={16} />
           </button>
           <Logo showText size="sm" />
+          <div className="flex-1" />
+          <button
+            onClick={() => setBrainDumpOpen(true)}
+            className="p-1 text-purple-400 hover:text-purple-300"
+            title="Brain Dump"
+          >
+            <Brain className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => router.push('/settings')}
+            className="relative p-1 text-zinc-500 hover:text-orange-400"
+            title="Notifications"
+          >
+            <Bell className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="p-1 text-zinc-500 hover:text-orange-400"
+            title="Search (Ctrl+K)"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* Command palette hint (desktop) */}
+        <div className="hidden md:flex sticky top-0 z-30 h-10 items-center justify-end gap-2 border-b border-zinc-800/50 bg-black/80 backdrop-blur-sm px-6">
+          <button
+            onClick={() => setBrainDumpOpen(true)}
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-purple-800/50 text-purple-400 hover:text-purple-300 hover:border-purple-700 transition-colors"
+            title="Brain Dump"
+          >
+            <Brain className="w-3 h-3" />
+            <span className="font-terminal text-xs">Brain Dump</span>
+          </button>
+          <button
+            onClick={() => router.push('/settings')}
+            className="relative p-1.5 rounded-md border border-zinc-800 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors"
+            title="Notifications"
+          >
+            <Bell className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-800 text-zinc-500 hover:text-zinc-300 hover:border-zinc-700 transition-colors"
+          >
+            <Search className="w-3 h-3" />
+            <span className="font-terminal text-xs">Search</span>
+            <kbd className="ml-2 px-1.5 py-0.5 rounded text-[0.6rem] border border-zinc-700 bg-zinc-900 font-terminal text-zinc-500">⌘K</kbd>
+          </button>
         </div>
 
         {/* Downgrade notice banner */}
@@ -305,6 +373,31 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           );
         })}
       </nav>
+
+      {/* ── Global Toast Notification System ── */}
+      <Toast />
+
+      {/* ── Level-Up Celebration Detector ── */}
+      <LevelUpDetector />
+
+      {/* ── Global Command Palette (Cmd+K) ── */}
+      <GlobalSearch
+        isOpen={searchOpen}
+        onClose={() => setSearchOpen(false)}
+        onNavigate={(tab) => { router.push(`/${tab}`); setSearchOpen(false); }}
+      />
+
+      {/* ── Brain Dump Modal ── */}
+      <BrainDump isOpen={brainDumpOpen} onClose={() => setBrainDumpOpen(false)} />
+
+      {/* ── Floating Brain Dump Button ── */}
+      <button
+        onClick={() => setBrainDumpOpen(true)}
+        className="fixed bottom-24 right-4 z-40 flex h-12 w-12 items-center justify-center border border-purple-700 bg-purple-900/80 text-purple-300 shadow-lg backdrop-blur-sm transition hover:bg-purple-800 hover:text-purple-200 md:bottom-6 md:right-6 md:h-14 md:w-14"
+        title="Brain Dump — pour out everything on your mind"
+      >
+        <Brain className="h-5 w-5 md:h-6 md:w-6" />
+      </button>
     </div>
   );
 }

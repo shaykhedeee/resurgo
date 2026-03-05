@@ -15,6 +15,7 @@ import { MorningCheckIn } from '@/components/MorningCheckIn';
 import { EveningDebrief } from '@/components/EveningDebrief';
 import AdaptiveDifficultyWidget from '@/components/AdaptiveDifficultyWidget';
 import WeatherWidget from '@/components/WeatherWidget';
+import DailyQuote from '@/components/DailyQuote';
 import {
   Target,
   CheckCircle2,
@@ -464,6 +465,11 @@ export default function DashboardPage() {
       {/* -- WEATHER WIDGET -- */}
       <div className="mb-6">
         <WeatherWidget />
+      </div>
+
+      {/* -- DAILY QUOTE -- */}
+      <div className="mb-6">
+        <DailyQuote />
       </div>
 
       {/* -- AI Morning Briefing (if done) -- */}
