@@ -16,6 +16,12 @@ import { EveningDebrief } from '@/components/EveningDebrief';
 import AdaptiveDifficultyWidget from '@/components/AdaptiveDifficultyWidget';
 import WeatherWidget from '@/components/WeatherWidget';
 import DailyQuote from '@/components/DailyQuote';
+import FocusTimerWidget from '@/components/widgets/FocusTimerWidget';
+import HabitStreakWidget from '@/components/widgets/HabitStreakWidget';
+import QuickJournalWidget from '@/components/widgets/QuickJournalWidget';
+import GoalProgressWidget from '@/components/widgets/GoalProgressWidget';
+import AICoachWidget from '@/components/widgets/AICoachWidget';
+import CalorieTrackerWidget from '@/components/widgets/CalorieTrackerWidget';
 import {
   Target,
   CheckCircle2,
@@ -460,6 +466,20 @@ export default function DashboardPage() {
             )}
           </div>
         </div>
+      </div>
+
+      {/* -- FOCUS / STREAKS / AI COACH ROW -- */}
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        <FocusTimerWidget />
+        <HabitStreakWidget />
+        <AICoachWidget />
+      </div>
+
+      {/* -- JOURNAL / GOAL PROGRESS / CALORIE ROW -- */}
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        <QuickJournalWidget />
+        <GoalProgressWidget />
+        <CalorieTrackerWidget />
       </div>
 
       {/* -- WEATHER WIDGET -- */}

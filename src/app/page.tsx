@@ -120,7 +120,7 @@ const softwareSchema = {
     'AI goal breakdown into milestones and daily tasks',
     'Habit tracker with streaks and consistency analytics',
     'Pomodoro, Deep Work, and Flowtime focus timers',
-    '4 specialized AI coaches (NOVA, TITAN, SAGE, PHOENIX)',
+    '6 specialized AI coaches (NOVA, TITAN, SAGE, PHOENIX, ATLAS, EMBER)',
     'Gamification with XP, levels, and badges',
     'Wellness, sleep, and nutrition tracking',
     'Weekly AI-generated progress reviews',
@@ -289,7 +289,7 @@ const faqSchema = {
       name: 'What makes Resurgo different from other habit trackers like Habitica, Streaks, or Notion?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Resurgo combines AI goal planning, habit tracking with streaks, Pomodoro/Deep Work focus timers, 4 specialized AI coaches, wellness tracking, gamification with XP and levels, and weekly AI reviews — all in one app. Most tools only handle one or two of these. Resurgo connects them into a single daily workflow so you never need to switch apps.',
+        text: 'Resurgo combines AI goal planning, habit tracking with streaks, Pomodoro/Deep Work focus timers, 6 specialized AI coaches, wellness tracking, gamification with XP and levels, and weekly AI reviews — all in one app. Most tools only handle one or two of these. Resurgo connects them into a single daily workflow so you never need to switch apps.',
       },
     },
     {
@@ -313,7 +313,7 @@ const faqSchema = {
       name: 'How does AI coaching work in Resurgo?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Resurgo has 4 specialized AI coaches: NOVA (Systems Architect), TITAN (Performance Engine), SAGE (Wealth Architect), and PHOENIX (Resilience Forge). Each coach has a distinct personality and approach. Nova and Phoenix are free. Upgrade to Pro to unlock all four. Coaches respond based on your goals, habits, and recent progress.',
+        text: 'Resurgo has 6 specialized AI coaches: NOVA (Systems Architect), TITAN (Performance Engine), SAGE (Wealth Architect), PHOENIX (Resilience Forge), ATLAS (Strategic Planner), and EMBER (Creative Catalyst). Each coach has a distinct personality and approach. Nova and Phoenix are free. Upgrade to Pro to unlock all six. Coaches respond based on your goals, habits, and recent progress.',
       },
     },
     {

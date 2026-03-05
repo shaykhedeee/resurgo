@@ -124,7 +124,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
     categories: [
       { name: 'Habit Analytics', resurgo: 'Streaks, completion rates, patterns', competitor: 'Advanced charts and trend analysis' },
       { name: 'AI Goal Planning', resurgo: 'Automatic milestones and daily tasks', competitor: 'Not included' },
-      { name: 'AI Coaching', resurgo: '4 specialized AI coaches', competitor: 'Not included' },
+      { name: 'AI Coaching', resurgo: '6 specialized AI coaches', competitor: 'Not included' },
       { name: 'Wellness Tracking', resurgo: 'Sleep, mood, energy, nutrition', competitor: 'Basic mood logging only' },
       { name: 'Focus Timers', resurgo: 'Pomodoro, Deep Work, Flowtime', competitor: 'Not included' },
       { name: 'Gamification', resurgo: 'XP, levels, streak badges', competitor: 'Not included' },

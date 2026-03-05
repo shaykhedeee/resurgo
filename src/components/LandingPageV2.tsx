@@ -48,9 +48,9 @@ const CORE_FEATURES = [
   },
   {
     id: 'AI_COACHING',
-    title: '4 Specialized AI Coaches',
+    title: '6 Specialized AI Coaches',
     description:
-      'Chat with NOVA (Systems), TITAN (Performance), SAGE (Wealth), or PHOENIX (Resilience). Each coach has a distinct strategy. Advice personalized to your goals, 24/7.',
+      'Chat with NOVA (Systems), TITAN (Performance), SAGE (Wealth), PHOENIX (Resilience), ATLAS (Strategy), or EMBER (Creativity). Each coach has a distinct strategy. Advice personalized to your goals, 24/7.',
     status: 'Live',
     category: 'AI',
   },
@@ -224,7 +224,7 @@ const FAQS = [
   {
     question: 'What is the best free AI habit tracker in 2025?',
     answer:
-      'Resurgo is one of the top free AI habit trackers available in 2025. Unlike basic trackers, Resurgo uses AI to automatically break your goals into milestones and daily habits, offers Pomodoro and Deep Work focus timers, provides AI coaching via four distinct personas, and has a gamification system with XP and levels — all on the free plan with no time limit.',
+      'Resurgo is one of the top free AI habit trackers available in 2025. Unlike basic trackers, Resurgo uses AI to automatically break your goals into milestones and daily habits, offers Pomodoro and Deep Work focus timers, provides AI coaching via six distinct personas, and has a gamification system with XP and levels — all on the free plan with no time limit.',
   },
   {
     question: 'Does Resurgo work offline?',
@@ -850,7 +850,7 @@ function LandingPageV2() {
                 4 AI coaches. Choose your mentor.
               </h2>
               <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
-                Each coach has a distinct personality, philosophy, and strategy. Nova and Phoenix are free forever. Unlock all four with Pro.
+                Each coach has a distinct personality, philosophy, and strategy. Nova and Phoenix are free forever. Unlock all six with Pro.
               </p>
             </div>
 
