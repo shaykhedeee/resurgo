@@ -17,10 +17,13 @@ interface VisionBoardPanel {
   goalTitle: string;
   imageData: string | null;
   imagePrompt: string;
+  imageKeywords?: string[];
   affirmation: string;
   category: string;
   progress: number;
   position: number;
+  emotionalAnchor?: string;
+  milestoneHint?: string;
 }
 
 interface VisionBoardTheme {
@@ -36,6 +39,7 @@ interface VisionBoardConfig {
   panels: VisionBoardPanel[];
   centerAffirmation: string;
   generatedAt: string;
+  generationMethod?: 'pipeline' | 'direct';
 }
 
 type GrowthEventName =
@@ -364,7 +368,10 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         </h2>
         <p className="text-zinc-300 text-base italic">&ldquo;{board.centerAffirmation}&rdquo;</p>
         <p className="text-zinc-400 text-xs">
-          Generated {new Date(board.generatedAt).toLocaleDateString()} - {board.theme.mood}
+          Generated {new Date(board.generatedAt).toLocaleDateString()} · {board.theme.mood}
+          {board.generationMethod === 'pipeline' && (
+            <span className="ml-1 text-orange-500">· AI Pipeline ✦</span>
+          )}
         </p>
       </div>
 
@@ -511,33 +518,41 @@ function PanelCard({
       )}
 
       {/* Hover overlay */}
-      <div
-        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity
-                   flex flex-col justify-end p-3"
-        style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%)' }}
-      >
-        <div className="flex items-center gap-1 mb-1">
-          <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: accentColor }}>
-            {CATEGORY_ICONS[panel.category]} {panel.category}
-          </span>
-        </div>
-        <h3 className="text-white font-bold text-xs leading-tight mb-1 line-clamp-2">
-          {panel.goalTitle}
-        </h3>
-        <p className="text-zinc-300 text-xs italic line-clamp-2">
-          &ldquo;{panel.affirmation}&rdquo;
-        </p>
-        {/* Progress bar */}
-        <div className="mt-2">
-          <div className="h-0.5 bg-zinc-700 rounded-full overflow-hidden">
-            <div
-              className="h-full rounded-full transition-all"
-              style={{ width: `${panel.progress}%`, backgroundColor: accentColor }}
-            />
+        <div
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity
+                     flex flex-col justify-end p-3"
+          style={{ background: 'linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 70%, transparent 100%)' }}
+        >
+          <div className="flex items-center gap-1 mb-1">
+            <span className="text-xs uppercase tracking-wider font-semibold" style={{ color: accentColor }}>
+              {CATEGORY_ICONS[panel.category]} {panel.category}
+            </span>
+            {panel.emotionalAnchor && (
+              <span className="ml-auto text-xs px-1.5 py-0.5 rounded-full bg-black/50 text-zinc-300 font-mono uppercase tracking-widest">
+                {panel.emotionalAnchor}
+              </span>
+            )}
           </div>
-          <span className="text-xs text-zinc-400 mt-0.5 block">{panel.progress}% complete</span>
+          <h3 className="text-white font-bold text-xs leading-tight mb-1 line-clamp-2">
+            {panel.goalTitle}
+          </h3>
+          <p className="text-zinc-200 text-xs italic line-clamp-2">
+            &ldquo;{panel.affirmation}&rdquo;
+          </p>
+          {panel.milestoneHint && (
+            <p className="text-zinc-400 text-xs mt-1 line-clamp-1">{panel.milestoneHint}</p>
+          )}
+          {/* Progress bar */}
+          <div className="mt-2">
+            <div className="h-1 bg-zinc-700/60 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all"
+                style={{ width: `${panel.progress}%`, backgroundColor: accentColor }}
+              />
+            </div>
+            <span className="text-xs text-zinc-400 mt-0.5 block">{panel.progress}% complete</span>
+          </div>
         </div>
-      </div>
     </div>
   );
 }
@@ -596,7 +611,18 @@ function PanelModal({
             </span>
           </div>
           <h3 className="text-white font-bold text-lg">{panel.goalTitle}</h3>
+          {panel.emotionalAnchor && (
+            <div className="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-bold uppercase tracking-widest"
+              style={{ background: `${accentColor}20`, color: accentColor }}>
+              ✦ {panel.emotionalAnchor}
+            </div>
+          )}
           <p className="text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
+          {panel.milestoneHint && (
+            <p className="text-zinc-400 text-xs leading-relaxed border-l-2 pl-3" style={{ borderColor: accentColor }}>
+              {panel.milestoneHint}
+            </p>
+          )}
 
           {/* Progress */}
           <div>

@@ -28,6 +28,9 @@ import {
   ChevronDown,
   ChevronUp,
   MessageSquare,
+  Droplets,
+  Activity,
+  Heart,
 } from 'lucide-react';
 
 type HabitView = {
@@ -62,6 +65,12 @@ export default function DashboardPage() {
   const recentCheckIns = useQuery(api.dailyCheckIns.getRecent, { days: 7 });
   const toggleHabit = useMutation(api.habits.toggleComplete);
   const toggleTask = useMutation(api.tasks.toggleComplete);
+
+  // Wellness data
+  const todayStr = new Date().toISOString().split('T')[0];
+  const todayNutrition = useQuery(api.nutrition.getNutritionLog, { date: todayStr });
+  const moodHistory = useQuery(api.wellness.getMoodHistory, { days: 7 });
+  const sleepStats = useQuery(api.sleep.getSleepStats, { days: 7 });
 
   const [togglingHabit, setTogglingHabit] = useState<string | null>(null);
   const [togglingTask, setTogglingTask] = useState<string | null>(null);
@@ -404,6 +413,98 @@ export default function DashboardPage() {
                   </div>
                 </Link>
               ))}
+            </div>
+          )}
+        </section>
+
+        {/* -- WELLNESS METRICS PANEL -- */}
+        <section className="border border-zinc-900 bg-zinc-950 lg:col-span-2">
+          <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2.5">
+            <Heart className="h-3.5 w-3.5 text-rose-500" />
+            <span className="font-terminal text-sm font-bold text-zinc-100">Wellness Overview</span>
+            <Link href="/wellness" className="ml-auto font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:text-orange-500">[DETAILS]</Link>
+          </div>
+          <div className="grid grid-cols-2 gap-px md:grid-cols-4">
+            {/* Water */}
+            <div className="p-4">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Droplets className="h-3.5 w-3.5 text-cyan-400" />
+                <span className="font-terminal text-xs text-zinc-400">Water</span>
+              </div>
+              <p className="font-terminal text-xl font-bold text-cyan-400">
+                {todayNutrition?.waterMl ? `${todayNutrition.waterMl}ml` : '--'}
+              </p>
+              {todayNutrition?.waterMl && (
+                <div className="mt-1.5 h-1 w-full rounded-full bg-zinc-800">
+                  <div className="h-1 rounded-full bg-cyan-500 transition-all" style={{ width: `${Math.min(100, (todayNutrition.waterMl / 2500) * 100)}%` }} />
+                </div>
+              )}
+              <p className="font-terminal text-xs text-zinc-600 mt-0.5">goal: 2500ml</p>
+            </div>
+            {/* Steps */}
+            <div className="p-4">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Activity className="h-3.5 w-3.5 text-green-400" />
+                <span className="font-terminal text-xs text-zinc-400">Steps</span>
+              </div>
+              <p className="font-terminal text-xl font-bold text-green-400">
+                {todayNutrition?.steps ? todayNutrition.steps.toLocaleString() : '--'}
+              </p>
+              {todayNutrition?.steps && (
+                <div className="mt-1.5 h-1 w-full rounded-full bg-zinc-800">
+                  <div className="h-1 rounded-full bg-green-500 transition-all" style={{ width: `${Math.min(100, (todayNutrition.steps / 8000) * 100)}%` }} />
+                </div>
+              )}
+              <p className="font-terminal text-xs text-zinc-600 mt-0.5">goal: 8,000</p>
+            </div>
+            {/* Calories */}
+            <div className="p-4">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Zap className="h-3.5 w-3.5 text-amber-400" />
+                <span className="font-terminal text-xs text-zinc-400">Calories</span>
+              </div>
+              <p className="font-terminal text-xl font-bold text-amber-400">
+                {todayNutrition?.totalCalories ? `${todayNutrition.totalCalories}` : '--'}
+              </p>
+              {todayNutrition?.totalCalories && (
+                <div className="mt-1.5 h-1 w-full rounded-full bg-zinc-800">
+                  <div className="h-1 rounded-full bg-amber-500 transition-all" style={{ width: `${Math.min(100, (todayNutrition.totalCalories / 2000) * 100)}%` }} />
+                </div>
+              )}
+              <p className="font-terminal text-xs text-zinc-600 mt-0.5">goal: 2000 kcal</p>
+            </div>
+            {/* Sleep */}
+            <div className="p-4">
+              <div className="flex items-center gap-1.5 mb-1">
+                <Moon className="h-3.5 w-3.5 text-violet-400" />
+                <span className="font-terminal text-xs text-zinc-400">Avg Sleep</span>
+              </div>
+              <p className="font-terminal text-xl font-bold text-violet-400">
+                {sleepStats?.avgDurationMinutes && sleepStats.avgDurationMinutes > 0
+                  ? `${Math.floor(sleepStats.avgDurationMinutes / 60)}h ${sleepStats.avgDurationMinutes % 60}m`
+                  : '--'}
+              </p>
+              {sleepStats?.avgQuality && (
+                <div className="mt-1.5 h-1 w-full rounded-full bg-zinc-800">
+                  <div className="h-1 rounded-full bg-violet-500 transition-all" style={{ width: `${(sleepStats.avgQuality / 5) * 100}%` }} />
+                </div>
+              )}
+              <p className="font-terminal text-xs text-zinc-600 mt-0.5">goal: 8h / quality: {sleepStats?.avgQuality?.toFixed(1) ?? '--'}/5</p>
+            </div>
+          </div>
+          {/* Mood trend */}
+          {moodHistory && moodHistory.length > 0 && (
+            <div className="border-t border-zinc-900 px-4 py-3">
+              <span className="font-terminal text-xs text-zinc-500">7-day mood: </span>
+              <div className="inline-flex gap-1 mt-1">
+                {(moodHistory as any[]).slice(0, 7).reverse().map((m: any, i: number) => {
+                  const colors = ['', 'bg-red-600', 'bg-orange-600', 'bg-yellow-500', 'bg-green-500', 'bg-emerald-400'];
+                  return (
+                    <div key={i} title={`${m.date}: ${m.score}/5`}
+                      className={`h-4 w-4 rounded-sm ${colors[m.score] ?? 'bg-zinc-700'}`} />
+                  );
+                })}
+              </div>
             </div>
           )}
         </section>

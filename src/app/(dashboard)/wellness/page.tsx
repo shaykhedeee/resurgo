@@ -2,8 +2,8 @@
 
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { FormEvent, useState } from 'react';
-import { BookOpen, Smile, Meh, Frown, Plus, Calendar, Moon, Apple, Droplets, Zap } from 'lucide-react';
+import { FormEvent, useState, useMemo } from 'react';
+import { BookOpen, Smile, Meh, Frown, Plus, Calendar, Moon, Apple, Droplets, Zap, Activity, TrendingUp, Brain, Heart } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const MOOD_LABELS = ['', 'Very Low', 'Low', 'Okay', 'Good', 'Great'];
@@ -17,11 +17,57 @@ const JOURNAL_TYPES = [
   { id: 'freeform'   as const, label: 'Freeform'   },
 ];
 type JournalType = 'reflection' | 'gratitude' | 'goal_note' | 'freeform';
-type Tab = 'mood' | 'journal' | 'sleep' | 'nutrition';
+type Tab = 'overview' | 'mood' | 'journal' | 'sleep' | 'nutrition';
+
+// Daily wellness goals
+const WATER_GOAL_ML   = 2500;
+const STEPS_GOAL      = 8000;
+const CALORIES_GOAL   = 2000;
+const SLEEP_GOAL_HRS  = 8;
+
+function WellnessScore({ score, label, color }: { score: number; label: string; color: string }) {
+  const pct = Math.min(100, Math.max(0, score));
+  const r = 20;
+  const circ = 2 * Math.PI * r;
+  const dash = (pct / 100) * circ;
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <svg width={56} height={56} viewBox="0 0 56 56">
+        <circle cx={28} cy={28} r={r} fill="none" stroke="#18181b" strokeWidth={5} />
+        <circle
+          cx={28} cy={28} r={r} fill="none" stroke={color} strokeWidth={5}
+          strokeDasharray={`${dash} ${circ - dash}`}
+          strokeLinecap="round"
+          transform="rotate(-90 28 28)"
+        />
+        <text x="50%" y="55%" textAnchor="middle" dominantBaseline="middle" fill="#f4f4f5" fontSize="10" fontFamily="monospace" fontWeight="bold">
+          {Math.round(pct)}
+        </text>
+      </svg>
+      <span className="font-mono text-xs tracking-widest text-zinc-400">{label}</span>
+    </div>
+  );
+}
+
+function ProgressBar({ value, max, color, label, unit }: { value: number; max: number; color: string; label: string; unit: string }) {
+  const pct = Math.min(100, Math.round((value / max) * 100));
+  return (
+    <div className="space-y-1">
+      <div className="flex justify-between">
+        <span className="font-mono text-xs text-zinc-400">{label}</span>
+        <span className="font-mono text-xs font-bold" style={{ color }}>{value}{unit} / {max}{unit}</span>
+      </div>
+      <div className="h-2 w-full rounded-full bg-zinc-800">
+        <div className="h-2 rounded-full transition-all duration-500" style={{ width: `${pct}%`, backgroundColor: color }} />
+      </div>
+      <span className="font-mono text-xs text-zinc-500">{pct}% of daily goal</span>
+    </div>
+  );
+}
 
 export default function WellnessPage() {
   const today = new Date().toISOString().split('T')[0];
-  const [tab, setTab] = useState<Tab>('mood');
+  const [tab, setTab] = useState<Tab>('overview');
 
   const logMoodMut      = useMutation(api.wellness.logMood);
   const createJournal   = useMutation(api.wellness.createJournalEntry);
@@ -60,6 +106,22 @@ export default function WellnessPage() {
   const [waterMl,      setWaterMl]      = useState('');
   const [stepCount,    setStepCount]    = useState('');
   const [mealSaving,   setMealSaving]   = useState(false);
+  const [quickWaterSaving, setQuickWaterSaving] = useState(false);
+
+  // ── Derived wellness scores ─────────────────────────────────────────────────
+  const todaySleep = sleepLogs?.find((l: any) => l.date === today);
+  const waterScore  = todayNutrition?.waterMl ? Math.min(100, (todayNutrition.waterMl / WATER_GOAL_ML) * 100) : 0;
+  const stepsScore  = todayNutrition?.steps ? Math.min(100, (todayNutrition.steps / STEPS_GOAL) * 100) : 0;
+  const moodScoreNorm  = todayMood ? (todayMood.score / 5) * 100 : 0;
+  const sleepScore  = todaySleep?.durationMinutes ? Math.min(100, (todaySleep.durationMinutes / (SLEEP_GOAL_HRS * 60)) * 100) : 0;
+  const overallScore = Math.round((waterScore + stepsScore + moodScoreNorm + sleepScore) / 4);
+
+  const moodTrend7 = useMemo(() => {
+    if (!moodHistory || moodHistory.length < 2) return null;
+    const last7 = moodHistory.slice(0, 7).map((m: any) => m.score);
+    const avg = last7.reduce((a: number, b: number) => a + b, 0) / last7.length;
+    return avg;
+  }, [moodHistory]);
 
   const handleMoodSubmit = async () => {
     if (moodSaving) return;
@@ -118,16 +180,26 @@ export default function WellnessPage() {
     setWaterMl(''); setStepCount('');
   };
 
+  const handleQuickWater = async (ml: number) => {
+    if (quickWaterSaving) return;
+    setQuickWaterSaving(true);
+    try {
+      const current = todayNutrition?.waterMl ?? 0;
+      await updateHydration({ date: today, waterMl: current + ml });
+    } finally { setQuickWaterSaving(false); }
+  };
+
   const toggleTag = (tag: string) =>
     setMoodTags((prev) => prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]);
 
   const fmtDuration = (mins: number) => `${Math.floor(mins / 60)}h ${mins % 60}m`;
 
   const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
-    { id: 'mood',      label: 'MOOD',      icon: Smile    },
-    { id: 'journal',   label: 'JOURNAL',   icon: BookOpen },
-    { id: 'sleep',     label: 'SLEEP',     icon: Moon     },
-    { id: 'nutrition', label: 'NUTRITION', icon: Apple    },
+    { id: 'overview',  label: 'OVERVIEW',  icon: Activity  },
+    { id: 'mood',      label: 'MOOD',      icon: Smile     },
+    { id: 'journal',   label: 'JOURNAL',   icon: BookOpen  },
+    { id: 'sleep',     label: 'SLEEP',     icon: Moon      },
+    { id: 'nutrition', label: 'NUTRITION', icon: Apple     },
   ];
 
   return (
@@ -140,12 +212,12 @@ export default function WellnessPage() {
           </div>
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Health & Wellness</h1>
-            <p className="mt-0.5 font-mono text-xs tracking-widest text-zinc-500">Mood · Journal · Sleep · Nutrition</p>
+            <p className="mt-0.5 font-mono text-xs tracking-widest text-zinc-500">Overview · Mood · Journal · Sleep · Nutrition</p>
           </div>
-          <div className="flex border-t border-zinc-900">
+          <div className="flex border-t border-zinc-900 overflow-x-auto">
             {TABS.map(({ id, label, icon: Icon }) => (
               <button key={id} onClick={() => setTab(id)}
-                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 px-2 py-2.5 font-mono text-xs tracking-widest transition',
+                className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 px-2 py-2.5 font-mono text-xs tracking-widest transition whitespace-nowrap',
                   tab === id ? 'border-orange-600 bg-orange-950/10 text-orange-500' : 'border-transparent text-zinc-400 hover:text-zinc-400'
                 )}>
                 <Icon className="h-3 w-3" /> {label}
@@ -153,6 +225,146 @@ export default function WellnessPage() {
             ))}
           </div>
         </div>
+
+        {/* ── OVERVIEW TAB ─────────────────────────────────────────────────── */}
+        {tab === 'overview' && (
+          <div className="space-y-4">
+            {/* Wellness Score Rings */}
+            <div className="border border-zinc-900 bg-zinc-950 p-5">
+              <div className="mb-4 flex items-center gap-2">
+                <Heart className="h-4 w-4 text-orange-500" />
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">TODAY_WELLNESS_SCORE</span>
+                <span className="ml-auto font-mono text-2xl font-bold text-orange-500">{overallScore}<span className="text-xs text-zinc-500">/100</span></span>
+              </div>
+              <div className="flex flex-wrap justify-around gap-4">
+                <WellnessScore score={moodScoreNorm}  label="MOOD"       color="#f97316" />
+                <WellnessScore score={waterScore}    label="HYDRATION"  color="#22d3ee" />
+                <WellnessScore score={stepsScore}    label="ACTIVITY"   color="#4ade80" />
+                <WellnessScore score={sleepScore}    label="SLEEP"      color="#818cf8" />
+              </div>
+              {moodTrend7 !== null && (
+                <div className="mt-4 flex items-center gap-2 border-t border-zinc-900 pt-3">
+                  <TrendingUp className="h-3 w-3 text-zinc-400" />
+                  <span className="font-mono text-xs text-zinc-400">7-day mood avg:</span>
+                  <span className={cn('font-mono text-xs font-bold', MOOD_COLORS[Math.round(moodTrend7)])}>
+                    {moodTrend7.toFixed(1)} — {MOOD_LABELS[Math.round(moodTrend7)]}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Water Log */}
+            <div className="border border-zinc-900 bg-zinc-950 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Droplets className="h-4 w-4 text-cyan-400" />
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">QUICK_HYDRATION</span>
+              </div>
+              <ProgressBar
+                value={todayNutrition?.waterMl ?? 0}
+                max={WATER_GOAL_ML}
+                color="#22d3ee"
+                label="Water"
+                unit="ml"
+              />
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[200, 330, 500, 750].map((ml) => (
+                  <button
+                    key={ml}
+                    onClick={() => handleQuickWater(ml)}
+                    disabled={quickWaterSaving}
+                    className="border border-cyan-900 bg-cyan-950/20 px-3 py-1.5 font-mono text-xs tracking-widest text-cyan-400 transition hover:bg-cyan-950/40 disabled:opacity-40"
+                  >
+                    +{ml}ml
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Today's Steps */}
+            <div className="border border-zinc-900 bg-zinc-950 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Activity className="h-4 w-4 text-green-400" />
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">ACTIVITY_TRACKING</span>
+              </div>
+              <ProgressBar
+                value={todayNutrition?.steps ?? 0}
+                max={STEPS_GOAL}
+                color="#4ade80"
+                label="Steps"
+                unit=" steps"
+              />
+              <div className="mt-3 flex items-center gap-2">
+                <Zap className="h-4 w-4 text-green-400" />
+                <input
+                  type="number"
+                  value={stepCount}
+                  onChange={(e) => setStepCount(e.target.value)}
+                  placeholder="Log step count"
+                  className="h-8 w-40 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-green-800 focus:outline-none"
+                />
+                <button
+                  onClick={() => { if (stepCount) updateHydration({ date: today, steps: parseInt(stepCount) }).then(() => setStepCount('')); }}
+                  className="border border-green-900 bg-green-950/20 px-3 py-1.5 font-mono text-xs tracking-widest text-green-400 transition hover:bg-green-950/40"
+                >
+                  [LOG]
+                </button>
+              </div>
+            </div>
+
+            {/* Nutrition Summary */}
+            {todayNutrition && (
+              <div className="border border-zinc-900 bg-zinc-950 p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <Apple className="h-4 w-4 text-amber-400" />
+                  <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">TODAY_NUTRITION</span>
+                </div>
+                <ProgressBar
+                  value={todayNutrition.totalCalories ?? 0}
+                  max={CALORIES_GOAL}
+                  color="#fbbf24"
+                  label="Calories"
+                  unit=" kcal"
+                />
+                <div className="mt-3 grid grid-cols-3 gap-2">
+                  {[
+                    { label: 'PROTEIN', value: `${todayNutrition.totalProtein ?? 0}g`, color: 'text-blue-400' },
+                    { label: 'CARBS',   value: `${todayNutrition.totalCarbs ?? 0}g`,   color: 'text-yellow-400' },
+                    { label: 'FAT',     value: `${todayNutrition.totalFat ?? 0}g`,     color: 'text-orange-400' },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="border border-zinc-800 p-2 text-center">
+                      <p className="font-mono text-xs text-zinc-500">{label}</p>
+                      <p className={cn('font-mono text-sm font-bold', color)}>{value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* AI Insight Panel */}
+            <div className="border border-zinc-900 bg-zinc-950 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Brain className="h-4 w-4 text-purple-400" />
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">AI_WELLNESS_INSIGHT</span>
+              </div>
+              <div className="rounded border border-zinc-800 bg-black/50 p-3">
+                {overallScore >= 75 ? (
+                  <p className="font-mono text-xs leading-relaxed text-green-400">
+                    ✦ Strong day — all 4 wellness pillars are tracking well. Keep the momentum and prioritize rest tonight to lock in recovery.
+                  </p>
+                ) : overallScore >= 50 ? (
+                  <p className="font-mono text-xs leading-relaxed text-yellow-400">
+                    ◈ Moderate wellness day. Focus on the areas scoring below 50% — {waterScore < 50 ? 'hydration' : stepsScore < 50 ? 'movement' : 'sleep'} needs attention first.
+                  </p>
+                ) : (
+                  <p className="font-mono text-xs leading-relaxed text-orange-400">
+                    ◎ Recovery day detected. Prioritize: (1) Drink 500ml water now, (2) Log your mood to track patterns, (3) Aim for 8h sleep tonight. Small consistent actions rebuild momentum.
+                  </p>
+                )}
+                <p className="mt-2 font-mono text-xs text-zinc-600">Score: {overallScore}/100 · {today}</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {tab === 'mood' && (
           <div className="space-y-4">

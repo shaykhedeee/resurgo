@@ -416,6 +416,12 @@ function LandingPageV2() {
   const [heroVariant, setHeroVariant] = useState('control');
 
   useEffect(() => {
+    // Prevent auto-scroll to hash anchors on initial page load (e.g. #demo from ad URLs)
+    if (typeof window !== 'undefined' && window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname + window.location.search);
+      window.scrollTo(0, 0);
+    }
+
     captureUtmParams();
     trackMarketingEvent('landing_viewed', { page: '/' });
 

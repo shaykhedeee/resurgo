@@ -705,3 +705,148 @@ export function getAvailableProviders(): AIProvider[] {
     .filter(([provider, envVar]) => !!process.env[envVar] && !isCircuitOpen(provider))
     .map(([provider]) => provider);
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MULTI-MODEL PIPELINE
+// Passes content through multiple AI stages, each refining the previous output.
+// Used for complex tasks like goal decomposition, deep psychology profiling,
+// weekly reviews, and vision board generation.
+//
+// Stages (up to 5):
+//   1. PARSE    — Extract structured facts from raw user input
+//   2. ANALYZE  — Deep analysis of the parsed facts
+//   3. SYNTHESIZE — Combine analysis into coherent insights
+//   4. RECOMMEND  — Generate actionable recommendations
+//   5. FORMAT   — Final formatting / JSON schema enforcement
+// ─────────────────────────────────────────────────────────────────────────────
+
+export type PipelineStage = 'parse' | 'analyze' | 'synthesize' | 'recommend' | 'format';
+
+export interface PipelineStageConfig {
+  stage: PipelineStage;
+  systemPrompt: string;
+  taskType?: TaskType;
+  maxTokens?: number;
+  temperature?: number;
+}
+
+export interface PipelineResult {
+  finalOutput: string;
+  stages: Array<{
+    stage: PipelineStage;
+    output: string;
+    provider: AIProvider;
+    model: string;
+    durationMs: number;
+  }>;
+  totalDurationMs: number;
+}
+
+/**
+ * Run a multi-model AI pipeline.
+ *
+ * Each stage receives the ORIGINAL user input PLUS the accumulated context
+ * from all previous stages, letting each model build on prior reasoning.
+ *
+ * @param userInput   - Raw user content (goal, reflection text, etc.)
+ * @param stages      - Ordered list of pipeline stages with their prompts
+ * @returns           - Final output string plus full per-stage telemetry
+ */
+export async function runAIPipeline(
+  userInput: string,
+  stages: PipelineStageConfig[],
+): Promise<PipelineResult> {
+  if (stages.length === 0) throw new Error('[Pipeline] No stages provided');
+  if (stages.length > 6) throw new Error('[Pipeline] Max 6 stages allowed to keep latency reasonable');
+
+  const pipelineStart = Date.now();
+  const stageResults: PipelineResult['stages'] = [];
+  let accumulatedContext = '';
+
+  for (const stageCfg of stages) {
+    const stageStart = Date.now();
+
+    // Build messages: system defines the stage role, user gives full context
+    const contextBlock = accumulatedContext
+      ? `\n\n=== PRIOR STAGE CONTEXT ===\n${accumulatedContext}\n=== END CONTEXT ===\n`
+      : '';
+
+    const messages: AIMessage[] = [
+      { role: 'system', content: stageCfg.systemPrompt },
+      {
+        role: 'user',
+        content: `${contextBlock}\n=== USER INPUT ===\n${userInput}\n\nProceed with your ${stageCfg.stage.toUpperCase()} stage task.`,
+      },
+    ];
+
+    const result = await callAI(messages, {
+      taskType: stageCfg.taskType ?? 'analyze',
+      maxTokens: stageCfg.maxTokens,
+      temperature: stageCfg.temperature,
+    });
+
+    const durationMs = Date.now() - stageStart;
+    stageResults.push({
+      stage: stageCfg.stage,
+      output: result.content,
+      provider: result.provider,
+      model: result.model,
+      durationMs,
+    });
+
+    // Append this stage's output to the accumulated context for the next stage
+    accumulatedContext += `\n[${stageCfg.stage.toUpperCase()} by ${result.provider}/${result.model}]:\n${result.content}`;
+
+    console.log(`[Pipeline] Stage ${stageCfg.stage} completed via ${result.provider}/${result.model} in ${durationMs}ms`);
+  }
+
+  return {
+    finalOutput: stageResults[stageResults.length - 1].output,
+    stages: stageResults,
+    totalDurationMs: Date.now() - pipelineStart,
+  };
+}
+
+/**
+ * Convenience: run a 4-stage "deep analysis" pipeline for complex user goals.
+ * Uses the standard Parse → Analyze → Synthesize → Recommend flow.
+ */
+export async function runDeepAnalysisPipeline(params: {
+  userInput: string;
+  userName: string;
+  context?: string;
+}): Promise<PipelineResult> {
+  const { userInput, userName, context = '' } = params;
+  const contextNote = context ? `\nUser context: ${context}` : '';
+
+  return runAIPipeline(userInput, [
+    {
+      stage: 'parse',
+      systemPrompt: `You are a precise extractor for the Resurgo AI system. Your job is to parse user input about goals, habits, or challenges and extract the key structured facts: what they want, obstacles mentioned, timelines, and emotional signals. Be concise. Output as a bullet list.${contextNote}`,
+      taskType: 'quick',
+      maxTokens: 400,
+      temperature: 0.3,
+    },
+    {
+      stage: 'analyze',
+      systemPrompt: `You are a deep behavioral analyst for ${userName}. Based on the parsed facts from the prior stage, identify root patterns, psychological drivers, potential blockers (internal/external), and hidden opportunities. Be insightful, not surface-level. Think like a world-class executive coach.${contextNote}`,
+      taskType: 'analyze',
+      maxTokens: 600,
+      temperature: 0.7,
+    },
+    {
+      stage: 'synthesize',
+      systemPrompt: `You are a strategic synthesizer. Combine the extraction and analysis from prior stages into a coherent narrative about ${userName}'s situation. Identify the single most important insight and what it implies for their plan.${contextNote}`,
+      taskType: 'coaching',
+      maxTokens: 500,
+      temperature: 0.6,
+    },
+    {
+      stage: 'recommend',
+      systemPrompt: `You are ${userName}'s personal AI coach. Using all prior analysis, produce 3-5 specific, actionable recommendations. Each should be concrete (include a first step), time-bound where possible, and ordered by impact. Format as a numbered list.${contextNote}`,
+      taskType: 'coaching',
+      maxTokens: 700,
+      temperature: 0.7,
+    },
+  ]);
+}
