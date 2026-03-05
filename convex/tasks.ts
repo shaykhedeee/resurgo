@@ -6,6 +6,27 @@
 import { mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
+// ── Level Thresholds (shared with gamification.ts) ──
+const LEVEL_THRESHOLDS = [
+  { level: 1, xpRequired: 0 }, { level: 2, xpRequired: 100 },
+  { level: 3, xpRequired: 250 }, { level: 4, xpRequired: 500 },
+  { level: 5, xpRequired: 800 }, { level: 6, xpRequired: 1200 },
+  { level: 7, xpRequired: 1800 }, { level: 8, xpRequired: 2500 },
+  { level: 9, xpRequired: 3500 }, { level: 10, xpRequired: 5000 },
+  { level: 11, xpRequired: 7000 }, { level: 12, xpRequired: 10000 },
+  { level: 13, xpRequired: 15000 }, { level: 14, xpRequired: 20000 },
+  { level: 15, xpRequired: 30000 }, { level: 16, xpRequired: 50000 },
+] as const;
+
+function calculateLevel(xp: number): number {
+  let level = 1;
+  for (const t of LEVEL_THRESHOLDS) {
+    if (xp >= t.xpRequired) level = t.level;
+    else break;
+  }
+  return level;
+}
+
 async function getAuthUser(ctx: any) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) throw new Error('Not authenticated');
@@ -296,11 +317,15 @@ export const toggleComplete = mutation({
 
       if (gamification) {
         const xpGain = task.xpValue ??
-          (task.priority === 'urgent' ? 20 : task.priority === 'high' ? 15 : 10);
+          (task.priority === 'urgent' ? 25 : task.priority === 'high' ? 15 : task.priority === 'medium' ? 10 : 5);
+        const newXP = gamification.totalXP + xpGain;
+        const newLevel = calculateLevel(newXP);
+        const newCoins = (gamification.coins ?? 0) + Math.ceil(xpGain * 0.1);
         await ctx.db.patch(gamification._id, {
-          totalXP: gamification.totalXP + xpGain,
-          currentLevelXP: (gamification.currentLevelXP ?? 0) + xpGain,
-          level: Math.floor((gamification.totalXP + xpGain) / 100) + 1,
+          totalXP: newXP,
+          level: newLevel,
+          coins: newCoins,
+          totalTasksCompleted: (gamification.totalTasksCompleted ?? 0) + 1,
           updatedAt: Date.now(),
         });
 

@@ -5,6 +5,8 @@ import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useState } from 'react';
 import { BookOpen, Smile, Meh, Frown, Plus, Calendar, Moon, Apple, Droplets, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useStoreUser } from '@/hooks/useStoreUser';
+import WellnessRadarChart from '@/components/WellnessRadarChart';
 
 const MOOD_LABELS = ['', 'Very Low', 'Low', 'Okay', 'Good', 'Great'];
 const MOOD_COLORS = ['', 'text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400', 'text-emerald-400'];
@@ -22,6 +24,7 @@ type Tab = 'mood' | 'journal' | 'sleep' | 'nutrition';
 export default function WellnessPage() {
   const today = new Date().toISOString().split('T')[0];
   const [tab, setTab] = useState<Tab>('mood');
+  const { user } = useStoreUser();
 
   const logMoodMut      = useMutation(api.wellness.logMood);
   const createJournal   = useMutation(api.wellness.createJournalEntry);
@@ -153,6 +156,13 @@ export default function WellnessPage() {
             ))}
           </div>
         </div>
+
+        {/* Life Wheel Radar Chart */}
+        {user?.lifeWheelScores && (
+          <div className="mb-5">
+            <WellnessRadarChart scores={user.lifeWheelScores as Record<string, number>} />
+          </div>
+        )}
 
         {tab === 'mood' && (
           <div className="space-y-4">

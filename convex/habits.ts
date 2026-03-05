@@ -2,6 +2,27 @@ import { mutation, internalMutation, query } from './_generated/server';
 import { v } from 'convex/values';
 import { checkAndCreateHabit } from './lib/transactions';
 
+// ── Level Thresholds (shared with gamification.ts) ──
+const LEVEL_THRESHOLDS = [
+  { level: 1, xpRequired: 0 }, { level: 2, xpRequired: 100 },
+  { level: 3, xpRequired: 250 }, { level: 4, xpRequired: 500 },
+  { level: 5, xpRequired: 800 }, { level: 6, xpRequired: 1200 },
+  { level: 7, xpRequired: 1800 }, { level: 8, xpRequired: 2500 },
+  { level: 9, xpRequired: 3500 }, { level: 10, xpRequired: 5000 },
+  { level: 11, xpRequired: 7000 }, { level: 12, xpRequired: 10000 },
+  { level: 13, xpRequired: 15000 }, { level: 14, xpRequired: 20000 },
+  { level: 15, xpRequired: 30000 }, { level: 16, xpRequired: 50000 },
+] as const;
+
+function calculateLevel(xp: number): number {
+  let level = 1;
+  for (const t of LEVEL_THRESHOLDS) {
+    if (xp >= t.xpRequired) level = t.level;
+    else break;
+  }
+  return level;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // ARCHIVE EXCESS HABITS ON DOWNGRADE
 // ─────────────────────────────────────────────────────────────────────────────
@@ -425,10 +446,11 @@ export const toggleComplete = mutation({
           .unique();
         if (gamification) {
           const newXP = Math.max(0, gamification.totalXP - 10);
-          const newLevel = Math.floor(newXP / 100) + 1;
+          const newLevel = calculateLevel(newXP);
           await ctx.db.patch(gamification._id, {
             totalXP: newXP,
             level: newLevel,
+            totalHabitsCompleted: Math.max(0, (gamification.totalHabitsCompleted ?? 0) - 1),
             updatedAt: Date.now(),
           });
         }
@@ -482,14 +504,26 @@ export const toggleComplete = mutation({
       .unique();
 
     if (gamification) {
-      const xpGain = 10 + (newStreak >= 7 ? 5 : 0) + (newStreak >= 30 ? 10 : 0);
+      const xpGain = 10 + (newStreak >= 7 ? 5 : 0) + (newStreak >= 30 ? 10 : 0) + (newStreak >= 100 ? 25 : 0);
       const newXP = gamification.totalXP + xpGain;
-      const newLevel = Math.floor(newXP / 100) + 1;
+      const newLevel = calculateLevel(newXP);
+      const newCoins = (gamification.coins ?? 0) + Math.ceil(xpGain * 0.1);
 
       await ctx.db.patch(gamification._id, {
         totalXP: newXP,
         level: newLevel,
+        coins: newCoins,
+        totalHabitsCompleted: (gamification.totalHabitsCompleted ?? 0) + 1,
         updatedAt: Date.now(),
+      });
+
+      // Log XP history
+      await ctx.db.insert('xpHistory', {
+        userId: user._id,
+        amount: xpGain,
+        source: 'habit_complete',
+        description: `Habit: ${habit.title} (${newStreak}d streak)`,
+        createdAt: Date.now(),
       });
 
       return { action: 'completed', xpChange: xpGain, streak: newStreak };
