@@ -7,7 +7,7 @@ import { LogoMark } from '@/components/Logo';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { TerminalDemo } from '@/components/TerminalDemo';
 import { MarketingFooter } from '@/components/MarketingFooter';
-import DemoSandbox from '@/components/marketing/DemoSandbox';
+// DemoSandbox available for future interactive demos
 import InteractiveDemoCarousel from '@/components/marketing/InteractiveDemoCarousel';
 import SocialProof from '@/components/marketing/SocialProof';
 import EmailCapture from '@/components/marketing/EmailCapture';
@@ -224,9 +224,9 @@ const FAQS = [
       'Resurgo is a Progressive Web App — no app store download needed. On iOS (Safari): tap the Share icon → "Add to Home Screen" → Add. On Android (Chrome): tap the three-dot menu → "Add to Home Screen" → Install. It installs in seconds, works offline, receives automatic updates, and uses under 1MB of storage.',
   },
   {
-    question: 'What is the best free AI habit tracker in 2025?',
+    question: 'What is the best free AI habit tracker in 2026?',
     answer:
-      'Resurgo is one of the top free AI habit trackers available in 2025. Unlike basic trackers, Resurgo uses AI to automatically break your goals into milestones and daily habits, offers Pomodoro and Deep Work focus timers, provides AI coaching via six distinct personas, and has a gamification system with XP and levels — all on the free plan with no time limit.',
+      'Resurgo is one of the top free AI habit trackers available in 2026. Unlike basic trackers, Resurgo uses AI to automatically break your goals into milestones and daily habits, offers Pomodoro and Deep Work focus timers, provides AI coaching via six distinct personas, and has a gamification system with XP and levels — all on the free plan with no time limit.',
   },
   {
     question: 'Does Resurgo work offline?',
@@ -270,7 +270,7 @@ const TICKER_ITEMS = [
 ];
 
 // ─── ONBOARDING STEPS ───────────────────────────────────────────────────────
-const BOOT_STEPS = [
+const _BOOT_STEPS = [
   {
     step: '01',
     cmd: 'Set your goal',
@@ -621,8 +621,7 @@ function LandingPageV2() {
                     Start Free — No Credit Card
                   </Link>
                   <a
-                    href="/downloads/resurgo-latest.apk"
-                    download
+                    href="https://github.com/ShaykhedeE/ascend/releases/latest/download/resurgo.apk"
                     className="inline-flex min-h-[56px] items-center justify-center gap-2 border-2 border-green-800 bg-green-950/40 px-8 font-mono text-sm tracking-wider text-green-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition-all duration-100 hover:border-green-600 hover:bg-green-950/70 hover:text-green-300 active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -841,7 +840,8 @@ function LandingPageV2() {
                         <span className="font-pixel text-[0.35rem] text-orange-500">{s.step}</span>
                       </span>
                       <span className="font-pixel text-[0.55rem] tracking-widest text-orange-400">
-                        // {s.cmd}
+                        {/* eslint-disable-next-line */}
+                        {`// ${s.cmd}`}
                       </span>
                     </div>
                     <p className="font-terminal text-base text-zinc-300 ml-11">&gt; {s.desc}</p>
@@ -1100,6 +1100,15 @@ function LandingPageV2() {
                 </article>
               ))}
             </div>
+
+            {/* Trust badges */}
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-pixel text-[0.5rem] tracking-widest text-zinc-500">
+              <span className="flex items-center gap-1.5">🔒 DATA_ENCRYPTED_AT_REST</span>
+              <span className="flex items-center gap-1.5">💳 CANCEL_ANYTIME</span>
+              <span className="flex items-center gap-1.5">✓ 30-DAY_MONEY_BACK</span>
+              <span className="flex items-center gap-1.5">📱 WORKS_ON_ANY_DEVICE</span>
+              <span className="flex items-center gap-1.5">∞ FREE_TIER_FOREVER</span>
+            </div>
           </div>
         </section>
 
@@ -1298,13 +1307,19 @@ function LandingPageV2() {
               <p className="mx-auto mt-4 max-w-xl font-terminal text-lg leading-relaxed text-zinc-300">
                 Create your free account, set one goal, and follow your first personalized AI habit plan — all in under 2 minutes. No credit card. No trial that expires. Free forever.
               </p>
-              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+              <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
                 <Link
                   href="/sign-up"
                   className="inline-flex min-h-[48px] items-center justify-center border-2 border-orange-600 bg-orange-600 px-8 font-pixel text-[0.45rem] tracking-widest text-black shadow-[3px_3px_0px_rgba(0,0,0,0.7)] transition hover:bg-orange-500 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
                 >
                   [ START FREE — NO CREDIT CARD ]
                 </Link>
+                <a
+                  href="https://github.com/ShaykhedeE/ascend/releases/latest/download/resurgo.apk"
+                  className="inline-flex min-h-[48px] items-center justify-center gap-2 border-2 border-green-700 bg-green-950/40 px-8 font-pixel text-[0.6rem] tracking-widest text-green-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition hover:border-green-500 hover:bg-green-900/30 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
+                >
+                  [ DOWNLOAD_APK ]
+                </a>
                 <a
                   href="/download"
                   className="inline-flex min-h-[48px] items-center justify-center gap-2 border-2 border-zinc-800 px-8 font-pixel text-[0.6rem] tracking-widest text-zinc-500 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition hover:border-zinc-600 hover:text-zinc-300 active:translate-x-[2px] active:translate-y-[2px] active:shadow-none"
@@ -1321,6 +1336,7 @@ function LandingPageV2() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-4 font-pixel text-[0.55rem] tracking-widest text-zinc-400">
                 <span>&gt; FREE_PLAN_FOREVER</span>
                 <span>&gt; NO_CREDIT_CARD_REQUIRED</span>
+                <span>&gt; 30_DAY_MONEY_BACK_GUARANTEE</span>
                 <span>&gt; WORKS_OFFLINE_AS_PWA</span>
                 <span>&gt; PRIVATE_ENCRYPTED_DATA</span>
               </div>

@@ -85,7 +85,7 @@ export default function DownloadPage() {
           </h1>
           {/* APK primary download */}
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="/downloads/resurgo-latest.apk" download
+            <a href="https://github.com/ShaykhedeE/ascend/releases/latest/download/resurgo.apk"
               className="flex items-center gap-2 border-2 border-orange-600 bg-orange-600 px-6 py-3 font-mono text-sm font-bold tracking-widest text-black transition hover:bg-orange-500">
               ↓ Download APK (Android)
             </a>

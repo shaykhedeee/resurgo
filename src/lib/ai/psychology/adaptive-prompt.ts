@@ -3,7 +3,7 @@ import { PsychologicalProfile } from './profile-schema';
 /**
  * Converts a 1–10 Big Five score into a human-readable description.
  */
-function traitLevel(score: number): 'very low' | 'low' | 'moderate' | 'high' | 'very high' {
+function _traitLevel(score: number): 'very low' | 'low' | 'moderate' | 'high' | 'very high' {
   if (score <= 2) return 'very low';
   if (score <= 4) return 'low';
   if (score <= 6) return 'moderate';

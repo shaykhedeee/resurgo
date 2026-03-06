@@ -48,7 +48,6 @@ import {
   Star,
   TrendingUp,
   Award,
-  Shield,
 } from 'lucide-react';
 
 type HabitView = {

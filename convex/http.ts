@@ -33,8 +33,8 @@ http.route({
       // Determine plan from product_cart
       const productIds = (data.product_cart ?? []).map((p) => p.product_id);
       const lifetimeId = process.env.DODO_PRODUCT_ID_LIFETIME ?? '';
-      const proMonthlyId = process.env.DODO_PRODUCT_ID_PRO_MONTHLY ?? '';
-      const proYearlyId = process.env.DODO_PRODUCT_ID_PRO_YEARLY ?? '';
+      const _proMonthlyId = process.env.DODO_PRODUCT_ID_PRO_MONTHLY ?? '';
+      const _proYearlyId = process.env.DODO_PRODUCT_ID_PRO_YEARLY ?? '';
 
       let plan: 'pro' | 'lifetime' = 'pro';
       if (lifetimeId && productIds.includes(lifetimeId)) {

@@ -187,7 +187,7 @@ PROACTIVE INTELLIGENCE:
 - Data validation: Catch impossible numbers, typos, unrealistic entries.
 `;
 
-const USER_CONTEXT_TEMPLATE = `
+const _USER_CONTEXT_TEMPLATE = `
 CURRENT USER CONTEXT (use this to personalize your responses):
 - Name: {{USER_NAME}}
 - Plan: {{USER_PLAN}}
@@ -406,7 +406,7 @@ const COACH_ID_VALIDATOR = v.union(
   v.literal('NOVA'),
 );
 
-type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'NOVA';
+type _CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'NOVA';
 
 // ─── Mutations ───────────────────────────────────────────────────────────────
 
@@ -531,6 +531,13 @@ export const getUserContext = internalQuery({
       totalTasksCompleted: 0, totalHabitsCompleted: 0, totalFocusMinutes: 0,
       weeklyCompletionRate: 0, recentWins: [] as string[], overdueTasks: 0, goalsCompletedAllTime: 0,
       todayCalories: 0, todayWaterGlasses: 0,
+      morningMood: undefined as number | undefined,
+      morningEnergy: undefined as number | undefined,
+      sleepQuality: undefined as number | undefined,
+      todaysPriorities: undefined as string[] | undefined,
+      lastSleepHours: undefined as number | undefined,
+      lastSleepQualityRating: undefined as number | undefined,
+      lastMoodScore: undefined as number | undefined,
     };
 
     const identity = await ctx.auth.getUserIdentity();
