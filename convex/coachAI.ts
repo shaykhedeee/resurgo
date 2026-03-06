@@ -136,11 +136,12 @@ async function callAICascade(
 // ─── The Four Universal Coaches ──────────────────────────────────────────────
 
 const ACTION_SYSTEM = `
-You have DIRECT CONTROL over the user's life dashboard. You can execute real actions.
+You have DIRECT CONTROL over the user's life dashboard. You can execute real actions across ALL domains.
 
 When you want to take an action for the user, include ACTION BLOCKS at the END of your response.
 Each action block must be on its own line, formatted EXACTLY like this:
 
+── PRODUCTIVITY ──
 [ACTION:CREATE_TASK] {"title":"Task name","priority":"high","dueDate":"2026-03-05","description":"Optional desc"}
 [ACTION:CREATE_HABIT] {"title":"Habit name","frequency":"daily","timeOfDay":"morning","category":"health","estimatedMinutes":15}
 [ACTION:CREATE_GOAL] {"title":"Goal name","description":"Why this matters","category":"health","targetDate":"2026-06-01"}
@@ -148,17 +149,42 @@ Each action block must be on its own line, formatted EXACTLY like this:
 [ACTION:COMPLETE_TASK] {"titleMatch":"partial task name"}
 [ACTION:UPDATE_TASK] {"titleMatch":"partial task name","priority":"urgent","dueDate":"2026-03-04"}
 
+── WELLNESS & HEALTH ──
+[ACTION:LOG_MOOD] {"score":7,"notes":"Feeling energized after workout","tags":["exercise","motivated"]}
+[ACTION:LOG_SLEEP] {"date":"2026-03-05","bedtime":"23:00","wakeTime":"06:30","quality":4,"notes":"Slept well"}
+[ACTION:LOG_MEAL] {"name":"Grilled chicken salad","calories":450,"protein":35,"carbs":20,"fat":15,"time":"12:30"}
+[ACTION:LOG_WATER] {"glasses":8}
+[ACTION:CREATE_JOURNAL] {"content":"Today I realized...","type":"reflection"}
+
+── FINANCE ──
+[ACTION:LOG_TRANSACTION] {"amount":50,"type":"expense","category":"food","description":"Groceries","date":"2026-03-05"}
+
 RULES FOR ACTIONS:
-- Only create actions when the user ASKS you to, or when it's clearly implied (e.g. "plan my week" = create tasks).
+- Only create actions when the user ASKS you to, or when it's clearly implied (e.g. "plan my week" = create tasks, "I ate a burger" = log meal, "I slept 6 hours" = log sleep).
+- VALIDATE USER DATA: If a user says something impossible (e.g., "I drank 7 liters in 2 hours" or "I slept 20 hours"), CHALLENGE IT politely before logging. Ask for clarification.
 - Dates must be ISO format (YYYY-MM-DD). Today is {{TODAY}}.
 - Always explain WHAT you're creating and WHY before the action blocks.
-- You can include multiple action blocks in one response.
+- You can include multiple action blocks in one response for combined actions.
 - The action blocks are INVISIBLE to the user — they only see the results. So describe what you're doing in your message text.
 - For CREATE_PLAN: include 3-6 phases with 3-5 subTasks each.
+- For LOG_MOOD: score is 1-10 (1=terrible, 10=amazing). Detect mood from conversation context.
+- For LOG_SLEEP: quality is 1-5. Auto-calculate if user gives bedtime/waketime.
+- For LOG_MEAL: estimate calories/macros if user doesn't provide them. Be reasonably accurate.
+- For LOG_WATER: 1 glass = ~250ml. Convert if user says liters/ounces.
+- For LOG_TRANSACTION: type is "income" or "expense". Infer category from context.
 - Categories: health, productivity, learning, finance, wellness, career, personal_growth, mindfulness, social
 - Priorities: low, medium, high, urgent
 - Frequencies: daily, weekdays, weekends, 3x_week, weekly
 - TimeOfDay: morning, afternoon, evening, anytime
+- Journal types: reflection, gratitude, goal_note, freeform
+
+PROACTIVE INTELLIGENCE:
+- If a user mentions food/eating, offer to log it as a meal.
+- If they mention sleep/tiredness, offer to log sleep or suggest better sleep habits.
+- If they mention money/spending/earning, offer to log the transaction.
+- If they mention feeling a certain way, offer to log their mood.
+- Cross-reference: If user has a goal about fitness but hasn't logged workouts, mention it.
+- Data validation: Catch impossible numbers, typos, unrealistic entries.
 `;
 
 const USER_CONTEXT_TEMPLATE = `
@@ -488,6 +514,12 @@ export const getUserContext = internalQuery({
     recentWins: v.array(v.string()),
     overdueTasks: v.number(),
     goalsCompletedAllTime: v.number(),
+    // ── Nutrition & Sleep context ──
+    todayCalories: v.number(),
+    todayWaterGlasses: v.number(),
+    lastSleepHours: v.optional(v.number()),
+    lastSleepQualityRating: v.optional(v.number()),
+    lastMoodScore: v.optional(v.number()),
   }),
   handler: async (ctx) => {
     const empty = {
@@ -498,6 +530,7 @@ export const getUserContext = internalQuery({
       level: 1, levelName: 'Seedling', totalXP: 0, achievementCount: 0,
       totalTasksCompleted: 0, totalHabitsCompleted: 0, totalFocusMinutes: 0,
       weeklyCompletionRate: 0, recentWins: [] as string[], overdueTasks: 0, goalsCompletedAllTime: 0,
+      todayCalories: 0, todayWaterGlasses: 0,
     };
 
     const identity = await ctx.auth.getUserIdentity();
@@ -599,6 +632,28 @@ export const getUserContext = internalQuery({
       checkIn?.sleepQuality,
     );
 
+    // Fetch today's nutrition
+    const nutritionToday = await ctx.db
+      .query('nutritionLogs')
+      .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', today))
+      .unique();
+
+    // Fetch latest sleep log
+    const sleepLogs = await ctx.db
+      .query('sleepLogs')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .order('desc')
+      .take(1);
+    const lastSleep = sleepLogs[0];
+
+    // Fetch latest mood entry
+    const moodEntries = await ctx.db
+      .query('moodEntries')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .order('desc')
+      .take(1);
+    const lastMood = moodEntries[0];
+
     return {
       userName: user.name || identity.name || 'User',
       userPlan: user.plan || 'free',
@@ -628,6 +683,12 @@ export const getUserContext = internalQuery({
       recentWins,
       overdueTasks,
       goalsCompletedAllTime: completedGoals.length,
+      // ── Nutrition & Sleep context ──
+      todayCalories: nutritionToday?.totalCalories ?? 0,
+      todayWaterGlasses: (nutritionToday as any)?.waterGlasses ?? 0,
+      lastSleepHours: lastSleep?.durationMinutes ? Math.round(lastSleep.durationMinutes / 60 * 10) / 10 : undefined,
+      lastSleepQualityRating: lastSleep?.quality,
+      lastMoodScore: lastMood?.score,
     };
   },
 });
@@ -871,6 +932,186 @@ export const executeCoachActions = internalMutation({
             break;
           }
 
+          // ── WELLNESS & HEALTH ACTIONS ────────────────────────────────────
+
+          case 'LOG_MOOD': {
+            const today = new Date().toISOString().split('T')[0];
+            const score = Math.max(1, Math.min(10, data.score || 5));
+            const existing = await ctx.db
+              .query('moodEntries')
+              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', today))
+              .unique();
+            if (existing) {
+              await ctx.db.patch(existing._id, { score, notes: data.notes, tags: data.tags });
+              results.push({ type: 'LOG_MOOD', success: true, message: `Mood updated: ${score}/10${data.notes ? ` — "${data.notes}"` : ''}` });
+            } else {
+              await ctx.db.insert('moodEntries', {
+                userId: user._id,
+                date: today,
+                score,
+                notes: data.notes || undefined,
+                tags: data.tags || undefined,
+                createdAt: now,
+              });
+              results.push({ type: 'LOG_MOOD', success: true, message: `Mood logged: ${score}/10${data.notes ? ` — "${data.notes}"` : ''}` });
+            }
+            break;
+          }
+
+          case 'LOG_SLEEP': {
+            const date = data.date || new Date().toISOString().split('T')[0];
+            let duration = data.durationMinutes;
+            if (!duration && data.bedtime && data.wakeTime) {
+              const [bh, bm] = data.bedtime.split(':').map(Number);
+              const [wh, wm] = data.wakeTime.split(':').map(Number);
+              let bedMin = bh * 60 + bm;
+              const wakeMin = wh * 60 + wm;
+              if (wakeMin < bedMin) bedMin -= 24 * 60;
+              duration = wakeMin - bedMin;
+            }
+            const existing = await ctx.db
+              .query('sleepLogs')
+              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .unique();
+            if (existing) {
+              await ctx.db.patch(existing._id, {
+                bedtime: data.bedtime ?? existing.bedtime,
+                wakeTime: data.wakeTime ?? existing.wakeTime,
+                durationMinutes: duration ?? existing.durationMinutes,
+                quality: data.quality ?? existing.quality,
+                notes: data.notes ?? existing.notes,
+              });
+              results.push({ type: 'LOG_SLEEP', success: true, message: `Sleep updated for ${date}: ${duration ? `${Math.round(duration / 60 * 10) / 10}h` : 'logged'}` });
+            } else {
+              await ctx.db.insert('sleepLogs', {
+                userId: user._id,
+                date,
+                bedtime: data.bedtime,
+                wakeTime: data.wakeTime,
+                durationMinutes: duration,
+                quality: data.quality,
+                notes: data.notes,
+                createdAt: now,
+              });
+              results.push({ type: 'LOG_SLEEP', success: true, message: `Sleep logged for ${date}: ${duration ? `${Math.round(duration / 60 * 10) / 10}h` : 'logged'}` });
+            }
+            break;
+          }
+
+          case 'LOG_MEAL': {
+            const date = data.date || new Date().toISOString().split('T')[0];
+            const meal = {
+              name: data.name || 'Meal',
+              calories: data.calories || 0,
+              protein: data.protein,
+              carbs: data.carbs,
+              fat: data.fat,
+              time: data.time,
+            };
+            const existing = await ctx.db
+              .query('nutritionLogs')
+              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .unique();
+            if (existing) {
+              const meals = [...(existing.meals || []), meal];
+              const totals = meals.reduce(
+                (acc: any, m: any) => ({
+                  calories: acc.calories + (m.calories ?? 0),
+                  protein: acc.protein + (m.protein ?? 0),
+                  carbs: acc.carbs + (m.carbs ?? 0),
+                  fat: acc.fat + (m.fat ?? 0),
+                }),
+                { calories: 0, protein: 0, carbs: 0, fat: 0 }
+              );
+              await ctx.db.patch(existing._id, {
+                meals,
+                totalCalories: totals.calories,
+                totalProtein: totals.protein,
+                totalCarbs: totals.carbs,
+                totalFat: totals.fat,
+                updatedAt: now,
+              });
+              results.push({ type: 'LOG_MEAL', success: true, message: `Meal logged: "${meal.name}" (${meal.calories} cal) — today's total: ${totals.calories} cal` });
+            } else {
+              await ctx.db.insert('nutritionLogs', {
+                userId: user._id,
+                date,
+                meals: [meal],
+                totalCalories: meal.calories,
+                totalProtein: meal.protein ?? 0,
+                totalCarbs: meal.carbs ?? 0,
+                totalFat: meal.fat ?? 0,
+                createdAt: now,
+                updatedAt: now,
+              });
+              results.push({ type: 'LOG_MEAL', success: true, message: `Meal logged: "${meal.name}" (${meal.calories} cal)` });
+            }
+            break;
+          }
+
+          case 'LOG_WATER': {
+            const date = new Date().toISOString().split('T')[0];
+            const glasses = data.glasses || 1;
+            const existing = await ctx.db
+              .query('nutritionLogs')
+              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .unique();
+            if (existing) {
+              const currentWater = (existing as any).waterGlasses || 0;
+              await ctx.db.patch(existing._id, {
+                waterGlasses: currentWater + glasses,
+                updatedAt: now,
+              } as any);
+              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: +${glasses} glass(es) — total today: ${currentWater + glasses}` });
+            } else {
+              await ctx.db.insert('nutritionLogs', {
+                userId: user._id,
+                date,
+                meals: [],
+                totalCalories: 0,
+                totalProtein: 0,
+                totalCarbs: 0,
+                totalFat: 0,
+                waterGlasses: glasses,
+                createdAt: now,
+                updatedAt: now,
+              } as any);
+              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: ${glasses} glass(es)` });
+            }
+            break;
+          }
+
+          case 'CREATE_JOURNAL': {
+            const today = new Date().toISOString().split('T')[0];
+            const journalType = data.type || 'freeform';
+            await ctx.db.insert('journal', {
+              userId: user._id,
+              date: today,
+              content: data.content,
+              type: journalType,
+              createdAt: now,
+            });
+            results.push({ type: 'CREATE_JOURNAL', success: true, message: `Journal entry created (${journalType})` });
+            break;
+          }
+
+          // ── FINANCE ACTIONS ────────────────────────────────────────────────
+
+          case 'LOG_TRANSACTION': {
+            const date = data.date || new Date().toISOString().split('T')[0];
+            await ctx.db.insert('transactions', {
+              userId: user._id,
+              amount: data.amount,
+              type: data.type || 'expense',
+              category: data.category || 'general',
+              description: data.description || '',
+              date,
+              createdAt: now,
+            });
+            results.push({ type: 'LOG_TRANSACTION', success: true, message: `${data.type === 'income' ? 'Income' : 'Expense'} logged: $${data.amount} (${data.category || 'general'})` });
+            break;
+          }
+
           default:
             results.push({ type: action.type, success: false, message: `Unknown action: ${action.type}` });
         }
@@ -1018,6 +1259,9 @@ CURRENT USER CONTEXT (use this to personalize — reference specific data points
 - Emotional State Today: ${userCtx.emotionalState}
 - Mood/Energy/Sleep: ${userCtx.morningMood ?? '?'}/5 | ${userCtx.morningEnergy ?? '?'}/5 | ${userCtx.sleepQuality ?? '?'}/5
 - Top Priorities Today: ${userCtx.todaysPriorities?.join(' → ') || 'Not set yet'}
+- Nutrition Today: ${userCtx.todayCalories} cal consumed | ${userCtx.todayWaterGlasses} glasses of water
+- Last Sleep: ${userCtx.lastSleepHours ? `${userCtx.lastSleepHours}h (quality: ${userCtx.lastSleepQualityRating ?? '?'}/5)` : 'Not logged'}
+- Last Mood: ${userCtx.lastMoodScore ? `${userCtx.lastMoodScore}/10` : 'Not logged'}
 - Time: ${timeContext} (${today})
 
 PERSONALIZATION DIRECTIVES:

@@ -8,7 +8,7 @@
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock } from 'lucide-react';
+import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock, CheckCircle2, XCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 
@@ -44,12 +44,54 @@ const FALLBACK_PROMPTS: Record<CoachId, string[]> = {
   NOVA:    ['I\'m stuck on a creative problem', 'How do I learn faster?', 'Help me build a second brain system'],
 };
 
+// ── Render action badges from action summary blocks ──
+function MessageContent({ content, coachColor: _coachColor }: { content: string; coachColor: string }) {
+  const ACTION_REGEX = /\n*──── ACTIONS(?: EXECUTED)? ────\n([\s\S]*)$/;
+  const match = content.match(ACTION_REGEX);
+  const textPart = match ? content.slice(0, match.index).trim() : content;
+  const actionLines = match
+    ? match[1].split('\n').map(l => l.trim()).filter(Boolean)
+    : [];
+
+  return (
+    <>
+      <p className="font-mono text-[11px] leading-relaxed text-zinc-300 whitespace-pre-wrap">{textPart}</p>
+      {actionLines.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-1.5">
+          {actionLines.map((line, i) => {
+            const isSuccess = line.startsWith('✓');
+            const text = line.replace(/^[✓✗]\s*/, '');
+            return (
+              <span
+                key={i}
+                className={cn(
+                  'inline-flex items-center gap-1 px-2 py-0.5 text-[9px] font-mono tracking-wider border',
+                  isSuccess
+                    ? 'border-emerald-800/60 bg-emerald-950/40 text-emerald-400'
+                    : 'border-red-800/60 bg-red-950/40 text-red-400'
+                )}
+              >
+                {isSuccess
+                  ? <CheckCircle2 className="h-2.5 w-2.5 shrink-0" />
+                  : <XCircle className="h-2.5 w-2.5 shrink-0" />
+                }
+                {text}
+              </span>
+            );
+          })}
+        </div>
+      )}
+    </>
+  );
+}
+
 export default function CoachPage() {
   const [selectedCoach, setSelectedCoach] = useState<CoachId>('MARCUS');
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isGreeting, setIsGreeting] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
   const greetedRef = useRef<Set<string>>(new Set());
 
   const { user } = useStoreUser();
@@ -79,6 +121,18 @@ export default function CoachPage() {
         .finally(() => setIsGreeting(false));
     }
   }, [history, selectedCoach, isGreeting, isSending, greetUser, user?.name]);
+
+  // Focus input with / key
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, []);
 
   useEffect(() => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -214,7 +268,11 @@ export default function CoachPage() {
                     <p className="mb-1 font-mono text-[8px] tracking-widest" style={isCoach ? { color: coach.color } : { color: '#52525b' }}>
                       {isCoach ? `AGENT_${coach.name}` : 'OPERATOR'}
                     </p>
-                    <p className="font-mono text-[11px] leading-relaxed text-zinc-300 whitespace-pre-wrap">{m.content}</p>
+                    {isCoach ? (
+                      <MessageContent content={m.content} coachColor={coach.color} />
+                    ) : (
+                      <p className="font-mono text-[11px] leading-relaxed text-zinc-300 whitespace-pre-wrap">{m.content}</p>
+                    )}
                   </div>
                 );
               })}
@@ -231,8 +289,8 @@ export default function CoachPage() {
           {/* Input */}
           <form onSubmit={handleSubmit} className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 p-3">
             <span className="hidden font-mono text-[9px] tracking-widest text-zinc-400 md:block">TRANSMIT&gt;</span>
-            <input value={message} onChange={(e) => setMessage(e.target.value)}
-              placeholder={`Message ${coach.name}...`} disabled={isSending}
+            <input ref={inputRef} value={message} onChange={(e) => setMessage(e.target.value)}
+              placeholder={`Message ${coach.name}... (press / to focus)`} disabled={isSending}
               className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none disabled:opacity-50" />
             <button type="submit" disabled={isSending || !message.trim()}
               className="flex h-9 items-center gap-1.5 border px-4 font-mono text-[10px] tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"

@@ -613,7 +613,7 @@ function LandingPageV2() {
                 </p>
 
                 {/* CTAs */}
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
                   <Link
                     href="/sign-up"
                     className="inline-flex min-h-[56px] items-center justify-center border-2 border-orange-600 bg-orange-600 px-8 font-mono text-sm font-bold tracking-wider text-black shadow-[3px_3px_0px_rgba(0,0,0,0.8)] transition-all duration-100 hover:bg-orange-500 active:translate-x-[2px] active:translate-y-[2px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.8)]"
@@ -621,17 +621,20 @@ function LandingPageV2() {
                     Start Free — No Credit Card
                   </Link>
                   <a
+                    href="/downloads/resurgo-latest.apk"
+                    download
+                    className="inline-flex min-h-[56px] items-center justify-center gap-2 border-2 border-green-800 bg-green-950/40 px-8 font-mono text-sm tracking-wider text-green-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition-all duration-100 hover:border-green-600 hover:bg-green-950/70 hover:text-green-300 active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    Download APK
+                  </a>
+                  <a
                     href="/download"
                     className="inline-flex min-h-[56px] items-center justify-center gap-2 border-2 border-zinc-800 px-8 font-mono text-sm tracking-wider text-zinc-400 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] transition-all duration-100 hover:border-orange-600 hover:text-orange-400 active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_rgba(0,0,0,0.5)]"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
                     </svg>
                     Add to Homescreen

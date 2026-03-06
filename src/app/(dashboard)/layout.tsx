@@ -17,26 +17,31 @@ import { GlobalSearch } from '@/components/GlobalSearch';
 import BrainDump from '@/components/BrainDump';
 import LevelUpDetector from '@/components/LevelUpDetector';
 import { useRouter, usePathname } from 'next/navigation';
-import { useEffect, useState, useCallback, ReactNode } from 'react';
+import { useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { UserButton, useClerk } from '@clerk/nextjs';
 import { Search, Brain, Bell } from 'lucide-react';
 
-// ── Navigation Sections (ASCII-grouped) ──
+// ── Navigation Sections (ASCII-grouped, collapsible) ──
 const NAV_SECTIONS = [
   {
     label: 'CMD CENTER',
+    collapsible: true,
+    defaultOpen: true,
     items: [
       { href: '/dashboard', label: 'Dashboard' },
       { href: '/goals', label: 'Goals' },
       { href: '/tasks', label: 'Tasks' },
       { href: '/habits', label: 'Habits' },
+      { href: '/calendar', label: 'Calendar' },
       { href: '/analytics', label: 'Analytics' },
     ],
   },
   {
     label: '★ AI COACH',
+    collapsible: false,
+    defaultOpen: true,
     items: [
       { href: '/coach', label: 'AI Coach' },
       { href: '/orchestrator', label: 'Orchestrator' },
@@ -45,14 +50,18 @@ const NAV_SECTIONS = [
   },
   {
     label: 'WELLNESS',
+    collapsible: true,
+    defaultOpen: true,
     items: [
       { href: '/wellness', label: 'Wellness' },
       { href: '/focus', label: 'Focus Timer' },
-      { href: '/calendar', label: 'Calendar' },
+      { href: '/vision-board', label: 'Vision Board' },
     ],
   },
   {
     label: 'WEALTH',
+    collapsible: true,
+    defaultOpen: false,
     items: [
       { href: '/budget', label: 'Budget' },
       { href: '/business', label: 'Business' },
@@ -61,10 +70,11 @@ const NAV_SECTIONS = [
   },
   {
     label: 'SYSTEM',
+    collapsible: true,
+    defaultOpen: false,
     items: [
-      { href: '/vision-board', label: 'Vision Board' },
       { href: '/integrations', label: 'Integrations' },
-      { href: '/refer', label: 'Refer & Earn' },
+      { href: '/referrals', label: 'Refer & Earn' },
     ],
   },
 ];
@@ -78,6 +88,15 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [brainDumpOpen, setBrainDumpOpen] = useState(false);
+  // Per-section collapse state (for collapsible sidebar sections)
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    NAV_SECTIONS.forEach((s) => { initial[s.label] = s.defaultOpen; });
+    return initial;
+  });
+  const toggleSection = (label: string) => {
+    setOpenSections((prev) => ({ ...prev, [label]: !prev[label] }));
+  };
 
   // Cmd+K / Ctrl+K to open command palette
   useEffect(() => {
@@ -176,22 +195,37 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           </button>
         </div>
 
-        {/* Nav links — ASCII-grouped sections */}
+        {/* Nav links — ASCII-grouped, collapsible sections */}
         <nav className="flex-1 overflow-y-auto py-1 scrollbar-thin">
-          {NAV_SECTIONS.map((section) => (
+          {NAV_SECTIONS.map((section) => {
+            const isOpen = openSections[section.label] ?? section.defaultOpen;
+            return (
             <div key={section.label} className="mb-1">
-              {/* Section header */}
+              {/* Section header — clickable for collapsible sections */}
               {!collapsed && (
-                <div className="px-3 pt-3 pb-1">
+                <button
+                  onClick={() => section.collapsible && toggleSection(section.label)}
+                  className={cn(
+                    'w-full flex items-center justify-between px-3 pt-3 pb-1 text-left',
+                    section.collapsible ? 'cursor-pointer hover:opacity-80' : 'cursor-default'
+                  )}
+                >
                   <span className={cn(
                     'font-pixel text-[0.45rem] tracking-[0.15em]',
                     section.label === '★ AI COACH' ? 'text-orange-600' : 'text-zinc-600'
                   )}>
                     ── {section.label} ──
                   </span>
-                </div>
+                  {section.collapsible && (
+                    <span className="font-pixel text-[0.5rem] text-zinc-700 transition-transform duration-150">
+                      {isOpen ? '▼' : '►'}
+                    </span>
+                  )}
+                </button>
               )}
               {collapsed && <div className="mx-2 my-2 h-px bg-zinc-800" />}
+              {/* Section items — hide when collapsed */}
+              {(isOpen || collapsed) && (
               <ul className="space-y-px px-1.5">
                 {section.items.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -227,8 +261,10 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                   );
                 })}
               </ul>
+              )}
             </div>
-          ))}
+            );
+          })}
         </nav>
 
         {/* Bottom section — Settings + User */}
