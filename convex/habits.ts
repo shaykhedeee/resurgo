@@ -57,23 +57,23 @@ export const restoreArchivedOnUpgrade = mutation({
   handler: async (ctx, { newPlan }) => {
     const user = await getAuthUser(ctx);
     const limit = PLAN_LIMITS[newPlan].maxHabits;
-    const archived = await ctx.db
+    const archivedHabits = await ctx.db
       .query('habits')
       .withIndex('by_userId_archivedByDowngrade', (q) => q.eq('userId', user._id).eq('archivedByDowngrade', true))
       .collect();
+    // Fetch the current active habit count once, then track it locally to avoid
+    // an N+1 query pattern (one DB read per loop iteration).
+    const currentlyActiveHabits = await ctx.db
+      .query('habits')
+      .withIndex('by_userId_active', (q) => q.eq('userId', user._id).eq('isActive', true))
+      .collect();
+    let activeHabitCount = currentlyActiveHabits.length;
     let restored = 0;
-    for (const habit of archived) {
-      // Only restore up to the new plan's limit
-      const activeCount = await ctx.db
-        .query('habits')
-        .withIndex('by_userId_active', (q) => q.eq('userId', user._id).eq('isActive', true))
-        .collect();
-      if (activeCount.length < limit) {
-        await ctx.db.patch(habit._id, { isActive: true, archivedByDowngrade: false, updatedAt: Date.now() });
-        restored++;
-      } else {
-        break;
-      }
+    for (const habit of archivedHabits) {
+      if (activeHabitCount >= limit) break;
+      await ctx.db.patch(habit._id, { isActive: true, archivedByDowngrade: false, updatedAt: Date.now() });
+      activeHabitCount++;
+      restored++;
     }
     return restored;
   },
@@ -106,22 +106,23 @@ export const restoreArchivedOnUpgradeInternal = internalMutation({
   handler: async (ctx, { newPlan }) => {
     const user = await getAuthUser(ctx);
     const limit = PLAN_LIMITS[newPlan].maxHabits;
-    const archived = await ctx.db
+    const archivedHabits = await ctx.db
       .query('habits')
       .withIndex('by_userId_archivedByDowngrade', (q) => q.eq('userId', user._id).eq('archivedByDowngrade', true))
       .collect();
+    // Fetch the current active habit count once, then track it locally to avoid
+    // an N+1 query pattern (one DB read per loop iteration).
+    const currentlyActiveHabits = await ctx.db
+      .query('habits')
+      .withIndex('by_userId_active', (q) => q.eq('userId', user._id).eq('isActive', true))
+      .collect();
+    let activeHabitCount = currentlyActiveHabits.length;
     let restored = 0;
-    for (const habit of archived) {
-      const activeCount = await ctx.db
-        .query('habits')
-        .withIndex('by_userId_active', (q) => q.eq('userId', user._id).eq('isActive', true))
-        .collect();
-      if (activeCount.length < limit) {
-        await ctx.db.patch(habit._id, { isActive: true, archivedByDowngrade: false, updatedAt: Date.now() });
-        restored++;
-      } else {
-        break;
-      }
+    for (const habit of archivedHabits) {
+      if (activeHabitCount >= limit) break;
+      await ctx.db.patch(habit._id, { isActive: true, archivedByDowngrade: false, updatedAt: Date.now() });
+      activeHabitCount++;
+      restored++;
     }
     return restored;
   },

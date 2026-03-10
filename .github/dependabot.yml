@@ -1,0 +1,52 @@
+version: 2
+updates:
+  # ── npm dependencies ────────────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "automated"
+    commit-message:
+      prefix: "chore(deps)"
+    groups:
+      radix-ui:
+        patterns:
+          - "@radix-ui/*"
+      capacitor:
+        patterns:
+          - "@capacitor/*"
+      testing:
+        patterns:
+          - "@testing-library/*"
+          - "@types/jest"
+          - "jest*"
+          - "ts-jest"
+    ignore:
+      # Only patch/minor updates for major packages — review majors manually
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "convex"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@clerk/nextjs"
+        update-types: ["version-update:semver-major"]
+
+  # ── GitHub Actions ───────────────────────────────────────────────────────────
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+      timezone: "UTC"
+    labels:
+      - "dependencies"
+      - "automated"
+      - "github-actions"
+    commit-message:
+      prefix: "chore(ci)"

@@ -37,23 +37,23 @@ export const restoreArchivedOnUpgrade = mutation({
   handler: async (ctx, { newPlan }) => {
     const user = await getAuthUser(ctx);
     const limit = PLAN_LIMITS[newPlan].maxGoals;
-    const archived = await ctx.db
+    const archivedGoals = await ctx.db
       .query('goals')
       .withIndex('by_userId_archivedByDowngrade', (q) => q.eq('userId', user._id).eq('archivedByDowngrade', true))
       .collect();
+    // Fetch the current active goal count once, then track it locally to avoid
+    // an N+1 query pattern (one DB read per loop iteration).
+    const currentlyActiveGoals = await ctx.db
+      .query('goals')
+      .withIndex('by_userId_status', (q) => q.eq('userId', user._id).eq('status', 'in_progress'))
+      .collect();
+    let activeGoalCount = currentlyActiveGoals.length;
     let restored = 0;
-    for (const goal of archived) {
-      // Only restore up to the new plan's limit
-      const activeCount = await ctx.db
-        .query('goals')
-        .withIndex('by_userId_status', (q) => q.eq('userId', user._id).eq('status', 'in_progress'))
-        .collect();
-      if (activeCount.length < limit) {
-        await ctx.db.patch(goal._id, { status: 'in_progress', archivedByDowngrade: false, updatedAt: Date.now() });
-        restored++;
-      } else {
-        break;
-      }
+    for (const goal of archivedGoals) {
+      if (activeGoalCount >= limit) break;
+      await ctx.db.patch(goal._id, { status: 'in_progress', archivedByDowngrade: false, updatedAt: Date.now() });
+      activeGoalCount++;
+      restored++;
     }
     return restored;
   },
@@ -86,22 +86,23 @@ export const restoreArchivedOnUpgradeInternal = internalMutation({
   handler: async (ctx, { newPlan }) => {
     const user = await getAuthUser(ctx);
     const limit = PLAN_LIMITS[newPlan].maxGoals;
-    const archived = await ctx.db
+    const archivedGoals = await ctx.db
       .query('goals')
       .withIndex('by_userId_archivedByDowngrade', (q) => q.eq('userId', user._id).eq('archivedByDowngrade', true))
       .collect();
+    // Fetch the current active goal count once, then track it locally to avoid
+    // an N+1 query pattern (one DB read per loop iteration).
+    const currentlyActiveGoals = await ctx.db
+      .query('goals')
+      .withIndex('by_userId_status', (q) => q.eq('userId', user._id).eq('status', 'in_progress'))
+      .collect();
+    let activeGoalCount = currentlyActiveGoals.length;
     let restored = 0;
-    for (const goal of archived) {
-      const activeCount = await ctx.db
-        .query('goals')
-        .withIndex('by_userId_status', (q) => q.eq('userId', user._id).eq('status', 'in_progress'))
-        .collect();
-      if (activeCount.length < limit) {
-        await ctx.db.patch(goal._id, { status: 'in_progress', archivedByDowngrade: false, updatedAt: Date.now() });
-        restored++;
-      } else {
-        break;
-      }
+    for (const goal of archivedGoals) {
+      if (activeGoalCount >= limit) break;
+      await ctx.db.patch(goal._id, { status: 'in_progress', archivedByDowngrade: false, updatedAt: Date.now() });
+      activeGoalCount++;
+      restored++;
     }
     return restored;
   },
