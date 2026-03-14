@@ -91,8 +91,26 @@ export function FirstContactBriefing() {
   useEffect(() => {
     if (scan === undefined || existingGreeting === undefined) return; // Still loading
 
-    // If scan not completed, redirect back
-    if (!scan || !scan.completedAt) {
+    // If no deep scan at all (e.g. came from simple onboarding), fall through to greeting check
+    if (!scan) {
+      // Show greeting if one exists
+      if (existingGreeting && !existingGreeting.viewed) {
+        setBriefing({
+          greeting: existingGreeting.greeting,
+          fullBriefing: existingGreeting.systemPlan ?? existingGreeting.greeting,
+          sections: { psychProfile: '', strengths: '', protocol: existingGreeting.systemPlan ?? '', greeting: existingGreeting.greeting },
+          stats: { providersUsed: [], totalDurationMs: 0, totalTokens: 0 },
+        });
+        setPhase('reveal');
+        return;
+      }
+      // No scan, no greeting — skip to dashboard
+      router.push('/dashboard');
+      return;
+    }
+
+    // If scan started but not completed, redirect back to finish it
+    if (!scan.completedAt) {
       router.push('/deep-scan');
       return;
     }

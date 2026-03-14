@@ -54,8 +54,8 @@ export default function StreakHeatmapWidget() {
     const map = new Map<string, number>();
     if (!logs) return map;
     for (const log of logs) {
-      if ((log as any).status === 'completed') {
-        const d = (log as any).date as string;
+      if (log.status === 'completed') {
+        const d = log.date;
         map.set(d, (map.get(d) ?? 0) + 1);
       }
     }

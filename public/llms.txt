@@ -1,0 +1,126 @@
+# Resurgo — AI Life Command Center
+> https://resurgo.life
+
+**Resurgo** (Latin: "to rise again") is an intelligent productivity operating system that helps ambitious people rebuild momentum, design better behaviors, and consistently move toward meaningful goals — without burnout or toxic productivity culture.
+
+It combines deep AI coaching, real-time app actions, habit science, goal decomposition, and wellness tracking into one unified, beautiful command center.
+
+## The Resurgo Philosophy
+Resurgo is built on proven behavior science:
+- **Tiny Habits** (BJ Fogg) — making change ridiculously small, anchored to existing routines, and immediately celebrated
+- **Motivational Interviewing** — supporting autonomy and evoking the user's own motivation
+- **Identity-Based Growth** — helping users become the person they want to be ("I am someone who...")
+- Real-time action system — the AI doesn't just advise, it directly shapes your system (creates tasks/habits, logs progress, updates goals, etc.)
+
+The system is intentionally humane: "Never Miss Twice" logic, gentle recovery paths, and focus on sustainable momentum rather than perfection.
+
+## Core Capabilities
+- **Intelligent Goal Decomposition**: Turn any big goal into 4-level breakdown (milestones → quarterly/weekly objectives → daily tasks) automatically
+- **Living AI Coaching**: 8 distinct, deeply contextual coach personas that remember you across sessions and directly modify your tasks, habits, goals, and logs in real-time
+- **Habit System with Never Miss Twice**: Intelligent streak protection that treats one missed day as human and helps you recover on Day 2 instead of quitting
+- **Focus & Deep Work**: Pomodoro, Flowtime, custom timers + distraction pattern logging
+- **Wellness Integration**: Mood tracking, energy logging, sleep, nutrition, and breathing tools
+- **Real-Time Actions**: AI can instantly create/update tasks, habits, goals, log moods, celebrate wins, schedule reminders, and more
+- **Weekly Reviews & Reflection**: Structured AI-guided reviews that turn experience into insight
+- **Finance & Business Mode**: Dedicated support for budgeting and startup/business goal systems
+
+## The 8 AI Coach Personas
+Each coach has a distinct voice, philosophy, and expertise:
+- **MARCUS** — Stoic strategist. Clear-headed, disciplined, long-term thinking.
+- **AURORA** — Wellness & energy guide. Gentle, intuitive, focused on sustainable energy and recovery.
+- **TITAN** — Physical & mental toughness coach. Direct, motivational, performance-oriented.
+- **SAGE** — Finance & resource tactician. Analytical, strategic, wealth-building focused.
+- **PHOENIX** — Comeback & resilience specialist. Empathetic but firm for people rebuilding after setbacks.
+- **NOVA** — Creative systems & innovation coach. Playful, expansive, helps creators build sustainable output.
+- **ORACLE** — Strategic foresight & decision architect. Big-picture, scenario thinking.
+- **NEXUS** — Holistic integrator. Synthesizes all areas of life into coherent systems.
+
+You can switch coaches or let the system recommend the best one for the moment.
+
+## How the AI Coaching Works
+
+When a user sends a message to any coach, the AI:
+1. Understands the emotional and practical content of the message
+2. Takes real-time actions in the app (creates tasks, logs mood, tracks habits, schedules reminders, logs expenses)
+3. Responds with a warm, concise coaching message grounded in behavioral science
+
+The coaching system uses established psychological frameworks:
+- **Fogg Behavior Model**: Behavior = Motivation × Ability × Prompt. When something isn't happening, reduce friction.
+- **Motivational Interviewing**: When resistance appears, explore it — don't lecture through it.
+- **Self-Determination Theory**: Support autonomy (choices), competence (celebrate wins), and relatedness (be warm).
+- **Implementation Intentions**: Convert vague goals to specific "If X, then Y" plans with when/where/what.
+- **Identity-Based Habits**: Connect behaviors to identity ("I am someone who exercises") rather than outcomes.
+
+The AI also includes safety protocols: if a user mentions self-harm or crisis, the system immediately provides crisis resources (iCall India: 9152987821, 988 Lifeline US, findahelpline.com) and does not attempt to coach through it.
+
+## Technical Architecture
+
+| Layer          | Technology                                      |
+|----------------|--------------------------------------------------|
+| Framework      | Next.js 14 (App Router, server components)       |
+| Language       | TypeScript (strict mode)                         |
+| Authentication | Clerk (email, Google, GitHub OAuth)              |
+| Database       | Convex (real-time reactive backend)              |
+| Styling        | Tailwind CSS                                     |
+| Primary AI     | Groq (Llama 3.3 70B) — fast inference            |
+| Fallback AI    | OpenRouter (multi-model), Puter.js (free tier)   |
+| Payments       | Dodo Payments                                    |
+| Deployment     | Vercel                                           |
+| PWA            | Installable on Android, iOS, Windows, macOS      |
+
+### Why Convex?
+Convex provides real-time data synchronization. When the AI creates a task during a coaching conversation, the user sees it appear instantly in their task list without a page refresh. This is critical for the "Living System" experience where AI actions and UI are in sync.
+
+### AI Action System
+The AI doesn't just chat — it executes structured actions. Each AI response includes:
+- A coaching message (≤1500 characters)
+- Zero or more immediate actions (create_task, update_task, delete_task, create_habit, update_habit, create_goal, update_goal, log_mood, log_energy, log_expense, log_journal, schedule_reminder, start_focus_session)
+- Zero or more suggestions requiring user confirmation
+- A memory patch that persists context for future sessions
+
+
+## Key Differentiators
+- Real behavior change science instead of generic advice
+- AI that **acts** inside your system, not just talks
+- 8 specialized personas with persistent memory
+- "Never Miss Twice" habit psychology
+- 4-level automatic goal decomposition
+- Terminal-inspired aesthetic built for developers, founders, and deep thinkers
+- Extremely generous free tier with no core feature paywalls
+- Real-time sync across web + PWA (installable on all platforms)
+
+## Tech Stack
+- Next.js 14 (App Router) + TypeScript
+- Real-time backend: Convex
+- Auth: Clerk
+- AI: Groq (Llama 3.3 70B primary), OpenRouter fallback
+- Styling: Tailwind CSS
+- PWA + cross-platform install support
+- Payments: Dodo Payments
+
+## Pricing (as of March 2026)
+- **Free**: Full access to all 8 coaches, goal decomposition, habit tracking, focus sessions, basic analytics, and real-time AI actions. No credit card required.
+- **Pro** ($4.99/month): Unlimited habits/goals, advanced models, priority support, API access.
+- **Pro Yearly** ($29.99/year): 50% savings.
+- **Lifetime** ($49.99 one-time): Permanent access to everything.
+
+## Who Resurgo Is For
+- Developers, indie hackers, and founders managing complex, multi-domain lives
+- People in comeback seasons who want to rise again stronger
+- Productivity enthusiasts who hate bloat and friction
+- Anyone serious about building lasting habits and identity-level change
+
+## Why Resurgo Stands Out
+It is the rare system that is simultaneously deeply intelligent and genuinely humane. It respects your time, your energy, and your need for real progress — not just another dopamine-hit todo list.
+
+**Website**: https://resurgo.life  
+**Download / Install**: https://resurgo.life/download  
+**Pricing**: https://resurgo.life/pricing  
+**Blog**: https://resurgo.life/blog  
+**Twitter/X**: https://x.com/resurgo_life  
+**Support**: support@resurgo.life  
+**Telegram Bot**: @resurgo_bot
+
+---
+
+*This llms.txt is designed to give any AI (including future versions of Resurgo itself) a clear, high-fidelity understanding of the product, its philosophy, capabilities, and user promise.*

@@ -63,7 +63,7 @@ export function MarketingHeader({
 				<div className="flex items-center gap-3">
 					<Link
 						href={secondaryCtaHref}
-						className="font-mono text-sm text-zinc-400 transition hover:text-zinc-200"
+						className="hidden sm:inline-flex items-center gap-1.5 border border-zinc-600 bg-zinc-900 px-4 py-1.5 font-mono text-sm text-zinc-200 transition hover:border-orange-500 hover:bg-black hover:text-orange-400"
 					>
 						{secondaryCtaLabel}
 					</Link>
@@ -77,11 +77,29 @@ export function MarketingHeader({
 				</div>
 			</div>
 
-			<div className="border-t border-zinc-900 bg-zinc-950 px-5 py-1">
-				<span className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-zinc-400">
-					<PixelIcon name="terminal" size={11} className="text-orange-500" />
-					<span>{tickerText}</span>
-				</span>
+			<div className="border-t border-zinc-900 bg-zinc-950 overflow-hidden py-1">
+				<div className="flex whitespace-nowrap" style={{ animation: 'ticker-scroll 35s linear infinite' }}>
+					{[0,1].map((idx) => (
+						<span key={idx} className="inline-flex shrink-0 items-center gap-6 pr-16 font-mono text-[10px] tracking-widest text-zinc-300">
+							<PixelIcon name="terminal" size={11} className="text-orange-500 shrink-0" />
+							<span className="text-orange-600/70">★</span>
+							<span>{tickerText}</span>
+							<span className="text-zinc-700">·</span>
+							<span className="text-orange-600/50">FREE FOREVER TIER</span>
+							<span className="text-zinc-700">·</span>
+							<span>8 AI COACHES AVAILABLE</span>
+							<span className="text-zinc-700">·</span>
+							<span className="text-orange-600/50">NO APP STORE REQUIRED</span>
+							<span className="text-zinc-700">·</span>
+						</span>
+					))}
+				</div>
+				<style>{`
+					@keyframes ticker-scroll {
+						0%   { transform: translateX(0); }
+						100% { transform: translateX(-50%); }
+					}
+				`}</style>
 			</div>
 
 			<nav className="border-t border-zinc-900 bg-black px-3 py-2 lg:hidden">

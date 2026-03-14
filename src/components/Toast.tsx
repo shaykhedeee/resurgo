@@ -207,7 +207,7 @@ export function LevelUpModal({ level, levelName, onClose }: LevelUpModalProps) {
             onClick={onClose}
             className="w-full border border-orange-600 bg-orange-900/30 px-4 py-2.5 font-pixel text-[0.6rem] tracking-widest text-orange-300 transition hover:bg-orange-900/50"
           >
-            CONTINUE_ASCENDING
+            CONTINUE_RISING
           </button>
         </div>
       </div>
@@ -407,7 +407,7 @@ export function GoalCelebration({ goalTitle, onClose }: GoalCelebrationProps) {
               onClick={onClose}
               className="mt-6 px-6 py-2.5 rounded-xl bg-gradient-to-r from-gold-400 to-orange-500 text-white font-semibold hover:opacity-90 transition-opacity"
             >
-              Continue Ascending
+              Continue Rising
             </button>
           </div>
         </div>

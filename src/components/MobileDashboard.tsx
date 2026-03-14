@@ -23,7 +23,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain, Target, Activity, Flame, Heart,
   ChevronRight, Plus, DollarSign, BookOpen,
-  Zap, BarChart3, Moon, Dumbbell, Trophy, Star,
+  BarChart3, Moon, Dumbbell, Trophy, Star,
   MessageSquare, Droplets, Sparkles,
 } from 'lucide-react';
 
@@ -377,7 +377,7 @@ function WealthTab() {
           <p className="font-pixel text-[0.5rem] tracking-widest text-green-500">BUDGET_OVERVIEW</p>
           <Link href="/budget" className="font-terminal text-xs text-orange-500">Full view →</Link>
         </div>
-        <p className="font-terminal text-xs leading-relaxed text-zinc-500">
+        <p className="font-terminal text-xs leading-relaxed text-zinc-400">
           Track income, expenses and savings goals in the full budget dashboard.
         </p>
         <Link href="/budget"
@@ -391,7 +391,7 @@ function WealthTab() {
           <p className="font-pixel text-[0.5rem] tracking-widest text-blue-500">BUSINESS_TRACKER</p>
           <Link href="/business" className="font-terminal text-xs text-orange-500">Full view →</Link>
         </div>
-        <p className="font-terminal text-xs leading-relaxed text-zinc-500">
+        <p className="font-terminal text-xs leading-relaxed text-zinc-400">
           Business goals, KPIs and milestones — manage your enterprise objectives.
         </p>
         <Link href="/business"
@@ -414,9 +414,16 @@ export default function MobileDashboard() {
   return (
     <div className="flex min-h-screen flex-col bg-black">
       {/* ── Top header ───────────────────────────────────── */}
-      <div className="sticky top-0 z-20 border-b border-zinc-900 bg-zinc-950/95 backdrop-blur-sm px-3 py-3">
-        <p className="surface-kicker">Mobile workspace</p>
-        <p className="mt-0.5 font-terminal text-xs text-zinc-500">Cleaner focus, same system.</p>
+      <div className="sticky top-0 z-20 border-b border-zinc-900 bg-zinc-950/95 backdrop-blur-sm px-4 py-2.5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" />
+            <span className="font-pixel text-[0.45rem] tracking-widest text-orange-500">RESURGO OS</span>
+          </div>
+          <span className="font-terminal text-xs text-zinc-400">
+            {new Date().toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' })}
+          </span>
+        </div>
       </div>
 
       {/* ── Scrollable content ───────────────────────────── */}
@@ -464,7 +471,7 @@ export default function MobileDashboard() {
               )}
             >
               <Icon className="h-4 w-4" />
-              <span className="font-pixel text-[0.3rem] tracking-widest">{label}</span>
+              <span className="font-pixel text-[0.38rem] tracking-widest">{label}</span>
             </button>
           ))}
 
@@ -517,7 +524,7 @@ export default function MobileDashboard() {
               )}
             >
               <Icon className="h-4 w-4" />
-              <span className="font-pixel text-[0.3rem] tracking-widest">{label}</span>
+              <span className="font-pixel text-[0.38rem] tracking-widest">{label}</span>
             </button>
           ))}
         </div>

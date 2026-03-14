@@ -47,6 +47,21 @@ export default function robots(): MetadataRoute.Robots {
         allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
+      {
+        userAgent: 'ClaudeBot',
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
+        disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
+      },
+      {
+        userAgent: 'Applebot',
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog'],
+        disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
+      },
+      {
+        userAgent: 'Google-Extended',
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics'],
+        disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
+      },
       // Block aggressive crawlers
       {
         userAgent: 'AhrefsBot',

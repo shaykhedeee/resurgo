@@ -83,6 +83,18 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
 
+  // SEO-friendly redirects
+  async redirects() {
+    return [
+      // /pricing is the canonical SEO path in sitemap; /billing is the actual route
+      {
+        source: '/pricing',
+        destination: '/billing',
+        permanent: true, // 301 — passes PageRank to /billing
+      },
+    ];
+  },
+
   // Compression and performance
   compress: true,
   

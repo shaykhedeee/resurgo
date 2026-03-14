@@ -6,7 +6,7 @@ import { api } from '../../convex/_generated/api';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePlanGating } from '@/hooks/usePlanGating';
-import { CheckCircle, RefreshCw, Sparkles, ChevronLeft, ChevronRight, Crown, Upload, Wand2 } from 'lucide-react';
+import { CheckCircle, RefreshCw, Sparkles, ChevronLeft, ChevronRight, Crown, Upload, Wand2, Copy, Check } from 'lucide-react';
 import VisionBoardWizard, { type VisionBoardWizardResult } from '@/components/VisionBoardWizard';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -93,6 +93,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const [stylePreset, setStylePreset] = useState<'pinterest-bold' | 'clean-minimal' | 'luxury-editorial' | 'cinematic-dream'>('pinterest-bold');
   const [customImages, setCustomImages] = useState<string[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
 
   // Guided wizard
   const [wizardDone, setWizardDone] = useState(false);
@@ -375,6 +376,11 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   }
 
   // ── Full board ──────────────────────────────────────────────────────────────
+  const allCategories = [...new Set(board.panels.map((p) => p.category))];
+  const visiblePanels = categoryFilter
+    ? board.panels.filter((p) => p.category === categoryFilter)
+    : board.panels;
+
   return (
     <div
       className="rounded-xl p-6 space-y-6"
@@ -397,16 +403,46 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
         </p>
       </div>
 
+      {/* Category filter tabs */}
+      {allCategories.length > 1 && (
+        <div className="flex flex-wrap gap-2 justify-center">
+          <button
+            onClick={() => setCategoryFilter(null)}
+            className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+              categoryFilter === null
+                ? 'bg-white/10 text-white border border-white/20'
+                : 'text-zinc-400 hover:text-zinc-200'
+            }`}
+          >
+            All ({board.panels.length})
+          </button>
+          {allCategories.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setCategoryFilter(categoryFilter === cat ? null : cat)}
+              className={`px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                categoryFilter === cat
+                  ? 'text-white border border-white/30'
+                  : 'text-zinc-400 hover:text-zinc-200'
+              }`}
+              style={categoryFilter === cat ? { backgroundColor: `${primaryColor}30`, borderColor: primaryColor } : {}}
+            >
+              {CATEGORY_ICONS[cat]} {cat}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Panels */}
       <div className={layoutClass[board.theme.layoutStyle] ?? layoutClass.grid}>
-        {board.panels
+        {visiblePanels
           .sort((a, b) => a.position - b.position)
           .map((panel, idx) => (
             <PanelCard
               key={panel.id}
               panel={panel}
               accentColor={board.theme.colorPalette[idx % board.theme.colorPalette.length]}
-              onClick={() => setActivePanelIndex(idx)}
+              onClick={() => setActivePanelIndex(board.panels.indexOf(panel))}
             />
           ))}
       </div>
@@ -539,6 +575,20 @@ function PanelCard({
         </div>
       )}
 
+      {/* Progress badge — always visible */}
+      <div
+        className="absolute top-2 left-2 flex items-center gap-1 rounded-full px-2 py-0.5"
+        style={{ backgroundColor: 'rgba(0,0,0,0.7)' }}
+      >
+        <div className="h-1.5 w-12 bg-zinc-700 rounded-full overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all"
+            style={{ width: `${panel.progress}%`, backgroundColor: accentColor }}
+          />
+        </div>
+        <span className="text-[9px] font-mono" style={{ color: accentColor }}>{panel.progress}%</span>
+      </div>
+
       {/* Hover overlay */}
       <div
         className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity
@@ -593,6 +643,17 @@ function PanelModal({
   onNext: () => void;
 }) {
   const accentColor = colorPalette[currentIndex % colorPalette.length];
+  const [copied, setCopied] = useState(false);
+
+  const copyAffirmation = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(panel.affirmation);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* clipboard not available */
+    }
+  }, [panel.affirmation]);
 
   return (
     <div
@@ -625,7 +686,16 @@ function PanelModal({
             </span>
           </div>
           <h3 className="text-white font-bold text-lg">{panel.goalTitle}</h3>
-          <p className="text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
+          <div className="flex items-start gap-2">
+            <p className="flex-1 text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
+            <button
+              onClick={() => void copyAffirmation()}
+              className="shrink-0 p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition"
+              title="Copy affirmation"
+            >
+              {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} className="text-zinc-400" />}
+            </button>
+          </div>
 
           {/* Progress */}
           <div>

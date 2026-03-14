@@ -16,6 +16,7 @@ import { Toast } from '@/components/Toast';
 import { GlobalSearch } from '@/components/GlobalSearch';
 import BrainDump from '@/components/BrainDump';
 import LevelUpDetector from '@/components/LevelUpDetector';
+import GlobalFAB from '@/components/GlobalFAB';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
@@ -26,7 +27,7 @@ import { Search, Brain, Bell } from 'lucide-react';
 // ── Navigation Sections (ASCII-grouped, collapsible) ──
 const NAV_SECTIONS = [
   {
-    label: 'CMD CENTER',
+    label: 'HOME',
     collapsible: true,
     defaultOpen: true,
     items: [
@@ -39,23 +40,31 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    label: '★ AI COACH',
+    label: '★ AI ZONE',
     collapsible: false,
     defaultOpen: true,
     items: [
       { href: '/coach', label: 'AI Coach' },
-      { href: '/orchestrator', label: 'Orchestrator' },
       { href: '/plan-builder', label: 'Plan Builder' },
+      { href: '/vision-board', label: 'Vision Board' },
     ],
   },
   {
-    label: 'WELLNESS',
+    label: 'HEALTH',
     collapsible: true,
     defaultOpen: true,
     items: [
+      { href: '/fitness', label: 'Fitness' },
+      { href: '/food', label: 'Food & Nutrition' },
       { href: '/wellness', label: 'Wellness' },
+    ],
+  },
+  {
+    label: 'FOCUS',
+    collapsible: true,
+    defaultOpen: false,
+    items: [
       { href: '/focus', label: 'Focus Timer' },
-      { href: '/vision-board', label: 'Vision Board' },
     ],
   },
   {
@@ -78,6 +87,67 @@ const NAV_SECTIONS = [
     ],
   },
 ];
+
+function AiCentreButton({ pathname }: { pathname: string }) {
+  const [aiMenuOpen, setAiMenuOpen] = useState(false);
+  const isAiActive = ['/coach', '/plan-builder', '/vision-board'].some(
+    (p) => pathname === p || pathname.startsWith(p + '/'),
+  );
+  const AI_MENU_ITEMS: { href: string; label: string; iconName: PixelIconName }[] = [
+    { href: '/coach',        label: 'CHAT',   iconName: 'coach' as PixelIconName },
+    { href: '/plan-builder', label: 'PLAN',   iconName: 'plan'  as PixelIconName },
+    { href: '/vision-board', label: 'VISION', iconName: 'goals' as PixelIconName },
+  ];
+  return (
+    <div className="relative -top-3 flex flex-col items-center">
+      {/* Backdrop */}
+      {aiMenuOpen && (
+        <div className="fixed inset-0 z-30" onClick={() => setAiMenuOpen(false)} />
+      )}
+      {/* Sub-menu floats above the button */}
+      {aiMenuOpen && (
+        <div className="absolute bottom-[calc(100%+10px)] z-40 flex flex-col gap-1.5 items-center">
+          {AI_MENU_ITEMS.map((item) => {
+            const active = pathname === item.href || pathname.startsWith(item.href + '/');
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setAiMenuOpen(false)}
+                className={cn(
+                  'flex flex-col items-center gap-0.5 w-14 py-2 border-2 transition-all',
+                  active
+                    ? 'border-orange-500 bg-orange-600 text-black'
+                    : 'border-orange-800/60 bg-zinc-950/95 text-orange-400 hover:border-orange-700',
+                )}
+              >
+                <PixelIcon name={item.iconName} size={15} />
+                <span className="font-pixel text-[0.28rem] tracking-wider">{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
+      {/* Centre button */}
+      <button
+        onClick={() => setAiMenuOpen((v) => !v)}
+        aria-label="AI Coach menu"
+        className={cn(
+          'flex h-14 w-14 shrink-0 flex-col items-center justify-center gap-0.5',
+          'border-2 shadow-[0_0_20px_rgba(234,88,12,0.4)] transition-all active:scale-95',
+          isAiActive || aiMenuOpen
+            ? 'border-orange-500 bg-orange-600 text-black shadow-[0_0_28px_rgba(234,88,12,0.6)]'
+            : 'border-orange-700 bg-orange-950 text-orange-400',
+        )}
+      >
+        <PixelIcon name={'coach' as PixelIconName} size={18} />
+        <span className="font-pixel text-[0.3rem] tracking-wider">
+          {aiMenuOpen ? '▲ AI' : 'AI'}
+        </span>
+      </button>
+    </div>
+  );
+}
 
 function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { user, isLoading, isAuthenticated } = useStoreUser();
@@ -416,7 +486,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           return (
             <Link key={item.href} href={item.href}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-4 py-2 transition-colors duration-100',
+                'flex flex-col items-center gap-0.5 px-3 py-2.5 min-w-[52px] transition-colors duration-100',
                 isActive ? 'text-orange-400' : 'text-zinc-600',
               )}>
               <PixelIcon name={item.iconName} size={18} />
@@ -427,17 +497,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         })}
 
         {/* ── Raised AI Coach centre button ── */}
-        <Link href="/coach"
-          className={cn(
-            'relative -top-3 flex h-14 w-14 shrink-0 flex-col items-center justify-center gap-0.5',
-            'border-2 shadow-[0_0_20px_rgba(234,88,12,0.35)] transition-all active:scale-95',
-            pathname === '/coach' || pathname.startsWith('/coach/')
-              ? 'border-orange-500 bg-orange-600 text-black shadow-[0_0_28px_rgba(234,88,12,0.55)]'
-              : 'border-orange-700 bg-orange-950 text-orange-400',
-          )}>
-          <PixelIcon name={'coach' as PixelIconName} size={18} />
-          <span className="font-pixel text-[0.3rem] tracking-wider">AI</span>
-        </Link>
+        <AiCentreButton pathname={pathname} />
 
         {([
           { href: '/habits', label: 'HABITS', iconName: 'habits' as PixelIconName },
@@ -447,7 +507,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           return (
             <Link key={item.href} href={item.href}
               className={cn(
-                'flex flex-col items-center gap-0.5 px-4 py-2 transition-colors duration-100',
+                'flex flex-col items-center gap-0.5 px-3 py-2.5 min-w-[52px] transition-colors duration-100',
                 isActive ? 'text-orange-400' : 'text-zinc-600',
               )}>
               <PixelIcon name={item.iconName} size={18} />
@@ -482,6 +542,9 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
       >
         <Brain className="h-5 w-5 md:h-6 md:w-6" />
       </button>
+
+      {/* ── Global Quick Add FAB ── */}
+      <GlobalFAB />
     </div>
   );
 }

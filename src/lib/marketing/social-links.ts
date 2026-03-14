@@ -1,8 +1,8 @@
 export const MARKETING_SOCIAL_LINKS = [
-  { icon: '𝕏', label: 'X', href: 'https://twitter.com/resurgolife' },
-  { icon: '✈', label: 'Telegram', href: 'https://t.me/ResurgoApp' },
-  { icon: 'in', label: 'LinkedIn', href: 'https://linkedin.com/company/resurgo' },
-  { icon: '▶', label: 'YouTube', href: 'https://youtube.com/@resurgo' },
+  { icon: '𝕏', label: 'Twitter', href: 'https://x.com/resurgo_life' },
+  { icon: 'DC', label: 'Discord', href: 'https://discord.gg/yrTQBXmf' },
+  { icon: 'r/', label: 'Reddit', href: 'https://www.reddit.com/user/Resurgo_life/' },
+  { icon: 'IG', label: 'Instagram', href: 'https://instagram.com/resurgo.life' },
 ] as const;
 
 export const MARKETING_SOCIAL_URLS = MARKETING_SOCIAL_LINKS.map((link) => link.href);

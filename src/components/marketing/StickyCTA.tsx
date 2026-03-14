@@ -19,7 +19,22 @@ export default function StickyCTA() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const dismissed = window.sessionStorage.getItem(STICKY_DISMISSED_KEY);
-    setHidden(dismissed === '1');
+    if (dismissed === '1') { setHidden(true); return; }
+    // Only show after user scrolls at least 50% down the page
+    let shown = false;
+    const handleScroll = () => {
+      if (shown) return;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      if (total <= 0) return;
+      const pct = window.scrollY / total;
+      if (pct >= 0.5) {
+        shown = true;
+        setHidden(false);
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Rotate messages every 5s

@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAscendStore } from '@/lib/store';
 import { aiGoalDecomposer } from '@/lib/ai-goal-decomposer';
+import { analytics } from '@/lib/analytics';
 import { cn, getRandomQuote, CATEGORY_ICONS, CATEGORY_LABELS } from '@/lib/utils';
 import { GoalCategory, UltimateGoal, AIGoalDecompositionRequest } from '@/types';
 import { addMonths } from 'date-fns';
@@ -112,10 +113,10 @@ export function Onboarding() {
   };
 
   const handleNext = () => {
-    if (step === 'welcome') setStep('name');
-    else if (step === 'name' && name.trim()) setStep('about');
-    else if (step === 'about') setStep('goal');
-    else if (step === 'goal' && goalText.trim()) setStep('category');
+    if (step === 'welcome') { analytics.completeOnboarding(1); setStep('name'); }
+    else if (step === 'name' && name.trim()) { analytics.completeOnboarding(2); setStep('about'); }
+    else if (step === 'about') { analytics.completeOnboarding(3); setStep('goal'); }
+    else if (step === 'goal' && goalText.trim()) { analytics.completeOnboarding(4); setStep('category'); }
     else if (step === 'category') handleCreateGoal();
   };
 
@@ -181,7 +182,7 @@ export function Onboarding() {
         targetDate,
         createdAt: new Date(),
         status: 'in_progress',
-        milestones: result.milestones.map((m: any) => ({
+        milestones: result.milestones.map((m) => ({
           ...m,
           progress: m.progressPercentage || 0,
         })),
@@ -194,9 +195,9 @@ export function Onboarding() {
       addGoal(goal);
 
       // Add suggested habits
-      result.suggestedHabits?.forEach((habit: any) => {
+      result.suggestedHabits?.forEach((habit) => {
         addHabit({
-          name: habit.name,
+          name: habit.name ?? 'New Habit',
           description: habit.description,
           icon: habit.icon || '✨',
           color: habit.color || '#14B899',
@@ -209,6 +210,9 @@ export function Onboarding() {
       });
 
       setStep('ready');
+      analytics.createGoal(12); // 12-week default timeline
+      analytics.useAIDecomposition();
+      analytics.completeOnboarding(6); // Step 6 = goal plan generated
     } catch {
       setError('Something went wrong. Please try again.');
       setStep('category');
@@ -218,6 +222,7 @@ export function Onboarding() {
   };
 
   const handleFinish = () => {
+    analytics.completeOnboarding(7); // Step 7 = user clicked "Let's go" — fully activated
     addToast({
       type: 'success',
       title: `Welcome to Resurgo, ${name}! 🚀`,

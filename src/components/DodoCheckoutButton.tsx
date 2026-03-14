@@ -8,6 +8,7 @@
 import { useState, useCallback } from 'react';
 import { useAction } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { analytics } from '@/lib/analytics';
 
 interface DodoCheckoutButtonProps {
   productId: string;
@@ -27,6 +28,8 @@ export default function DodoCheckoutButton({
 
   const handleClick = useCallback(async () => {
     setLoading(true);
+    // Fire checkout_start analytics event before redirecting
+    analytics.startTrial(label);
     try {
       const result = await createCheckout({
         productId,
@@ -38,7 +41,7 @@ export default function DodoCheckoutButton({
       console.error('[DodoCheckout] Failed to create session:', err);
       setLoading(false);
     }
-  }, [createCheckout, productId, returnUrl]);
+  }, [createCheckout, productId, returnUrl, label]);
 
   return (
     <button onClick={handleClick} disabled={loading} className={className}>

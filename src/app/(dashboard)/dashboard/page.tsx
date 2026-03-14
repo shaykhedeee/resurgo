@@ -9,7 +9,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Id } from '../../../../convex/_generated/dataModel';
 import { useStoreUser } from '@/hooks/useStoreUser';
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import { MorningCheckIn } from '@/components/MorningCheckIn';
 import { EveningDebrief } from '@/components/EveningDebrief';
@@ -22,6 +22,7 @@ import { resolveLayout, WIDGET_REGISTRY, type LayoutEntry } from '@/lib/dashboar
 import MobileDashboard from '@/components/MobileDashboard';
 import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
+import { Tutorial } from '@/components/Tutorial';
 import {
   Target,
   CheckCircle2,
@@ -73,14 +74,22 @@ export default function DashboardPage() {
   const gamificationProfile = useQuery(api.gamification.getProfile);
   const toggleHabit = useMutation(api.habits.toggleComplete);
   const toggleTask = useMutation(api.tasks.toggleComplete);
+  const aiGreeting = useQuery(api.aiGreetings.getGreeting);
+  const markGreetingViewed = useMutation(api.aiGreetings.markViewed);
+
+  const createTask = useMutation(api.tasks.create);
 
   const [togglingHabit, setTogglingHabit] = useState<string | null>(null);
   const [togglingTask, setTogglingTask] = useState<string | null>(null);
+  const [quickAddOpen, setQuickAddOpen] = useState(false);
+  const [quickAddTitle, setQuickAddTitle] = useState('');
+  const [quickAddSaving, setQuickAddSaving] = useState(false);
   const [showMorningCheckIn, setShowMorningCheckIn] = useState(false);
   const [showEveningDebrief, setShowEveningDebrief] = useState(false);
   const [checkInJustCompleted, setCheckInJustCompleted] = useState(false);
   const [debriefJustCompleted, setDebriefJustCompleted] = useState(false);
-
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [greetingDismissed, setGreetingDismissed] = useState(false);
 
   // ── Dashboard customisation state ──
   const [editMode, setEditMode] = useState(false);
@@ -137,16 +146,15 @@ export default function DashboardPage() {
   const checkInStreak = useMemo(() => {
     if (!recentCheckIns || recentCheckIns.length === 0) return 0;
     let streak = 0;
-    const sorted = [...recentCheckIns].sort((a: any, b: any) => b.date.localeCompare(a.date));
+    const sorted = [...recentCheckIns].sort((a, b) => b.date.localeCompare(a.date));
     const todayStr = new Date().toISOString().split('T')[0];
     for (const ci of sorted) {
-      const ciAny = ci as any;
-      const d = ciAny.date;
+      const d = ci.date;
       const expected = new Date();
       expected.setDate(expected.getDate() - streak);
       const expectedStr = expected.toISOString().split('T')[0];
       if (d === expectedStr || (streak === 0 && d === todayStr)) {
-        if (ciAny.morningCompletedAt || ciAny.eveningCompletedAt) streak++;
+        if (ci.morningCompletedAt || ci.eveningCompletedAt) streak++;
         else break;
       } else {
         break;
@@ -154,6 +162,12 @@ export default function DashboardPage() {
     }
     return streak;
   }, [recentCheckIns]);
+
+  useEffect(() => {
+    if (!localStorage.getItem('resurgo-tutorial-done')) {
+      setShowTutorial(true);
+    }
+  }, []);
 
   if (!user) return null;
 
@@ -174,7 +188,7 @@ export default function DashboardPage() {
   // Emotional state derived from today's check-in (mirrors convex/coachAI.ts deriveEmotionalState)
   const _mood = todayCheckIn?.morningMood;
   const _energy = todayCheckIn?.morningEnergy;
-  const _sleep = (todayCheckIn as any)?.sleepQuality;
+  const _sleep = todayCheckIn?.sleepQuality;
   const dashboardEmotionalState: string =
     (_energy !== undefined && _mood !== undefined && _energy >= 4 && _mood >= 4)
       ? 'energized and focused'
@@ -215,6 +229,21 @@ export default function DashboardPage() {
     setTogglingTask(null);
   };
 
+  const handleQuickAddTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const title = quickAddTitle.trim();
+    if (!title) return;
+    setQuickAddSaving(true);
+    try {
+      await createTask({ title, priority: 'medium' });
+      setQuickAddTitle('');
+      setQuickAddOpen(false);
+    } catch (err) {
+      console.error('Failed to create task:', err);
+    }
+    setQuickAddSaving(false);
+  };
+
   return (
     <>
       {/* ── Mobile: full native-like tabbed dashboard ── */}
@@ -225,6 +254,25 @@ export default function DashboardPage() {
       {/* ── Desktop: original full dashboard ── */}
       <div className="hidden md:block">
       <div className="mx-auto min-h-screen w-full max-w-7xl px-4 py-4 md:px-6 md:py-6">
+
+      {/* -- AI Welcome Banner -- */}
+      {aiGreeting && !aiGreeting.viewed && !greetingDismissed && (
+        <div className="mb-4 flex items-center justify-between border border-orange-800 bg-orange-950/20 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 shrink-0 text-orange-500" />
+            <p className="font-terminal text-sm text-orange-300">
+              ⚡ We&apos;ve analysed your goals, habits and data — your AI has set up your dashboard.{' '}
+              <Link href="/first-contact" className="underline hover:text-orange-200">View full briefing →</Link>
+            </p>
+          </div>
+          <button
+            onClick={async () => { setGreetingDismissed(true); await markGreetingViewed({ greetingId: aiGreeting._id }); }}
+            className="ml-4 shrink-0 font-terminal text-xs text-zinc-500 hover:text-zinc-300"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* -- HEADER -- */}
       <div className="surface-panel mb-6 overflow-hidden">
@@ -315,6 +363,69 @@ export default function DashboardPage() {
         )}
       </div>
 
+      {/* -- QUICK ADD STRIP -- */}
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        {quickAddOpen ? (
+          <form onSubmit={handleQuickAddTask} className="flex flex-1 items-center gap-2">
+            <input
+              autoFocus
+              type="text"
+              value={quickAddTitle}
+              onChange={(e) => setQuickAddTitle(e.target.value)}
+              placeholder="Task title..."
+              className="flex-1 border border-orange-800 bg-black px-3 py-2 font-terminal text-sm text-zinc-100 placeholder-zinc-600 outline-none focus:border-orange-600"
+            />
+            <button
+              type="submit"
+              disabled={quickAddSaving || !quickAddTitle.trim()}
+              className="border border-orange-700 bg-orange-600 px-4 py-2 font-terminal text-xs text-white transition hover:bg-orange-500 disabled:opacity-50"
+            >
+              {quickAddSaving ? '...' : 'ADD'}
+            </button>
+            <button
+              type="button"
+              onClick={() => { setQuickAddOpen(false); setQuickAddTitle(''); }}
+              className="border border-zinc-700 px-3 py-2 font-terminal text-xs text-zinc-400 transition hover:text-zinc-200"
+            >
+              ✕
+            </button>
+          </form>
+        ) : (
+          <>
+            <button
+              onClick={() => setQuickAddOpen(true)}
+              className="flex items-center gap-1.5 border border-orange-900 bg-orange-950/30 px-3 py-2 font-terminal text-xs text-orange-400 transition hover:border-orange-700 hover:bg-orange-950/60"
+            >
+              <Plus className="h-3 w-3" /> Task
+            </button>
+            <Link
+              href="/habits"
+              className="flex items-center gap-1.5 border border-emerald-900 bg-emerald-950/30 px-3 py-2 font-terminal text-xs text-emerald-400 transition hover:border-emerald-700 hover:bg-emerald-950/60"
+            >
+              <Plus className="h-3 w-3" /> Habit
+            </Link>
+            <Link
+              href="/food"
+              className="flex items-center gap-1.5 border border-yellow-900 bg-yellow-950/30 px-3 py-2 font-terminal text-xs text-yellow-400 transition hover:border-yellow-700 hover:bg-yellow-950/60"
+            >
+              <Plus className="h-3 w-3" /> Food
+            </Link>
+            <Link
+              href="/fitness"
+              className="flex items-center gap-1.5 border border-blue-900 bg-blue-950/30 px-3 py-2 font-terminal text-xs text-blue-400 transition hover:border-blue-700 hover:bg-blue-950/60"
+            >
+              <Plus className="h-3 w-3" /> Workout
+            </Link>
+            <Link
+              href="/wellness"
+              className="flex items-center gap-1.5 border border-purple-900 bg-purple-950/30 px-3 py-2 font-terminal text-xs text-purple-400 transition hover:border-purple-700 hover:bg-purple-950/60"
+            >
+              <Plus className="h-3 w-3" /> Mood
+            </Link>
+          </>
+        )}
+      </div>
+
       {/* -- DAILY CHECK-IN PROMPT -- */}
       {isMorning && !morningDone && !showMorningCheckIn && (
         <button
@@ -360,8 +471,8 @@ export default function DashboardPage() {
         <div className="mb-6">
           <EveningDebrief
             userName={user.name?.split(' ')[0]}
-            tasksCompleted={(todayCheckIn as any)?.tasksCompleted}
-            habitsCompleted={(todayCheckIn as any)?.habitsCompleted}
+            tasksCompleted={todayCheckIn?.tasksCompleted}
+            habitsCompleted={todayCheckIn?.habitsCompleted}
             onComplete={() => {
               setDebriefJustCompleted(true);
               setShowEveningDebrief(false);
@@ -371,7 +482,7 @@ export default function DashboardPage() {
       )}
 
       {/* -- STATS -- */}
-      <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-6 lg:gap-4">
+      <div data-tutorial="progress" className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-6 lg:gap-4">
         <TermStatCard label="Habits" value={totalHabits} />
         <TermStatCard label="Goals" value={activeGoals.length} />
         <TermStatCard label="Tasks" value={openTasks.length} />
@@ -458,7 +569,7 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         {/* -- HABITS PANEL -- */}
-        <section className="border border-zinc-900 bg-zinc-950">
+        <section data-tutorial="habits" className="border border-zinc-900 bg-zinc-950">
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Sparkles className="h-3.5 w-3.5 text-orange-500" />
@@ -497,7 +608,7 @@ export default function DashboardPage() {
         </section>
 
         {/* -- TASK QUEUE PANEL -- */}
-        <section className="border border-zinc-900 bg-zinc-950">
+        <section data-tutorial="tasks" className="border border-zinc-900 bg-zinc-950">
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-3.5 w-3.5 text-zinc-500" />
@@ -539,7 +650,7 @@ export default function DashboardPage() {
         </section>
 
         {/* -- GOALS PANEL -- */}
-        <section className="border border-zinc-900 bg-zinc-950 lg:col-span-2">
+        <section data-tutorial="goal-card" className="border border-zinc-900 bg-zinc-950 lg:col-span-2">
           <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
             <div className="flex items-center gap-2">
               <Target className="h-3.5 w-3.5 text-zinc-500" />
@@ -613,11 +724,11 @@ export default function DashboardPage() {
                     </div>
                   </div>
                 </div>
-                {(todayCheckIn as any)?.topThreePriorities?.length > 0 && (
+                {Array.isArray(todayCheckIn?.topThreePriorities) && todayCheckIn.topThreePriorities.length > 0 && (
                   <div>
                     <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">TODAY&apos;S PRIORITIES</span>
                     <ol className="mt-1 space-y-0.5">
-                      {((todayCheckIn as any).topThreePriorities as string[]).map((p, i) => (
+                      {(todayCheckIn?.topThreePriorities as string[]).map((p, i) => (
                         <li key={i} className="font-terminal text-xs text-zinc-300">
                           <span className="text-zinc-600">{i + 1}.</span> {p}
                         </li>
@@ -704,6 +815,12 @@ export default function DashboardPage() {
       </div>
     </div>
       </div>{/* /hidden md:block */}
+      {showTutorial && (
+        <Tutorial
+          onComplete={() => setShowTutorial(false)}
+          onSkip={() => setShowTutorial(false)}
+        />
+      )}
     </>
   );
 }

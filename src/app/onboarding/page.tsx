@@ -129,6 +129,7 @@ export default function OnboardingPage() {
   const { user: clerkUser } = useUser();
   const router = useRouter();
   const completeOnboarding = useMutation(api.users.completeOnboarding);
+  const autoGenerateFromOnboarding = useMutation(api.goals.autoGenerateFromOnboarding);
   const createGoal = useMutation(api.goals.create);
   const createHabit = useMutation(api.habits.create);
 
@@ -195,26 +196,37 @@ export default function OnboardingPage() {
         timezone: tz,
       });
 
-      // 2. Create the primary goal in Convex
-      let goalId: any = undefined;
+      // 2. Auto-generate goal + milestones + starter tasks via AI
       if (primaryGoal.trim()) {
         try {
-          const deadlineMap: Record<string, string> = {
-            '1m': new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
-            '3m': new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
-            '6m': new Date(Date.now() + 180 * 86400000).toISOString().split('T')[0],
-            '1y': new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0],
-          };
-          goalId = await createGoal({
-            title: primaryGoal.trim(),
-            description: primaryGoalReason.trim() || undefined,
-            category: selectedFocus[0] || 'personal_growth',
-            targetDate: deadlineMap[primaryGoalDeadline] || undefined,
-            whyImportant: primaryGoalReason.trim() || undefined,
-            deadlineType: primaryGoalDeadline === 'ongoing' ? 'ongoing' : 'flexible',
+          await autoGenerateFromOnboarding({
+            goalTitle: primaryGoal.trim(),
+            goalReason: primaryGoalReason.trim() || undefined,
+            goalDeadline: primaryGoalDeadline || undefined,
+            focusAreas: selectedFocus.length > 0 ? selectedFocus : undefined,
+            preferredTime: preferredTime || undefined,
           });
         } catch (err) {
-          console.warn('Goal creation failed:', err);
+          // Fall back to manual goal creation if AI generation fails
+          console.warn('Auto-generate failed, falling back:', err);
+          try {
+            const deadlineMap: Record<string, string> = {
+              '1m': new Date(Date.now() + 30 * 86400000).toISOString().split('T')[0],
+              '3m': new Date(Date.now() + 90 * 86400000).toISOString().split('T')[0],
+              '6m': new Date(Date.now() + 180 * 86400000).toISOString().split('T')[0],
+              '1y': new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0],
+            };
+            await createGoal({
+              title: primaryGoal.trim(),
+              description: primaryGoalReason.trim() || undefined,
+              category: selectedFocus[0] || 'personal_growth',
+              targetDate: deadlineMap[primaryGoalDeadline] || undefined,
+              whyImportant: primaryGoalReason.trim() || undefined,
+              deadlineType: primaryGoalDeadline === 'ongoing' ? 'ongoing' : 'flexible',
+            });
+          } catch (fallbackErr) {
+            console.warn('Fallback goal creation also failed:', fallbackErr);
+          }
         }
       }
 
@@ -230,19 +242,18 @@ export default function OnboardingPage() {
             frequency: template.frequency,
             timeOfDay: template.timeOfDay,
             estimatedMinutes: template.estimatedMinutes,
-            goalId: goalId || undefined,
           });
         } catch (err) {
           console.warn(`Habit creation failed for ${habitId}:`, err);
         }
       }
     } catch (err) {
-      // Non-fatal: log but always proceed to dashboard
+      // Non-fatal: log but always proceed
       console.warn('Onboarding save failed, proceeding anyway:', err);
     }
-    // Always navigate regardless of mutation success
-    router.replace('/dashboard');
-  }, [saving, completeOnboarding, createGoal, createHabit, primaryGoal, primaryGoalReason, primaryGoalDeadline, lifeVision, selectedFocus, selectedHabits, preferredTime, router]);
+    // Route to first-contact AI briefing instead of dashboard directly
+    router.replace('/first-contact');
+  }, [saving, completeOnboarding, autoGenerateFromOnboarding, createGoal, createHabit, primaryGoal, primaryGoalReason, primaryGoalDeadline, lifeVision, selectedFocus, selectedHabits, preferredTime, router]);
 
   // Skip: save whatever we have and go straight to dashboard
   const handleSkip = useCallback(() => {
@@ -346,7 +357,7 @@ export default function OnboardingPage() {
               [Get Started]
             </button>
             <button onClick={handleSkip} className="font-mono text-[9px] tracking-widest text-zinc-600 hover:text-zinc-400 mt-2 transition">
-              I'll set this later →
+              I&apos;ll set this later →
             </button>
           </div>
         )}

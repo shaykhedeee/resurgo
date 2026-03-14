@@ -1,5 +1,4 @@
 ﻿import type { Metadata } from 'next';
-import Link from 'next/link';
 import { TermLinkButton } from '@/components/ui/TermButton';
 
 export const metadata: Metadata = {
@@ -51,8 +50,12 @@ const FEATURES = [
   { label: 'FREE_TO_INSTALL',  desc: 'No app store account needed. Install directly from your browser.' },
 ];
 
-// APK GitHub Releases URL — update file name once APK is built and uploaded
-const APK_URL = 'https://github.com/shaykhedeee/ascend/releases/latest';
+
+// APK download URL — direct download from resurgo.life
+// Falls back to GitHub Releases if self-hosted APK isn't uploaded yet
+const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
+// GitHub Releases fallback — used in FAQ reference and as backup source
+const _APK_GITHUB_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
 const APK_VERSION = 'v1.0.0';
 
 // ─── Shared step list ─────────────────────────────────────────────────────────
@@ -311,7 +314,7 @@ export default function DownloadPage() {
             {[
               {
                 q: 'Is the APK safe to install?',
-                a: 'Yes. The APK is built from the same codebase that runs on resurgo.life and published directly from our GitHub repository (github.com/shaykhedeee/ascend). The SHA-256 checksum is listed on the release page so you can verify the file before installing.',
+                a: 'Yes. The APK is built from the same codebase that runs on resurgo.life and published directly from our GitHub repository (github.com/shaykhedeee/resurgo). The SHA-256 checksum is listed on the release page so you can verify the file before installing.',
               },
               {
                 q: 'Do I need an account to use the app?',
@@ -378,7 +381,7 @@ export default function DownloadPage() {
             operatingSystem: 'Android, iOS, Windows, macOS',
             applicationCategory: 'LifestyleApplication',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-            downloadUrl: APK_URL,
+            downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
             softwareVersion: APK_VERSION,
             description:
               'AI-powered productivity assistant. Install on Android (APK), iPhone/iPad (PWA), Windows and macOS.',

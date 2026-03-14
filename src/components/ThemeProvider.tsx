@@ -23,11 +23,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   // On mount, read theme from localStorage or system preference
   useEffect(() => {
-    const savedTheme = localStorage.getItem('ascend-theme') as Theme | null;
+    // Migration: read new key first, fall back to legacy key
+    const savedTheme = (localStorage.getItem('resurgo-theme') || localStorage.getItem('ascend-theme')) as Theme | null;
     
     if (savedTheme) {
       setThemeState(savedTheme);
       document.documentElement.setAttribute('data-theme', savedTheme);
+      // Migrate to new key
+      localStorage.setItem('resurgo-theme', savedTheme);
     } else {
       // Default to dark theme (premium feel)
       document.documentElement.setAttribute('data-theme', 'dark');
@@ -39,7 +42,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (mounted) {
       document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('ascend-theme', theme);
+      localStorage.setItem('resurgo-theme', theme);
     }
   }, [theme, mounted]);
 

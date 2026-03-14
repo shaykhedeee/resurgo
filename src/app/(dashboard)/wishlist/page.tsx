@@ -10,8 +10,6 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Id } from '../../../../convex/_generated/dataModel';
 
-const apiAny = api as any;
-
 type WishlistItem = {
   _id: Id<'wishlistItems'>;
   name: string;
@@ -38,10 +36,10 @@ function formatPrice(price?: number, currency = 'USD'): string {
 }
 
 export default function WishlistPage() {
-  const items = useQuery(apiAny.wishlist.list) as WishlistItem[] | undefined;
-  const createItem = useMutation(apiAny.wishlist.create);
-  const toggleBought = useMutation(apiAny.wishlist.toggleBought);
-  const removeItem = useMutation(apiAny.wishlist.remove);
+  const items = useQuery(api.wishlist.list, {}) as WishlistItem[] | undefined;
+  const createItem = useMutation(api.wishlist.create);
+  const toggleBought = useMutation(api.wishlist.toggleBought);
+  const removeItem = useMutation(api.wishlist.remove);
 
   // Filter
   const [filter, setFilter] = useState<'all' | 'pending' | 'bought'>('all');

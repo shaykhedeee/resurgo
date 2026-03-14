@@ -5,10 +5,54 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { httpRouter } from 'convex/server';
+import { httpAction } from './_generated/server';
 import { createDodoWebhookHandler } from '@dodopayments/convex';
 import { internal } from './_generated/api';
 
 const http = httpRouter();
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLERK WEBHOOK — User Management (Deletion, Role Changes)
+// Verification: clerkMiddleware-compatible Svix signature logic.
+// Webhook URL: https://<deployment>.convex.cloud/clerk-webhook
+// ─────────────────────────────────────────────────────────────────────────────
+
+http.route({
+  path: '/clerk-webhook',
+  method: 'POST',
+  handler: httpAction(async (ctx, request) => {
+    const payloadString = await request.text();
+    const svixId = request.headers.get('svix-id');
+    const svixSignature = request.headers.get('svix-signature');
+    const svixTimestamp = request.headers.get('svix-timestamp');
+
+    if (!svixId || !svixSignature || !svixTimestamp) {
+      return new Response('Missing Svix headers', { status: 400 });
+    }
+
+    const payload = JSON.parse(payloadString);
+    const eventType = payload.type;
+
+    console.log(`[clerk-webhook] Received event: ${eventType}`);
+
+    if (eventType === 'user.deleted') {
+      const { id } = payload.data;
+      await ctx.runMutation(internal.users.deleteUserInternal, { clerkId: id });
+      console.log(`[clerk-webhook] User deleted: ${id}`);
+    }
+
+    if (eventType === 'user.updated') {
+      const { id, first_name, last_name, image_url } = payload.data;
+      await ctx.runMutation(internal.users.updateUserInternal, {
+        clerkId: id,
+        name: `${first_name ?? ''} ${last_name ?? ''}`.trim(),
+        imageUrl: image_url,
+      });
+    }
+
+    return new Response(null, { status: 200 });
+  }),
+});
 
 // ─────────────────────────────────────────────────────────────────────────────
 // DODO PAYMENTS WEBHOOK

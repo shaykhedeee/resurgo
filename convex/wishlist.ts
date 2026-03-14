@@ -17,7 +17,7 @@ export const list = query({
       .first();
     if (!user) return [];
 
-    let q = ctx.db.query('wishlistItems').withIndex('by_userId', (q) => q.eq('userId', user._id));
+    const q = ctx.db.query('wishlistItems').withIndex('by_userId', (q) => q.eq('userId', user._id));
     const items = await q.collect();
     if (args.includesBought === false) {
       return items.filter((i) => !i.bought);

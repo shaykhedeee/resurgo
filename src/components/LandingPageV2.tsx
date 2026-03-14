@@ -11,7 +11,6 @@ import { MarketingFooter } from '@/components/MarketingFooter';
 // DemoSandbox available for future interactive demos
 import InteractiveDemoCarousel from '@/components/marketing/InteractiveDemoCarousel';
 import SocialProof from '@/components/marketing/SocialProof';
-import EmailCapture from '@/components/marketing/EmailCapture';
 
 import ExitIntent from '@/components/marketing/ExitIntent';
 import StickyCTA from '@/components/marketing/StickyCTA';
@@ -25,7 +24,6 @@ import {
   ProgressBar,
   KeyboardHints,
   SparklineBars,
-  TerminalOutput,
 } from '@/components/terminal';
 import type { TerminalLine, StatusItem, KeyHint } from '@/components/terminal';
 
@@ -608,7 +606,7 @@ function LandingPageV2() {
         </section>}
 
         {/* ────────────────────── HERO ────────────────────── */}
-        <section id="system" className="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+        <section id="system" className="relative flex h-screen min-h-[600px] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
           {/* Pixel dot-grid background */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.04]">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -621,28 +619,20 @@ function LandingPageV2() {
             </svg>
           </div>
           <div className="mx-auto max-w-7xl">
-            {/* Badge */}
-            <div className="mb-6 inline-flex max-w-full flex-wrap items-center gap-2 border-2 border-zinc-800 bg-black px-3 py-1.5 shadow-[2px_2px_0px_rgba(0,0,0,0.6)]">
-              <span className="h-2 w-2 shrink-0 animate-pulse bg-orange-600" />
-              <span className="font-pixel text-[0.55rem] leading-relaxed tracking-widest text-zinc-500 sm:text-[0.6rem]">
-                AI PRODUCTIVITY ASSISTANT · DAILY PLANNER · FOCUS SYSTEM · AI COACHING
-              </span>
-            </div>
+
 
             <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
               {/* Left — copy */}
               <div>
-                {/* Pixel art streak bars */}
-                <div aria-hidden="true" className="mb-6 flex items-end gap-px">
-                  {[4,5,4,7,6,9,7,11,9,13,11,15,13,17,15,19,17,20,20,20,20,20,20,20].map((h, i) => (
-                    <div
-                      key={i}
-                      style={{ height: `${h}px` }}
-                      className={i < 18 ? 'w-2 bg-orange-600/70' : 'w-2 bg-zinc-800'}
-                    />
-                  ))}
-                  <span className="ml-3 self-end font-pixel text-[0.4rem] tracking-widest text-zinc-600">
-                    CONSISTENCY_RISING
+                {/* Status badge */}
+                <div className="mb-5 flex items-center gap-3">
+                  <span className="inline-flex items-center gap-2 border border-orange-900/50 bg-orange-950/20 px-3 py-1.5">
+                    <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
+                    <span className="font-pixel text-[0.45rem] tracking-widest text-orange-500/90">RESURGO · LIFE OS · v2.4</span>
+                  </span>
+                  <span className="hidden sm:inline-flex items-center gap-1.5 border border-green-900/40 bg-green-950/20 px-2.5 py-1">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500/80" />
+                    <span className="font-terminal text-xs text-green-400/80">All systems active</span>
                   </span>
                 </div>
 
@@ -652,7 +642,7 @@ function LandingPageV2() {
                     {heroContent.headingAccent}
                   </span>
                 </h1>
-                <p className="mt-6 max-w-xl font-terminal text-lg leading-relaxed text-zinc-400 sm:text-xl">
+                <p className="mt-6 max-w-xl font-terminal text-lg leading-relaxed text-zinc-200 sm:text-xl">
                   {heroContent.subcopy}
                 </p>
 
@@ -677,8 +667,8 @@ function LandingPageV2() {
                 </div>
               </div>
 
-              {/* Right — Enhanced Terminal Preview (research-driven) */}
-              <div className="flex flex-col gap-3">
+              {/* Right — Enhanced Terminal Preview */}
+              <div className="hidden lg:flex flex-col gap-3">
                 <TerminalWindow
                   title="resurgo.terminal"
                   variant="bordered"
@@ -798,10 +788,10 @@ function LandingPageV2() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600">THE_FRAMEWORK</p>
-              <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl">
+              <h2 className="mt-2 font-pixel text-xl text-zinc-100 sm:text-2xl">
                 How to execute with clarity: the Resurgo framework
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+              <p className="mx-auto mt-4 max-w-2xl font-terminal text-xl leading-relaxed text-zinc-200">
                 Plans fail because of vague intentions, inconsistent execution, and no feedback loop. Resurgo solves all three inside one system.
               </p>
             </div>
@@ -810,15 +800,15 @@ function LandingPageV2() {
               {ACHIEVEMENT_STEPS.map((step) => (
                 <article key={step.num} className="border-2 border-zinc-800 bg-black p-6 shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
                   <div className="flex items-center gap-3">
-                    <span className="flex h-10 w-10 items-center justify-center border-2 border-orange-900 bg-orange-950/40 font-pixel text-[0.55rem] text-orange-500">
+                    <span className="flex h-12 w-12 items-center justify-center border-2 border-orange-900 bg-orange-950/40 font-pixel text-[0.6rem] text-orange-500 shrink-0">
                       {step.num}
                     </span>
                     <div>
-                      <h3 className="font-pixel text-[0.55rem] text-zinc-100">{step.title}</h3>
-                      <p className="font-pixel text-[0.35rem] tracking-widest text-orange-500">{step.subtitle}</p>
+                      <h3 className="font-terminal text-xl font-bold text-zinc-100 sm:text-2xl">{step.title}</h3>
+                      <p className="mt-0.5 font-terminal text-sm font-semibold tracking-wider text-orange-400">{step.subtitle}</p>
                     </div>
                   </div>
-                  <p className="mt-4 font-terminal text-base leading-relaxed text-zinc-300">{step.desc}</p>
+                  <p className="mt-4 font-terminal text-lg leading-relaxed text-zinc-200">{step.desc}</p>
                 </article>
               ))}
             </div>
@@ -945,7 +935,7 @@ function LandingPageV2() {
                     </div>
                     <p className="mt-3 font-pixel text-[0.5rem] tracking-widest text-orange-600">{spec.id}</p>
                     <h3 className="mt-1 font-pixel text-[0.6rem] text-zinc-200 sm:text-[0.65rem]">{spec.title}</h3>
-                    <p className="mt-2 font-terminal text-sm leading-relaxed text-zinc-400 sm:text-base">{spec.description}</p>
+                    <p className="mt-2 font-terminal text-sm leading-relaxed text-zinc-300 sm:text-base">{spec.description}</p>
                   </div>
                   <div className="border-t border-zinc-800 px-4 py-2.5 sm:px-5">
                     <code className="font-terminal text-xs text-zinc-500 transition-colors group-hover:text-orange-500/70">
@@ -966,7 +956,7 @@ function LandingPageV2() {
               <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl">
                 8 AI coaches. One for every domain.
               </h2>
-              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-200">
                 Each coach has a distinct personality, philosophy, and area of expertise. Marcus &amp; Aurora are free forever. Unlock all eight with Pro.
               </p>
             </div>
@@ -1007,13 +997,13 @@ function LandingPageV2() {
                       {coach.free ? 'FREE' : 'PRO'}
                     </span>
                   </div>
-                  <p className="mt-1 font-pixel text-[0.35rem] tracking-widest text-zinc-500">{coach.style}</p>
+                  <p className="mt-1 font-pixel text-[0.35rem] tracking-widest text-zinc-400">{coach.style}</p>
                   <p className="mt-3 font-terminal text-sm leading-relaxed text-zinc-400">{coach.desc}</p>
                 </article>
               ))}
             </div>
 
-            <p className="mt-6 text-center font-terminal text-base text-zinc-500">
+            <p className="mt-6 text-center font-terminal text-base text-zinc-400">
               Use <span className="text-orange-400">@TITAN</span>, <span className="text-green-400">@SAGE</span>, <span className="text-cyan-400">@NOVA</span> in any message to direct your question to a specific coach
             </p>
           </div>
@@ -1026,7 +1016,7 @@ function LandingPageV2() {
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">ACCESS_TIERS</p>
             </div>
             <h2 className="text-center font-pixel text-lg text-zinc-100 sm:text-xl">Simple, transparent pricing</h2>
-            <p className="mx-auto mt-2 max-w-xl text-center font-terminal text-lg text-zinc-400">
+            <p className="mx-auto mt-2 max-w-xl text-center font-terminal text-lg text-zinc-300">
               Start free forever. Upgrade to Pro only when you&apos;re ready. No lock-in, no hidden fees.
             </p>
 
@@ -1092,11 +1082,11 @@ function LandingPageV2() {
                         {plan.price.monthly}
                         <span className="font-terminal text-sm text-zinc-400"> {plan.period.monthly}</span>
                       </p>
-                      <p className="mt-1 font-terminal text-sm text-zinc-500">
+                      <p className="mt-1 font-terminal text-sm text-zinc-400">
                         <span className="line-through">{plan.originalPrice}</span>
                         <span className="ml-2 text-yellow-500">save 44%</span>
                       </p>
-                      <p className="mt-1 font-pixel text-[0.5rem] tracking-widest text-zinc-500">
+                      <p className="mt-1 font-pixel text-[0.5rem] tracking-widest text-zinc-400">
                         Regular price after {plan.spotsLeft?.toLocaleString()} spots
                       </p>
                     </div>
@@ -1146,7 +1136,7 @@ function LandingPageV2() {
             </div>
 
             {/* Trust badges */}
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-pixel text-[0.5rem] tracking-widest text-zinc-500">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 font-pixel text-[0.5rem] tracking-widest text-zinc-400">
               <span className="flex items-center gap-1.5"><PixelIcon name="check" size={12} className="text-orange-500" />DATA_ENCRYPTED_AT_REST</span>
               <span className="flex items-center gap-1.5"><PixelIcon name="star" size={12} className="text-orange-500" />CANCEL_ANYTIME</span>
               <span className="flex items-center gap-1.5"><PixelIcon name="sparkles" size={12} className="text-orange-500" />14-DAY_MONEY_BACK</span>
@@ -1187,8 +1177,8 @@ function LandingPageV2() {
                 </p>
                 <div className="mt-5 flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <p className="font-pixel text-[0.45rem] text-zinc-400">{TESTIMONIALS[activeLog].name}</p>
-                    <p className="font-pixel text-[0.35rem] tracking-widest text-zinc-400">
+                    <p className="font-pixel text-[0.5rem] text-zinc-200">{TESTIMONIALS[activeLog].name}</p>
+                    <p className="font-pixel text-[0.4rem] tracking-widest text-zinc-400">
                       {TESTIMONIALS[activeLog].role}
                     </p>
                   </div>
@@ -1221,8 +1211,8 @@ function LandingPageV2() {
                   </p>
                   <div className="mt-4 flex flex-wrap items-end justify-between gap-2">
                     <div>
-                      <p className="font-pixel text-[0.6rem] text-zinc-400">{t.name}</p>
-                      <p className="font-pixel text-[0.55rem] tracking-widest text-zinc-500">{t.role}</p>
+                      <p className="font-pixel text-[0.6rem] text-zinc-200">{t.name}</p>
+                      <p className="font-pixel text-[0.5rem] tracking-widest text-zinc-400">{t.role}</p>
                     </div>
                     <span className="shrink-0 border-2 border-green-900/60 px-2 py-0.5 font-pixel text-[0.5rem] tracking-widest text-green-600">
                       {t.outcome}
@@ -1297,7 +1287,7 @@ function LandingPageV2() {
                       >
                         <p
                           itemProp="text"
-                          className="border-t border-zinc-800 px-5 pb-4 pt-3 pl-10 font-terminal text-base leading-relaxed text-zinc-400"
+                          className="border-t border-zinc-800 px-5 pb-4 pt-3 pl-10 font-terminal text-base leading-relaxed text-zinc-300"
                         >
                           {faq.answer}
                         </p>
@@ -1389,12 +1379,18 @@ function LandingPageV2() {
               <SocialProof />
             </div>
 
-            <div className="mt-8 border-2 border-zinc-800 bg-black p-5 shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
-              <EmailCapture
-                variant="inline"
-                source="landing_demo_section"
-                offer="7-Day Resurgo Reset"
-              />
+            <div className="mt-8 border-2 border-orange-900/50 bg-gradient-to-br from-orange-950/20 to-black p-8 text-center shadow-[3px_3px_0px_rgba(0,0,0,0.7)]">
+              <p className="mb-2 font-pixel text-[0.5rem] tracking-widest text-orange-500">READY_TO_START?</p>
+              <h3 className="font-pixel text-sm text-zinc-100 sm:text-base">Your system is waiting. Set it up free in 2 minutes.</h3>
+              <p className="mx-auto mt-2 max-w-md font-terminal text-base text-zinc-300">No credit card. No commitments. Set your first goal, build your habit stack, and get your AI coach — today.</p>
+              <div className="mt-6 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                <TermLinkButton href="/sign-up" variant="primary" size="lg">
+                  Start Free — No Credit Card
+                </TermLinkButton>
+                <TermLinkButton href="/pricing" variant="secondary" size="md">
+                  View Pricing →
+                </TermLinkButton>
+              </div>
             </div>
 
 
@@ -1406,11 +1402,11 @@ function LandingPageV2() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-600">COMPARISON_MATRIX</p>
-              <h2 className="mt-3 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
+              <h2 className="mt-3 font-pixel text-xl text-zinc-100 sm:text-2xl lg:text-3xl">
                 How Resurgo outperforms every alternative
               </h2>
-              <p className="mx-auto mt-3 max-w-xl font-terminal text-lg text-zinc-400">
-                Most apps track one thing. Resurgo unifies your goals, habits, focus, and AI coaching in a single OS.
+              <p className="mx-auto mt-4 max-w-xl font-terminal text-xl leading-relaxed text-zinc-200">
+                Most apps track one thing. Resurgo unifies your goals, habits, focus, and AI coaching in a single life OS — nothing else comes close.
               </p>
             </div>
 
@@ -1426,40 +1422,48 @@ function LandingPageV2() {
                 </span>
               </div>
 
-              <table className="w-full min-w-[640px] text-left">
-                <thead className="border-b border-zinc-800 bg-zinc-950">
+              <table className="w-full min-w-[780px] text-left">
+                <thead className="border-b-2 border-zinc-700 bg-zinc-950">
                   <tr>
-                    <th className="px-5 py-3 font-pixel text-[0.38rem] tracking-widest text-zinc-500">APP</th>
-                    {['AI Goal Planning','AI Coaching','Habits + Focus + Wellness','Free Tier','All-in-one'].map((f) => (
-                      <th key={f} className="px-3 py-3 font-pixel text-[0.35rem] tracking-widest text-zinc-500 text-center">{f}</th>
+                    <th className="px-5 py-4 font-pixel text-[0.5rem] tracking-widest text-zinc-300">APP</th>
+                    {['AI Goal Planning','AI Coaching','Habits + Focus','Gamification','Health & Nutrition','Free Tier','All-in-One'].map((f) => (
+                      <th key={f} className="px-3 py-4 font-terminal text-xs font-semibold text-zinc-300 text-center">{f}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {([
-                    { app: 'Habitica',  ai: false, coach: false, unified: false, free: true,  aio: false },
-                    { app: 'Streaks',   ai: false, coach: false, unified: false, free: false, aio: false },
-                    { app: 'Notion',    ai: 'partial', coach: false, unified: false, free: true, aio: false },
-                    { app: 'Todoist',   ai: 'partial', coach: false, unified: false, free: true, aio: false },
-                    { app: 'RESURGO ★', ai: true,  coach: true,  unified: true,  free: true,  aio: true,  highlight: true },
+                    { app: 'Habitica',       ai: false,      coach: false, habits: true,  gamify: true,  health: false, free: true,  aio: false },
+                    { app: 'Streaks',        ai: false,      coach: false, habits: true,  gamify: false, health: false, free: false, aio: false },
+                    { app: 'MyFitnessPal',   ai: 'partial',  coach: false, habits: false, gamify: false, health: true,  free: true,  aio: false },
+                    { app: 'Notion',         ai: 'partial',  coach: false, habits: false, gamify: false, health: false, free: true,  aio: false },
+                    { app: 'Todoist',        ai: 'partial',  coach: false, habits: true,  gamify: false, health: false, free: true,  aio: false },
+                    { app: 'Monday.com',     ai: 'partial',  coach: false, habits: false, gamify: false, health: false, free: false, aio: false },
+                    { app: 'RESURGO ★',      ai: true,       coach: true,  habits: true,  gamify: true,  health: true,  free: true,  aio: true,  highlight: true },
                   ] as const).map((row) => {
-                    const cols = [row.ai, row.coach, row.unified, row.free, row.aio];
+                    const cols = [row.ai, row.coach, row.habits, row.gamify, row.health, row.free, row.aio];
+                    const isHighlight = 'highlight' in row && row.highlight;
                     return (
                       <tr
                         key={row.app}
-                        className={`border-t border-zinc-800 ${'highlight' in row && row.highlight ? 'bg-orange-950/10' : 'bg-black'}`}
+                        className={`border-t transition-colors ${isHighlight ? 'border-t-2 border-t-orange-700 border-b-2 border-b-orange-700 bg-gradient-to-r from-orange-950/30 via-orange-950/15 to-orange-950/30' : 'border-zinc-800 bg-black hover:bg-zinc-950'}`}
                       >
-                        <td className={`px-5 py-3 font-pixel text-[0.4rem] tracking-widest ${'highlight' in row && row.highlight ? 'text-orange-400' : 'text-zinc-400'}`}>
-                          {row.app}
+                        <td className={`px-5 py-4 ${isHighlight ? 'font-terminal text-base font-bold text-orange-400' : 'font-pixel text-[0.5rem] tracking-widest text-zinc-300'}`}>
+                          {isHighlight ? (
+                            <span className="flex items-center gap-2">
+                              <span className="h-2 w-2 animate-pulse bg-orange-500" />
+                              {row.app}
+                            </span>
+                          ) : row.app}
                         </td>
                         {cols.map((val, ci) => (
-                          <td key={ci} className="px-3 py-3 text-center">
+                          <td key={ci} className="px-3 py-4 text-center">
                             {val === true ? (
-                              <span className={`font-pixel text-[0.5rem] ${'highlight' in row && row.highlight ? 'text-orange-500' : 'text-green-500'}`}>✓</span>
+                              <span className={`font-bold text-lg ${isHighlight ? 'text-orange-400' : 'text-green-500'}`}>✓</span>
                             ) : val === 'partial' ? (
-                              <span className="font-pixel text-[0.5rem] text-yellow-600">~</span>
+                              <span className="text-lg text-yellow-500 font-bold">~</span>
                             ) : (
-                              <span className="font-pixel text-[0.5rem] text-zinc-700">✗</span>
+                              <span className="text-lg text-zinc-700">✗</span>
                             )}
                           </td>
                         ))}
@@ -1468,9 +1472,9 @@ function LandingPageV2() {
                   })}
                 </tbody>
               </table>
-              <div className="border-t border-zinc-800 bg-zinc-950 px-5 py-2 text-right">
-                <Link href="/compare" className="font-mono text-[11px] text-orange-500 hover:text-orange-400 transition-colors">
-                  full comparison guide →
+              <div className="border-t border-zinc-800 bg-zinc-950/50 px-4 py-3 text-center">
+                <Link href="/compare" className="inline-flex items-center gap-2 border border-zinc-700 bg-zinc-900/40 px-6 py-2.5 font-terminal text-sm font-semibold text-zinc-400 transition hover:border-orange-700 hover:text-orange-400">
+                  [ VIEW FULL COMPARISON GUIDE ] →
                 </Link>
               </div>
             </div>

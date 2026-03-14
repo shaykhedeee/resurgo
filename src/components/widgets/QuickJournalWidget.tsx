@@ -79,9 +79,9 @@ export default function QuickJournalWidget() {
               Mood: {MOODS.find((m) => m.value === (todayCheckIn?.morningMood ?? 0))?.emoji ?? '—'}{' '}
               Energy: {ENERGY_LEVELS.find((e) => e.value === (todayCheckIn?.morningEnergy ?? 0))?.bar ?? '—'}
             </p>
-            {(todayCheckIn as any)?.morningIntention && (
+            {todayCheckIn?.morningIntention && (
               <p className="font-terminal text-xs text-zinc-400 italic">
-                &quot;{(todayCheckIn as any).morningIntention}&quot;
+                &quot;{todayCheckIn.morningIntention}&quot;
               </p>
             )}
           </div>

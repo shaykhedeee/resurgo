@@ -2,8 +2,12 @@
 
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { FormEvent, useState } from 'react';
-import { BookOpen, Smile, Meh, Frown, Plus, Calendar, Moon, Apple, Droplets, Zap } from 'lucide-react';
+import { FormEvent, useState, useRef, useEffect } from 'react';
+import { BookOpen, Smile, Meh, Frown, Plus, Calendar, Moon, Apple, Droplets, Zap, Wind } from 'lucide-react';
+
+interface MoodEntry { _id: string; date: string; score: number; notes?: string; tags?: string[]; }
+interface JournalEntry { _id: string; date: string; content: string; type?: string; }
+interface NutritionMeal { name: string; calories: number; protein?: number; carbs?: number; fat?: number; time?: string; }
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import WellnessRadarChart from '@/components/WellnessRadarChart';
@@ -19,7 +23,7 @@ const JOURNAL_TYPES = [
   { id: 'freeform'   as const, label: 'Freeform'   },
 ];
 type JournalType = 'reflection' | 'gratitude' | 'goal_note' | 'freeform';
-type Tab = 'mood' | 'journal' | 'sleep' | 'nutrition';
+type Tab = 'mood' | 'journal' | 'sleep' | 'nutrition' | 'meditation';
 
 export default function WellnessPage() {
   const today = new Date().toISOString().split('T')[0];
@@ -42,7 +46,7 @@ export default function WellnessPage() {
   const [moodNotes, setMoodNotes] = useState('');
   const [moodTags,  setMoodTags]  = useState<string[]>([]);
   const [moodSaving, setMoodSaving] = useState(false);
-  const todayMood = moodHistory?.find((m: any) => m.date === today);
+  const todayMood = moodHistory?.find((m: MoodEntry) => m.date === today);
 
   const [showJournalForm, setShowJournalForm] = useState(false);
   const [journalContent, setJournalContent]   = useState('');
@@ -127,10 +131,11 @@ export default function WellnessPage() {
   const fmtDuration = (mins: number) => `${Math.floor(mins / 60)}h ${mins % 60}m`;
 
   const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
-    { id: 'mood',      label: 'MOOD',      icon: Smile    },
-    { id: 'journal',   label: 'JOURNAL',   icon: BookOpen },
-    { id: 'sleep',     label: 'SLEEP',     icon: Moon     },
-    { id: 'nutrition', label: 'NUTRITION', icon: Apple    },
+    { id: 'mood',       label: 'MOOD',      icon: Smile  },
+    { id: 'journal',    label: 'JOURNAL',   icon: BookOpen },
+    { id: 'sleep',      label: 'SLEEP',     icon: Moon     },
+    { id: 'nutrition',  label: 'NUTRITION', icon: Apple    },
+    { id: 'meditation', label: 'MEDITATE',  icon: Wind     },
   ];
 
   return (
@@ -213,7 +218,7 @@ export default function WellnessPage() {
                 <div className="py-8 text-center"><p className="font-mono text-xs tracking-widest text-zinc-400">NO_ENTRIES_YET</p></div>
               ) : (
                 <div className="space-y-px p-1">
-                  {moodHistory.slice(0, 14).map((entry: any) => {
+                  {moodHistory.slice(0, 14).map((entry: MoodEntry) => {
                     const Icon = MOOD_ICONS[entry.score] || Meh;
                     return (
                       <div key={entry._id} className="flex items-start gap-3 px-3 py-2.5 hover:bg-zinc-900">
@@ -284,7 +289,7 @@ export default function WellnessPage() {
               </div>
             ) : (
               <div className="space-y-px">
-                {journalEntries.map((entry: any) => (
+                {journalEntries.map((entry: JournalEntry) => (
                   <div key={entry._id} className="border border-zinc-900 bg-zinc-950 p-4 transition hover:bg-zinc-900">
                     <div className="mb-2 flex items-center justify-between">
                       <span className={cn('border px-2 py-0.5 font-mono text-xs tracking-widest',
@@ -361,7 +366,7 @@ export default function WellnessPage() {
                   <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">SLEEP_HISTORY</span>
                 </div>
                 <div className="divide-y divide-zinc-900">
-                  {sleepLogs.map((log: any) => (
+                  {sleepLogs.map((log) => (
                     <div key={log._id} className="flex items-center gap-4 px-4 py-2.5">
                       <span className="font-mono text-xs text-zinc-400">{log.date}</span>
                       <span className="font-mono text-xs text-zinc-300">
@@ -443,7 +448,7 @@ export default function WellnessPage() {
                   <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">TODAY_MEALS</span>
                 </div>
                 <div className="divide-y divide-zinc-900">
-                  {todayNutrition.meals.map((meal: any, i: number) => (
+                  {todayNutrition.meals.map((meal: NutritionMeal, i: number) => (
                     <div key={i} className="flex items-center gap-3 px-4 py-2.5">
                       <Apple className="h-3.5 w-3.5 shrink-0 text-amber-500" />
                       <div className="flex-1">
@@ -459,6 +464,222 @@ export default function WellnessPage() {
             )}
           </div>
         )}
+
+        {/* ─────────── MEDITATION TAB ─────────── */}
+        {tab === 'meditation' && (
+          <MeditationTab />
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── Meditation Timer Component ─────────────────────────────────────────────
+const BREATH_CYCLES = [
+  { label: '4-7-8 Calm',      inhale: 4, hold: 7, exhale: 8, color: '#a855f7' },
+  { label: 'Box Breath',      inhale: 4, hold: 4, exhale: 4, color: '#06b6d4' },
+  { label: 'Energize 1:1:1',  inhale: 6, hold: 0, exhale: 6, color: '#22c55e' },
+  { label: 'Wim Hof Power',   inhale: 2, hold: 1, exhale: 2, color: '#f97316' },
+];
+
+const DURATIONS = [5, 10, 15, 20, 30];
+
+function MeditationTab() {
+  const [active, setActive] = useState(false);
+  const [elapsed, setElapsed] = useState(0);
+  const [duration, setDuration] = useState(10);
+  const [phase, setPhase] = useState<'inhale' | 'hold' | 'exhale'>('inhale');
+  const [phaseCount, setPhaseCount] = useState(0);
+  const [cycleIdx, setCycleIdx] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const breathRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const cycle = BREATH_CYCLES[cycleIdx];
+  const totalSecs = duration * 60;
+  const pct = totalSecs > 0 ? Math.min((elapsed / totalSecs) * 100, 100) : 0;
+  const remaining = Math.max(totalSecs - elapsed, 0);
+  const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+  const ss = String(remaining % 60).padStart(2, '0');
+
+  const PHASE_ORDER: ('inhale' | 'hold' | 'exhale')[] = cycle.hold > 0
+    ? ['inhale', 'hold', 'exhale']
+    : ['inhale', 'exhale'];
+  const PHASE_DURATIONS: Record<'inhale' | 'hold' | 'exhale', number> = {
+    inhale: cycle.inhale,
+    hold:   cycle.hold,
+    exhale: cycle.exhale,
+  };
+  const PHASE_LABELS: Record<'inhale' | 'hold' | 'exhale', string> = {
+    inhale: 'BREATHE IN',
+    hold:   'HOLD',
+    exhale: 'BREATHE OUT',
+  };
+
+  const stopAll = () => {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (breathRef.current) { clearInterval(breathRef.current); breathRef.current = null; }
+  };
+
+  const start = () => {
+    setActive(true);
+    setElapsed(0);
+    setPhase('inhale');
+    setPhaseCount(0);
+
+    timerRef.current = setInterval(() => {
+      setElapsed((e) => {
+        if (e + 1 >= totalSecs) { stopAll(); setActive(false); return totalSecs; }
+        return e + 1;
+      });
+    }, 1000);
+
+    let phaseIdx = 0;
+    let phaseElapsed = 0;
+    breathRef.current = setInterval(() => {
+      phaseElapsed++;
+      const currentPhase = PHASE_ORDER[phaseIdx % PHASE_ORDER.length];
+      const phaseDur = PHASE_DURATIONS[currentPhase];
+      if (phaseElapsed >= phaseDur) {
+        phaseIdx++;
+        phaseElapsed = 0;
+        const next = PHASE_ORDER[phaseIdx % PHASE_ORDER.length];
+        setPhase(next);
+        setPhaseCount((c) => c + 1);
+      }
+    }, 1000);
+  };
+
+  const stop = () => { stopAll(); setActive(false); setElapsed(0); setPhase('inhale'); };
+
+  useEffect(() => () => stopAll(), []);
+
+  return (
+    <div className="space-y-4">
+      {/* Duration selector */}
+      <div className="border border-zinc-900 bg-zinc-950">
+        <div className="border-b border-zinc-900 px-4 py-2.5">
+          <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">SESSION_DURATION</span>
+        </div>
+        <div className="flex flex-wrap gap-2 p-4">
+          {DURATIONS.map((d) => (
+            <button key={d} onClick={() => !active && setDuration(d)}
+              className={cn('border px-4 py-2 font-mono text-xs tracking-widest transition',
+                duration === d ? 'border-purple-700 bg-purple-950/30 text-purple-400' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700',
+                active && 'opacity-40 cursor-not-allowed'
+              )}>
+              {d} MIN
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Breath pattern selector */}
+      <div className="border border-zinc-900 bg-zinc-950">
+        <div className="border-b border-zinc-900 px-4 py-2.5">
+          <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">BREATH_PATTERN</span>
+        </div>
+        <div className="grid grid-cols-2 gap-2 p-4">
+          {BREATH_CYCLES.map((bc, i) => (
+            <button key={i} onClick={() => !active && setCycleIdx(i)}
+              className={cn('border p-3 text-left transition',
+                cycleIdx === i ? 'border-purple-700 bg-purple-950/20' : 'border-zinc-800 hover:border-zinc-700',
+                active && 'opacity-40 cursor-not-allowed'
+              )}>
+              <p className="font-mono text-xs font-bold tracking-widest" style={{ color: cycleIdx === i ? bc.color : '#a1a1aa' }}>{bc.label}</p>
+              <p className="mt-0.5 font-mono text-xs text-zinc-500">
+                {bc.inhale}s in{bc.hold > 0 ? ` · ${bc.hold}s hold` : ''} · {bc.exhale}s out
+              </p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Active timer */}
+      <div className="border border-zinc-900 bg-zinc-950">
+        <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
+          <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">MEDITATION_TIMER</span>
+          {active && <span className="animate-pulse font-mono text-xs tracking-widest text-purple-500">ACTIVE</span>}
+        </div>
+        <div className="p-6 flex flex-col items-center gap-6">
+          {/* Breathing circle */}
+          <div className="relative flex h-36 w-36 items-center justify-center">
+            <svg className="absolute inset-0 h-full w-full -rotate-90" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" fill="none" stroke="#18181b" strokeWidth="6" />
+              <circle
+                cx="50" cy="50" r="44" fill="none"
+                stroke={cycle.color} strokeWidth="6"
+                strokeLinecap="round"
+                strokeDasharray={`${2 * Math.PI * 44}`}
+                strokeDashoffset={`${2 * Math.PI * 44 * (1 - pct / 100)}`}
+                style={{ transition: 'stroke-dashoffset 1s linear' }}
+              />
+            </svg>
+            <div className="text-center">
+              <p className="font-mono text-3xl font-bold tabular-nums text-zinc-100">{mm}:{ss}</p>
+              {active && (
+                <p className="mt-1 font-mono text-[10px] tracking-widest" style={{ color: cycle.color }}>
+                  {PHASE_LABELS[phase]}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Phase indicator */}
+          {active && (
+            <div className="flex gap-3">
+              {PHASE_ORDER.map((p) => (
+                <div key={p} className={cn('border px-3 py-1.5 font-mono text-[10px] tracking-widest transition',
+                  phase === p ? 'border-purple-700 text-purple-300' : 'border-zinc-800 text-zinc-600'
+                )}>
+                  {PHASE_LABELS[p]} ({PHASE_DURATIONS[p]}s)
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Cycle count */}
+          {active && phaseCount > 0 && (
+            <p className="font-mono text-xs text-zinc-500">
+              BREATH_CYCLES: {Math.floor(phaseCount / PHASE_ORDER.length)}
+            </p>
+          )}
+
+          {/* Controls */}
+          <div className="flex gap-3">
+            {!active ? (
+              <button onClick={start}
+                className="flex items-center gap-2 border border-purple-700 bg-purple-950/30 px-8 py-3 font-mono text-sm tracking-widest text-purple-400 transition hover:bg-purple-950/60">
+                <Wind className="h-4 w-4" /> [START]
+              </button>
+            ) : (
+              <button onClick={stop}
+                className="flex items-center gap-2 border border-red-800 bg-red-950/30 px-8 py-3 font-mono text-sm tracking-widest text-red-400 transition hover:bg-red-950/60">
+                [STOP]
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Tips */}
+      <div className="border border-zinc-900 bg-zinc-950">
+        <div className="border-b border-zinc-900 px-4 py-2.5">
+          <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">TECHNIQUE_GUIDE</span>
+        </div>
+        <div className="grid grid-cols-1 gap-px md:grid-cols-2">
+          {[
+            { name: '4-7-8 Calm',     use: 'Anxiety · Sleep · Stress relief',     detail: 'Activates parasympathetic system. Best at night.' },
+            { name: 'Box Breath',      use: 'Focus · Performance · Navy SEAL drill', detail: 'Equal phases reset nervous system. Use before hard work.' },
+            { name: 'Energize 1:1:1', use: 'Morning energy · Clarity boost',       detail: 'Simple rhythm. Great for starting your day.' },
+            { name: 'Wim Hof Power',  use: 'Cold exposure · Mental resilience',    detail: 'Rapid cycle raises alertness and oxygen intake.' },
+          ].map((t) => (
+            <div key={t.name} className="p-4 bg-zinc-950 hover:bg-zinc-900 transition">
+              <p className="font-mono text-xs font-bold tracking-widest text-purple-400">{t.name}</p>
+              <p className="mt-1 font-mono text-xs text-zinc-300">{t.use}</p>
+              <p className="mt-0.5 font-mono text-xs text-zinc-500">{t.detail}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

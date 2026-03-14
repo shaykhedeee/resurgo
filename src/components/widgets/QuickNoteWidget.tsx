@@ -10,15 +10,15 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import Link from 'next/link';
 
-const apiAny = api as any;
+
 
 export default function QuickNoteWidget() {
   const [text, setText] = useState('');
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const saveNote = useMutation(apiAny.scratchNotes.save);
-  const latest = useQuery(apiAny.scratchNotes.getLatest);
+  const saveNote = useMutation(api.scratchNotes.save);
+  const latest = useQuery(api.scratchNotes.getLatest);
 
   async function handleSave() {
     const trimmed = text.trim();

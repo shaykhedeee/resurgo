@@ -15,7 +15,7 @@ export function PsychDisclaimer() {
   const [confirming, setConfirming] = useState(false);
   const [deleted, setDeleted] = useState(false);
 
-  const deleteProfile = useMutation((api as any).psychology.deleteProfile);
+  const deleteProfile = useMutation(api.psychology.deleteProfile);
 
   async function handleDelete() {
     if (!confirming) {

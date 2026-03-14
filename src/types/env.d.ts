@@ -4,6 +4,7 @@ declare namespace NodeJS {
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?: string;
     CLERK_SECRET_KEY?: string;
     CLERK_JWT_ISSUER_DOMAIN?: string;
+    CLERK_FRONTEND_API_URL?: string;
     CLERK_WEBHOOK_SECRET?: string;
 
     // Convex

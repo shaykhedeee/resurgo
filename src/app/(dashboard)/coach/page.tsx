@@ -8,13 +8,15 @@
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock, CheckCircle2, XCircle } from 'lucide-react';
+import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import { PixelArt } from '@/components/PixelArt';
 import { PixelIcon } from '@/components/PixelIcon';
+import VisionBoard from '@/components/VisionBoard';
 
 type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'NOVA' | 'ORACLE' | 'NEXUS';
+type CoachTab = 'chat' | 'vision' | 'analytics';
 
 interface CoachDef {
   id: CoachId;
@@ -95,6 +97,7 @@ function MessageContent({ content, coachColor: _coachColor }: { content: string;
 
 export default function CoachPage() {
   const [selectedCoach, setSelectedCoach] = useState<CoachId>('MARCUS');
+  const [activeTab, setActiveTab] = useState<CoachTab>('chat');
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isGreeting, setIsGreeting] = useState(false);
@@ -105,7 +108,7 @@ export default function CoachPage() {
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
   // Premium agents require yearly Pro or Lifetime — billingPeriod is set by billing webhook
-  const isYearly = user?.plan === 'lifetime' || ((user as any)?.billingPeriod === 'year' && user?.plan === 'pro');
+  const isYearly = user?.plan === 'lifetime' || (user?.billingPeriod === 'year' && user?.plan === 'pro');
   const FREE_COACHES: CoachId[] = ['MARCUS', 'AURORA'];
 
   const history = useQuery(api.coachMessages.getHistory, { limit: 100 });
@@ -116,13 +119,13 @@ export default function CoachPage() {
 
   const coachMessages = useMemo(() => {
     if (!history) return [];
-    return history.filter((m: any) => m.context?.startsWith(`coach:${selectedCoach}`));
+    return history.filter((m) => m.context?.startsWith(`coach:${selectedCoach}`));
   }, [history, selectedCoach]);
 
   // Auto-greet when switching to a coach with no messages
   useEffect(() => {
     if (!history || isGreeting || isSending) return;
-    const msgs = history.filter((m: any) => m.context?.startsWith(`coach:${selectedCoach}`));
+    const msgs = history.filter((m) => m.context?.startsWith(`coach:${selectedCoach}`));
     if (msgs.length === 0 && !greetedRef.current.has(selectedCoach)) {
       greetedRef.current.add(selectedCoach);
       setIsGreeting(true);
@@ -131,18 +134,6 @@ export default function CoachPage() {
         .finally(() => setIsGreeting(false));
     }
   }, [history, selectedCoach, isGreeting, isSending, greetUser, user?.name]);
-
-  // Focus input with / key
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === '/' && document.activeElement?.tagName !== 'INPUT' && document.activeElement?.tagName !== 'TEXTAREA') {
-        e.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, []);
 
   useEffect(() => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -174,6 +165,12 @@ export default function CoachPage() {
 
   const coach = COACHES.find((c) => c.id === selectedCoach)!;
 
+  const MAIN_TABS: { id: CoachTab; label: string; icon: React.ElementType }[] = [
+    { id: 'chat',      label: 'CHAT',         icon: MessageSquare },
+    { id: 'vision',    label: 'VISION_BOARD', icon: Sparkles      },
+    { id: 'analytics', label: 'ANALYTICS',    icon: BarChart3     },
+  ];
+
   return (
     <div className="flex min-h-screen flex-col bg-black">
       {/* -- HEADER -- */}
@@ -187,12 +184,90 @@ export default function CoachPage() {
         </div>
       </div>
 
+      {/* -- TAB BAR -- */}
+      <div className="border-b border-zinc-900 bg-zinc-950/80">
+        <div className="mx-auto flex max-w-5xl">
+          {MAIN_TABS.map(({ id, label, icon: Icon }) => (
+            <button key={id} onClick={() => setActiveTab(id)}
+              className={cn(
+                'flex items-center gap-2 border-b-2 px-6 py-3 font-mono text-[10px] tracking-widest transition',
+                activeTab === id
+                  ? 'border-orange-600 bg-orange-950/10 text-orange-500'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-300'
+              )}>
+              <Icon className="h-3 w-3" />{label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* -- VISION BOARD TAB -- */}
+      {activeTab === 'vision' && (
+        <div className="mx-auto w-full max-w-5xl flex-1 p-4 md:p-6">
+          <VisionBoard />
+        </div>
+      )}
+
+      {/* -- ANALYTICS TAB -- */}
+      {activeTab === 'analytics' && (
+        <div className="mx-auto w-full max-w-5xl flex-1 p-4 md:p-6 space-y-6">
+          <div className="border border-zinc-900 bg-zinc-950">
+            <div className="border-b border-zinc-900 px-4 py-2.5">
+              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">COACH_USAGE_BREAKDOWN</span>
+            </div>
+            <div className="p-4 grid grid-cols-2 gap-3 md:grid-cols-4">
+              {COACHES.slice(0, 6).map((c) => {
+                const count = history?.filter((m) => m.context?.startsWith(`coach:${c.id}`) && m.role === 'user').length ?? 0;
+                const total = history?.filter((m) => m.role === 'user').length ?? 1;
+                const pct = total > 0 ? Math.round((count / total) * 100) : 0;
+                return (
+                  <div key={c.id} className="border border-zinc-800 bg-black p-3">
+                    <div className="mb-2 flex items-center gap-1.5">
+                      <span className="text-base">{c.avatar}</span>
+                      <p className="font-mono text-[10px] font-bold tracking-widest" style={{ color: c.color }}>{c.name}</p>
+                    </div>
+                    <p className="font-mono text-xl font-bold text-zinc-100">{count}</p>
+                    <p className="font-mono text-xs text-zinc-500">messages ({pct}%)</p>
+                    <div className="mt-2 h-1 w-full bg-zinc-900">
+                      <div className="h-full transition-all" style={{ width: `${pct}%`, backgroundColor: c.color }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          <div className="border border-zinc-900 bg-zinc-950">
+            <div className="border-b border-zinc-900 px-4 py-2.5">
+              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">RECENT_INSIGHTS</span>
+            </div>
+            <div className="p-4 space-y-2">
+              {history && history.filter((m) => m.role === 'coach').slice(0, 5).map((m) => {
+                const cId = m.context?.replace('coach:', '') as CoachId | undefined;
+                const cDef = COACHES.find(c => c.id === cId);
+                return (
+                  <div key={m._id} className="border border-zinc-800 bg-black px-3 py-2.5">
+                    {cDef && <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: cDef.color }}>{cDef.name}</p>}
+                    <p className="font-mono text-[10px] leading-relaxed text-zinc-400 line-clamp-2">{m.content.slice(0, 180)}…</p>
+                  </div>
+                );
+              })}
+              {(!history || history.filter(m=>m.role==='coach').length === 0) && (
+                <p className="py-8 text-center font-mono text-xs tracking-widest text-zinc-500">NO_COACH_HISTORY_YET</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* -- CHAT TAB (default) -- */}
+      {activeTab === 'chat' && (
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4 p-4 md:flex-row md:p-6">
         {/* -- AGENT SELECTOR -- */}
         <aside className="w-full md:w-64 shrink-0 space-y-3">
           <div className="surface-panel overflow-hidden">
             <div className="border-b border-zinc-900 px-3 py-2">
-              <p className="font-mono text-[9px] tracking-widest text-zinc-400">SELECT_AGENT</p>
+              <p className="font-mono text-[9px] tracking-widest text-zinc-400">CHOOSE COACH</p>
             </div>
             <div className="space-y-px p-1">
               {COACHES.map((c) => {
@@ -246,7 +321,7 @@ export default function CoachPage() {
 
           <div className="surface-panel overflow-hidden">
             <div className="border-b border-zinc-900 px-3 py-2">
-              <p className="font-mono text-[9px] tracking-widest text-zinc-400">SMART_PROMPTS</p>
+              <p className="font-mono text-[9px] tracking-widest text-zinc-400">QUICK PROMPTS</p>
             </div>
             <div className="space-y-px p-1">
               {(smartPrompts ?? FALLBACK_PROMPTS[selectedCoach]).map((q) => (
@@ -282,24 +357,24 @@ export default function CoachPage() {
               {coachMessages.length === 0 && !isGreeting && (
                 <div className="flex flex-col items-center justify-center py-16 text-center">
                   <span className="mb-3 text-4xl">{coach.avatar}</span>
-                  <p className="font-mono text-[9px] tracking-widest text-zinc-400">AGENT_{coach.name}_INITIALIZING</p>
+                <p className="font-mono text-[9px] tracking-widest text-zinc-400">{coach.name} — {coach.title}</p>
                   <p className="mt-2 font-mono text-[10px] text-zinc-400">{coach.shortBio}</p>
                 </div>
               )}
               {isGreeting && coachMessages.length === 0 && (
                 <div className="mr-6 border px-4 py-3" style={{ borderColor: `${coach.color}30` }}>
-                  <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: coach.color }}>AGENT_{coach.name}</p>
-                  <p className="font-mono text-[11px] text-zinc-500 animate-pulse">INITIALIZING_GREETING_</p>
+                  <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: coach.color }}>{coach.name}</p>
+                  <p className="font-mono text-[11px] text-zinc-500 animate-pulse">Starting chat...</p>
                 </div>
               )}
-              {coachMessages.map((m: any) => {
+              {coachMessages.map((m) => {
                 const isCoach = m.role === 'coach';
                 return (
                   <div key={m._id}
                     className={cn('border px-4 py-3', isCoach ? 'mr-6 bg-black' : 'ml-6 border-zinc-800 bg-zinc-950')}
                     style={isCoach ? { borderColor: `${coach.color}30` } : {}}>
                     <p className="mb-1 font-mono text-[8px] tracking-widest" style={isCoach ? { color: coach.color } : { color: '#52525b' }}>
-                      {isCoach ? `AGENT_${coach.name}` : 'OPERATOR'}
+                      {isCoach ? coach.name : 'You'}
                     </p>
                     {isCoach ? (
                       <MessageContent content={m.content} coachColor={coach.color} />
@@ -311,8 +386,8 @@ export default function CoachPage() {
               })}
               {isSending && (
                 <div className="mr-6 border px-4 py-3" style={{ borderColor: `${coach.color}30` }}>
-                  <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: coach.color }}>AGENT_{coach.name}</p>
-                  <p className="font-mono text-[11px] text-zinc-500 animate-pulse">PROCESSING_</p>
+                  <p className="mb-1 font-mono text-[8px] tracking-widest" style={{ color: coach.color }}>{coach.name}</p>
+                  <p className="font-mono text-[11px] text-zinc-500 animate-pulse">Thinking...</p>
                 </div>
               )}
               <div ref={bottomRef} />
@@ -321,19 +396,19 @@ export default function CoachPage() {
 
           {/* Input */}
           <form onSubmit={handleSubmit} className="surface-panel flex items-center gap-2 p-3">
-            <span className="hidden font-mono text-[9px] tracking-widest text-zinc-400 md:block">TRANSMIT&gt;</span>
             <input ref={inputRef} value={message} onChange={(e) => setMessage(e.target.value)}
-              placeholder={`Message ${coach.name}... (press / to focus)`} disabled={isSending}
+              placeholder={`Ask ${coach.name} anything...`} disabled={isSending}
               className="h-9 flex-1 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none disabled:opacity-50" />
             <button type="submit" disabled={isSending || !message.trim()}
               className="flex h-9 items-center gap-1.5 border px-4 font-mono text-[10px] tracking-widest transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
               style={{ borderColor: `${coach.color}60`, color: coach.color, backgroundColor: `${coach.color}15` }}>
               <Send className="h-3 w-3" />
-              {isSending ? 'SENDING_' : '[TRANSMIT]'}
+              {isSending ? 'Sending...' : 'Send'}
             </button>
           </form>
         </div>
       </div>
+      )}
     </div>
   );
 }

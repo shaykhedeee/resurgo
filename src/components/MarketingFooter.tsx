@@ -88,7 +88,7 @@ export function MarketingFooter() {
       </div>
 
       {/* ── Main footer body ── */}
-      <div className="mx-auto max-w-7xl px-4 pt-14 pb-8 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-5 pb-3 sm:px-6 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[2.2fr_1fr_1fr_1fr]">
           {/* ── Brand column ── */}
           <div className="space-y-7">
@@ -169,7 +169,7 @@ export function MarketingFooter() {
                   <li key={href}>
                     <Link
                       href={href}
-                      className="group flex items-center gap-2 font-terminal text-sm text-zinc-600 transition-colors hover:text-orange-400"
+                      className="group flex items-center gap-2 font-terminal text-sm text-zinc-500 transition-colors hover:text-orange-400"
                     >
                       <span className="font-pixel text-[0.4rem] text-zinc-800 transition group-hover:text-orange-700">›</span>
                       {label}
@@ -182,7 +182,7 @@ export function MarketingFooter() {
         </div>
 
         {/* ── Pixel art divider ── */}
-        <div aria-hidden="true" className="my-10 flex items-center gap-px overflow-hidden opacity-20">
+        <div aria-hidden="true" className="my-6 flex items-center gap-px overflow-hidden opacity-20">
           {Array.from({ length: 80 }).map((_, i) => (
             <div
               key={i}

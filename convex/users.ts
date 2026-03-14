@@ -528,8 +528,8 @@ export const updatePlanFromWebhook = mutation({
 
     if (isDowngrade) {
       try {
-        const archivedHabitsCount = await ctx.runMutation((internal as any).habits.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
-        const archivedGoalsCount = await ctx.runMutation((internal as any).goals.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+        const archivedHabitsCount = await ctx.runMutation(internal.habits.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+        const archivedGoalsCount = await ctx.runMutation(internal.goals.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
         console.log(`[Downgrade] Archived ${archivedHabitsCount ?? 0} habits and ${archivedGoalsCount ?? 0} goals for ${clerkId}`);
       } catch (err) {
         console.error('[Downgrade] Failed to archive excess items via internal helpers', err instanceof Error ? err.message : String(err));
@@ -538,8 +538,8 @@ export const updatePlanFromWebhook = mutation({
 
     if (isUpgrade) {
       try {
-        const restoredHabits = await ctx.runMutation((internal as any).habits.restoreArchivedOnUpgradeInternal, { newPlan: plan });
-        const restoredGoals = await ctx.runMutation((internal as any).goals.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+        const restoredHabits = await ctx.runMutation(internal.habits.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+        const restoredGoals = await ctx.runMutation(internal.goals.restoreArchivedOnUpgradeInternal, { newPlan: plan });
         console.log(`[Upgrade] Restored ${restoredHabits ?? 0} habits and ${restoredGoals ?? 0} goals for ${clerkId}`);
       } catch (err) {
         console.error('[Upgrade] Failed to restore archived items via internal helpers', err instanceof Error ? err.message : String(err));
@@ -779,8 +779,13 @@ export const updateSummaryMemory = mutation({
       .unique();
     if (!user) throw new Error('User not found');
 
+    // Accumulate memory: append new patch to existing, keep latest 1500 chars
+    const existing = (user as Record<string, unknown>).summaryMemory as string | undefined ?? '';
+    const separator = existing ? '\n' : '';
+    const combined = (existing + separator + patch.trim()).slice(-1500);
+
     await ctx.db.patch(user._id, {
-      summaryMemory: patch.slice(0, 200), // cap at 200 chars
+      summaryMemory: combined,
       updatedAt: Date.now(),
     });
   },
@@ -993,8 +998,8 @@ export const updatePlanFromWebhookInternal = internalMutation({
 
     if (isDowngrade) {
       try {
-        await ctx.runMutation((internal as any).habits.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
-        await ctx.runMutation((internal as any).goals.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+        await ctx.runMutation(internal.habits.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
+        await ctx.runMutation(internal.goals.archiveExcessOnDowngradeInternal, { newPlan: 'free' });
       } catch (err) {
         console.error('[Downgrade] Failed to archive excess items', err instanceof Error ? err.message : String(err));
       }
@@ -1002,8 +1007,8 @@ export const updatePlanFromWebhookInternal = internalMutation({
 
     if (isUpgrade) {
       try {
-        await ctx.runMutation((internal as any).habits.restoreArchivedOnUpgradeInternal, { newPlan: plan });
-        await ctx.runMutation((internal as any).goals.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+        await ctx.runMutation(internal.habits.restoreArchivedOnUpgradeInternal, { newPlan: plan });
+        await ctx.runMutation(internal.goals.restoreArchivedOnUpgradeInternal, { newPlan: plan });
       } catch (err) {
         console.error('[Upgrade] Failed to restore archived items', err instanceof Error ? err.message : String(err));
       }
@@ -1086,6 +1091,140 @@ export const saveDashboardLayout = mutation({
       updatedAt: Date.now(),
     });
 
+    return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN ACTIVATION METRICS
+// Protected by BILLING_WEBHOOK_SYNC_SECRET — same constant-time comparison used
+// elsewhere in this file. Exposed via GET /api/admin/metrics.
+// NEVER call this from client components — server-side API route only.
+// ─────────────────────────────────────────────────────────────────────────────
+export const getActivationMetrics = query({
+  args: {
+    adminSecret: v.string(),
+  },
+  returns: v.object({
+    total_users: v.number(),
+    onboarding_complete: v.number(),
+    onboarding_completion_rate: v.number(),
+    pro_users: v.number(),
+    lifetime_users: v.number(),
+    pro_conversion_rate: v.number(),
+    d1_retained: v.number(),
+    d1_retention_rate: v.number(),
+    users_older_than_24h: v.number(),
+    as_of: v.number(),
+  }),
+  handler: async (ctx, { adminSecret }) => {
+    // Constant-time secret verification (same pattern as updatePlanFromWebhook)
+    const expected = process.env.BILLING_WEBHOOK_SYNC_SECRET ?? '';
+    if (!expected) throw new Error('[getActivationMetrics] BILLING_WEBHOOK_SYNC_SECRET not set');
+    if (expected.length !== adminSecret.length) throw new Error('Unauthorized');
+    let mismatch = 0;
+    for (let i = 0; i < expected.length; i++) {
+      mismatch |= expected.charCodeAt(i) ^ adminSecret.charCodeAt(i);
+    }
+    if (mismatch !== 0) throw new Error('Unauthorized');
+
+    // Collect all users — suitable for up to ~10k users
+    // For larger datasets, switch to paginated counting
+    const users = await ctx.db.query('users').collect();
+
+    const total = users.length;
+    const onboardingComplete = users.filter((u) => u.onboardingComplete).length;
+    const proUsers = users.filter(
+      (u) => u.plan === 'pro' || u.plan === 'lifetime'
+    ).length;
+    const lifetimeUsers = users.filter((u) => u.plan === 'lifetime').length;
+
+    // D1 retention proxy: users created >24 h ago who have updatedAt > createdAt + 24 h
+    // (Any post-signup activity patches updatedAt, so this catches returning users)
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    const usersOlderThan24h = users.filter(
+      (u) => Date.now() - u._creationTime >= oneDayMs
+    );
+    const d1Retained = usersOlderThan24h.filter((u) => {
+      const updatedAt = (u as { updatedAt?: number }).updatedAt ?? u._creationTime;
+      return updatedAt - u._creationTime >= oneDayMs;
+    }).length;
+
+    return {
+      total_users: total,
+      onboarding_complete: onboardingComplete,
+      onboarding_completion_rate:
+        total > 0 ? Math.round((onboardingComplete / total) * 100) : 0,
+      pro_users: proUsers,
+      lifetime_users: lifetimeUsers,
+      pro_conversion_rate:
+        total > 0 ? Math.round((proUsers / total) * 100) : 0,
+      d1_retained: d1Retained,
+      d1_retention_rate:
+        usersOlderThan24h.length > 0
+          ? Math.round((d1Retained / usersOlderThan24h.length) * 100)
+          : 0,
+      users_older_than_24h: usersOlderThan24h.length,
+      as_of: Date.now(),
+    };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CLERK WEBHOOK INTERNAL HELPERS
+// Called from http.ts httpAction — no auth check needed (Svix verified upstream)
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const deleteUserInternal = internalMutation({
+  args: { clerkId: v.string() },
+  returns: v.null(),
+  handler: async (ctx, { clerkId }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+
+    if (!user) {
+      console.warn(`[deleteUserInternal] User not found for clerkId=${clerkId} — skipping`);
+      return null;
+    }
+
+    const gamification = await ctx.db
+      .query('gamification')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .unique();
+    if (gamification) await ctx.db.delete(gamification._id);
+
+    await ctx.db.delete(user._id);
+    console.log(`[deleteUserInternal] Deleted user clerkId=${clerkId}`);
+    return null;
+  },
+});
+
+export const updateUserInternal = internalMutation({
+  args: {
+    clerkId: v.string(),
+    name: v.optional(v.string()),
+    imageUrl: v.optional(v.string()),
+  },
+  returns: v.null(),
+  handler: async (ctx, { clerkId, name, imageUrl }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+
+    if (!user) {
+      console.warn(`[updateUserInternal] User not found for clerkId=${clerkId} — skipping`);
+      return null;
+    }
+
+    const patch: Record<string, unknown> = { updatedAt: Date.now() };
+    if (name !== undefined) patch.name = name;
+    if (imageUrl !== undefined) patch.imageUrl = imageUrl;
+
+    await ctx.db.patch(user._id, patch);
+    console.log(`[updateUserInternal] Updated user clerkId=${clerkId}`);
     return null;
   },
 });

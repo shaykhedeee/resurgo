@@ -41,17 +41,27 @@ interface CoachResponse {
 async function getUserContext(clerkToken: string) {
   convex.setAuth(clerkToken);
   try {
-    const user = await convex.query(api.users.current, {});
-    return { user };
+    const [user, tasks, habits, goals] = await Promise.all([
+      convex.query(api.users.current, {}),
+      convex.query(api.tasks.list, { status: 'todo' }).catch(() => []),
+      convex.query(api.habits.listActive, {}).catch(() => []),
+      convex.query(api.goals.listActive, {}).catch(() => []),
+    ]);
+    return {
+      user,
+      activeTasks: (tasks as unknown[]).length,
+      activeHabits: (habits as unknown[]).length,
+      activeGoals: (goals as unknown[]).length,
+    };
   } catch {
-    return { user: null };
+    return { user: null, activeTasks: 0, activeHabits: 0, activeGoals: 0 };
   }
 }
 
 async function loadPsychProfile(clerkToken: string): Promise<PsychologicalProfile | null> {
   convex.setAuth(clerkToken);
   try {
-    const raw = await convex.query((api as any).psychology.getProfile, {});
+    const raw = await convex.query((api as unknown as Record<string, Record<string, unknown>>).psychology.getProfile as Parameters<typeof convex.query>[0], {});
     if (!raw) return null;
     return JSON.parse(raw.profileData) as PsychologicalProfile;
   } catch {
@@ -65,7 +75,7 @@ async function savePsychProfile(
 ): Promise<void> {
   convex.setAuth(clerkToken);
   try {
-    await convex.mutation((api as any).psychology.upsertProfile, {
+    await convex.mutation((api as unknown as Record<string, Record<string, unknown>>).psychology.upsertProfile as Parameters<typeof convex.mutation>[0], {
       profileData: JSON.stringify(profile),
     });
   } catch (err) {
@@ -123,17 +133,18 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
   }
 
   // ── Load context in parallel ──────────────────────────────────────────────
-  const [clerkUser, { user: convexUser }, psychProfile] = await Promise.all([
+  const [clerkUser, { user: convexUser, activeTasks, activeHabits, activeGoals }, psychProfile] = await Promise.all([
     currentUser().catch(() => null),
     getUserContext(clerkToken),
     loadPsychProfile(clerkToken),
   ]);
 
   const userName = clerkUser?.firstName ?? 'friend';
-  const summaryMemory = (convexUser as any)?.summaryMemory ?? '';
+  const convexUserRecord = convexUser as unknown as Record<string, unknown>;
+  const summaryMemory = (convexUserRecord?.summaryMemory as string) ?? '';
 
   // ── Archetype context ─────────────────────────────────────────────────────
-  const userArchetype = (convexUser as any)?.archetype ?? null;
+  const userArchetype = (convexUserRecord?.archetype as string) ?? null;
   const archetypeConfig = userArchetype ? getArchetypeConfig(userArchetype) : null;
   const archetypeInstructions = archetypeConfig
     ? `\n\nUSER ARCHETYPE: ${archetypeConfig.label} (${archetypeConfig.emoji})\n` +
@@ -151,10 +162,10 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
   const systemPrompt = buildCoachingSystemPrompt({
     todayDate,
     userName,
-    activeTasks: 0,
-    activeHabits: 0,
-    activeGoals: 0,
-    currentStreak: (convexUser as any)?.currentStreak ?? 0,
+    activeTasks,
+    activeHabits,
+    activeGoals,
+    currentStreak: (convexUser as unknown as Record<string, unknown>)?.currentStreak as number ?? 0,
     recentMoodAvg: undefined,
     summaryMemory,
     adaptiveInstructions,
@@ -180,7 +191,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
     if (!parsed.success) {
       // Fallback: treat raw as plain text message
       coachResponse = {
-        message: typeof rawResult === 'string' ? rawResult : (rawResult as any)?.message ?? 'I had trouble generating a response. Please try again.',
+        message: typeof rawResult === 'string' ? rawResult : ((rawResult as Record<string, unknown>)?.message as string) ?? 'I had trouble generating a response. Please try again.',
         actions: [],
         requiresConfirmation: [],
       };

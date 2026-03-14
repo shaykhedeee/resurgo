@@ -25,7 +25,7 @@ export default function WaterTrackingWidget() {
   const updateWater = useMutation(api.nutrition.updateWaterAndSteps);
   const [loading, setLoading] = useState(false);
 
-  const currentWater = (todayNutrition as any)?.waterMl ?? 0;
+  const currentWater = (todayNutrition?.waterMl as number) ?? 0;
   const percent = Math.min(100, Math.round((currentWater / WATER_GOAL_ML) * 100));
 
   const handleAdd = useCallback(

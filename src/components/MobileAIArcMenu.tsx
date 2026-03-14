@@ -3,13 +3,13 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Mobile AI Arc Menu
 // Floating semi-circle launcher from the center AI button in the bottom nav.
-// 3 spokes: Brain Dump · AI Coach · AI Orchestrator
+// 5 spokes: Add Habit · Add Goal · AI Coach · Brain Dump · Quick Task
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { Brain, MessageSquare, Zap } from 'lucide-react';
+import { Brain, MessageSquare, Target, Sparkles, CheckCircle2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface MobileAIArcMenuProps {
@@ -20,8 +20,8 @@ export interface MobileAIArcMenuProps {
 
 // ─── Arc spoke config ────────────────────────────────────────────────────────
 // Positions are offsets from the bottom-center AI button (px).
-// Radius ~90px, spread 150° → 3 spokes at 30° / 90° / 150° above horizontal.
-const SPOKE_RADIUS = 90;
+// Radius 100px, spread 160° → 5 spokes at 160° / 120° / 90° / 60° / 20°
+const SPOKE_RADIUS = 100;
 
 function toXY(angleDeg: number) {
   const rad = (angleDeg * Math.PI) / 180;
@@ -33,16 +33,30 @@ function toXY(angleDeg: number) {
 
 const SPOKES = [
   {
-    id: 'brain-dump',
-    icon: Brain,
-    label: 'BRAIN_DUMP',
-    sublabel: 'Clear your mind',
-    color: 'text-purple-400',
-    bg: 'bg-purple-950/90',
-    border: 'border-purple-700',
-    glow: 'shadow-[0_0_18px_rgba(168,85,247,0.35)]',
-    ...toXY(135), // upper-left
-    type: 'callback' as const,
+    id: 'add-habit',
+    icon: Target,
+    label: 'ADD_HABIT',
+    sublabel: 'New habit',
+    color: 'text-green-400',
+    bg: 'bg-green-950/90',
+    border: 'border-green-700',
+    glow: 'shadow-[0_0_18px_rgba(34,197,94,0.35)]',
+    ...toXY(155),
+    type: 'link' as const,
+    href: '/habits',
+  },
+  {
+    id: 'add-goal',
+    icon: Sparkles,
+    label: 'ADD_GOAL',
+    sublabel: 'New goal',
+    color: 'text-blue-400',
+    bg: 'bg-blue-950/90',
+    border: 'border-blue-700',
+    glow: 'shadow-[0_0_18px_rgba(59,130,246,0.35)]',
+    ...toXY(115),
+    type: 'link' as const,
+    href: '/goals',
   },
   {
     id: 'ai-coach',
@@ -53,22 +67,34 @@ const SPOKES = [
     bg: 'bg-orange-950/90',
     border: 'border-orange-600',
     glow: 'shadow-[0_0_18px_rgba(234,88,12,0.35)]',
-    ...toXY(90), // top-center
+    ...toXY(90),
     type: 'link' as const,
     href: '/coach',
   },
   {
-    id: 'orchestrator',
-    icon: Zap,
-    label: 'ORCHESTRATOR',
-    sublabel: 'Multi-AI tasks',
-    color: 'text-yellow-400',
-    bg: 'bg-yellow-950/90',
-    border: 'border-yellow-700',
-    glow: 'shadow-[0_0_18px_rgba(234,179,8,0.35)]',
-    ...toXY(45), // upper-right
+    id: 'brain-dump',
+    icon: Brain,
+    label: 'BRAIN_DUMP',
+    sublabel: 'Clear your mind',
+    color: 'text-purple-400',
+    bg: 'bg-purple-950/90',
+    border: 'border-purple-700',
+    glow: 'shadow-[0_0_18px_rgba(168,85,247,0.35)]',
+    ...toXY(65),
+    type: 'callback' as const,
+  },
+  {
+    id: 'quick-task',
+    icon: CheckCircle2,
+    label: 'QUICK_TASK',
+    sublabel: 'Add task',
+    color: 'text-teal-400',
+    bg: 'bg-teal-950/90',
+    border: 'border-teal-700',
+    glow: 'shadow-[0_0_18px_rgba(20,184,166,0.35)]',
+    ...toXY(25),
     type: 'link' as const,
-    href: '/orchestrator',
+    href: '/tasks',
   },
 ] as const;
 

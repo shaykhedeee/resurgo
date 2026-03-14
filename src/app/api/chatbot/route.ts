@@ -16,7 +16,7 @@ import {
   FAQ,
   CHATBOT_PERSONA,
   UserIntent,
-} from '@/lib/ascend-knowledge-base';
+} from '@/lib/resurgo-knowledge-base';
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // CONFIGURATION

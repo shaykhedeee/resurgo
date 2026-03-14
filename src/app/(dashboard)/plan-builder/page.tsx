@@ -1,11 +1,18 @@
 'use client';
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// RESURGO — Plan Builder 2.0
+// 4-Bot AI system: Goal Architect · Week Planner · Habit Stack · Weekly Review
+// ═══════════════════════════════════════════════════════════════════════════════
+
 import { useAction, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, ElementType } from 'react';
 import { useRouter } from 'next/navigation';
-import { Map, Zap, ChevronRight, CheckCircle, Circle, Rocket, Loader2, ArrowRight, Sparkles, Target, BarChart3, Clock, ListChecks } from 'lucide-react';
+import { CheckCircle, Circle, Rocket, Loader2, ArrowRight, Sparkles, Target, BarChart3, Clock, ListChecks, ChevronRight, Compass, Zap, CalendarDays, Brain, RefreshCw } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+type BotTab = 'goal' | 'week' | 'habit' | 'review';
 
 interface Step {
   title: string;
@@ -37,6 +44,10 @@ export default function PlanBuilderPage() {
   const sendWithPersona = useAction(api.coachAI.sendWithPersona);
   const activatePlan = useMutation(api.goals.activatePlan);
 
+  // ── Bot tab navigation ──
+  const [botTab, setBotTab] = useState<BotTab>('goal');
+
+  // ── Goal Architect state ──
   const [goalTitle, setGoalTitle] = useState('');
   const [goalContext, setGoalContext] = useState('');
   const [coachType, setCoachType] = useState<'TITAN' | 'NOVA' | 'SAGE' | 'PHOENIX'>('NOVA');
@@ -52,6 +63,25 @@ export default function PlanBuilderPage() {
     habitCount: number;
   } | null>(null);
   const [selectedHabits, setSelectedHabits] = useState<Set<number>>(new Set());
+
+  // ── Week Planner state ──
+  const [weekGoal, setWeekGoal] = useState('');
+  const [weekBuilding, setWeekBuilding] = useState(false);
+  interface WeekDay { day: string; focus: string; tasks: string[]; timeBlock: string; }
+  const [weekPlan, setWeekPlan] = useState<WeekDay[] | null>(null);
+
+  // ── Habit Stack state ──
+  const [habitGoalInput, setHabitGoalInput] = useState('');
+  const [habitBuilding, setHabitBuilding] = useState(false);
+  interface DesignedHabit { title: string; why: string; when: string; duration: string; cue: string; reward: string; science: string; }
+  const [habitStack, setHabitStack] = useState<DesignedHabit[] | null>(null);
+
+  // ── Weekly Review state ──
+  const [reviewWins, setReviewWins] = useState('');
+  const [reviewBlocks, setReviewBlocks] = useState('');
+  const [reviewBuilding, setReviewBuilding] = useState(false);
+  interface ReviewResult { summary: string; wins: string[]; blockers: string[]; insights: string[]; nextWeekFocus: string[]; score: number; }
+  const [reviewResult, setReviewResult] = useState<ReviewResult | null>(null);
 
   const COACHES = [
     { id: 'NOVA' as const, label: 'NOVA', desc: 'Productivity Scientist — systematic, efficient', icon: '⚡' },
@@ -210,6 +240,99 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
   const totalTasks = plan?.phases.reduce((sum, p) => sum + p.subTasks.length, 0) ?? 0;
   const totalDays = plan?.phases.reduce((sum, p) => sum + p.estimatedDays, 0) ?? 0;
 
+  // ── Week Planner handler ──
+  const handleBuildWeekPlan = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!weekGoal.trim() || weekBuilding) return;
+    setWeekBuilding(true);
+    setWeekPlan(null);
+    const prompt = `You are a Week Planner bot. Create a focused 7-day execution plan for: "${weekGoal}"
+
+RESPOND WITH ONLY A VALID JSON ARRAY of 7 day objects:
+[
+  {
+    "day": "Monday",
+    "focus": "One-sentence focus for the day",
+    "tasks": ["Task 1", "Task 2", "Task 3"],
+    "timeBlock": "e.g. 2 hours morning"
+  }
+]
+
+Make tasks specific and achievable in one day. No generic advice.`;
+    try {
+      const response = await sendWithPersona({ content: prompt, coachId: coachType });
+      const jsonMatch = response.reply?.match(/\[[\s\S]*\]/);
+      if (jsonMatch) setWeekPlan(JSON.parse(jsonMatch[0]));
+    } catch (err) {
+      console.error('Week plan failed:', err);
+    }
+    setWeekBuilding(false);
+  };
+
+  // ── Habit Stack handler ──
+  const handleBuildHabitStack = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!habitGoalInput.trim() || habitBuilding) return;
+    setHabitBuilding(true);
+    setHabitStack(null);
+    const prompt = `You are a Habit Designer bot. Design a supporting habit stack for this goal: "${habitGoalInput}"
+
+RESPOND WITH ONLY A VALID JSON ARRAY of 4-6 habit objects:
+[
+  {
+    "title": "Habit name",
+    "why": "Why this habit supports the goal",
+    "when": "Best time to do it",
+    "duration": "e.g. 10 minutes",
+    "cue": "Trigger/cue for this habit",
+    "reward": "Built-in reward or celebration",
+    "science": "Brief science backing (1 sentence)"
+  }
+]
+
+Make habits specific, sustainable, and directly tied to the goal.`;
+    try {
+      const response = await sendWithPersona({ content: prompt, coachId: coachType });
+      const jsonMatch = response.reply?.match(/\[[\s\S]*\]/);
+      if (jsonMatch) setHabitStack(JSON.parse(jsonMatch[0]));
+    } catch (err) {
+      console.error('Habit stack failed:', err);
+    }
+    setHabitBuilding(false);
+  };
+
+  // ── Weekly Review handler ──
+  const handleBuildReview = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!reviewWins.trim() || reviewBuilding) return;
+    setReviewBuilding(true);
+    setReviewResult(null);
+    const prompt = `You are a Weekly Review bot. Analyze this week's reflection and generate insights.
+
+WINS THIS WEEK: ${reviewWins}
+BLOCKERS / CHALLENGES: ${reviewBlocks || 'None noted'}
+
+RESPOND WITH ONLY A VALID JSON OBJECT:
+{
+  "summary": "One-sentence week summary",
+  "wins": ["Key win 1", "Key win 2", "Key win 3"],
+  "blockers": ["Blocker insight 1", "Blocker insight 2"],
+  "insights": ["Strategic insight 1", "Strategic insight 2", "Strategic insight 3"],
+  "nextWeekFocus": ["Priority 1 for next week", "Priority 2", "Priority 3"],
+  "score": 7
+}
+
+Score should be 1-10 based on the wins vs blockers balance. Be direct and actionable.`;
+    try {
+      const response = await sendWithPersona({ content: prompt, coachId: coachType });
+      const jsonMatch = response.reply?.match(/\{[\s\S]*\}/);
+      if (jsonMatch) setReviewResult(JSON.parse(jsonMatch[0]));
+    } catch (err) {
+      console.error('Review failed:', err);
+    }
+    setReviewBuilding(false);
+  };
+
   return (
     <div className="min-h-screen bg-black p-4 md:p-6">
       <div className="mx-auto max-w-4xl">
@@ -222,64 +345,87 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
           <div className="px-5 py-4">
             <h1 className="font-mono text-2xl font-bold tracking-tight text-zinc-100">Plan Builder</h1>
             <p className="mt-0.5 font-mono text-xs tracking-widest text-zinc-500">
-              AI-powered goal decomposition — generates goals, milestones, tasks & habits automatically
+              4-Bot AI system — each bot specialises in a different part of your growth
             </p>
           </div>
         </div>
 
-        {/* Input Form */}
-        {!activated && (
-          <div className="mb-5 border border-zinc-900 bg-zinc-950">
-            <div className="border-b border-zinc-900 px-4 py-2.5">
-              <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">GOAL_INPUT</span>
-            </div>
-            <form onSubmit={handleBuild} className="p-4 space-y-3">
-              <input
-                value={goalTitle}
-                onChange={(e) => setGoalTitle(e.target.value)}
-                placeholder="What's your big goal? (e.g., Launch my SaaS, Lose 20lbs, Write a book)"
-                required
-                className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
-              />
-              <textarea
-                value={goalContext}
-                onChange={(e) => setGoalContext(e.target.value)}
-                placeholder="Extra context (current situation, constraints, resources available)..."
-                rows={3}
-                className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
-              />
-              <div>
-                <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">COACH_PERSPECTIVE</p>
-                <div className="grid grid-cols-2 gap-1.5">
-                  {COACHES.map(({ id, label, desc, icon }) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => setCoachType(id)}
-                      className={cn(
-                        'border p-2.5 text-left transition',
-                        coachType === id ? 'border-orange-800 bg-orange-950/20' : 'border-zinc-800 hover:border-zinc-700'
-                      )}
-                    >
-                      <p className={cn('font-mono text-xs font-bold tracking-widest', coachType === id ? 'text-orange-500' : 'text-zinc-400')}>
-                        {icon} {label}
-                      </p>
-                      <p className="font-mono text-xs text-zinc-400">{desc}</p>
-                    </button>
-                  ))}
-                </div>
-              </div>
+        {/* ── 4-Bot Tab Navigation ── */}
+        <div className="mb-5 grid grid-cols-4 border border-zinc-900">
+          {([
+            { id: 'goal'   as BotTab, label: 'GOAL\nARCHITECT', icon: Target,      color: 'text-orange-400', activeColor: 'bg-orange-950/30 border-b-2 border-orange-600' },
+            { id: 'week'   as BotTab, label: 'WEEK\nPLANNER',   icon: CalendarDays, color: 'text-blue-400',   activeColor: 'bg-blue-950/30   border-b-2 border-blue-600'   },
+            { id: 'habit'  as BotTab, label: 'HABIT\nSTACK',    icon: Zap,          color: 'text-emerald-400',activeColor: 'bg-emerald-950/30 border-b-2 border-emerald-600'},
+            { id: 'review' as BotTab, label: 'WEEKLY\nREVIEW',  icon: RefreshCw,    color: 'text-purple-400', activeColor: 'bg-purple-950/30  border-b-2 border-purple-600' },
+          ] as { id: BotTab; label: string; icon: ElementType; color: string; activeColor: string }[]).map(({ id, label, icon: Icon, color, activeColor }) => (
+            <button
+              key={id}
+              onClick={() => setBotTab(id)}
+              className={cn(
+                'flex flex-col items-center gap-1 px-2 py-3 transition',
+                botTab === id ? activeColor : 'hover:bg-zinc-900/50',
+              )}
+            >
+              <Icon className={cn('h-4 w-4', botTab === id ? color : 'text-zinc-500')} />
+              <span className={cn('whitespace-pre-wrap text-center font-mono text-[0.55rem] leading-tight tracking-widest', botTab === id ? color : 'text-zinc-500')}>
+                {label}
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {/* ── COACH SELECTOR (shared across all bots) ── */}
+        <div className="mb-4 border border-zinc-900 bg-zinc-950 p-3">
+          <p className="mb-2 font-mono text-xs tracking-widest text-zinc-400">AI VOICE</p>
+          <div className="flex flex-wrap gap-1.5">
+            {COACHES.map(({ id, label, icon }) => (
               <button
-                type="submit"
-                disabled={building || !goalTitle.trim()}
-                className="flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40"
+                key={id}
+                onClick={() => setCoachType(id)}
+                className={cn(
+                  'border px-3 py-1.5 font-mono text-xs transition',
+                  coachType === id ? 'border-orange-800 bg-orange-950/20 text-orange-400' : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                )}
               >
-                <Sparkles className="h-3.5 w-3.5" />
-                {building ? 'GENERATING_PLAN_' : '[GENERATE MY PLAN]'}
+                {icon} {label}
               </button>
-            </form>
+            ))}
           </div>
-        )}
+        </div>
+        {/* ── BOT 1: GOAL ARCHITECT ── */}
+        {botTab === 'goal' && (
+          <div className="space-y-4">
+            {!activated && (
+              <div className="border border-zinc-900 bg-zinc-950">
+                <div className="border-b border-zinc-900 px-4 py-2.5">
+                  <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">GOAL_INPUT</span>
+                </div>
+                <form onSubmit={handleBuild} className="p-4 space-y-3">
+                  <input
+                    value={goalTitle}
+                    onChange={(e) => setGoalTitle(e.target.value)}
+                    placeholder="What's your big goal? (e.g., Launch my SaaS, Lose 20lbs, Write a book)"
+                    required
+                    className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
+                  />
+                  <textarea
+                    value={goalContext}
+                    onChange={(e) => setGoalContext(e.target.value)}
+                    placeholder="Extra context (current situation, constraints, resources available)..."
+                    rows={3}
+                    className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={building || !goalTitle.trim()}
+                    className="flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    {building ? 'GENERATING_PLAN_' : '[GENERATE MY PLAN]'}
+                  </button>
+                </form>
+              </div>
+            )}
 
         {/* Loading */}
         {building && (
@@ -542,7 +688,7 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
         {/* Empty State */}
         {!plan && !building && (
           <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
-            <Map className="mx-auto mb-4 h-8 w-8 text-zinc-400" />
+            <Compass className="mx-auto mb-4 h-8 w-8 text-zinc-400" />
             <h3 className="font-mono text-sm font-bold text-zinc-300">Your AI Plan Builder</h3>
             <p className="mt-2 max-w-md mx-auto font-mono text-xs leading-relaxed text-zinc-500">
               Enter any goal above and your AI coach will generate a complete action plan with phases, milestones, tasks, and supporting habits.
@@ -559,6 +705,245 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
                 </button>
               ))}
             </div>
+          </div>
+        )}
+        </div>
+        )}
+
+        {/* ── BOT 2: WEEK PLANNER ── */}
+        {botTab === 'week' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">WEEK_PLANNER</span>
+              </div>
+              <form onSubmit={handleBuildWeekPlan} className="p-4 space-y-3">
+                <p className="font-mono text-xs text-zinc-400">What goal or phase are you executing this week?</p>
+                <input
+                  value={weekGoal}
+                  onChange={(e) => setWeekGoal(e.target.value)}
+                  placeholder="e.g. Launch landing page, Complete fitness phase 1, Study for exam"
+                  required
+                  className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-blue-800 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={weekBuilding || !weekGoal.trim()}
+                  className="flex items-center gap-2 border border-blue-800 bg-blue-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-blue-400 transition hover:bg-blue-950/60 disabled:opacity-40"
+                >
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  {weekBuilding ? 'PLANNING_WEEK_' : '[PLAN MY WEEK]'}
+                </button>
+              </form>
+            </div>
+            {weekBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-blue-600" />
+                <p className="font-mono text-xs tracking-widest text-zinc-500">PLANNING_7_DAYS_</p>
+              </div>
+            )}
+            {weekPlan && !weekBuilding && (
+              <div className="space-y-2">
+                {weekPlan.map((day, i) => (
+                  <div key={i} className="border border-zinc-900 bg-zinc-950 p-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-mono text-xs font-bold tracking-widest text-blue-400">{day.day.toUpperCase()}</span>
+                      <span className="border border-zinc-800 px-2 py-0.5 font-mono text-xs text-zinc-400">{day.timeBlock}</span>
+                    </div>
+                    <p className="font-mono text-sm text-zinc-100 mb-2">{day.focus}</p>
+                    <ul className="space-y-1">
+                      {day.tasks.map((task, j) => (
+                        <li key={j} className="flex items-start gap-1.5">
+                          <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-blue-600" />
+                          <span className="font-mono text-xs text-zinc-400">{task}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+                <button
+                  onClick={() => { setWeekPlan(null); setWeekGoal(''); }}
+                  className="w-full border border-dashed border-zinc-800 py-3 font-mono text-xs tracking-widest text-zinc-400 transition hover:border-blue-800 hover:text-blue-400"
+                >
+                  [REPLAN WEEK]
+                </button>
+              </div>
+            )}
+            {!weekPlan && !weekBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <CalendarDays className="mx-auto mb-4 h-8 w-8 text-zinc-400" />
+                <p className="font-mono text-sm font-bold text-zinc-300">Week Planner Bot</p>
+                <p className="mt-2 font-mono text-xs text-zinc-500">Enter a goal or phase and get a specific day-by-day execution plan for the next 7 days.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── BOT 3: HABIT STACK ── */}
+        {botTab === 'habit' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">HABIT_DESIGNER</span>
+              </div>
+              <form onSubmit={handleBuildHabitStack} className="p-4 space-y-3">
+                <p className="font-mono text-xs text-zinc-400">What goal are you building habits to support?</p>
+                <input
+                  value={habitGoalInput}
+                  onChange={(e) => setHabitGoalInput(e.target.value)}
+                  placeholder="e.g. Build muscle, Write a novel, Grow a business"
+                  required
+                  className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-emerald-800 focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  disabled={habitBuilding || !habitGoalInput.trim()}
+                  className="flex items-center gap-2 border border-emerald-800 bg-emerald-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-emerald-400 transition hover:bg-emerald-950/60 disabled:opacity-40"
+                >
+                  <Zap className="h-3.5 w-3.5" />
+                  {habitBuilding ? 'DESIGNING_HABITS_' : '[DESIGN HABIT STACK]'}
+                </button>
+              </form>
+            </div>
+            {habitBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-emerald-600" />
+                <p className="font-mono text-xs tracking-widest text-zinc-500">DESIGNING_HABIT_STACK_</p>
+              </div>
+            )}
+            {habitStack && !habitBuilding && (
+              <div className="space-y-2">
+                {habitStack.map((habit, i) => (
+                  <div key={i} className="border border-zinc-900 bg-zinc-950 p-4">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <p className="font-mono text-sm font-bold text-emerald-400">{habit.title}</p>
+                      <span className="shrink-0 border border-zinc-800 px-2 py-0.5 font-mono text-xs text-zinc-400">{habit.duration}</span>
+                    </div>
+                    <p className="font-mono text-xs text-zinc-300 mb-2">{habit.why}</p>
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+                      <div className="border border-zinc-800 bg-black p-2"><span className="text-zinc-500">WHEN: </span><span className="text-zinc-300">{habit.when}</span></div>
+                      <div className="border border-zinc-800 bg-black p-2"><span className="text-zinc-500">CUE: </span><span className="text-zinc-300">{habit.cue}</span></div>
+                      <div className="border border-zinc-800 bg-black p-2"><span className="text-zinc-500">REWARD: </span><span className="text-zinc-300">{habit.reward}</span></div>
+                      <div className="border border-zinc-800 bg-black p-2 col-span-2"><span className="text-zinc-500">SCIENCE: </span><span className="text-zinc-400 italic">{habit.science}</span></div>
+                    </div>
+                  </div>
+                ))}
+                <button
+                  onClick={() => { setHabitStack(null); setHabitGoalInput(''); }}
+                  className="w-full border border-dashed border-zinc-800 py-3 font-mono text-xs tracking-widest text-zinc-400 transition hover:border-emerald-800 hover:text-emerald-400"
+                >
+                  [REDESIGN STACK]
+                </button>
+              </div>
+            )}
+            {!habitStack && !habitBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <Zap className="mx-auto mb-4 h-8 w-8 text-zinc-400" />
+                <p className="font-mono text-sm font-bold text-zinc-300">Habit Stack Designer</p>
+                <p className="mt-2 font-mono text-xs text-zinc-500">Enter your goal and get a science-backed habit stack with cues, rewards, and timing.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── BOT 4: WEEKLY REVIEW ── */}
+        {botTab === 'review' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">WEEKLY_REVIEW</span>
+              </div>
+              <form onSubmit={handleBuildReview} className="p-4 space-y-3">
+                <div>
+                  <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">WINS THIS WEEK</p>
+                  <textarea
+                    value={reviewWins}
+                    onChange={(e) => setReviewWins(e.target.value)}
+                    placeholder="What did you accomplish? What went well? What are you proud of?"
+                    rows={3}
+                    required
+                    className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-purple-800 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-400">BLOCKERS &amp; CHALLENGES</p>
+                  <textarea
+                    value={reviewBlocks}
+                    onChange={(e) => setReviewBlocks(e.target.value)}
+                    placeholder="What held you back? What was difficult? What do you want to improve?"
+                    rows={2}
+                    className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-purple-800 focus:outline-none"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={reviewBuilding || !reviewWins.trim()}
+                  className="flex items-center gap-2 border border-purple-800 bg-purple-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-purple-400 transition hover:bg-purple-950/60 disabled:opacity-40"
+                >
+                  <Brain className="h-3.5 w-3.5" />
+                  {reviewBuilding ? 'ANALYZING_WEEK_' : '[ANALYZE MY WEEK]'}
+                </button>
+              </form>
+            </div>
+            {reviewBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-purple-600" />
+                <p className="font-mono text-xs tracking-widest text-zinc-500">ANALYZING_WEEKLY_DATA_</p>
+              </div>
+            )}
+            {reviewResult && !reviewBuilding && (
+              <div className="space-y-3">
+                <div className="border border-zinc-900 bg-zinc-950 p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="font-mono text-xs font-bold tracking-widest text-purple-400">WEEK ANALYSIS</span>
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono text-xs text-zinc-500">SCORE:</span>
+                      <span className={cn('font-mono text-2xl font-bold', reviewResult.score >= 7 ? 'text-green-400' : reviewResult.score >= 5 ? 'text-yellow-400' : 'text-red-400')}>{reviewResult.score}/10</span>
+                    </div>
+                  </div>
+                  <p className="font-mono text-sm text-zinc-200 mb-4">{reviewResult.summary}</p>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div>
+                      <p className="mb-2 font-mono text-xs tracking-widest text-green-500">WINS</p>
+                      <ul className="space-y-1">
+                        {reviewResult.wins.map((w, i) => (<li key={i} className="flex items-start gap-1.5"><span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-green-600" /><span className="font-mono text-xs text-zinc-300">{w}</span></li>))}
+                      </ul>
+                    </div>
+                    <div>
+                      <p className="mb-2 font-mono text-xs tracking-widest text-red-500">BLOCKERS</p>
+                      <ul className="space-y-1">
+                        {reviewResult.blockers.map((b, i) => (<li key={i} className="flex items-start gap-1.5"><span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-red-600" /><span className="font-mono text-xs text-zinc-300">{b}</span></li>))}
+                      </ul>
+                    </div>
+                  </div>
+                  <div className="mt-3">
+                    <p className="mb-2 font-mono text-xs tracking-widest text-orange-500">INSIGHTS</p>
+                    <ul className="space-y-1">
+                      {reviewResult.insights.map((ins, i) => (<li key={i} className="flex items-start gap-1.5"><span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-orange-600" /><span className="font-mono text-xs text-zinc-300">{ins}</span></li>))}
+                    </ul>
+                  </div>
+                  <div className="mt-3">
+                    <p className="mb-2 font-mono text-xs tracking-widest text-blue-400">NEXT WEEK FOCUS</p>
+                    <ul className="space-y-1">
+                      {reviewResult.nextWeekFocus.map((f, i) => (<li key={i} className="flex items-start gap-1.5"><ChevronRight className="mt-0.5 h-3 w-3 shrink-0 text-blue-600" /><span className="font-mono text-xs text-zinc-300">{f}</span></li>))}
+                    </ul>
+                  </div>
+                </div>
+                <button
+                  onClick={() => { setReviewResult(null); setReviewWins(''); setReviewBlocks(''); }}
+                  className="w-full border border-dashed border-zinc-800 py-3 font-mono text-xs tracking-widest text-zinc-400 transition hover:border-purple-800 hover:text-purple-400"
+                >
+                  [NEW REVIEW]
+                </button>
+              </div>
+            )}
+            {!reviewResult && !reviewBuilding && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <RefreshCw className="mx-auto mb-4 h-8 w-8 text-zinc-400" />
+                <p className="font-mono text-sm font-bold text-zinc-300">Weekly Review Bot</p>
+                <p className="mt-2 font-mono text-xs text-zinc-500">Reflect on your wins and blockers and get AI-powered analysis, insights, and a focused plan for next week.</p>
+              </div>
+            )}
           </div>
         )}
       </div>
