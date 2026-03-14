@@ -13,16 +13,19 @@ const CURRENT_VERSION = {
   version: '1.0.0',
   versionCode: 1,
   minAndroidVersion: '8.0',
-  releaseDate: '2026-03-02',
+  releaseDate: '2026-03-10',
   downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
   releaseNotes: [
     'Initial Android release',
     'Native FCM push notifications (morning digest, reminders, coaching)',
     'Haptic feedback on habit completion',
     'Full dashboard access via WebView',
+    '8 AI coach personas with context memory',
   ],
   size: '4.2 MB',
-  sha256: '', // Fill after signing the APK
+  sha256: 'pending-upload', // TODO: Run after APK build: Get-FileHash resurgo-latest.apk -Algorithm SHA256 | Select-Object Hash
+  // Then copy APK to /public/downloads/resurgo-latest.apk and update this value.
+  githubReleasesUrl: 'https://github.com/shaykhedeee/resurgo/releases/latest',
 };
 
 export function GET() {

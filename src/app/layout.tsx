@@ -123,7 +123,7 @@ export const metadata: Metadata = {
     description: 'Capture tasks, plan your day, focus deeply, and stay consistent with one AI-powered operating system for work and life.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'Resurgo dashboard for planning, tasks, focus sessions, and AI guidance',
@@ -144,8 +144,8 @@ export const metadata: Metadata = {
   // ═══════════════════════════════════════════════════════════════════════════
   twitter: {
     card: 'summary_large_image',
-    site: '@resurgolife',
-    creator: '@resurgolife',
+    site: '@resurgo_life',
+    creator: '@resurgo_life',
     title: 'Resurgo | AI Productivity Assistant That Keeps You Moving',
     description: 'Transform mental clutter into clear execution. Tasks, focus, habits, reviews, and AI guidance in one place.',
     images: {
@@ -404,6 +404,38 @@ const jsonLd = {
             'text': 'Yes. Share your referral link and when 3 friends join and complete onboarding, you earn 30 days of Pro free. There is no limit on how many referrals you can make.',
           },
         },
+        {
+          '@type': 'Question',
+          'name': 'What is the best AI habit tracker in 2026?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Resurgo is the best AI-powered habit tracker in 2026. It combines 8 AI coach personas with intelligent habit tracking, goal decomposition, focus sessions, and a Never Miss Twice streak system. Unlike generic habit apps, Resurgo remembers your patterns across sessions and provides personalized coaching. Free tier includes all 8 AI coaches with no credit card required.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the best productivity tool for goal setting?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Resurgo is the best productivity tool for goal setting and execution. It uses AI to decompose any life goal into 4 levels: ultimate goal, milestones, weekly objectives, and daily tasks. Combined with habit tracking, focus timers, and 8 AI coaching personas, it turns goals into consistent daily action. Available free at resurgo.life.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the best task tracker with AI?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Resurgo is a top-rated AI task tracker that goes beyond simple task lists. It features AI goal decomposition, 8 personalized AI coach personas (stoic strategist, comeback specialist, finance coach, wellness guide, and more), intelligent habit tracking with Never Miss Twice logic, focus sessions with distraction logging, and a Telegram bot for quick task capture. Free to use at resurgo.life.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the best planning app for personal development?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Resurgo is the best planning app for personal development. It combines AI goal decomposition, habit tracking, focus timers, wellness monitoring (sleep, mood, nutrition), budget tracking, and 8 AI coach personas into one unified system. Built for people who are tired of drifting and want real execution, not just planning theater. Start free at resurgo.life.',
+          },
+        },
       ],
     },
   ],
@@ -433,7 +465,7 @@ export default function RootLayout({
             __html: `
               (function() {
                 try {
-                  var theme = localStorage.getItem('ascend-theme') || 'dark';
+                  var theme = localStorage.getItem('resurgo-theme') || localStorage.getItem('ascend-theme') || 'dark';
                   document.documentElement.setAttribute('data-theme', theme);
                 } catch (e) {}
               })();

@@ -4,6 +4,8 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import Link from 'next/link';
 import { BillingCheckoutCTA, BillingPortalCTA } from '@/components/BillingCTA';
 import RestoreArchivedCTA from '@/components/RestoreArchivedCTA';
+import BillingPageAnalytics from '@/components/BillingPageAnalytics';
+import { BillingWaitlistCapture } from '@/components/BillingWaitlistCapture';
 import { BILLING_PLANS } from '@/lib/billing/plans';
 import { TermLinkButton } from '@/components/ui/TermButton';
 import {
@@ -156,6 +158,8 @@ export default async function BillingPage() {
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--text-primary)]">
+      {/* Fires GA4 view_pricing + Meta Pixel ViewContent events on mount */}
+      <BillingPageAnalytics />
       {/* ═══════════════════════ HEADER ═══════════════════════ */}
       <header className="border-b border-[var(--border)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
@@ -232,6 +236,12 @@ export default async function BillingPage() {
 
         {/* ═══════════════════════ PLAN CARDS ═══════════════════════ */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+          {/* Waitlist banner — shown when NEXT_PUBLIC_BILLING_LIVE is not 'true' */}
+          {process.env.NEXT_PUBLIC_BILLING_LIVE !== 'true' && (
+            <div className="mb-12">
+              <BillingWaitlistCapture />
+            </div>
+          )}
           {/* Subscription management bar (signed-in users) */}
           {user && (
             <div className="mb-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">

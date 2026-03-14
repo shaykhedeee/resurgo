@@ -143,13 +143,13 @@ export function Tutorial({ onComplete, onSkip }: TutorialProps) {
   const handleComplete = () => {
     setIsVisible(false);
     // Store that tutorial was completed
-    localStorage.setItem('ascend-tutorial-completed', 'true');
+    localStorage.setItem('resurgo-tutorial-completed', 'true');
     onComplete();
   };
   
   const handleSkip = () => {
     setIsVisible(false);
-    localStorage.setItem('ascend-tutorial-completed', 'true');
+    localStorage.setItem('resurgo-tutorial-completed', 'true');
     onSkip();
   };
   
@@ -312,8 +312,8 @@ export function useTutorial() {
   
   useEffect(() => {
     // Check if this is the first time the user sees the app after onboarding
-    const tutorialCompleted = localStorage.getItem('ascend-tutorial-completed');
-    const hasCompletedOnboarding = localStorage.getItem('ascend-storage');
+    const tutorialCompleted = localStorage.getItem('resurgo-tutorial-completed') || localStorage.getItem('ascend-tutorial-completed');
+    const hasCompletedOnboarding = localStorage.getItem('resurgo-storage') || localStorage.getItem('ascend-storage');
     
     if (!tutorialCompleted && hasCompletedOnboarding) {
       setShouldShowTutorial(true);
@@ -321,12 +321,13 @@ export function useTutorial() {
   }, []);
   
   const completeTutorial = () => {
-    localStorage.setItem('ascend-tutorial-completed', 'true');
+    localStorage.setItem('resurgo-tutorial-completed', 'true');
     setShouldShowTutorial(false);
   };
   
   const resetTutorial = () => {
-    localStorage.removeItem('ascend-tutorial-completed');
+    localStorage.removeItem('resurgo-tutorial-completed');
+    localStorage.removeItem('ascend-tutorial-completed'); // legacy cleanup
     setShouldShowTutorial(true);
   };
   

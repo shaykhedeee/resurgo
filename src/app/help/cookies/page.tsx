@@ -21,19 +21,19 @@ export const metadata: Metadata = {
 const cookies = {
   essential: [
     {
-      name: 'ascend-session',
+      name: 'resurgo-session',
       purpose: 'Maintains your login session',
       duration: '7 days',
       type: 'First-party',
     },
     {
-      name: 'ascend-theme',
+      name: 'resurgo-theme',
       purpose: 'Remembers your theme preference (dark/light)',
       duration: '1 year',
       type: 'First-party',
     },
     {
-      name: 'ascend-onboarding',
+      name: 'resurgo-onboarding',
       purpose: 'Tracks onboarding completion status',
       duration: '1 year',
       type: 'First-party',
@@ -41,13 +41,13 @@ const cookies = {
   ],
   functional: [
     {
-      name: 'ascend-preferences',
+      name: 'resurgo-preferences',
       purpose: 'Stores your app preferences and settings',
       duration: '1 year',
       type: 'First-party',
     },
     {
-      name: 'ascend-tutorial',
+      name: 'resurgo-tutorial',
       purpose: 'Tracks which tutorials you have completed',
       duration: '1 year',
       type: 'First-party',

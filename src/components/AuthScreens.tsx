@@ -57,7 +57,7 @@ export function AuthScreens({ onClose, onSuccess, initialView = 'login' }: AuthS
       // Demo login - accept any email/password
       if (email && password) {
         // Store user session (demo)
-        localStorage.setItem('ascend-user', JSON.stringify({ 
+        localStorage.setItem('resurgo-user', JSON.stringify({ 
           email, 
           name: email.split('@')[0],
           plan: 'free',
@@ -85,7 +85,7 @@ export function AuthScreens({ onClose, onSuccess, initialView = 'login' }: AuthS
         return;
       }
       // Store user session (demo)
-      localStorage.setItem('ascend-user', JSON.stringify({ 
+      localStorage.setItem('resurgo-user', JSON.stringify({ 
         email, 
         name,
         plan: 'free',
@@ -110,7 +110,7 @@ export function AuthScreens({ onClose, onSuccess, initialView = 'login' }: AuthS
     setIsLoading(true);
     // Simulate social login
     await new Promise(resolve => setTimeout(resolve, 1000));
-    localStorage.setItem('ascend-user', JSON.stringify({ 
+    localStorage.setItem('resurgo-user', JSON.stringify({ 
       email: `user@${provider}.com`, 
       name: 'Demo User',
       plan: 'free',
