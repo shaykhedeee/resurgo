@@ -587,7 +587,7 @@ function PricingPanel() {
           period: 'one-time',
           color: 'yellow',
           highlight: false,
-          badge: '⚡ Founding Price',
+          badge: '⚡ Founding Price · Use code LTP50',
           features: [
             'Everything in Pro',
             'Pay once, use forever',
@@ -595,7 +595,7 @@ function PricingPanel() {
             'Founding member badge',
           ],
           cta: 'Claim Founding Price',
-          href: 'https://resurgo.life/billing',
+          href: 'https://resurgo.life/billing?promo=LTP50',
         },
       ].map((plan) => (
         <div

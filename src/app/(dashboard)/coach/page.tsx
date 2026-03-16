@@ -2,7 +2,7 @@
 
 // -------------------------------------------------------------------------------
 // RESURGO - AI Coach Interface (Terminal Robot UI)
-// Six distinct AI personas with memory, real-time streaming, typing animation
+// Eight elite AI coaches with memory, real-time streaming, typing animation
 // -------------------------------------------------------------------------------
 
 import { useAction, useMutation, useQuery } from 'convex/react';

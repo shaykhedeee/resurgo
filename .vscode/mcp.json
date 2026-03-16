@@ -4,6 +4,16 @@
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "convex@latest", "mcp", "start"]
+    },
+    "dodopayments": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-remote@latest", "https://mcp.dodopayments.com/sse"]
+    },
+    "dodo-knowledge": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "mcp-remote@latest", "https://knowledge.dodopayments.com/mcp"]
     }
   }
 }

@@ -23,8 +23,8 @@ const CURRENT_VERSION = {
     '8 AI coach personas with context memory',
   ],
   size: '4.2 MB',
-  sha256: 'pending-upload', // TODO: Run after APK build: Get-FileHash resurgo-latest.apk -Algorithm SHA256 | Select-Object Hash
-  // Then copy APK to /public/downloads/resurgo-latest.apk and update this value.
+  sha256: null, // Set after APK build: Get-FileHash resurgo-latest.apk -Algorithm SHA256
+  // Then copy APK to /public/downloads/resurgo-latest.apk and update this hash.
   githubReleasesUrl: 'https://github.com/shaykhedeee/resurgo/releases/latest',
 };
 

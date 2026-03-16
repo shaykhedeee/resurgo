@@ -78,7 +78,7 @@ export default function SleepWidget() {
       <div className="border-b border-zinc-900 px-3 py-1.5 flex items-center justify-between">
         <span className="font-pixel text-[0.5rem] tracking-widest text-zinc-600">SLEEP_LOG</span>
         <Link
-          href="/sleep"
+          href="/wellness"
           className="font-pixel text-[0.4rem] tracking-widest text-zinc-700 hover:text-orange-500 transition-colors"
         >
           HISTORY →

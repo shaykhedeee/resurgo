@@ -405,7 +405,7 @@ export default function SettingsPage() {
             {archivedHabits.length > 0 && (
               <div className="mb-3">
                 <p className="mb-1.5 font-mono text-[9px] tracking-widest text-zinc-400">
-                  NODES ({archivedHabits.length})
+                  RITUALS ({archivedHabits.length})
                 </p>
                 <div className="space-y-px">
                   {(archivedHabits as { _id: string; title: string; category: string }[]).map((h) => (

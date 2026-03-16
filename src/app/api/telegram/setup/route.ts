@@ -10,7 +10,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
-const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || 'resurgo-webhook-secret';
+const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://resurgo.life';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 

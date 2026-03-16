@@ -9,6 +9,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { CloudRain, Loader2, MapPin, RefreshCw, Play, Pause } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getCachedLocation } from '@/lib/locationCache';
 
 interface RadarFrame {
   time: number;
@@ -66,11 +67,10 @@ export default function RainViewerWidget({ className }: { className?: string }) 
 
   useEffect(() => {
     fetchFrames();
-    navigator.geolocation.getCurrentPosition(
-      pos => setLocation({ lat: pos.coords.latitude, lon: pos.coords.longitude }),
-      () => setLocation({ lat: 51.505, lon: -0.09 }),
-      { timeout: 5000 }
-    );
+    getCachedLocation().then(loc => {
+      if (loc) setLocation({ lat: loc.latitude, lon: loc.longitude });
+      else setLocation({ lat: 51.505, lon: -0.09 });
+    });
   }, [fetchFrames]);
 
   // Animation

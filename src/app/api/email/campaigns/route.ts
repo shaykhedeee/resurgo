@@ -232,9 +232,13 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Admin-only check for batch sends
+    // Admin auth required for all sends (prevents open relay abuse)
     const adminSecret = request.headers.get('x-admin-secret');
-    const isAdmin = adminSecret === process.env.ADMIN_SECRET;
+    const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+    if (!ADMIN_SECRET || adminSecret !== ADMIN_SECRET) {
+      return NextResponse.json({ error: 'Unauthorized. x-admin-secret header required.' }, { status: 401 });
+    }
+    const isAdmin = true;
 
     const body = await request.json();
     const { type, to, vars = {}, batchRecipients } = body;

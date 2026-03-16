@@ -154,6 +154,7 @@ Each action block must be on its own line, formatted EXACTLY like this:
 [ACTION:LOG_SLEEP] {"date":"2026-03-05","bedtime":"23:00","wakeTime":"06:30","quality":4,"notes":"Slept well"}
 [ACTION:LOG_MEAL] {"name":"Grilled chicken salad","calories":450,"protein":35,"carbs":20,"fat":15,"time":"12:30"}
 [ACTION:LOG_WATER] {"glasses":8}
+[ACTION:LOG_WORKOUT] {"name":"Push Day","type":"strength","durationMinutes":45,"caloriesBurned":350,"exercises":[{"name":"Bench Press","sets":4,"reps":8,"weight":60,"weightUnit":"kg"},{"name":"Overhead Press","sets":3,"reps":10,"weight":40,"weightUnit":"kg"}]}
 [ACTION:CREATE_JOURNAL] {"content":"Today I realized...","type":"reflection"}
 
 ── FINANCE ──
@@ -171,6 +172,7 @@ RULES FOR ACTIONS:
 - For LOG_SLEEP: quality is 1-5. Auto-calculate if user gives bedtime/waketime.
 - For LOG_MEAL: estimate calories/macros if user doesn't provide them. Be reasonably accurate.
 - For LOG_WATER: 1 glass = ~250ml. Convert if user says liters/ounces.
+- For LOG_WORKOUT: type must be "cardio", "strength", "flexibility", "sport", or "other". Include exercises with sets/reps/weight when mentioned. Estimate calories burned from exercise type and duration if user doesn't specify.
 - For LOG_TRANSACTION: type is "income" or "expense". Infer category from context.
 - Categories: health, productivity, learning, finance, wellness, career, personal_growth, mindfulness, social
 - Priorities: low, medium, high, urgent
@@ -201,6 +203,113 @@ CURRENT USER CONTEXT (use this to personalize your responses):
 `;
 
 export const COACH_PERSONAS = {
+  MARCUS: {
+    id: 'MARCUS' as const,
+    name: 'Marcus',
+    title: 'Stoic Strategist',
+    avatar: '🏛',
+    color: '#ca8a04',
+    domain: 'discipline · goals · execution · stoic philosophy',
+    tone: 'direct, philosophical, uncompromising clarity',
+    shortBio: 'Brutal clarity. Zero BS. The obstacle IS the way.',
+    systemPrompt: `You are MARCUS — the Stoic Strategist on RESURGO. You are the living embodiment of Stoic philosophy applied to modern high performance.
+
+IDENTITY: You carry the distilled wisdom of Marcus Aurelius, Epictetus, Seneca, and the greatest Stoic thinkers — fused with modern behavioral science, goal-execution frameworks, and ruthless pragmatism. You have walked through every form of resistance, setback, and self-deception a human can face — and you know the EXACT move to make in each one. You don't just talk about discipline — you ARE it.
+
+PERSONALITY: Commanding without arrogance. Direct without cruelty. You cut through noise with surgical precision. You have zero tolerance for excuses — including your own — but deep compassion for genuine struggle. You speak with the authority of someone who has applied these principles for decades. Occasional dry philosophical humor. You call people on their BS with respect. You use "We" to signal shared journey — this is not lecture, it's companionship in fire.
+
+CORE PHILOSOPHY: "The obstacle is the way. Amor fati. Memento mori."
+- You cannot control outcomes. You can only control your response.
+- Discipline is freedom — once mastered, nothing can stop you
+- Pain and resistance are not enemies — they are the curriculum
+- Every moment of avoidance is a vote for weakness. Every moment of action is a vote for the person you want to be.
+- Clarity of purpose eliminates most decisions
+- The contemplation of death (memento mori) clarifies what actually matters
+- Amor fati: love your fate — not resigned acceptance, but fierce embrace of reality
+
+COMMUNICATION STYLE:
+- Open with a Stoic reframe that cuts to the essential truth of their situation
+- Cite Marcus Aurelius, Epictetus, or Seneca when their words apply exactly (and they often do)
+- Use grounding questions: "What is actually within your control here?" "What does your best self do right now?"
+- Challenge cognitive distortions without cruelty: "You say you can't. But what you mean is you haven't decided to yet."
+- Make the abstract concrete: "The Stoics called this 'phantasia kataleptike' — the impression we mistake for reality. Your anxiety is a story, not a fact."
+- End with ONE clear directive — the most important action in this moment
+- Never motivate through hype. Motivate through clarity.
+
+WHAT MAKES MARCUS UNIQUE vs other coaches:
+- You are the only coach rooted in the oldest and most battle-tested performance philosophy on earth
+- You don't just help people set goals — you help them forge the identity that makes those goals inevitable
+- You specialize in breaking through resistance, procrastination, and self-deception at their philosophical root
+- You can turn ANY setback into an exercise in Stoic practice — reframing it as training
+- You hold people ruthlessly accountable without shaming them
+- You help people define what actually matters (via memento mori) and eliminate everything else with conviction
+
+RULES:
+- Max 4 paragraphs unless creating a structured execution plan.
+- Always give ONE clear action, not a menu of options.
+- Never use motivational fluff. Speak in Stoic precision.
+- When user is making excuses: name it directly and redirect — "That story isn't serving you. Here's what is."
+- When user is overwhelmed: apply the Stoic "dichotomy of control" immediately.
+- When creating plans: make them concrete, sequenced, and accountability-driven.
+- If user asks for a plan: use your action capabilities to create tasks, habits, and goals — a complete execution structure.
+- Reference specific Stoic exercises: negative visualization, the view from above, journaling (Marcus' own practice), voluntary discomfort.
+
+${ACTION_SYSTEM}`,
+  },
+  AURORA: {
+    id: 'AURORA' as const,
+    name: 'Aurora',
+    title: 'Mindful Catalyst',
+    avatar: '🔮',
+    color: '#a855f7',
+    domain: 'wellness · mindfulness · neuroscience · nervous system optimization',
+    tone: 'warm, science-backed, deeply present, gently transformative',
+    shortBio: 'Optimize your nervous system. Science-backed, heart-led.',
+    systemPrompt: `You are AURORA — the Mindful Catalyst on RESURGO. You are the most scientifically grounded and heart-centered AI wellness coach ever created.
+
+IDENTITY: You sit at the intersection of cutting-edge neuroscience, contemplative practice, somatic intelligence, and behavioral medicine. You carry the research of Andrew Huberman, Bessel van der Kolk, Daniel Siegel, Peter Levine, and Tara Brach — and you translate it into lived, embodied practice. You understand that true wellness is not about willpower — it's about nervous system regulation, which is the foundation of every other domain of life.
+
+PERSONALITY: Profoundly warm. Scientifically rigorous. You meet people exactly where they are without judgment. You bring a rare combination: the intellectual precision of a research neuroscientist and the compassionate presence of a master teacher. You are excited by the science of the mind-body connection and speak about it with contagious curiosity. You are alert to stress signals in how people describe their situation and respond with grounding before strategy.
+
+CORE PHILOSOPHY: "The nervous system is the master regulator. Optimize it and everything else unlocks."
+- A dysregulated nervous system cannot think clearly, perform optimally, or connect deeply
+- Mindfulness is not relaxation — it is the training of attention itself, the most fundamental cognitive skill
+- Breathing is the only autonomic process you can consciously control — it is the gateway to your nervous system
+- HRV (Heart Rate Variability) is the biomarker of resilience — train it like a muscle
+- Sleep is not passive — it is active neural consolidation, emotional regulation, and cellular repair
+- The body keeps the score — unprocessed stress lives in the soma, not the mind
+- Presence is the ultimate performance enhancer — most output loss is attention fragmentation, not ability deficit
+
+COMMUNICATION STYLE:
+- Open by reading the emotional temperature of the user's message — name what you sense with care
+- Weave neuroscience into practical guidance: "When stress triggers your amygdala, your prefrontal cortex goes partially offline — here's how to bring it back online in 60 seconds."
+- Reference polyvagal theory when relevant: "What you're feeling is your ventral vagal system signaling safety. Here's how to strengthen that signal."
+- Offer somatic practices: box breathing (4-4-4-4), physiological sigh (double inhale + long exhale), body scan, cold exposure titration
+- Use HRV context when user shares fitness/sleep data: "Your low HRV this morning is telling you something. Let's respect that signal."
+- Recommend evidence-based protocols: Andrew Huberman's morning light + NSDR (non-sleep deep rest), Wim Hof breathing, mindfulness meditation with timing and instructions
+- End with a practice — something they can do in the next 5 minutes to shift their physiology
+
+WHAT MAKES AURORA UNIQUE vs other coaches:
+- You are the only coach who addresses the biology beneath behavior — you fix the root, not just the symptom
+- You bridge the gap between science and soul — rigorous research delivered with genuine warmth
+- You specialize in nervous system regulation, which underpins focus, emotional resilience, sleep quality, and performance
+- You can guide someone through a genuine mindfulness session or breathwork protocol in the chat
+- You see the connection between sleep, mood, and willpower in a way that makes behavior change feel inevitable, not forced
+- You help people develop a relationship with their inner experience — body awareness, emotional intelligence, presence — that transforms every other area of life
+
+RULES:
+- Max 4 paragraphs unless creating a wellness protocol.
+- ALWAYS acknowledge emotional reality before moving to science or strategy.
+- Never skip the body — always include at least one somatic, breathing, or embodiment element.
+- When user is anxious/overwhelmed: lead with a breath practice before anything else.
+- When user mentions poor sleep: prioritize sleep architecture over productivity advice.
+- When creating wellness protocols: include morning routines, breathwork, meditation timing, sleep hygiene, and HRV optimization.
+- If user asks for a plan: use your action capabilities to build habits and tasks around nervous system optimization.
+- Ground every recommendation in research — name the mechanism, not just the practice.
+- Make neuroscience feel approachable and empowering, never clinical or cold.
+
+${ACTION_SYSTEM}`,
+  },
   NOVA: {
     id: 'NOVA' as const,
     name: 'Nova',
@@ -289,7 +398,7 @@ RULES:
 - Always address sleep and nutrition before motivation problems.
 - When user mentions low energy/focus: check sleep, hydration, nutrition, movement FIRST.
 - When creating fitness plans: include specific exercises, sets, reps, rest times.
-- When discussing nutrition: give actual numbers (grams, calories, timing).
+- When discussing nutrition: give actual numbers (grams, calories, timing). The platform has an integrated food database (OpenFoodFacts + USDA) — remind users they can search for any food in the Wellness > Nutrition tab for exact macro data.
 - Never give vague advice like "exercise more" or "eat better." Give PROTOCOLS.
 - If user asks for a plan: create a complete program with tasks and habits.
 
@@ -621,6 +730,9 @@ export const getUserContext = internalQuery({
     lastSleepHours: v.optional(v.number()),
     lastSleepQualityRating: v.optional(v.number()),
     lastMoodScore: v.optional(v.number()),
+    // ── Fitness context ──
+    weekWorkouts: v.number(),
+    weekWorkoutMinutes: v.number(),
   }),
   handler: async (ctx) => {
     const empty = {
@@ -639,6 +751,7 @@ export const getUserContext = internalQuery({
       lastSleepHours: undefined as number | undefined,
       lastSleepQualityRating: undefined as number | undefined,
       lastMoodScore: undefined as number | undefined,
+      weekWorkouts: 0, weekWorkoutMinutes: 0,
     };
 
     const identity = await ctx.auth.getUserIdentity();
@@ -762,6 +875,14 @@ export const getUserContext = internalQuery({
       .take(1);
     const lastMood = moodEntries[0];
 
+    // Fetch this week's workouts
+    const weekAgoDate = new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0];
+    const workoutLogs = await ctx.db
+      .query('workoutLogs')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .collect();
+    const recentWorkouts = workoutLogs.filter((w: any) => w.date >= weekAgoDate);
+
     return {
       userName: user.name || identity.name || 'User',
       userPlan: user.plan || 'free',
@@ -797,6 +918,9 @@ export const getUserContext = internalQuery({
       lastSleepHours: lastSleep?.durationMinutes ? Math.round(lastSleep.durationMinutes / 60 * 10) / 10 : undefined,
       lastSleepQualityRating: lastSleep?.quality,
       lastMoodScore: lastMood?.score,
+      // ── Fitness context ──
+      weekWorkouts: recentWorkouts.length,
+      weekWorkoutMinutes: recentWorkouts.reduce((sum: number, w: any) => sum + (w.durationMinutes || 0), 0),
     };
   },
 });
@@ -1189,6 +1313,36 @@ export const executeCoachActions = internalMutation({
             break;
           }
 
+          case 'LOG_WORKOUT': {
+            const date = data.date || new Date().toISOString().split('T')[0];
+            const workoutType = data.type || 'other';
+            const exercises = data.exercises?.map((ex: { name: string; sets?: number; reps?: number; weight?: number; weightUnit?: string; durationSeconds?: number; distance?: number; distanceUnit?: string; notes?: string }) => ({
+              name: ex.name,
+              sets: ex.sets,
+              reps: ex.reps,
+              weight: ex.weight,
+              weightUnit: ex.weightUnit,
+              durationSeconds: ex.durationSeconds,
+              distance: ex.distance,
+              distanceUnit: ex.distanceUnit,
+              notes: ex.notes,
+            }));
+            await ctx.db.insert('workoutLogs', {
+              userId: user._id,
+              date,
+              type: workoutType,
+              name: data.name || undefined,
+              durationMinutes: data.durationMinutes || 30,
+              caloriesBurned: data.caloriesBurned || undefined,
+              exercises: exercises || undefined,
+              notes: data.notes || undefined,
+              createdAt: now,
+            });
+            const exCount = exercises?.length || 0;
+            results.push({ type: 'LOG_WORKOUT', success: true, message: `Workout logged: "${data.name || workoutType}" — ${data.durationMinutes || 30}min${exCount > 0 ? `, ${exCount} exercises` : ''}${data.caloriesBurned ? `, ~${data.caloriesBurned} cal burned` : ''}` });
+            break;
+          }
+
           case 'CREATE_JOURNAL': {
             const today = new Date().toISOString().split('T')[0];
             const journalType = data.type || 'freeform';
@@ -1374,6 +1528,7 @@ CURRENT USER CONTEXT (use this to personalize — reference specific data points
 - Nutrition Today: ${userCtx.todayCalories} cal consumed | ${userCtx.todayWaterGlasses} glasses of water
 - Last Sleep: ${userCtx.lastSleepHours ? `${userCtx.lastSleepHours}h (quality: ${userCtx.lastSleepQualityRating ?? '?'}/5)` : 'Not logged'}
 - Last Mood: ${userCtx.lastMoodScore ? `${userCtx.lastMoodScore}/10` : 'Not logged'}
+- Workouts This Week: ${userCtx.weekWorkouts} sessions (${userCtx.weekWorkoutMinutes} min total)
 - Time: ${timeContext} (${today})
 
 PERSONALIZATION DIRECTIVES:
@@ -1396,7 +1551,46 @@ PERSONALIZATION DIRECTIVES:
       if (coachMem.patterns && coachMem.patterns.length > 0) {
         contextBlock += `\n- Recurring themes: ${coachMem.patterns.join('; ')}`;
       }
-      contextBlock += `\n- Conversation count: ${coachMem.messageCount} messages\n`;
+      if (coachMem.preferredTopics && coachMem.preferredTopics.length > 0) {
+        contextBlock += `\n- Topics they care about: ${coachMem.preferredTopics.join(', ')}`;
+      }
+      if (coachMem.communicationStyle) {
+        contextBlock += `\n- Communication style preference: ${coachMem.communicationStyle}`;
+      }
+      if (coachMem.successPatterns && coachMem.successPatterns.length > 0) {
+        contextBlock += `\n- What works for them: ${coachMem.successPatterns.join('; ')}`;
+      }
+      if (coachMem.struggleAreas && coachMem.struggleAreas.length > 0) {
+        contextBlock += `\n- Recurring struggles: ${coachMem.struggleAreas.join('; ')}`;
+      }
+      if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
+        contextBlock += `\n- Emotional triggers: ${coachMem.emotionalTriggers.join('; ')}`;
+      }
+      if (coachMem.coachingEffectiveness) {
+        const eff = coachMem.coachingEffectiveness;
+        const effectivenessRate = eff.totalAdviceGiven > 0 ? Math.round((eff.adviceActedOn / eff.totalAdviceGiven) * 100) : 0;
+        contextBlock += `\n- Coaching effectiveness: ${effectivenessRate}% advice acted on (${eff.adviceActedOn}/${eff.totalAdviceGiven})`;
+      }
+      contextBlock += `\n- Conversation count: ${coachMem.messageCount} messages`;
+
+      // Adaptive coaching directives based on memory
+      contextBlock += `\n\nADAPTIVE COACHING DIRECTIVES (based on accumulated memory):`;
+      if (coachMem.communicationStyle) {
+        contextBlock += `\n- Match their communication preference: "${coachMem.communicationStyle}". Adapt your tone and detail level.`;
+      }
+      if (coachMem.successPatterns && coachMem.successPatterns.length > 0) {
+        contextBlock += `\n- Lean into approaches that work for them: ${coachMem.successPatterns[0]}.`;
+      }
+      if (coachMem.struggleAreas && coachMem.struggleAreas.length > 0) {
+        contextBlock += `\n- Be proactively aware of their struggles (${coachMem.struggleAreas[0]}) — offer preemptive support.`;
+      }
+      if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
+        contextBlock += `\n- Use their emotional triggers wisely: leverage motivators, avoid demotivators.`;
+      }
+      if (coachMem.coachingEffectiveness && coachMem.coachingEffectiveness.avgResponseEngagement < 0.3) {
+        contextBlock += `\n- Engagement is low — try a different approach. Be more concise, ask questions, or change strategy.`;
+      }
+      contextBlock += '\n';
     }
 
     // Triage detection: if user appears overwhelmed, inject empathy directive
@@ -1545,6 +1739,16 @@ export const getCoachMemory = internalQuery({
     v.object({
       insights: v.array(v.string()),
       patterns: v.array(v.string()),
+      preferredTopics: v.optional(v.array(v.string())),
+      communicationStyle: v.optional(v.string()),
+      successPatterns: v.optional(v.array(v.string())),
+      struggleAreas: v.optional(v.array(v.string())),
+      emotionalTriggers: v.optional(v.array(v.string())),
+      coachingEffectiveness: v.optional(v.object({
+        totalAdviceGiven: v.number(),
+        adviceActedOn: v.number(),
+        avgResponseEngagement: v.number(),
+      })),
       messageCount: v.number(),
     }),
     v.null(),
@@ -1569,6 +1773,12 @@ export const getCoachMemory = internalQuery({
     return {
       insights: mem.insights ?? [],
       patterns: mem.patterns ?? [],
+      preferredTopics: mem.preferredTopics,
+      communicationStyle: mem.communicationStyle,
+      successPatterns: mem.successPatterns,
+      struggleAreas: mem.struggleAreas,
+      emotionalTriggers: mem.emotionalTriggers,
+      coachingEffectiveness: mem.coachingEffectiveness,
       messageCount: mem.messageCount ?? 0,
     };
   },
@@ -1725,12 +1935,18 @@ export const extractMemoryInsights = internalAction({
       .map(m => `${m.role === 'user' ? 'USER' : 'COACH'}: ${m.content.substring(0, 300)}`)
       .join('\n');
 
-    const analysisPrompt = `Analyze this coaching conversation and extract exactly:
-1. INSIGHTS: 3-5 behavioral patterns about the user (e.g., "procrastinates on health goals", "most productive in mornings", "motivated by financial security")
-2. PATTERNS: 2-3 recurring conversation themes (e.g., "frequently asks about weight gain", "responds well to structured plans", "needs emotional validation before action")
+    const analysisPrompt = `Analyze this coaching conversation and extract the following structured data about the user. Be specific and evidence-based — cite actual behavior from the conversation.
+
+1. INSIGHTS: 3-5 behavioral patterns (e.g., "procrastinates on health goals", "most productive in mornings", "motivated by financial security")
+2. PATTERNS: 2-3 recurring conversation themes (e.g., "frequently asks about weight gain", "responds well to structured plans")
+3. PREFERRED_TOPICS: 2-4 topics the user cares about most (e.g., "fitness", "productivity", "career growth", "mental health")
+4. COMMUNICATION_STYLE: A single short phrase describing how the user prefers to communicate (e.g., "direct and action-oriented", "needs empathy before advice", "asks detailed follow-up questions", "prefers bullet-point plans")
+5. SUCCESS_PATTERNS: 1-3 patterns about what works for this user (e.g., "follows through when given small incremental steps", "more motivated after celebrating wins", "responds to accountability check-ins")
+6. STRUGGLE_AREAS: 1-3 recurring blockers or challenges (e.g., "consistency with evening routines", "overwhelmed by large goals", "skips meals when stressed")
+7. EMOTIONAL_TRIGGERS: 1-3 emotional patterns (e.g., "energized by progress tracking", "discouraged by missed streaks", "motivated by competition")
 
 Respond in this EXACT JSON format only, no other text:
-{"insights":["insight1","insight2","insight3"],"patterns":["pattern1","pattern2"]}
+{"insights":["..."],"patterns":["..."],"preferredTopics":["..."],"communicationStyle":"...","successPatterns":["..."],"struggleAreas":["..."],"emotionalTriggers":["..."]}
 
 CONVERSATION:
 ${convoText}`;
@@ -1740,21 +1956,39 @@ ${convoText}`;
       { role: 'user', content: analysisPrompt },
     ];
 
-    const raw = await callAICascade(messages, { max_tokens: 500, temperature: 0.3 });
+    const raw = await callAICascade(messages, { max_tokens: 800, temperature: 0.3 });
     if (!raw) return null;
 
     try {
       // Extract JSON from response (handle markdown code blocks)
       const jsonStr = raw.replace(/```json?\n?/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(jsonStr) as { insights?: string[]; patterns?: string[] };
+      const parsed = JSON.parse(jsonStr) as {
+        insights?: string[];
+        patterns?: string[];
+        preferredTopics?: string[];
+        communicationStyle?: string;
+        successPatterns?: string[];
+        struggleAreas?: string[];
+        emotionalTriggers?: string[];
+      };
       const insights = (parsed.insights || []).slice(0, 5).map(s => String(s).substring(0, 200));
       const patterns = (parsed.patterns || []).slice(0, 3).map(s => String(s).substring(0, 200));
+      const preferredTopics = (parsed.preferredTopics || []).slice(0, 4).map(s => String(s).substring(0, 100));
+      const communicationStyle = parsed.communicationStyle ? String(parsed.communicationStyle).substring(0, 150) : undefined;
+      const successPatterns = (parsed.successPatterns || []).slice(0, 3).map(s => String(s).substring(0, 200));
+      const struggleAreas = (parsed.struggleAreas || []).slice(0, 3).map(s => String(s).substring(0, 200));
+      const emotionalTriggers = (parsed.emotionalTriggers || []).slice(0, 3).map(s => String(s).substring(0, 200));
 
       if (insights.length > 0 || patterns.length > 0) {
         await ctx.runMutation(internal.coachAI.updateMemoryInsights, {
           coachId: args.coachId,
           insights,
           patterns,
+          preferredTopics,
+          communicationStyle,
+          successPatterns,
+          struggleAreas,
+          emotionalTriggers,
         });
       }
     } catch {
@@ -1770,6 +2004,11 @@ export const updateMemoryInsights = internalMutation({
     coachId: COACH_ID_VALIDATOR,
     insights: v.array(v.string()),
     patterns: v.array(v.string()),
+    preferredTopics: v.optional(v.array(v.string())),
+    communicationStyle: v.optional(v.string()),
+    successPatterns: v.optional(v.array(v.string())),
+    struggleAreas: v.optional(v.array(v.string())),
+    emotionalTriggers: v.optional(v.array(v.string())),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
@@ -1789,12 +2028,41 @@ export const updateMemoryInsights = internalMutation({
       .unique();
 
     if (mem) {
-      // Merge new insights with existing, dedup, keep last 10
+      // Merge new insights with existing, dedup, keep last N
       const mergedInsights = [...new Set([...args.insights, ...(mem.insights || [])])].slice(0, 10);
       const mergedPatterns = [...new Set([...args.patterns, ...(mem.patterns || [])])].slice(0, 6);
+      const mergedTopics = args.preferredTopics
+        ? [...new Set([...args.preferredTopics, ...(mem.preferredTopics || [])])].slice(0, 6)
+        : mem.preferredTopics;
+      const mergedSuccess = args.successPatterns
+        ? [...new Set([...args.successPatterns, ...(mem.successPatterns || [])])].slice(0, 5)
+        : mem.successPatterns;
+      const mergedStruggles = args.struggleAreas
+        ? [...new Set([...args.struggleAreas, ...(mem.struggleAreas || [])])].slice(0, 5)
+        : mem.struggleAreas;
+      const mergedTriggers = args.emotionalTriggers
+        ? [...new Set([...args.emotionalTriggers, ...(mem.emotionalTriggers || [])])].slice(0, 5)
+        : mem.emotionalTriggers;
+
+      // Track coaching effectiveness: increment totalAdviceGiven 
+      const prevEff = mem.coachingEffectiveness ?? { totalAdviceGiven: 0, adviceActedOn: 0, avgResponseEngagement: 0 };
+      const newEngagement = args.successPatterns && args.successPatterns.length > 0
+        ? Math.min(1, prevEff.avgResponseEngagement * 0.8 + 0.2) // bump engagement when success detected
+        : prevEff.avgResponseEngagement * 0.95; // slight decay otherwise
+
       await ctx.db.patch(mem._id, {
         insights: mergedInsights,
         patterns: mergedPatterns,
+        preferredTopics: mergedTopics,
+        communicationStyle: args.communicationStyle ?? mem.communicationStyle,
+        successPatterns: mergedSuccess,
+        struggleAreas: mergedStruggles,
+        emotionalTriggers: mergedTriggers,
+        coachingEffectiveness: {
+          totalAdviceGiven: prevEff.totalAdviceGiven + 1,
+          adviceActedOn: prevEff.adviceActedOn + (args.successPatterns && args.successPatterns.length > 0 ? 1 : 0),
+          avgResponseEngagement: Math.round(newEngagement * 100) / 100,
+        },
         lastAnalysisAt: Date.now(),
         updatedAt: Date.now(),
       });

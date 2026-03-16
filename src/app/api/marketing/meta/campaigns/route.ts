@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
+import { auth, currentUser } from '@clerk/nextjs/server';
 import {
   listCampaigns,
   getCampaign,
@@ -14,14 +14,18 @@ import {
 } from '@/lib/marketing/meta-api';
 
 // Only admin users can manage campaigns
-const ADMIN_EMAILS = ['shaykhede2005@gmail.com']; // Add admin emails
+const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'shaykhede2005@gmail.com').split(',').map(e => e.trim());
 
 async function requireAdmin() {
   const { userId } = await auth();
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  // In production, check against admin list or Clerk metadata
+  const user = await currentUser();
+  const email = user?.emailAddresses?.[0]?.emailAddress;
+  if (!email || !ADMIN_EMAILS.includes(email)) {
+    return NextResponse.json({ error: 'Forbidden — admin only' }, { status: 403 });
+  }
   return null;
 }
 

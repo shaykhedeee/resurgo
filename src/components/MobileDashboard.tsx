@@ -89,6 +89,7 @@ function TodayTab() {
   const updateWater = useMutation(api.nutrition.updateWaterAndSteps);
   const toggleTask = useMutation(api.tasks.toggleComplete);
   const toggleHabit = useMutation(api.habits.toggleComplete);
+  const createTask = useMutation(api.tasks.create);
 
   const currentWater = (todayNutrition as { waterMl?: number } | null | undefined)?.waterMl ?? 0;
   const waterGoal = 2500;
@@ -97,6 +98,8 @@ function TodayTab() {
   const [waterLoading, setWaterLoading] = useState(false);
   const [togglingTask, setTogglingTask] = useState<string | null>(null);
   const [togglingHabit, setTogglingHabit] = useState<string | null>(null);
+  const [inlineTaskInput, setInlineTaskInput] = useState('');
+  const [inlineTaskAdding, setInlineTaskAdding] = useState(false);
 
   // Set of completed habit IDs for today
   const completedHabitIds = new Set((habitLogs ?? []) as string[]);
@@ -187,6 +190,41 @@ function TodayTab() {
           ))}
         </div>
       </div>
+
+      {/* — Inline task add — */}
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const text = inlineTaskInput.trim();
+          if (!text || inlineTaskAdding) return;
+          setInlineTaskAdding(true);
+          try {
+            await createTask({ title: text, priority: 'medium' });
+            setInlineTaskInput('');
+          } catch { /* silent */ }
+          setInlineTaskAdding(false);
+        }}
+        className="flex items-center gap-2 border border-zinc-900 bg-zinc-950 px-3 py-2.5"
+      >
+        <Plus className="h-3.5 w-3.5 shrink-0 text-orange-500" />
+        <input
+          type="text"
+          value={inlineTaskInput}
+          onChange={(e) => setInlineTaskInput(e.target.value)}
+          placeholder="Quick add task..."
+          disabled={inlineTaskAdding}
+          className="flex-1 bg-transparent font-terminal text-sm text-zinc-200 placeholder-zinc-600 outline-none"
+        />
+        {inlineTaskInput.trim() && (
+          <button
+            type="submit"
+            disabled={inlineTaskAdding}
+            className="shrink-0 border border-orange-800 bg-orange-950/40 px-2.5 py-1 font-pixel text-[0.4rem] tracking-widest text-orange-400 active:bg-orange-950/60 disabled:opacity-50"
+          >
+            {inlineTaskAdding ? '...' : 'ADD'}
+          </button>
+        )}
+      </form>
 
       {/* — Task queue — */}
       <div>
@@ -456,6 +494,18 @@ export default function MobileDashboard() {
 
       {/* ── Fixed bottom nav ─────────────────────────────── */}
       <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-zinc-900 bg-zinc-950/98 backdrop-blur-md">
+        {/* Animated top indicator bar */}
+        <div className="relative h-[2px] bg-zinc-900">
+          <motion.div
+            className="absolute top-0 h-[2px] bg-orange-500"
+            layout
+            transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+            style={{
+              width: '20%',
+              left: activeTab === 'today' ? '0%' : activeTab === 'health' ? '20%' : activeTab === 'goals' ? '60%' : '80%',
+            }}
+          />
+        </div>
         <div className="flex h-16 items-end">
 
           {/* Left tabs */}
@@ -464,14 +514,21 @@ export default function MobileDashboard() {
               key={id}
               onClick={() => { setArcOpen(false); setActiveTab(id); }}
               className={cn(
-                'flex flex-1 flex-col items-center justify-center gap-0.5 h-full transition-colors',
+                'relative flex flex-1 flex-col items-center justify-center gap-0.5 h-full transition-colors',
                 activeTab === id
                   ? 'text-orange-400'
                   : 'text-zinc-600 active:text-zinc-400',
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className={cn('h-4 w-4 transition-transform', activeTab === id && 'scale-110')} />
               <span className="font-pixel text-[0.38rem] tracking-widest">{label}</span>
+              {activeTab === id && (
+                <motion.span
+                  layoutId="mobile-tab-dot"
+                  className="absolute top-1.5 h-1 w-1 rounded-full bg-orange-500"
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              )}
             </button>
           ))}
 
@@ -517,14 +574,21 @@ export default function MobileDashboard() {
               key={id}
               onClick={() => { setArcOpen(false); setActiveTab(id); }}
               className={cn(
-                'flex flex-1 flex-col items-center justify-center gap-0.5 h-full transition-colors',
+                'relative flex flex-1 flex-col items-center justify-center gap-0.5 h-full transition-colors',
                 activeTab === id
                   ? 'text-orange-400'
                   : 'text-zinc-600 active:text-zinc-400',
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className={cn('h-4 w-4 transition-transform', activeTab === id && 'scale-110')} />
               <span className="font-pixel text-[0.38rem] tracking-widest">{label}</span>
+              {activeTab === id && (
+                <motion.span
+                  layoutId="mobile-tab-dot"
+                  className="absolute top-1.5 h-1 w-1 rounded-full bg-orange-500"
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                />
+              )}
             </button>
           ))}
         </div>

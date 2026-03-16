@@ -6,6 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react';
+import { getCachedLocation } from '@/lib/locationCache';
 
 interface WeatherInfo {
   temp: number;
@@ -66,13 +67,9 @@ export default function DigitalClockWidget() {
     setWeatherError(false);
     try {
       let locationParam = 'auto';
-      try {
-        const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
-        );
-        locationParam = `${pos.coords.latitude},${pos.coords.longitude}`;
-      } catch {
-        locationParam = 'auto';
+      const loc = await getCachedLocation();
+      if (loc) {
+        locationParam = `${loc.latitude},${loc.longitude}`;
       }
 
       const res = await fetch(`/api/weather?q=${encodeURIComponent(locationParam)}`, {

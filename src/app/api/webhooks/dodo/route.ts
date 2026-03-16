@@ -250,6 +250,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     console.error(`[DodoWebhook] Convex mutation failed for event ${eventId}:`, message);
 
     // Return 500 so Dodo retries the webhook
-    return NextResponse.json({ error: 'Internal error — will retry', detail: message }, { status: 500 });
+    return NextResponse.json({ error: 'Internal error — will retry' }, { status: 500 });
   }
 }

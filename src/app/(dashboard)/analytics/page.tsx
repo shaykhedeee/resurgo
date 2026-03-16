@@ -33,12 +33,12 @@ export default function AnalyticsPage() {
   const statCards = [
     { label: 'LEVEL',           value: `${profile.level}`,                    sub: profile.levelName?.toUpperCase()           },
     { label: 'TOTAL_XP',        value: profile.totalXP.toLocaleString(),      sub: `${profile.xpToNextLevel}_TO_NEXT`         },
-    { label: 'CURRENT_UPTIME',  value: `${profile.currentStreak}d`,           sub: `PEAK_${profile.longestStreak}d`            },
+    { label: 'CURRENT_STREAK',  value: `${profile.currentStreak}d`,           sub: `BEST_${profile.longestStreak}d`            },
     { label: 'ACHIEVEMENTS',    value: `${profile.achievements.length}`,      sub: 'UNLOCKED'                                 },
     { label: 'OBJECTIVES_DONE', value: `${profile.totalGoalsCompleted}`,      sub: ''                                         },
     { label: 'TASKS_DONE',      value: `${profile.totalTasksCompleted}`,      sub: ''                                         },
     { label: 'FOCUS_HOURS',     value: `${focusStats.totalHours}h`,           sub: `${focusStats.totalSessions}_SESSIONS`     },
-    { label: 'NODES_DONE',      value: `${profile.totalHabitsCompleted}`,     sub: ''                                         },
+    { label: 'RITUALS_DONE',    value: `${profile.totalHabitsCompleted}`,     sub: ''                                         },
   ];
 
   const xpPercent = Math.min(Math.round(profile.xpProgress * 100), 100);
@@ -137,7 +137,7 @@ export default function AnalyticsPage() {
               <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">NODE_AND_OBJECTIVE_METRICS</span>
             </div>
             <div className="space-y-px p-1">
-              {(([['NODES_COMPLETED', profile.totalHabitsCompleted], ['CURRENT_UPTIME', `${profile.currentStreak}_DAYS`], ['PEAK_UPTIME', `${profile.longestStreak}_DAYS`], ['OBJECTIVES_COMPLETED', profile.totalGoalsCompleted], ['FOCUS_MINUTES', profile.totalFocusMinutes], ['COINS_EARNED', profile.coins]]) as [string, string | number][]).map(([label, val]) => (
+              {(([['RITUALS_DONE', profile.totalHabitsCompleted], ['CURRENT_STREAK', `${profile.currentStreak}_DAYS`], ['BEST_STREAK', `${profile.longestStreak}_DAYS`], ['OBJECTIVES_COMPLETED', profile.totalGoalsCompleted], ['FOCUS_MINUTES', profile.totalFocusMinutes], ['COINS_EARNED', profile.coins]]) as [string, string | number][]).map(([label, val]) => (
                 <div key={label} className="flex items-center justify-between px-3 py-2">
                   <span className="font-mono text-xs tracking-widest text-zinc-400">{label}</span>
                   <span className="font-mono text-xs text-zinc-200">{val}</span>
@@ -158,7 +158,7 @@ export default function AnalyticsPage() {
           {profile.achievements.length === 0 ? (
             <div className="py-12 text-center">
               <p className="font-mono text-xs tracking-widest text-zinc-400">NO_ACHIEVEMENTS_YET</p>
-              <p className="mt-2 font-mono text-xs text-zinc-400">Continue building nodes and objectives to unlock rewards.</p>
+              <p className="mt-2 font-mono text-xs text-zinc-400">Continue building rituals and goals to unlock rewards.</p>
             </div>
           ) : (
             <div className="grid gap-px p-1 sm:grid-cols-2 lg:grid-cols-3">

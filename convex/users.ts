@@ -836,6 +836,7 @@ export const getByClerkIdInternal = internalQuery({
       clerkId: v.string(),
       email: v.string(),
       dodoCustomerId: v.optional(v.string()),
+      dodoSubscriptionId: v.optional(v.string()),
     }),
     v.null()
   ),
@@ -850,6 +851,7 @@ export const getByClerkIdInternal = internalQuery({
       clerkId: user.clerkId,
       email: user.email,
       dodoCustomerId: user.dodoCustomerId,
+      dodoSubscriptionId: user.dodoSubscriptionId,
     };
   },
 });
@@ -1225,6 +1227,80 @@ export const updateUserInternal = internalMutation({
 
     await ctx.db.patch(user._id, patch);
     console.log(`[updateUserInternal] Updated user clerkId=${clerkId}`);
+    return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DODO SUBSCRIPTION MANAGEMENT — Internal helpers called from http.ts & payments.ts
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Stores subscription ID and metadata when a subscription first becomes active */
+export const storeSubscriptionDataInternal = internalMutation({
+  args: {
+    clerkId: v.string(),
+    dodoSubscriptionId: v.string(),
+    subscriptionStatus: v.union(
+      v.literal('pending'),
+      v.literal('active'),
+      v.literal('on_hold'),
+      v.literal('cancelled'),
+      v.literal('failed'),
+      v.literal('expired'),
+    ),
+    nextBillingDate: v.optional(v.string()),
+    cancelAtNextBillingDate: v.optional(v.boolean()),
+  },
+  returns: v.null(),
+  handler: async (ctx, { clerkId, dodoSubscriptionId, subscriptionStatus, nextBillingDate, cancelAtNextBillingDate }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+    if (!user) {
+      console.warn(`[storeSubscriptionDataInternal] User not found for clerkId=${clerkId}`);
+      return null;
+    }
+    await ctx.db.patch(user._id, {
+      dodoSubscriptionId,
+      subscriptionStatus,
+      ...(nextBillingDate !== undefined ? { nextBillingDate } : {}),
+      ...(cancelAtNextBillingDate !== undefined ? { cancelAtNextBillingDate } : {}),
+      updatedAt: Date.now(),
+    });
+    console.log(`[storeSubscriptionDataInternal] sub=${dodoSubscriptionId} status=${subscriptionStatus} clerkId=${clerkId}`);
+    return null;
+  },
+});
+
+/** Updates subscription status and next billing date from webhook events */
+export const updateSubscriptionStatusInternal = internalMutation({
+  args: {
+    clerkId: v.string(),
+    subscriptionStatus: v.union(
+      v.literal('pending'),
+      v.literal('active'),
+      v.literal('on_hold'),
+      v.literal('cancelled'),
+      v.literal('failed'),
+      v.literal('expired'),
+    ),
+    nextBillingDate: v.optional(v.string()),
+    cancelAtNextBillingDate: v.optional(v.boolean()),
+  },
+  returns: v.null(),
+  handler: async (ctx, { clerkId, subscriptionStatus, nextBillingDate, cancelAtNextBillingDate }) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', clerkId))
+      .unique();
+    if (!user) return null;
+    await ctx.db.patch(user._id, {
+      subscriptionStatus,
+      ...(nextBillingDate !== undefined ? { nextBillingDate } : {}),
+      ...(cancelAtNextBillingDate !== undefined ? { cancelAtNextBillingDate } : {}),
+      updatedAt: Date.now(),
+    });
     return null;
   },
 });

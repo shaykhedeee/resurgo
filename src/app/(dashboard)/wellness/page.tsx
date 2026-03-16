@@ -11,6 +11,7 @@ interface NutritionMeal { name: string; calories: number; protein?: number; carb
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import WellnessRadarChart from '@/components/WellnessRadarChart';
+import { FoodSearch } from '@/components/FoodSearch';
 
 const MOOD_LABELS = ['', 'Very Low', 'Low', 'Okay', 'Good', 'Great'];
 const MOOD_COLORS = ['', 'text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400', 'text-emerald-400'];
@@ -398,6 +399,16 @@ export default function WellnessPage() {
                 ))}
               </div>
             )}
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">FOOD_DATABASE_SEARCH</span>
+              </div>
+              <div className="p-4">
+                <FoodSearch onAddMeal={async (meal) => {
+                  await logMealMut({ date: today, meal });
+                }} />
+              </div>
+            </div>
             <div className="border border-zinc-900 bg-zinc-950">
               <div className="border-b border-zinc-900 px-4 py-2.5">
                 <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">LOG_MEAL</span>

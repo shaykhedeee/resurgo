@@ -227,7 +227,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                   {user.name?.charAt(0).toUpperCase() || 'A'}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-themed">{user.name || 'Ascender'}</h3>
+                  <h3 className="text-lg font-bold text-themed">{user.name || 'Riser'}</h3>
                   <p className="text-themed-muted text-sm">Level {user.gamification?.level || 1}</p>
                 </div>
               </div>

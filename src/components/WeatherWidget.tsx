@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Cloud, Sun, CloudRain, CloudSnow, CloudLightning, Wind, Thermometer, Droplets, Eye } from 'lucide-react';
+import { getCachedLocation } from '@/lib/locationCache';
 
 interface WeatherData {
   temp: number;
@@ -52,16 +53,11 @@ export default function WeatherWidget() {
       setLoading(true);
       setError(null);
 
-      // Try to get location, fallback to auto-detect by IP
+      // Use cached location (single browser prompt), fallback to auto-detect by IP
       let locationParam = 'auto';
-      try {
-        const pos = await new Promise<GeolocationPosition>((resolve, reject) =>
-          navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 })
-        );
-        locationParam = `${pos.coords.latitude},${pos.coords.longitude}`;
-      } catch {
-        // Auto-detect by IP — server proxy handles this
-        locationParam = 'auto';
+      const loc = await getCachedLocation();
+      if (loc) {
+        locationParam = `${loc.latitude},${loc.longitude}`;
       }
 
       // Use server-side proxy to avoid CORS issues in production

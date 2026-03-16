@@ -107,11 +107,11 @@ export default function GoalsPage() {
     <div className="min-h-screen bg-black p-4 md:p-6">
       <div className="mx-auto max-w-6xl">
 
-        {/* -- CORE OBJECTIVES HEADER -- */}
+        {/* -- GOALS HEADER -- */}
         <div className="surface-panel mb-6 overflow-hidden">
           <div className="surface-header">
             <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
-            <span className="surface-kicker-accent">Core objectives</span>
+            <span className="surface-kicker-accent">Goals</span>
           </div>
           <div className="grid gap-4 px-5 py-5 lg:grid-cols-[minmax(0,1.45fr)_320px]">
             <div>

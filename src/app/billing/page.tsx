@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import Link from 'next/link';
 import { BillingCheckoutCTA, BillingPortalCTA } from '@/components/BillingCTA';
 import RestoreArchivedCTA from '@/components/RestoreArchivedCTA';
 import BillingPageAnalytics from '@/components/BillingPageAnalytics';
 import { BillingWaitlistCapture } from '@/components/BillingWaitlistCapture';
+import SubscriptionManagementCard from '@/components/SubscriptionManagementCard';
+import PromoCodeBanner from '@/components/PromoCodeBanner';
 import { BILLING_PLANS } from '@/lib/billing/plans';
 import { TermLinkButton } from '@/components/ui/TermButton';
 import {
@@ -147,8 +149,6 @@ function CellValue({ value }: { value: boolean | string }) {
 export default async function BillingPage() {
   const { userId } = await auth();
   const user = userId ? await currentUser() : null;
-  const manageUrl = process.env.NEXT_PUBLIC_DODO_CUSTOMER_PORTAL_URL || '';
-
   const plans = BILLING_PLANS.map((plan) => {
     const checkoutUrl = plan.clerkCheckoutUrlEnv
       ? process.env[plan.clerkCheckoutUrlEnv]
@@ -242,31 +242,34 @@ export default async function BillingPage() {
               <BillingWaitlistCapture />
             </div>
           )}
-          {/* Subscription management bar (signed-in users) */}
+          {/* Subscription management — signed-in users */}
           {user && (
-            <div className="mb-8 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div>
-                <p className="text-xs uppercase tracking-wider text-[var(--text-muted)] mb-1">
-                  Your subscription
-                </p>
-                <p className="text-sm text-[var(--text-secondary)]">
-                  Manage billing, payment methods, invoices, and cancellations.
-                </p>
+            <div className="mb-10 space-y-3">
+              {/* Live subscription status card (cancel, reactivate, update payment method) */}
+              <SubscriptionManagementCard />
+
+              {/* Dodo-hosted portal + restore archived items */}
+              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <p className="text-xs uppercase tracking-wider text-[var(--text-muted)] mb-1">
+                    Billing portal
+                  </p>
+                  <p className="text-sm text-[var(--text-secondary)]">
+                    View invoices, payment history, and advanced billing settings.
+                  </p>
+                </div>
+                <div className="flex items-center gap-4">
+                  <BillingPortalCTA />
+                  <RestoreArchivedCTA />
+                </div>
               </div>
-              {manageUrl ? (
-                <div className="flex items-center gap-4">
-                  <BillingPortalCTA />
-                  {/* Client-side restore CTA; dynamic import to keep page server-rendered */}
-                  <RestoreArchivedCTA />
-                </div>
-              ) : (
-                <div className="flex items-center gap-4">
-                  <BillingPortalCTA />
-                  <RestoreArchivedCTA />
-                </div>
-              )}
             </div>
           )}
+
+          {/* Promo Code Input */}
+          <Suspense fallback={null}>
+            <PromoCodeBanner />
+          </Suspense>
 
           {/* Plan Cards Grid */}
           <div className="grid gap-6 lg:grid-cols-4">

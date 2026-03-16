@@ -8,6 +8,15 @@ import { httpRouter } from 'convex/server';
 import { httpAction } from './_generated/server';
 import { createDodoWebhookHandler } from '@dodopayments/convex';
 import { internal } from './_generated/api';
+import {
+  notifyPaymentSucceeded,
+  notifySubscriptionActive,
+  notifySubscriptionRenewed,
+  notifySubscriptionCancelled,
+  notifySubscriptionOnHold,
+  notifyPaymentFailed,
+  notifyRefundSucceeded,
+} from './billingNotifications';
 
 const http = httpRouter();
 
@@ -131,6 +140,16 @@ http.route({
       console.log(
         `[dodo-webhook] payment.succeeded → plan=${plan}, clerkId=${resolvedClerkId}, payment=${data.payment_id}`
       );
+
+      // Notify: Discord alert + Resend payment receipt
+      await notifyPaymentSucceeded({
+        customerEmail: data.customer?.email ?? '',
+        customerName: data.customer?.name ?? 'Customer',
+        amountCents: data.total_amount ?? 0,
+        currency: data.currency ?? 'USD',
+        paymentId: data.payment_id,
+        plan,
+      });
     },
 
     // ── Subscription active (initial activation or reactivation) ──
@@ -158,11 +177,31 @@ http.route({
         return;
       }
 
+      // Store subscription ID + status for plan management
+      await ctx.runMutation(internal.users.storeSubscriptionDataInternal, {
+        clerkId: resolvedClerkId,
+        dodoSubscriptionId: data.subscription_id,
+        subscriptionStatus: 'active',
+        nextBillingDate: data.next_billing_date ? data.next_billing_date.toISOString() : undefined,
+        cancelAtNextBillingDate: false,
+      });
+
       await ctx.runMutation(internal.users.updatePlanFromWebhookInternal, {
         clerkId: resolvedClerkId,
         plan: 'pro',
         eventId: data.subscription_id,
         eventType: 'subscription.active',
+      });
+
+      // Notify: Discord alert + Resend subscription welcome email
+      await notifySubscriptionActive({
+        customerEmail: data.customer?.email ?? '',
+        customerName: data.customer?.name ?? 'Customer',
+        subscriptionId: data.subscription_id,
+        amountCents: data.recurring_pre_tax_amount ?? 0,
+        currency: data.currency ?? 'USD',
+        interval: data.payment_frequency_interval ?? 'month',
+        nextBillingDate: data.next_billing_date ? data.next_billing_date.toISOString() : undefined,
       });
     },
 
@@ -189,11 +228,29 @@ http.route({
         return;
       }
 
+      // Reset on_hold / cancellation flags on successful renewal
+      await ctx.runMutation(internal.users.updateSubscriptionStatusInternal, {
+        clerkId: resolvedClerkId,
+        subscriptionStatus: 'active',
+        nextBillingDate: data.next_billing_date ? data.next_billing_date.toISOString() : undefined,
+        cancelAtNextBillingDate: false,
+      });
+
       await ctx.runMutation(internal.users.updatePlanFromWebhookInternal, {
         clerkId: resolvedClerkId,
         plan: 'pro',
         eventId: data.subscription_id,
         eventType: 'subscription.renewed',
+      });
+
+      // Notify: Discord + Resend renewal receipt
+      await notifySubscriptionRenewed({
+        customerEmail: data.customer?.email ?? '',
+        customerName: data.customer?.name ?? 'Customer',
+        amountCents: data.recurring_pre_tax_amount ?? 0,
+        currency: data.currency ?? 'USD',
+        interval: data.payment_frequency_interval ?? 'month',
+        nextBillingDate: data.next_billing_date ? data.next_billing_date.toISOString() : undefined,
       });
     },
 
@@ -240,6 +297,13 @@ http.route({
         plan: 'free',
         eventId: data.subscription_id,
         eventType: 'subscription.cancelled',
+      });
+
+      // Notify: Discord alert + Resend cancellation email
+      await notifySubscriptionCancelled({
+        customerEmail: data.customer?.email ?? '',
+        customerName: data.customer?.name ?? 'Customer',
+        subscriptionId: data.subscription_id,
       });
     },
 
@@ -295,6 +359,44 @@ http.route({
       });
     },
 
+    // ── Subscription on hold (payment failed, requires payment method update) ──
+    onSubscriptionOnHold: async (ctx, payload) => {
+      const { data } = payload;
+      const customerId = data.customer?.customer_id;
+      const email = data.customer?.email;
+
+      let resolvedClerkId: string | null = null;
+      if (customerId) {
+        const user = await ctx.runQuery(internal.users.getByDodoCustomerIdInternal, {
+          dodoCustomerId: customerId,
+        });
+        if (user) resolvedClerkId = user.clerkId;
+      }
+      if (!resolvedClerkId && email) {
+        const user = await ctx.runQuery(internal.users.getByEmailInternal, { email });
+        if (user) resolvedClerkId = user.clerkId;
+      }
+
+      if (!resolvedClerkId) {
+        console.warn(`[dodo-webhook] subscription.on_hold: Could not resolve clerkId`);
+        return;
+      }
+
+      // Mark on_hold — do NOT downgrade plan; access continues until resolved
+      await ctx.runMutation(internal.users.updateSubscriptionStatusInternal, {
+        clerkId: resolvedClerkId,
+        subscriptionStatus: 'on_hold',
+      });
+      console.log(`[dodo-webhook] subscription.on_hold: clerkId=${resolvedClerkId}, sub=${data.subscription_id}`);
+
+      // Notify: Discord alert + Resend dunning email
+      await notifySubscriptionOnHold({
+        customerEmail: data.customer?.email ?? '',
+        customerName: data.customer?.name ?? 'Customer',
+        subscriptionId: data.subscription_id,
+      });
+    },
+
     // ── Subscription paused ──
     onSubscriptionPaused: async (ctx, payload) => {
       const { data } = payload;
@@ -319,7 +421,7 @@ http.route({
     },
 
     // ── Payment failed ──
-    onPaymentFailed: async (ctx, payload) => {
+    onPaymentFailed: async (_ctx, payload) => {
       const { data } = payload;
       console.warn(
         `[dodo-webhook] payment.failed: payment_id=${data.payment_id}, ` +
@@ -327,6 +429,18 @@ http.route({
       );
       // Don't downgrade on payment failure — Dodo will retry and eventually
       // fire subscription.cancelled / subscription.expired if it's unrecoverable
+
+      // Notify customer to update payment method
+      if (data.customer?.email) {
+        await notifyPaymentFailed({
+          customerEmail: data.customer.email,
+          customerName: data.customer.name ?? 'Customer',
+          amountCents: data.total_amount ?? 0,
+          currency: data.currency ?? 'USD',
+          paymentId: data.payment_id,
+          errorMessage: data.error_message ?? undefined,
+        });
+      }
     },
 
     // ── Refund succeeded ──
@@ -352,6 +466,15 @@ http.route({
         plan: 'free',
         eventId: data.payment_id,
         eventType: 'refund.succeeded',
+      });
+
+      // Notify: Discord alert + Resend refund confirmation
+      await notifyRefundSucceeded({
+        customerEmail: data.customer?.customer_id ?? '',
+        customerName: 'Customer',
+        amountCents: data.amount ?? 0,
+        currency: data.currency ?? 'USD',
+        paymentId: data.payment_id,
       });
     },
 

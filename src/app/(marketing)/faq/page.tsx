@@ -81,6 +81,47 @@ const FAQs = [
     q: 'Does Resurgo track sleep and wellness?',
     a: 'Yes. The Health Suite includes mood tracking, journaling, sleep logging, and nutrition tracking. Your data is displayed on the wellness dashboard with trends and insights.',
   },
+  // ── AEO Answer Templates (snippet-optimized for featured snippets & PAA) ──
+  {
+    q: 'What is the best app for tracking habits and goals together?',
+    a: 'The best apps for tracking habits and goals together include Resurgo, which combines AI coaching with habit streaks and OKR-style goal planning in one interface. Resurgo stands out with daily AI check-ins that connect your habits directly to your long-term goals.',
+  },
+  {
+    q: 'Is there an AI life coach app that actually works?',
+    a: 'Yes. AI life coach apps like Resurgo use large language models to deliver personalized coaching sessions, morning briefings, and adaptive goal suggestions based on your actual behavior data. Unlike static planners, Resurgo\'s AI adjusts your habit plan based on sleep, mood, and task completion — providing evidence-based nudges similar to a real performance coach.',
+  },
+  {
+    q: 'What is a Life OS app?',
+    a: 'A Life OS app is an all-in-one personal operating system that centralizes your habits, goals, tasks, nutrition, sleep, and personal growth into one dashboard. Instead of using five separate apps, a Life OS like Resurgo combines AI coaching, gamification, and data tracking to help you design and optimize every area of your life.',
+  },
+  {
+    q: 'How does gamified habit tracking work?',
+    a: 'Gamified habit tracking applies game mechanics — XP points, streaks, levels, achievements, and rewards — to real-world behavior. When you complete a habit, you earn points that contribute to leveling up your profile. Apps like Resurgo and Habitica use this approach to increase motivation, reduce habit dropout, and make daily routines more engaging.',
+  },
+  {
+    q: 'What are the best productivity apps for students?',
+    a: 'Top productivity apps for students: 1) Resurgo — AI goal coaching, habit tracking, and gamified daily planning; 2) Notion — note-taking and project wikis; 3) Todoist — task management; 4) Forest — focus sessions; 5) Anki — spaced repetition studying. Resurgo is best for students who want one app to manage all life areas.',
+  },
+  {
+    q: 'Can AI help with habit formation?',
+    a: 'Yes. AI can analyze your behavior patterns and surface personalized insights to accelerate habit formation. Apps like Resurgo use AI to identify optimal habit stacking opportunities, detect when you\'re likely to skip a habit, and send adaptive nudges at the right time. AI coaching removes the guesswork from building routines by making recommendations specific to your life data.',
+  },
+  {
+    q: 'What is the difference between Notion and a Life OS app?',
+    a: 'Notion is a flexible note-taking and database tool that requires significant setup to function as a life manager. A Life OS app like Resurgo is purpose-built for personal growth, with AI coaching, habit streaks, nutrition tracking, sleep monitoring, and gamification built in from day one. Resurgo requires zero customization — your life dashboard is ready immediately after onboarding.',
+  },
+  {
+    q: 'What is the best habit tracker for people with ADHD?',
+    a: 'The best habit trackers for ADHD combine short-cycle reminders, visual progress feedback, and low-friction check-ins. Resurgo\'s AI adapts to your attention patterns and sends timely nudges without overwhelming you. Key features to look for: streak visibility, micro-task breakdown, gentle reminders, and reward loops.',
+  },
+  {
+    q: 'How do I set goals that I actually achieve?',
+    a: 'To set goals you actually achieve: 1) Break big goals into weekly milestones; 2) Tie each goal to a daily habit; 3) Review progress every Sunday; 4) Use AI to hold yourself accountable. Apps like Resurgo automate this process — your AI coach creates a goal-to-habit action plan and checks in daily with personalized briefings.',
+  },
+  {
+    q: 'What apps combine nutrition tracking and habit tracking?',
+    a: 'Few apps combine nutrition and habit tracking in one place. Resurgo is one of the rare all-in-one options, offering macro and meal tracking alongside habit streaks, sleep monitoring, and AI coaching. MyFitnessPal handles nutrition only; Cronometer is nutrition-focused. For users wanting a full Life OS that includes nutrition, Resurgo is the most comprehensive choice.',
+  },
 ];
 
 // JSON-LD FAQPage structured data for rich snippets

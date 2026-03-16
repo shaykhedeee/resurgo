@@ -166,6 +166,17 @@ export default defineSchema({
     }))),
     // ── Dodo Payments ──
     dodoCustomerId: v.optional(v.string()), // Dodo Payments customer ID for checkout/portal
+    dodoSubscriptionId: v.optional(v.string()), // Active Dodo subscription ID (for plan changes / cancellation)
+    subscriptionStatus: v.optional(v.union(
+      v.literal('pending'),
+      v.literal('active'),
+      v.literal('on_hold'),
+      v.literal('cancelled'),
+      v.literal('failed'),
+      v.literal('expired'),
+    )),
+    nextBillingDate: v.optional(v.string()), // ISO date of next renewal
+    cancelAtNextBillingDate: v.optional(v.boolean()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -1054,6 +1065,17 @@ export default defineSchema({
     ),
     insights: v.array(v.string()),       // inferred behavioral patterns
     patterns: v.array(v.string()),       // recurring themes from history
+    // Enhanced memory fields for self-learning
+    preferredTopics: v.optional(v.array(v.string())),       // topics user engages with most
+    communicationStyle: v.optional(v.string()),              // e.g. "concise and action-oriented", "detailed and empathetic"
+    successPatterns: v.optional(v.array(v.string())),        // what advice/approaches led to action
+    struggleAreas: v.optional(v.array(v.string())),          // recurring blockers/challenges
+    emotionalTriggers: v.optional(v.array(v.string())),      // what motivates or demotivates them
+    coachingEffectiveness: v.optional(v.object({
+      totalAdviceGiven: v.number(),
+      adviceActedOn: v.number(),
+      avgResponseEngagement: v.number(),                     // 0-1 score based on follow-up depth
+    })),
     lastAnalysisAt: v.optional(v.number()),
     messageCount: v.number(),
     updatedAt: v.number(),
@@ -1480,11 +1502,39 @@ export default defineSchema({
     config: v.string(),   // JSON-serialised VisionBoardConfig (includes images)
     version: v.number(),
     isActive: v.boolean(),
+    boardType: v.optional(v.union(
+      v.literal('goals'),      // Classic goal-based vision board
+      v.literal('lifestyle'),  // Aspirational lifestyle board
+      v.literal('yearly'),     // Annual vision board
+      v.literal('domain'),     // Domain-specific (health, wealth, etc.)
+      v.literal('gratitude'),  // What you're grateful for + future
+      v.literal('custom'),     // Fully custom
+    )),
+    title: v.optional(v.string()),
+    description: v.optional(v.string()),
+    tags: v.optional(v.array(v.string())),
+    isFavorite: v.optional(v.boolean()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index('by_user', ['userId'])
     .index('by_user_active', ['userId', 'isActive']),
+
+  // Vision Board image bookmarks (saved from stock search for later use)
+  visionBoardImages: defineTable({
+    userId: v.id('users'),
+    imageUrl: v.string(),
+    thumbUrl: v.string(),
+    alt: v.string(),
+    photographer: v.optional(v.string()),
+    provider: v.string(),
+    attribution: v.string(),
+    domain: v.optional(v.string()),
+    isFavorite: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index('by_user', ['userId'])
+    .index('by_user_domain', ['userId', 'domain']),
 
   // ─────────────────────────────────────────────────────────────────────────────
   // WISHLIST ITEMS — Goal-oriented saving & purchase tracking (Wealth section)
@@ -1529,9 +1579,21 @@ export default defineSchema({
       v.literal('sport'),
       v.literal('other'),
     ),
+    name: v.optional(v.string()),
     durationMinutes: v.number(),
     notes: v.optional(v.string()),
     caloriesBurned: v.optional(v.number()),
+    exercises: v.optional(v.array(v.object({
+      name: v.string(),
+      sets: v.optional(v.number()),
+      reps: v.optional(v.number()),
+      weight: v.optional(v.number()),
+      weightUnit: v.optional(v.union(v.literal('kg'), v.literal('lb'))),
+      durationSeconds: v.optional(v.number()),
+      distance: v.optional(v.number()),
+      distanceUnit: v.optional(v.union(v.literal('km'), v.literal('mi'))),
+      notes: v.optional(v.string()),
+    }))),
     createdAt: v.number(),
   })
     .index('by_userId', ['userId'])

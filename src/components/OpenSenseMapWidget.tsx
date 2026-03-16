@@ -9,6 +9,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MapPin, Wind, Thermometer, Droplets, Eye, RefreshCw, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { getCachedLocation } from '@/lib/locationCache';
 
 interface SenseBox {
   _id: string;
@@ -218,10 +219,9 @@ export default function OpenSenseMapWidget({ className }: { className?: string }
   }, []);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      async pos => {
-        const loc: UserLocation = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-        // Try to reverse geocode city name
+    getCachedLocation().then(async cached => {
+      if (cached) {
+        const loc: UserLocation = { lat: cached.latitude, lon: cached.longitude };
         try {
           const r = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${loc.lat}&lon=${loc.lon}&format=json`);
           const d = await r.json();
@@ -229,15 +229,12 @@ export default function OpenSenseMapWidget({ className }: { className?: string }
         } catch {}
         setLocation(loc);
         fetchData(loc, radiusKm);
-      },
-      () => {
-        // Fallback: London
+      } else {
         const fallback = { lat: 51.505, lon: -0.09, city: 'London' };
         setLocation(fallback);
         fetchData(fallback, radiusKm);
-      },
-      { timeout: 5000 }
-    );
+      }
+    });
   }, [fetchData, radiusKm]);
 
   // Compute air quality summary

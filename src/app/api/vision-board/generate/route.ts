@@ -107,9 +107,10 @@ export async function POST(req: NextRequest) {
   // If wizard provided a style preset, it takes priority over direct payload stylePreset
   const stylePreset: VisionStylePreset = (payload.promptData?.stylePreset ?? payload.stylePreset) ?? 'pinterest-bold';
   const wizardData: WizardPromptData | null = payload.promptData ?? null;
+  const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // 2MB per image
   const customImages = Array.isArray(payload.customImages)
     ? payload.customImages
-        .filter((img) => typeof img === 'string' && img.startsWith('data:image/'))
+        .filter((img) => typeof img === 'string' && img.startsWith('data:image/') && img.length <= MAX_IMAGE_SIZE)
         .slice(0, 6)
     : [];
 
@@ -239,6 +240,10 @@ export async function POST(req: NextRequest) {
     await convex.mutation(api.visionBoards.save, {
       config: JSON.stringify(boardWithImages),
       version: boardWithImages.version,
+      boardType: (['goals', 'lifestyle', 'yearly', 'domain', 'gratitude', 'custom'] as const).includes(
+        (payload as Record<string, unknown>).boardType as 'goals'
+      ) ? (payload as Record<string, unknown>).boardType as 'goals' | 'lifestyle' | 'yearly' | 'domain' | 'gratitude' | 'custom' : 'goals',
+      title: boardWithImages.title,
     });
   } catch (err) {
     console.error('[VisionBoard] Failed to save board:', err);

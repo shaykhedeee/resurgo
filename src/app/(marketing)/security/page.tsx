@@ -81,7 +81,7 @@ const SECTIONS: SecuritySection[] = [
       { label: 'Vercel Edge Network', detail: 'Global CDN with automatic DDoS mitigation' },
       { label: 'Convex cloud', detail: 'SOC 2 Type II certified real-time database infrastructure' },
       { label: 'Zero-downtime deploys', detail: 'Atomic deployments — no maintenance windows' },
-      { label: 'Uptime SLA', detail: '99.9% uptime target with automated monitoring and alerting' },
+      { label: 'Availability SLA', detail: '99.9% availability target with automated monitoring and alerting' },
       { label: 'Disaster recovery', detail: 'Automated backups; point-in-time recovery available' },
     ],
   },

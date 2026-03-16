@@ -731,7 +731,7 @@ function LandingPageV2() {
         <TerminalDemo />
 
         {/* ────────────────── BRAND STORY ────────────────── */}
-        <section className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-4xl text-center">
             <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600">OUR_STORY</p>
             <h2 className="mt-3 font-pixel text-lg text-zinc-100 sm:text-xl">
@@ -784,7 +784,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
-        <section className="border-t-2 border-zinc-800 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600">THE_FRAMEWORK</p>
@@ -816,7 +816,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── HOW IT WORKS (TERMINAL PIPELINE) ────────────── */}
-        <section id="how-it-works" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="how-it-works" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">GETTING_STARTED</p>
@@ -897,7 +897,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── FEATURES (12 CORE) ────────────────── */}
-        <section id="features" className="border-t-2 border-zinc-800 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="features" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-7xl">
             <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
@@ -949,7 +949,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── AI COACHES ────────────────── */}
-        <section id="coaches" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="coaches" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">AI_COACHING_ENGINE</p>
@@ -1010,7 +1010,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── PRICING ────────────────── */}
-        <section id="access" className="border-t-2 border-zinc-800 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="access" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-5xl">
             <div className="mb-2 text-center">
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">ACCESS_TIERS</p>
@@ -1147,7 +1147,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── TESTIMONIALS ────────────────── */}
-        <section id="logs" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="logs" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-8 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
               <div>
@@ -1225,7 +1225,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── FAQ ────────────────── */}
-        <section id="faq" className="border-t-2 border-zinc-800 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="faq" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-4xl">
             <div className="text-center">
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-600">FAQ_DATABASE</p>
@@ -1301,7 +1301,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── GOAL TEMPLATES ────────────────── */}
-        <section id="templates" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="templates" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-600">GOAL_TEMPLATES</p>
@@ -1361,7 +1361,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── INTERACTIVE DEMO CAROUSEL ────────────────── */}
-        <section id="demo" className="border-t-2 border-zinc-800 bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section id="demo" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-600">INTERACTIVE_DEMO</p>
@@ -1398,7 +1398,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── COMPARISON MATRIX ────────────────── */}
-        <section className="border-t-2 border-zinc-800 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-600">COMPARISON_MATRIX</p>
@@ -1482,7 +1482,7 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────────── CTA TERMINAL ────────────────── */}
-        <section className="border-t-2 border-zinc-800 px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
+        <section className="px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-6xl border-2 border-zinc-800 bg-black shadow-[4px_4px_0px_rgba(0,0,0,0.7)]">
             <div className="flex items-center gap-2 border-b-2 border-zinc-800 px-5 py-2">
               <span className="h-2 w-2 bg-orange-600" />

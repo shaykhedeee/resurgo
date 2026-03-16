@@ -15,14 +15,17 @@ import { MorningCheckIn } from '@/components/MorningCheckIn';
 import { EveningDebrief } from '@/components/EveningDebrief';
 import AdaptiveDifficultyWidget from '@/components/AdaptiveDifficultyWidget';
 import WeatherWidget from '@/components/WeatherWidget';
+import OpenSenseMapWidget from '@/components/OpenSenseMapWidget';
 import DailyQuote from '@/components/DailyQuote';
 import WidgetGrid from '@/components/dashboard/WidgetGrid';
 import WidgetPanel from '@/components/dashboard/WidgetPanel';
 import { resolveLayout, WIDGET_REGISTRY, type LayoutEntry } from '@/lib/dashboard/widgetRegistry';
 import MobileDashboard from '@/components/MobileDashboard';
+import QuickAddPalette from '@/components/QuickAddPalette';
 import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
 import { Tutorial } from '@/components/Tutorial';
+import DesktopAIFab from '@/components/DesktopAIFab';
 import {
   Target,
   CheckCircle2,
@@ -84,6 +87,7 @@ export default function DashboardPage() {
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [quickAddTitle, setQuickAddTitle] = useState('');
   const [quickAddSaving, setQuickAddSaving] = useState(false);
+  const [paletteOpen, setPaletteOpen] = useState(false);
   const [showMorningCheckIn, setShowMorningCheckIn] = useState(false);
   const [showEveningDebrief, setShowEveningDebrief] = useState(false);
   const [checkInJustCompleted, setCheckInJustCompleted] = useState(false);
@@ -164,9 +168,21 @@ export default function DashboardPage() {
   }, [recentCheckIns]);
 
   useEffect(() => {
-    if (!localStorage.getItem('resurgo-tutorial-done')) {
+    if (!localStorage.getItem('resurgo-tutorial-completed')) {
       setShowTutorial(true);
     }
+  }, []);
+
+  // ⌘K / Ctrl+K opens the command palette
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setPaletteOpen((v) => !v);
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   if (!user) return null;
@@ -365,6 +381,17 @@ export default function DashboardPage() {
 
       {/* -- QUICK ADD STRIP -- */}
       <div className="mb-6 flex flex-wrap items-center gap-2">
+        {/* Command palette trigger – primary CTA */}
+        <button
+          onClick={() => setPaletteOpen(true)}
+          className="flex items-center gap-2 border border-orange-700 bg-orange-600 px-4 py-2 font-terminal text-xs font-bold text-black transition hover:bg-orange-500"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Quick Add
+          <kbd className="ml-1 hidden rounded border border-orange-800 bg-orange-700/80 px-1 py-0.5 font-terminal text-[0.6rem] text-orange-200 md:inline">⌘K</kbd>
+        </button>
+
+        {/* Inline task quick-add (kept for speed) */}
         {quickAddOpen ? (
           <form onSubmit={handleQuickAddTask} className="flex flex-1 items-center gap-2">
             <input
@@ -378,7 +405,7 @@ export default function DashboardPage() {
             <button
               type="submit"
               disabled={quickAddSaving || !quickAddTitle.trim()}
-              className="border border-orange-700 bg-orange-600 px-4 py-2 font-terminal text-xs text-white transition hover:bg-orange-500 disabled:opacity-50"
+              className="border border-orange-700 bg-orange-950/60 px-4 py-2 font-terminal text-xs text-orange-400 transition hover:bg-orange-950 disabled:opacity-50"
             >
               {quickAddSaving ? '...' : 'ADD'}
             </button>
@@ -425,6 +452,9 @@ export default function DashboardPage() {
           </>
         )}
       </div>
+
+      {/* Quick Add Command Palette */}
+      <QuickAddPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
 
       {/* -- DAILY CHECK-IN PROMPT -- */}
       {isMorning && !morningDone && !showMorningCheckIn && (
@@ -555,6 +585,11 @@ export default function DashboardPage() {
       {/* -- WEATHER WIDGET -- */}
       <div className="mb-6">
         <WeatherWidget />
+      </div>
+
+      {/* -- ENVIRONMENT MAP (OpenSenseMap + location) -- */}
+      <div className="mb-6">
+        <OpenSenseMapWidget />
       </div>
 
       {/* -- DAILY QUOTE -- */}
@@ -803,16 +838,8 @@ export default function DashboardPage() {
         </section>
       </div>
 
-      {/* Mobile FAB — desktop/tablet only (mobile uses MobileDashboard) */}
-      <div className="fixed bottom-6 right-6 md:hidden">
-        <Link
-          href="/tasks"
-          className="flex h-12 w-12 items-center justify-center border border-orange-600 bg-orange-600 text-black transition hover:bg-orange-500"
-          aria-label="Add task"
-        >
-          <Plus className="h-5 w-5" />
-        </Link>
-      </div>
+      {/* Desktop AI FAB — expandable quick actions */}
+      <DesktopAIFab />
     </div>
       </div>{/* /hidden md:block */}
       {showTutorial && (

@@ -533,12 +533,14 @@ Give 1-3 sentences of actionable advice. Use /help to show commands if the user 
 // POST handler — Entry point for Telegram webhook
 // ─────────────────────────────────────────────────────────────────────────────
 export async function POST(req: NextRequest) {
-  // 1. Verify the webhook secret if configured
-  if (WEBHOOK_SECRET) {
-    const incoming = req.headers.get('x-telegram-bot-api-secret-token');
-    if (incoming !== WEBHOOK_SECRET) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+  // 1. Verify the webhook secret — fail closed if not configured
+  if (!WEBHOOK_SECRET) {
+    console.error('[telegram/webhook] TELEGRAM_WEBHOOK_SECRET not configured');
+    return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
+  }
+  const incoming = req.headers.get('x-telegram-bot-api-secret-token') || '';
+  if (incoming.length !== WEBHOOK_SECRET.length || incoming !== WEBHOOK_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
   if (!BOT_TOKEN) {

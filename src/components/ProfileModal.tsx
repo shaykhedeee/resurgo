@@ -98,7 +98,7 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
             {/* Info */}
             <div>
               <h2 id="profile-title" className="text-2xl font-bold text-white">
-                {user.name || 'Ascender'}
+                {user.name || 'Riser'}
               </h2>
               <div className="flex items-center gap-2 mt-1">
                 <Crown className="w-4 h-4 text-gold-400" />

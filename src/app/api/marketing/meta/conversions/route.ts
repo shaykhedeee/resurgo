@@ -49,6 +49,11 @@ const ALLOWED_EVENTS = new Set([
 
 export async function POST(req: NextRequest) {
   try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const body = await req.json();
     const { event_name, params, fbc, fbp, source_url, email, user_id } = body;
 

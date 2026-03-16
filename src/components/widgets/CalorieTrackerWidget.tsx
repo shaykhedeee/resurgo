@@ -135,7 +135,7 @@ export default function CalorieTrackerWidget() {
         </div>
 
         <Link
-          href="/nutrition"
+          href="/food"
           className="flex items-center justify-center gap-1.5 border border-zinc-800 bg-zinc-900 px-3 py-1.5 font-terminal text-xs text-zinc-400 transition hover:border-amber-700 hover:text-amber-400"
         >
           <Plus className="h-3 w-3" /> Log Custom Meal

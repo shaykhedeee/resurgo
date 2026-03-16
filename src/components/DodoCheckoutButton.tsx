@@ -15,6 +15,7 @@ interface DodoCheckoutButtonProps {
   label: string;
   className?: string;
   returnUrl?: string;
+  discountCode?: string;
 }
 
 export default function DodoCheckoutButton({
@@ -22,6 +23,7 @@ export default function DodoCheckoutButton({
   label,
   className = '',
   returnUrl,
+  discountCode,
 }: DodoCheckoutButtonProps) {
   const [loading, setLoading] = useState(false);
   const createCheckout = useAction(api.payments.createCheckout);
@@ -34,6 +36,7 @@ export default function DodoCheckoutButton({
       const result = await createCheckout({
         productId,
         returnUrl,
+        ...(discountCode ? { discountCode } : {}),
       });
       // Redirect to Dodo-hosted checkout page
       window.location.href = result.checkout_url;
@@ -41,7 +44,7 @@ export default function DodoCheckoutButton({
       console.error('[DodoCheckout] Failed to create session:', err);
       setLoading(false);
     }
-  }, [createCheckout, productId, returnUrl, label]);
+  }, [createCheckout, productId, returnUrl, label, discountCode]);
 
   return (
     <button onClick={handleClick} disabled={loading} className={className}>

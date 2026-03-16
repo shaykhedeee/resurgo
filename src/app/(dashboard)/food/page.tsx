@@ -7,11 +7,36 @@
 
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { useState, type FormEvent } from 'react';
+import { useState, useEffect, useRef, type FormEvent } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { Droplets, BarChart3, Utensils, Plus, Leaf } from 'lucide-react';
+import { Droplets, BarChart3, Utensils, Plus, Leaf, Search, ChefHat, X, Loader2 } from 'lucide-react';
 
-type Tab = 'meals' | 'water' | 'calories' | 'summary';
+type Tab = 'meals' | 'water' | 'calories' | 'summary' | 'recipes';
+
+interface FoodItem {
+  id: string;
+  name: string;
+  brand?: string;
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+  serving: string;
+  source: string;
+}
+
+interface Ingredient { name: string; measure: string; }
+interface Recipe {
+  id: string;
+  name: string;
+  category?: string;
+  cuisine?: string;
+  thumbnail?: string;
+  ingredients: Ingredient[];
+  instructions?: string;
+  youtubeUrl?: string;
+}
 
 interface MealEntry {
   name: string;
@@ -48,6 +73,49 @@ export default function FoodPage() {
   // Water form state
   const [waterMl, setWaterMl] = useState('');
   const [waterSaving, setWaterSaving] = useState(false);
+
+  // Food search state
+  const [foodQuery, setFoodQuery] = useState('');
+  const [foodResults, setFoodResults] = useState<FoodItem[]>([]);
+  const [foodSearching, setFoodSearching] = useState(false);
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Recipe search state
+  const [recipeQuery, setRecipeQuery] = useState('');
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipeSearching, setRecipeSearching] = useState(false);
+  const [expandedRecipe, setExpandedRecipe] = useState<string | null>(null);
+
+  // Debounced food search
+  useEffect(() => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    if (!foodQuery.trim() || foodQuery.trim().length < 2) { setFoodResults([]); return; }
+    searchTimerRef.current = setTimeout(async () => {
+      setFoodSearching(true);
+      try {
+        const res = await fetch(`/api/food/search?q=${encodeURIComponent(foodQuery.trim())}`);
+        if (res.ok) {
+          const data = await res.json();
+          setFoodResults(data.results ?? []);
+        }
+      } catch { /* ignore */ }
+      finally { setFoodSearching(false); }
+    }, 500);
+    return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current); };
+  }, [foodQuery]);
+
+  const handleRecipeSearch = async () => {
+    if (!recipeQuery.trim() || recipeSearching) return;
+    setRecipeSearching(true);
+    try {
+      const res = await fetch(`/api/food/recipes?q=${encodeURIComponent(recipeQuery.trim())}`);
+      if (res.ok) {
+        const data = await res.json();
+        setRecipes(data.results ?? []);
+      }
+    } catch { /* ignore */ }
+    finally { setRecipeSearching(false); }
+  };
 
   const today = new Date().toISOString().split('T')[0];
 
@@ -138,6 +206,7 @@ export default function FoodPage() {
     { id: 'water',    label: 'WATER',   icon: Droplets   },
     { id: 'calories', label: 'MACROS',  icon: BarChart3  },
     { id: 'summary',  label: 'SUMMARY', icon: Leaf       },
+    { id: 'recipes',  label: 'RECIPES', icon: ChefHat    },
   ];
 
   const MacroBar = ({ label, value, goal, pct, color }: { label: string; value: number; goal: number; pct: number; color: string }) => (
@@ -198,7 +267,65 @@ export default function FoodPage() {
         {/* MEALS TAB */}
         {tab === 'meals' && (
           <div className="space-y-4">
-            {/* Quick log presets */}
+            {/* Live food search */}
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">FOOD_SEARCH</span>
+                <span className="font-mono text-xs text-zinc-600">OpenFoodFacts · 2M+ items</span>
+              </div>
+              <div className="p-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
+                  <input
+                    value={foodQuery}
+                    onChange={(e) => setFoodQuery(e.target.value)}
+                    placeholder="Search foods — e.g. 'chicken breast', 'banana'..."
+                    className="h-9 w-full border border-zinc-800 bg-black pl-9 pr-9 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-orange-800 focus:outline-none"
+                  />
+                  {foodSearching && <Loader2 className="absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-orange-500" />}
+                  {!foodSearching && foodQuery && (
+                    <button onClick={() => { setFoodQuery(''); setFoodResults([]); }} className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-600 hover:text-zinc-300">
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+                {foodResults.length > 0 && (
+                  <div className="mt-2 max-h-60 overflow-y-auto border border-zinc-800 bg-black">
+                    {foodResults.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setMealName(item.name + (item.brand ? ` (${item.brand})` : ''));
+                          setMealCals(String(item.calories));
+                          setMealProtein(String(item.protein));
+                          setMealCarbs(String(item.carbs));
+                          setMealFat(String(item.fat));
+                          setFoodQuery('');
+                          setFoodResults([]);
+                          setTab('meals');
+                        }}
+                        className="w-full border-b border-zinc-900 px-3 py-2.5 text-left transition last:border-0 hover:bg-zinc-900"
+                      >
+                        <div className="flex items-start justify-between gap-2">
+                          <div className="min-w-0">
+                            <p className="truncate font-mono text-xs font-bold text-zinc-200">{item.name}</p>
+                            {item.brand && <p className="font-mono text-xs text-zinc-600">{item.brand}</p>}
+                          </div>
+                          <div className="shrink-0 text-right">
+                            <p className="font-mono text-xs text-amber-400">{item.calories} kcal</p>
+                            <p className="font-mono text-xs text-zinc-600">P:{item.protein}g C:{item.carbs}g F:{item.fat}g</p>
+                          </div>
+                        </div>
+                        <p className="mt-0.5 font-mono text-xs text-zinc-700">per {item.serving} · click to fill form</p>
+                      </button>
+                    ))}
+                  </div>
+                )}
+                {foodQuery.trim().length >= 2 && !foodSearching && foodResults.length === 0 && (
+                  <p className="mt-2 font-mono text-xs text-zinc-600">No results for &ldquo;{foodQuery}&rdquo; — try a shorter term</p>
+                )}
+              </div>
+            </div>
             <div className="border border-zinc-900 bg-zinc-950">
               <div className="border-b border-zinc-900 px-4 py-2.5">
                 <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">QUICK_ADD</span>
@@ -521,6 +648,111 @@ export default function FoodPage() {
                 )}
               </ul>
             </div>
+          </div>
+        )}
+
+        {/* RECIPES TAB */}
+        {tab === 'recipes' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">RECIPE_DISCOVERY</span>
+                <span className="font-mono text-xs text-zinc-600">TheMealDB · free</span>
+              </div>
+              <div className="p-3">
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-zinc-500" />
+                    <input
+                      value={recipeQuery}
+                      onChange={(e) => setRecipeQuery(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleRecipeSearch()}
+                      placeholder="Search recipes — e.g. 'chicken', 'pasta', 'beef stew'..."
+                      className="h-9 w-full border border-zinc-800 bg-black pl-9 font-mono text-xs text-zinc-200 placeholder:text-zinc-600 focus:border-orange-800 focus:outline-none"
+                    />
+                  </div>
+                  <button
+                    onClick={handleRecipeSearch}
+                    disabled={recipeSearching || !recipeQuery.trim()}
+                    className="border border-orange-800 bg-orange-950/30 px-4 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40"
+                  >
+                    {recipeSearching ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : '[SEARCH]'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {recipes.length === 0 && !recipeSearching && (
+              <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
+                <ChefHat className="mx-auto mb-3 h-8 w-8 text-zinc-700" />
+                <p className="font-mono text-xs text-zinc-500">Search for recipes above to discover meal ideas</p>
+                <div className="mt-4 flex flex-wrap justify-center gap-2">
+                  {['chicken', 'beef', 'pasta', 'salmon', 'eggs', 'salad'].map((s) => (
+                    <button key={s} onClick={() => { setRecipeQuery(s); }}
+                      className="border border-zinc-800 bg-zinc-900 px-3 py-1 font-mono text-xs text-zinc-400 hover:border-orange-800 hover:text-orange-400 transition">
+                      {s}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {recipes.length > 0 && (
+              <div className="grid gap-3 md:grid-cols-2">
+                {recipes.map((recipe) => (
+                  <div key={recipe.id} className="border border-zinc-900 bg-zinc-950">
+                    {recipe.thumbnail && (
+                      <Image src={recipe.thumbnail} alt={recipe.name} width={400} height={176}
+                        className="h-44 w-full object-cover border-b border-zinc-900" />
+                    )}
+                    <div className="p-3">
+                      <div className="flex items-start justify-between gap-2">
+                        <div>
+                          <p className="font-mono text-sm font-bold text-zinc-100">{recipe.name}</p>
+                          <div className="mt-0.5 flex gap-2">
+                            {recipe.category && <span className="font-mono text-xs text-zinc-500">{recipe.category}</span>}
+                            {recipe.cuisine && <span className="font-mono text-xs text-zinc-600">· {recipe.cuisine}</span>}
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setExpandedRecipe(expandedRecipe === recipe.id ? null : recipe.id)}
+                          className="shrink-0 border border-zinc-800 px-2 py-1 font-mono text-xs text-zinc-400 hover:border-orange-800 hover:text-orange-400 transition">
+                          {expandedRecipe === recipe.id ? '[HIDE]' : '[VIEW]'}
+                        </button>
+                      </div>
+
+                      {expandedRecipe === recipe.id && (
+                        <div className="mt-3 space-y-3">
+                          <div>
+                            <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-500">INGREDIENTS</p>
+                            <div className="grid grid-cols-2 gap-1">
+                              {recipe.ingredients.map((ing, i) => (
+                                <div key={i} className="flex gap-1 font-mono text-xs">
+                                  <span className="text-orange-600">›</span>
+                                  <span className="text-zinc-400">{ing.measure} {ing.name}</span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                          {recipe.instructions && (
+                            <div>
+                              <p className="mb-1.5 font-mono text-xs tracking-widest text-zinc-500">INSTRUCTIONS</p>
+                              <p className="font-mono text-xs leading-relaxed text-zinc-400 line-clamp-6">{recipe.instructions}</p>
+                            </div>
+                          )}
+                          {recipe.youtubeUrl && (
+                            <a href={recipe.youtubeUrl} target="_blank" rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 border border-red-900 bg-red-950/20 px-3 py-1.5 font-mono text-xs text-red-400 hover:bg-red-950/40 transition">
+                              ▶ Watch Tutorial
+                            </a>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>

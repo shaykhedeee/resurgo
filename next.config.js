@@ -10,6 +10,9 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'img.clerk.com' },
+      { protocol: 'https', hostname: 'www.themealdb.com' },
+      { protocol: 'https', hostname: 'images.openfoodfacts.org' },
+      { protocol: 'https', hostname: 'static.openfoodfacts.org' },
     ],
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
@@ -78,9 +81,6 @@ const nextConfig = {
   // Skip type checking in build (handled by IDE/CI separately)
   typescript: {
     ignoreBuildErrors: true,
-  },
-  eslint: {
-    ignoreDuringBuilds: true,
   },
 
   // SEO-friendly redirects

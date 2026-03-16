@@ -171,10 +171,23 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
     adaptiveInstructions,
   });
 
-  // ── Build message array ───────────────────────────────────────────────────
+  // ── Build message array (sanitized) ────────────────────────────────────────
+  const ALLOWED_HISTORY_ROLES = new Set(['user', 'assistant']);
+  const sanitizedHistory = (Array.isArray(conversationHistory) ? conversationHistory : [])
+    .slice(-10)
+    .filter((m): m is { role: 'user' | 'assistant'; content: string } =>
+      typeof m === 'object' && m !== null &&
+      typeof m.content === 'string' && m.content.length <= 4000 &&
+      ALLOWED_HISTORY_ROLES.has(m.role)
+    )
+    .map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content.slice(0, 4000) }));
+
+  const validConfirmActions = (Array.isArray(confirmActions) ? confirmActions : [])
+    .filter((a): a is number => typeof a === 'number' && Number.isFinite(a));
+
   const messages: { role: 'user' | 'assistant' | 'system'; content: string }[] = [
     { role: 'system', content: systemPrompt },
-    ...conversationHistory.slice(-10), // last 10 turns for context
+    ...sanitizedHistory,
     { role: 'user', content: message },
   ];
 
@@ -206,7 +219,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
   // ── Execute actions (skip those needing confirmation) ─────────────────────
   const confirmSet = new Set(coachResponse.requiresConfirmation ?? []);
   // Also execute any previously-confirmed suggestions from this request
-  for (const idx of confirmActions) confirmSet.delete(idx);
+  for (const idx of validConfirmActions) confirmSet.delete(idx);
 
   const actionResults = await executeActions(clerkToken, coachResponse, confirmSet)
     .catch((err) => {

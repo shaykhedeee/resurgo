@@ -232,7 +232,7 @@ export default function CalendarPage() {
             {/* Legend */}
             <div className="flex items-center gap-4">
               <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
-                <div className="h-1.5 w-1.5 bg-green-500" /> NODES_COMPLETED
+                <div className="h-1.5 w-1.5 bg-green-500" /> HABITS_COMPLETED
               </span>
               <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-cyan-500" /> TASKS_COMPLETED

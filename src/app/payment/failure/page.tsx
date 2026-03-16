@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { sanitizePaymentParams } from '@/lib/payment-params';
 
 interface PageProps {
-  searchParams?: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-export default function PaymentFailurePage({ searchParams = {} }: PageProps) {
-  const params = sanitizePaymentParams(searchParams);
+export default async function PaymentFailurePage({ searchParams }: PageProps) {
+  const params = sanitizePaymentParams(await searchParams);
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">

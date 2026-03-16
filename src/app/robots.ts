@@ -39,27 +39,27 @@ export default function robots(): MetadataRoute.Robots {
       },
       {
         userAgent: 'GPTBot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt', '/compare', '/faq', '/templates', '/use-cases', '/tools', '/learn'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       {
         userAgent: 'PerplexityBot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt', '/compare', '/faq', '/templates', '/use-cases', '/tools', '/learn'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       {
         userAgent: 'ClaudeBot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/blog/rss.xml', '/llms.txt', '/compare', '/faq', '/templates', '/use-cases', '/tools', '/learn'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       {
         userAgent: 'Applebot',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/compare', '/faq', '/templates', '/use-cases', '/tools', '/learn'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       {
         userAgent: 'Google-Extended',
-        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics'],
+        allow: ['/', '/guides', '/help', '/features', '/pricing', '/about', '/blog', '/blog/topics', '/compare', '/faq', '/templates', '/use-cases', '/tools', '/learn'],
         disallow: ['/api/', '/(dashboard)/', '/onboarding', '/sign-in', '/sign-up', '/callback'],
       },
       // Block aggressive crawlers

@@ -13,16 +13,28 @@
 
 :root {
   /* ── Rust / Orange accent (only for charged/active states) ── */
+  /* Canonical --resurgo-* vars + legacy --ascend-* aliases */
+  --resurgo-50: #FFF7ED;
+  --resurgo-100: #FFEDD5;
+  --resurgo-200: #FED7AA;
+  --resurgo-300: #FDBA74;
+  --resurgo-400: #FB923C;
+  --resurgo-500: #EA580C;   /* primary rust – use sparingly */
+  --resurgo-600: #C2410C;
+  --resurgo-700: #9A3412;
+  --resurgo-primary: #EA580C;
+  --resurgo-primary-light: #FB923C;
+  --resurgo-primary-dark: #C2410C;
+
+  /* Legacy aliases (backward compat — do not remove yet) */
   --ascend-50: #FFF7ED;
   --ascend-100: #FFEDD5;
   --ascend-200: #FED7AA;
   --ascend-300: #FDBA74;
   --ascend-400: #FB923C;
-  --ascend-500: #EA580C;   /* primary rust – use sparingly */
+  --ascend-500: #EA580C;
   --ascend-600: #C2410C;
   --ascend-700: #9A3412;
-
-  /* Legacy compatibility */
   --ascend-primary: #EA580C;
   --ascend-primary-light: #FB923C;
   --ascend-primary-dark: #C2410C;
@@ -482,7 +494,7 @@ h6 { font-size: 1rem; }
   }
 
   .surface-kicker {
-    @apply font-pixel text-[0.45rem] uppercase tracking-[0.22em] text-zinc-500;
+    @apply font-pixel text-[0.45rem] uppercase tracking-[0.22em] text-zinc-400;
   }
 
   .surface-kicker-accent {
@@ -494,11 +506,11 @@ h6 { font-size: 1rem; }
   }
 
   .surface-subtitle {
-    @apply font-terminal text-sm leading-relaxed text-zinc-400;
+    @apply font-terminal text-sm leading-relaxed text-zinc-300;
   }
 
   .surface-chip {
-    @apply inline-flex items-center gap-1.5 border border-zinc-800 bg-black/70 px-2.5 py-1 font-pixel text-[0.38rem] uppercase tracking-[0.18em] text-zinc-400;
+    @apply inline-flex items-center gap-1.5 border border-zinc-800 bg-black/70 px-2.5 py-1 font-pixel text-[0.38rem] uppercase tracking-[0.18em] text-zinc-300;
   }
 
   .surface-chip-accent {
@@ -510,7 +522,7 @@ h6 { font-size: 1rem; }
   }
 
   .metric-label {
-    @apply font-pixel text-[0.38rem] uppercase tracking-[0.2em] text-zinc-500;
+    @apply font-pixel text-[0.38rem] uppercase tracking-[0.2em] text-zinc-400;
   }
 
   .metric-value {

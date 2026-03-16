@@ -137,7 +137,7 @@ export default function HabitsPage() {
               <h1 className="surface-title mt-2">Habits</h1>
               <p className="surface-subtitle mt-2 max-w-2xl">Build identity-driven routines, keep the streak logic visible, and make every repeat feel like a satisfying little machine click.</p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="surface-chip">{activeCount} active nodes</span>
+                <span className="surface-chip">{activeCount} active rituals</span>
                 <span className="surface-chip">{highestStreak} day peak</span>
                 <span className="surface-chip">{withIdentityCount} identity linked</span>
               </div>
@@ -147,14 +147,14 @@ export default function HabitsPage() {
                   className="action-tile text-orange-300 hover:text-orange-200"
                 >
                   <PixelIcon name="sparkles" size={14} className="text-orange-400" />
-                  <span className="font-terminal text-sm">Initialize node</span>
+                  <span className="font-terminal text-sm">Start ritual</span>
                 </button>
               </div>
             </div>
             <div className="surface-panel-muted p-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <p className="surface-kicker-accent">Featured node</p>
+                  <p className="surface-kicker-accent">Spotlight</p>
                   <p className="mt-2 font-terminal text-lg font-semibold text-zinc-100">{featuredHabit?.title ?? 'Create the habit you want to become known for'}</p>
                   <p className="mt-2 font-terminal text-sm text-zinc-400">{featuredHabit ? `${featuredHabit.streakCurrent ?? 0} day streak • ${featuredHabit.frequency.replace('_', ' ')}` : 'Small loops build the system faster than heroic bursts.'}</p>
                 </div>
@@ -163,9 +163,9 @@ export default function HabitsPage() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-px border-t border-zinc-900 sm:grid-cols-4">
-            <NodeMetric label="ACTIVE_NODES" value={String(activeCount)} />
-            <NodeMetric label="TOTAL_NODES" value={String(totalCount)} />
-            <NodeMetric label="PEAK_UPTIME" value={`${highestStreak}D`} />
+            <NodeMetric label="ACTIVE_RITUALS" value={String(activeCount)} />
+            <NodeMetric label="TOTAL_RITUALS" value={String(totalCount)} />
+            <NodeMetric label="BEST_STREAK" value={`${highestStreak}D`} />
             <NodeMetric label="ID_LINKED" value={String(withIdentityCount)} />
           </div>
         </div>
@@ -182,7 +182,7 @@ export default function HabitsPage() {
                   : 'border-transparent bg-transparent text-zinc-400 hover:text-zinc-300'
               }`}
             >
-              {t === 'active' ? `ACTIVE_NODES [${activeCount}]` : `ALL_NODES [${totalCount}]`}
+              {t === 'active' ? `ACTIVE_RITUALS [${activeCount}]` : `ALL_RITUALS [${totalCount}]`}
             </button>
           ))}
         </div>
@@ -196,7 +196,7 @@ export default function HabitsPage() {
               onClick={() => setShowCreate(true)}
               className="mt-4 border border-zinc-800 bg-zinc-900 px-4 py-2 font-mono text-xs tracking-widest text-zinc-500 transition hover:border-orange-900 hover:text-orange-500"
             >
-              <Plus className="mr-1 inline h-3 w-3" /> INIT_NODE
+              <Plus className="mr-1 inline h-3 w-3" /> NEW_RITUAL
             </button>
           </div>
         ) : (
@@ -240,8 +240,8 @@ export default function HabitsPage() {
 
                   <div className="flex items-center gap-3">
                     <div className="text-right">
-                      <p className="font-mono text-base font-bold text-orange-500">UPTIME_{habit.streakCurrent}D</p>
-                      <p className="font-mono text-xs text-zinc-400">PEAK_{habit.streakLongest}D</p>
+                      <p className="font-mono text-base font-bold text-orange-500">STREAK_{habit.streakCurrent}D</p>
+                      <p className="font-mono text-xs text-zinc-400">BEST_{habit.streakLongest}D</p>
                     </div>
                     <button
                       onClick={() => handleSkip(habit._id)}
@@ -277,7 +277,7 @@ export default function HabitsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
           <div className="w-full max-w-lg border border-zinc-800 bg-zinc-950 shadow-2xl">
             <div className="flex items-center justify-between border-b border-zinc-900 px-5 py-3">
-              <span className="font-mono text-xs tracking-widest text-orange-500">INIT_NODE :: CREATE_BEHAVIORAL_ROUTINE</span>
+              <span className="font-mono text-xs tracking-widest text-orange-500">NEW_RITUAL :: CREATE_BEHAVIORAL_ROUTINE</span>
               <button onClick={() => setShowCreate(false)} className="text-zinc-400 transition hover:text-zinc-300">
                 <X className="h-4 w-4" />
               </button>
@@ -289,7 +289,7 @@ export default function HabitsPage() {
                 <p className="mt-2 font-terminal text-sm text-zinc-300">Name the behavior so it is easy to repeat tomorrow. Dramatic reinventions can wait outside.</p>
               </div>
               <div>
-                <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">NODE_TITLE *</label>
+                <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">RITUAL_NAME *</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
@@ -335,7 +335,7 @@ export default function HabitsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">NODE_TYPE</label>
+                  <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">RITUAL_TYPE</label>
                   <select value={habitType} onChange={(e) => setHabitType(e.target.value as typeof HABIT_TYPES[number])} className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 focus:border-orange-800 focus:outline-none">
                     {HABIT_TYPES.map((h) => <option key={h} value={h}>{h.replace('_', '/')}</option>)}
                   </select>
@@ -365,7 +365,7 @@ export default function HabitsPage() {
                   [CANCEL]
                 </button>
                 <button type="submit" disabled={creating || !title.trim()} className="flex-1 border border-orange-800 bg-orange-950/40 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/70 disabled:opacity-40">
-                  {creating ? 'INITIALIZING...' : '[DEPLOY_NODE]'}
+                  {creating ? 'CREATING...' : '[LAUNCH_RITUAL]'}
                 </button>
               </div>
             </form>
@@ -378,9 +378,9 @@ export default function HabitsPage() {
 
 function NodeMetric({ label, value }: { label: string; value: string }) {
   const iconMap: Record<string, Parameters<typeof PixelIcon>[0]['name']> = {
-    ACTIVE_NODES: 'habits',
-    TOTAL_NODES: 'grid',
-    PEAK_UPTIME: 'fire',
+    ACTIVE_RITUALS: 'habits',
+    TOTAL_RITUALS: 'grid',
+    BEST_STREAK: 'fire',
     ID_LINKED: 'loop',
   };
   return (

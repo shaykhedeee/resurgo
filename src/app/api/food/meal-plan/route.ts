@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 const GROQ_KEY = process.env.GROQ_API_KEY || '';
 const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
@@ -121,7 +122,10 @@ Be specific, motivating, and practical. No fluff.`,
 }
 
 export async function POST(request: NextRequest) {
-  // Auth is optional for demo; Convex enforces it on save operations
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
   const body = await request.json();
   const {
     goal = 'maintain',

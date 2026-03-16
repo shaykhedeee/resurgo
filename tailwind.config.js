@@ -9,13 +9,27 @@ module.exports = {
     extend: {
       colors: {
         // Primary brand – Pixel Terminal: Rust × Black × Matrix
-        ascend: {
+        // `resurgo` is the canonical key; `ascend` kept for backward compat
+        resurgo: {
           50: '#FFF7ED',
           100: '#FFEDD5',
           200: '#FED7AA',
           300: '#FDBA74',
           400: '#FB923C',
           500: '#EA580C', // primary CTA rust
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12',
+          950: '#431407',
+        },
+        ascend: {
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#EA580C',
           600: '#EA580C',
           700: '#C2410C',
           800: '#9A3412',

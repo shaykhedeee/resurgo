@@ -51,11 +51,10 @@ const FEATURES = [
 ];
 
 
-// APK download URL — direct download from resurgo.life
-// Falls back to GitHub Releases if self-hosted APK isn't uploaded yet
-const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
-// GitHub Releases fallback — used in FAQ reference and as backup source
-const _APK_GITHUB_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
+// APK download URL — points to GitHub Releases until self-hosted APK is uploaded
+// TODO: after uploading APK to /public/downloads/resurgo-latest.apk, change back to:
+//   'https://resurgo.life/downloads/resurgo-latest.apk'
+const APK_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
 const APK_VERSION = 'v1.0.0';
 
 // ─── Shared step list ─────────────────────────────────────────────────────────
