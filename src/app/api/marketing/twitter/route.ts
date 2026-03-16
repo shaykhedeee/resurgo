@@ -12,7 +12,7 @@ const TWITTER_BEARER_TOKEN = process.env.TWITTER_BEARER_TOKEN || '';
 const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY || '';
 const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET || '';
 const TWITTER_OAUTH2_CLIENT_ID = process.env.TWITTER_OAUTH2_CLIENT_ID || '';
-const TWITTER_OAUTH2_CLIENT_SECRET = process.env.TWITTER_OAUTH2_CLIENT_SECRET || '';
+const _TWITTER_OAUTH2_CLIENT_SECRET = process.env.TWITTER_OAUTH2_CLIENT_SECRET || '';
 const TWITTER_ACCESS_TOKEN = process.env.TWITTER_ACCESS_TOKEN || '';
 const TWITTER_ACCESS_TOKEN_SECRET = process.env.TWITTER_ACCESS_TOKEN_SECRET || '';
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
@@ -197,7 +197,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { action, text, templateType, templateIndex, replyToId, searchQuery, threadTweets, dryRun } = body;
+  const { action, text, templateType, templateIndex, replyToId, searchQuery, threadTweets, dryRun, replacements } = body;
 
   switch (action) {
     // ── Post a single tweet ──────────────────────────────────────────
@@ -213,12 +213,27 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      // Apply caller-supplied replacements to fill {placeholder} tokens
+      if (tweetText && replacements && typeof replacements === 'object') {
+        for (const [key, value] of Object.entries(replacements)) {
+          tweetText = tweetText.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value));
+        }
+      }
+
       if (!tweetText) {
         return NextResponse.json({ error: 'No text or valid templateType provided' }, { status: 400 });
       }
 
+      // Block posting if template placeholders remain unfilled
+      const unfilledPlaceholders = tweetText.match(/\{[a-zA-Z_]+\}/g);
+      if (unfilledPlaceholders && !dryRun) {
+        return NextResponse.json({
+          error: `Template contains unfilled placeholders: ${unfilledPlaceholders.join(', ')}. Pass replacements:{day:"42",update:"..."} to fill them.`,
+        }, { status: 400 });
+      }
+
       if (dryRun) {
-        return NextResponse.json({ dryRun: true, wouldPost: tweetText, charCount: tweetText.length });
+        return NextResponse.json({ dryRun: true, wouldPost: tweetText, charCount: tweetText.length, unfilledPlaceholders: unfilledPlaceholders ?? [] });
       }
 
       const result = await postTweet(tweetText, replyToId);

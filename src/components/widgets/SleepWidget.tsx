@@ -27,10 +27,6 @@ function formatDuration(mins: number): string {
   return `${h}h ${m}m`;
 }
 
-function todayDate(): string {
-  return new Date().toISOString().slice(0, 10);
-}
-
 function yesterdayDate(): string {
   const d = new Date();
   d.setDate(d.getDate() - 1);

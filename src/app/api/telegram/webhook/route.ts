@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
-import { Bot } from 'grammy';
+import { Bot, Context } from 'grammy';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../../../convex/_generated/api';
 // import type { Id } from '../../../../../convex/_generated/dataModel';
@@ -23,9 +23,9 @@ const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 // ─── Telegram Bot ─────────────────────────────────────────────────────────────
 // The Bot object is created on first request (lazy initialization)
 // This prevents initialization errors during build when BOT_TOKEN is not available
-let bot: Bot<any> | null = null;
+let bot: Bot<Context> | null = null;
 
-function initializeBot(): Bot<any> | null {
+function initializeBot(): Bot<Context> | null {
   if (!BOT_TOKEN || !bot) {
     if (BOT_TOKEN) {
       bot = new Bot(BOT_TOKEN);
@@ -95,7 +95,7 @@ function progressBar(value: number, length = 10): string {
 
 // ─── Command Registration ─────────────────────────────────────────────────────
 /** Register all bot commands - called once on first request */
-function registerCommands(botInstance: Bot<any>) {
+function registerCommands(botInstance: Bot<Context>) {
 // ── Command: /start ───────────────────────────────────────────────────────────
 botInstance.command('start', async (ctx) => {
   const chatId = ctx.chat.id.toString();

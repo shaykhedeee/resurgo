@@ -3,7 +3,7 @@
 // Scheduled reminders from Telegram /remind command and the app
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { mutation, query } from './_generated/server';
+import { mutation, query, internalMutation, internalQuery } from './_generated/server';
 import { v } from 'convex/values';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -35,7 +35,7 @@ export const createReminder = mutation({
 // ─────────────────────────────────────────────────────────────────────────────
 // getPendingReminders — Called by the cron to find due reminders
 // ─────────────────────────────────────────────────────────────────────────────
-export const getPendingReminders = query({
+export const getPendingReminders = internalQuery({
   args: { beforeTimestamp: v.number() },
   returns: v.array(v.object({
     _id: v.id('reminders'),
@@ -68,7 +68,7 @@ export const getPendingReminders = query({
 // ─────────────────────────────────────────────────────────────────────────────
 // markReminderSent — Mark a reminder as sent after delivery
 // ─────────────────────────────────────────────────────────────────────────────
-export const markReminderSent = mutation({
+export const markReminderSent = internalMutation({
   args: { reminderId: v.id('reminders') },
   returns: v.null(),
   handler: async (ctx, args) => {

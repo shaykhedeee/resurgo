@@ -4,7 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { internalAction } from './_generated/server';
-import { api } from './_generated/api';
+import { api, internal } from './_generated/api';
 import { v } from 'convex/values';
 
 const TELEGRAM_FOOTER = '\n\n📊 Organized by RESURGO.life — AI life management';
@@ -92,7 +92,7 @@ export const deliverDueReminders = internalAction({
     if (!token) return null;
 
     const now = Date.now();
-    const dueReminders = await ctx.runQuery(api.reminders.getPendingReminders, {
+    const dueReminders = await ctx.runQuery(internal.reminders.getPendingReminders, {
       beforeTimestamp: now,
     });
 
@@ -102,7 +102,7 @@ export const deliverDueReminders = internalAction({
           const text = `⏰ <b>Reminder</b>\n\n${reminder.text}${TELEGRAM_FOOTER}`;
           await sendTelegramMessage(token, reminder.telegramChatId, text, 'HTML');
         }
-        await ctx.runMutation(api.reminders.markReminderSent, { reminderId: reminder._id });
+        await ctx.runMutation(internal.reminders.markReminderSent, { reminderId: reminder._id });
       } catch (err) {
         console.error(`[telegramActions] Failed to deliver reminder ${reminder._id}:`, err);
       }

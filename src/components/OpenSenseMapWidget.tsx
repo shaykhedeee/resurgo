@@ -7,7 +7,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react';
-import { MapPin, Wind, Thermometer, Droplets, Eye, RefreshCw, Loader2 } from 'lucide-react';
+import { MapPin, Wind, Thermometer, Droplets, RefreshCw, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { getCachedLocation } from '@/lib/locationCache';
 

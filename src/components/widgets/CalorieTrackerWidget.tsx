@@ -8,7 +8,7 @@
 import { useState, useCallback } from 'react';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
-import { Flame, Plus, UtensilsCrossed, ArrowRight } from 'lucide-react';
+import { Plus, UtensilsCrossed, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 const QUICK_MEALS = [
@@ -24,13 +24,13 @@ export default function CalorieTrackerWidget() {
   const logMeal = useMutation(api.nutrition.logMeal);
   const [logging, setLogging] = useState(false);
 
-  const totalCal = (todayNutrition as any)?.totalCalories ?? 0;
-  const totalProtein = (todayNutrition as any)?.totalProtein ?? 0;
-  const totalCarbs = (todayNutrition as any)?.totalCarbs ?? 0;
-  const totalFat = (todayNutrition as any)?.totalFat ?? 0;
-  const calGoal = (todayNutrition as any)?.calorieGoal ?? 2000;
+  const totalCal = todayNutrition?.totalCalories ?? 0;
+  const totalProtein = todayNutrition?.totalProtein ?? 0;
+  const totalCarbs = todayNutrition?.totalCarbs ?? 0;
+  const totalFat = todayNutrition?.totalFat ?? 0;
+  const calGoal = todayNutrition?.calorieGoal ?? 2000;
   const calPercent = Math.min(100, Math.round((totalCal / calGoal) * 100));
-  const mealsCount = (todayNutrition as any)?.meals?.length ?? 0;
+  const mealsCount = todayNutrition?.meals?.length ?? 0;
 
   const handleQuickLog = useCallback(async (meal: typeof QUICK_MEALS[0]) => {
     setLogging(true);

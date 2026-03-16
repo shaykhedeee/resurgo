@@ -48,7 +48,7 @@ export function useNativePush(): UseNativePushReturn {
       setFcmToken(token);
 
       // Store token in Convex
-      await registerToken({ clerkId: user.id, fcmToken: token });
+      await registerToken({ fcmToken: token });
       setIsRegistered(true);
 
       // Set up foreground notification listeners

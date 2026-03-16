@@ -3,7 +3,7 @@
 // Campaign sync, conversion event logging, and marketing analytics queries
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { mutation, query } from './_generated/server';
+import { internalMutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -13,7 +13,7 @@ import { v } from 'convex/values';
 /**
  * Upsert a Meta campaign record (called by sync API route)
  */
-export const upsertCampaign = mutation({
+export const upsertCampaign = internalMutation({
   args: {
     metaCampaignId: v.string(),
     name: v.string(),
@@ -167,13 +167,13 @@ export const getCampaignSummary = query({
 /**
  * Log a conversion event sent to Meta CAPI
  */
-export const logConversionEvent = mutation({
+export const logConversionEvent = internalMutation({
   args: {
     eventName: v.string(),
     eventId: v.string(),
     userId: v.optional(v.string()),
     sourceUrl: v.optional(v.string()),
-    customData: v.optional(v.any()),
+    customData: v.optional(v.unknown()),
     sentToMeta: v.boolean(),
     metaResponse: v.optional(v.string()),
   },
@@ -202,7 +202,7 @@ export const listConversionEvents = query({
     eventId: v.string(),
     userId: v.optional(v.string()),
     sourceUrl: v.optional(v.string()),
-    customData: v.optional(v.any()),
+    customData: v.optional(v.unknown()),
     sentToMeta: v.boolean(),
     metaResponse: v.optional(v.string()),
     createdAt: v.number(),

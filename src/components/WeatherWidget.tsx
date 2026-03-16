@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react';
-import { Cloud, Sun, CloudRain, CloudSnow, CloudLightning, Wind, Thermometer, Droplets, Eye } from 'lucide-react';
+import { Cloud, Sun, CloudRain, CloudSnow, CloudLightning, Wind, Droplets, Eye } from 'lucide-react';
 import { getCachedLocation } from '@/lib/locationCache';
 
 interface WeatherData {
@@ -84,7 +84,7 @@ export default function WeatherWidget() {
         sunrise: astro?.sunrise ?? '',
         sunset: astro?.sunset ?? '',
       });
-    } catch (e: any) {
+    } catch {
       setError('Weather unavailable');
     } finally {
       setLoading(false);

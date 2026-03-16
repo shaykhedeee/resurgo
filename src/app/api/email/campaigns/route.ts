@@ -174,7 +174,7 @@ const TEMPLATES: Record<string, {
       <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $97/year = $8.08/month</p>
       <a href="${SITE_URL}/pricing" class="cta">[UPGRADE_NOW]</a>
     `),
-    text: (v) => `Upgrade to Resurgo Pro — unlock 8 AI coaches: ${SITE_URL}/pricing`,
+    text: (_v) => `Upgrade to Resurgo Pro — unlock 8 AI coaches: ${SITE_URL}/pricing`,
   },
 };
 

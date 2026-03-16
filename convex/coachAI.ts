@@ -8,6 +8,7 @@
 import { action, internalAction, internalMutation, internalQuery, mutation, query } from './_generated/server';
 import { internal } from './_generated/api';
 import { v } from 'convex/values';
+import type { Id } from './_generated/dataModel';
 
 // ─── Multi-Provider AI Cascade ───────────────────────────────────────────────
 // Groq 70B → Cerebras 70B → Gemini 2.0 Flash → Groq 8B (emergency fallback)
@@ -37,7 +38,7 @@ async function callAICascade(
         }),
       });
       if (res.ok) {
-        const json = await res.json() as Record<string, any>;
+        const json = await res.json() as { choices?: Array<{ message?: { content?: string } }> };
         const content = json?.choices?.[0]?.message?.content ?? '';
         if (content) return content;
       }
@@ -61,7 +62,7 @@ async function callAICascade(
         }),
       });
       if (res.ok) {
-        const json = await res.json() as Record<string, any>;
+        const json = await res.json() as { choices?: Array<{ message?: { content?: string } }> };
         const content = json?.choices?.[0]?.message?.content ?? '';
         if (content) return content;
       }
@@ -99,7 +100,7 @@ async function callAICascade(
         }
       );
       if (res.ok) {
-        const json = await res.json() as Record<string, any>;
+        const json = await res.json() as { candidates?: Array<{ content?: { parts?: Array<{ text?: string }> } }> };
         const content = json?.candidates?.[0]?.content?.parts?.[0]?.text ?? '';
         if (content) return content;
       }
@@ -122,7 +123,7 @@ async function callAICascade(
         }),
       });
       if (res.ok) {
-        const json = await res.json() as Record<string, any>;
+        const json = await res.json() as { choices?: Array<{ message?: { content?: string } }> };
         return json?.choices?.[0]?.message?.content ?? '';
       }
     } catch {
@@ -630,7 +631,7 @@ export const setSelectedCoach = mutation({
     if (!identity) throw new Error('Not authenticated');
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) throw new Error('User not found');
     await ctx.db.patch(user._id, { selectedCoach: coachId, updatedAt: Date.now() });
@@ -659,13 +660,13 @@ export const getOrCreateCoachMemory = query({
     if (!identity) return null;
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return null;
 
     const mem = await ctx.db
       .query('coachMemory')
-      .withIndex('by_userId_coachId', (q: any) =>
+      .withIndex('by_userId_coachId', (q) =>
         q.eq('userId', user._id).eq('coachId', coachId)
       )
       .unique();
@@ -759,40 +760,40 @@ export const getUserContext = internalQuery({
 
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return { ...empty, userName: identity.name || 'User' };
 
     // Goals
     const goals = await ctx.db
       .query('goals')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
-    const activeGoals = goals.filter((g: any) => g.status === 'active' || g.status === 'in_progress');
-    const completedGoals = goals.filter((g: any) => g.status === 'completed');
+    const activeGoals = goals.filter((g) => g.status === 'in_progress');
+    const completedGoals = goals.filter((g) => g.status === 'completed');
     const goalsSummary = activeGoals.length > 0
-      ? activeGoals.slice(0, 5).map((g: any) => `"${g.title}" (${g.progressPercentage || g.progress || 0}%)`).join(', ')
+      ? activeGoals.slice(0, 5).map((g) => `"${g.title}" (${g.progress || 0}%)`).join(', ')
       : 'No active goals';
 
     // Tasks (pending for today)
     const today = new Date().toISOString().split('T')[0];
     const tasks = await ctx.db
       .query('tasks')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
-    const pendingTasks = tasks.filter((t: any) => t.status === 'todo');
-    const todayTasks = pendingTasks.filter((t: any) => t.scheduledDate === today || t.dueDate === today);
+    const pendingTasks = tasks.filter((t) => t.status === 'todo');
+    const todayTasks = pendingTasks.filter((t) => t.scheduledDate === today || t.dueDate === today);
     const tasksSummary = todayTasks.length > 0
-      ? todayTasks.slice(0, 6).map((t: any) => `"${t.title}" [${t.priority}]`).join(', ')
+      ? todayTasks.slice(0, 6).map((t) => `"${t.title}" [${t.priority}]`).join(', ')
       : (pendingTasks.length > 0 ? `${pendingTasks.length} pending tasks (none scheduled today)` : 'No pending tasks');
 
     // Overdue tasks
-    const overdueTasks = pendingTasks.filter((t: any) => t.dueDate && t.dueDate < today).length;
+    const overdueTasks = pendingTasks.filter((t) => t.dueDate && t.dueDate < today).length;
 
     // Tasks completed this week (for weekly completion rate)
     const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0];
-    const doneThisWeek = tasks.filter((t: any) => t.status === 'done' && t.updatedAt && new Date(t.updatedAt).toISOString().split('T')[0] >= weekAgo);
-    const createdOrDueThisWeek = tasks.filter((t: any) =>
+    const doneThisWeek = tasks.filter((t) => t.status === 'done' && t.updatedAt && new Date(t.updatedAt).toISOString().split('T')[0] >= weekAgo);
+    const createdOrDueThisWeek = tasks.filter((t) =>
       (t.dueDate && t.dueDate >= weekAgo && t.dueDate <= today) ||
       (t.scheduledDate && t.scheduledDate >= weekAgo && t.scheduledDate <= today)
     );
@@ -802,27 +803,27 @@ export const getUserContext = internalQuery({
 
     // Recent wins (last 5 completed tasks from this week)
     const recentWins = doneThisWeek
-      .sort((a: any, b: any) => (b.updatedAt || 0) - (a.updatedAt || 0))
+      .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
       .slice(0, 5)
-      .map((t: any) => t.title);
+      .map((t) => t.title);
 
     // Habits
     const habits = await ctx.db
       .query('habits')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
-    const activeHabits = habits.filter((h: any) => !h.archived && !h.archivedByDowngrade);
+    const activeHabits = habits.filter((h) => !h.archivedByDowngrade);
     const habitsSummary = activeHabits.length > 0
-      ? activeHabits.slice(0, 6).map((h: any) => `"${h.title}" (${h.currentStreak || h.streakCurrent || 0}d streak)`).join(', ')
+      ? activeHabits.slice(0, 6).map((h) => `"${h.title}" (${h.streakCurrent || 0}d streak)`).join(', ')
       : 'No active habits';
 
     // Best streak
-    const maxStreak = activeHabits.reduce((max: number, h: any) => Math.max(max, h.currentStreak || h.streakCurrent || 0), 0);
+    const maxStreak = activeHabits.reduce((max, h) => Math.max(max, h.streakCurrent || 0), 0);
 
     // Gamification profile
     const gamification = await ctx.db
       .query('gamification')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .unique();
 
     const LEVEL_THRESHOLDS = [
@@ -845,7 +846,7 @@ export const getUserContext = internalQuery({
     // Fetch today's check-in for emotional context
     const checkIn = await ctx.db
       .query('dailyCheckIns')
-      .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', today))
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
       .unique();
     const emotionalState = deriveEmotionalState(
       checkIn?.morningMood,
@@ -856,13 +857,13 @@ export const getUserContext = internalQuery({
     // Fetch today's nutrition
     const nutritionToday = await ctx.db
       .query('nutritionLogs')
-      .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', today))
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
       .unique();
 
     // Fetch latest sleep log
     const sleepLogs = await ctx.db
       .query('sleepLogs')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .order('desc')
       .take(1);
     const lastSleep = sleepLogs[0];
@@ -870,7 +871,7 @@ export const getUserContext = internalQuery({
     // Fetch latest mood entry
     const moodEntries = await ctx.db
       .query('moodEntries')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .order('desc')
       .take(1);
     const lastMood = moodEntries[0];
@@ -879,15 +880,16 @@ export const getUserContext = internalQuery({
     const weekAgoDate = new Date(Date.now() - 7 * 86400000).toISOString().split('T')[0];
     const workoutLogs = await ctx.db
       .query('workoutLogs')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
-    const recentWorkouts = workoutLogs.filter((w: any) => w.date >= weekAgoDate);
+    const recentWorkouts = workoutLogs.filter((w) => w.date >= weekAgoDate);
 
+    const userExtra = user as Record<string, unknown>;
     return {
       userName: user.name || identity.name || 'User',
       userPlan: user.plan || 'free',
-      primaryGoal: (user as any).primaryGoal || activeGoals[0]?.title || 'Not set',
-      focusAreas: (user as any).focusAreas?.join(', ') || 'Not set',
+      primaryGoal: (userExtra.primaryGoal as string | undefined) || activeGoals[0]?.title || 'Not set',
+      focusAreas: (userExtra.focusAreas as string[] | undefined)?.join(', ') || 'Not set',
       goalCount: activeGoals.length,
       goalsSummary,
       taskCount: todayTasks.length > 0 ? todayTasks.length : pendingTasks.length,
@@ -914,13 +916,13 @@ export const getUserContext = internalQuery({
       goalsCompletedAllTime: completedGoals.length,
       // ── Nutrition & Sleep context ──
       todayCalories: nutritionToday?.totalCalories ?? 0,
-      todayWaterGlasses: (nutritionToday as any)?.waterGlasses ?? 0,
+      todayWaterGlasses: Math.round((nutritionToday?.waterMl ?? 0) / 250),
       lastSleepHours: lastSleep?.durationMinutes ? Math.round(lastSleep.durationMinutes / 60 * 10) / 10 : undefined,
       lastSleepQualityRating: lastSleep?.quality,
       lastMoodScore: lastMood?.score,
       // ── Fitness context ──
       weekWorkouts: recentWorkouts.length,
-      weekWorkoutMinutes: recentWorkouts.reduce((sum: number, w: any) => sum + (w.durationMinutes || 0), 0),
+      weekWorkoutMinutes: recentWorkouts.reduce((sum, w) => sum + (w.durationMinutes || 0), 0),
     };
   },
 });
@@ -944,7 +946,7 @@ export const executeCoachActions = internalMutation({
     if (!identity) return [];
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return [];
 
@@ -983,9 +985,9 @@ export const executeCoachActions = internalMutation({
             // Check habit limit
             const existingHabits = await ctx.db
               .query('habits')
-              .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+              .withIndex('by_userId', (q) => q.eq('userId', user._id))
               .collect();
-            const activeCount = existingHabits.filter((h: any) => !h.archived && !h.archivedByDowngrade).length;
+            const activeCount = existingHabits.filter((h) => !h.archivedByDowngrade).length;
             const limit = (user.plan === 'pro' || user.plan === 'lifetime') ? 999 : 10;
             if (activeCount >= limit) {
               results.push({ type: 'CREATE_HABIT', success: false, message: `Habit limit reached (${limit}). Upgrade to Pro for unlimited.` });
@@ -1017,9 +1019,9 @@ export const executeCoachActions = internalMutation({
             // Check goal limit
             const existingGoals = await ctx.db
               .query('goals')
-              .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+              .withIndex('by_userId', (q) => q.eq('userId', user._id))
               .collect();
-            const activeGoalCount = existingGoals.filter((g: any) => g.status === 'active' || g.status === 'in_progress').length;
+            const activeGoalCount = existingGoals.filter((g) => g.status === 'in_progress').length;
             const goalLimit = (user.plan === 'pro' || user.plan === 'lifetime') ? 999 : 3;
             if (activeGoalCount >= goalLimit) {
               results.push({ type: 'CREATE_GOAL', success: false, message: `Goal limit reached (${goalLimit}). Upgrade to Pro for unlimited.` });
@@ -1050,10 +1052,10 @@ export const executeCoachActions = internalMutation({
           case 'COMPLETE_TASK': {
             const allTasks = await ctx.db
               .query('tasks')
-              .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+              .withIndex('by_userId', (q) => q.eq('userId', user._id))
               .collect();
             const needle = (data.titleMatch || '').toLowerCase();
-            const match = allTasks.find((t: any) =>
+            const match = allTasks.find((t) =>
               t.status === 'todo' && t.title.toLowerCase().includes(needle)
             );
             if (match) {
@@ -1068,10 +1070,10 @@ export const executeCoachActions = internalMutation({
           case 'UPDATE_TASK': {
             const userTasks = await ctx.db
               .query('tasks')
-              .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+              .withIndex('by_userId', (q) => q.eq('userId', user._id))
               .collect();
             const searchStr = (data.titleMatch || '').toLowerCase();
-            const found = userTasks.find((t: any) =>
+            const found = userTasks.find((t) =>
               t.status === 'todo' && t.title.toLowerCase().includes(searchStr)
             );
             if (found) {
@@ -1171,7 +1173,7 @@ export const executeCoachActions = internalMutation({
             const score = Math.max(1, Math.min(10, data.score || 5));
             const existing = await ctx.db
               .query('moodEntries')
-              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', today))
+              .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
               .unique();
             if (existing) {
               await ctx.db.patch(existing._id, { score, notes: data.notes, tags: data.tags });
@@ -1203,7 +1205,7 @@ export const executeCoachActions = internalMutation({
             }
             const existing = await ctx.db
               .query('sleepLogs')
-              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', date))
               .unique();
             if (existing) {
               await ctx.db.patch(existing._id, {
@@ -1242,12 +1244,12 @@ export const executeCoachActions = internalMutation({
             };
             const existing = await ctx.db
               .query('nutritionLogs')
-              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', date))
               .unique();
             if (existing) {
               const meals = [...(existing.meals || []), meal];
               const totals = meals.reduce(
-                (acc: any, m: any) => ({
+                (acc, m) => ({
                   calories: acc.calories + (m.calories ?? 0),
                   protein: acc.protein + (m.protein ?? 0),
                   carbs: acc.carbs + (m.carbs ?? 0),
@@ -1286,15 +1288,13 @@ export const executeCoachActions = internalMutation({
             const glasses = data.glasses || 1;
             const existing = await ctx.db
               .query('nutritionLogs')
-              .withIndex('by_userId_date', (q: any) => q.eq('userId', user._id).eq('date', date))
+              .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', date))
               .unique();
             if (existing) {
-              const currentWater = (existing as any).waterGlasses || 0;
-              await ctx.db.patch(existing._id, {
-                waterGlasses: currentWater + glasses,
-                updatedAt: now,
-              } as any);
-              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: +${glasses} glass(es) — total today: ${currentWater + glasses}` });
+              const currentMl = existing.waterMl || 0;
+              const newMl = currentMl + glasses * 250;
+              await ctx.db.patch(existing._id, { waterMl: newMl, updatedAt: now });
+              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: +${glasses} glass(es) — total today: ${Math.round(newMl / 250)} glasses (${newMl}ml)` });
             } else {
               await ctx.db.insert('nutritionLogs', {
                 userId: user._id,
@@ -1304,11 +1304,11 @@ export const executeCoachActions = internalMutation({
                 totalProtein: 0,
                 totalCarbs: 0,
                 totalFat: 0,
-                waterGlasses: glasses,
+                waterMl: glasses * 250,
                 createdAt: now,
                 updatedAt: now,
-              } as any);
-              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: ${glasses} glass(es)` });
+              });
+              results.push({ type: 'LOG_WATER', success: true, message: `Water logged: ${glasses} glass(es) (${glasses * 250}ml)` });
             }
             break;
           }
@@ -1437,12 +1437,12 @@ IMPORTANT: Do NOT include any [ACTION:...] blocks in your greeting. Just a natur
 
     if (!greeting) greeting = buildGreeting(args.coachId, name);
 
-    const coachMessageId: string = await ctx.runMutation(
+    const coachMessageId: Id<'coachMessages'> = await ctx.runMutation(
       internal.coachAI.persistGreeting,
       { coachContent: greeting, coachId: args.coachId },
     );
 
-    return { coachMessageId: coachMessageId as any, greeting };
+    return { coachMessageId, greeting };
   },
 });
 
@@ -1485,7 +1485,12 @@ export const sendWithPersona = action({
       message: v.string(),
     }))),
   }),
-  handler: async (ctx, args) => {
+  handler: async (ctx, args): Promise<{
+    userMessageId: Id<'coachMessages'>;
+    coachMessageId: Id<'coachMessages'>;
+    reply: string;
+    actionsExecuted?: Array<{ type: string; success: boolean; message: string }>;
+  }> => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error('Not authenticated');
 
@@ -1667,7 +1672,7 @@ PERSONALIZATION DIRECTIVES:
     const finalReply = cleanReply + actionSummary;
 
     // Persist messages
-    const ids: { userMessageId: string; coachMessageId: string } = await ctx.runMutation(
+    const ids: { userMessageId: Id<'coachMessages'>; coachMessageId: Id<'coachMessages'> } = await ctx.runMutation(
       internal.coachAI.persistMessages,
       {
         userContent: args.content,
@@ -1678,8 +1683,8 @@ PERSONALIZATION DIRECTIVES:
     );
 
     return {
-      userMessageId: ids.userMessageId as any,
-      coachMessageId: ids.coachMessageId as any,
+      userMessageId: ids.userMessageId,
+      coachMessageId: ids.coachMessageId,
       reply: finalReply,
       actionsExecuted: actionsExecuted.length > 0 ? actionsExecuted : undefined,
     };
@@ -1715,17 +1720,17 @@ export const getRecentHistory = internalQuery({
     if (!identity) return [];
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return [];
 
     const all = await ctx.db
       .query('coachMessages')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .order('desc')
       .collect();
 
-    const filtered = all.filter((m: any) => m.context?.startsWith(`coach:${coachId}`));
+    const filtered = all.filter((m) => m.context?.startsWith(`coach:${coachId}`));
     const limited = (limit ? filtered.slice(0, limit) : filtered).reverse();
     return limited;
   },
@@ -1758,13 +1763,13 @@ export const getCoachMemory = internalQuery({
     if (!identity) return null;
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return null;
 
     const mem = await ctx.db
       .query('coachMemory')
-      .withIndex('by_userId_coachId', (q: any) =>
+      .withIndex('by_userId_coachId', (q) =>
         q.eq('userId', user._id).eq('coachId', coachId)
       )
       .unique();
@@ -1803,7 +1808,7 @@ export const persistMessages = internalMutation({
     if (!identity) throw new Error('Not authenticated');
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) throw new Error('User not found');
 
@@ -1831,7 +1836,7 @@ export const persistMessages = internalMutation({
     // Upsert coach memory
     const mem = await ctx.db
       .query('coachMemory')
-      .withIndex('by_userId_coachId', (q: any) =>
+      .withIndex('by_userId_coachId', (q) =>
         q.eq('userId', user._id).eq('coachId', args.coachId)
       )
       .unique();
@@ -1876,7 +1881,7 @@ export const persistGreeting = internalMutation({
     if (!identity) throw new Error('Not authenticated');
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) throw new Error('User not found');
 
@@ -1894,7 +1899,7 @@ export const persistGreeting = internalMutation({
 
     const mem = await ctx.db
       .query('coachMemory')
-      .withIndex('by_userId_coachId', (q: any) =>
+      .withIndex('by_userId_coachId', (q) =>
         q.eq('userId', user._id).eq('coachId', args.coachId)
       )
       .unique();
@@ -1932,7 +1937,7 @@ export const extractMemoryInsights = internalAction({
 
     // Build conversation summary for analysis
     const convoText = history
-      .map(m => `${m.role === 'user' ? 'USER' : 'COACH'}: ${m.content.substring(0, 300)}`)
+      .map((m: { role: string; content: string }) => `${m.role === 'user' ? 'USER' : 'COACH'}: ${m.content.substring(0, 300)}`)
       .join('\n');
 
     const analysisPrompt = `Analyze this coaching conversation and extract the following structured data about the user. Be specific and evidence-based — cite actual behavior from the conversation.
@@ -2016,13 +2021,13 @@ export const updateMemoryInsights = internalMutation({
     if (!identity) return null;
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return null;
 
     const mem = await ctx.db
       .query('coachMemory')
-      .withIndex('by_userId_coachId', (q: any) =>
+      .withIndex('by_userId_coachId', (q) =>
         q.eq('userId', user._id).eq('coachId', args.coachId)
       )
       .unique();
@@ -2084,7 +2089,7 @@ export const getSmartPrompts = query({
     if (!identity) return [];
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .unique();
     if (!user) return [];
 
@@ -2093,21 +2098,21 @@ export const getSmartPrompts = query({
 
     // Gather data for smart suggestions
     const [goals, tasks, habits, _gamification, checkIn] = await Promise.all([
-      ctx.db.query('goals').withIndex('by_userId', (q: any) => q.eq('userId', user._id)).collect(),
-      ctx.db.query('tasks').withIndex('by_userId', (q: any) => q.eq('userId', user._id)).collect(),
-      ctx.db.query('habits').withIndex('by_userId', (q: any) => q.eq('userId', user._id)).collect(),
-      ctx.db.query('gamification').withIndex('by_userId', (q: any) => q.eq('userId', user._id)).unique(),
-      ctx.db.query('dailyCheckIns').withIndex('by_userId_date', (q: any) =>
+      ctx.db.query('goals').withIndex('by_userId', (q) => q.eq('userId', user._id)).collect(),
+      ctx.db.query('tasks').withIndex('by_userId', (q) => q.eq('userId', user._id)).collect(),
+      ctx.db.query('habits').withIndex('by_userId', (q) => q.eq('userId', user._id)).collect(),
+      ctx.db.query('gamification').withIndex('by_userId', (q) => q.eq('userId', user._id)).unique(),
+      ctx.db.query('dailyCheckIns').withIndex('by_userId_date', (q) =>
         q.eq('userId', user._id).eq('date', today)
       ).unique(),
     ]);
 
-    const activeGoals = goals.filter((g: any) => g.status === 'active' || g.status === 'in_progress');
-    const pendingTasks = tasks.filter((t: any) => t.status === 'todo');
-    const overdueTasks = pendingTasks.filter((t: any) => t.dueDate && t.dueDate < today);
-    const todayTasks = pendingTasks.filter((t: any) => t.scheduledDate === today || t.dueDate === today);
-    const activeHabits = habits.filter((h: any) => !h.archived && !h.archivedByDowngrade);
-    const maxStreak = activeHabits.reduce((mx: number, h: any) => Math.max(mx, h.currentStreak || h.streakCurrent || 0), 0);
+    const activeGoals = goals.filter((g) => g.status === 'in_progress');
+    const pendingTasks = tasks.filter((t) => t.status === 'todo');
+    const overdueTasks = pendingTasks.filter((t) => t.dueDate && t.dueDate < today);
+    const todayTasks = pendingTasks.filter((t) => t.scheduledDate === today || t.dueDate === today);
+    const activeHabits = habits.filter((h) => !h.archivedByDowngrade);
+    const maxStreak = activeHabits.reduce((mx: number, h) => Math.max(mx, h.streakCurrent ?? 0), 0);
 
     const prompts: string[] = [];
 

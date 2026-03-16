@@ -186,7 +186,7 @@ export async function POST(req: NextRequest) {
   }
 
   const body = await req.json();
-  const { action, imageUrl, videoUrl, caption, templateType, templateIndex, mediaType, childImageUrls, dryRun } = body;
+  const { action, imageUrl, videoUrl, caption, templateType, templateIndex, mediaType, childImageUrls, dryRun, replacements } = body;
 
   switch (action) {
     // ── Publish a single image/reel ──────────────────────────────────
@@ -201,8 +201,23 @@ export async function POST(req: NextRequest) {
         }
       }
 
+      // Apply caller-supplied replacements to fill {placeholder} tokens
+      if (postCaption && replacements && typeof replacements === 'object') {
+        for (const [key, value] of Object.entries(replacements)) {
+          postCaption = postCaption.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value));
+        }
+      }
+
       if (!postCaption) {
         return NextResponse.json({ error: 'No caption or valid templateType' }, { status: 400 });
+      }
+
+      // Block posting if template placeholders remain unfilled
+      const unfilledPlaceholders = postCaption.match(/\{[a-zA-Z_]+\}/g);
+      if (unfilledPlaceholders && !dryRun) {
+        return NextResponse.json({
+          error: `Template contains unfilled placeholders: ${unfilledPlaceholders.join(', ')}. Pass replacements:{feature:"food search"} to fill them.`,
+        }, { status: 400 });
       }
 
       if (!imageUrl && !videoUrl) {
@@ -214,6 +229,7 @@ export async function POST(req: NextRequest) {
           dryRun: true,
           wouldPublish: { caption: postCaption, imageUrl, videoUrl, mediaType: mediaType || 'IMAGE' },
           captionLength: postCaption.length,
+          unfilledPlaceholders: unfilledPlaceholders ?? [],
         });
       }
 

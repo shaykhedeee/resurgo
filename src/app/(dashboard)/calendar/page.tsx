@@ -8,7 +8,7 @@
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Download } from 'lucide-react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
 import { downloadIcs, generateTasksIcs } from '@/lib/ics';
 import { PixelArt } from '@/components/PixelArt';
 import { PixelIcon } from '@/components/PixelIcon';

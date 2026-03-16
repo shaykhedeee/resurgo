@@ -4,7 +4,7 @@
 // Replaces Telegram as the primary notification channel for native app users
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { mutation, query, internalAction, internalQuery } from './_generated/server';
+import { mutation, internalAction, internalQuery } from './_generated/server';
 import { internal } from './_generated/api';
 import { v } from 'convex/values';
 
@@ -14,17 +14,18 @@ import { v } from 'convex/values';
 // ─────────────────────────────────────────────────────────────────────────────
 export const registerPushToken = mutation({
   args: {
-    clerkId: v.string(),
     fcmToken: v.string(),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', args.clerkId))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .first();
     if (!user) {
-      console.warn('[pushNotifications] User not found for clerkId:', args.clerkId);
+      console.warn('[pushNotifications] User not found for clerkId:', identity.subject);
       return null;
     }
     await ctx.db.patch(user._id, {
@@ -41,12 +42,14 @@ export const registerPushToken = mutation({
 // unregisterPushToken — Clears FCM token (e.g. sign-out on device)
 // ─────────────────────────────────────────────────────────────────────────────
 export const unregisterPushToken = mutation({
-  args: { clerkId: v.string() },
+  args: {},
   returns: v.null(),
-  handler: async (ctx, args) => {
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
     const user = await ctx.db
       .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', args.clerkId))
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
       .first();
     if (!user) return null;
     await ctx.db.patch(user._id, {
@@ -228,9 +231,9 @@ export const deliverDueRemindersPush = internalAction({
     const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
     if (!serviceAccountJson) return null;
 
-    const { api } = await import('./_generated/api');
+    const { internal: internalApi } = await import('./_generated/api');
     const now = Date.now();
-    const dueReminders = await ctx.runQuery(api.reminders.getPendingReminders, {
+    const dueReminders = await ctx.runQuery(internalApi.reminders.getPendingReminders, {
       beforeTimestamp: now,
     });
 

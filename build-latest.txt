@@ -1,0 +1,202 @@
+﻿Γû▓ Next.js 16.1.6 (Turbopack)
+- Environments: .env.local, .env
+- Experiments (use with caution):
+  ┬╖ optimizePackageImports
+
+ΓÜá The "middleware" file convention is deprecated. Please use "proxy" instead. Learn more: https://nextjs.org/docs/messages/middleware-to-proxy
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 107s
+  Skipping validation of types
+  Collecting page data using 3 workers ...
+ΓÜá Using edge runtime on a page currently disables static generation for that page
+  Generating static pages using 3 workers (0/251) ...
+  Generating static pages using 3 workers (62/251) 
+  Generating static pages using 3 workers (125/251) 
+  Generating static pages using 3 workers (188/251) 
+Γ£ô Generating static pages using 3 workers (251/251) in 17.8s
+  Finalizing page optimization ...
+
+Route (app)
+Γöî Γùï /
+Γö£ Γùï /_not-found
+Γö£ Γùï /about
+Γö£ Γùï /account
+Γö£ ╞Æ /admin
+Γö£ ╞Æ /admin/content
+Γö£ Γùï /admin/marketing
+Γö£ ╞Æ /admin/system-status
+Γö£ Γùï /analytics
+Γö£ ╞Æ /api/admin/metrics
+Γö£ ╞Æ /api/ai/chat
+Γö£ ╞Æ /api/ai/decompose
+Γö£ ╞Æ /api/ai/orchestrate
+Γö£ ╞Æ /api/ai/suggestions
+Γö£ ╞Æ /api/analytics/content
+Γö£ ╞Æ /api/analytics/event
+Γö£ ╞Æ /api/analytics/events
+Γö£ Γùï /api/app/version
+Γö£ ╞Æ /api/brain-dump
+Γö£ ╞Æ /api/chatbot
+Γö£ ╞Æ /api/chatbot/events
+Γö£ ╞Æ /api/coach
+Γö£ ╞Æ /api/deep-scan/diagnose
+Γö£ ╞Æ /api/discord
+Γö£ ╞Æ /api/email/campaigns
+Γö£ ╞Æ /api/email/send
+Γö£ ╞Æ /api/evening-reflection/generate
+Γö£ ╞Æ /api/first-contact/generate
+Γö£ ╞Æ /api/fitness/exercises
+Γö£ ╞Æ /api/food/meal-plan
+Γö£ ╞Æ /api/food/recipes
+Γö£ ╞Æ /api/food/search
+Γö£ ╞Æ /api/health
+Γö£ ╞Æ /api/leads/capture
+Γö£ ╞Æ /api/marketing/instagram
+Γö£ ╞Æ /api/marketing/linkedin
+Γö£ ╞Æ /api/marketing/meta/audiences
+Γö£ ╞Æ /api/marketing/meta/campaigns
+Γö£ ╞Æ /api/marketing/meta/conversions
+Γö£ ╞Æ /api/marketing/meta/health
+Γö£ ╞Æ /api/marketing/meta/insights
+Γö£ ╞Æ /api/marketing/reddit
+Γö£ ╞Æ /api/marketing/twitter
+Γö£ ╞Æ /api/morning-briefing/generate
+Γö£ ╞Æ /api/nutrition/search
+Γö£ ╞Æ /api/offline/queue/brain-dump
+Γö£ ╞Æ /api/offline/queue/task
+Γö£ ╞Æ /api/og/achievement
+Γö£ ╞Æ /api/og/share-card
+Γö£ ╞Æ /api/onboarding/detect-archetype
+Γö£ ╞Æ /api/partner-engine
+Γö£ ╞Æ /api/research/search
+Γö£ ╞Æ /api/telegram/setup
+Γö£ ╞Æ /api/telegram/webhook
+Γö£ ╞Æ /api/terminal-demo
+Γö£ ╞Æ /api/v1
+Γö£ ╞Æ /api/v1/goals
+Γö£ ╞Æ /api/v1/habits
+Γö£ ╞Æ /api/v1/habits/log
+Γö£ ╞Æ /api/v1/stats
+Γö£ ╞Æ /api/vision-board/generate
+Γö£ ╞Æ /api/vision-board/images
+Γö£ ╞Æ /api/vision-board/stock-search
+Γö£ ╞Æ /api/weather
+Γö£ ╞Æ /api/webhooks/clerk-billing
+Γö£ ╞Æ /api/webhooks/dodo
+Γö£ ╞Æ /billing
+Γö£ Γùï /blog
+Γö£ ΓùÅ /blog/[slug]
+Γöé Γö£ /blog/ai-growth-system-2026-ultimate-playbook
+Γöé Γö£ /blog/why-vision-boards-fail-and-how-ai-fixes-it
+Γöé Γö£ /blog/stop-restarting-goals-every-monday
+Γöé Γöö [+26 more paths]
+Γö£ ╞Æ /blog/rss.xml
+Γö£ Γùï /blog/topics
+Γö£ ΓùÅ /blog/topics/[topic]
+Γöé Γö£ /blog/topics/habit-systems
+Γöé Γö£ /blog/topics/focus-procrastination
+Γöé Γö£ /blog/topics/ai-coaching-execution
+Γöé Γöö [+3 more paths]
+Γö£ Γùï /brain-dump
+Γö£ Γùï /budget
+Γö£ Γùï /business
+Γö£ Γùï /calendar
+Γö£ ╞Æ /callback
+Γö£ Γùï /changelog
+Γö£ Γùï /coach
+Γö£ Γùï /compare
+Γö£ ΓùÅ /compare/[slug]
+Γöé Γö£ /compare/resurgo-vs-ticktick
+Γöé Γö£ /compare/resurgo-vs-notion
+Γöé Γö£ /compare/resurgo-vs-habitica
+Γöé Γöö [+10 more paths]
+Γö£ Γùï /contact
+Γö£ Γùï /dashboard
+Γö£ Γùï /deep-scan
+Γö£ Γùï /demo
+Γö£ Γùï /docs
+Γö£ Γùï /download
+Γö£ Γùï /faq
+Γö£ Γùï /features
+Γö£ Γùï /first-contact
+Γö£ Γùï /fitness
+Γö£ Γùï /focus
+Γö£ Γùï /food
+Γö£ Γùï /goals
+Γö£ ╞Æ /goals/[id]
+Γö£ Γùï /guides
+Γö£ ΓùÅ /guides/[slug]
+Γöé Γö£ /guides/goal-setting-system
+Γöé Γö£ /guides/productivity-habits
+Γöé Γö£ /guides/habit-tracking-statistics
+Γöé Γöö [+6 more paths]
+Γö£ Γùï /guides/atomic-habits-guide
+Γö£ Γùï /habits
+Γö£ Γùï /help
+Γö£ ΓùÅ /help/[category]
+Γöé Γö£ /help/getting-started
+Γöé Γö£ /help/features
+Γöé Γö£ /help/habits-goals
+Γöé Γöö [+2 more paths]
+Γö£ Γùï /help/cookies
+Γö£ Γùï /help/refund
+Γö£ Γùï /integrations
+Γö£ Γùï /learn
+Γö£ ΓùÅ /learn/[slug]
+Γöé Γö£ /learn/what-is-habit-stacking
+Γöé Γö£ /learn/what-is-time-blocking
+Γöé Γö£ /learn/what-is-pomodoro-technique
+Γöé Γöö [+17 more paths]
+Γö£ Γùï /link-telegram
+Γö£ ╞Æ /llms.txt
+Γö£ ╞Æ /login
+Γö£ Γùï /manifest.webmanifest
+Γö£ Γùï /offline
+Γö£ Γùï /onboarding
+Γö£ Γùï /orchestrator
+Γö£ ╞Æ /payment/failure
+Γö£ ╞Æ /payment/success
+Γö£ Γùï /plan-builder
+Γö£ Γùï /pricing
+Γö£ Γùï /privacy
+Γö£ Γùï /refer
+Γö£ Γùï /referrals
+Γö£ Γùï /roadmap
+Γö£ Γùï /robots.txt
+Γö£ Γùï /security
+Γö£ Γùï /settings
+Γö£ ╞Æ /sign-in/[[...sign-in]]
+Γö£ ╞Æ /sign-up/[[...sign-up]]
+Γö£ Γùï /sitemap.xml
+Γö£ Γùï /support
+Γö£ Γùï /tasks
+Γö£ Γùï /templates
+Γö£ ΓùÅ /templates/[slug]
+Γöé Γö£ /templates/run-a-5k-in-12-weeks
+Γöé Γö£ /templates/lose-20-pounds-sustainably
+Γöé Γö£ /templates/build-a-consistent-gym-habit
+Γöé Γöö [+26 more paths]
+Γö£ Γùï /terms
+Γö£ Γùï /tools
+Γö£ ΓùÅ /tools/[slug]
+Γöé Γö£ /tools/free-ai-task-prioritizer
+Γöé Γö£ /tools/free-brain-dump-to-task-list
+Γöé Γö£ /tools/free-ai-goal-planner
+Γöé Γöö [+3 more paths]
+Γö£ Γùï /use-cases
+Γö£ ΓùÅ /use-cases/[slug]
+Γöé Γö£ /use-cases/developers
+Γöé Γö£ /use-cases/adhd
+Γöé Γö£ /use-cases/students
+Γöé Γöö [+7 more paths]
+Γö£ Γùï /vision-board
+Γö£ Γùï /wellness
+Γöö Γùï /wishlist
+
+
+╞Æ Proxy (Middleware)
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+
