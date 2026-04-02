@@ -75,8 +75,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ascend.git
-cd ascend
+git clone https://github.com/yourusername/resurgo.git
+cd resurgo
 
 # Install dependencies
 npm install
@@ -127,15 +127,15 @@ NEXT_PUBLIC_CLERK_BILLING_PORTAL_URL=
 - Focus timer
 - Mood tracking
 
-### Pro Plan (₹199/month or $12/month)
+### Pro Plan ($4.99/month or $29.99/year)
 - Unlimited habits & goals
+- All 5 AI Coaches (Marcus, Titan, Aurora, Phoenix, Nexus)
+- Unlimited AI messages
 - Advanced analytics
-- Identity system
-- Custom themes
-- Data export
+- Vision boards
 - Priority support
 
-### Lifetime Plan (₹999 or $199 one-time)
+### Lifetime Plan ($49.99 one-time — 1,000 founding spots)
 - Everything in Pro, forever
 
 ---
@@ -259,7 +259,7 @@ Edit `src/app/globals.css`:
 
 ```css
 :root {
-  --ascend-primary: #F97316;  /* Main accent - orange */
+  --resurgo-primary: #F97316;  /* Main accent - orange */
   --gold-primary: #F59E0B;    /* Secondary accent */
   --background: #0A0A0B;      /* Dark background */
 }

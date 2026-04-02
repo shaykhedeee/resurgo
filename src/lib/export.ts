@@ -239,7 +239,6 @@ export function exportAllData(): void {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    console.log('Data exported successfully');
   } catch (error) {
     console.error('Failed to export data:', error);
   }

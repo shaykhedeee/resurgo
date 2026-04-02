@@ -16,7 +16,7 @@ The system is intentionally humane: "Never Miss Twice" logic, gentle recovery pa
 
 ## Core Capabilities
 - **Intelligent Goal Decomposition**: Turn any big goal into 4-level breakdown (milestones → quarterly/weekly objectives → daily tasks) automatically
-- **Living AI Coaching**: 8 distinct, deeply contextual coach personas that remember you across sessions and directly modify your tasks, habits, goals, and logs in real-time
+- **Living AI Coaching**: 5 distinct, deeply contextual coach personas that remember you across sessions and directly modify your tasks, habits, goals, and logs in real-time
 - **Habit System with Never Miss Twice**: Intelligent streak protection that treats one missed day as human and helps you recover on Day 2 instead of quitting
 - **Focus & Deep Work**: Pomodoro, Flowtime, custom timers + distraction pattern logging
 - **Wellness Integration**: Mood tracking, energy logging, sleep, nutrition, and breathing tools
@@ -24,18 +24,15 @@ The system is intentionally humane: "Never Miss Twice" logic, gentle recovery pa
 - **Weekly Reviews & Reflection**: Structured AI-guided reviews that turn experience into insight
 - **Finance & Business Mode**: Dedicated support for budgeting and startup/business goal systems
 
-## The 8 AI Coach Personas
+## The 5 AI Coach Personas
 Each coach has a distinct voice, philosophy, and expertise:
 - **MARCUS** — Stoic strategist. Clear-headed, disciplined, long-term thinking.
-- **AURORA** — Wellness & energy guide. Gentle, intuitive, focused on sustainable energy and recovery.
 - **TITAN** — Physical & mental toughness coach. Direct, motivational, performance-oriented.
-- **SAGE** — Finance & resource tactician. Analytical, strategic, wealth-building focused.
+- **AURORA** — Wellness & energy guide. Gentle, intuitive, focused on sustainable energy and recovery.
 - **PHOENIX** — Comeback & resilience specialist. Empathetic but firm for people rebuilding after setbacks.
-- **NOVA** — Creative systems & innovation coach. Playful, expansive, helps creators build sustainable output.
-- **ORACLE** — Strategic foresight & decision architect. Big-picture, scenario thinking.
 - **NEXUS** — Holistic integrator. Synthesizes all areas of life into coherent systems.
 
-You can switch coaches or let the system recommend the best one for the moment.
+Free plan users get access to Marcus + Titan. Pro/Lifetime users get all 5 coaches.
 
 ## How the AI Coaching Works
 
@@ -82,7 +79,7 @@ The AI doesn't just chat — it executes structured actions. Each AI response in
 ## Key Differentiators
 - Real behavior change science instead of generic advice
 - AI that **acts** inside your system, not just talks
-- 8 specialized personas with persistent memory
+- 5 specialized coach personas with persistent memory
 - "Never Miss Twice" habit psychology
 - 4-level automatic goal decomposition
 - Terminal-inspired aesthetic built for developers, founders, and deep thinkers
@@ -99,7 +96,7 @@ The AI doesn't just chat — it executes structured actions. Each AI response in
 - Payments: Dodo Payments
 
 ## Pricing (as of March 2026)
-- **Free**: Full access to all 8 coaches, goal decomposition, habit tracking, focus sessions, basic analytics, and real-time AI actions. No credit card required.
+- **Free**: 2 AI coaches (Marcus + Titan), goal decomposition, habit tracking, focus sessions, basic analytics, and real-time AI actions. No credit card required.
 - **Pro** ($4.99/month): Unlimited habits/goals, advanced models, priority support, API access.
 - **Pro Yearly** ($29.99/year): 50% savings.
 - **Lifetime** ($49.99 one-time): Permanent access to everything.

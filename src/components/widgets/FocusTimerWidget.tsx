@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Play, Pause, RotateCcw, Coffee } from 'lucide-react';
+import { analytics } from '@/lib/analytics';
 
 type Mode = 'work' | 'break';
 
@@ -30,6 +31,7 @@ export default function FocusTimerWidget() {
       // Session complete
       if (mode === 'work') {
         setSessions((s) => s + 1);
+        analytics.focusSessionCompleted(Math.round(workDuration / 60));
         setMode('break');
         setTimeLeft(breakDuration);
         setRunning(false);

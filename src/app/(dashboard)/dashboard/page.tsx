@@ -11,20 +11,25 @@ import { Id } from '../../../../convex/_generated/dataModel';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
-import { MorningCheckIn } from '@/components/MorningCheckIn';
-import { EveningDebrief } from '@/components/EveningDebrief';
-import AdaptiveDifficultyWidget from '@/components/AdaptiveDifficultyWidget';
-import WeatherWidget from '@/components/WeatherWidget';
-import OpenSenseMapWidget from '@/components/OpenSenseMapWidget';
-import DailyQuote from '@/components/DailyQuote';
-import WidgetGrid from '@/components/dashboard/WidgetGrid';
-import WidgetPanel from '@/components/dashboard/WidgetPanel';
+import dynamic from 'next/dynamic';
 import { resolveLayout, WIDGET_REGISTRY, type LayoutEntry } from '@/lib/dashboard/widgetRegistry';
-import MobileDashboard from '@/components/MobileDashboard';
-import QuickAddPalette from '@/components/QuickAddPalette';
 import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
-import { Tutorial } from '@/components/Tutorial';
+import { UpsellPrompt } from '@/components/UpsellPrompt';
+import { analytics } from '@/lib/analytics';
+
+// Dynamic imports for heavy / conditional components
+const MorningCheckIn = dynamic(() => import('@/components/MorningCheckIn').then(m => ({ default: m.MorningCheckIn })), { ssr: false });
+const EveningDebrief = dynamic(() => import('@/components/EveningDebrief').then(m => ({ default: m.EveningDebrief })), { ssr: false });
+const AdaptiveDifficultyWidget = dynamic(() => import('@/components/AdaptiveDifficultyWidget'), { ssr: false });
+const WeatherWidget = dynamic(() => import('@/components/WeatherWidget'), { ssr: false });
+const OpenSenseMapWidget = dynamic(() => import('@/components/OpenSenseMapWidget'), { ssr: false });
+const DailyQuote = dynamic(() => import('@/components/DailyQuote'), { ssr: false });
+const WidgetGrid = dynamic(() => import('@/components/dashboard/WidgetGrid'), { ssr: false });
+const WidgetPanel = dynamic(() => import('@/components/dashboard/WidgetPanel'), { ssr: false });
+const MobileDashboard = dynamic(() => import('@/components/MobileDashboard'), { ssr: false });
+const QuickAddPalette = dynamic(() => import('@/components/QuickAddPalette'), { ssr: false });
+const Tutorial = dynamic(() => import('@/components/Tutorial').then(m => ({ default: m.Tutorial })), { ssr: false });
 import {
   Target,
   CheckCircle2,
@@ -67,6 +72,17 @@ type GoalView = {
   targetDate?: string;
 };
 
+// Streak flame tier helper — escalating visuals at milestone thresholds
+function streakBadge(days: number): { emoji: string; color: string; label?: string } {
+  if (days >= 100) return { emoji: '💎', color: 'text-cyan-400', label: '100d+' };
+  if (days >= 66) return { emoji: '🏆', color: 'text-yellow-400', label: '66d — habit locked' };
+  if (days >= 30) return { emoji: '🔥', color: 'text-orange-400', label: '30d+' };
+  if (days >= 21) return { emoji: '🔥', color: 'text-amber-500', label: '21d+' };
+  if (days >= 7) return { emoji: '🔥', color: 'text-amber-600', label: '7d+' };
+  if (days > 0) return { emoji: '🔥', color: 'text-zinc-500' };
+  return { emoji: '', color: 'text-zinc-700' };
+}
+
 export default function DashboardPage() {
   const { user } = useStoreUser();
   const habits = useQuery(api.habits.listActive);
@@ -95,6 +111,7 @@ export default function DashboardPage() {
   const [debriefJustCompleted, setDebriefJustCompleted] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [greetingDismissed, setGreetingDismissed] = useState(false);
+  const [streakUpsellDismissed, setStreakUpsellDismissed] = useState(false);
 
   // ── Dashboard customisation state ──
   const [editMode, setEditMode] = useState(false);
@@ -144,6 +161,7 @@ export default function DashboardPage() {
   const hour = now.getHours();
   const isEvening = hour >= 18;
   const isMorning = hour < 12;
+  const isAfternoonNudge = hour >= 17 && hour < 20; // 5-8pm "don't break the chain"
 
   // Check-in status
   const morningDone = !!todayCheckIn?.morningCompletedAt || checkInJustCompleted;
@@ -176,6 +194,21 @@ export default function DashboardPage() {
     }
   }, []);
 
+  // Fire streak milestone analytics once per session per milestone threshold
+  useEffect(() => {
+    if (!habits || habits.length === 0) return;
+    const best = (habits as HabitView[]).reduce((max, h) => Math.max(max, h.streakCurrent ?? 0), 0);
+    const MILESTONES = [7, 21, 30, 66, 100];
+    const hit = MILESTONES.find(m => best >= m);
+    if (hit) {
+      const key = `resurgo_streak_milestone_${hit}`;
+      if (!sessionStorage.getItem(key)) {
+        analytics.streakMilestone(hit);
+        sessionStorage.setItem(key, '1');
+      }
+    }
+  }, [habits]);
+
   // ⌘K / Ctrl+K — handled by the layout's GlobalSearch; Quick Add Palette opened via button only
 
   if (!user) return null;
@@ -193,6 +226,7 @@ export default function DashboardPage() {
 
   // Best streak from habits
   const bestStreak = activeHabits.reduce((max, h) => Math.max(max, h.streakCurrent ?? 0), 0);
+  const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
 
   // Emotional state derived from today's check-in (mirrors convex/coachAI.ts deriveEmotionalState)
   const _mood = todayCheckIn?.morningMood;
@@ -222,6 +256,13 @@ export default function DashboardPage() {
     setTogglingHabit(habitId);
     try {
       await toggleHabit({ habitId: habitId as Id<"habits">, date: today.toISOString().split('T')[0] });
+      // XP visual flash for habit completion
+      setXpFlash({ xp: 10, visible: true });
+      setTimeout(() => setXpFlash({ xp: 0, visible: false }), 2200);
+      // Haptic feedback (mobile)
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate([20, 30, 50]);
+      }
     } catch (e) {
       console.error('Failed to toggle habit:', e);
     }
@@ -285,7 +326,9 @@ export default function DashboardPage() {
       {xpFlash.visible && (
         <div className="pointer-events-none fixed inset-0 z-[999] flex items-center justify-center">
           <div className="animate-bounce border-2 border-orange-500 bg-black/80 px-8 py-4 text-center shadow-lg shadow-orange-900/50">
-            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-400 mb-1">TASK COMPLETE</p>
+            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-400 mb-1">
+              {xpFlash.xp >= 20 ? 'TASK COMPLETE' : 'HABIT LOGGED'}
+            </p>
             <p className="font-pixel text-2xl text-orange-500">+{xpFlash.xp} XP</p>
           </div>
         </div>
@@ -483,6 +526,29 @@ export default function DashboardPage() {
       {/* Quick Add Command Palette */}
       <QuickAddPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
 
+      {/* -- YOUR FOCUS: #1 priority task banner -- */}
+      {openTasks.length > 0 && (
+        <div className="mb-6 border-2 border-orange-800 bg-gradient-to-r from-orange-950/30 via-black to-orange-950/20 p-4">
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0 flex-1">
+              <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500 mb-1">YOUR_FOCUS — #1 PRIORITY</p>
+              <p className="font-terminal text-lg font-bold text-zinc-100 truncate">{openTasks[0].title}</p>
+              {openTasks[0].dueDate && (
+                <p className="mt-1 font-terminal text-xs text-zinc-500">Due {openTasks[0].dueDate}</p>
+              )}
+            </div>
+            <button
+              onClick={() => handleToggleTask(openTasks[0]._id)}
+              disabled={togglingTask === openTasks[0]._id}
+              className="shrink-0 flex items-center gap-2 border-2 border-orange-600 bg-orange-600 px-5 py-2.5 font-pixel text-[0.55rem] tracking-widest text-black transition hover:bg-orange-500 disabled:opacity-50"
+            >
+              <CheckCircle2 className="h-4 w-4" />
+              COMPLETE
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* -- DAILY CHECK-IN PROMPT -- */}
       {isMorning && !morningDone && !showMorningCheckIn && (
         <button
@@ -502,6 +568,8 @@ export default function DashboardPage() {
         <div className="mb-6">
           <MorningCheckIn
             userName={user.name?.split(' ')[0]}
+            todayHabits={activeHabits.slice(0, 5).map(h => h.title)}
+            topTasks={openTasks.slice(0, 3).map(t => t.title)}
             onComplete={() => {
               setCheckInJustCompleted(true);
               setShowMorningCheckIn(false);
@@ -559,7 +627,15 @@ export default function DashboardPage() {
               </button>
             ))}
             {!openTasks.length && (
-              <p className="font-terminal text-xs text-zinc-600">No tasks yet — add one above</p>
+              <div className="text-center py-2">
+                <p className="font-terminal text-xs text-zinc-600 mb-2">No tasks yet</p>
+                <button
+                  onClick={() => setPaletteOpen(true)}
+                  className="inline-flex items-center gap-1.5 border border-orange-800 bg-orange-950/30 px-3 py-1.5 font-pixel text-[0.45rem] tracking-widest text-orange-400 transition hover:bg-orange-950/60"
+                >
+                  <Plus className="h-3 w-3" /> ADD YOUR FIRST TASK
+                </button>
+              </div>
             )}
           </div>
         </div>
@@ -582,13 +658,24 @@ export default function DashboardPage() {
                 <div className="min-w-0">
                   <p className="font-terminal text-sm text-zinc-200 group-hover:text-orange-300 transition truncate">{habit.title}</p>
                   {habit.streakCurrent > 0 && (
-                    <p className="font-terminal text-xs text-amber-600">🔥 {habit.streakCurrent}d</p>
+                    <p className={`font-terminal text-xs ${streakBadge(habit.streakCurrent).color}`}>
+                      {streakBadge(habit.streakCurrent).emoji} {habit.streakCurrent}d
+                      {streakBadge(habit.streakCurrent).label && <span className="ml-1 text-[0.6rem] opacity-70">{streakBadge(habit.streakCurrent).label}</span>}
+                    </p>
                   )}
                 </div>
               </button>
             ))}
             {!activeHabits.length && (
-              <p className="font-terminal text-xs text-zinc-600">No habits yet — track your first one</p>
+              <div className="text-center py-2">
+                <p className="font-terminal text-xs text-zinc-600 mb-2">No habits yet</p>
+                <Link
+                  href="/habits"
+                  className="inline-flex items-center gap-1.5 border border-emerald-800 bg-emerald-950/30 px-3 py-1.5 font-pixel text-[0.45rem] tracking-widest text-emerald-400 transition hover:bg-emerald-950/60"
+                >
+                  <Plus className="h-3 w-3" /> START A HABIT
+                </Link>
+              </div>
             )}
           </div>
         </div>
@@ -633,7 +720,7 @@ export default function DashboardPage() {
         <TermStatCard label="Goals" value={activeGoals.length} />
         <TermStatCard label="Tasks" value={openTasks.length} />
         <TermStatCard label="Progress" value={`${avgGoalProgress}%`} />
-        <TermStatCard label="Best Streak" value={bestStreak > 0 ? `${bestStreak}d` : '—'} icon={<Flame className="h-3 w-3 text-amber-500" />} />
+        <TermStatCard label="Best Streak" value={bestStreak > 0 ? `${bestStreak}d` : '—'} icon={<span className="text-sm">{bestStreak > 0 ? streakBadge(bestStreak).emoji : '🔥'}</span>} />
         <TermStatCard label="Level" value={gamificationProfile ? `${gamificationProfile.level}` : '1'} icon={<Star className="h-3 w-3 text-yellow-500" />} highlight />
       </div>
 
@@ -750,7 +837,7 @@ export default function DashboardPage() {
                     </p>
                   </div>
                   <span className={`rounded px-2 py-0.5 font-terminal text-xs ${habit.streakCurrent > 0 ? 'bg-orange-950/50 text-orange-400' : 'bg-zinc-900 text-zinc-500'}`}>
-                    {habit.streakCurrent > 0 ? '🔥 Active' : 'Idle'}
+                    {habit.streakCurrent > 0 ? `${streakBadge(habit.streakCurrent).emoji} ${habit.streakCurrent}d` : 'Idle'}
                   </span>
                 </button>
               ))}
@@ -909,6 +996,11 @@ export default function DashboardPage() {
                   🌙 Evening debrief pending
                 </span>
               )}
+              {isAfternoonNudge && bestStreak > 0 && activeHabits.length > 0 && (
+                <span className="rounded border border-orange-900 bg-orange-950/20 px-3 py-1.5 font-terminal text-xs text-orange-400 animate-pulse">
+                  ⛓ Don&apos;t break the chain — {bestStreak}d at stake!
+                </span>
+              )}
               {openTasks.length > 3 && (
                 <span className="rounded border border-orange-900 bg-orange-950/20 px-3 py-1.5 font-terminal text-xs text-orange-400">
                   {openTasks.length} tasks pending — clear the queue
@@ -921,6 +1013,17 @@ export default function DashboardPage() {
               )}
             </div>
           </div>
+
+          {/* Streak milestone upsell for free users with 7+ day streak */}
+          {bestStreak >= 7 && !isPro && !streakUpsellDismissed && (
+            <div className="mt-2">
+              <UpsellPrompt
+                trigger="streak_milestone"
+                variant="banner"
+                onDismiss={() => setStreakUpsellDismissed(true)}
+              />
+            </div>
+          )}
         </section>
 
         {/* -- ADAPTIVE DIFFICULTY -- */}

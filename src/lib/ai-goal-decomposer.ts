@@ -238,8 +238,6 @@ export class AIGoalDecomposer {
     const totalDays = differenceInDays(request.targetDate, today);
     const totalWeeks = Math.ceil(totalDays / 7);
 
-    console.log('AI Goal Decomposer: Generating plan for:', request.ultimateGoal);
-    
     try {
       // Try real AI first (Groq/Gemini)
       const rawAiResponse = await ascendAI.decomposeGoal(
@@ -253,7 +251,6 @@ export class AIGoalDecomposer {
         }
       );
       const aiResponse = rawAiResponse as AIGoalPlanResponse;
-      console.log('AI Goal Decomposer: Real AI response received');
       const result = this.transformToResponse(aiResponse, request, totalWeeks);
       return result;
     } catch (error) {
@@ -264,7 +261,6 @@ export class AIGoalDecomposer {
       
       try {
         const result = this.generateMockDecomposition(request, totalDays, totalWeeks);
-        console.log('AI Goal Decomposer: Mock plan generated successfully');
         return result;
       } catch (mockError) {
         console.error('AI Goal Decomposition Error:', mockError);

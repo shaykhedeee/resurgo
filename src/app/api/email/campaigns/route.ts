@@ -165,16 +165,16 @@ const TEMPLATES: Record<string, {
       <p class="p">You've been using Resurgo for ${v.daysActive || 'a while'}. You've seen what's possible with the basics.</p>
       <p class="p">Here's what unlocking Pro gives you:</p>
       <ul style="color:#aaa; font-size:13px; line-height:2; padding-left:20px;">
-        <li>8 AI coaches vs 2 (TITAN + SAGE + PHOENIX + NOVA + ORACLE + NEXUS)</li>
+        <li>All 5 AI coaches (MARCUS + AURORA + TITAN + PHOENIX + NEXUS)</li>
         <li>Unlimited habit tracking</li>
         <li>Advanced goal analytics</li>
         <li>Vision board with AI insights</li>
         <li>Priority AI response speed</li>
       </ul>
-      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $97/year = $8.08/month</p>
+      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $29.99/year = $2.49/month</p>
       <a href="${SITE_URL}/pricing" class="cta">[UPGRADE_NOW]</a>
     `),
-    text: (_v) => `Upgrade to Resurgo Pro — unlock 8 AI coaches: ${SITE_URL}/pricing`,
+    text: (_v) => `Upgrade to Resurgo Pro — unlock all 5 AI coaches: ${SITE_URL}/pricing`,
   },
 };
 

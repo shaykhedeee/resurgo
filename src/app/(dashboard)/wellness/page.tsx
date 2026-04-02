@@ -10,8 +10,10 @@ interface JournalEntry { _id: string; date: string; content: string; type?: stri
 interface NutritionMeal { name: string; calories: number; protein?: number; carbs?: number; fat?: number; time?: string; }
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
-import WellnessRadarChart from '@/components/WellnessRadarChart';
-import { FoodSearch } from '@/components/FoodSearch';
+import dynamic from 'next/dynamic';
+
+const WellnessRadarChart = dynamic(() => import('@/components/WellnessRadarChart'), { ssr: false });
+const FoodSearch = dynamic(() => import('@/components/FoodSearch').then(m => ({ default: m.FoodSearch })), { ssr: false });
 
 const MOOD_LABELS = ['', 'Very Low', 'Low', 'Okay', 'Good', 'Great'];
 const MOOD_COLORS = ['', 'text-red-400', 'text-orange-400', 'text-yellow-400', 'text-green-400', 'text-emerald-400'];

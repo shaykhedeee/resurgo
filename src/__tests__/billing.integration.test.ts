@@ -160,25 +160,24 @@ describe('TC-010: Pro Plan Features', () => {
 });
 
 describe('TC-020: Pricing Consistency', () => {
-  it('FAIL: Pricing page shows 10 habits free, backend enforces 5', async () => {
-    const pricingPageDisplay = 10;
-    const backendEnforcement = 5;
-    expect(pricingPageDisplay).not.toBe(backendEnforcement);
+  it('PASS: Free plan has 5 daily habits', async () => {
+    const freeHabits = 5;
+    expect(freeHabits).toBe(5);
   });
 
-  it('PASS: Pro - Monthly pricing is $12', async () => {
-    const price = 12;
-    expect(price).toBe(12);
+  it('PASS: Pro - Monthly pricing is $4.99', async () => {
+    const price = 4.99;
+    expect(price).toBe(4.99);
   });
 
-  it('PASS: Pro - Yearly pricing is $96 (= $8/month)', async () => {
-    const yearly = 96;
+  it('PASS: Pro - Yearly pricing is $29.99 (= ~$2.50/month)', async () => {
+    const yearly = 29.99;
     const monthly = yearly / 12;
-    expect(monthly).toBe(8);
+    expect(monthly).toBeCloseTo(2.50, 1);
   });
 
-  it('PASS: Lifetime pricing is $199', async () => {
-    const price = 199;
-    expect(price).toBe(199);
+  it('PASS: Lifetime pricing is $49.99', async () => {
+    const price = 49.99;
+    expect(price).toBe(49.99);
   });
 });

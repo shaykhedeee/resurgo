@@ -8,14 +8,18 @@
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
-import { Send, Brain, Zap, Dumbbell, TrendingUp, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare } from 'lucide-react';
+import { Send, Brain, Zap, Dumbbell, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
+import { analytics } from '@/lib/analytics';
 import { PixelArt } from '@/components/PixelArt';
 import { PixelIcon } from '@/components/PixelIcon';
-import VisionBoard from '@/components/VisionBoard';
+import dynamic from 'next/dynamic';
+import { UpsellPrompt } from '@/components/UpsellPrompt';
 
-type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'NOVA' | 'ORACLE' | 'NEXUS';
+const VisionBoard = dynamic(() => import('@/components/VisionBoard'), { ssr: false });
+
+type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'PHOENIX' | 'NEXUS';
 type CoachTab = 'chat' | 'vision' | 'analytics';
 
 interface CoachDef {
@@ -27,31 +31,23 @@ interface CoachDef {
   domain: string;
   shortBio: string;
   Icon: React.ElementType;
-  premium?: boolean; // requires yearly or lifetime plan
 }
 
 const COACHES: CoachDef[] = [
-  { id: 'MARCUS', name: 'MARCUS', title: 'Stoic Strategist',       avatar: '🏛', color: '#ca8a04', domain: 'discipline · goals · execution',          shortBio: 'Brutal clarity. Zero BS. The obstacle IS the way.',        Icon: Brain },
-  { id: 'AURORA', name: 'AURORA', title: 'Mindful Catalyst',       avatar: '🔮', color: '#a855f7', domain: 'wellness · mindfulness · neuroscience',    shortBio: 'Optimize your nervous system. Science-backed, heart-led.', Icon: Sparkles },
-  { id: 'TITAN',  name: 'TITAN',  title: 'Physical Performance',   avatar: '💪', color: '#ef4444', domain: 'fitness · nutrition · optimization',        shortBio: 'Your body is the engine. Fix physical → fix mental.',      Icon: Dumbbell },
-  { id: 'SAGE',   name: 'SAGE',   title: 'Financial Alchemist',    avatar: '💰', color: '#22c55e', domain: 'finance · wealth · career strategy',        shortBio: 'Every dollar is a soldier. Deploy capital with precision.', Icon: TrendingUp },
-  { id: 'PHOENIX',name: 'PHOENIX',title: 'Comeback Specialist',    avatar: '🔥', color: '#f97316', domain: 'resilience · recovery · setbacks',          shortBio: 'Built for rock bottom. The ashes are the fuel.',           Icon: Flame },
-  { id: 'NOVA',   name: 'NOVA',   title: 'Creative Systems',       avatar: '⚡', color: '#06b6d4', domain: 'creativity · learning · systems',           shortBio: 'Connects dots across disciplines to unlock breakthroughs.', Icon: Zap },
-  // ── PREMIUM AGENTS (Yearly / Lifetime only) ──────────────────────────────────
-  { id: 'ORACLE', name: 'ORACLE', title: 'Omniscient Life Architect', avatar: '👁', color: '#FF6B35', domain: 'strategy · psychology · full-spectrum life OS',   shortBio: 'Synthesises all coach wisdom. Sees your entire system, rewrites what isn\'t working.', Icon: Brain, premium: true },
-  { id: 'NEXUS',  name: 'NEXUS',  title: 'Neural Integration Engine', avatar: '∞', color: '#e879f9', domain: 'neural hacking · deep learning · mastery systems', shortBio: 'Merges mind, body, finance & creativity into one adaptive engine. No limits.', Icon: Zap, premium: true },
+  { id: 'MARCUS',  name: 'MARCUS',  title: 'Stoic Strategist',     avatar: '🏛', color: '#ca8a04', domain: 'discipline · goals · execution',              shortBio: 'Brutal clarity. Zero BS. The obstacle IS the way.',              Icon: Brain },
+  { id: 'TITAN',   name: 'TITAN',   title: 'Physical Performance', avatar: '💪', color: '#ef4444', domain: 'fitness · nutrition · optimization',              shortBio: 'Your body is the engine. Fix physical → fix mental.',            Icon: Dumbbell },
+  { id: 'AURORA',  name: 'AURORA',  title: 'Mindful Catalyst',     avatar: '🔮', color: '#a855f7', domain: 'wellness · mindfulness · creativity · neuroscience', shortBio: 'Optimize your nervous system. Science-backed, heart-led.',       Icon: Sparkles },
+  { id: 'PHOENIX', name: 'PHOENIX', title: 'Comeback Specialist',  avatar: '🔥', color: '#f97316', domain: 'resilience · recovery · setbacks · finance',       shortBio: 'Built for rock bottom. The ashes are the fuel.',                Icon: Flame },
+  { id: 'NEXUS',   name: 'NEXUS',   title: 'Systems Builder',      avatar: '∞',  color: '#e879f9', domain: 'habits · routines · automation · efficiency',       shortBio: 'Merges mind, body & systems into one adaptive engine. No limits.', Icon: Zap },
 ];
 
 // Static fallback prompts (used only while smart prompts load)
 const FALLBACK_PROMPTS: Record<CoachId, string[]> = {
   MARCUS:  ['Plan my top 3 priorities for today', 'I feel stuck and overwhelmed', 'How do I build iron discipline?'],
-  AURORA:  ['I\'m feeling anxious and burned out', 'Help me build a mindfulness routine', 'How do I sleep better?'],
   TITAN:   ['Design me a weekly workout plan', 'What should I eat for peak energy?', 'My energy crashes at 3pm — fix it'],
-  SAGE:    ['How do I build a savings system?', 'Help me create a monthly budget', 'How do I grow my income?'],
+  AURORA:  ['I\'m feeling anxious and burned out', 'Help me build a mindfulness routine', 'How do I sleep better?'],
   PHOENIX: ['I failed at my goals again', 'I\'m in a deep slump — help me restart', 'How do I build resilience?'],
-  NOVA:    ['I\'m stuck on a creative problem', 'How do I learn faster?', 'Help me build a second brain system'],
-  ORACLE:  ['Audit my entire life system right now', 'What is the single highest-leverage change I can make?', 'Map out my full 90-day transformation protocol'],
-  NEXUS:   ['Build me a custom neural mastery stack', 'Integrate my fitness, work, and mental health into one system', 'What cognitive upgrades should I prioritize first?'],
+  NEXUS:   ['Build me a custom systems stack', 'Integrate my fitness, work, and mental health into one system', 'How do I automate my routines?'],
 };
 
 // ── Render action badges from action summary blocks ──
@@ -101,21 +97,31 @@ export default function CoachPage() {
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [isGreeting, setIsGreeting] = useState(false);
+  const [showCoachUpsell, setShowCoachUpsell] = useState<string | null>(null);
+  const [showMessageLimitUpsell, setShowMessageLimitUpsell] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const greetedRef = useRef<Set<string>>(new Set());
 
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
-  // Premium agents require yearly Pro or Lifetime — billingPeriod is set by billing webhook
-  const isYearly = user?.plan === 'lifetime' || (user?.billingPeriod === 'year' && user?.plan === 'pro');
-  const FREE_COACHES: CoachId[] = ['MARCUS', 'AURORA'];
+  const FREE_COACHES: CoachId[] = ['MARCUS', 'TITAN'];
 
   const history = useQuery(api.coachMessages.getHistory, { limit: 100 });
   const smartPrompts = useQuery(api.coachAI.getSmartPrompts, { coachId: selectedCoach });
   const sendWithPersona = useAction(api.coachAI.sendWithPersona);
   const greetUser = useAction(api.coachAI.greetUser);
   const setCoachMutation = useMutation(api.coachAI.setSelectedCoach);
+
+  const FREE_DAILY_MESSAGE_LIMIT = 10;
+  
+  // Count today's user messages for free plan limit
+  const todayUserMessages = useMemo(() => {
+    if (!history || isPro) return 0;
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    return history.filter(m => m.role === 'user' && m.createdAt >= todayStart.getTime()).length;
+  }, [history, isPro]);
 
   const coachMessages = useMemo(() => {
     if (!history) return [];
@@ -142,8 +148,18 @@ export default function CoachPage() {
   const handleSend = async (text: string) => {
     const trimmed = text.trim();
     if (!trimmed || isSending) return;
+    
+    // Gate: check daily message limit for free users
+    if (!isPro && todayUserMessages >= FREE_DAILY_MESSAGE_LIMIT) {
+      setShowMessageLimitUpsell(true);
+      return;
+    }
+    
     setMessage('');
     setIsSending(true);
+    // Track first AI message (activation event)
+    if (coachMessages.length === 0) analytics.firstAIMessage(selectedCoach);
+    analytics.getAICoaching();
     try {
       await sendWithPersona({ content: trimmed, coachId: selectedCoach, touchpoint: 'on_demand' });
     } catch (e) {
@@ -156,10 +172,15 @@ export default function CoachPage() {
   const handleSubmit = (e: FormEvent) => { e.preventDefault(); handleSend(message); };
 
   const handleSwitchCoach = async (id: CoachId) => {
-    const def = COACHES.find(c => c.id === id);
-    if (def?.premium && !isYearly) return; // premium agents require yearly/lifetime
-    if (!isPro && !FREE_COACHES.includes(id) && !def?.premium) return; // blocked for free users
+    if (!isPro && !FREE_COACHES.includes(id)) {
+      const coachDef = COACHES.find(c => c.id === id);
+      setShowCoachUpsell(coachDef?.name ?? id);
+      analytics.upgradePromptShown('coach_selection');
+      return; // blocked for free users
+    }
+    setShowCoachUpsell(null);
     setSelectedCoach(id);
+    analytics.coachSelected(id);
     await setCoachMutation({ coachId: id }).catch(() => {});
   };
 
@@ -273,30 +294,21 @@ export default function CoachPage() {
               {COACHES.map((c) => {
                 const Icon = c.Icon;
                 const isActive = c.id === selectedCoach;
-                const isPremiumLocked = !!c.premium && !isYearly;
-                const isProLocked = !c.premium && !isPro && !FREE_COACHES.includes(c.id);
-                const isLocked = isPremiumLocked || isProLocked;
-                const isSeparator = c.id === 'ORACLE'; // visual divider before premium block
+                const isProLocked = !isPro && !FREE_COACHES.includes(c.id);
+                const isLocked = isProLocked;
                 return (
                   <div key={c.id}>
-                    {isSeparator && (
-                      <div className="my-1 border-t border-zinc-800 px-3 py-1">
-                        <p className="font-mono text-[7px] tracking-widest" style={{ color: '#FF6B35' }}>── PREMIUM_AGENTS ──</p>
-                      </div>
-                    )}
                     <button onClick={() => handleSwitchCoach(c.id)}
                       className={cn('group w-full border px-3 py-2.5 text-left transition',
                         isLocked ? 'cursor-not-allowed opacity-50 border-transparent' :
                         isActive ? 'border-zinc-700 bg-zinc-900' : 'border-transparent hover:border-zinc-800 hover:bg-zinc-900/50'
                       )}
-                      style={isActive && !isLocked && c.premium ? { borderColor: `${c.color}60`, background: `${c.color}10` } : {}}
                     >
                       <div className="flex items-center gap-2">
                         <Icon className="h-3.5 w-3.5 shrink-0" style={{ color: isActive && !isLocked ? c.color : '#52525b' }} />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5">
                             <p className="font-mono text-[10px] font-bold tracking-widest" style={{ color: isActive && !isLocked ? c.color : '#71717a' }}>{c.name}</p>
-                            {c.premium && !isLocked && <span className="font-mono text-[6px] tracking-widest" style={{ color: c.color }}>★</span>}
                           </div>
                           <p className="truncate font-mono text-[8px] tracking-wider text-zinc-400">{c.title}</p>
                         </div>
@@ -306,10 +318,7 @@ export default function CoachPage() {
                           <span className="h-1 w-1 rounded-full" style={{ backgroundColor: c.color }} />
                         ) : null}
                       </div>
-                      {isPremiumLocked && (
-                        <p className="mt-1 font-mono text-[7px] tracking-widest" style={{ color: '#FF6B35' }}>YEARLY / LIFETIME ONLY</p>
-                      )}
-                      {isProLocked && (
+                      {isLocked && (
                         <p className="mt-1 font-mono text-[7px] tracking-widest text-amber-600/70">PRO ONLY</p>
                       )}
                     </button>
@@ -317,6 +326,16 @@ export default function CoachPage() {
                 );
               })}
             </div>
+            {showCoachUpsell && (
+              <div className="p-2">
+                <UpsellPrompt
+                  trigger="coach_locked"
+                  variant="inline"
+                  coachName={showCoachUpsell}
+                  onDismiss={() => setShowCoachUpsell(null)}
+                />
+              </div>
+            )}
           </div>
 
           <div className="surface-panel overflow-hidden">
@@ -393,6 +412,17 @@ export default function CoachPage() {
               <div ref={bottomRef} />
             </div>
           </div>
+
+          {/* Message Limit Upsell */}
+          {showMessageLimitUpsell && (
+            <div className="px-3 py-2">
+              <UpsellPrompt
+                trigger="ai_message_limit"
+                variant="banner"
+                onDismiss={() => setShowMessageLimitUpsell(false)}
+              />
+            </div>
+          )}
 
           {/* Input */}
           <form onSubmit={handleSubmit} className="surface-panel flex items-center gap-2 p-3">

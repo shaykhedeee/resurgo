@@ -10,6 +10,7 @@ import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useState, useEffect } from 'react';
 import { Moon, Star, Trophy, AlertTriangle, Heart, ArrowRight, Check, Loader2, ChevronRight } from 'lucide-react';
+import { analytics } from '@/lib/analytics';
 
 interface EveningDebriefProps {
   onComplete?: () => void;
@@ -42,7 +43,7 @@ export function EveningDebrief({ onComplete, userName, tasksCompleted, habitsCom
   const [step, setStep] = useState<Step>('rating');
   const [dayRating, setDayRating] = useState(0);
   const [mood, setMood] = useState(0);
-  const [energy, setEnergy] = useState(3);
+  const [energy, _setEnergy] = useState(3);
   const [biggestWin, setBiggestWin] = useState('');
   const [biggestChallenge, setBiggestChallenge] = useState('');
   const [gratitude, setGratitude] = useState<string[]>(['', '', '']);
@@ -103,6 +104,7 @@ export function EveningDebrief({ onComplete, userName, tasksCompleted, habitsCom
         tomorrowFocus: tomorrowFocus || undefined,
         aiReflection: aiReflection || undefined,
       });
+      analytics.eveningDebrief();
       setStep('done');
       setTimeout(() => onComplete?.(), 1500);
     } catch (e) {

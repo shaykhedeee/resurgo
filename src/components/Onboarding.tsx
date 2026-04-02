@@ -211,6 +211,7 @@ export function Onboarding() {
 
       setStep('ready');
       analytics.createGoal(12); // 12-week default timeline
+      analytics.firstGoalCreated(category);
       analytics.useAIDecomposition();
       analytics.completeOnboarding(6); // Step 6 = goal plan generated
     } catch {
@@ -223,6 +224,7 @@ export function Onboarding() {
 
   const handleFinish = () => {
     analytics.completeOnboarding(7); // Step 7 = user clicked "Let's go" — fully activated
+    analytics.signUp('onboarding');
     addToast({
       type: 'success',
       title: `Welcome to Resurgo, ${name}! 🚀`,

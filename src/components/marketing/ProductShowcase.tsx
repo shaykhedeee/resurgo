@@ -47,11 +47,11 @@ const SCREENS = [
     tag: 'AI_COACHING_ENGINE',
     route: '/coach',
     img: '/screenshots/924_1x_shots_so.png',
-    description: '8 specialized AI coaches — one for every domain of life.',
+    description: '5 specialized AI coaches — one for every domain of life.',
     features: [
-      { icon: '01', label: '8 Distinct Personas', desc: 'Marcus, Aurora, Titan, Sage, Phoenix, Nova, Oracle, Nexus.' },
-      { icon: '02', label: 'Domain Expertise',    desc: 'Strategy · Wellness · Finance · Systems · Resilience.' },
-      { icon: '03', label: 'Free to Start',       desc: 'Marcus & Aurora are free forever — upgrade for the rest.' },
+      { icon: '01', label: '5 Distinct Personas', desc: 'Marcus, Aurora, Titan, Phoenix, Nexus.' },
+      { icon: '02', label: 'Domain Expertise',    desc: 'Strategy · Wellness · Performance · Resilience · Integration.' },
+      { icon: '03', label: 'Free to Start',       desc: 'Marcus & Titan are free forever — upgrade for the rest.' },
     ],
   },
 ];

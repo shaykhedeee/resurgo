@@ -9,11 +9,13 @@
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useState, useEffect } from 'react';
-import { Sun, Zap, Moon, Target, Brain, ChevronRight, Check, Loader2 } from 'lucide-react';
+import { Sun, Moon, Target, Brain, ChevronRight, Check, Loader2 } from 'lucide-react';
 
 interface MorningCheckInProps {
   onComplete?: () => void;
   userName?: string;
+  todayHabits?: string[];
+  topTasks?: string[];
 }
 
 const MOOD_OPTIONS = [
@@ -42,7 +44,7 @@ const SLEEP_OPTIONS = [
 
 type Step = 'mood' | 'energy' | 'sleep' | 'intention' | 'briefing' | 'done';
 
-export function MorningCheckIn({ onComplete, userName }: MorningCheckInProps) {
+export function MorningCheckIn({ onComplete, userName, todayHabits, topTasks }: MorningCheckInProps) {
   const saveMorning = useMutation(api.dailyCheckIns.saveMorning);
 
   const [step, setStep] = useState<Step>('mood');
@@ -243,6 +245,35 @@ export function MorningCheckIn({ onComplete, userName }: MorningCheckInProps) {
         {/* STEP: Intention + Priorities */}
         {step === 'intention' && (
           <div className="animate-fade-in">
+            {/* Today's scheduled habits & tasks context */}
+            {(todayHabits?.length || topTasks?.length) ? (
+              <div className="mb-4 border border-zinc-800 bg-zinc-900/30 p-3 space-y-2">
+                <p className="font-pixel text-[0.5rem] tracking-widest text-zinc-500">TODAY&apos;S LINEUP</p>
+                {todayHabits && todayHabits.length > 0 && (
+                  <div>
+                    <p className="font-terminal text-xs text-zinc-500 mb-1">Habits:</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {todayHabits.slice(0, 5).map((h, i) => (
+                        <span key={i} className="rounded border border-zinc-700 bg-zinc-900 px-2 py-0.5 font-terminal text-xs text-zinc-300">{h}</span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {topTasks && topTasks.length > 0 && (
+                  <div>
+                    <p className="font-terminal text-xs text-zinc-500 mb-1">Top tasks:</p>
+                    <div className="space-y-1">
+                      {topTasks.slice(0, 3).map((t, i) => (
+                        <p key={i} className="font-terminal text-xs text-zinc-300">
+                          <Target className="inline h-3 w-3 text-orange-500 mr-1" />{t}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : null}
+
             <p className="font-terminal text-sm text-zinc-300 mb-1">Set your intention for today</p>
             <p className="font-terminal text-xs text-zinc-500 mb-3">One sentence. What matters most?</p>
             <input

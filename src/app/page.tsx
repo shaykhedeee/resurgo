@@ -145,7 +145,7 @@ const softwareSchema = {
       price: '0',
       priceCurrency: 'USD',
       description:
-        'Unlimited habits and goals, all focus timer modes, 2 AI coaches (Marcus and Aurora), daily planning — free forever with no credit card.',
+        'Unlimited habits and goals, all focus timer modes, 2 AI coaches (Marcus and Titan), daily planning — free forever with no credit card.',
     },
     {
       '@type': 'Offer',
@@ -153,7 +153,7 @@ const softwareSchema = {
       price: '4.99',
       priceCurrency: 'USD',
       billingIncrement: 'Month',
-      description: 'All 8 AI coaches, advanced analytics, weekly AI reviews, priority support, and Telegram bot.',
+      description: 'All 5 AI coaches, advanced analytics, weekly AI reviews, priority support, and Telegram bot.',
     },
     {
       '@type': 'Offer',
@@ -276,7 +276,7 @@ const faqSchema = {
       name: 'Is Resurgo free to use?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. The Resurgo free plan includes unlimited habits and goals, all three focus timer modes (Pomodoro, Deep Work, Flowtime), 2 AI coaches (Marcus and Aurora), daily planning, and basic analytics — with no time limit and no credit card required. Pro plans start at $4.99/month.',
+        text: 'Yes. The Resurgo free plan includes unlimited habits and goals, all three focus timer modes (Pomodoro, Deep Work, Flowtime), 2 AI coaches (Marcus and Titan), daily planning, and basic analytics — with no time limit and no credit card required. Pro plans start at $4.99/month.',
       },
     },
     {

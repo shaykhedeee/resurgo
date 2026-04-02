@@ -6,6 +6,7 @@
 
 import { useState } from 'react';
 import { useAscendStore } from '@/lib/store';
+import { analytics } from '@/lib/analytics';
 import { cn, HABIT_ICONS, HABIT_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '@/lib/utils';
 import { HabitFrequency, HabitCategory } from '@/types';
 import { 
@@ -49,7 +50,7 @@ const SUGGESTED_HABITS = [
 ];
 
 export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalProps) {
-  const { addHabit, goals } = useAscendStore();
+  const { addHabit, habits, goals } = useAscendStore();
   
   const [step, setStep] = useState<'main' | 'icons' | 'colors'>('main');
   const [name, setName] = useState('');
@@ -81,6 +82,11 @@ export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalPr
       linkedGoalId: selectedGoalId || undefined,
       isActive: true,
     });
+
+    analytics.createHabit(category);
+    if (habits.length === 0) {
+      analytics.firstHabitCreated(category);
+    }
 
     // Reset form
     setName('');

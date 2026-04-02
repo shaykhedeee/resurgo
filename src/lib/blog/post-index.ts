@@ -151,7 +151,7 @@ export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
     slug: 'ai-coaching-vs-human-coaching',
     title: 'AI Coaching vs Human Coaching: A Brutally Honest Comparison',
-    desc: 'We pitted 6 AI personas against traditional coaching approaches across accountability, cost, availability, and emotional intelligence. The results might surprise you.',
+    desc: 'We pitted 5 AI coaches against traditional coaching approaches across accountability, cost, availability, and emotional intelligence. The results might surprise you.',
     date: 'February 3, 2026',
     lastModified: '2026-02-03T14:05:00.000Z',
     readTime: '10 min',
@@ -232,7 +232,7 @@ export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
     slug: 'streaks-vs-habitify-vs-resurgo-2026',
     title: 'Streaks vs Habitify vs Resurgo: Which Habit Tracker Wins in 2026?',
-    desc: "We compared three popular habit trackers head-to-head on AI coaching, gamification, cross-platform support, and real-world stickiness. One of them has 8 AI coaches. The other two have zero.",
+    desc: "We compared three popular habit trackers head-to-head on AI coaching, gamification, cross-platform support, and real-world stickiness. One of them has 5 AI coaches. The other two have zero.",
     date: 'March 8, 2026',
     lastModified: '2026-03-08T14:00:00.000Z',
     readTime: '12 min',

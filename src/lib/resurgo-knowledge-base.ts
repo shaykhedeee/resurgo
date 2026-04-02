@@ -76,36 +76,35 @@ export const PRICING = {
     priceDisplay: 'Free forever',
     description: 'Perfect for getting started with habit tracking',
     limits: {
-      habits: 10,
+      habits: 5,
       goals: 3,
       aiRequests: 10,
     },
     features: [
-      'Up to 10 active habits',
+      'Up to 5 daily habits',
       'Up to 3 active goals',
-      'Basic habit stacking',
-      'Streak tracking',
-      'Basic gamification (XP & levels)',
-      '10 AI coaching messages/month',
-      'Pomodoro timer',
-      'Calendar view',
+      '2 AI Coaches (Marcus + Titan)',
+      'Unlimited tasks',
+      'Focus sessions (all modes)',
+      '10 AI messages/day',
+      '3 vision board panels',
+      'Streak tracking & gamification',
     ],
     notIncluded: [
-      'Advanced analytics',
+      'All 5 AI coaches',
       'Unlimited habits & goals',
-      'Priority AI coaching',
-      'Data export',
-      'Custom themes',
+      'Unlimited AI messages',
+      'Unlimited vision boards',
       'Priority support',
     ],
   },
   pro: {
     name: 'Pro',
-    price: 12,
-    priceYearly: 96,
-    priceDisplay: '$12/month or $96/year',
-    savingsYearly: '$48 saved annually',
-    description: 'For serious goal-achievers who want AI-powered growth',
+    price: 4.99,
+    priceYearly: 29.99,
+    priceDisplay: '$4.99/month or $29.99/year',
+    savingsYearly: 'Save 50% with yearly',
+    description: 'For serious goal-achievers who want full AI-powered growth',
     limits: {
       habits: 'unlimited',
       goals: 'unlimited',
@@ -113,26 +112,24 @@ export const PRICING = {
     },
     features: [
       'Unlimited habits & goals',
-      'Unlimited AI coaching with Kai',
+      'All 5 AI Coaches (Marcus, Titan, Aurora, Phoenix, Nexus)',
+      'Unlimited AI messages',
       'Advanced analytics & insights',
-      'Smart habit recommendations',
+      'Unlimited vision boards',
       'Full AI goal decomposition',
-      'Data export (JSON/CSV)',
-      'Custom themes & sounds',
-      'Priority email support',
-      'Early access to new features',
-      'All badges & achievements',
+      'All integrations',
+      'Priority support',
     ],
     popularReasons: [
       'Most popular for professionals',
-      '83% of users see results in 14 days',
+      'Unlock all 5 AI coaches',
     ],
   },
   lifetime: {
     name: 'Lifetime',
-    price: 199,
-    priceDisplay: '$199 one-time',
-    description: 'Pay once, use forever - includes all future updates',
+    price: 49.99,
+    priceDisplay: '$49.99 one-time',
+    description: 'Pay once, use forever - founding member pricing (1,000 spots)',
     features: [
       'Everything in Pro',
       'Lifetime access - no renewals',
@@ -140,7 +137,7 @@ export const PRICING = {
       'Founding member badge',
       'VIP support priority',
     ],
-    savings: 'Save $450+ over 5 years vs Pro yearly',
+    savings: 'Best value - less than 1 year of Pro',
     limitedOffer: true,
   },
 };
@@ -365,9 +362,9 @@ ${CHATBOT_PERSONA.principles.map((p, i) => `${i + 1}. ${p}`).join('\n')}
 PRODUCT KNOWLEDGE:
 - Resurgo uses Atomic Habits principles by James Clear
 - Key features: ${PRODUCT_INFO.keyFeatures.slice(0, 5).map(f => f.name).join(', ')}
-- Free plan: ${PRICING.free.limits.habits} habits, ${PRICING.free.limits.goals} goal, ${PRICING.free.limits.aiRequests} AI messages/month
-- Pro plan: $${PRICING.pro.price}/month - unlimited everything + advanced analytics + priority AI
-- Lifetime: $${PRICING.lifetime.price} one-time - everything forever
+- Free plan: ${PRICING.free.limits.habits} daily habits, ${PRICING.free.limits.goals} goals, ${PRICING.free.limits.aiRequests} AI messages/day, 2 coaches (Marcus + Titan)
+- Pro plan: $${PRICING.pro.price}/month - unlimited everything, all 5 AI coaches
+- Lifetime: $${PRICING.lifetime.price} one-time - everything forever (founding member pricing)
 
 ${ctx.plan ? `USER CONTEXT:
 - Plan: ${ctx.plan}
@@ -477,7 +474,7 @@ export function getQuickResponse(intent: UserIntent): string | null {
       return CHATBOT_PERSONA.greetings[Math.floor(Math.random() * CHATBOT_PERSONA.greetings.length)];
     
     case 'pricing_question':
-      return `Here's our pricing:\n\n**Free**: Up to 10 habits, 3 goals, AI-powered insights\n\n**Pro Monthly** ($12/mo): Unlimited habits & goals, AI coaching, advanced analytics\n\n**Pro Yearly** ($96/yr): Same Pro power at $8/mo effective (save $48/yr)\n\n**Lifetime** ($199 once): Everything in Pro, forever!\n\nWhat would you like to know more about?`;
+      return `Here's our pricing:\n\n**Free**: 5 daily habits, 3 goals, 2 AI coaches (Marcus + Titan), 10 AI messages/day\n\n**Pro** ($4.99/mo): Unlimited everything, all 5 AI coaches\n\n**Pro Yearly** ($29.99/yr): Same Pro power, save 50%\n\n**Lifetime** ($49.99 once): Everything in Pro, forever! Founding member pricing.\n\nWhat would you like to know more about?`;
     
     case 'cancel_subscription':
       return `I'm sorry to hear you're considering canceling. You can cancel anytime from Settings > Subscription > Manage. Your access continues until the billing period ends.\n\nBefore you go - is there something that isn't working for you? I'd love to help if I can.`;

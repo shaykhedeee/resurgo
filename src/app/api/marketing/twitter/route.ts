@@ -57,9 +57,9 @@ function buildOAuthHeader(method: string, url: string, extraParams: Record<strin
 // ── Tweet Templates ─────────────────────────────────────────────────────────
 const TWEET_TEMPLATES = {
   product_launch: [
-    `🚀 Resurgo is live.\n\nAn AI life OS that turns goals → daily execution in minutes.\n\n8 AI coaches. Habit stacking. Focus timer. Weekly reviews.\n\nFree forever tier. No BS.\n\nresurgo.life`,
-    `Most productivity apps fail you after week 2.\n\nResurgo doesn't.\n\n→ 8 AI coaches that adapt to you\n→ Habit stacking engine\n→ Streak protection (forgives your bad days)\n→ Weekly review wizard\n\nFree: resurgo.life`,
-    `I kept restarting every Monday.\n\nNew planner. New app. New system.\n\nSo I built one that sticks.\n\nResurgo — AI habit tracker + life OS\n\n→ PHOENIX coach for restart recovery\n→ MARCUS for stoic discipline\n→ ORACLE for root-cause analysis\n\nresurgo.life`,
+    `🚀 Resurgo is live.\n\nAn AI life OS that turns goals → daily execution in minutes.\n\n5 AI coaches. Habit stacking. Focus timer. Weekly reviews.\n\nFree forever tier. No BS.\n\nresurgo.life`,
+    `Most productivity apps fail you after week 2.\n\nResurgo doesn't.\n\n→ 5 AI coaches that adapt to you\n→ Habit stacking engine\n→ Streak protection (forgives your bad days)\n→ Weekly review wizard\n\nFree: resurgo.life`,
+    `I kept restarting every Monday.\n\nNew planner. New app. New system.\n\nSo I built one that sticks.\n\nResurgo — AI habit tracker + life OS\n\n→ PHOENIX coach for restart recovery\n→ MARCUS for stoic discipline\n→ NEXUS for integration & flow\n\nresurgo.life`,
   ],
   build_in_public: [
     `Building an AI life OS in public.\n\nDay {day}:\n- {update}\n\nThe hardest part isn't the code. It's making something people actually use past week 2.\n\n#buildinpublic #indiehacker`,

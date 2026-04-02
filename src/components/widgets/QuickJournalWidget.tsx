@@ -9,6 +9,7 @@ import { useState, useCallback } from 'react';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { PenLine, Check, Loader2 } from 'lucide-react';
+import { analytics } from '@/lib/analytics';
 
 const MOODS = [
   { value: 1, emoji: '😔', label: 'Low' },
@@ -49,6 +50,7 @@ export default function QuickJournalWidget() {
         intention: note || undefined,
         topThreePriorities: [],
       });
+      analytics.morningCheckin();
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
       setMood(0);

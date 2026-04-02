@@ -31,7 +31,7 @@ const FAQs = [
   },
   {
     q: 'What is included in the Pro plan?',
-    a: 'Pro unlocks unlimited habits, goals, and tasks. You also get all 8 AI coach personas, advanced analytics with charts, the business goal planner, all focus timer modes, sleep and nutrition tracking, Telegram bot integration, API access with webhooks, and priority email support.',
+    a: 'Pro unlocks unlimited habits, goals, and tasks. You also get all 5 AI coach personas (Marcus, Titan, Aurora, Phoenix, Nexus), advanced analytics with charts, the business goal planner, all focus timer modes, sleep and nutrition tracking, Telegram bot integration, API access with webhooks, and priority email support.',
   },
   {
     q: 'How much does Resurgo Pro cost?',
@@ -43,7 +43,7 @@ const FAQs = [
   },
   {
     q: 'How does AI coaching work?',
-    a: 'You choose from 5 core AI coach personas — Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Phoenix (comeback specialist), and Nexus (integration engine). All 5 are available on the free plan. Pro and Lifetime unlock Sage (financial alchemist), Nova (creative systems), and Oracle (life architect). Each coach can directly create tasks, goals, habits, and full plans for you from conversation. They remember your sessions and personalize advice based on your real data.'
+    a: 'You choose from 5 AI coach personas — Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Phoenix (comeback specialist), and Nexus (integration engine). Marcus and Titan are free. Pro and Lifetime unlock Aurora, Phoenix, and Nexus. Each coach can directly create tasks, goals, habits, and full plans for you from conversation. They remember your sessions and personalize advice based on your real data.'
   },
   {
     q: 'Is my data private?',

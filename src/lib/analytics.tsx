@@ -217,6 +217,52 @@ export const analytics = {
   getAIInsights: () => {
     trackEvent('get_ai_insights', 'ai_features');
   },
+
+  // P0 Events — Critical funnel tracking
+  firstAIMessage: (coachId: string) => {
+    trackEvent('first_ai_message', 'activation', coachId);
+  },
+
+  coachSelected: (coachId: string) => {
+    trackEvent('coach_selected', 'engagement', coachId);
+  },
+
+  upgradePromptShown: (trigger: string) => {
+    trackEvent('upgrade_prompt_shown', 'conversion', trigger);
+  },
+
+  upgradePromptClicked: (trigger: string) => {
+    trackEvent('upgrade_prompt_clicked', 'conversion', trigger);
+  },
+
+  firstHabitCreated: (category: string) => {
+    trackEvent('first_habit_created', 'activation', category);
+  },
+
+  firstGoalCreated: (category: string) => {
+    trackEvent('first_goal_created', 'activation', category);
+  },
+
+  upgradeCompleted: (plan: string, value: number) => {
+    trackEvent('upgrade_completed', 'conversion', plan, value, { currency: 'USD' });
+  },
+
+  // P1 Events — Retention tracking
+  morningCheckin: () => {
+    trackEvent('morning_checkin', 'engagement');
+  },
+
+  eveningDebrief: () => {
+    trackEvent('evening_debrief', 'engagement');
+  },
+
+  focusSessionCompleted: (durationMinutes: number) => {
+    trackEvent('focus_session_completed', 'engagement', `${durationMinutes}min`, durationMinutes);
+  },
+
+  streakMilestone: (days: number) => {
+    trackEvent('streak_milestone', 'milestones', `${days}_days`, days);
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────────

@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-
-function validateApiKey(req: NextRequest): boolean {
-  const key = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
-  return !!(key && key.startsWith('rsg_'));
-}
+import { resolveApiKey } from '../_lib/auth';
 
 export async function GET(req: NextRequest) {
-  if (!validateApiKey(req)) {
+  const authResult = await resolveApiKey(req.headers.get('authorization'));
+  if (!authResult) {
     return NextResponse.json({ error: 'Unauthorized.' }, { status: 401 });
   }
   return NextResponse.json({

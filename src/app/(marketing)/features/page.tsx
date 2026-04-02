@@ -4,7 +4,7 @@ import { TermLinkButton } from '@/components/ui/TermButton';
 export const metadata: Metadata = {
   title: 'Features — Resurgo Habit Tracker | AI Coaching, Focus Timers, Wellness & More',
   description:
-    'Explore all Resurgo features: AI goal decomposition, habit tracking with streaks, 8 AI coach personas, Pomodoro and Deep Work timers, mood and sleep tracking, budget planner, Telegram bot, REST API, and more.',
+    'Explore all Resurgo features: AI goal decomposition, habit tracking with streaks, 5 AI coach personas, Pomodoro and Deep Work timers, mood and sleep tracking, budget planner, Telegram bot, REST API, and more.',
   keywords: [
     'Resurgo features', 'habit tracker features', 'AI goal decomposition',
     'habit stacking app', 'focus timer app', 'Pomodoro tracker',
@@ -47,7 +47,7 @@ const FEATURES = [
     category: 'AI_COACHING',
     icon: '🤖',
     features: [
-      { name: '5 Core AI Coaches + Premium Personas', desc: 'Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), Nexus (Integration Engine) — all free. Pro unlocks Sage (Financial Alchemist), Nova (Creative Systems) & Oracle (Life Architect). Each coach creates tasks, goals, habits & plans directly from chat.' },
+      { name: '5 AI Coaches', desc: 'Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), Nexus (Integration Engine). Marcus & Titan free. Pro unlocks all 5. Each coach creates tasks, goals, habits & plans directly from chat.' },
       { name: 'Context-Aware Intelligence', desc: 'Your coach knows your real goals, tasks, habits, and streaks — delivering hyper-personalized advice based on actual data' },
       { name: 'AI Plan Builder', desc: 'AI breaks any goal into phases, weekly actions, and daily steps you can follow immediately' },
       { name: 'Anti-Procrastination', desc: 'Daily intention setting, Two-Minute Rule prompts, and accountability check-ins' },
@@ -98,11 +98,11 @@ const FEATURES = [
 const FEATURE_FAQS = [
   {
     q: 'How many habits can I track on the free plan?',
-    a: 'The free plan allows 5 habit check-ins per day and up to 3 active goals, with 10 AI coach messages per day and 5 core coaches (Marcus, Titan, Aurora, Phoenix, Nexus). Upgrade to Pro for unlimited habits, goals, and tasks plus Sage, Nova & Oracle premium coaches.',
+    a: 'The free plan allows 5 habit check-ins per day and up to 3 active goals, with 10 AI coach messages per day and 2 coaches (Marcus & Titan). Upgrade to Pro for unlimited habits, goals, and tasks plus all 5 AI coaches.',
   },
   {
     q: 'What makes Resurgo different from other habit trackers?',
-    a: 'Resurgo combines AI goal decomposition, 8 AI coaching personas, focus timers, habit stacking, sleep and mood tracking, a budget planner, and gamification — all in one app. Most trackers only cover one or two of these areas.',
+    a: 'Resurgo combines AI goal decomposition, 5 AI coaching personas, focus timers, habit stacking, sleep and mood tracking, a budget planner, and gamification — all in one app. Most trackers only cover one or two of these areas.',
   },
   {
     q: 'Can I track business goals alongside personal habits?',

@@ -1137,11 +1137,10 @@ And that's a good thing.
 
 ## Try It Yourself
 
-Resurgo gives you 8 AI coaches, each with a different lens:  
+Resurgo gives you 5 AI coaches, each with a different lens:  
 - **MARCUS:** Stoic strategist (discipline, obstacles, execution)  
 - **AURORA:** Mindful catalyst (wellness, nervous system optimization)  
 - **TITAN:** Physical performance (fitness, energy, optimization)  
-- **SAGE:** Financial alchemist (wealth building, career strategy)  
 - **PHOENIX:** Comeback specialist (resilience, recovery, setbacks)  
 - **NOVA:** Creative systems (mental models, learning, connections)  
 - **ORACLE:** Data-driven analyst (patterns, metrics, predictive insights)  
@@ -1579,7 +1578,7 @@ In 2026, the bar is higher than streaks and reminders. A great habit tracker nee
 
 **Best for:** Anyone who wants AI-powered habit coaching, unlimited habits, and goal tracking in one platform.
 
-Resurgo combines everything: unlimited habit tracking with streaks and XP, 8 AI coaches that break your goals into daily actions, wellness tracking (sleep, mood, nutrition), focus timers (Pomodoro, Deep Work, Flowtime), and a generous free plan.
+Resurgo combines everything: unlimited habit tracking with streaks and XP, 5 AI coaches that break your goals into daily actions, wellness tracking (sleep, mood, nutrition), focus timers (Pomodoro, Deep Work, Flowtime), and a generous free plan.
 
 **Standout feature:** Instead of manually creating habits, you tell Resurgo your goal and it suggests the specific habits — with frequency, timing, and stacking recommendations. It's the difference between a tracker and a system.
 
@@ -1639,7 +1638,7 @@ For most people, the question is: do you want an app that tracks habits, or one 
 Resurgo offers the most generous free tier — unlimited habits, 2 AI coaches, all focus timer modes, and XP gamification with no time limit or credit card required.
 
 ### Is there a habit tracker with AI coaching?
-Yes. Resurgo has 8 AI coaching personas (Marcus, Aurora, Titan, Sage, Phoenix, Nova, Oracle, Nexus) that each take a different approach to accountability and goal planning. They can break down any goal into specific habits and adjust your plan based on your progress data.
+Yes. Resurgo has 5 AI coaching personas (Marcus, Aurora, Titan, Phoenix, Nexus) that each take a different approach to accountability and goal planning. They can break down any goal into specific habits and adjust your plan based on your progress data.
 
 ### What habit tracker works on Android and iOS?
 Resurgo, TickTick, Habitica, Todoist, and Habitify are all cross-platform. Streaks and Things 3 are iOS/macOS only.
@@ -1719,7 +1718,7 @@ If you want habit tracking that is:
 - Gamified (XP, levels, streak badges)
 - Immediately usable (no template setup)
 
-Resurgo was built for this. You get unlimited habits, 8 AI coaches, focus timers, wellness tracking, and an XP system — all in one app without building a Notion database from scratch.
+Resurgo was built for this. You get unlimited habits, 5 AI coaches, focus timers, wellness tracking, and an XP system — all in one app without building a Notion database from scratch.
 
 **Free plan:** Unlimited habits, 2 coaches, all focus modes, XP — no credit card.
 
@@ -1947,7 +1946,7 @@ Start free at resurgo.life.
 Resurgo offers better AI coaching, goal decomposition, wellness tracking, and focus timers while maintaining gamification (XP, levels, badges). For pure RPG social gaming mechanics, Habitica is still unique.
 
 ### Is there a Habitica alternative with AI coaching?
-Yes — Resurgo has 8 AI coaching personas with behavioral strategy, goal decomposition, and weekly AI reviews. No other gamified habit app has this depth of AI coaching in 2026.
+Yes — Resurgo has 5 AI coaching personas with behavioral strategy, goal decomposition, and weekly AI reviews. No other gamified habit app has this depth of AI coaching in 2026.
 
 ### Does any app have Habitica's social features plus AI?
 Currently, no app perfectly combines Habitica's guild/party social system with AI coaching. Resurgo focuses on individual performance with AI. If social guild accountability is critical, Habitica still leads there.
@@ -2091,7 +2090,7 @@ We put three of the top contenders head-to-head: **Streaks**, **Habitify**, and 
 
 **Habitify:** No AI coaching. Habitify has strong analytics and reporting, but it doesn't offer personalized coaching or behavioral nudges.
 
-**Resurgo:** 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) — each with a distinct coaching personality. MARCUS delivers Stoic discipline. AURORA focuses on creative momentum. TITAN pushes athletic intensity. SAGE offers mindfulness-based guidance. They analyze your behavioral data, adapt to your patterns, and provide real-time coaching when streaks are at risk. This is the biggest differentiator in 2026.
+**Resurgo:** 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) — each with a distinct coaching personality. MARCUS delivers Stoic discipline. AURORA focuses on creative momentum and wellness. TITAN pushes athletic intensity. PHOENIX specializes in comebacks and resilience. They analyze your behavioral data, adapt to your patterns, and provide real-time coaching when streaks are at risk. This is the biggest differentiator in 2026.
 
 ### Gamification
 
@@ -2115,7 +2114,7 @@ We put three of the top contenders head-to-head: **Streaks**, **Habitify**, and 
 
 **Habitify:** Strong analytics — daily/weekly/monthly reports, completion rates, time-of-day analysis. Habitify's data visualization is genuinely excellent.
 
-**Resurgo:** AI-powered insights that go beyond charts. The 8 AI coaches analyze your patterns and tell you *why* streaks break, when your energy peaks, and which habits are correlated. Weekly review summaries synthesize everything into actionable advice.
+**Resurgo:** AI-powered insights that go beyond charts. The 5 AI coaches analyze your patterns and tell you *why* streaks break, when your energy peaks, and which habits are correlated. Weekly review summaries synthesize everything into actionable advice.
 
 ### Pricing
 
@@ -2141,16 +2140,16 @@ For most users in 2026, Resurgo offers the best value — especially with the fr
 ## FAQ
 
 ### Is Resurgo better than Streaks for building habits?
-For most users, yes. Streaks is excellent for simple tracking in the Apple ecosystem, but Resurgo adds AI coaching from 8 AI coaches, gamification (XP, levels, streak freezes), and behavioral insights that significantly improve long-term consistency. Streaks tracks; Resurgo coaches.
+For most users, yes. Streaks is excellent for simple tracking in the Apple ecosystem, but Resurgo adds AI coaching from 5 AI coaches, gamification (XP, levels, streak freezes), and behavioral insights that significantly improve long-term consistency. Streaks tracks; Resurgo coaches.
 
 ### Can I switch from Habitify to Resurgo easily?
 Yes. You can set up your habits in Resurgo in under 5 minutes. While there's no direct data import, Resurgo's AI onboarding helps you rebuild your system quickly — and the AI coaches will start adapting to your patterns within the first week.
 
 ### Which app is best for ADHD habit tracking?
-Resurgo. The gamification (XP, levels, daily challenges) provides the dopamine feedback that ADHD brains need. The 8 AI coaches reduce decision fatigue by telling you what to focus on. And streak freezes prevent the "I broke my streak so I quit" spiral that plagues ADHD users.
+Resurgo. The gamification (XP, levels, daily challenges) provides the dopamine feedback that ADHD brains need. The 5 AI coaches reduce decision fatigue by telling you what to focus on. And streak freezes prevent the "I broke my streak so I quit" spiral that plagues ADHD users.
 
 ### Is the free plan of Resurgo really unlimited?
-Yes — unlimited habits, full gamification engine, 2 AI coaches (MARCUS and AURORA), all focus timer modes (Pomodoro, deep work, custom), and basic goal tracking. No credit card required. The Pro plan ($4.99/mo) unlocks all 8 AI coaches, advanced analytics, and priority features.
+Yes — unlimited habits, full gamification engine, 2 AI coaches (MARCUS and TITAN), all focus timer modes (Pomodoro, deep work, custom), and basic goal tracking. No credit card required. The Pro plan ($4.99/mo) unlocks all 5 AI coaches, advanced analytics, and priority features.
     `,
   },
 
@@ -2181,7 +2180,7 @@ Here's what actually matters for students and founders:
 
 Resurgo was built for ambitious individuals managing goals across multiple life domains. It's not a project management tool — it's a personal growth operating system.
 
-**Why it works for students:** Unlimited habits and goals on the free plan. 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) that adapt coaching style to your needs. Gamification (XP, levels, streaks) keeps motivation high during exam seasons. Daily planning takes under 2 minutes.
+**Why it works for students:** Unlimited habits and goals on the free plan. 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) that adapt coaching style to your needs. Gamification (XP, levels, streaks) keeps motivation high during exam seasons. Daily planning takes under 2 minutes.
 
 **Why it works for founders:** AI coaching that covers business goals alongside health and personal growth. Weekly reviews synthesize progress across all domains. Focus session timers for deep work. The system scales from solopreneur to someone managing a growing team's personal productivity.
 
@@ -2235,7 +2234,7 @@ Monday is a visual work management platform that handles goals through its board
 
 | Feature | Resurgo | Notion | ClickUp | Todoist | Monday |
 |---------|---------|--------|---------|---------|--------|
-| AI Coaching | 8 AI coaches | No | Basic AI | No | No |
+| AI Coaching | 5 AI coaches | No | Basic AI | No | No |
 | Gamification | Full (XP, levels) | No | No | No | No |
 | Habit Tracking | Built-in | Manual setup | No | No | No |
 | Free Tier | Generous | Good | Limited | Good | Limited |
@@ -2260,7 +2259,7 @@ Yes. Project management tools (ClickUp, Monday) track team deliverables. A perso
 For goal tracking specifically, yes — Resurgo is better because it includes AI coaching, gamification, and built-in habit tracking that Notion requires manual setup for. However, Notion is still superior for note-taking, documentation, and wiki-style knowledge bases.
 
 ### Is AI coaching actually useful for goal tracking?
-Research from Stanford's Behavior Design Lab suggests that personalized feedback loops increase goal completion rates by 31%. Resurgo's 8 AI coaches provide exactly this — adaptive coaching based on your behavioral patterns, not generic motivational quotes.
+Research from Stanford's Behavior Design Lab suggests that personalized feedback loops increase goal completion rates by 31%. Resurgo's 5 AI coaches provide exactly this — adaptive coaching based on your behavioral patterns, not generic motivational quotes.
     `,
   },
 
@@ -2293,10 +2292,10 @@ Both are valuable. But they solve fundamentally different problems. If you're al
 
 ### 1. Resurgo — Best for AI Behavioral Coaching
 
-Resurgo takes a unique approach: instead of managing your tasks, it coaches your behavior. With 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS), each offering a distinct coaching personality, Resurgo analyzes your habits, goals, focus sessions, and daily check-ins to provide adaptive guidance.
+Resurgo takes a unique approach: instead of managing your tasks, it coaches your behavior. With 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS), each offering a distinct coaching personality, Resurgo analyzes your habits, goals, focus sessions, and daily check-ins to provide adaptive guidance.
 
 **Key AI features:**
-- 8 specialized AI coaches with distinct coaching styles
+- 5 specialized AI coaches with distinct coaching styles
 - Behavioral pattern analysis across habits, goals, and focus sessions
 - Streak risk detection — coaches intervene before streaks break
 - AI-powered weekly reviews that synthesize multi-domain progress
@@ -2348,7 +2347,7 @@ Todoist's AI features focus on natural language task creation and smart suggesti
 
 ## How to Choose the Right AI Productivity App
 
-**If you need help staying consistent with habits and goals →** Resurgo. The 8 AI coaches and gamification system are specifically designed for long-term behavioral change.
+**If you need help staying consistent with habits and goals →** Resurgo. The 5 AI coaches and gamification system are specifically designed for long-term behavioral change.
 
 **If you need help managing and scheduling tasks →** Motion or Reclaim.ai. These excel at fitting work into your calendar.
 
@@ -2365,15 +2364,15 @@ A 2025 study published in *Nature Human Behaviour* found that AI coaching system
 3. **Multi-modal feedback** — combining data analysis with motivational coaching
 4. **Gamification integration** — behavioral rewards alongside coaching
 
-Resurgo is currently the only consumer app that combines all four factors through its 8 AI coaches system.
+Resurgo is currently the only consumer app that combines all four factors through its 5 AI coaches system.
 
 ## FAQ
 
 ### What is the best AI productivity app in 2026?
-It depends on your need. For behavioral coaching and habit consistency, Resurgo leads with 8 AI coaches. For task auto-scheduling, Motion excels. For general AI assistance, ChatGPT remains unmatched. For team knowledge management, Notion AI is best.
+It depends on your need. For behavioral coaching and habit consistency, Resurgo leads with 5 AI coaches. For task auto-scheduling, Motion excels. For general AI assistance, ChatGPT remains unmatched. For team knowledge management, Notion AI is best.
 
 ### Is AI coaching better than a human productivity coach?
-AI coaching and human coaching serve different roles. AI coaching (like Resurgo's 8 AI coaches) provides 24/7 availability, real-time behavioral data analysis, and consistent daily interaction at a fraction of the cost ($4.99/mo vs $200+/mo for human coaches). Human coaches offer deeper emotional support and complex life strategy. Many users combine both.
+AI coaching and human coaching serve different roles. AI coaching (like Resurgo's 5 AI coaches) provides 24/7 availability, real-time behavioral data analysis, and consistent daily interaction at a fraction of the cost ($4.99/mo vs $200+/mo for human coaches). Human coaches offer deeper emotional support and complex life strategy. Many users combine both.
 
 ### Are AI productivity apps worth paying for?
 Yes — if you choose the right one for your needs. A Harvard Business Review analysis (2025) found that professionals using AI productivity tools saved an average of 5.2 hours per week. At $4.99/mo, Resurgo's Pro plan costs less than a single coffee per week.
@@ -2423,12 +2422,12 @@ Based on ADHD research and real user behavior data, here's what an ADHD-friendly
 
 ### 1. Resurgo — Best Overall for ADHD
 
-Resurgo was designed with ADHD-specific challenges in mind. Daily planning takes under 2 minutes. The gamification engine (XP, levels, daily challenges, streak freezes) provides the dopamine feedback ADHD brains crave. And 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) provide external accountability that adapts to your patterns.
+Resurgo was designed with ADHD-specific challenges in mind. Daily planning takes under 2 minutes. The gamification engine (XP, levels, daily challenges, streak freezes) provides the dopamine feedback ADHD brains crave. And 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) provide external accountability that adapts to your patterns.
 
 **ADHD-specific features:**
 - Daily plan takes under 2 minutes (3 priorities + energy check)
 - Full gamification with XP, levels, achievements, and streak freezes
-- 8 AI coaches that notice when patterns break and intervene
+- 5 AI coaches that notice when patterns break and intervene
 - Focus timers (Pomodoro, deep work, custom durations)
 - Streak freeze system — miss a day without losing progress
 - Low-friction check-ins (tap, don't type)
@@ -2568,7 +2567,7 @@ This protocol uses **AI coaching** to build momentum systematically — day by d
 **Actions:**
 1. Complete daily plan
 2. Review your first 3 days: which habits stuck? Which felt forced?
-3. Ask your AI coach for a mid-week assessment — the 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) are trained to identify friction patterns early
+3. Ask your AI coach for a mid-week assessment — the 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) are trained to identify friction patterns early
 4. Adjust: drop or simplify any habit that consistently felt like a grind
 5. Add one small "reward habit" — something enjoyable you track (reading, walking, music)
 
@@ -2627,7 +2626,7 @@ Week 2 is about consistency, not expansion. Keep the same system. Let the AI coa
 ## FAQ
 
 ### Can I do this 7-day protocol on Resurgo's free plan?
-Yes — the free plan includes unlimited habits, 2 AI coaches (MARCUS and AURORA), full gamification (XP, levels, streaks), all focus timer modes, and weekly reviews. Everything in this protocol works on the free plan.
+Yes — the free plan includes unlimited habits, 2 AI coaches (MARCUS and TITAN), full gamification (XP, levels, streaks), all focus timer modes, and weekly reviews. Everything in this protocol works on the free plan.
 
 ### What if I miss a day during the 7-day protocol?
 Use a streak freeze (available on Resurgo) and continue the next day. The protocol is designed for imperfection — missing one day doesn't reset your progress. Your AI coach will acknowledge the gap and help you adjust.
@@ -2677,7 +2676,7 @@ Why does this happen? It's not because people are lazy. It's because most produc
 
 **The research:** Sheena Iyengar's paradox of choice research (Columbia University) demonstrates that more options lead to less action. Productivity apps with extensive customization often produce *less* productivity than simple ones because users spend more time configuring than doing.
 
-**How Resurgo solves it:** The core daily loop is deliberately minimal: set 3 priorities, check off habits, do a quick energy check. Total time: under 2 minutes. You can go deeper with focus sessions, AI coaching conversations, and weekly reviews — but the daily minimum is intentionally low-friction. The 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) also reduce setup decisions by *telling you* what to focus on based on your data.
+**How Resurgo solves it:** The core daily loop is deliberately minimal: set 3 priorities, check off habits, do a quick energy check. Total time: under 2 minutes. You can go deeper with focus sessions, AI coaching conversations, and weekly reviews — but the daily minimum is intentionally low-friction. The 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) also reduce setup decisions by *telling you* what to focus on based on your data.
 
 ### 3. No Feedback Loop
 
@@ -2693,7 +2692,7 @@ Why does this happen? It's not because people are lazy. It's because most produc
 
 **The research:** The American Society of Training and Development found that having a specific accountability partner increases goal completion probability from 65% to 95%. But most productivity apps provide zero accountability.
 
-**How Resurgo solves it:** 8 AI coaches that notice behavioral changes and respond. If your streak is at risk, your coach sends a nudge. If your habit completion drops, the coach acknowledges it and suggests adjustments. If you miss a weekly review, the coach follows up. It's not surveillance — it's the digital equivalent of a coach who notices when you don't show up and cares enough to say something.
+**How Resurgo solves it:** 5 AI coaches that notice behavioral changes and respond. If your streak is at risk, your coach sends a nudge. If your habit completion drops, the coach acknowledges it and suggests adjustments. If you miss a weekly review, the coach follows up. It's not surveillance — it's the digital equivalent of a coach who notices when you don't show up and cares enough to say something.
 
 ## The Retention Stack: Why Some Apps Beat the Two-Week Wall
 
@@ -2722,7 +2721,7 @@ Even with the best-designed app, here are personal strategies that help:
 It's not a character flaw — it's a design problem. Most apps front-load dopamine (novelty of setup) and provide zero reinforcement after the first week. Look for apps with gamification, AI coaching, and progressive reward systems that create ongoing engagement, not just initial excitement.
 
 ### What productivity app has the best long-term retention?
-Apps with gamification and AI coaching have the highest long-term retention rates. Resurgo combines both — 8 AI coaches for accountability and a full XP/level/streak system for behavioral reinforcement. Users who complete their first week have a 73% Day 60 retention rate.
+Apps with gamification and AI coaching have the highest long-term retention rates. Resurgo combines both — 5 AI coaches for accountability and a full XP/level/streak system for behavioral reinforcement. Users who complete their first week have a 73% Day 60 retention rate.
 
 ### How do I make a productivity system stick permanently?
 Three rules: (1) Keep the daily minimum under 2 minutes. (2) Use gamification for immediate feedback. (3) Have some form of accountability — whether AI coaching, a human partner, or a community. Resurgo provides all three out of the box.
@@ -2768,7 +2767,7 @@ The goal is to get your working memory to zero. Research from the *Journal of Ex
 
 ### Step 2: The AI Sort (3 minutes)
 
-This is where AI saves you 30+ minutes of manual organizing. Take your brain dump and bring it to one of Resurgo's 8 AI coaches. The AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) are trained to help you triage and organize.
+This is where AI saves you 30+ minutes of manual organizing. Take your brain dump and bring it to one of Resurgo's 5 AI coaches. The AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) are trained to help you triage and organize.
 
 The AI will help you categorize items into:
 - **This week actions** — concrete tasks you can complete in 7 days
@@ -2837,7 +2836,7 @@ The AI review at the end catches overcommitment and imbalance before the week st
 A brain dump is *unfiltered* — everything in your head, regardless of priority, category, or feasibility. A to-do list is *curated* — only actionable items, organized by priority. The brain dump is the raw material; the weekly plan is the refined product. Most people skip the dump and go straight to the list, which means unprioritized items keep circling in their heads.
 
 ### Can I do this method with Resurgo's free plan?
-Yes. The free plan includes scratch notes, daily planning, unlimited habits, 2 AI coaches (MARCUS and AURORA), and all planning features. The Pro plan ($4.99/mo) adds all 8 AI coaches and advanced analytics, but the brain dump method works fully on the free tier.
+Yes. The free plan includes scratch notes, daily planning, unlimited habits, 2 AI coaches (MARCUS and TITAN), and all planning features. The Pro plan ($4.99/mo) adds all 5 AI coaches and advanced analytics, but the brain dump method works fully on the free tier.
 
 ### What if my brain dump has over 50 items?
 That's normal — and actually a sign the method is working. The AI sort in Step 2 is specifically designed to handle large dumps. Most people find that 30-40% of items are either someday/maybe or delegate/delete, which immediately reduces the actionable list to a manageable size.
@@ -2874,7 +2873,7 @@ After analyzing dozens of AI productivity tools and reviewing the behavioral sci
 
 **What to look for:** Multiple coaching personalities (not just one tone), adaptive messaging that changes based on your data, and coaching that references your specific habits and goals.
 
-**Resurgo's approach:** 8 AI coaches (MARCUS, AURORA, TITAN, SAGE, PHOENIX, NOVA, ORACLE, NEXUS) with distinct coaching styles. MARCUS uses Stoic discipline. AURORA focuses on creative encouragement. TITAN pushes physical intensity. SAGE guides through mindfulness. Each one adapts based on your behavioral data — not just your preferences.
+**Resurgo's approach:** 5 AI coaches (MARCUS, AURORA, TITAN, PHOENIX, NEXUS) with distinct coaching styles. MARCUS uses Stoic discipline. AURORA focuses on creative encouragement and wellness. TITAN pushes physical intensity. PHOENIX specializes in resilience and comebacks. Each one adapts based on your behavioral data — not just your preferences.
 
 ### 2. Behavioral Data Analysis
 
@@ -2934,13 +2933,13 @@ After analyzing dozens of AI productivity tools and reviewing the behavioral sci
 
 **What to look for:** Flexible goal categories, habit categories spanning health/work/personal/social, and coaching that considers your whole life — not just your task list.
 
-**Resurgo's approach:** Goals, habits, and coaching span every life domain. The 8 AI coaches don't just coach productivity — they coach across fitness (TITAN), mindfulness (SAGE), creative work (AURORA), strategic thinking (ORACLE), and more. Your weekly review considers all domains, flagging imbalance before it becomes burnout.
+**Resurgo's approach:** Goals, habits, and coaching span every life domain. The 5 AI coaches don't just coach productivity — they coach across fitness (TITAN), creativity (AURORA), resilience (PHOENIX), and integration (NEXUS). Your weekly review considers all domains, flagging imbalance before it becomes burnout.
 
 ## The Bottom Line
 
 Most "AI accountability" is just automated reminders. A real AI accountability system needs all seven criteria: personalized coaching, behavioral data analysis, streak mechanics, recovery protocols, goal decomposition, progress summaries, and multi-domain support.
 
-Resurgo (at resurgo.life) is currently the only consumer app that implements all seven criteria through its 8 AI coaches system, integrated habit/goal/focus tracking, full gamification engine, and AI-powered weekly reviews.
+Resurgo (at resurgo.life) is currently the only consumer app that implements all seven criteria through its 5 AI coaches system, integrated habit/goal/focus tracking, full gamification engine, and AI-powered weekly reviews.
 
 If you're evaluating AI accountability tools, use these 7 criteria as your checklist. If a tool is missing more than one, it's a tracker with a chatbot — not an accountability system.
 
@@ -2950,7 +2949,7 @@ If you're evaluating AI accountability tools, use these 7 criteria as your check
 Reminders tell you *what* to do. AI accountability analyzes *why you're not doing it* and adapts its approach. A reminder says "Time to exercise." An AI accountability coach says "You've skipped exercise the last 2 Wednesdays — let's move it to Thursday when your completion rate is 90%." The difference is behavioral intelligence.
 
 ### Do I need to pay for an AI accountability system?
-Resurgo's free plan includes 2 AI coaches (MARCUS and AURORA), full gamification, unlimited habits, and weekly reviews — which covers most of the 7 criteria. The Pro plan ($4.99/mo, $29.99/yr, or $49.99 lifetime) unlocks all 8 AI coaches and advanced analytics. Even the free tier provides more accountability than most paid alternatives.
+Resurgo's free plan includes 2 AI coaches (MARCUS and TITAN), full gamification, unlimited habits, and weekly reviews — which covers most of the 7 criteria. The Pro plan ($4.99/mo, $29.99/yr, or $49.99 lifetime) unlocks all 5 AI coaches and advanced analytics. Even the free tier provides more accountability than most paid alternatives.
 
 ### Can AI accountability replace a human coach?
 For daily behavioral accountability, AI is actually *better* than most human coaches — it's available 24/7, has perfect memory of your data, never cancels, and costs a fraction of human coaching ($4.99/mo vs $200+/mo). For deep emotional support, complex life strategy, or navigating major life transitions, human coaches remain superior. The ideal setup: AI accountability for daily habits (Resurgo) + a human coach for monthly life strategy.

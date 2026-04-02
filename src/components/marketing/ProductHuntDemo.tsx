@@ -572,7 +572,7 @@ function PricingPanel() {
           highlight: true,
           features: [
             'Everything in Free',
-            'All 8 AI coaches',
+            'All 5 AI coaches',
             'Advanced analytics',
             'Weekly AI reviews',
             'Telegram bot access',
@@ -711,7 +711,7 @@ function WelcomeScreen({ onStart }: { onStart: () => void }) {
             '🎯 AI Goal Engine',
             '🔥 Habit Tracker',
             '⚡ Focus Timer',
-            '🤖 8 AI Coaches',
+            '🤖 5 AI Coaches',
             '📊 Weekly Reviews',
             '🎮 XP & Levels',
           ].map((f) => (
@@ -982,7 +982,7 @@ export default function ProductHuntDemo() {
         {/* Social proof footer */}
         <div className="mt-8 border-t border-zinc-900 pt-6 text-center space-y-2">
           <div className="flex items-center justify-center gap-6 flex-wrap">
-            <span className="text-zinc-500 font-mono text-xs">8 AI coaches</span>
+            <span className="text-zinc-500 font-mono text-xs">5 AI coaches</span>
             <span className="text-zinc-800">|</span>
             <span className="text-zinc-500 font-mono text-xs">28 goal templates</span>
             <span className="text-zinc-800">|</span>

@@ -350,7 +350,7 @@ export default function VisionBoardStudioPage() {
           </div>
 
           <p className="mt-4 text-zinc-600 text-[10px] font-mono">
-            FREE_TIER_AVAILABLE · PRO_FROM_$9/MO · CANCEL_ANYTIME
+            FREE_TIER_AVAILABLE · PRO_FROM_$4.99/MO · CANCEL_ANYTIME
           </p>
         </div>
       </section>

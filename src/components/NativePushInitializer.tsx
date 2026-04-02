@@ -24,9 +24,7 @@ export function NativePushInitializer() {
   const { isRegistered, isNative } = useNativePush();
 
   useEffect(() => {
-    if (isNative && isRegistered) {
-      console.log('[NativePushInit] Push notifications registered successfully');
-    }
+    // Push registration state tracked via isRegistered
   }, [isNative, isRegistered]);
 
   // ── App plugin lifecycle events ──────────────────────────────────────────

@@ -4,6 +4,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
 const SPOONACULAR_KEY = process.env.SPOONACULAR_API_KEY || '';
@@ -128,6 +129,11 @@ async function searchSpoonacular(query: string, diet?: string, maxCalories?: num
 }
 
 export async function GET(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q')?.trim() || '';
   const category = searchParams.get('category')?.trim();

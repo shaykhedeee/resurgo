@@ -17,15 +17,15 @@ const GRAPH_BASE = `https://graph.facebook.com/${GRAPH_API_VERSION}`;
 // ── Content templates (caption templates for different post types) ───────────
 const CAPTION_TEMPLATES = {
   product_showcase: [
-    `🖥️ Your goals deserve a command center.\n\nResurgo turns chaos into daily execution:\n\n→ 8 AI coaches that learn YOUR patterns\n→ Habit stacking engine\n→ Focus timer with streak protection\n→ Weekly AI reviews\n\nFree forever. Link in bio.\n\n#productivity #habits #AI #lifeOS #goalsetting #discipline #selfimprovement #buildinpublic`,
-    `Stop restarting every Monday.\n\nResurgo gives you:\n✅ AI goal decomposition\n✅ 8 unique coach personalities\n✅ Streak protection (grace days)\n✅ Daily execution plans\n✅ Terminal-aesthetic UI\n\nFree at resurgo.life\n\n#habittracker #productivityapp #AIcoach #goalsetting #selfgrowth #motivation #discipline`,
+    `🖥️ Your goals deserve a command center.\n\nResurgo turns chaos into daily execution:\n\n→ 5 AI coaches that learn YOUR patterns\n→ Habit stacking engine\n→ Focus timer with streak protection\n→ Weekly AI reviews\n\nFree forever. Link in bio.\n\n#productivity #habits #AI #lifeOS #goalsetting #discipline #selfimprovement #buildinpublic`,
+    `Stop restarting every Monday.\n\nResurgo gives you:\n✅ AI goal decomposition\n✅ 5 unique coach personalities\n✅ Streak protection (grace days)\n✅ Daily execution plans\n✅ Terminal-aesthetic UI\n\nFree at resurgo.life\n\n#habittracker #productivityapp #AIcoach #goalsetting #selfgrowth #motivation #discipline`,
   ],
   reel_caption: [
     `POV: Your productivity app actually works past week 2 🖥️⚡\n\n#resurgo #productivity #habits #AI #lifeOS #coding #discipline`,
-    `The difference between a to-do list and a life OS ⚡\n\n→ Goals broken into daily actions by AI\n→ 8 coaches that adapt to you\n→ No more starting over on Monday\n\nresurgo.life — free forever\n\n#productivityhacks #habittracking #AIproductivity #motivation`,
+    `The difference between a to-do list and a life OS ⚡\n\n→ Goals broken into daily actions by AI\n→ 5 coaches that adapt to you\n→ No more starting over on Monday\n\nresurgo.life — free forever\n\n#productivityhacks #habittracking #AIproductivity #motivation`,
   ],
   carousel_caption: [
-    `8 AI coaches. 8 different ways to stay on track. Swipe →\n\n1️⃣ MARCUS — Stoic discipline\n2️⃣ AURORA — Creative exploration\n3️⃣ TITAN — Physical performance\n4️⃣ SAGE — Mindfulness\n5️⃣ PHOENIX — Recovery specialist\n6️⃣ NOVA — Innovation & career\n7️⃣ ORACLE — Life architecture ✨\n8️⃣ NEXUS — Neuroscience optimization ✨\n\nWhich one do you need? 👇\n\n#AIcoach #productivity #selfimprovement #habits #goalsetting #lifeOS #resurgo`,
+    `5 AI coaches. 5 different ways to stay on track. Swipe →\n\n1️⃣ MARCUS — Stoic discipline\n2️⃣ AURORA — Wellness & creativity\n3️⃣ TITAN — Physical performance\n4️⃣ PHOENIX — Recovery & resilience\n5️⃣ NEXUS — Integration engine\n\nWhich one do you need? 👇\n\n#AIcoach #productivity #selfimprovement #habits #goalsetting #lifeOS #resurgo`,
   ],
   behind_the_scenes: [
     `Building an AI life OS from scratch.\n\nToday's commit: {feature}\n\nThe hardest part isn't writing code.\nIt's making something people use past day 14.\n\n#buildinpublic #indiehacker #startup #saas #developer #coding #productivity`,

@@ -321,7 +321,7 @@ export default async function BillingPage() {
                     </div>
                     {plan.key === 'pro_yearly' && (
                       <p className="text-xs text-emerald-400 mt-1 font-medium">
-                        = $8/mo · Save $48/year vs monthly
+                        = $2.50/mo · Save 50% vs monthly
                       </p>
                     )}
                     {isFree && (
@@ -331,7 +331,7 @@ export default async function BillingPage() {
                     )}
                     {isLifetime && (
                       <p className="text-xs text-gold-400 mt-1 font-medium">
-                        One-time payment · No renewals
+                        One-time payment · Monthly would cost $59.88/yr
                       </p>
                     )}
                   </div>

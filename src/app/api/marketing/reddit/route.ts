@@ -35,7 +35,7 @@ const POST_TEMPLATES: Record<string, { title: string; text: string }[]> = {
 The core insight I coded into it: most productivity apps track what you did, but don't adapt to why you failed. So I added AI coaching that reads your data and gives context-aware advice — not generic tips.
 
 Key features I'm most proud of:
-- 8 AI coach personas (each with different philosophy: stoic, mindfulness-based, performance, financial, resilience, creative systems, strategic foresight, integration)
+- 5 AI coach personas (each with different philosophy: stoic, performance, creative systems, resilience, integration)
 - AI that reads your habit/goal data before responding so it's actually relevant
 - Deep Scan protocol — weekly psychological assessment that adapts your system
 - Terminal-style UI because I hate bloated dashboards
@@ -61,7 +61,7 @@ Free at resurgo.life — I'd love to know if the Phoenix coach resonates with an
   ],
   HabitTracker: [
     {
-      title: 'Resurgo — AI habit tracker with 8 coaching personas (free to try)',
+      title: 'Resurgo — AI habit tracker with 5 coaching personas (free to try)',
       text: `Hey r/HabitTracker — I've been building a habit tracker that goes deeper than streaks.
 
 What makes it different from Habitica/Streaks/Loop:

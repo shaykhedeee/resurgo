@@ -9,6 +9,7 @@
 
 import { useState, useEffect } from 'react';
 import { Download, X, Share } from 'lucide-react';
+import Image from 'next/image';
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -97,8 +98,7 @@ export function PWAInstallPrompt() {
         className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-800 bg-zinc-950 px-4 py-3 shadow-2xl"
       >
         <div className="mx-auto flex max-w-lg items-center gap-3">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/icons/icon-192x192.png" alt="" className="h-9 w-9 shrink-0 rounded-xl" />
+          <Image src="/icons/icon-192x192.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-xl" />
           <div className="flex-1 min-w-0">
             <p className="font-mono text-[10px] font-bold tracking-widest text-orange-400 uppercase">
               Add to Home Screen
@@ -130,8 +130,7 @@ export function PWAInstallPrompt() {
       className="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-800 bg-zinc-950 px-4 py-3 shadow-2xl"
     >
       <div className="mx-auto flex max-w-lg items-center gap-3">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/icons/icon-192x192.png" alt="" className="h-9 w-9 shrink-0 rounded-xl" />
+        <Image src="/icons/icon-192x192.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-xl" />
         <div className="flex-1 min-w-0">
           <p className="font-mono text-[10px] font-bold tracking-widest text-orange-400 uppercase">
             Install_Resurgo

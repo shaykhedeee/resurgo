@@ -87,7 +87,7 @@ export function MarketingHeader({
 							<span className="text-zinc-700">·</span>
 							<span className="text-orange-600/50">FREE FOREVER TIER</span>
 							<span className="text-zinc-700">·</span>
-							<span>8 AI COACHES AVAILABLE</span>
+							<span>5 AI COACHES AVAILABLE</span>
 							<span className="text-zinc-700">·</span>
 							<span className="text-orange-600/50">NO APP STORE REQUIRED</span>
 							<span className="text-zinc-700">·</span>

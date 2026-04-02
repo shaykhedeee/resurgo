@@ -4,8 +4,14 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { NextRequest } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 export async function GET(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return Response.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const location = searchParams.get('q') ?? 'auto';
 

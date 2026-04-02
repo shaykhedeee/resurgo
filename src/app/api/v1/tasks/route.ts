@@ -13,7 +13,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const { searchParams } = new URL(req.url);
-  const status = (searchParams.get('status') as 'todo' | 'done' | 'all') ?? 'todo';
+  const statusParam = searchParams.get('status') ?? 'todo';
+  const status: 'todo' | 'done' | 'in_progress' | undefined = statusParam === 'all' ? undefined : (statusParam as 'todo' | 'done' | 'in_progress');
 
   const tasks = await convexClient.query(api.tasks.list, { status }).catch(() => []);
   return NextResponse.json({ tasks });
@@ -36,11 +37,16 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ error: 'title is required' }, { status: 400 });
   }
 
+  const validPriorities = ['high', 'medium', 'low', 'urgent'] as const;
+  const validEnergy = ['high', 'medium', 'low'] as const;
+  const priorityVal = typeof priority === 'string' && (validPriorities as readonly string[]).includes(priority) ? priority as typeof validPriorities[number] : 'medium';
+  const energyVal = typeof energyRequired === 'string' && (validEnergy as readonly string[]).includes(energyRequired) ? energyRequired as typeof validEnergy[number] : undefined;
+
   const id = await convexClient.mutation(api.tasks.create, {
     title: title.trim(),
-    priority: (priority as string) ?? 'medium',
+    priority: priorityVal,
     dueDate: (dueDate as string) ?? undefined,
-    energyRequired: (energyRequired as string) ?? undefined,
+    energyRequired: energyVal,
     tags: Array.isArray(tags) ? (tags as string[]) : undefined,
   });
 

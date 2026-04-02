@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { sanitizePaymentParams } from '@/lib/payment-params';
+import PaymentSuccessAnalytics from '@/components/PaymentSuccessAnalytics';
 
 interface PageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -10,6 +11,7 @@ export default async function PaymentSuccessPage({ searchParams }: PageProps) {
 
   return (
     <main className="mx-auto max-w-2xl px-6 py-16">
+      <PaymentSuccessAnalytics plan={params.plan ?? undefined} />
       <h1 className="text-3xl font-bold text-[var(--text-primary)]">Payment successful</h1>
       <p className="mt-3 text-sm text-[var(--text-secondary)]">
         Your billing update was received. Your plan access should be available shortly.

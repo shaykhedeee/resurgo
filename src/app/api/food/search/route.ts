@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import { auth } from '@clerk/nextjs/server';
 
 const USDA_KEY = process.env.USDA_FOODDATA_API_KEY || '';
 const OFF_BASE = 'https://world.openfoodfacts.org';
@@ -110,6 +111,11 @@ async function searchUSDA(query: string, pageSize = 8): Promise<FoodItem[]> {
 }
 
 export async function GET(request: NextRequest) {
+  const { userId } = await auth();
+  if (!userId) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const query = searchParams.get('q')?.trim();
   const barcode = searchParams.get('barcode');

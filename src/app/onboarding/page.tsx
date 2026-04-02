@@ -4,7 +4,7 @@ export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // RESURGO - Premium Onboarding Flow
-// 6-step wizard: Welcome -> Goal -> Focus -> Habits -> Schedule -> Launch
+// 3-step wizard: Welcome -> Focus (goal + areas + habits + rhythm) -> Ready
 // ============================================================================
 
 import { useMutation } from 'convex/react';
@@ -46,8 +46,8 @@ const HABIT_TEMPLATE_DATA: Record<string, { title: string; description: string; 
 
 // -- Types -------------------------------------------------------------------
 
-type Step = 'welcome' | 'goal' | 'focus' | 'habits' | 'schedule' | 'ready';
-const STEPS: Step[] = ['welcome', 'goal', 'focus', 'habits', 'schedule', 'ready'];
+type Step = 'welcome' | 'focus' | 'ready';
+const STEPS: Step[] = ['welcome', 'focus', 'ready'];
 
 interface FocusArea {
   id: string;
@@ -362,301 +362,280 @@ export default function OnboardingPage() {
           </div>
         )}
 
-        {/* ── STEP 2: PRIMARY GOAL ── */}
-        {step === 'goal' && (
-          <div className="py-10">
-            <div className="surface-panel mb-6">
-              <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[9px] tracking-widest text-orange-600">STEP 1 · YOUR GOAL</span>
-              </div>
-              <div className="px-4 py-4">
-                <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">What&apos;s your #1 goal?</h2>
-                <p className="mt-1 font-mono text-xs text-zinc-400">Set your #1 goal · you can add more later.</p>
-              </div>
-            </div>
-
-            <div className="grid gap-6 lg:grid-cols-[minmax(0,1.5fr)_260px]">
-              <div>
-                {/* Example chips */}
-                <div className="mb-4 flex flex-wrap gap-2">
-                  {GOAL_EXAMPLES.map((ex) => (
-                    <button
-                      key={ex}
-                      onClick={() => setPrimaryGoal(ex)}
-                      className={cn(
-                        'border px-2.5 py-1 font-mono text-[9px] tracking-widest transition',
-                        primaryGoal === ex
-                          ? 'border-orange-800 bg-orange-950/30 text-orange-500'
-                          : 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-400'
-                      )}
-                    >
-                      {ex}
-                    </button>
-                  ))}
-                </div>
-
-                <textarea
-                  value={primaryGoal}
-                  onChange={(e) => setPrimaryGoal(e.target.value)}
-                  placeholder="e.g. Get fit and feel more energetic every day..."
-                  rows={3}
-                  className="mb-4 w-full resize-none border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800"
-                />
-
-                {/* Deadline */}
-                <div className="mb-4">
-                  <p className="mb-2 font-mono text-[9px] tracking-widest text-zinc-400">Target deadline</p>
-                  <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
-                    {DEADLINE_OPTIONS.map((d) => (
-                      <button
-                        key={d.id}
-                        onClick={() => setPrimaryGoalDeadline(d.id)}
-                        className={cn(
-                          'flex flex-col items-center gap-0.5 border py-3 font-mono text-center transition',
-                          primaryGoalDeadline === d.id
-                            ? 'border-orange-800 bg-orange-950/30 text-orange-500'
-                            : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700'
-                        )}
-                      >
-                        <span className="text-[10px] font-bold">{d.label}</span>
-                        <span className="text-[8px] text-zinc-400">{d.description}</span>
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Why */}
-                <div className="mb-6">
-                  <p className="mb-2 font-mono text-[9px] tracking-widest text-zinc-400">Why this matters <span className="text-zinc-400">(optional)</span></p>
-                  <textarea
-                    value={primaryGoalReason}
-                    onChange={(e) => setPrimaryGoalReason(e.target.value)}
-                    placeholder="Your 'why' is your most powerful motivator..."
-                    rows={2}
-                    className="w-full resize-none border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800"
-                  />
-                </div>
-              </div>
-
-              <aside className="surface-panel-muted h-fit p-4">
-                <p className="surface-kicker-accent">Good goal formula</p>
-                <ul className="mt-3 space-y-2 font-terminal text-sm text-zinc-300">
-                  <li>• Make it specific enough to act on this week.</li>
-                  <li>• Pick a timeframe you can actually feel.</li>
-                  <li>• Add a reason that matters when motivation dips.</li>
-                </ul>
-              </aside>
-            </div>
-
-            <div className="flex flex-col items-center gap-3">
-              <button onClick={next} disabled={!primaryGoal.trim()} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50 disabled:cursor-not-allowed disabled:opacity-40">
-                [Set My Goal]
-              </button>
-              <button onClick={next} className="font-mono text-[9px] tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll set this later →</button>
-            </div>
-          </div>
-        )}
-
-        {/* ── STEP 3: FOCUS AREAS ── */}
+        {/* ── STEP 2: FOCUS (goal + areas + habits + rhythm) ── */}
         {step === 'focus' && (
-          <div className="py-10">
-            <div className="surface-panel mb-6">
-              <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[9px] tracking-widest text-orange-600">STEP 2 · FOCUS AREAS</span>
-              </div>
-              <div className="flex items-center justify-between px-4 py-4">
-                <div>
-                  <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">Pick your focus areas</h2>
-                  <p className="mt-1 font-mono text-xs text-zinc-400">Pick up to 3 · personalises your AI coaching</p>
-                </div>
-                <span className={cn(
-                  'font-mono text-[10px] tracking-widest border px-2 py-0.5',
-                  selectedFocus.length >= 3
-                    ? 'border-orange-800 text-orange-500 bg-orange-950/30'
-                    : 'border-zinc-800 text-zinc-400'
-                )}>{selectedFocus.length}/3</span>
-              </div>
-            </div>
+          <div className="py-10 space-y-10">
 
-            <div className="mb-6 grid grid-cols-1 gap-1 sm:grid-cols-2">
-              {FOCUS_AREAS.map((area) => {
-                const isSelected = selectedFocus.includes(area.id);
-                return (
+            {/* ── Section A: Your Goal ── */}
+            <section>
+              <div className="surface-panel mb-4">
+                <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
+                  <span className="font-mono text-[9px] tracking-widest text-orange-600">A · YOUR GOAL</span>
+                </div>
+                <div className="px-4 py-3">
+                  <h2 className="font-mono text-lg font-bold tracking-tight text-zinc-100">What&apos;s your #1 goal?</h2>
+                  <p className="mt-0.5 font-mono text-[10px] text-zinc-400">You can always add more later.</p>
+                </div>
+              </div>
+
+              <div className="mb-3 flex flex-wrap gap-2">
+                {GOAL_EXAMPLES.map((ex) => (
                   <button
-                    key={area.id}
-                    onClick={() => {
-                      setSelectedFocus(prev => {
-                        if (isSelected) return prev.filter(id => id !== area.id);
-                        if (prev.length >= 3) {
-                          setAtMaxFocus(true);
-                          setTimeout(() => setAtMaxFocus(false), 2500);
-                          return prev;
-                        }
-                        return [...prev, area.id];
-                      });
-                    }}
+                    key={ex}
+                    onClick={() => setPrimaryGoal(ex)}
                     className={cn(
-                      'flex items-center gap-3 border px-4 py-3 text-left transition',
-                      isSelected
-                        ? 'border-orange-800 bg-orange-950/20 text-orange-500'
-                        : 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                      'border px-2.5 py-1 font-mono text-[9px] tracking-widest transition',
+                      primaryGoal === ex
+                        ? 'border-orange-800 bg-orange-950/30 text-orange-500'
+                        : 'border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-400'
                     )}
                   >
-                    <div className="flex-1">
-                      <div className="font-mono text-xs font-semibold tracking-wider">{area.label}</div>
-                      <div className="font-mono text-[9px] text-zinc-400">{area.description}</div>
-                    </div>
-                    {isSelected && <Check className="h-3 w-3 shrink-0 text-orange-500" />}
+                    {ex}
                   </button>
-                );
-              })}
-            </div>
+                ))}
+              </div>
 
-            {atMaxFocus && (
-              <p className="mb-3 font-mono text-[9px] tracking-wider text-amber-500 text-center">
-                Max 3 areas selected — deselect one to choose another.
-              </p>
-            )}
-            {/* Life vision */}
-            <div className="surface-panel-muted mb-6 p-4">
-              <p className="mb-2 font-mono text-[9px] tracking-widest text-zinc-400">1-year vision <span className="text-zinc-400">(optional)</span></p>
+              <textarea
+                value={primaryGoal}
+                onChange={(e) => setPrimaryGoal(e.target.value)}
+                placeholder="e.g. Get fit and feel more energetic every day..."
+                rows={2}
+                className="mb-3 w-full resize-none border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800"
+              />
+
+              <textarea
+                value={primaryGoalReason}
+                onChange={(e) => setPrimaryGoalReason(e.target.value)}
+                placeholder="Why this matters to you (optional)..."
+                rows={1}
+                className="mb-3 w-full resize-none border border-zinc-800 bg-black px-4 py-2 font-mono text-[10px] text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800"
+              />
+
+              <div className="grid grid-cols-3 gap-2 sm:grid-cols-5">
+                {DEADLINE_OPTIONS.map((d) => (
+                  <button
+                    key={d.id}
+                    onClick={() => setPrimaryGoalDeadline(d.id)}
+                    className={cn(
+                      'flex flex-col items-center gap-0.5 border py-2 font-mono text-center transition',
+                      primaryGoalDeadline === d.id
+                        ? 'border-orange-800 bg-orange-950/30 text-orange-500'
+                        : 'border-zinc-800 bg-zinc-950 text-zinc-400 hover:border-zinc-700'
+                    )}
+                  >
+                    <span className="text-[10px] font-bold">{d.label}</span>
+                    <span className="text-[8px] text-zinc-400">{d.description}</span>
+                  </button>
+                ))}
+              </div>
+            </section>
+
+            {/* ── Section B: Focus Areas ── */}
+            <section>
+              <div className="surface-panel mb-4">
+                <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
+                  <span className="font-mono text-[9px] tracking-widest text-orange-600">B · FOCUS AREAS</span>
+                </div>
+                <div className="flex items-center justify-between px-4 py-3">
+                  <div>
+                    <h2 className="font-mono text-lg font-bold tracking-tight text-zinc-100">Pick your focus areas</h2>
+                    <p className="mt-0.5 font-mono text-[10px] text-zinc-400">Pick up to 3 · personalises your AI coaching</p>
+                  </div>
+                  <span className={cn(
+                    'font-mono text-[10px] tracking-widest border px-2 py-0.5',
+                    selectedFocus.length >= 3
+                      ? 'border-orange-800 text-orange-500 bg-orange-950/30'
+                      : 'border-zinc-800 text-zinc-400'
+                  )}>{selectedFocus.length}/3</span>
+                </div>
+              </div>
+
+              <div className="mb-3 grid grid-cols-1 gap-1 sm:grid-cols-2">
+                {FOCUS_AREAS.map((area) => {
+                  const isSelected = selectedFocus.includes(area.id);
+                  return (
+                    <button
+                      key={area.id}
+                      onClick={() => {
+                        setSelectedFocus(prev => {
+                          if (isSelected) return prev.filter(id => id !== area.id);
+                          if (prev.length >= 3) {
+                            setAtMaxFocus(true);
+                            setTimeout(() => setAtMaxFocus(false), 2500);
+                            return prev;
+                          }
+                          return [...prev, area.id];
+                        });
+                      }}
+                      className={cn(
+                        'flex items-center gap-3 border px-4 py-3 text-left transition',
+                        isSelected
+                          ? 'border-orange-800 bg-orange-950/20 text-orange-500'
+                          : 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'
+                      )}
+                    >
+                      <div className="flex-1">
+                        <div className="font-mono text-xs font-semibold tracking-wider">{area.label}</div>
+                        <div className="font-mono text-[9px] text-zinc-400">{area.description}</div>
+                      </div>
+                      {isSelected && <Check className="h-3 w-3 shrink-0 text-orange-500" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {atMaxFocus && (
+                <p className="mb-2 font-mono text-[9px] tracking-wider text-amber-500 text-center">
+                  Max 3 areas selected — deselect one to choose another.
+                </p>
+              )}
+
               <textarea
                 value={lifeVision}
                 onChange={(e) => setLifeVision(e.target.value)}
-                placeholder="Paint a vivid picture of where you'll be in 1 year..."
-                rows={3}
-                className="w-full border border-zinc-800 bg-black px-3 py-2.5 font-mono text-xs text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
+                placeholder="1-year vision — where will you be? (optional)"
+                rows={2}
+                className="mt-3 w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-[10px] text-zinc-300 placeholder-zinc-700 outline-none transition focus:border-orange-800 resize-none"
               />
-              <p className="mt-1.5 font-mono text-[9px] text-zinc-400">Your AI coach uses this for tailored advice</p>
-            </div>
+            </section>
 
-            <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
-                {selectedFocus.length > 0 ? `[Confirm ${selectedFocus.length} Area${selectedFocus.length !== 1 ? 's' : ''}]` : '[Continue]'}
+            {/* ── Section C: Starter Habits ── */}
+            <section>
+              <div className="surface-panel mb-4">
+                <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
+                  <span className="font-mono text-[9px] tracking-widest text-orange-600">C · STARTER HABITS</span>
+                </div>
+                <div className="px-4 py-3">
+                  <h2 className="font-mono text-lg font-bold tracking-tight text-zinc-100">Pick your starter habits</h2>
+                  <p className="mt-0.5 font-mono text-[10px] text-zinc-400">
+                    {selectedFocus.length > 0 ? 'Curated for your focus areas · start small' : 'Choose habits to begin today'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mb-3 divide-y divide-zinc-900 border border-zinc-900">
+                {relevantHabits.map((habit) => {
+                  const isSelected = selectedHabits.includes(habit.id);
+                  return (
+                    <button
+                      key={habit.id}
+                      onClick={() => {
+                        setSelectedHabits(prev =>
+                          isSelected ? prev.filter(id => id !== habit.id) : [...prev, habit.id]
+                        );
+                      }}
+                      className={cn(
+                        'flex w-full items-center gap-3 px-4 py-3 text-left transition',
+                        isSelected ? 'bg-orange-950/20' : 'bg-zinc-950 hover:bg-zinc-900'
+                      )}
+                    >
+                      <div className={cn('h-3 w-3 shrink-0 border', isSelected ? 'border-orange-600 bg-orange-950/60' : 'border-zinc-700')} />
+                      <div className="flex-1">
+                        <p className={cn('font-mono text-xs', isSelected ? 'text-orange-400' : 'text-zinc-400')}>{habit.name}</p>
+                        <p className="font-mono text-[9px] text-zinc-400">{habit.description}</p>
+                      </div>
+                      <span className="shrink-0 border border-zinc-800 px-1.5 py-0.5 font-mono text-[8px] text-zinc-400">{habit.frequency.toUpperCase()}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedHabits.length > 0 && (
+                <div className="border border-orange-900 bg-orange-950/10 px-4 py-2">
+                  <p className="font-mono text-[10px] tracking-widest text-orange-600">
+                    {selectedHabits.length}_HABIT{selectedHabits.length !== 1 ? 'S' : ''}_SELECTED :: START_SMALL_FOR_BEST_RESULTS
+                  </p>
+                </div>
+              )}
+            </section>
+
+            {/* ── Section D: Daily Rhythm ── */}
+            <section>
+              <div className="surface-panel mb-4">
+                <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
+                  <span className="font-mono text-[9px] tracking-widest text-orange-600">D · DAILY RHYTHM</span>
+                </div>
+                <div className="px-4 py-3">
+                  <h2 className="font-mono text-lg font-bold tracking-tight text-zinc-100">When are you most productive?</h2>
+                  <p className="mt-0.5 font-mono text-[10px] text-zinc-400">We&apos;ll schedule check-ins around your peak energy</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+                {TIME_OPTIONS.map((time) => {
+                  const isSelected = preferredTime === time.id;
+                  return (
+                    <button
+                      key={time.id}
+                      onClick={() => setPreferredTime(time.id)}
+                      className={cn(
+                        'flex flex-col items-center gap-1 border py-4 transition',
+                        isSelected
+                          ? 'border-orange-800 bg-orange-950/20 text-orange-500'
+                          : 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700'
+                      )}
+                    >
+                      <div className="font-mono text-xs font-bold tracking-widest">{time.label}</div>
+                      <div className="font-mono text-[9px] text-zinc-400">{time.description}</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* ── Continue Button ── */}
+            <div className="flex flex-col items-center gap-3 pt-2">
+              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-10 py-3 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
+                [Continue]
               </button>
-              <button onClick={next} className="font-mono text-[9px] tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll decide later →</button>
+              <button onClick={next} className="font-mono text-[9px] tracking-widest text-zinc-500 transition hover:text-zinc-300 underline-offset-2 hover:underline">I&apos;ll configure later →</button>
             </div>
           </div>
         )}
 
-        {/* ── STEP 4: HABITS ── */}
-        {step === 'habits' && (
-          <div className="py-10">
-            <div className="surface-panel mb-6">
-              <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[9px] tracking-widest text-orange-600">STEP 3 · STARTER HABITS</span>
-              </div>
-              <div className="px-4 py-4">
-                <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">Pick your starter habits</h2>
-                <p className="mt-1 font-mono text-xs text-zinc-400">
-                  {selectedFocus.length > 0 ? 'Curated for your focus areas · start small' : 'Choose habits to begin today'}
-                </p>
-              </div>
-            </div>
-
-            <div className="mb-4 divide-y divide-zinc-900 border border-zinc-900">
-              {relevantHabits.map((habit) => {
-                const isSelected = selectedHabits.includes(habit.id);
-                return (
-                  <button
-                    key={habit.id}
-                    onClick={() => {
-                      setSelectedHabits(prev =>
-                        isSelected ? prev.filter(id => id !== habit.id) : [...prev, habit.id]
-                      );
-                    }}
-                    className={cn(
-                      'flex w-full items-center gap-3 px-4 py-3 text-left transition',
-                      isSelected ? 'bg-orange-950/20' : 'bg-zinc-950 hover:bg-zinc-900'
-                    )}
-                  >
-                    <div className={cn('h-3 w-3 shrink-0 border', isSelected ? 'border-orange-600 bg-orange-950/60' : 'border-zinc-700')} />
-                    <div className="flex-1">
-                      <p className={cn('font-mono text-xs', isSelected ? 'text-orange-400' : 'text-zinc-400')}>{habit.name}</p>
-                      <p className="font-mono text-[9px] text-zinc-400">{habit.description}</p>
-                    </div>
-                    <span className="shrink-0 border border-zinc-800 px-1.5 py-0.5 font-mono text-[8px] text-zinc-400">{habit.frequency.toUpperCase()}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            {selectedHabits.length > 0 && (
-              <div className="mb-4 border border-orange-900 bg-orange-950/10 px-4 py-2.5">
-                <p className="font-mono text-[10px] tracking-widest text-orange-600">
-                  {selectedHabits.length}_NODE{selectedHabits.length !== 1 ? 'S' : ''}_SELECTED :: START_SMALL_FOR_BEST_RESULTS
-                </p>
-              </div>
-            )}
-
-            <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
-                {selectedHabits.length > 0 ? `[Add ${selectedHabits.length} Habit${selectedHabits.length !== 1 ? 's' : ''}]` : '[Continue]'}
-              </button>
-              <button onClick={next} className="font-mono text-[9px] tracking-widest text-zinc-400 transition hover:text-zinc-500">[I&apos;ll add habits later]</button>
-            </div>
-          </div>
-        )}
-
-        {/* ── STEP 5: SCHEDULE ── */}
-        {step === 'schedule' && (
-          <div className="py-10">
-            <div className="surface-panel mb-6">
-              <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-orange-600" />
-                <span className="font-mono text-[9px] tracking-widest text-orange-600">STEP 4 · DAILY RHYTHM</span>
-              </div>
-              <div className="px-4 py-4">
-                <h2 className="font-mono text-xl font-bold tracking-tight text-zinc-100">When are you most productive?</h2>
-                <p className="mt-1 font-mono text-xs text-zinc-400">We&apos;ll schedule your daily check-ins around your peak energy</p>
-              </div>
-            </div>
-
-            <div className="mb-8 grid grid-cols-2 gap-2">
-              {TIME_OPTIONS.map((time) => {
-                const isSelected = preferredTime === time.id;
-                return (
-                  <button
-                    key={time.id}
-                    onClick={() => setPreferredTime(time.id)}
-                    className={cn(
-                      'flex flex-col items-center gap-1.5 border py-6 transition',
-                      isSelected
-                        ? 'border-orange-800 bg-orange-950/20 text-orange-500'
-                        : 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-zinc-700'
-                    )}
-                  >
-                    <div className="font-mono text-xs font-bold tracking-widest">{time.label}</div>
-                    <div className="font-mono text-[9px] text-zinc-400">{time.description}</div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex flex-col items-center gap-3">
-              <button onClick={next} className="border border-orange-800 bg-orange-950/30 px-8 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/50">
-                [Confirm Schedule]
-              </button>
-              <button onClick={next} className="font-mono text-[9px] tracking-widest text-zinc-400 transition hover:text-zinc-500">[Any time is fine]</button>
-            </div>
-          </div>
-        )}
-
-        {/* ── STEP 6: READY ── */}
+        {/* ── STEP 3: READY ── */}
         {step === 'ready' && (
-          <div className="flex min-h-[80vh] flex-col justify-center py-10">
-            <div className="mb-8 text-center">
+          <div className="flex min-h-[80vh] flex-col justify-center py-10 relative overflow-hidden">
+
+            {/* Confetti particles */}
+            <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="absolute h-1.5 w-1.5 rounded-full animate-bounce"
+                  style={{
+                    left: `${8 + (i * 37) % 84}%`,
+                    top: `${5 + (i * 23) % 70}%`,
+                    backgroundColor: ['#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7', '#ec4899'][i % 6],
+                    animationDelay: `${i * 0.15}s`,
+                    animationDuration: `${1.5 + (i % 3) * 0.5}s`,
+                    opacity: 0.6,
+                  }}
+                />
+              ))}
+            </div>
+
+            <div className="mb-8 text-center relative z-10">
               <div className="mb-4 flex items-center justify-center gap-2">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-green-500" />
-                <span className="font-mono text-[9px] tracking-widest text-green-600">ALL SET</span>
+                <span className="font-mono text-[9px] tracking-widest text-green-600">SYSTEM READY</span>
               </div>
+
+              {/* XP Badge */}
+              <div className="mx-auto mb-5 inline-flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-5 py-2">
+                <span className="text-lg">🏆</span>
+                <span className="font-mono text-sm font-bold tracking-widest text-orange-500">+50 XP</span>
+                <span className="font-mono text-[9px] text-zinc-400">ONBOARDING COMPLETE</span>
+              </div>
+
               <h2 className="font-mono text-3xl font-black tracking-tight text-zinc-100">
                 You&apos;re ready, <span className="text-orange-500">{firstName}</span>
               </h2>
-              <p className="mt-2 font-mono text-xs text-zinc-400">Resurgo is personalised · AI coach ready</p>
+              <p className="mt-2 font-mono text-xs text-zinc-400">Your AI coach is standing by · let&apos;s make today count</p>
             </div>
 
             {/* Summary */}

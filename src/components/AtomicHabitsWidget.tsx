@@ -54,10 +54,11 @@ type CoachingContext =
   | 'identity_building';
 
 // ─────────────────────────────────────────────────────────────────────────────────
-// SMART COACH COMPONENT
+// ATOMIC HABITS WIDGET COMPONENT
+// (Renamed from SmartCoach.tsx to prevent confusion with AI Coach system)
 // ─────────────────────────────────────────────────────────────────────────────────
 
-export function SmartCoach({ variant = 'card', context, onGetInsights, className = '' }: SmartCoachProps) {
+export function AtomicHabitsWidget({ variant = 'card', context, onGetInsights, className = '' }: SmartCoachProps) {
   const [quote, setQuote] = useState<QuoteType | null>(null);
   const [coaching, setCoaching] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -435,7 +436,7 @@ export function FourLawsWidget({ highlightLaw }: { highlightLaw?: number }) {
   );
 }
 
-export default SmartCoach;
+export default AtomicHabitsWidget;
 
 // Refined coach messaging logic for adaptive, persona-driven messages
 const COACH_MOTIVATION_TEMPLATES = {

@@ -20,7 +20,7 @@ const CURRENT_VERSION = {
     'Native FCM push notifications (morning digest, reminders, coaching)',
     'Haptic feedback on habit completion',
     'Full dashboard access via WebView',
-    '8 AI coach personas with context memory',
+    '5 AI coach personas with context memory',
   ],
   size: '4.2 MB',
   sha256: null, // Set after APK build: Get-FileHash resurgo-latest.apk -Algorithm SHA256

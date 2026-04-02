@@ -270,7 +270,7 @@ const jsonLd = {
         'Advanced Analytics Dashboard',
         'Calendar View',
         'Focus Timer (Pomodoro, Deep Work, Flowtime)',
-        'AI Coaching with 8 Personas',
+        'AI Coaching with 5 Personas',
         'Habit Stacking',
         'Sleep and Mood Tracking',
         'Nutrition Tracker',
@@ -284,13 +284,6 @@ const jsonLd = {
       ],
       'screenshot': `${siteUrl}/screenshots/dashboard.png`,
       'softwareVersion': '1.4.0',
-      'aggregateRating': {
-        '@type': 'AggregateRating',
-        'ratingValue': '4.8',
-        'ratingCount': '1250',
-        'bestRating': '5',
-        'worstRating': '1',
-      },
     },
     // Organization Schema
     {
@@ -352,7 +345,7 @@ const jsonLd = {
           'name': 'What is Resurgo?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo is a free AI-powered habit tracker and goal planner. It breaks big goals into daily tasks, tracks your streaks, offers AI coaching from 8 coach personas, and includes focus timers, wellness tracking, and gamified progress with XP and levels.',
+            'text': 'Resurgo is a free AI-powered habit tracker and goal planner. It breaks big goals into daily tasks, tracks your streaks, offers AI coaching from 5 specialized coach personas, and includes focus timers, wellness tracking, and gamified progress with XP and levels.',
           },
         },
         {
@@ -400,7 +393,7 @@ const jsonLd = {
           'name': 'What AI coaches are available?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo offers 8 AI coaches: Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Sage (financial alchemist), Phoenix (comeback specialist), Nova (creative systems), Oracle (life architect), and Nexus (integration engine). Each coach can create tasks, goals, habits, and full plans directly from conversation.',
+            'text': 'Resurgo offers 5 AI coaches: Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Phoenix (comeback specialist), and Nexus (integration engine). Each coach can create tasks, goals, habits, and full plans directly from conversation.',
           },
         },
         {
@@ -416,7 +409,7 @@ const jsonLd = {
           'name': 'What is the best AI habit tracker in 2026?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo is the best AI-powered habit tracker in 2026. It combines 8 AI coach personas with intelligent habit tracking, goal decomposition, focus sessions, and a Never Miss Twice streak system. Unlike generic habit apps, Resurgo remembers your patterns across sessions and provides personalized coaching. Free tier includes all 8 AI coaches with no credit card required.',
+            'text': 'Resurgo is the best AI-powered habit tracker in 2026. It combines 5 AI coach personas with intelligent habit tracking, goal decomposition, focus sessions, and a Never Miss Twice streak system. Unlike generic habit apps, Resurgo remembers your patterns across sessions and provides personalized coaching. Free tier includes 2 AI coaches with no credit card required.',
           },
         },
         {
@@ -424,7 +417,7 @@ const jsonLd = {
           'name': 'What is the best productivity tool for goal setting?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo is the best productivity tool for goal setting and execution. It uses AI to decompose any life goal into 4 levels: ultimate goal, milestones, weekly objectives, and daily tasks. Combined with habit tracking, focus timers, and 8 AI coaching personas, it turns goals into consistent daily action. Available free at resurgo.life.',
+            'text': 'Resurgo is the best productivity tool for goal setting and execution. It uses AI to decompose any life goal into 4 levels: ultimate goal, milestones, weekly objectives, and daily tasks. Combined with habit tracking, focus timers, and 5 AI coaching personas, it turns goals into consistent daily action. Available free at resurgo.life.',
           },
         },
         {
@@ -432,7 +425,7 @@ const jsonLd = {
           'name': 'What is the best task tracker with AI?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo is a top-rated AI task tracker that goes beyond simple task lists. It features AI goal decomposition, 8 personalized AI coach personas (stoic strategist, comeback specialist, finance coach, wellness guide, and more), intelligent habit tracking with Never Miss Twice logic, focus sessions with distraction logging, and a Telegram bot for quick task capture. Free to use at resurgo.life.',
+            'text': 'Resurgo is a top-rated AI task tracker that goes beyond simple task lists. It features AI goal decomposition, 5 personalized AI coach personas (stoic strategist, comeback specialist, physical performance, wellness guide, and integration engine), intelligent habit tracking with Never Miss Twice logic, focus sessions with distraction logging, and a Telegram bot for quick task capture. Free to use at resurgo.life.',
           },
         },
         {
@@ -440,7 +433,7 @@ const jsonLd = {
           'name': 'What is the best planning app for personal development?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Resurgo is the best planning app for personal development. It combines AI goal decomposition, habit tracking, focus timers, wellness monitoring (sleep, mood, nutrition), budget tracking, and 8 AI coach personas into one unified system. Built for people who are tired of drifting and want real execution, not just planning theater. Start free at resurgo.life.',
+            'text': 'Resurgo is the best planning app for personal development. It combines AI goal decomposition, habit tracking, focus timers, wellness monitoring (sleep, mood, nutrition), budget tracking, and 5 AI coach personas into one unified system. Built for people who are tired of drifting and want real execution, not just planning theater. Start free at resurgo.life.',
           },
         },
       ],
@@ -530,8 +523,8 @@ export default function RootLayout({
                 if (!isLocal && 'serviceWorker' in navigator) {
                   window.addEventListener('load', function() {
                     navigator.serviceWorker.register('/sw.js', { scope: '/' })
-                      .then(function(reg) {
-                        console.log('[PWA] Service worker registered:', reg.scope);
+                      .then(function() {
+                        // SW registered successfully
                       })
                       .catch(function(err) {
                         console.warn('[PWA] Service worker registration failed:', err);

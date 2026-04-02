@@ -290,14 +290,13 @@ export async function GET(req: NextRequest) {
 
   // ── Coach Introduction Card ────────────────────────────────────────
   const COACH_EMOJIS: Record<string, string> = {
-    MARCUS: '🏛️', AURORA: '🎨', TITAN: '⚔️', SAGE: '🧘',
-    PHOENIX: '🔥', NOVA: '🚀', ORACLE: '◉', NEXUS: '∞',
+    MARCUS: '🏛️', AURORA: '🎨', TITAN: '⚔️',
+    PHOENIX: '🔥', NEXUS: '∞',
   };
   const COACH_TITLES: Record<string, string> = {
     MARCUS: 'Stoic Discipline Engine', AURORA: 'Creative Flow Catalyst',
-    TITAN: 'Physical Performance Coach', SAGE: 'Mindfulness Architect',
-    PHOENIX: 'Recovery & Restart Specialist', NOVA: 'Innovation & Career Strategist',
-    ORACLE: 'Omniscient Life Architect', NEXUS: 'Neural Integration Engine',
+    TITAN: 'Physical Performance Coach',
+    PHOENIX: 'Recovery & Resilience Specialist', NEXUS: 'Neural Integration Engine',
   };
 
   return new ImageResponse(

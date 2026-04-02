@@ -6,9 +6,12 @@
 
 import { useState } from 'react';
 import { useAscendStore } from '@/lib/store';
+import { useStoreUser } from '@/hooks/useStoreUser';
+import { analytics } from '@/lib/analytics';
 import { aiGoalDecomposer } from '@/lib/ai-goal-decomposer';
 import { cn, CATEGORY_ICONS, CATEGORY_LABELS } from '@/lib/utils';
 import { GoalCategory, UltimateGoal, AIGoalDecompositionRequest } from '@/types';
+import { UpsellPrompt } from '@/components/UpsellPrompt';
 import { 
   Sparkles, 
   Target, 
@@ -64,7 +67,11 @@ const SKILL_LEVELS = [
 ];
 
 export function GoalWizard({ isOpen, onClose }: GoalWizardProps) {
-  const { addGoal, addHabit, addToast, addCoachMessage } = useAscendStore();
+  const { addGoal, addHabit, addToast, addCoachMessage, goals: existingGoals } = useAscendStore();
+  const { user } = useStoreUser();
+  const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
+  const FREE_GOAL_LIMIT = 3;
+  const [showGoalLimitUpsell, setShowGoalLimitUpsell] = useState(false);
   
   const [step, setStep] = useState<WizardStep>('goal');
   const [goalText, setGoalText] = useState('');
@@ -87,6 +94,12 @@ export function GoalWizard({ isOpen, onClose }: GoalWizardProps) {
     const steps: WizardStep[] = ['goal', 'category', 'timeline', 'preferences', 'processing', 'review'];
     const currentIndex = steps.indexOf(step);
     
+    // Gate: check goal limit for free users at first step
+    if (step === 'goal' && !isPro && existingGoals.length >= FREE_GOAL_LIMIT) {
+      setShowGoalLimitUpsell(true);
+      return;
+    }
+
     if (step === 'preferences') {
       handleDecompose();
     } else if (currentIndex < steps.length - 1) {
@@ -152,6 +165,11 @@ export function GoalWizard({ isOpen, onClose }: GoalWizardProps) {
     };
 
     addGoal(goal);
+    analytics.createGoal(Math.ceil((new Date(targetDate).getTime() - Date.now()) / (7 * 24 * 60 * 60 * 1000)));
+    if (existingGoals.length === 0) {
+      analytics.firstGoalCreated(category);
+    }
+    analytics.useAIDecomposition();
 
     // Add suggested habits
     decompositionResult.suggestedHabits?.forEach((habit: any) => {
@@ -564,6 +582,20 @@ export function GoalWizard({ isOpen, onClose }: GoalWizardProps) {
             </div>
           )}
         </div>
+
+        {/* Goal Limit Upsell */}
+        {showGoalLimitUpsell && (
+          <div className="px-6 py-4">
+            <UpsellPrompt
+              trigger="goal_limit"
+              variant="inline"
+              onDismiss={() => {
+                setShowGoalLimitUpsell(false);
+                onClose();
+              }}
+            />
+          </div>
+        )}
 
         {/* Footer */}
         <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-white/[0.02]">
