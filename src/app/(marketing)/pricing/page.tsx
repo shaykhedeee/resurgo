@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import MarketingPageBeacon from '@/components/marketing/MarketingPageBeacon';
 
 import EmailCapture from '@/components/marketing/EmailCapture';

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Inter, Press_Start_2P, VT323 } from 'next/font/google';
+import { Inter, Press_Start_2P, VT323, IBM_Plex_Sans, IBM_Plex_Mono } from 'next/font/google';
 import Script from 'next/script';
 import './globals.css';
 import '@/lib/env'; // Env validation — runs at startup (server-side)
@@ -39,6 +39,20 @@ const vt323 = VT323({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-vt323',
+});
+
+const ibmPlexSans = IBM_Plex_Sans({
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-sans',
+});
+
+const ibmPlexMono = IBM_Plex_Mono({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-mono',
 });
 
 export const metadata: Metadata = {
@@ -440,8 +454,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${pressStart2P.variable} ${vt323.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${pressStart2P.variable} ${vt323.variable} ${ibmPlexSans.variable} ${ibmPlexMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Google Tag Manager */}
+        <Script id="gtm-head" strategy="afterInteractive">
+          {`
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-KWTBH8SB');
+          `}
+        </Script>
+        {/* End Google Tag Manager */}
         {/* JSON-LD Structured Data */}
         <script
           type="application/ld+json"
@@ -519,6 +544,12 @@ export default function RootLayout({
         </Script>
       </head>
       <body className="antialiased min-h-screen bg-[var(--background)] text-[var(--text-primary)] pixel-mode crt-subtle">
+        {/* Google Tag Manager (noscript) */}
+        <noscript>
+          <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KWTBH8SB"
+            height="0" width="0" style={{ display: 'none', visibility: 'hidden' }}></iframe>
+        </noscript>
+        {/* End Google Tag Manager (noscript) */}
         {/* Error Tracking */}
         <ErrorTrackingInit />
 

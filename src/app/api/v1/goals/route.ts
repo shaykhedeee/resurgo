@@ -1,35 +1,16 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET /api/v1/goals — list active goals
+// Authorization: Bearer rsg_<key>
+// ═══════════════════════════════════════════════════════════════════════════════
+
 import { NextRequest, NextResponse } from 'next/server';
-import { ConvexHttpClient } from 'convex/browser';
+import { resolveApiKey, convexClient } from '../_lib/auth';
 import { api } from '../../../../../convex/_generated/api';
 
-const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const auth = await resolveApiKey(req.headers.get('authorization'));
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-async function validateApiKey(req: NextRequest): Promise<string | null> {
-  const key = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
-  if (!key || !key.startsWith('rsg_')) return null;
-  // Basic validation: key format check
-  // In production, verify against Convex apiKeys table
-  return key;
-}
-
-export async function GET(req: NextRequest) {
-  const apiKey = await validateApiKey(req);
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Unauthorized. Provide x-api-key header.' }, { status: 401 });
-  }
-  return NextResponse.json(
-    { error: 'Server-side Convex access requires user context. Use client SDK.' },
-    { status: 400 }
-  );
-}
-
-export async function POST(req: NextRequest) {
-  const apiKey = await validateApiKey(req);
-  if (!apiKey) {
-    return NextResponse.json({ error: 'Unauthorized. Provide x-api-key header.' }, { status: 401 });
-  }
-  return NextResponse.json(
-    { error: 'Server-side Convex access requires user context. Use client SDK.' },
-    { status: 400 }
-  );
+  const goals = await convexClient.query(api.goals.listActive, {}).catch(() => []);
+  return NextResponse.json({ goals });
 }

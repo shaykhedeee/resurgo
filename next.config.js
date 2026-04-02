@@ -13,7 +13,15 @@ const nextConfig = {
       { protocol: 'https', hostname: 'www.themealdb.com' },
       { protocol: 'https', hostname: 'images.openfoodfacts.org' },
       { protocol: 'https', hostname: 'static.openfoodfacts.org' },
+      // Vision Board image providers
+      { protocol: 'https', hostname: 'image.pollinations.ai' },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'api.unsplash.com' },
+      { protocol: 'https', hostname: '*.pexels.com' },
+      { protocol: 'https', hostname: 'media.gettyimages.com' },
     ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 86400, // 24h CDN cache for optimized images
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
@@ -66,7 +74,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://fonts.googleapis.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://challenges.cloudflare.com https://*.cloudflare.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob: https:",
-              "connect-src 'self' https://wttr.in https://api.groq.com https://generativelanguage.googleapis.com https://openrouter.ai https://api.aimlapi.com https://api.cerebras.ai https://api.together.xyz https://api.mistral.ai https://api.fireworks.ai https://api.scaleway.ai https://api.openai.com https://api.puter.com https://*.puter.com https://js.puter.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://*.convex.cloud wss://*.convex.cloud wss: https://accounts.google.com https://api.notion.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com",
+              "connect-src 'self' https://wttr.in https://api.groq.com https://generativelanguage.googleapis.com https://openrouter.ai https://api.aimlapi.com https://api.cerebras.ai https://api.together.xyz https://api.mistral.ai https://api.fireworks.ai https://api.scaleway.ai https://api.openai.com https://api.puter.com https://*.puter.com https://js.puter.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://*.convex.cloud wss://*.convex.cloud wss: https://accounts.google.com https://api.notion.com https://challenges.cloudflare.com https://*.cloudflare.com https://www.googletagmanager.com https://www.google-analytics.com https://region1.google-analytics.com https://image.pollinations.ai https://api-inference.huggingface.co https://images.unsplash.com https://api.unsplash.com",
               "frame-src 'self' https://*.clerk.accounts.dev https://clerk.resurgo.life https://accounts.google.com https://www.notion.so https://challenges.cloudflare.com https://*.cloudflare.com https://www.google.com https://www.recaptcha.net",
               "form-action 'self'",
               "worker-src 'self' blob:",
@@ -103,7 +111,19 @@ const nextConfig = {
   
   // Bundle optimization
   experimental: {
-    optimizePackageImports: ['lucide-react', 'date-fns', '@/components', '@/lib'],
+    optimizePackageImports: [
+      'lucide-react',
+      'date-fns',
+      'framer-motion',
+      'recharts',
+      '@/components',
+      '@/lib',
+    ],
+    // Client-side router cache TTL (Next.js 15+)
+    staleTimes: {
+      dynamic: 30,   // Cache dynamic pages 30s on back navigation
+      static: 300,   // Cache static pages 5 minutes
+    },
   },
 }
 

@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { searchStockImages, searchDomainImages } from '@/lib/ai/vision-board/image-service';
+import { searchStockImages } from '@/lib/ai/vision-board/image-service';
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const images = domain && !query
-      ? await searchDomainImages(domain, limit)
+      ? await searchStockImages(domain, limit)
       : await searchStockImages(query || 'motivation inspiration lifestyle', limit);
 
     return NextResponse.json({ images, count: images.length });

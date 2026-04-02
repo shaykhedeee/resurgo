@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
-import { searchStockImages, searchDomainImages } from '@/lib/ai/vision-board/image-service';
+import { searchStockImages } from '@/lib/ai/vision-board/image-service';
 
 export async function GET(req: NextRequest) {
   const { userId } = await auth();
@@ -16,15 +16,13 @@ export async function GET(req: NextRequest) {
   const domain = searchParams.get('domain') ?? '';
   const limit = Math.min(30, Math.max(1, Number(searchParams.get('limit')) || 12));
 
-  if (domain) {
-    const images = await searchDomainImages(domain, limit);
-    return NextResponse.json({ images, domain });
-  }
+  // domain search uses the domain name itself as the query term
+  const searchTerm = domain.trim() || query.trim();
 
-  if (!query.trim()) {
+  if (!searchTerm) {
     return NextResponse.json({ error: 'Missing ?q= or ?domain= parameter' }, { status: 400 });
   }
 
-  const images = await searchStockImages(query, limit);
-  return NextResponse.json({ images, query });
+  const images = await searchStockImages(searchTerm, limit);
+  return NextResponse.json({ images, query: searchTerm });
 }

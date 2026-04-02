@@ -89,3 +89,27 @@ export const revokeKey = mutation({
     await ctx.db.patch(id, { revokedAt: Date.now() });
   },
 });
+
+// Used by REST API v1 routes — validates API key hash and returns userId
+export const validateByHash = query({
+  args: { keyHash: v.string() },
+  handler: async (ctx, { keyHash }) => {
+    const key = await ctx.db
+      .query('apiKeys')
+      .withIndex('by_keyHash', (q: any) => q.eq('keyHash', keyHash))
+      .first();
+    if (!key || key.revokedAt) return null;
+    return { userId: key._id, ownerId: key.userId, rateLimitPerHour: key.rateLimitPerHour };
+  },
+});
+
+export const touchLastUsed = mutation({
+  args: { keyHash: v.string() },
+  handler: async (ctx, { keyHash }) => {
+    const key = await ctx.db
+      .query('apiKeys')
+      .withIndex('by_keyHash', (q: any) => q.eq('keyHash', keyHash))
+      .first();
+    if (key && !key.revokedAt) await ctx.db.patch(key._id, { lastUsedAt: Date.now() });
+  },
+});

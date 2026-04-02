@@ -120,7 +120,7 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'overview' | 'badges' | 'stats')}
               role="tab"
               aria-selected={activeTab === tab.id ? true : false}
               className={cn(
@@ -230,7 +230,7 @@ export function ProfileModal({ isOpen, onClose }: ProfileModalProps) {
                   <div className="pt-3 border-t border-[var(--border)]">
                     <button
                       onClick={() => {
-                        try { logout(); } catch (e) {}
+                        try { logout(); } catch { }
                         router.push('/');
                       }}
                       className="w-full text-left px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 font-medium"

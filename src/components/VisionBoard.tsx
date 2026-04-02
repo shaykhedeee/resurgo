@@ -9,7 +9,8 @@ import { usePlanGating } from '@/hooks/usePlanGating';
 import {
   CheckCircle, RefreshCw, Sparkles, ChevronLeft, ChevronRight, Crown,
   Upload, Wand2, Copy, Check, History, Trash2, Search, Download,
-  Star, Grid3X3, LayoutGrid, Columns, X, Plus,
+  Star, Grid3X3, LayoutGrid, Columns, X, Plus, Edit3, Share2,
+  Maximize2, RotateCcw,
 } from 'lucide-react';
 import VisionBoardWizard, { type VisionBoardWizardResult } from '@/components/VisionBoardWizard';
 
@@ -92,6 +93,7 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const { isPro, plan } = usePlanGating();
   const proUnlocked = isPro();
   const hasTrackedView = useRef(false);
+  const boardRef = useRef<HTMLDivElement>(null);
 
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -112,6 +114,14 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const [stockImages, setStockImages] = useState<StockImage[]>([]);
   const [stockLoading, setStockLoading] = useState(false);
   const [layoutOverride, setLayoutOverride] = useState<string | null>(null);
+  const [downloadingHD, setDownloadingHD] = useState(false);
+  // Panel regen
+  const [regenningPanelId, setRegenningPanelId] = useState<string | null>(null);
+  // Focus / cinema mode
+  const [focusMode, setFocusMode] = useState(false);
+  const [focusPanelIndex, setFocusPanelIndex] = useState(0);
+  // Share
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copied'>('idle');
 
   // Convex queries
   const boardDoc = useQuery(api.visionBoards.getActive, {});
@@ -122,6 +132,10 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const removeBoard = useMutation(api.visionBoards.remove);
   const activateBoard = useMutation(api.visionBoards.activate);
   const duplicateBoard = useMutation(api.visionBoards.duplicate);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const _patchPanelMutation = useMutation(api.visionBoards.patchPanel as any);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const patchAffirmationMutation = useMutation(api.visionBoards.patchAffirmation as any);
 
   useEffect(() => {
     if (hasTrackedView.current) return;
@@ -229,6 +243,157 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
       await duplicateBoard({ boardId: boardId as any });
     } catch { /* ignore */ }
   }, [duplicateBoard]);
+
+  // ── PANEL REGEN ────────────────────────────────────────────────────────────
+  const handleRegenPanel = useCallback(async (panel: VisionBoardPanel) => {
+    if (!boardDoc) return;
+    setRegenningPanelId(panel.id);
+    setError(null);
+    try {
+      const res = await fetch('/api/vision-board/regen-panel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          boardId: (boardDoc as any)._id,
+          panelId: panel.id,
+          imagePrompt: panel.imagePrompt,
+          stylePreset,
+          affirmation: panel.affirmation,
+          goalTitle: panel.goalTitle,
+        }),
+      });
+      if (!res.ok) {
+        const data = (await res.json().catch(() => ({}))) as { error?: string };
+        throw new Error(data.error ?? `HTTP ${res.status}`);
+      }
+      // Convex realtime subscription will auto-update the board UI
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Panel regeneration failed');
+    } finally {
+      setRegenningPanelId(null);
+    }
+  }, [boardDoc, stylePreset]);
+
+  // ── SHARE ──────────────────────────────────────────────────────────────────
+  const handleShare = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShareStatus('copied');
+      setTimeout(() => setShareStatus('idle'), 2000);
+    } catch { /* clipboard blocked */ }
+  }, []);
+
+  // ── FOCUS / CINEMA MODE ────────────────────────────────────────────────────
+  const openFocusMode = useCallback((index: number) => {
+    setFocusPanelIndex(index);
+    setFocusMode(true);
+  }, []);
+
+  // ── HD DOWNLOAD ────────────────────────────────────────────────────────────
+  const handleDownloadHD = useCallback(async () => {
+    if (!board) return;
+    setDownloadingHD(true);
+    try {
+      const PANEL_SIZE = 400;
+      const COLS = Math.min(3, board.panels.length);
+      const ROWS = Math.ceil(board.panels.length / COLS);
+      const PAD = 20;
+      const HEADER_H = 90;
+      const FOOTER_H = 50;
+      const W = COLS * PANEL_SIZE + (COLS + 1) * PAD;
+      const H = HEADER_H + ROWS * (PANEL_SIZE + PAD) + PAD + FOOTER_H;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Background gradient
+      const bg = ctx.createLinearGradient(0, 0, W, H);
+      bg.addColorStop(0, '#0a0a0a');
+      bg.addColorStop(1, '#111111');
+      ctx.fillStyle = bg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Title
+      ctx.fillStyle = board.theme.colorPalette[0] ?? '#f97316';
+      ctx.font = 'bold 28px system-ui, -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(board.title, W / 2, 42);
+
+      // Center affirmation
+      ctx.fillStyle = 'rgba(255,255,255,0.5)';
+      ctx.font = 'italic 15px Georgia, serif';
+      ctx.fillText(`"${board.centerAffirmation}"`, W / 2, 72);
+
+      // Draw panels
+      for (let i = 0; i < board.panels.length; i++) {
+        const panel = board.panels[i];
+        const col = i % COLS;
+        const row = Math.floor(i / COLS);
+        const x = PAD + col * (PANEL_SIZE + PAD);
+        const y = HEADER_H + row * (PANEL_SIZE + PAD);
+        const AFFWH = 52;
+
+        // Panel background
+        ctx.fillStyle = '#1a1a1a';
+        ctx.roundRect?.(x, y, PANEL_SIZE, PANEL_SIZE, 12);
+        ctx.fill();
+
+        // Panel image
+        if (panel.imageData) {
+          try {
+            const img = new window.Image();
+            img.crossOrigin = 'anonymous';
+            await new Promise<void>((resolve) => {
+              img.onload = () => {
+                ctx.save();
+                if (ctx.roundRect) {
+                  ctx.beginPath();
+                  ctx.roundRect(x, y, PANEL_SIZE, PANEL_SIZE - AFFWH, [12, 12, 0, 0]);
+                  ctx.clip();
+                }
+                ctx.drawImage(img, x, y, PANEL_SIZE, PANEL_SIZE - AFFWH);
+                ctx.restore();
+                resolve();
+              };
+              img.onerror = () => resolve();
+              img.src = panel.imageData!;
+            });
+          } catch { /* skip panel image on error */ }
+        }
+
+        // Affirmation bar
+        const accent = board.theme.colorPalette[i % board.theme.colorPalette.length] ?? '#f97316';
+        ctx.fillStyle = accent + '22';
+        ctx.fillRect(x, y + PANEL_SIZE - AFFWH, PANEL_SIZE, AFFWH);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'italic 11px Georgia, serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(panel.affirmation.slice(0, 55), x + PANEL_SIZE / 2, y + PANEL_SIZE - AFFWH + 18);
+        ctx.fillStyle = accent;
+        ctx.font = 'bold 10px system-ui, sans-serif';
+        ctx.fillText(panel.goalTitle.slice(0, 44).toUpperCase(), x + PANEL_SIZE / 2, y + PANEL_SIZE - AFFWH + 36);
+      }
+
+      // Footer watermark
+      ctx.fillStyle = 'rgba(255,255,255,0.15)';
+      ctx.font = '11px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText('resurgo.life • vision board', W / 2, H - 18);
+
+      const link = document.createElement('a');
+      link.href = canvas.toDataURL('image/png');
+      link.download = `vision-board-${new Date().toISOString().slice(0, 10)}.png`;
+      link.click();
+    } catch (err) {
+      console.error('[VisionBoard] HD download failed:', err);
+    } finally {
+      setDownloadingHD(false);
+    }
+  }, [board, setDownloadingHD]);
 
   const activePanel = activePanelIndex !== null ? board?.panels[activePanelIndex] : null;
   const primaryColor = board?.theme.colorPalette[0] ?? '#f97316';
@@ -419,9 +584,9 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           ))}
         </div>
 
-        {/* Layout switcher (board tab only) */}
-        {activeTab === 'board' && (
-          <div className="flex gap-1">
+        {/* Layout switcher + Download (board tab only) */}
+        {activeTab === 'board' && board && (
+          <div className="flex items-center gap-1">
             {([
               { key: 'grid', icon: <Grid3X3 size={14} /> },
               { key: 'collage', icon: <Columns size={14} /> },
@@ -434,17 +599,67 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
                 {l.icon}
               </button>
             ))}
+            <div className="w-px h-4 bg-zinc-700 mx-1" />
+            <button
+              onClick={() => void handleDownloadHD()}
+              disabled={downloadingHD}
+              title="Download HD PNG"
+              className="flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-mono rounded border border-zinc-700 text-zinc-400 hover:text-orange-400 hover:border-orange-700 transition disabled:opacity-50"
+            >
+              <Download size={12} className={downloadingHD ? 'animate-bounce' : ''} />
+              {downloadingHD ? 'SAVING…' : 'DOWNLOAD_HD'}
+            </button>
+            <div className="w-px h-4 bg-zinc-700 mx-1" />
+            <button
+              onClick={() => openFocusMode(0)}
+              title="Cinema mode — full-screen panel view"
+              className="p-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-purple-400 hover:border-purple-700 transition"
+            >
+              <Maximize2 size={12} />
+            </button>
+            <button
+              onClick={() => void handleShare()}
+              title={shareStatus === 'copied' ? 'Link copied!' : 'Copy page link'}
+              className="p-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-green-400 hover:border-green-700 transition"
+            >
+              {shareStatus === 'copied' ? <Check size={12} className="text-green-400" /> : <Share2 size={12} />}
+            </button>
           </div>
         )}
       </div>
 
       {/* ── BOARD TAB ── */}
       {activeTab === 'board' && (
-        <div className="rounded-xl p-5 space-y-5"
+        <div ref={boardRef} className="relative rounded-xl p-5 space-y-5"
           style={{
             background: `linear-gradient(135deg, ${primaryColor}12, ${secondaryColor}08)`,
             border: `1px solid ${primaryColor}25`,
           }}>
+          {/* Pixel brand corner decorations */}
+          <svg className="absolute top-0 left-0 w-12 h-12 opacity-40 pointer-events-none" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="0" y="0" width="8" height="4" fill={primaryColor}/>
+            <rect x="0" y="4" width="4" height="4" fill={primaryColor} opacity="0.7"/>
+            <rect x="0" y="8" width="4" height="4" fill={primaryColor} opacity="0.4"/>
+            <rect x="4" y="0" width="4" height="4" fill={primaryColor} opacity="0.7"/>
+            <rect x="8" y="0" width="4" height="4" fill={primaryColor} opacity="0.4"/>
+          </svg>
+          <svg className="absolute top-0 right-0 w-12 h-12 opacity-40 pointer-events-none" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="40" y="0" width="8" height="4" fill={secondaryColor}/>
+            <rect x="44" y="4" width="4" height="4" fill={secondaryColor} opacity="0.7"/>
+            <rect x="44" y="8" width="4" height="4" fill={secondaryColor} opacity="0.4"/>
+            <rect x="36" y="0" width="4" height="4" fill={secondaryColor} opacity="0.7"/>
+            <rect x="32" y="0" width="4" height="4" fill={secondaryColor} opacity="0.4"/>
+          </svg>
+          <svg className="absolute bottom-0 left-0 w-12 h-12 opacity-30 pointer-events-none" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="0" y="44" width="8" height="4" fill={primaryColor}/>
+            <rect x="0" y="40" width="4" height="4" fill={primaryColor} opacity="0.7"/>
+            <rect x="0" y="36" width="4" height="4" fill={primaryColor} opacity="0.4"/>
+          </svg>
+          <svg className="absolute bottom-0 right-0 w-12 h-12 opacity-30 pointer-events-none" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="40" y="44" width="8" height="4" fill={secondaryColor}/>
+            <rect x="44" y="40" width="4" height="4" fill={secondaryColor} opacity="0.7"/>
+            <rect x="44" y="36" width="4" height="4" fill={secondaryColor} opacity="0.4"/>
+          </svg>
           {/* Header */}
           <div className="text-center space-y-1">
             <h2 className="text-2xl font-bold tracking-tight" style={{ color: primaryColor }}>{board.title}</h2>
@@ -452,6 +667,15 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
             <p className="text-zinc-500 text-xs">
               Generated {new Date(board.generatedAt).toLocaleDateString()} · {board.theme.mood}
             </p>
+            {/* Board type badge */}
+            {(boardDoc as { boardType?: string } | undefined)?.boardType ? (
+              <span className="inline-flex items-center gap-1 border border-zinc-700 bg-zinc-900/60 px-2.5 py-0.5 rounded-full text-[9px] font-mono text-zinc-400 uppercase tracking-widest">
+                {(boardDoc as { boardType?: string }).boardType === 'manifesting' ? '✦' :
+                 (boardDoc as { boardType?: string }).boardType === 'yearly' ? '◉' :
+                 (boardDoc as { boardType?: string }).boardType === 'gratitude' ? '♡' : '◈'}{' '}
+                {(boardDoc as { boardType?: string }).boardType}
+              </span>
+            ) : null}
           </div>
 
           {/* Category filter */}
@@ -488,6 +712,8 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
                     panel={panel}
                     accentColor={board.theme.colorPalette[idx % board.theme.colorPalette.length]}
                     onClick={() => setActivePanelIndex(board.panels.indexOf(panel))}
+                    onRegen={() => void handleRegenPanel(panel)}
+                    isRegenerating={regenningPanelId === panel.id}
                     className={rowSpan}
                     isMasonry={currentLayout === 'collage'}
                   />
@@ -671,6 +897,29 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           onClose={() => setActivePanelIndex(null)}
           onPrev={() => setActivePanelIndex((i) => Math.max(0, (i ?? 0) - 1))}
           onNext={() => setActivePanelIndex((i) => Math.min(board.panels.length - 1, (i ?? 0) + 1))}
+          onRegen={(panel) => void handleRegenPanel(panel)}
+          isRegenerating={regenningPanelId === activePanel.id}
+          onEditAffirmation={async (id, text) => {
+            if (!boardDoc) return;
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await patchAffirmationMutation({ boardId: (boardDoc as any)._id, panelId: id, affirmation: text });
+          }}
+        />
+      )}
+      {/* Focus / Cinema Mode Overlay */}
+      {focusMode && (
+        <FocusModeOverlay
+          panels={board.panels}
+          currentIndex={focusPanelIndex}
+          colorPalette={board.theme.colorPalette}
+          title={board.title}
+          centerAffirmation={board.centerAffirmation}
+          onClose={() => setFocusMode(false)}
+          onPrev={() => setFocusPanelIndex((i) => Math.max(0, i - 1))}
+          onNext={() => setFocusPanelIndex((i) => Math.min(board.panels.length - 1, i + 1))}
+          onNavigate={setFocusPanelIndex}
+          onRegen={(p) => void handleRegenPanel(p)}
+          regenningPanelId={regenningPanelId}
         />
       )}
     </div>
@@ -682,11 +931,13 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
 // ─────────────────────────────────────────────────────────────────────────────
 
 function PanelCard({
-  panel, accentColor, onClick, className = '', isMasonry = false,
+  panel, accentColor, onClick, onRegen, isRegenerating = false, className = '', isMasonry = false,
 }: {
   panel: VisionBoardPanel;
   accentColor: string;
   onClick: () => void;
+  onRegen?: () => void;
+  isRegenerating?: boolean;
   className?: string;
   isMasonry?: boolean;
 }) {
@@ -697,6 +948,13 @@ function PanelCard({
                  border border-zinc-800 hover:border-zinc-600 transition-all
                  hover:scale-[1.02] hover:shadow-lg ${isMasonry ? 'break-inside-avoid' : 'aspect-square'} ${className}`}
     >
+      {/* Regen spinner overlay — shown while regenerating */}
+      {isRegenerating && (
+        <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+          <RotateCcw size={22} className="text-orange-400 animate-spin" />
+        </div>
+      )}
+
       {panel.imageData ? (
         <Image src={panel.imageData} alt={panel.goalTitle}
           {...(isMasonry ? { width: 400, height: 400 } : { fill: true, sizes: '(max-width: 768px) 100vw, 33vw' })}
@@ -731,8 +989,149 @@ function PanelCard({
           <div className="h-0.5 bg-zinc-700 rounded-full overflow-hidden">
             <div className="h-full rounded-full transition-all" style={{ width: `${panel.progress}%`, backgroundColor: accentColor }} />
           </div>
-          <span className="text-[10px] text-zinc-400 mt-0.5 block">{panel.progress}% complete</span>
+          <div className="flex items-center justify-between mt-1">
+            <span className="text-[10px] text-zinc-400">{panel.progress}% complete</span>
+            {onRegen && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onRegen(); }}
+                disabled={isRegenerating}
+                title="Regenerate this panel's image"
+                className="flex items-center gap-1 px-2 py-0.5 rounded bg-black/50 text-[9px] text-zinc-300 hover:text-orange-400 border border-zinc-700 hover:border-orange-700 transition disabled:opacity-50"
+              >
+                <RotateCcw size={9} className={isRegenerating ? 'animate-spin' : ''} />
+                {isRegenerating ? 'Regen…' : 'Regen'}
+              </button>
+            )}
+          </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Focus / Cinema Mode Overlay — fullscreen single-panel view
+// ─────────────────────────────────────────────────────────────────────────────
+
+function FocusModeOverlay({
+  panels, currentIndex, colorPalette, title, centerAffirmation,
+  onClose, onPrev, onNext, onNavigate, onRegen, regenningPanelId,
+}: {
+  panels: VisionBoardPanel[];
+  currentIndex: number;
+  colorPalette: string[];
+  title: string;
+  centerAffirmation: string;
+  onClose: () => void;
+  onPrev: () => void;
+  onNext: () => void;
+  onNavigate: (index: number) => void;
+  onRegen: (panel: VisionBoardPanel) => void;
+  regenningPanelId: string | null;
+}) {
+  const panel = panels[currentIndex];
+  const accent = colorPalette[currentIndex % colorPalette.length] ?? '#f97316';
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+      if (e.key === 'ArrowLeft') onPrev();
+      if (e.key === 'ArrowRight') onNext();
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose, onPrev, onNext]);
+
+  if (!panel) return null;
+
+  return (
+    <div className="fixed inset-0 z-[60] flex flex-col items-center justify-center bg-black/95 backdrop-blur-xl">
+      {/* Top bar */}
+      <div className="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-4">
+        <div className="flex flex-col">
+          <span className="text-white font-bold text-sm">{title}</span>
+          <span className="text-zinc-400 text-[10px] italic">&ldquo;{centerAffirmation}&rdquo;</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="text-zinc-500 text-xs font-mono">{currentIndex + 1}/{panels.length}</span>
+          <button onClick={onClose}
+            className="p-2 rounded-full bg-zinc-800 hover:bg-zinc-700 transition" title="Close (Esc)">
+            <X size={16} className="text-zinc-300" />
+          </button>
+        </div>
+      </div>
+
+      {/* Main image */}
+      <div className="relative w-full max-w-2xl aspect-square mx-auto">
+        {panel.imageData ? (
+          <Image src={panel.imageData} alt={panel.goalTitle} fill
+            className="object-cover rounded-2xl" unoptimized />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center rounded-2xl"
+            style={{ background: `${accent}20` }}>
+            <span className="text-7xl">{CATEGORY_ICONS[panel.category] ?? '🎯'}</span>
+          </div>
+        )}
+
+        {/* Progress bar overlay */}
+        <div className="absolute bottom-0 left-0 right-0 h-1 rounded-b-2xl overflow-hidden">
+          <div className="h-full rounded-full transition-all" style={{ width: `${panel.progress}%`, backgroundColor: accent }} />
+        </div>
+      </div>
+
+      {/* Panel info */}
+      <div className="mt-6 text-center max-w-lg px-4 space-y-2">
+        <span className="text-[11px] uppercase tracking-widest font-bold" style={{ color: accent }}>
+          {CATEGORY_ICONS[panel.category]} {panel.category}
+        </span>
+        <h3 className="text-white font-bold text-xl">{panel.goalTitle}</h3>
+        <p className="text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
+        <p className="text-zinc-500 text-xs">{panel.progress}% complete</p>
+      </div>
+
+      {/* Controls row */}
+      <div className="mt-6 flex items-center gap-4">
+        <button onClick={onPrev} disabled={currentIndex === 0}
+          className="p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 disabled:opacity-30 transition" title="Previous (←)">
+          <ChevronLeft size={20} className="text-zinc-200" />
+        </button>
+
+        <button
+          onClick={() => onRegen(panel)}
+          disabled={regenningPanelId === panel.id}
+          className="flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-800 hover:bg-orange-950/50 border border-zinc-700 hover:border-orange-700 text-sm text-zinc-300 hover:text-orange-400 transition disabled:opacity-50"
+          title="Regenerate this panel's image"
+        >
+          <RotateCcw size={14} className={regenningPanelId === panel.id ? 'animate-spin text-orange-400' : ''} />
+          {regenningPanelId === panel.id ? 'Regenerating…' : 'Regen image'}
+        </button>
+
+        <button onClick={onNext} disabled={currentIndex === panels.length - 1}
+          className="p-3 rounded-xl bg-zinc-800 hover:bg-zinc-700 disabled:opacity-30 transition" title="Next (→)">
+          <ChevronRight size={20} className="text-zinc-200" />
+        </button>
+      </div>
+
+      {/* Thumbnails strip */}
+      <div className="absolute bottom-6 flex gap-2 px-4 overflow-x-auto max-w-full">
+        {panels.map((p, i) => (
+          <button key={p.id} onClick={() => { /* handled via onPrev/onNext */ }}
+            className={`relative w-12 h-12 rounded-lg overflow-hidden border-2 transition flex-shrink-0 ${
+              i === currentIndex ? 'border-orange-500 scale-110' : 'border-zinc-700 opacity-60 hover:opacity-100'
+            }`}
+            // Navigate directly by calling prev/next n times would be complex — use a simple approach
+            style={{ cursor: i === currentIndex ? 'default' : 'pointer' }}
+            onClickCapture={(e) => {
+              e.stopPropagation();
+              onNavigate(i);
+            }}
+          >
+            {p.imageData
+              ? <Image src={p.imageData} alt={p.goalTitle} fill className="object-cover" unoptimized />
+              : <span className="text-base">{CATEGORY_ICONS[p.category] ?? '🎯'}</span>
+            }
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -744,6 +1143,7 @@ function PanelCard({
 
 function PanelModal({
   panel, panels, currentIndex, colorPalette, onClose, onPrev, onNext,
+  onRegen, isRegenerating = false, onEditAffirmation,
 }: {
   panel: VisionBoardPanel;
   panels: VisionBoardPanel[];
@@ -752,9 +1152,20 @@ function PanelModal({
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  onRegen?: (panel: VisionBoardPanel) => void;
+  isRegenerating?: boolean;
+  onEditAffirmation?: (panelId: string, text: string) => Promise<void>;
 }) {
   const accentColor = colorPalette[currentIndex % colorPalette.length];
   const [copied, setCopied] = useState(false);
+  const [editingAffirmation, setEditingAffirmation] = useState(false);
+  const [editValue, setEditValue] = useState(panel.affirmation);
+  const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setEditValue(panel.affirmation);
+    setEditingAffirmation(false);
+  }, [panel.id, panel.affirmation]);
 
   const copyAffirmation = useCallback(async () => {
     try {
@@ -764,16 +1175,47 @@ function PanelModal({
     } catch { /* clipboard not available */ }
   }, [panel.affirmation]);
 
+  const saveAffirmation = useCallback(async () => {
+    if (!onEditAffirmation || editValue.trim() === panel.affirmation) {
+      setEditingAffirmation(false);
+      return;
+    }
+    setSaving(true);
+    try {
+      await onEditAffirmation(panel.id, editValue.trim());
+      setEditingAffirmation(false);
+    } catch { /* ignore */ } finally {
+      setSaving(false);
+    }
+  }, [onEditAffirmation, editValue, panel.affirmation, panel.id]);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <div className="relative bg-zinc-900 rounded-2xl max-w-lg w-full mx-4 overflow-hidden shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="aspect-square w-full">
+        {/* Image */}
+        <div className="relative aspect-square w-full">
           {panel.imageData ? (
             <Image src={panel.imageData} alt={panel.goalTitle} width={720} height={720} className="w-full h-full object-cover" unoptimized />
           ) : (
             <div className="w-full h-full flex items-center justify-center" style={{ background: `${accentColor}20` }}>
               <span className="text-6xl">{CATEGORY_ICONS[panel.category] ?? '🎯'}</span>
             </div>
+          )}
+          {/* Regen spinner overlay */}
+          {isRegenerating && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+              <RotateCcw size={28} className="text-orange-400 animate-spin" />
+            </div>
+          )}
+          {/* Quick regen button */}
+          {onRegen && !isRegenerating && (
+            <button
+              onClick={() => onRegen(panel)}
+              title="Regenerate this panel's image"
+              className="absolute bottom-2 right-2 flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-black/70 border border-zinc-700 hover:border-orange-600 text-[10px] text-zinc-300 hover:text-orange-400 transition"
+            >
+              <RotateCcw size={11} /> New image
+            </button>
           )}
         </div>
 
@@ -782,13 +1224,44 @@ function PanelModal({
             {CATEGORY_ICONS[panel.category]} {panel.category}
           </span>
           <h3 className="text-white font-bold text-lg">{panel.goalTitle}</h3>
-          <div className="flex items-start gap-2">
-            <p className="flex-1 text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
-            <button onClick={() => void copyAffirmation()}
-              className="shrink-0 p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition" title="Copy affirmation">
-              {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} className="text-zinc-400" />}
-            </button>
-          </div>
+
+          {/* Affirmation — inline edit or view */}
+          {editingAffirmation ? (
+            <div className="space-y-2">
+              <textarea
+                value={editValue}
+                onChange={(e) => setEditValue(e.target.value)}
+                rows={3}
+                className="w-full bg-zinc-800 border border-zinc-600 rounded-lg px-3 py-2 text-sm text-zinc-100 italic resize-none focus:border-orange-600 focus:outline-none"
+              />
+              <div className="flex items-center gap-2">
+                <button onClick={() => void saveAffirmation()} disabled={saving}
+                  className="px-3 py-1.5 bg-orange-600 hover:bg-orange-500 text-black text-xs font-bold rounded-lg transition disabled:opacity-50">
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+                <button onClick={() => { setEditingAffirmation(false); setEditValue(panel.affirmation); }}
+                  className="px-3 py-1.5 border border-zinc-700 hover:border-zinc-500 text-zinc-400 text-xs rounded-lg transition">
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex items-start gap-2">
+              <p className="flex-1 text-zinc-300 italic text-sm">&ldquo;{panel.affirmation}&rdquo;</p>
+              <div className="flex gap-1">
+                {onEditAffirmation && (
+                  <button onClick={() => setEditingAffirmation(true)}
+                    className="shrink-0 p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition" title="Edit affirmation">
+                    <Edit3 size={13} className="text-zinc-400" />
+                  </button>
+                )}
+                <button onClick={() => void copyAffirmation()}
+                  className="shrink-0 p-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700 transition" title="Copy affirmation">
+                  {copied ? <Check size={13} className="text-green-400" /> : <Copy size={13} className="text-zinc-400" />}
+                </button>
+              </div>
+            </div>
+          )}
 
           <div>
             <div className="flex justify-between text-xs text-zinc-500 mb-1">

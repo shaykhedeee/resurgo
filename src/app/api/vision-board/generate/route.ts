@@ -3,6 +3,9 @@
 // Generates + stores a personalised vision board for the authenticated user.
 // ═══════════════════════════════════════════════════════════════════════════════
 
+// Extend Vercel serverless timeout — image generation can take 60-120s for full boards
+export const maxDuration = 300;
+
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { ConvexHttpClient } from 'convex/browser';
@@ -15,6 +18,26 @@ import type { UserArchetype } from '@/lib/ai/onboarding/archetypes';
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 const ANALYTICS_SYNC_SECRET = process.env.BILLING_WEBHOOK_SYNC_SECRET;
+
+// Per-user rate limit: max 3 board generations per 10 minutes
+const VISION_RATE_LIMIT = 3;
+const VISION_RATE_WINDOW_MS = 10 * 60 * 1000;
+const visionRateMap = new Map<string, { count: number; windowStart: number }>();
+
+function checkVisionRateLimit(userId: string): { allowed: boolean; retryAfterMs: number } {
+  const now = Date.now();
+  const entry = visionRateMap.get(userId);
+  if (!entry || now - entry.windowStart > VISION_RATE_WINDOW_MS) {
+    visionRateMap.set(userId, { count: 1, windowStart: now });
+    return { allowed: true, retryAfterMs: 0 };
+  }
+  if (entry.count >= VISION_RATE_LIMIT) {
+    const retryAfterMs = VISION_RATE_WINDOW_MS - (now - entry.windowStart);
+    return { allowed: false, retryAfterMs };
+  }
+  entry.count++;
+  return { allowed: true, retryAfterMs: 0 };
+}
 
 type VisionGenerationMode = 'ai' | 'hybrid';
 type VisionStylePreset = 'pinterest-bold' | 'clean-minimal' | 'luxury-editorial' | 'cinematic-dream';
@@ -59,6 +82,22 @@ const STYLE_SUFFIX: Record<VisionStylePreset, string> = {
   'cinematic-dream': 'cinematic dreamlike look, dramatic lighting, shallow depth of field, emotionally rich scene',
 };
 
+// Map wizard boardType values → Convex schema enum values
+const WIZARD_BOARD_TYPE_MAP: Record<string, 'goals' | 'lifestyle' | 'yearly' | 'domain' | 'gratitude' | 'custom'> = {
+  manifesting: 'goals',
+  vision: 'lifestyle',
+  yearly: 'yearly',
+  gratitude: 'gratitude',
+  custom: 'custom',
+  domain: 'domain',
+  goals: 'goals',
+  lifestyle: 'lifestyle',
+};
+
+function toConvexBoardType(raw: string | undefined): 'goals' | 'lifestyle' | 'yearly' | 'domain' | 'gratitude' | 'custom' {
+  return WIZARD_BOARD_TYPE_MAP[raw ?? ''] ?? 'goals';
+}
+
 async function logGrowthEvent(
   eventName: GrowthEventName,
   clerkId: string,
@@ -96,11 +135,22 @@ export async function POST(req: NextRequest) {
   const { userId, getToken } = await auth();
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
+  // Per-user rate limit: max 3 generations per 10 minutes
+  const { allowed, retryAfterMs } = checkVisionRateLimit(userId);
+  if (!allowed) {
+    const retryAfterSec = Math.ceil(retryAfterMs / 1000);
+    return NextResponse.json(
+      { error: `Too many generation requests. Please wait ${retryAfterSec}s before trying again.`, code: 'RATE_LIMITED' },
+      { status: 429, headers: { 'Retry-After': String(retryAfterSec) } }
+    );
+  }
+
   const payload = (await req.json().catch(() => ({}))) as {
     mode?: VisionGenerationMode;
     stylePreset?: VisionStylePreset;
     customImages?: string[];
     promptData?: WizardPromptData;
+    boardType?: 'manifesting' | 'gratitude' | 'yearly' | 'vision' | 'custom';
   };
 
   const mode: VisionGenerationMode = payload.mode === 'hybrid' ? 'hybrid' : 'ai';
@@ -187,6 +237,34 @@ export async function POST(req: NextRequest) {
     ? [] // wizard data will provide all panel content
     : [{ title: 'Define my life vision', category: 'PERSONAL', progress: 0 }];
 
+  // ── Pull habit / goal completion metrics for momentum context ────────────
+  let habitCompletionRate: number | undefined;
+  let streakDays: number | undefined;
+  let goalCompletionRate: number | undefined;
+  try {
+    const habitsListRef = (api as unknown as { habits?: { list?: unknown } }).habits?.list;
+    const habitsRaw: unknown = habitsListRef
+      ? await convex.query(habitsListRef as never, {}).catch(() => null)
+      : null;
+    const goalsMeta = goals;
+    if (Array.isArray(habitsRaw) && habitsRaw.length > 0) {
+      const completions = (habitsRaw as { completionRate?: number }[])
+        .map((h) => h.completionRate ?? 0)
+        .filter((r) => typeof r === 'number');
+      if (completions.length > 0) {
+        habitCompletionRate = Math.round(completions.reduce((a, b) => a + b, 0) / completions.length);
+      }
+      const streaks = (habitsRaw as { currentStreak?: number }[])
+        .map((h) => h.currentStreak ?? 0);
+      streakDays = Math.max(0, ...streaks);
+    }
+    if (goalsMeta.length > 0) {
+      goalCompletionRate = Math.round(
+        goalsMeta.reduce((sum, g) => sum + (g.progress ?? 0), 0) / goalsMeta.length
+      );
+    }
+  } catch { /* metrics are supplemental — never block generation */ }
+
   const config = await generateVisionBoardConfig({
     userId,
     userName,
@@ -194,6 +272,9 @@ export async function POST(req: NextRequest) {
     archetype,
     psychProfile,
     wizardData,
+    habitCompletionRate,
+    streakDays,
+    goalCompletionRate,
   });
 
   if (!config) {
@@ -240,9 +321,7 @@ export async function POST(req: NextRequest) {
     await convex.mutation(api.visionBoards.save, {
       config: JSON.stringify(boardWithImages),
       version: boardWithImages.version,
-      boardType: (['goals', 'lifestyle', 'yearly', 'domain', 'gratitude', 'custom'] as const).includes(
-        (payload as Record<string, unknown>).boardType as 'goals'
-      ) ? (payload as Record<string, unknown>).boardType as 'goals' | 'lifestyle' | 'yearly' | 'domain' | 'gratitude' | 'custom' : 'goals',
+      boardType: toConvexBoardType(wizardData?.boardType ?? payload.boardType),
       title: boardWithImages.title,
     });
   } catch (err) {

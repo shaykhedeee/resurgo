@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils';
 import { Id } from '../../convex/_generated/dataModel';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
-type Stage = 1 | 2 | 3 | 4 | 5 | 'generating' | 'complete';
+type Stage = 0 | 1 | 2 | 3 | 4 | 5 | 'generating' | 'complete';
 
 interface PillarScores {
   health: number;
@@ -120,9 +120,15 @@ export function DeepScanProtocol() {
   const completeScan = useMutation(api.deepScan.completeScan);
 
   const [scanId, setScanId] = useState<Id<'deepScans'> | null>(null);
-  const [stage, setStage] = useState<Stage>(1);
+  const [stage, setStage] = useState<Stage>(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [genStep, setGenStep] = useState(0);
+
+  // Stage 0 — Brain Dump state
+  const [brainDump, setBrainDump] = useState('');
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [showSynthesis, setShowSynthesis] = useState(false);
+  const [synthesisText, setSynthesisText] = useState('');
 
   // Stage 1 state
   const [nickname, setNickname] = useState('');
@@ -173,8 +179,8 @@ export function DeepScanProtocol() {
       if (scan.chronotype) setChronotype(scan.chronotype);
       if (scan.energyPattern) setEnergyPattern(scan.energyPattern);
     } else if (!scan) {
-      // Start new scan
-      startScan().then((id) => setScanId(id));
+      // New user — show brain dump first, startScan called after
+      setStage(0);
     } else if (scan.completedAt) {
       // Already completed, go to greeting
       router.push('/first-contact');
@@ -203,6 +209,36 @@ export function DeepScanProtocol() {
   }, []);
 
   // ── Stage Handlers ──
+  const handleBrainDump = async () => {
+    if (!brainDump.trim() || isSynthesizing) return;
+    setIsSynthesizing(true);
+
+    // Derive a quick synthesis from the text (no API call — instant)
+    const words = brainDump.trim().split(/\s+/);
+    const preview = words.slice(0, 12).join(' ') + (words.length > 12 ? '...' : '');
+    const hasGoal = /goal|want|achieve|build|become|start|finish|launch|lose|gain/i.test(brainDump);
+    const hasStruggle = /struggle|hard|fail|stuck|can't|haven't|keep|stop|anxiety|stress|overwhelm/i.test(brainDump);
+    const synthesis = hasGoal && hasStruggle
+      ? `I heard: "${preview}"\n\nI can see both ambition and friction here. We'll map the blockers first and build your system around them.`
+      : hasGoal
+      ? `I heard: "${preview}"\n\nClear intent. Let's structure this into a system that moves you forward — starting today.`
+      : `I heard: "${preview}"\n\nLet's untangle this. We'll identify your core focus and build from there.`;
+
+    setSynthesisText(synthesis);
+    setShowSynthesis(true);
+    setIsSynthesizing(false);
+
+    // Pre-fill Stage 3's biggestChallenge with the raw brain dump
+    setBiggestChallenge(brainDump.trim().slice(0, 500));
+  };
+
+  const handleBrainDumpProceed = async () => {
+    // Now start the Convex scan and move to Stage 1
+    const id = await startScan();
+    setScanId(id);
+    transitionTo(1);
+  };
+
   const handleStage1 = async () => {
     if (!scanId || !nickname.trim()) return;
     await saveStage1({
@@ -314,7 +350,7 @@ export function DeepScanProtocol() {
     );
   };
 
-  const progress = typeof stage === 'number' ? (stage / 5) * 100 : stage === 'generating' ? 90 : 100;
+  const progress = stage === 0 ? 2 : typeof stage === 'number' ? (stage / 5) * 100 : stage === 'generating' ? 90 : 100;
 
   return (
     <div className="min-h-screen bg-black text-zinc-100">
@@ -335,7 +371,8 @@ export function DeepScanProtocol() {
           )} />
           <span className="font-pixel text-[0.6rem] tracking-widest text-zinc-400">
             DEEP SCAN PROTOCOL
-            {typeof stage === 'number' && ` — STAGE ${stage}/5`}
+            {stage === 0 && ' — INTAKE'}
+            {typeof stage === 'number' && stage > 0 && ` — STAGE ${stage}/5`}
             {stage === 'generating' && ' — GENERATING SYSTEM'}
             {stage === 'complete' && ' — COMPLETE'}
           </span>
@@ -346,6 +383,74 @@ export function DeepScanProtocol() {
         'mx-auto max-w-2xl px-4 pt-20 pb-16 transition-all duration-400',
         isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'
       )}>
+        {/* ── STAGE 0: Brain Dump ── */}
+        {stage === 0 && (
+          <div className="space-y-8">
+            {!showSynthesis ? (
+              <>
+                <div>
+                  <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600 mb-2">INTAKE — BRAIN DUMP</p>
+                  <h2 className="font-pixel text-lg text-zinc-100">Drop your chaos here.</h2>
+                  <p className="mt-2 font-terminal text-base text-zinc-400">
+                    Type your goal, your situation, your obstacles — don&apos;t filter. Raw is better.
+                    The system reads between the lines.
+                  </p>
+                </div>
+
+                <div>
+                  <label className="font-pixel text-[0.6rem] tracking-widest text-zinc-500 mb-2 block">
+                    YOUR SITUATION / GOAL / CHAOS
+                  </label>
+                  <textarea
+                    value={brainDump}
+                    onChange={(e) => setBrainDump(e.target.value)}
+                    placeholder="I want to... / I keep failing at... / My biggest problem is... / I need to..."
+                    rows={8}
+                    className="w-full border-2 border-zinc-800 bg-black px-4 py-3 font-terminal text-base text-zinc-100 outline-none focus:border-orange-600 transition placeholder:text-zinc-600 resize-none"
+                    autoFocus
+                  />
+                  <p className="font-pixel text-[0.55rem] tracking-widest text-zinc-600 mt-1">
+                    {brainDump.length} CHARS — {brainDump.trim().split(/\s+/).filter(Boolean).length} WORDS
+                  </p>
+                </div>
+
+                <button
+                  onClick={handleBrainDump}
+                  disabled={!brainDump.trim() || isSynthesizing}
+                  className="w-full border-2 border-orange-600 bg-orange-600 px-8 py-4 font-pixel text-[0.7rem] tracking-widest text-black transition hover:bg-orange-500 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  {isSynthesizing ? 'ANALYZING...' : 'ANALYZE MY SITUATION →'}
+                </button>
+              </>
+            ) : (
+              <>
+                <div>
+                  <p className="font-pixel text-[0.6rem] tracking-widest text-green-500 mb-2">ANALYSIS COMPLETE</p>
+                  <h2 className="font-pixel text-lg text-zinc-100">Here&apos;s what I heard.</h2>
+                </div>
+
+                <div className="border-2 border-zinc-800 bg-zinc-950 p-6 space-y-4">
+                  <p className="font-pixel text-[0.6rem] tracking-widest text-orange-500">RESURGO AI ›</p>
+                  {synthesisText.split('\n\n').map((para, i) => (
+                    <p key={i} className="font-terminal text-base text-zinc-200 leading-relaxed">{para}</p>
+                  ))}
+                </div>
+
+                <p className="font-terminal text-sm text-zinc-500">
+                  Now let&apos;s map your full situation. 5 quick stages — under 4 minutes.
+                </p>
+
+                <button
+                  onClick={handleBrainDumpProceed}
+                  className="w-full border-2 border-orange-600 bg-orange-600 px-8 py-4 font-pixel text-[0.7rem] tracking-widest text-black transition hover:bg-orange-500"
+                >
+                  BUILD MY SYSTEM →
+                </button>
+              </>
+            )}
+          </div>
+        )}
+
         {/* ── STAGE 1: Identity Scan ── */}
         {stage === 1 && (
           <div className="space-y-8">

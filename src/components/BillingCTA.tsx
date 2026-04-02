@@ -11,9 +11,9 @@ import DodoCustomerPortal from '@/components/DodoCustomerPortal';
 // Product ID map — these are set in Convex env vars and passed server-side
 // For the client, we hardcode the known test-mode product IDs
 const PRODUCT_IDS: Record<string, string> = {
-  pro_monthly: process.env.NEXT_PUBLIC_DODO_PRODUCT_PRO_MONTHLY ?? 'pdt_0NZYdCfSbVB1e0LxFPjm0',
-  pro_yearly: process.env.NEXT_PUBLIC_DODO_PRODUCT_PRO_YEARLY ?? 'pdt_0NZYdCj80XjB1pCTTX9fC',
-  lifetime: process.env.NEXT_PUBLIC_DODO_PRODUCT_LIFETIME ?? 'pdt_0NZYdCkCVaBUjB6wraIpN',
+  pro_monthly: process.env.NEXT_PUBLIC_DODO_PRODUCT_PRO_MONTHLY ?? 'pdt_0Nbgy81unnCdDrU1hc88F',
+  pro_yearly: process.env.NEXT_PUBLIC_DODO_PRODUCT_PRO_YEARLY ?? 'pdt_0Nbgy84XzeQzbliSt63Rt',
+  lifetime: process.env.NEXT_PUBLIC_DODO_PRODUCT_LIFETIME ?? 'pdt_0Nbgy868Cn6pYjtJCxB4T',
 };
 
 interface BillingCTAProps {

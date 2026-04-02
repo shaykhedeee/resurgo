@@ -25,7 +25,6 @@ import QuickAddPalette from '@/components/QuickAddPalette';
 import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
 import { Tutorial } from '@/components/Tutorial';
-import DesktopAIFab from '@/components/DesktopAIFab';
 import {
   Target,
   CheckCircle2,
@@ -42,6 +41,7 @@ import {
   MessageSquare,
   Star,
   Settings,
+  LayoutGrid,
 } from 'lucide-react';
 
 type HabitView = {
@@ -84,6 +84,7 @@ export default function DashboardPage() {
 
   const [togglingHabit, setTogglingHabit] = useState<string | null>(null);
   const [togglingTask, setTogglingTask] = useState<string | null>(null);
+  const [xpFlash, setXpFlash] = useState<{ xp: number; visible: boolean }>({ xp: 0, visible: false });
   const [quickAddOpen, setQuickAddOpen] = useState(false);
   const [quickAddTitle, setQuickAddTitle] = useState('');
   const [quickAddSaving, setQuickAddSaving] = useState(false);
@@ -98,6 +99,8 @@ export default function DashboardPage() {
   // ── Dashboard customisation state ──
   const [editMode, setEditMode] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [armoryOpen, setArmoryOpen] = useState(false);
+  const [emergencyMode, setEmergencyMode] = useState(false);
   const savedLayout = useQuery(api.users.getDashboardLayout);
   const saveLayoutMutation = useMutation(api.users.saveDashboardLayout);
   const layout = useMemo(() => resolveLayout(savedLayout ?? null), [savedLayout]);
@@ -173,17 +176,7 @@ export default function DashboardPage() {
     }
   }, []);
 
-  // ⌘K / Ctrl+K opens the command palette
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        setPaletteOpen((v) => !v);
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  // ⌘K / Ctrl+K — handled by the layout's GlobalSearch; Quick Add Palette opened via button only
 
   if (!user) return null;
 
@@ -239,6 +232,32 @@ export default function DashboardPage() {
     setTogglingTask(taskId);
     try {
       await toggleTask({ taskId: taskId as Id<"tasks"> });
+      // Find the completed task's XP value
+      const task = openTasks.find((t) => t._id === taskId);
+      const xp = task?.xpValue ?? 25;
+      // XP visual flash
+      setXpFlash({ xp, visible: true });
+      setTimeout(() => setXpFlash({ xp: 0, visible: false }), 2200);
+      // Haptic feedback (mobile)
+      if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+        navigator.vibrate([30, 40, 80]);
+      }
+      // Audio feedback — short synth beep via Web Audio API
+      try {
+        const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.18, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.3);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.3);
+      } catch {
+        // Audio not available — silently skip
+      }
     } catch (e) {
       console.error('Failed to toggle task:', e);
     }
@@ -262,6 +281,15 @@ export default function DashboardPage() {
 
   return (
     <>
+      {/* XP level-up flash overlay */}
+      {xpFlash.visible && (
+        <div className="pointer-events-none fixed inset-0 z-[999] flex items-center justify-center">
+          <div className="animate-bounce border-2 border-orange-500 bg-black/80 px-8 py-4 text-center shadow-lg shadow-orange-900/50">
+            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-400 mb-1">TASK COMPLETE</p>
+            <p className="font-pixel text-2xl text-orange-500">+{xpFlash.xp} XP</p>
+          </div>
+        </div>
+      )}
       {/* ── Mobile: full native-like tabbed dashboard ── */}
       <div className="block md:hidden">
         <MobileDashboard />
@@ -346,7 +374,7 @@ export default function DashboardPage() {
                   <PixelIcon name="tasks" size={14} className="text-orange-400" />
                   <p className="surface-kicker">Next task</p>
                 </div>
-                <p className="font-terminal text-sm text-zinc-500">Next task</p>
+
                 <p className="mt-1 font-terminal text-lg font-semibold text-zinc-100">{nextTask?.title ?? 'Capture one meaningful task'}</p>
                 <p className="mt-1 font-terminal text-sm text-zinc-400">
                   {nextTask ? `Priority: ${nextTask.priority}${nextTask.dueDate ? ` • due ${nextTask.dueDate}` : ''}` : 'Keep the queue small and obvious.'}
@@ -366,18 +394,29 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        {!user.onboardingComplete && (
-          <div className="mx-5 mb-4 flex items-center gap-2 border border-orange-900 bg-orange-950/30 px-3 py-2">
-            <Sparkles className="h-3.5 w-3.5 text-orange-500" />
-            <span className="font-terminal text-sm text-orange-400">
-              Setup incomplete —{' '}
-              <a href="/deep-scan" className="underline hover:text-orange-300">Complete Deep Scan</a>
-              {' or '}
-              <a href="/onboarding" className="underline hover:text-orange-300">Onboarding</a>
-            </span>
-          </div>
-        )}
+
       </div>
+
+      {/* -- EMERGENCY MODE BANNER -- */}
+      {emergencyMode && (
+        <div className="mb-6 border border-red-900 bg-red-950/30 p-4">
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <p className="font-pixel text-[0.55rem] tracking-widest text-red-400 mb-1">EMERGENCY MODE — SIMPLIFIED VIEW</p>
+              <p className="font-terminal text-sm text-zinc-300">
+                You only need to do <strong className="text-red-300">one thing</strong> right now.
+                Everything else can wait. Take a breath.
+              </p>
+            </div>
+            <button
+              onClick={() => setEmergencyMode(false)}
+              className="shrink-0 border border-zinc-700 px-3 py-1.5 font-pixel text-[0.5rem] tracking-widest text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
+            >
+              SNAP OUT
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* -- QUICK ADD STRIP -- */}
       <div className="mb-6 flex flex-wrap items-center gap-2">
@@ -392,6 +431,20 @@ export default function DashboardPage() {
         </button>
 
         {/* Inline task quick-add (kept for speed) */}
+        {/* Simplify Today / Emergency Mode toggle */}
+        {!quickAddOpen && (
+          <button
+            onClick={() => setEmergencyMode((v) => !v)}
+            className={`flex items-center gap-1.5 border px-3 py-2 font-pixel text-[0.5rem] tracking-widest transition ${
+              emergencyMode
+                ? 'border-red-800 bg-red-950/40 text-red-400 hover:border-red-600'
+                : 'border-zinc-800 bg-zinc-950 text-zinc-500 hover:border-red-900 hover:text-red-500'
+            }`}
+          >
+            {emergencyMode ? 'EXIT SIMPLIFY' : 'SIMPLIFY TODAY'}
+          </button>
+        )}
+
         {quickAddOpen ? (
           <form onSubmit={handleQuickAddTask} className="flex flex-1 items-center gap-2">
             <input
@@ -418,38 +471,12 @@ export default function DashboardPage() {
             </button>
           </form>
         ) : (
-          <>
-            <button
-              onClick={() => setQuickAddOpen(true)}
-              className="flex items-center gap-1.5 border border-orange-900 bg-orange-950/30 px-3 py-2 font-terminal text-xs text-orange-400 transition hover:border-orange-700 hover:bg-orange-950/60"
-            >
-              <Plus className="h-3 w-3" /> Task
-            </button>
-            <Link
-              href="/habits"
-              className="flex items-center gap-1.5 border border-emerald-900 bg-emerald-950/30 px-3 py-2 font-terminal text-xs text-emerald-400 transition hover:border-emerald-700 hover:bg-emerald-950/60"
-            >
-              <Plus className="h-3 w-3" /> Habit
-            </Link>
-            <Link
-              href="/food"
-              className="flex items-center gap-1.5 border border-yellow-900 bg-yellow-950/30 px-3 py-2 font-terminal text-xs text-yellow-400 transition hover:border-yellow-700 hover:bg-yellow-950/60"
-            >
-              <Plus className="h-3 w-3" /> Food
-            </Link>
-            <Link
-              href="/fitness"
-              className="flex items-center gap-1.5 border border-blue-900 bg-blue-950/30 px-3 py-2 font-terminal text-xs text-blue-400 transition hover:border-blue-700 hover:bg-blue-950/60"
-            >
-              <Plus className="h-3 w-3" /> Workout
-            </Link>
-            <Link
-              href="/wellness"
-              className="flex items-center gap-1.5 border border-purple-900 bg-purple-950/30 px-3 py-2 font-terminal text-xs text-purple-400 transition hover:border-purple-700 hover:bg-purple-950/60"
-            >
-              <Plus className="h-3 w-3" /> Mood
-            </Link>
-          </>
+          <button
+            onClick={() => setQuickAddOpen(true)}
+            className="flex items-center gap-1.5 border border-orange-900 bg-orange-950/30 px-3 py-2 font-terminal text-xs text-orange-400 transition hover:border-orange-700 hover:bg-orange-950/60"
+          >
+            <Plus className="h-3 w-3" /> Task
+          </button>
         )}
       </div>
 
@@ -511,6 +538,95 @@ export default function DashboardPage() {
         </div>
       )}
 
+      {/* -- TODAY FOCUS: Top 3 Tasks + 3 Habits + Coach Prompt (always visible) -- */}
+      <div className="mb-6 grid gap-4 md:grid-cols-3">
+        {/* Top 3 Tasks */}
+        <div className="border border-zinc-800 bg-zinc-950 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">TODAY&apos;S TOP 3 TASKS</p>
+            <Link href="/tasks" className="font-pixel text-[0.4rem] tracking-widest text-zinc-500 hover:text-orange-400">+ALL</Link>
+          </div>
+          <div className="space-y-2">
+            {openTasks.slice(0, emergencyMode ? 1 : 3).map((task, i) => (
+              <button
+                key={task._id}
+                onClick={() => handleToggleTask(task._id)}
+                disabled={togglingTask === task._id}
+                className="flex w-full items-start gap-2 text-left group disabled:opacity-50"
+              >
+                <span className="font-pixel text-[0.5rem] text-zinc-600 mt-1 shrink-0">{i + 1}.</span>
+                <p className="font-terminal text-sm text-zinc-200 group-hover:text-orange-300 transition leading-tight">{task.title}</p>
+              </button>
+            ))}
+            {!openTasks.length && (
+              <p className="font-terminal text-xs text-zinc-600">No tasks yet — add one above</p>
+            )}
+          </div>
+        </div>
+
+        {/* Top 3 Habits */}
+        <div className="border border-zinc-800 bg-zinc-950 p-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">TODAY&apos;S TOP 3 HABITS</p>
+            <Link href="/habits" className="font-pixel text-[0.4rem] tracking-widest text-zinc-500 hover:text-orange-400">+ALL</Link>
+          </div>
+          <div className="space-y-2">
+            {activeHabits.slice(0, emergencyMode ? 1 : 3).map((habit) => (
+              <button
+                key={habit._id}
+                onClick={() => handleToggleHabit(habit._id)}
+                disabled={togglingHabit === habit._id}
+                className="flex w-full items-center gap-2 text-left group disabled:opacity-50"
+              >
+                <Circle className="h-3.5 w-3.5 shrink-0 text-zinc-600 group-hover:text-orange-400 transition" />
+                <div className="min-w-0">
+                  <p className="font-terminal text-sm text-zinc-200 group-hover:text-orange-300 transition truncate">{habit.title}</p>
+                  {habit.streakCurrent > 0 && (
+                    <p className="font-terminal text-xs text-amber-600">🔥 {habit.streakCurrent}d</p>
+                  )}
+                </div>
+              </button>
+            ))}
+            {!activeHabits.length && (
+              <p className="font-terminal text-xs text-zinc-600">No habits yet — track your first one</p>
+            )}
+          </div>
+        </div>
+
+        {/* Coach Prompt */}
+        <Link
+          href="/coach"
+          className="flex flex-col justify-between border border-orange-900/60 bg-orange-950/10 p-4 hover:border-orange-700 hover:bg-orange-950/20 transition group"
+        >
+          <div>
+            <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500 mb-3">AI COACH PROMPT</p>
+            <p className="font-terminal text-sm text-zinc-300 leading-relaxed group-hover:text-zinc-100 transition">
+              {emergencyMode
+                ? "I'm overwhelmed. Help me pick just one thing to do right now."
+                : openTasks[0]
+                ? `How do I break down: &ldquo;${openTasks[0].title.slice(0, 60)}${openTasks[0].title.length > 60 ? '...' : ''}&rdquo;?`
+                : 'What should I focus on today to move my biggest goal forward?'}
+            </p>
+          </div>
+          <div className="mt-4 flex items-center gap-2">
+            <MessageSquare className="h-3.5 w-3.5 text-orange-500" />
+            <span className="font-pixel text-[0.5rem] tracking-widest text-orange-500">ASK YOUR COACH &rsaquo;</span>
+          </div>
+        </Link>
+      </div>
+
+      {/* -- ARMORY TOGGLE -- */}
+      <button
+        onClick={() => setArmoryOpen((v) => !v)}
+        className="mb-6 flex w-full items-center justify-center gap-3 border border-zinc-800 bg-zinc-950 px-4 py-3 font-pixel text-[0.6rem] tracking-widest text-zinc-400 transition hover:border-orange-800 hover:text-orange-400"
+      >
+        {armoryOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+        {armoryOpen ? 'COLLAPSE ARMORY' : 'OPEN ARMORY — FULL DASHBOARD'}
+        {armoryOpen ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
+      </button>
+
+      {armoryOpen && <>
+
       {/* -- STATS -- */}
       <div data-tutorial="progress" className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-6 lg:gap-4">
         <TermStatCard label="Habits" value={totalHabits} />
@@ -535,7 +651,7 @@ export default function DashboardPage() {
               onClick={() => setPanelOpen(true)}
               className="flex items-center gap-1.5 rounded border border-zinc-700 bg-zinc-900 px-3 py-1.5 font-terminal text-xs text-zinc-300 hover:border-orange-600 hover:text-orange-400 transition"
             >
-              <Settings className="h-3.5 w-3.5" />
+              <LayoutGrid className="h-3.5 w-3.5" />
               <span>Widgets</span>
             </button>
           )}
@@ -838,8 +954,8 @@ export default function DashboardPage() {
         </section>
       </div>
 
-      {/* Desktop AI FAB — expandable quick actions */}
-      <DesktopAIFab />
+    </>}
+
     </div>
       </div>{/* /hidden md:block */}
       {showTutorial && (

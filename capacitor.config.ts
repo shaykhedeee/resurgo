@@ -50,15 +50,16 @@ const config: CapacitorConfig = {
       overlaysWebView: false,
     },
     SplashScreen: {
-      launchAutoHide: true,
-      launchShowDuration: 1500,
+      launchAutoHide: false,         // Manually hide via SplashScreen.hide() for smooth app reveal
+      launchShowDuration: 2500,      // Show for 2.5s minimum before hiding
       backgroundColor: '#0A0A0B',
       androidScaleType: 'CENTER_CROP',
-      showSpinner: true,
-      spinnerColor: '#14B899',
+      showSpinner: false,            // Use custom animated icon instead
       splashFullScreen: true,
       splashImmersive: true,
       androidSplashResourceName: 'splash',
+      fadeInDuration: 200,           // Fade in from system
+      fadeOutDuration: 400,          // Smooth fade-out when hiding
     },
     Haptics: {
       // No special config needed — plugin auto-initializes

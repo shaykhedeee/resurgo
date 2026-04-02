@@ -11,6 +11,7 @@ import { MarketingFooter } from '@/components/MarketingFooter';
 // DemoSandbox available for future interactive demos
 import InteractiveDemoCarousel from '@/components/marketing/InteractiveDemoCarousel';
 import SocialProof from '@/components/marketing/SocialProof';
+import ProductShowcase from '@/components/marketing/ProductShowcase';
 
 import ExitIntent from '@/components/marketing/ExitIntent';
 import StickyCTA from '@/components/marketing/StickyCTA';
@@ -67,7 +68,7 @@ const CORE_FEATURES = [
     id: 'AI_COACHING',
     title: '8 Specialized AI Coaches',
     description:
-      'Chat with MARCUS (Strategy), AURORA (Wellness), TITAN (Performance), SAGE (Wealth), PHOENIX (Resilience), NOVA (Systems), ORACLE (Life Architect), or NEXUS (Integration). Each coach has a distinct approach. Advice personalized to your goals, 24/7.',
+      'Chat with MARCUS (Strategy), TITAN (Performance), AURORA (Wellness), PHOENIX (Resilience), or NEXUS (Integration) — all free. Unlock SAGE (Wealth), NOVA (Systems), and ORACLE (Life Architect) with Pro. Each coach has a distinct approach. Advice personalized to your goals, 24/7.',
     status: 'Live',
     category: 'AI',
     icon: 'robot' as PixelIconName,
@@ -244,7 +245,7 @@ const FAQS = [
   {
     question: 'How does AI coaching work?',
     answer:
-      'You choose from 8 specialized AI coaches, each with a unique personality and approach — from Stoic philosophy to creative energy. Coaches respond based on your goals, habits, and recent progress. Two coaches are free; the rest unlock with a Pro plan. ORACLE and NEXUS are premium agents for Yearly/Lifetime members.',
+      'You choose from 5 core AI coaches, each with a unique personality and approach — Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), and Nexus (Integration Engine). All 5 are free. Pro and Lifetime unlock Sage, Nova, and Oracle premium personas. Coaches respond based on your goals, habits, and recent progress, with advice personalized to your actual data.',
   },
   {
     question: 'Is my data private and secure?',
@@ -293,7 +294,7 @@ const TICKER_ITEMS = [
   'AI-POWERED GOAL PLANNING',
   'HABIT STREAKS & STACKING',
   'FOCUS TIMER (POMODORO / DEEP WORK)',
-  '8 AI COACHING PERSONAS',
+  '5 CORE AI COACHING PERSONAS',
   'DAILY & WEEKLY PLANNING',
   'GAMIFICATION & XP SYSTEM',
   'TELEGRAM BOT INTEGRATION',
@@ -330,7 +331,7 @@ const ACCESS_TIERS = [
     specs: [
       'Unlimited habits & goals',
       'Focus timer (all modes)',
-      '2 AI coaches (Marcus & Aurora)',
+      '5 core AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus)',
       'Daily planning',
       'Basic analytics',
       'Mobile PWA access',
@@ -347,7 +348,7 @@ const ACCESS_TIERS = [
     savings: 'SAVE $29.88/yr',
     specs: [
       'Everything in Free',
-      'All 8 AI coaches unlocked',
+      'All 5 core + Sage, Nova & Oracle premium coaches',
       'Advanced analytics & insights',
       'Weekly AI reviews',
       'Priority support',
@@ -355,7 +356,7 @@ const ACCESS_TIERS = [
       'Proactive coach notifications',
     ],
     cta: 'UPGRADE TO PRO',
-    highlight: true,
+    highlight: false,
     earlyAccess: false,
   },
   {
@@ -366,13 +367,14 @@ const ACCESS_TIERS = [
     originalPrice: '$89.99',
     spotsLeft: 1000,
     specs: [
-      'Everything in Pro',
+      'Everything in Pro — forever',
       'Pay once, use forever',
       'All future updates included',
       'Founding member badge',
+      'First 100 sold — price locks in',
     ],
-    cta: 'CLAIM FOUNDING PRICE',
-    highlight: false,
+    cta: 'CLAIM FOUNDING LIFETIME',
+    highlight: true,
   },
 ];
 
@@ -396,8 +398,22 @@ const AI_COACHES = [
     name: 'TITAN',
     style: 'Physical Performance',
     desc: 'Your body is the foundation. Titan creates workout plans, nutrition protocols, and energy optimization systems — all action-capable.',
-    free: false,
+    free: true,
     accent: 'red',
+  },
+  {
+    name: 'PHOENIX',
+    style: 'Comeback Specialist',
+    desc: 'Built for resilience. Phoenix creates recovery plans, micro-step momentum systems, and turns setbacks into structured comebacks.',
+    free: true,
+    accent: 'orange',
+  },
+  {
+    name: 'NEXUS',
+    style: 'Integration Engine',
+    desc: 'Merges mind, body, finance, and creativity into one adaptive engine. Nexus builds custom neural mastery stacks with no limits.',
+    free: true,
+    accent: 'pink',
   },
   {
     name: 'SAGE',
@@ -405,13 +421,6 @@ const AI_COACHES = [
     desc: 'Every dollar is a soldier. Sage builds financial plans, savings goals, career roadmaps, and compound growth strategies.',
     free: false,
     accent: 'green',
-  },
-  {
-    name: 'PHOENIX',
-    style: 'Comeback Specialist',
-    desc: 'Built for resilience. Phoenix creates recovery plans, micro-step momentum systems, and turns setbacks into structured comebacks.',
-    free: false,
-    accent: 'orange',
   },
   {
     name: 'NOVA',
@@ -426,13 +435,6 @@ const AI_COACHES = [
     desc: 'Synthesises all coach wisdom. Oracle sees your entire system, audits what isn\'t working, and rewrites your full strategy.',
     free: false,
     accent: 'orange',
-  },
-  {
-    name: 'NEXUS',
-    style: 'Integration Engine',
-    desc: 'Merges mind, body, finance, and creativity into one adaptive engine. Nexus builds custom neural mastery stacks with no limits.',
-    free: false,
-    accent: 'pink',
   },
 ];
 
@@ -529,21 +531,21 @@ function LandingPageV2() {
   const heroContent =
     heroVariant === 'clarity'
       ? {
-          headingMain: 'Stop planning.',
-          headingAccent: 'Start executing._',
+          headingMain: 'Drop your goal.',
+          headingAccent: 'Get a real plan in 90 seconds.',
           subcopy:
-            'Go from mental clutter to crystal-clear action in under 5 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
+            'Go from mental clutter to crystal-clear action in under 90 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
         }
       : heroVariant === 'adhd'
         ? {
-            headingMain: 'Stop planning.',
-            headingAccent: 'Start executing._',
+            headingMain: 'Drop your goal.',
+            headingAccent: 'Get a real plan in 90 seconds.',
             subcopy:
               'When everything feels loud, Resurgo gives you one calm next step. Gentle accountability, flexible structure, and momentum that meets you where you are.',
           }
         : {
-            headingMain: 'Stop planning.',
-            headingAccent: 'Start executing._',
+            headingMain: 'Drop your goal.',
+            headingAccent: 'Get a real plan in 90 seconds.',
             subcopy:
               'Resurgo turns any goal into a daily action plan — automatically. Enter one goal, get your AI-generated habit roadmap in seconds, and start executing with focus timers, streaks, and 24/7 AI coaching.',
           };
@@ -784,6 +786,8 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
+        <ProductShowcase />
+
         <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">

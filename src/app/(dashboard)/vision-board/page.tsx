@@ -1,7 +1,20 @@
 'use client';
 
-import { VisionBoard } from '@/components/VisionBoard';
+import dynamic from 'next/dynamic';
 import { usePlanGating } from '@/hooks/usePlanGating';
+
+// VisionBoard is large (canvas + image generation) — load it only when the route is visited
+const VisionBoard = dynamic(
+  () => import('@/components/VisionBoard').then((m) => ({ default: m.VisionBoard })),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex items-center justify-center py-24 font-mono text-xs tracking-widest text-zinc-600">
+        LOADING_VISION_MODULE...
+      </div>
+    ),
+  }
+);
 
 export default function VisionBoardPage() {
   const { isPro } = usePlanGating();

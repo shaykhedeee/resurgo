@@ -197,7 +197,7 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
+              onClick={() => setActiveTab(tab.id as 'profile' | 'notifications' | 'data' | 'danger')}
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`${tab.id}-panel`}

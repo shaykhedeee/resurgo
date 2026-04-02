@@ -51,9 +51,10 @@ const FEATURES = [
 ];
 
 
-// APK download URL — points to GitHub Releases until self-hosted APK is uploaded
-// TODO: after uploading APK to /public/downloads/resurgo-latest.apk, change back to:
-//   'https://resurgo.life/downloads/resurgo-latest.apk'
+// APK download URL — update to self-hosted if APK is uploaded to /public/downloads/
+// If /public/downloads/resurgo-latest.apk exists, use the line below:
+// const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
+// Otherwise, fallback to GitHub Releases:
 const APK_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
 const APK_VERSION = 'v1.0.0';
 

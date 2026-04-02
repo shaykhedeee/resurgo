@@ -47,7 +47,7 @@ const FEATURES = [
     category: 'AI_COACHING',
     icon: '🤖',
     features: [
-      { name: '8 Action-Capable AI Coaches', desc: 'Marcus (Stoic Strategist), Aurora (Mindful Catalyst), Titan (Physical Performance), Sage (Financial Alchemist), Phoenix (Comeback Specialist), Nova (Creative Systems), Oracle (Life Architect), Nexus (Integration Engine) — each can create tasks, goals, habits & plans from chat' },
+      { name: '5 Core AI Coaches + Premium Personas', desc: 'Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), Nexus (Integration Engine) — all free. Pro unlocks Sage (Financial Alchemist), Nova (Creative Systems) & Oracle (Life Architect). Each coach creates tasks, goals, habits & plans directly from chat.' },
       { name: 'Context-Aware Intelligence', desc: 'Your coach knows your real goals, tasks, habits, and streaks — delivering hyper-personalized advice based on actual data' },
       { name: 'AI Plan Builder', desc: 'AI breaks any goal into phases, weekly actions, and daily steps you can follow immediately' },
       { name: 'Anti-Procrastination', desc: 'Daily intention setting, Two-Minute Rule prompts, and accountability check-ins' },
@@ -98,7 +98,7 @@ const FEATURES = [
 const FEATURE_FAQS = [
   {
     q: 'How many habits can I track on the free plan?',
-    a: 'The free plan allows 5 habit check-ins per day and up to 3 active goals. Upgrade to Pro for unlimited habits, goals, and tasks.',
+    a: 'The free plan allows 5 habit check-ins per day and up to 3 active goals, with 10 AI coach messages per day and 5 core coaches (Marcus, Titan, Aurora, Phoenix, Nexus). Upgrade to Pro for unlimited habits, goals, and tasks plus Sage, Nova & Oracle premium coaches.',
   },
   {
     q: 'What makes Resurgo different from other habit trackers?',

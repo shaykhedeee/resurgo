@@ -68,7 +68,7 @@ export default function GlobalFAB() {
         />
       )}
 
-      {/* FAB container — stacked above the Brain Dump button */}
+      {/* FAB container */}
       <div className="fixed bottom-40 right-4 z-50 flex flex-col items-end gap-2 md:bottom-24 md:right-6">
         {/* Speed-dial items — animate up when open */}
         {QUICK_ADD_ITEMS.map((item, i) => (

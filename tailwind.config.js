@@ -64,11 +64,11 @@ module.exports = {
         info: '#4D96FF',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['var(--font-sans)', 'IBM Plex Sans', 'Inter', 'system-ui', 'sans-serif'],
+        mono: ['var(--font-mono)', 'IBM Plex Mono', '"JetBrains Mono"', '"Fira Code"', 'Consolas', 'monospace'],
         pixel: ['"Press Start 2P"', 'monospace'],
         terminal: ['"VT323"', 'monospace'],
-        display: ['"Press Start 2P"', '"Cal Sans"', 'monospace'],
-        mono: ['"VT323"', '"JetBrains Mono"', '"Fira Code"', '"Cascadia Code"', 'Consolas', 'monospace'],
+        display: ['var(--font-sans)', 'IBM Plex Sans', '"Cal Sans"', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         // ── Standard scale — bumped for readability ──

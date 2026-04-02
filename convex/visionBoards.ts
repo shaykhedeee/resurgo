@@ -199,6 +199,93 @@ export const duplicate = mutation({
   },
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// PATCH PANEL — Replace one panel's imageData + affirmation in the active board
+// Used by the per-panel regeneration endpoint
+// ─────────────────────────────────────────────────────────────────────────────
+export const patchPanel = mutation({
+  args: {
+    boardId: v.id('visionBoards'),
+    panelId: v.string(),
+    imageData: v.optional(v.string()),
+    imagePrompt: v.optional(v.string()),
+    affirmation: v.optional(v.string()),
+    goalTitle: v.optional(v.string()),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const user = await getAuthUser(ctx);
+    const board = await ctx.db.get(args.boardId);
+    if (!board || board.userId !== user._id) return false;
+
+    let config: Record<string, unknown>;
+    try {
+      config = JSON.parse(board.config as string) as Record<string, unknown>;
+    } catch {
+      return false;
+    }
+
+    const panels = config.panels as Array<Record<string, unknown>> | undefined;
+    if (!Array.isArray(panels)) return false;
+
+    const panelIndex = panels.findIndex((p) => p.id === args.panelId);
+    if (panelIndex === -1) return false;
+
+    const updatedPanel = { ...panels[panelIndex] };
+    if (args.imageData !== undefined) updatedPanel.imageData = args.imageData;
+    if (args.imagePrompt !== undefined) updatedPanel.imagePrompt = args.imagePrompt;
+    if (args.affirmation !== undefined) updatedPanel.affirmation = args.affirmation;
+    if (args.goalTitle !== undefined) updatedPanel.goalTitle = args.goalTitle;
+
+    const updatedPanels = [...panels];
+    updatedPanels[panelIndex] = updatedPanel;
+
+    await ctx.db.patch(args.boardId, {
+      config: JSON.stringify({ ...config, panels: updatedPanels }),
+      updatedAt: Date.now(),
+    });
+
+    return true;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// PATCH AFFIRMATION — Quick-edit a panel affirmation in place
+// ─────────────────────────────────────────────────────────────────────────────
+export const patchAffirmation = mutation({
+  args: {
+    boardId: v.id('visionBoards'),
+    panelId: v.string(),
+    affirmation: v.string(),
+  },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const user = await getAuthUser(ctx);
+    const board = await ctx.db.get(args.boardId);
+    if (!board || board.userId !== user._id) return false;
+
+    let config: Record<string, unknown>;
+    try {
+      config = JSON.parse(board.config as string) as Record<string, unknown>;
+    } catch { return false; }
+
+    const panels = config.panels as Array<Record<string, unknown>> | undefined;
+    if (!Array.isArray(panels)) return false;
+
+    const panelIndex = panels.findIndex((p) => p.id === args.panelId);
+    if (panelIndex === -1) return false;
+
+    const updatedPanels = [...panels];
+    updatedPanels[panelIndex] = { ...updatedPanels[panelIndex], affirmation: args.affirmation };
+
+    await ctx.db.patch(args.boardId, {
+      config: JSON.stringify({ ...config, panels: updatedPanels }),
+      updatedAt: Date.now(),
+    });
+    return true;
+  },
+});
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // VISION BOARD IMAGE BOOKMARKS
 // ═══════════════════════════════════════════════════════════════════════════════

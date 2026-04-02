@@ -1,4 +1,5 @@
 /** @jest-environment node */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export {};
 
@@ -55,9 +56,10 @@ describe('/api/food/search route', () => {
 
   it('returns 400 when query is too short (1 char)', async () => {
     const { GET } = await import('./route');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const req = new Request('http://localhost/api/food/search?q=a') as any;
     const res = await GET(req);
-    const body = await res.json();
+    await res.json();
     expect(res.status).toBe(400);
   });
 

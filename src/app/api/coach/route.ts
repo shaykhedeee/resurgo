@@ -132,7 +132,33 @@ export async function POST(req: NextRequest): Promise<NextResponse<CoachResponse
     return NextResponse.json({ error: 'message too long (max 2000 chars)' }, { status: 400 });
   }
 
-  // ── Load context in parallel ──────────────────────────────────────────────
+  // ── Safety: distress / crisis detection ──────────────────────────────────
+  const DISTRESS_PATTERNS = [
+    /\bkill\s*(my)?self\b/i,
+    /\bwant\s+to\s+die\b/i,
+    /\bend\s+(it|my\s+life)\b/i,
+    /\bsuicid(e|al)\b/i,
+    /\bno\s+reason\s+to\s+(live|go\s+on)\b/i,
+    /\bgive\s+up\s+on\s+(life|living)\b/i,
+    /\bcan'?t\s+(go\s+on|take\s+it\s+anymore)\b/i,
+    /\bharm\s+(my)?self\b/i,
+  ];
+  const isDistress = DISTRESS_PATTERNS.some((re) => re.test(message));
+  if (isDistress) {
+    return NextResponse.json({
+      message:
+        "I hear that you're going through something really difficult right now, and I want you to know that matters.\n\n" +
+        "Please reach out to a trained crisis counselor who can give you the real support you deserve:\n\n" +
+        "🇺🇸 **988 Suicide & Crisis Lifeline** — call or text **988** (US)\n" +
+        "🌐 **Crisis Text Line** — text HOME to **741741**\n" +
+        "🌍 **International:** findahelpline.com\n\n" +
+        "You don't have to face this alone. I'm here to help you build a better life — but right now, a real human who specializes in crisis support can help you most.\n\n" +
+        "Are you safe right now?",
+      actionResults: [],
+      pendingSuggestions: [],
+      memoryUpdated: false,
+    });
+  }
   const [clerkUser, { user: convexUser, activeTasks, activeHabits, activeGoals }, psychProfile] = await Promise.all([
     currentUser().catch(() => null),
     getUserContext(clerkToken),

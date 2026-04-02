@@ -14,15 +14,18 @@ import { DowngradePlanNotice } from '@/components/DowngradePlanNotice';
 import { OnboardingResume } from '@/components/OnboardingResume';
 import { Toast } from '@/components/Toast';
 import { GlobalSearch } from '@/components/GlobalSearch';
-import BrainDump from '@/components/BrainDump';
-import LevelUpDetector from '@/components/LevelUpDetector';
-import GlobalFAB from '@/components/GlobalFAB';
+import dynamic from 'next/dynamic';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { UserButton, useClerk } from '@clerk/nextjs';
-import { Search, Brain, Bell } from 'lucide-react';
+import { Search, Brain, Settings as SettingsIcon } from 'lucide-react';
+
+// Lazy-load non-critical overlay components to improve initial bundle
+const BrainDump = dynamic(() => import('@/components/BrainDump'), { ssr: false });
+const LevelUpDetector = dynamic(() => import('@/components/LevelUpDetector'), { ssr: false });
+const GlobalFAB = dynamic(() => import('@/components/GlobalFAB'), { ssr: false });
 
 // ── Navigation Sections (ASCII-grouped, collapsible) ──
 const NAV_SECTIONS = [
@@ -401,8 +404,11 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         'flex-1 transition-all duration-200 pb-16 md:pb-0',
         collapsed ? 'md:ml-14' : 'md:ml-56'
       )}>
-        {/* Top bar (mobile) */}
-        <div className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-zinc-900 bg-zinc-950/95 px-4 backdrop-blur-sm md:hidden">
+        {/* Top bar (mobile) — hidden on /dashboard because MobileDashboard renders its own header */}
+        <div className={cn(
+          "sticky top-0 z-30 flex h-14 items-center gap-4 border-b border-zinc-900 bg-zinc-950/95 px-4 backdrop-blur-sm md:hidden",
+          pathname === '/dashboard' && "hidden"
+        )}>
           <button onClick={() => setMobileOpen(true)} className="p-1 text-zinc-500 hover:text-orange-400">
             <PixelIcon name="menu" size={16} />
           </button>
@@ -418,9 +424,9 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           <button
             onClick={() => router.push('/settings')}
             className="relative p-1 text-zinc-500 hover:text-orange-400"
-            title="Notifications"
+            title="Settings"
           >
-            <Bell className="w-4 h-4" />
+            <SettingsIcon className="w-4 h-4" />
           </button>
           <button
             onClick={() => setSearchOpen(true)}
@@ -449,9 +455,9 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
           <button
             onClick={() => router.push('/settings')}
             className="relative rounded-md border border-zinc-800 bg-black/40 p-2 text-zinc-500 transition-colors hover:border-zinc-700 hover:text-zinc-300"
-            title="Notifications"
+            title="Settings"
           >
-            <Bell className="w-3.5 h-3.5" />
+            <SettingsIcon className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => setSearchOpen(true)}
@@ -473,9 +479,14 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         {children}
       </main>
 
-      {/* ── Mobile bottom tab bar — enhanced with raised AI centre button ── */}
+      {/* ── Mobile bottom tab bar — enhanced with raised AI centre button ──
+           Hidden on /dashboard because MobileDashboard renders its own full-screen
+           tabbed nav at z-30. Showing both would stack two nav bars. ── */}
       <nav
-        className="fixed bottom-0 left-0 right-0 z-40 flex h-16 items-end justify-around border-t-2 border-zinc-800 bg-black pb-1 md:hidden"
+        className={cn(
+          "fixed bottom-0 left-0 right-0 z-40 flex h-16 items-end justify-around border-t-2 border-zinc-800 bg-black pb-1 md:hidden",
+          pathname === '/dashboard' && "hidden"
+        )}
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4px)' }}
       >
         {([
@@ -533,15 +544,6 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
 
       {/* ── Brain Dump Modal ── */}
       <BrainDump isOpen={brainDumpOpen} onClose={() => setBrainDumpOpen(false)} />
-
-      {/* ── Floating Brain Dump Button ── */}
-      <button
-        onClick={() => setBrainDumpOpen(true)}
-        className="fixed bottom-24 right-4 z-40 flex h-12 w-12 items-center justify-center border border-purple-800 bg-purple-950/85 text-purple-200 shadow-[0_10px_30px_rgba(88,28,135,0.25)] backdrop-blur-sm transition hover:bg-purple-900 hover:text-purple-100 md:bottom-6 md:right-6 md:h-14 md:w-14"
-        title="Brain Dump — pour out everything on your mind"
-      >
-        <Brain className="h-5 w-5 md:h-6 md:w-6" />
-      </button>
 
       {/* ── Global Quick Add FAB ── */}
       <GlobalFAB />

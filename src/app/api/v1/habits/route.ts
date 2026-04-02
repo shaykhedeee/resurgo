@@ -1,17 +1,16 @@
+// ═══════════════════════════════════════════════════════════════════════════════
+// GET /api/v1/habits — list active habits
+// Authorization: Bearer rsg_<key>
+// ═══════════════════════════════════════════════════════════════════════════════
+
 import { NextRequest, NextResponse } from 'next/server';
+import { resolveApiKey, convexClient } from '../_lib/auth';
+import { api } from '../../../../../convex/_generated/api';
 
-function validateApiKey(req: NextRequest): boolean {
-  const key = req.headers.get('x-api-key') || req.headers.get('authorization')?.replace('Bearer ', '');
-  return !!(key && key.startsWith('rsg_'));
-}
+export async function GET(req: NextRequest): Promise<NextResponse> {
+  const auth = await resolveApiKey(req.headers.get('authorization'));
+  if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-export async function GET(req: NextRequest) {
-  if (!validateApiKey(req)) {
-    return NextResponse.json({ error: 'Unauthorized. Provide x-api-key header.' }, { status: 401 });
-  }
-  return NextResponse.json({
-    data: [],
-    message: 'Habits endpoint. Connect via Convex client SDK for real-time data.',
-    docs: 'https://resurgo.life/docs#habits',
-  });
+  const habits = await convexClient.query(api.habits.listActive, {}).catch(() => []);
+  return NextResponse.json({ habits });
 }
