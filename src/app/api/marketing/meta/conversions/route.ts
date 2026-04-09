@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
     const userAgent = req.headers.get('user-agent') || '';
 
     // Try to get authenticated user info
-    let authEmail = email;
+    const authEmail = email;
     let authUserId = user_id;
     try {
       const { userId } = await auth();

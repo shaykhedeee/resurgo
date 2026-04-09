@@ -35,8 +35,8 @@ export async function GET(request: NextRequest) {
     const result = await searchBrave(parsed.query, parsed.count ?? 5);
     return NextResponse.json(result, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Research request failed';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('[research/search] GET failed:', error);
+    return NextResponse.json({ error: 'Research request failed' }, { status: 500 });
   }
 }
 
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
     const result = await searchBrave(parsed.query, parsed.count ?? 5);
     return NextResponse.json(result, { headers: { 'Cache-Control': 'no-store' } });
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'Research request failed';
-    return NextResponse.json({ error: message }, { status: 500 });
+    console.error('[research/search] POST failed:', error);
+    return NextResponse.json({ error: 'Research request failed' }, { status: 500 });
   }
 }

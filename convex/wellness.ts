@@ -161,6 +161,49 @@ export const getJournalEntries = query({
   },
 });
 
+// ─────────────────────────────────────────────────────────────────────────────
+// RECENT MOODS (for coach context — last 7 entries)
+// ─────────────────────────────────────────────────────────────────────────────
+export const recentMoods = query({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id('moodEntries'),
+      _creationTime: v.number(),
+      userId: v.id('users'),
+      date: v.string(),
+      score: v.number(),
+      notes: v.optional(v.string()),
+      tags: v.optional(v.array(v.string())),
+      createdAt: v.number(),
+    })
+  ),
+  handler: async (ctx) => {
+    const user = await getAuthUser(ctx);
+    return await ctx.db
+      .query('moodEntries')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .order('desc')
+      .take(7);
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// RECENT SLEEP (for coach context — last 3 entries)
+// ─────────────────────────────────────────────────────────────────────────────
+export const recentSleep = query({
+  args: {},
+  returns: v.array(v.any()),
+  handler: async (ctx) => {
+    const user = await getAuthUser(ctx);
+    return await ctx.db
+      .query('sleepLogs')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .order('desc')
+      .take(3);
+  },
+});
+
 // ───────────────────────────────────────────────────────────────────────────
 // LOG MOOD FROM AI COACH (alias for logMood — Living System)
 // ───────────────────────────────────────────────────────────────────────────

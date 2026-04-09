@@ -30,7 +30,7 @@ import { TrendingUp, Target, Flame, Trophy, Calendar } from 'lucide-react';
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
     return (
-      <div className="bg-[#1C1C1F] border border-white/10 rounded-lg px-3 py-2 shadow-lg">
+      <div className="bg-[var(--card-hover)] border border-white/10 rounded-lg px-3 py-2 shadow-lg">
         <p className="text-white/60 text-xs mb-1">{label}</p>
         {payload.map((entry: any, index: number) => (
           <p key={index} className="text-sm font-semibold" style={{ color: entry.color }}>

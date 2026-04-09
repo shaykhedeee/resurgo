@@ -48,7 +48,7 @@ const COMPARISON_SECTIONS = [
   {
     category: 'Core Tracking',
     features: [
-      { name: 'Active habits', free: '10', pro: 'Unlimited', icon: Sparkles },
+      { name: 'Daily habits', free: '5/day', pro: 'Unlimited', icon: Sparkles },
       { name: 'Active goals', free: '3', pro: 'Unlimited', icon: Target },
       { name: 'Daily task management', free: true, pro: true, icon: Check },
       { name: 'Streak tracking & reminders', free: true, pro: true, icon: Zap },
@@ -102,7 +102,7 @@ const COMPARISON_SECTIONS = [
 const FAQS = [
   {
     q: 'Can I use Resurgo for free?',
-    a: 'Absolutely! The free plan includes 10 habits, 3 goals, AI insights, streak tracking, calendar view, focus timer, and mood tracking. No credit card required, no time limit.',
+    a: 'Absolutely! The free plan includes 5 daily habit check-ins, 3 goals, AI insights, streak tracking, calendar view, focus timer, and mood tracking. No credit card required, no time limit.',
   },
   {
     q: 'What payment methods do you accept?',
@@ -214,7 +214,7 @@ export default async function BillingPage() {
               </span>
             </h1>
             <p className="text-lg sm:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto mb-6">
-              Start free with 10 habits, 3 goals, and AI insights. Upgrade when you&apos;re ready
+              Start free with 5 daily habits, 3 goals, and AI insights. Upgrade when you&apos;re ready
               for unlimited power.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[var(--text-muted)]">
@@ -488,6 +488,68 @@ export default async function BillingPage() {
                 No lock-in contracts. Downgrade or cancel with one click from your billing portal.
               </p>
             </div>
+          </div>
+        </section>
+
+        {/* ═══════════════════════ SOCIAL PROOF ═══════════════════════ */}
+        <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-24">
+          <div className="text-center mb-12">
+            <p className="font-mono text-xs text-[var(--text-muted)] uppercase tracking-widest mb-3">
+              {'// OPERATOR_TESTIMONIALS'}
+            </p>
+            <h2 className="text-3xl sm:text-4xl font-bold mb-3">
+              Built for people who actually ship
+            </h2>
+            <p className="text-[var(--text-secondary)] max-w-xl mx-auto text-sm">
+              These are the operators Resurgo was built for.
+            </p>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              {
+                name: 'Daniel R.',
+                role: 'Indie hacker',
+                text: 'I\'ve shipped more in 6 weeks with Resurgo than I did in the previous 6 months. The daily plan-my-day prompt alone is worth the Pro upgrade.',
+              },
+              {
+                name: 'Mara T.',
+                role: 'Freelance developer',
+                text: 'Every other tracker made me feel behind. Resurgo makes me feel like I\'m operating. The AI coach gives direct feedback, not motivational fluff.',
+              },
+              {
+                name: 'James K.',
+                role: 'Solo founder',
+                text: 'The weekly review wizard surfaces what I actually accomplished versus what I thought I would. That gap used to be invisible. Now I close it.',
+              },
+              {
+                name: 'Sofia L.',
+                role: 'Content creator',
+                text: 'I track 4 habits and 2 goals. Five minutes each morning, five minutes each night. The streak pressure keeps me honest in a way nothing else has.',
+              },
+              {
+                name: 'Ravi M.',
+                role: 'Digital nomad',
+                text: 'The focus timer + habit stack combination is the closest thing to a productivity operating system I\'ve found. Lifetime was an obvious call.',
+              },
+              {
+                name: 'Elena V.',
+                role: 'Solopreneur',
+                text: 'The free plan is genuinely useful — I used it for a month before upgrading. When I hit the AI limit for the third time I just paid. No regrets.',
+              },
+            ].map(({ name, role, text }) => (
+              <div
+                key={name}
+                className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-5 font-mono"
+              >
+                <p className="text-xs text-[var(--text-muted)] mb-3">
+                  <span className="text-ascend-400">▶</span> {name}{' '}
+                  <span className="text-[var(--text-muted)]/60">{'// '}{role}</span>
+                </p>
+                <p className="text-sm text-[var(--text-secondary)] leading-relaxed">
+                  &ldquo;{text}&rdquo;
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

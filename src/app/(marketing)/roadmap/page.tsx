@@ -2,8 +2,24 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Roadmap — RESURGO',
+  title: 'Product Roadmap — What is Shipping Next | RESURGO',
   description: 'Public product roadmap for RESURGO — what is shipping now, what is planned next, and what is coming later across our marketing engine and core product.',
+  keywords: [
+    'Resurgo roadmap', 'product roadmap', 'habit tracker roadmap', 'AI productivity app roadmap',
+    'upcoming features', 'Resurgo planned features',
+  ],
+  alternates: { canonical: 'https://resurgo.life/roadmap' },
+  openGraph: {
+    title: 'Resurgo Product Roadmap — Shipping Now, Planned Next',
+    description: 'Transparent priorities across growth, marketing engine, and core product delivery.',
+    type: 'website',
+    url: 'https://resurgo.life/roadmap',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Resurgo Product Roadmap',
+    description: 'Transparent priorities across growth, marketing engine, and core product delivery.',
+  },
 };
 
 const ROADMAP = {

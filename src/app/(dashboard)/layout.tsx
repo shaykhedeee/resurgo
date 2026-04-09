@@ -190,10 +190,10 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
     }
   }, [isLoading, isAuthenticated, router]);
 
-  // Redirect users who haven't completed onboarding to deep-scan
+  // Redirect users who haven't completed onboarding to onboarding flow
   useEffect(() => {
     if (!isLoading && isAuthenticated && user && !user.onboardingComplete && !pathname.startsWith('/deep-scan') && !pathname.startsWith('/first-contact')) {
-      router.push('/deep-scan');
+      router.push('/onboarding');
     }
   }, [isLoading, isAuthenticated, user, pathname, router]);
 

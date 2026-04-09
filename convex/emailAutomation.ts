@@ -100,6 +100,34 @@ interface EmailContent {
   text: string;
 }
 
+function welcomeEmail(name: string): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  return {
+    subject: `${firstName}, your execution system is live`,
+    html: emailTemplate(`
+      <h2>SYSTEM_BOOT :: Welcome, ${firstName}</h2>
+      <p>Your Resurgo account is active. You now have a personal AI execution layer built around your goals, habits, and daily decisions.</p>
+      <p style="margin:16px 0;">Here is how to get your first win in the next 10 minutes:</p>
+      <ol style="padding-left:20px; margin:16px 0;">
+        <li style="margin-bottom:8px;"><strong>Set your first goal</strong> — Go to Goals, type one thing you want to achieve, and let AI decompose it into milestones and daily tasks.</li>
+        <li style="margin-bottom:8px;"><strong>Add 2 daily habits</strong> — Start with habits you already do (morning coffee, end-of-day review). Track them for 3 days straight and a streak begins.</li>
+        <li style="margin-bottom:8px;"><strong>Talk to your coach</strong> — Open the Coach tab and tell Marcus or Titan what you are working on. They will build a plan from your actual data.</li>
+      </ol>
+      <p><strong>Your plan access:</strong></p>
+      <ul style="padding-left:20px; margin:8px 0;">
+        <li>3 active goals</li>
+        <li>5 habit check-ins per day</li>
+        <li>10 AI messages per day</li>
+        <li>2 coaches: Marcus (Stoic Strategist) + Titan (Physical Performance)</li>
+      </ul>
+      <p style="margin:16px 0;">When you are ready to remove all limits, Pro starts at $4.99/month — or $49.99 once, forever.</p>
+      <a href="${SITE_URL}/goals" class="btn">OPEN_COMMAND_CENTER</a>
+      <p style="margin-top:16px; font-size:12px; color:#52525B;">If you have any questions, reply to this email or message us at support@resurgo.life</p>
+    `),
+    text: `Welcome to Resurgo, ${firstName}.\n\nYour execution system is live. In the next 10 minutes:\n1. Set your first goal (AI will decompose it for you)\n2. Add 2 daily habits\n3. Talk to your coach — tell Marcus or Titan what you are working on\n\nFree plan: 3 goals, 5 habits/day, 10 AI messages/day, 2 coaches (Marcus + Titan).\nPro: $4.99/month or $49.99 lifetime.\n\nGet started: ${SITE_URL}/goals\n\nQuestions? Reply here or email support@resurgo.life`,
+  };
+}
+
 function day3TipsEmail(name: string): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
@@ -217,6 +245,64 @@ function streakAtRiskEmail(name: string, streak: number): EmailContent {
   };
 }
 
+function earlyNudgeEmail(name: string): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  return {
+    subject: `${firstName}, a quick nudge from your coach 👋`,
+    html: emailTemplate(`
+      <h2>Just checking in</h2>
+      <p>Hey ${firstName} — it's been a couple of days since you last opened Resurgo. That's totally fine. Life happens.</p>
+      <p>One tiny action is all it takes to get momentum going again:</p>
+      <ul style="padding-left:20px;">
+        <li>Check off <strong>one habit</strong> for today</li>
+        <li>Or just open the dashboard — your progress is waiting</li>
+      </ul>
+      <a href="${SITE_URL}/dashboard" class="btn">OPEN DASHBOARD →</a>
+      <p style="font-size:12px; color:#71717A; margin-top:24px;">Small actions compound. See you inside.</p>
+    `),
+    text: `Hey ${firstName}, just checking in — it's been a couple days. One habit is all it takes. ${SITE_URL}/dashboard`,
+  };
+}
+
+function deepWinBackEmail(name: string, daysAway: number): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  return {
+    subject: `${firstName}, your future self is waiting ⏳`,
+    html: emailTemplate(`
+      <h2>${daysAway} days away — but your goals aren't going anywhere</h2>
+      <p>${firstName}, it's been ${daysAway} days. We're not here to guilt-trip you — we're here because we know what's possible when you show up for yourself.</p>
+      <p>Here's the thing: <strong style="color:#FAFAFA;">your data is fully intact.</strong> Every habit log, XP point, and goal you set is right where you left it.</p>
+      <p>One decision can change the next 30 days:</p>
+      <a href="${SITE_URL}/dashboard" class="btn">START AGAIN RIGHT NOW →</a>
+      <p style="margin-top:16px; font-size:13px; color:#A1A1AA;">Or if Resurgo isn't working for you, we'd love to know why — hit reply and tell us honestly.</p>
+      <p style="font-size:12px; color:#71717A; margin-top:24px;">No judgment. Just momentum. 🚀</p>
+    `),
+    text: `${firstName}, ${daysAway} days away — but your goals and progress are still here. One decision changes everything: ${SITE_URL}/dashboard`,
+  };
+}
+
+function lastChanceWinBackEmail(name: string, daysAway: number): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  return {
+    subject: `${firstName}, one last thing before we stop reaching out`,
+    html: emailTemplate(`
+      <h2>It's been ${daysAway} days</h2>
+      <p>${firstName}, we respect your time — this is our last check-in.</p>
+      <p>In the time you've been away, nothing has changed inside Resurgo:</p>
+      <ul style="padding-left:20px; color:#A1A1AA;">
+        <li>Your habits, goals, and XP are untouched</li>
+        <li>Your coach memory is intact</li>
+        <li>Your streak data is saved — ready to rebuild</li>
+      </ul>
+      <p>If you want to come back, one tap is all it takes. If not, we genuinely wish you well — and the door is always open.</p>
+      <a href="${SITE_URL}/dashboard" class="btn">COME BACK →</a>
+      <p style="margin-top:16px; font-size:13px; color:#A1A1AA;">If you'd rather not hear from us again, <a href="${SITE_URL}/settings" style="color:#A1A1AA;">update your email preferences here</a>.</p>
+      <p style="font-size:12px; color:#71717A; margin-top:24px;">No pressure. Just an open door.</p>
+    `),
+    text: `${firstName}, it's been ${daysAway} days. Your progress is saved. Come back anytime: ${SITE_URL}/dashboard — This is our last check-in. Unsubscribe: ${SITE_URL}/settings`,
+  };
+}
+
 function winBackEmail(name: string, daysAway: number): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
@@ -235,6 +321,32 @@ function winBackEmail(name: string, daysAway: number): EmailContent {
       <p style="font-size:12px; color:#71717A; margin-top:24px;">No judgment. No guilt. Just progress. 🚀</p>
     `),
     text: `Hey ${firstName}, it's been ${daysAway} days. Your progress is saved — just one habit to get back on track: ${SITE_URL}/dashboard`,
+  };
+}
+
+function completionCelebrationEmail(name: string, streak: number): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  const messages: Record<number, string> = {
+    7:   'Seven days in a row. Most people never make it this far. The compound effect is working.',
+    14:  'Two weeks straight. What started as a decision is now a pattern your brain defaults to.',
+    21:  'Twenty-one consecutive days. Neuroscience calls this a formed habit. You call it Tuesday.',
+    30:  'One full month without missing a day. That is not motivation — that is discipline.',
+    60:  'Sixty days. The streak that started as a goal is now part of who you are.',
+    100: 'One hundred days. This is what commitment looks like. You built something most people only talk about.',
+  };
+  const bodyLine = messages[streak] ?? `That is ${streak} days in a row. The compound effect is working.`;
+  return {
+    subject: `${firstName} — ${streak} days straight`,
+    html: emailTemplate(`
+      <h2>STREAK_MILESTONE :: ${streak} DAYS</h2>
+      <p>${bodyLine}</p>
+      <div style="text-align:center; margin:24px 0;">
+        <div class="stat"><span class="stat-value">${streak}</span><span class="stat-label">Days in a Row</span></div>
+      </div>
+      <p>Log today to keep it going. Momentum belongs to the consistent.</p>
+      <a href="${SITE_URL}/dashboard" class="btn">CONTINUE THE STREAK →</a>
+    `),
+    text: `${firstName} — ${streak} days straight.\n\n${bodyLine}\n\nKeep it going: ${SITE_URL}/dashboard`,
   };
 }
 
@@ -493,6 +605,27 @@ export const processLifecycleEmails = internalAction({
         }
       }
 
+      // ── Win-back day 3: Absent 3 days (early gentle nudge) ──
+      if (daysSinceActive >= 3 && daysSinceActive < 5) {
+        const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+          userId: user._id,
+          emailType: 'win_back_3d',
+        });
+        if (!alreadySent) {
+          const email = earlyNudgeEmail(user.name);
+          const result = await sendResendEmail({ to: user.email, ...email });
+          await ctx.runMutation(internalEmailAutomation.logEmail, {
+            userId: user._id,
+            emailType: 'win_back_3d',
+            success: result.ok,
+            resendId: result.id,
+            error: result.error,
+          });
+          if (result.ok) sent++;
+          continue;
+        }
+      }
+
       // ── Streak at risk: Active user who missed yesterday ──
       if (daysSinceActive === 1) {
         const stats = await ctx.runQuery(internalEmailAutomation.getUserStats, {
@@ -521,7 +654,36 @@ export const processLifecycleEmails = internalAction({
         }
       }
 
-      // ── Win-back: Inactive for 7+ days ──
+      // ── Completion celebration: Active user who just hit a streak milestone ──
+      if (daysSinceActive === 0) {
+        const stats = await ctx.runQuery(internalEmailAutomation.getUserStats, {
+          userId: user._id,
+        });
+        const milestones = [7, 14, 21, 30, 60, 100];
+        const hitMilestone = milestones.find((m) => stats.currentStreak === m);
+        if (hitMilestone !== undefined) {
+          const celebKey = `streak_celebration_${hitMilestone}`;
+          const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+            userId: user._id,
+            emailType: celebKey,
+          });
+          if (!alreadySent) {
+            const email = completionCelebrationEmail(user.name, hitMilestone);
+            const result = await sendResendEmail({ to: user.email, ...email });
+            await ctx.runMutation(internalEmailAutomation.logEmail, {
+              userId: user._id,
+              emailType: celebKey,
+              success: result.ok,
+              resendId: result.id,
+              error: result.error,
+            });
+            if (result.ok) sent++;
+            continue;
+          }
+        }
+      }
+
+      // ── Win-back: Inactive for 7–9 days ──
       if (daysSinceActive >= 7 && daysSinceActive < 10) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
@@ -541,9 +703,90 @@ export const processLifecycleEmails = internalAction({
           continue;
         }
       }
+
+      // ── Win-back day 14: Inactive 14+ days (stronger re-engagement) ──
+      if (daysSinceActive >= 14 && daysSinceActive < 17) {
+        const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+          userId: user._id,
+          emailType: 'win_back_14d',
+        });
+        if (!alreadySent) {
+          const email = deepWinBackEmail(user.name, daysSinceActive);
+          const result = await sendResendEmail({ to: user.email, ...email });
+          await ctx.runMutation(internalEmailAutomation.logEmail, {
+            userId: user._id,
+            emailType: 'win_back_14d',
+            success: result.ok,
+            resendId: result.id,
+            error: result.error,
+          });
+          if (result.ok) sent++;
+          continue;
+        }
+      }
+
+      // ── Win-back day 30: Last-chance re-engagement (final outreach) ──
+      if (daysSinceActive >= 28 && daysSinceActive < 33) {
+        const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+          userId: user._id,
+          emailType: 'win_back_30d',
+        });
+        if (!alreadySent) {
+          const email = lastChanceWinBackEmail(user.name, daysSinceActive);
+          const result = await sendResendEmail({ to: user.email, ...email });
+          await ctx.runMutation(internalEmailAutomation.logEmail, {
+            userId: user._id,
+            emailType: 'win_back_30d',
+            success: result.ok,
+            resendId: result.id,
+            error: result.error,
+          });
+          if (result.ok) sent++;
+          continue;
+        }
+      }
     }
 
     console.log(`[EmailAutomation] Processed ${users.length} users — sent: ${sent}, skipped: ${skipped}`);
+    return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SEND WELCOME EMAIL — Triggered on new user creation via ctx.scheduler
+// ─────────────────────────────────────────────────────────────────────────────
+
+export const sendWelcomeEmail = internalAction({
+  args: {
+    userId: v.id('users'),
+    email: v.string(),
+    name: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Dedup: don't send if already sent (in case of double-trigger)
+    const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+      userId: args.userId,
+      emailType: 'day0_welcome',
+    });
+    if (alreadySent) return null;
+
+    const emailContent = welcomeEmail(args.name);
+    const result = await sendResendEmail({ to: args.email, ...emailContent });
+
+    await ctx.runMutation(internalEmailAutomation.logEmail, {
+      userId: args.userId,
+      emailType: 'day0_welcome',
+      success: result.ok,
+      resendId: result.id,
+      error: result.error,
+    });
+
+    if (result.ok) {
+      console.log(`[EmailAutomation] Welcome email sent to ${args.email}`);
+    } else {
+      console.error(`[EmailAutomation] Welcome email failed for ${args.email}: ${result.error}`);
+    }
+
     return null;
   },
 });

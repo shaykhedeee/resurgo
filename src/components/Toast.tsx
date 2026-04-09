@@ -169,6 +169,33 @@ export function LevelUpModal({ level, levelName, onClose }: LevelUpModalProps) {
     return () => clearTimeout(timer);
   }, [onClose]);
 
+  // Play level-up sound via Web Audio API (no audio file needed)
+  useEffect(() => {
+    try {
+      const ctx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+      const playTone = (freq: number, start: number, dur: number, gain: number) => {
+        const osc = ctx.createOscillator();
+        const vol = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = freq;
+        vol.gain.setValueAtTime(gain, ctx.currentTime + start);
+        vol.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+        osc.connect(vol);
+        vol.connect(ctx.destination);
+        osc.start(ctx.currentTime + start);
+        osc.stop(ctx.currentTime + start + dur);
+      };
+      // Ascending chord: C5 → E5 → G5 → C6
+      playTone(523, 0, 0.3, 0.15);
+      playTone(659, 0.1, 0.3, 0.15);
+      playTone(784, 0.2, 0.3, 0.15);
+      playTone(1047, 0.35, 0.5, 0.2);
+      setTimeout(() => ctx.close(), 1500);
+    } catch {
+      // Audio not available — silent fallback
+    }
+  }, []);
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
       <div className="relative animate-bounce-in">

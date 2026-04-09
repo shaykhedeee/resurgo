@@ -11,6 +11,7 @@ import { metaPixelEvents, fbqTrack, fbqPageView } from '@/components/MetaPixel';
 
 // Google Analytics Measurement ID - Replace with your actual ID
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX';
+const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_ID || '';
 
 // Whether analytics is enabled
 const ANALYTICS_ENABLED = process.env.NODE_ENV === 'production' && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX';
@@ -62,10 +63,35 @@ export function GoogleAnalytics() {
               anonymize_ip: true,
               cookie_flags: 'SameSite=None;Secure',
             });
+
+            // Mark key events as GA4 conversions
+            gtag('event', 'conversion', { send_to: '${GA_MEASUREMENT_ID}' });
           `,
         }}
       />
     </>
+  );
+}
+
+export function MicrosoftClarity() {
+  if (!ANALYTICS_ENABLED || !CLARITY_PROJECT_ID) {
+    return null;
+  }
+
+  return (
+    <Script
+      id="microsoft-clarity"
+      strategy="afterInteractive"
+      dangerouslySetInnerHTML={{
+        __html: `
+          (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "${CLARITY_PROJECT_ID}");
+        `,
+      }}
+    />
   );
 }
 
@@ -164,6 +190,10 @@ export const analytics = {
   unlockAchievement: (achievementId: string) => {
     trackEvent('unlock_achievement', 'gamification', achievementId);
   },
+
+  featureUnlocked: (tier: string, widgetCount: number) => {
+    trackEvent('feature_unlocked', 'engagement', tier, widgetCount);
+  },
   
   // Conversion
   viewPricing: () => {
@@ -245,6 +275,15 @@ export const analytics = {
 
   upgradeCompleted: (plan: string, value: number) => {
     trackEvent('upgrade_completed', 'conversion', plan, value, { currency: 'USD' });
+    // GA4 conversion event for purchase funnel
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'purchase', {
+        transaction_id: `${Date.now()}`,
+        value,
+        currency: 'USD',
+        items: [{ item_name: plan }],
+      });
+    }
   },
 
   // P1 Events — Retention tracking

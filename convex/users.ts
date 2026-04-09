@@ -72,6 +72,13 @@ export const store = mutation({
       updatedAt: Date.now(),
     });
 
+    // Send welcome email to new user (scheduled so mutation can complete first)
+    await ctx.scheduler.runAfter(5000, internal.emailAutomation.sendWelcomeEmail, {
+      userId,
+      email: identity.email ?? '',
+      name: identity.name ?? 'there',
+    });
+
     return userId;
   },
 });
@@ -835,6 +842,7 @@ export const getByClerkIdInternal = internalQuery({
       _id: v.id('users'),
       clerkId: v.string(),
       email: v.string(),
+      plan: v.union(v.literal('free'), v.literal('pro'), v.literal('lifetime')),
       dodoCustomerId: v.optional(v.string()),
       dodoSubscriptionId: v.optional(v.string()),
     }),
@@ -850,6 +858,7 @@ export const getByClerkIdInternal = internalQuery({
       _id: user._id,
       clerkId: user.clerkId,
       email: user.email,
+      plan: user.plan,
       dodoCustomerId: user.dodoCustomerId,
       dodoSubscriptionId: user.dodoSubscriptionId,
     };
@@ -1302,6 +1311,156 @@ export const updateSubscriptionStatusInternal = internalMutation({
       updatedAt: Date.now(),
     });
     return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CUSTOMER ENGAGEMENT SCORE (CES)
+// Weighted 0–100 score per user. Recomputed weekly by cron.
+// Bands: power (80-100), active (50-79), at_risk (20-49), churning (0-19)
+//
+// Weights (per SAAS-FUNDAMENTALS.md §4):
+//   30% days active this week  (0–7 → max 30 pts)
+//   20% habits completed today (capped at 5 → max 20 pts)
+//   15% coach messages sent this week (capped at 10 → max 15 pts)
+//   15% goals with activity this week (capped at 3 → max 15 pts)
+//   10% focus sessions completed this week (capped at 7 → max 10 pts)
+//   10% check-in completion (morning+evening, capped at 14 → max 10 pts)
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Compute and persist CES for one user. Called per-user by the weekly cron. */
+export const computeEngagementScore = internalMutation({
+  args: { userId: v.id('users') },
+  returns: v.null(),
+  handler: async (ctx, { userId }) => {
+    const now = Date.now();
+    const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+    const todayStr = new Date(now).toISOString().slice(0, 10);
+
+    // ── 1. Days active this week (proxy: distinct days with a focus session or
+    //        coach message in the last 7 days) ────────────────────────────────
+    const [focusSessions, coachMsgsAll, recentGoals, todayCheckIn] = await Promise.all([
+      ctx.db
+        .query('focusSessions')
+        .withIndex('by_userId', (q) => q.eq('userId', userId))
+        .filter((q) => q.gte(q.field('completedAt'), weekAgo))
+        .collect(),
+      ctx.db
+        .query('coachMessages')
+        .withIndex('by_userId', (q) => q.eq('userId', userId))
+        .filter((q) => q.gte(q.field('createdAt'), weekAgo))
+        .collect(),
+      ctx.db
+        .query('goals')
+        .withIndex('by_userId', (q) => q.eq('userId', userId))
+        .filter((q) => q.gte(q.field('updatedAt'), weekAgo))
+        .collect(),
+      ctx.db
+        .query('dailyCheckIns')
+        .withIndex('by_userId', (q) => q.eq('userId', userId))
+        .filter((q) => q.eq(q.field('date'), todayStr))
+        .first(),
+    ]);
+
+    // Distinct days from focus sessions + coach messages
+    const activeDaySet = new Set<string>();
+    for (const s of focusSessions) {
+      activeDaySet.add(new Date(s.completedAt).toISOString().slice(0, 10));
+    }
+    for (const m of coachMsgsAll) {
+      if (m.role === 'user') {
+        activeDaySet.add(new Date(m.createdAt).toISOString().slice(0, 10));
+      }
+    }
+    const daysActive = Math.min(activeDaySet.size, 7);
+
+    // ── 2. Habits completed today ────────────────────────────────────────────
+    const habitsCompletedToday = todayCheckIn?.habitsCompleted ?? 0;
+
+    // ── 3. Coach messages sent this week (user side only) ───────────────────
+    const coachMsgsSent = coachMsgsAll.filter((m) => m.role === 'user').length;
+
+    // ── 4. Goals with activity this week ────────────────────────────────────
+    const goalsActive = Math.min(recentGoals.length, 3);
+
+    // ── 5. Focus sessions completed this week ────────────────────────────────
+    const focusCompleted = Math.min(focusSessions.length, 7);
+
+    // ── 6. Check-in completions this week (count morning + evening across 7 days)
+    const weekCheckIns = await ctx.db
+      .query('dailyCheckIns')
+      .withIndex('by_userId', (q) => q.eq('userId', userId))
+      .filter((q) => q.gte(q.field('_creationTime'), weekAgo))
+      .collect();
+    let checkInCount = 0;
+    for (const ci of weekCheckIns) {
+      if (ci.morningCompletedAt) checkInCount++;
+      if (ci.eveningCompletedAt) checkInCount++;
+    }
+    const checkInsScore = Math.min(checkInCount, 14); // max 14 (2×7 days)
+
+    // ── Compute weighted score (0–100) ───────────────────────────────────────
+    const score = Math.round(
+      (daysActive / 7) * 30 +
+      (Math.min(habitsCompletedToday, 5) / 5) * 20 +
+      (Math.min(coachMsgsSent, 10) / 10) * 15 +
+      (goalsActive / 3) * 15 +
+      (focusCompleted / 7) * 10 +
+      (checkInsScore / 14) * 10
+    );
+
+    const band =
+      score >= 80 ? 'power' :
+      score >= 50 ? 'active' :
+      score >= 20 ? 'at_risk' :
+      'churning';
+
+    await ctx.db.patch(userId, {
+      engagementScore: score,
+      engagementBand: band as 'power' | 'active' | 'at_risk' | 'churning',
+      engagementUpdatedAt: now,
+    });
+
+    return null;
+  },
+});
+
+/** Weekly cron handler — recomputes CES for all non-churning or recently active users. */
+export const recomputeAllEngagementScores = internalMutation({
+  args: {},
+  returns: v.null(),
+  handler: async (ctx) => {
+    // Process users active in last 30 days
+    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const activeUsers = await ctx.db
+      .query('users')
+      .filter((q) => q.gte(q.field('createdAt'), thirtyDaysAgo))
+      .collect();
+
+    for (const user of activeUsers) {
+      await ctx.scheduler.runAfter(0, internal.users.computeEngagementScore, { userId: user._id });
+    }
+
+    return null;
+  },
+});
+
+/** Get the current user's engagement score and band. */
+export const getMyEngagementScore = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+      .unique();
+    if (!user) return null;
+    return {
+      score: user.engagementScore ?? null,
+      band: user.engagementBand ?? null,
+      updatedAt: user.engagementUpdatedAt ?? null,
+    };
   },
 });
 

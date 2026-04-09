@@ -32,7 +32,7 @@ export async function GET() {
   } catch (error) {
     console.error('[Meta Health GET]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Health check failed' },
       { status: 500 }
     );
   }

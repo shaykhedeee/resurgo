@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('[Meta Audiences GET]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Failed to fetch audiences' },
       { status: 500 }
     );
   }
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('[Meta Audiences POST]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Audience operation failed' },
       { status: 500 }
     );
   }

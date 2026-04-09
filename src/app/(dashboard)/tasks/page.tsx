@@ -341,7 +341,22 @@ export default function TasksPage() {
                 </div>
                 <div>
                   <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">EST_MINUTES</label>
-                  <input type="number" value={estimatedMinutes} onChange={(e) => setEstimatedMinutes(e.target.value)} placeholder="30" className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {[5, 15, 30, 60, 120].map((m) => (
+                      <button
+                        key={m}
+                        type="button"
+                        onClick={() => setEstimatedMinutes(estimatedMinutes === String(m) ? '' : String(m))}
+                        className={`border px-2.5 py-1.5 font-mono text-xs tracking-widest transition ${
+                          estimatedMinutes === String(m)
+                            ? 'border-orange-700 bg-orange-950/60 text-orange-400'
+                            : 'border-zinc-800 bg-zinc-900/50 text-zinc-500 hover:border-zinc-600 hover:text-zinc-300'
+                        }`}
+                      >
+                        {m >= 60 ? `${m / 60}hr` : `${m}m`}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="flex gap-px pt-1">

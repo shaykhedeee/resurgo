@@ -166,7 +166,7 @@ export async function executeActions(
           const id = await withMutationTimeout('create_habit', convex.mutation(api.habits.createFromAI, {
             title,
             frequency: action.data.frequency,
-            timeOfDay: (action.data.timeOfDay as any) ?? 'anytime',
+            timeOfDay: (action.data.timeOfDay as 'morning' | 'afternoon' | 'evening' | 'anytime') ?? 'anytime',
             category: action.data.category,
           }));
           markExecuted('create_habit', title);
@@ -212,13 +212,16 @@ export async function executeActions(
         }
         case 'schedule_reminder': {
           try {
-            const remindersApi = (api as any).reminders;
+            const remindersApi = (api as Record<string, unknown>).reminders as { create?: unknown } | undefined;
             if (remindersApi?.create) {
-              await withMutationTimeout('schedule_reminder', convex.mutation(remindersApi.create, {
-                title: action.data.message,
-                scheduledFor: action.data.scheduledFor,
-                type: action.data.type,
-              }));
+              await withMutationTimeout('schedule_reminder', convex.mutation(
+                remindersApi.create as Parameters<typeof convex.mutation>[0],
+                {
+                  title: action.data.message,
+                  scheduledFor: action.data.scheduledFor,
+                  type: action.data.type,
+                }
+              ));
             }
           } catch { /* non-critical */ }
           logAction('schedule_reminder', true, Date.now() - t0);
@@ -227,9 +230,10 @@ export async function executeActions(
         }
         case 'update_goal': {
           try {
-            const goalsApi = (api as any).goals;
+            const goalsApi = (api as Record<string, unknown>).goals as { updateProgress?: unknown } | undefined;
             if (goalsApi?.updateProgress) {
-              await withMutationTimeout('update_goal', convex.mutation(goalsApi.updateProgress, {
+              await withMutationTimeout('update_goal', convex.mutation(
+                goalsApi.updateProgress as Parameters<typeof convex.mutation>[0], {
                 titleQuery: action.data.titleMatch,
                 progressIncrement: action.data.progressIncrement,
                 status: action.data.status,
@@ -241,11 +245,36 @@ export async function executeActions(
           results.push({ actionType: 'update_goal', success: true, durationMs: Date.now() - t0 });
           break;
         }
+
+        case 'just_start': {
+          // Create a micro-task tagged as a "just start" item — ultra-low friction
+          const microTask = validateTitle(action.data.microTask, 200);
+          if (isDuplicate('just_start', microTask)) {
+            logAction('just_start', true, 0, `dedup skip: "${microTask}"`);
+            results.push({ actionType: 'just_start', success: true, data: { deduped: true } });
+            break;
+          }
+          const id = await withMutationTimeout('just_start', convex.mutation(api.tasks.createFromAI, {
+            title: microTask,
+            priority: 'high' as const,
+            energyRequired: 'low' as const,
+            tags: ['just-start', '⚡ 2-min'],
+          }));
+          markExecuted('just_start', microTask);
+          logAction('just_start', true, Date.now() - t0, `"${microTask}"`);
+          results.push({
+            actionType: 'just_start',
+            success: true,
+            data: { id, microTask, fullTask: action.data.fullTask, nextMicroTask: action.data.nextMicroTask },
+            durationMs: Date.now() - t0,
+          });
+          break;
+        }
         default:
-          results.push({ actionType: (action as any).action, success: false, error: 'Unknown action type' });
+          results.push({ actionType: (action as { action: string }).action, success: false, error: 'Unknown action type' });
       }
     } catch (err) {
-      const actionType = (action as any).action ?? 'unknown';
+      const actionType = (action as { action?: string }).action ?? 'unknown';
       const error = err instanceof Error ? err.message : String(err);
       logAction(actionType, false, Date.now() - t0, error);
       console.error(`[ActionExecutor] Failed to execute ${actionType}:`, error);

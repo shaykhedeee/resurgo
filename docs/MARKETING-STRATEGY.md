@@ -1,9 +1,51 @@
 # RESURGO Marketing Strategy (Execution Version)
 ## Comprehensive SaaS Launch & Growth Playbook
 
-> **Last updated:** 2026-03-31
-> **Status source:** live codebase audit + production pages + Search guidance updates.
+> **Last updated:** 2026-04-05
+> **Status source:** live codebase + build/typecheck/test scan + launch-readiness execution review.
 > **Merged from:** This file now includes content previously in `CONTENT-AND-ADS-PLAYBOOK-2026.md` (5 article briefs, Meta/Google ads strategy, email drip sequence, 30-day launch calendar). That file has been deleted.
+
+---
+
+# ✅ 2026-04-05 Launch Execution Snapshot (Authoritative)
+
+## What is now verifiably in place
+
+- Build and typecheck pass for current release candidate.
+- Core funnel analytics primitives are implemented (`signup`, `first_*`, `upgrade_*`, check-ins, focus completion).
+- Clarity instrumentation is integrated and ready to activate with `NEXT_PUBLIC_CLARITY_ID`.
+- Billing stack is production-shaped (Dodo checkout, portal, webhook handlers, pricing rails).
+- Contextual upsell surfaces are active (goal limit, coach lock, message limit, streak milestone).
+- SEO/AEO technical foundations are active (schema, sitemap, robots, canonical metadata).
+
+## What still blocks predictable growth (not code-complete yet)
+
+- GA4 conversion goal configuration + verified dashboard views are not marked complete.
+- Backlink pipeline execution is still mostly strategic/documented, not fully operationalized.
+- Citation tracking cadence for GEO/AEO is not yet institutionalized weekly.
+- Editorial freshness loop (money-page updates + title/meta testing) is not running as an enforced process.
+
+## 30-day launch growth operating plan
+
+### Week 1 — Instrumentation certainty
+- finalize GA4 conversion goals and validate with live test events
+- publish one "launch metrics" dashboard view (activation, D1, upgrade starts/completions)
+- implement weekly marketing operator review ritual
+
+### Week 2 — Distribution kickoff
+- execute first 20 high-intent backlink outreach emails
+- publish 2 comparison pages + refresh top conversion landing page copy
+- ship founder thread + Product Hunt prep assets
+
+### Week 3 — Conversion optimization
+- run 2 hero/CTA tests on primary landing
+- run 1 pricing-page trust proof test (testimonial/proof block)
+- tighten upgrade trigger copy based on prompt→checkout clickthrough
+
+### Week 4 — Retention-led marketing
+- publish first data-backed retention story (case study style)
+- launch win-back content sequence hooks (email + social)
+- decide keep/kill on first 3 acquisition channels by CAC proxy and activation quality
 
 ---
 
@@ -11417,7 +11459,7 @@ Below I’ll (A) summarize what I found on resurgo.life, (B) give you a robust m
 
 ## 1) Deep scan findings: what you should market (and what to fix)
 ### What Resurgo is *positioning as* (from your site)
-Resurgo is positioned as an **AI-powered Life OS / “life command center”** that turns a single goal into **milestones + habits + daily tasks**, then drives execution via **habit stacks, focus sessions, XP/gamification, wellness tracking**, and **AI weekly reviews**, plus **8 specialized AI coaches** (2 free, 8 for Pro). It’s a **PWA** (no app store) and even has a **Telegram bot**. 
+Resurgo is positioned as an **AI-powered Life OS / “life command center”** that turns a single goal into **milestones + habits + daily tasks**, then drives execution via **habit stacks, focus sessions, XP/gamification, wellness tracking**, and **AI weekly reviews**, with **5 specialized AI coaches** (2 free: Marcus + Titan; 3 Pro: Aurora, Phoenix, Nexus). It’s a **PWA** (no app store) and even has a **Telegram bot**. 
 
 ### Pricing + urgency mechanics already on the page
 - Free tier (no card)  
@@ -11425,7 +11467,7 @@ Resurgo is positioned as an **AI-powered Life OS / “life command center”** t
 - Lifetime “founding price” **$49.99** for first 1,000 spots, then $89.99 (claimed “save 44%”). 
 
 ### Big inconsistency you should fix ASAP (it will hurt conversion)
-Your **resurgo.life pricing** (Life OS app) does not match **resurgo.app pricing** (a different product story: capture/resurface system, $8/mo Pro, “knowledge workers,” join waitlist). That mismatch creates distrust and refund risk. It also confuses SEO/brand. 
+Keep **resurgo.life** as the canonical customer-facing product/pricing surface for launch. If `resurgo.app` remains live, present it as a complementary module and avoid conflicting plan/pricing messaging.
 
 **Action:** decide whether these are (1) two products or (2) one product with two landing pages. If it’s one product, unify messaging + pricing + domain story this week.
 
@@ -11510,7 +11552,7 @@ Your site already supports goal templates; make those templates the entry points
 ### Phase 2 (30 days): Build your acquisition engine (3 pillars)
 
 ## Pillar A — Short-form “character” content (your biggest free lever)
-Your 8 coaches are *ready-made content IP*. Turn them into recurring series.
+Your 5 coaches are *ready-made content IP*. Turn them into recurring series.
 
 **Format that works: “Coach reacts”**
 - Hook (0–2s): “You keep failing habits because you’re doing this…”
@@ -13478,7 +13520,7 @@ free games, RPG, fiction, religion, diet plan (without app), therapy, medication
 
 ## PART 5: EMAIL DRIP SEQUENCE — 7-EMAIL WELCOME SERIES
 
-> **Note:** These are Resurgo-branded. Update all references in `/docs/MARKETING-STRATEGY.md` from "ASCEND" → "Resurgo."
+> **Note:** These templates are already Resurgo-branded and should remain aligned with `PRODUCT_TRUTH.md`.
 
 **Email 1 — Immediate (Day 0): Welcome + First Action**
 ```
@@ -13597,4 +13639,4 @@ You've built the foundation. Here's what unlocks next with Premium:
 
 ---
 
-*Last updated: 2026. Cross-reference with `/docs/SEO-GEO-AEO-STRATEGY.md` for keyword-to-content mapping.*
+*Last updated: 2026-04-05. Cross-reference with `/docs/SEO-GEO-AEO-STRATEGY.md` for keyword-to-content mapping.*

@@ -6,6 +6,8 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 import {
@@ -27,6 +29,9 @@ import {
   BarChart3,
   Zap,
   Brain,
+  Share2,
+  Copy,
+  Check,
 } from 'lucide-react';
 import { format, subDays, startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns';
 
@@ -90,6 +95,7 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
   } = useAscendStore();
 
   const [currentStep, setCurrentStep] = useState<ReviewStep>('overview');
+  const [shareCopied, setShareCopied] = useState(false);
   const [reviewData, setReviewData] = useState<ReviewData>({
     biggestWin: '',
     gratitude: '',
@@ -100,6 +106,13 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
     energyLevel: 3,
     satisfactionLevel: 3,
   });
+
+  // Load past weekly reviews to surface AI-generated nextWeekFocus
+  const pastReviews = useQuery(api.weeklyReviews.listAll);
+  const lastAIFocus = useMemo(
+    () => pastReviews?.find((r) => r.nextWeekFocus)?.nextWeekFocus ?? null,
+    [pastReviews]
+  );
 
   // Calculate the past week date range
   const weekRange = useMemo(() => {
@@ -613,6 +626,24 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
           <label htmlFor="next-week-focus" className="block text-sm font-medium text-themed mb-2">
             What will you focus on next week?
           </label>
+          {/* AI-generated focus suggestion from last review */}
+          {lastAIFocus && !reviewData.nextWeekFocus && (
+            <button
+              type="button"
+              onClick={() => setReviewData(prev => ({ ...prev, nextWeekFocus: lastAIFocus }))}
+              className="w-full mb-2 flex items-start gap-2.5 p-3 rounded-xl bg-ascend-500/10 border border-ascend-500/20 text-left hover:bg-ascend-500/15 transition-colors group"
+              aria-label="Use AI-suggested focus"
+            >
+              <Sparkles className="w-4 h-4 text-ascend-400 mt-0.5 flex-shrink-0" />
+              <div className="min-w-0">
+                <p className="text-xs text-ascend-400 font-medium mb-0.5">AI SUGGESTED FOCUS</p>
+                <p className="text-sm text-themed leading-snug">{lastAIFocus}</p>
+                <p className="text-xs text-themed-muted mt-1 group-hover:text-themed-secondary transition-colors">
+                  Tap to adopt this focus
+                </p>
+              </div>
+            </button>
+          )}
           <textarea
             id="next-week-focus"
             className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-themed placeholder:text-themed-muted text-sm resize-none focus:outline-none focus:ring-2 focus:ring-ascend-500/50"
@@ -721,6 +752,48 @@ export function WeeklyReview({ isOpen, onClose }: WeeklyReviewProps) {
         <p className="text-sm text-themed-muted">
           You earned <span className="text-amber-400 font-bold">+75 XP</span> for completing your weekly review!
         </p>
+      </div>
+
+      {/* Share to social */}
+      <div className="glass-card p-4 rounded-xl space-y-3">
+        <p className="text-xs font-medium text-themed-muted text-center">Share your progress</p>
+        <p className="text-xs text-themed text-center font-mono leading-relaxed">
+          Week complete: {weeklyStats.habitsCompletionRate}% habits · {weeklyStats.daysActive}/7 days active · {weeklyStats.totalTasksCompleted} tasks done. Staying consistent with Resurgo. #BuildInPublic #resurgo
+        </p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              const shareText = `Week complete: ${weeklyStats.habitsCompletionRate}% habits · ${weeklyStats.daysActive}/7 days active · ${weeklyStats.totalTasksCompleted} tasks done. Staying consistent with Resurgo. #BuildInPublic #resurgo\nhttps://resurgo.life`;
+              if (typeof navigator !== 'undefined' && navigator.share) {
+                try {
+                  await navigator.share({ text: shareText, url: 'https://resurgo.life' });
+                } catch {
+                  // user dismissed share sheet — no action needed
+                }
+              } else {
+                await navigator.clipboard.writeText(shareText);
+                setShareCopied(true);
+                setTimeout(() => setShareCopied(false), 2500);
+              }
+            }}
+            className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-ascend-500/20 hover:bg-ascend-500/30 border border-ascend-500/30 text-ascend-300 text-xs font-medium transition-colors"
+          >
+            <Share2 className="w-3.5 h-3.5" />
+            [SHARE_STATS]
+          </button>
+          <button
+            onClick={async () => {
+              const shareText = `Week complete: ${weeklyStats.habitsCompletionRate}% habits · ${weeklyStats.daysActive}/7 days active · ${weeklyStats.totalTasksCompleted} tasks done. Staying consistent with Resurgo. #BuildInPublic #resurgo\nhttps://resurgo.life`;
+              await navigator.clipboard.writeText(shareText);
+              setShareCopied(true);
+              setTimeout(() => setShareCopied(false), 2500);
+            }}
+            className="px-3 py-2.5 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-themed-muted text-xs transition-colors"
+            title="Copy to clipboard"
+          >
+            {shareCopied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+          </button>
+        </div>
       </div>
     </div>
   );

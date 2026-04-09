@@ -1142,9 +1142,7 @@ Resurgo gives you 5 AI coaches, each with a different lens:
 - **AURORA:** Mindful catalyst (wellness, nervous system optimization)  
 - **TITAN:** Physical performance (fitness, energy, optimization)  
 - **PHOENIX:** Comeback specialist (resilience, recovery, setbacks)  
-- **NOVA:** Creative systems (mental models, learning, connections)  
-- **ORACLE:** Data-driven analyst (patterns, metrics, predictive insights)  
-- **NEXUS:** Relationship architect (networking, communication, influence)
+- **NEXUS:** Systems architect (networking, strategy, interconnected goals)
 
 Start free. See which persona resonates. Track your progress for 30 days.
 
@@ -1831,12 +1829,12 @@ When reality changes (travel, stress, illness), tell your AI coach. A good syste
 
 ## Resurgo: AI Habit Tracking Built for This
 
-Resurgo was designed around this workflow. When you enter a goal, the AI breaks it into a recommended habit stack. As you log completions, your coaches (Nova, Titan, Sage, Phoenix) provide behavioral feedback and adapt your plan.
+Resurgo was designed around this workflow. When you enter a goal, the AI breaks it into a recommended habit stack. As you log completions, your coaches (Marcus, Aurora, Titan, Phoenix, Nexus) provide behavioral feedback and adapt your plan.
 
 The free plan includes:
 - Unlimited habits
 - AI goal decomposition
-- 2 coaches (Nova and Titan)
+- 2 coaches (Marcus and Titan)
 - All focus timer modes
 - XP and gamification
 
@@ -1891,7 +1889,7 @@ If you loved Habitica's gamification but want more in 2026, here are the 7 best 
 - Freeze tokens to protect streaks during travel or illness
 
 **AI features Habitica doesn't have:**
-- 4 coaching personas (Nova, Titan, Sage, Phoenix) — each with a different accountability style
+- 5 AI coaching personas (Marcus, Aurora, Titan, Phoenix, Nexus) — each with a different accountability style
 - Goal → habit decomposition: enter your goal, get a habit stack
 - Weekly AI review summarizing patterns and suggested changes
 - Wellness integration (sleep, mood, energy) connected to habit performance
@@ -1989,7 +1987,7 @@ ADHD productivity needs a different design philosophy:
 
 - **Low decision load:** Enter one goal. AI creates your entire habit stack — you don't have to figure out what to do.
 - **Immediate gamification:** Every completed habit gives XP and moves you toward a level. Instant dopamine feedback.
-- **Multiple coaching styles:** Choose between Nova (supportive), Titan (disciplined), Sage (analytical), or Phoenix (resilient) — different ADHD brains respond to different coaching approaches.
+- **Multiple coaching styles:** Choose between Marcus (structured discipline), Aurora (supportive motivation), Titan (high-performance intensity), or Phoenix (resilient comeback) — different ADHD brains respond to different coaching approaches.
 - **Telegram bot:** Check-in habits from Telegram without opening the full app — reduces friction for quick completions.
 - **Streak freeze tokens:** Missed a day? Protect your streak so you don't spiral. No shame mechanics.
 - **Focus timers:** Pomodoro (25 min) and Deep Work (90 min) modes with ambient sounds — structured work windows designed to match ADHD attention cycles.
@@ -2632,7 +2630,7 @@ Yes — the free plan includes unlimited habits, 2 AI coaches (MARCUS and TITAN)
 Use a streak freeze (available on Resurgo) and continue the next day. The protocol is designed for imperfection — missing one day doesn't reset your progress. Your AI coach will acknowledge the gap and help you adjust.
 
 ### Which AI coach should I start with?
-MARCUS for discipline and structure. AURORA for creative, gentle motivation. TITAN for athletic intensity. SAGE for mindfulness-based guidance. Start with whichever resonates most — you can switch or unlock additional coaches with Pro.
+MARCUS for discipline and structure. AURORA for creative, gentle motivation. TITAN for athletic intensity. NEXUS for strategic systems and long-term planning. Start with whichever resonates most — you can switch or unlock additional coaches with Pro.
 
 ### Is 7 days enough to build a real habit?
 Seven days builds *momentum*, not an automatic habit (which takes 18-254 days according to University College London research). But momentum is the critical first phase. The 7-day protocol gives you a working system, behavioral data, and AI coaching calibration — which dramatically increases the probability of reaching the 66-day average for habit automaticity.
@@ -2919,7 +2917,7 @@ After analyzing dozens of AI productivity tools and reviewing the behavioral sci
 
 **What it means:** Regular, AI-generated summaries of your progress across all tracked domains — not just raw data, but interpreted insights.
 
-**Why it matters:** Data without interpretation is noise. A weekly summary that says "You completed 84% of habits, your average focus session was 34 minutes, and your coaching interactions increased 40%" is informative. A summary that says "Your evening habits are slipping — Coach SAGE recommends a 5-minute wind-down routine before your nighttime check-in" is *useful*.
+**Why it matters:** Data without interpretation is noise. A weekly summary that says "You completed 84% of habits, your average focus session was 34 minutes, and your coaching interactions increased 40%" is informative. A summary that says "Your evening habits are slipping — Coach NEXUS recommends a 5-minute wind-down routine before your nighttime check-in" is *useful*.
 
 **What to look for:** Weekly summaries (minimum), multi-domain coverage (habits, goals, focus, wellness), trend analysis (improving/declining), and specific recommendations.
 

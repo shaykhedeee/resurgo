@@ -531,7 +531,7 @@ COST ESTIMATE (10,000 users):
 
 | App | Free Tier | Cheapest Paid | AI Coaching | Coaches |
 |-----|-----------|---------------|-------------|---------|
-| **Resurgo** | âœ… 3 goals, 10 habits, AI | $4.99/mo | âœ… 8 coaches | 8 |
+| **Resurgo** | âœ… 3 goals, 10 habits, AI | $4.99/mo | âœ… 5 coaches | 5 |
 | Habitica | âœ… Full game | $5/mo | âŒ | 0 |
 | Habitify | âœ… 3 habits | $4.99/mo | âŒ | 0 |
 | Streaks | âŒ Paid only | $4.99 once | âŒ | 0 |

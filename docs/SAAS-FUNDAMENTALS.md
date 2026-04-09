@@ -9,8 +9,8 @@
 | Key | What it means | Resurgo status |
 |---|---|---|
 | **Acquire** customers | Get them to sign up | ✅ Landing page live, SEO started, 5 niche pages |
-| **Retain** customers | Keep them using the product | ⚠️ No churn tracking yet, no engagement score |
-| **Monetize** customers | Convert free → paid → upsell | ⚠️ Dodo Payments live, but no upsell funnel |
+| **Retain** customers | Keep them using the product | ⚠️ Retention mechanics exist (check-ins, streaks, nudges), but churn instrumentation + CES not complete |
+| **Monetize** customers | Convert free → paid → upsell | ✅ Dodo + contextual upsell triggers implemented; ⚠️ conversion goal instrumentation still incomplete |
 
 > **Rule**: Fix retention BEFORE scaling acquisition. Pouring users into a leaky bucket wastes money.
 
@@ -256,8 +256,8 @@ Track users by signup week. For each cohort, measure:
 ## 12. METRICS IMPLEMENTATION PLAN
 
 ### Phase 1 — Pre-launch (must-have)
-- [ ] MRR/ARR tracking (Dodo Payments webhook → Convex)
-- [ ] Signup funnel events (GA4: visit → signup → first_action → upgrade)
+- [x] MRR/ARR tracking foundation (Dodo billing events + subscription data in Convex)
+- [ ] Signup funnel conversion goals in GA4 (visit → signup → first_action → upgrade)
 - [ ] User activation definition: "User completed 1 habit OR 1 task within first session"
 - [ ] Basic retention: track daily active users (DAU) via Convex
 
@@ -267,6 +267,30 @@ Track users by signup week. For each cohort, measure:
 - [ ] Revenue churn (MRR loss tracking)
 - [ ] Cohort tagging (signupWeek field on user)
 
+### 12.1 CURRENT STATE SNAPSHOT (2026-04-05)
+
+- Build and typecheck pass for current release candidate.
+- Core activation and conversion events exist in code (`src/lib/analytics.tsx`).
+- Clarity instrumentation added and env-gated.
+- Morning/evening local-time nudges and weekly summary cron are implemented.
+- Remaining gap is not feature absence, but **measurement completeness** (GA4 goal wiring + churn/CES dashboards).
+
+### 12.2 OPERATOR CADENCE (WEEKLY)
+
+Every Monday, review:
+
+1. Activation: signup → first action
+2. Retention: D1 / D7 / D30 cohorts
+3. Monetization: upgrade prompt views → checkout starts → completed purchases
+4. Health: at-risk users by engagement score band
+
+Required output each week:
+
+- One retention hypothesis
+- One funnel experiment
+- One monetization copy/placement test
+- One kill/keep decision
+
 ### Phase 3 — Month 1
 - [ ] NPS survey (in-app at day 7, day 30)
 - [ ] Free-to-paid conversion funnel
@@ -275,5 +299,5 @@ Track users by signup week. For each cohort, measure:
 
 ---
 
-*Last updated: {{DATE}}*
+*Last updated: 2026-04-05*
 *Source of truth for all metrics, pricing, and competitive intelligence.*

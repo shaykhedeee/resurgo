@@ -119,6 +119,42 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
           </Link>
         </div>
 
+        {/* ── INTERNAL LINKS §12.1 ── */}
+        <div className="mt-10 border-t border-zinc-900 pt-8">
+          <p className="mb-4 font-mono text-[10px] tracking-widest text-zinc-600">ALSO_FOR</p>
+          <div className="flex flex-wrap gap-2">
+            {([
+              { href: '/solopreneurs', label: 'Solopreneurs' },
+              { href: '/indie-hackers', label: 'Indie Hackers' },
+              { href: '/freelance-developers', label: 'Freelance Developers' },
+              { href: '/content-creators', label: 'Content Creators' },
+              { href: '/digital-nomads', label: 'Digital Nomads' },
+            ] as { href: string; label: string }[])
+              .filter((l) => !l.href.includes(page.slug))
+              .map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="border border-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-500 transition hover:border-zinc-600 hover:text-orange-400"
+                >
+                  {link.label} →
+                </Link>
+              ))}
+            <Link
+              href="/features"
+              className="border border-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-500 transition hover:border-zinc-600 hover:text-orange-400"
+            >
+              All Features →
+            </Link>
+            <Link
+              href="/blog"
+              className="border border-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-500 transition hover:border-zinc-600 hover:text-orange-400"
+            >
+              Blog →
+            </Link>
+          </div>
+        </div>
+
       </article>
     </main>
   );

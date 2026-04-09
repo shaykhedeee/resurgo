@@ -16,7 +16,7 @@ Below I’ll (A) summarize what I found on resurgo.life, (B) give you a robust m
 
 ## 1) Deep scan findings: what you should market (and what to fix)
 ### What Resurgo is *positioning as* (from your site)
-Resurgo is positioned as an **AI-powered Life OS / “life command center”** that turns a single goal into **milestones + habits + daily tasks**, then drives execution via **habit stacks, focus sessions, XP/gamification, wellness tracking**, and **AI weekly reviews**, plus **8 specialized AI coaches** (2 free, 8 for Pro). It’s a **PWA** (no app store) and even has a **Telegram bot**. 
+Resurgo is positioned as an **AI-powered Life OS / “life command center”** that turns a single goal into **milestones + habits + daily tasks**, then drives execution via **habit stacks, focus sessions, XP/gamification, wellness tracking**, and **AI weekly reviews**, with **5 specialized AI coaches** (2 free: Marcus + Titan; 3 Pro: Aurora, Phoenix, Nexus). It’s a **PWA** (no app store) and even has a **Telegram bot**. 
 
 ### Pricing + urgency mechanics already on the page
 - Free tier (no card)  
@@ -24,7 +24,7 @@ Resurgo is positioned as an **AI-powered Life OS / “life command center”** t
 - Lifetime “founding price” **$49.99** for first 1,000 spots, then $89.99 (claimed “save 44%”). 
 
 ### Big inconsistency you should fix ASAP (it will hurt conversion)
-Your **resurgo.life pricing** (Life OS app) does not match **resurgo.app pricing** (a different product story: capture/resurface system, $8/mo Pro, “knowledge workers,” join waitlist). That mismatch creates distrust and refund risk. It also confuses SEO/brand. 
+Your public-facing messaging must stay unified under **resurgo.life** as the primary launch domain and pricing source of truth. Any secondary product/domain narrative should be clearly framed as complementary, not conflicting.
 
 **Action:** decide whether these are (1) two products or (2) one product with two landing pages. If it’s one product, unify messaging + pricing + domain story this week.
 
@@ -50,7 +50,7 @@ From the site, your standout differentiators (relative to “yet another habit t
 
 1) **Goal → daily plan in <2 minutes** (the “execution pipeline” framing)   
 2) **Multi-domain system**: focus timer + habits + weekly review + wellness correlations in one workflow   
-3) **8 coach personas** (this is *content gold*; each coach can be a character brand)   
+3) **5 coach personas** (this is *content gold*; each coach can be a character brand)   
 4) **PWA install** + **Telegram bot** (distribution + retention angle; “track from anywhere”)   
 5) **Founding lifetime price** (great for first revenue, if you can drive urgency ethically) 
 
@@ -109,7 +109,7 @@ Your site already supports goal templates; make those templates the entry points
 ### Phase 2 (30 days): Build your acquisition engine (3 pillars)
 
 ## Pillar A — Short-form “character” content (your biggest free lever)
-Your 8 coaches are *ready-made content IP*. Turn them into recurring series.
+Your 5 coaches are *ready-made content IP*. Turn them into recurring series.
 
 **Format that works: “Coach reacts”**
 - Hook (0–2s): “You keep failing habits because you’re doing this…”
@@ -1808,7 +1808,7 @@ Key market insights indicate a shift towards personalized and AI-driven solution
 
 Your competitors in this space include Lunatask, Focus Bear, RoutineFlow, Structured, Habitica, and TickTick. But here's what matters: These apps target specific audiences or habit types: students needing study accountability, people with ADHD needing simplified interfaces, couples building habits together, or fitness-specific tracking.
 
-**None of them** combine AI goal→plan→execute pipeline + 8 coach personas + focus sessions + gamification + weekly AI reviews in one tool. That's your wedge.
+**None of them** combine AI goal→plan→execute pipeline + 5 coach personas + focus sessions + gamification + weekly AI reviews in one tool. That's your wedge.
 
 ---
 
@@ -18202,7 +18202,7 @@ Your math: 200 lifetime sales = $10,000 revenue. That's your first milestone
 Wedge fix:
 
 Your homepage hero should say ONE thing: "Drop your goal. Get a real plan in 90 seconds."
-Not "Life OS" or "8 coaches" or "gamification" — those are depth features, not wedge features
+Not "Life OS" or "5 coaches" or "gamification" — those are depth features, not wedge features
 The wedge is: instant plan generation from a brain dump
 STEP 2 (Week 2): Pick ONE channel and dominate it for 90 days
 Build in public: Share your journey on X, Indie Hackers, and Reddit's r/SaaS. Post threads like "Week 1: Interviewed 20 users, here's what I learned." Focus on 2-3 channels: SEO for long-tail keywords, cold outreach to your ICP via LinkedIn, and content like blog posts on pains you solve.
@@ -20910,7 +20910,7 @@ Key market insights indicate a shift towards personalized and AI-driven solution
 Your competitors in this space include Lunatask, Focus Bear, RoutineFlow, Structured, Habitica, and TickTick. But here's what matters: These apps target specific audiences or habit types: students needing study accountability, people with ADHD needing simplified interfaces, couples building habits together, or fitness-specific tracking.
 4
 
-None of them combine AI goal?plan?execute pipeline + 8 coach personas + focus sessions + gamification + weekly AI reviews in one tool. That's your wedge.
+None of them combine AI goal?plan?execute pipeline + 5 coach personas + focus sessions + gamification + weekly AI reviews in one tool. That's your wedge.
 
 PART 2: YOUR TOP 5 NICHES (ranked by fit + opportunity)
 Niche #1: Adults with ADHD who struggle to execute (PRIMARY — go all-in here first)
@@ -22130,7 +22130,7 @@ Below I’ll (A) summarize what I found on resurgo.life, (B) give you a robust m
 
 1) Deep scan findings: what you should market (and what to fix)
 What Resurgo is positioning as (from your site)
-Resurgo is positioned as an AI-powered Life OS / “life command center” that turns a single goal into milestones + habits + daily tasks, then drives execution via habit stacks, focus sessions, XP/gamification, wellness tracking, and AI weekly reviews, plus 8 specialized AI coaches (2 free, 8 for Pro). It’s a PWA (no app store) and even has a Telegram bot. 
+Resurgo is positioned as an AI-powered Life OS / “life command center” that turns a single goal into milestones + habits + daily tasks, then drives execution via habit stacks, focus sessions, XP/gamification, wellness tracking, and AI weekly reviews, with 5 specialized AI coaches (2 free: Marcus + Titan; 3 Pro: Aurora, Phoenix, Nexus). It’s a PWA (no app store) and even has a Telegram bot. 
 1
 
 Pricing + urgency mechanics already on the page
@@ -22139,7 +22139,7 @@ Pro is $4.99/mo (and you also show annual savings)
 Lifetime “founding price” $49.99 for first 1,000 spots, then $89.99 (claimed “save 44%”). 
 1
 Big inconsistency you should fix ASAP (it will hurt conversion)
-Your resurgo.life pricing (Life OS app) does not match resurgo.app pricing (a different product story: capture/resurface system, $8/mo Pro, “knowledge workers,” join waitlist). That mismatch creates distrust and refund risk. It also confuses SEO/brand. 
+Keep resurgo.life as the canonical customer-facing launch surface. If resurgo.app remains live, position it as a complementary module and avoid conflicting pricing or value-prop messaging.
 1
 
 Action: decide whether these are (1) two products or (2) one product with two landing pages. If it’s one product, unify messaging + pricing + domain story this week.
@@ -22166,7 +22166,7 @@ Goal ? daily plan in <2 minutes (the “execution pipeline” framing)
 1
 Multi-domain system: focus timer + habits + weekly review + wellness correlations in one workflow 
 1
-8 coach personas (this is content gold; each coach can be a character brand) 
+5 coach personas (this is content gold; each coach can be a character brand) 
 1
 PWA install + Telegram bot (distribution + retention angle; “track from anywhere”) 
 1
@@ -22219,7 +22219,7 @@ Your site already supports goal templates; make those templates the entry points
 
 Phase 2 (30 days): Build your acquisition engine (3 pillars)
 Pillar A — Short-form “character” content (your biggest free lever)
-Your 8 coaches are ready-made content IP. Turn them into recurring series.
+Your 5 coaches are ready-made content IP. Turn them into recurring series.
 
 Format that works: “Coach reacts”
 
@@ -22704,7 +22704,7 @@ Arena | Benchmark & Compare the Best AI Models
 > The following tactical checklist was merged from the separate Customer Acquisition Plan.
 > It contains specific environment variable checks, test flows, platform prep steps,
 > outreach templates, and conversion strategy that complement the strategy sections above.
-> **Note:** Some references may mention 8 coaches � the correct count is 5 (Marcus, Titan free; Aurora, Phoenix, Nexus pro).
+> **Note:** Some references may mention older coach counts — the canonical count is 5 (Marcus, Titan free; Aurora, Phoenix, Nexus pro).
 
 ---
 
@@ -22718,7 +22718,7 @@ Arena | Benchmark & Compare the Best AI Models
 - [ ] `RESEND_API_KEY` confirmed working (send yourself a test welcome email)
 - [ ] Test full signup → welcome email flow
 - [ ] Test free → Pro upgrade flow (Dodo Payments working)
-- [ ] All 8 AI coaches respond (test ORACLE and NEXUS)
+- [ ] All 5 AI coaches respond (Marcus, Titan, Aurora, Phoenix, Nexus)
 - [ ] Mobile: check the app on iPhone + Android
 
 ---
@@ -22953,9 +22953,9 @@ Day 21: If still free → Re-engagement email from PHOENIX ("comeback")
 
 ### Pricing Clarity (Add to UI)
 ```
-Free:    2 coaches (MARCUS + AURORA), 3 habits, 5 goals
-Pro:     8 coaches, unlimited everything = $97/year ($8.08/mo)
-Lifetime: Everything forever = $197 one-time
+Free:     2 coaches (MARCUS + TITAN), 3 goals, 5 habits/day, 10 AI messages/day
+Pro:      All 5 coaches, unlimited everything = $4.99/month or $29.99/year
+Lifetime: All 5 coaches, unlimited everything = $49.99 one-time
 ```
 
 **The first paying customer pitch to FOCUS on:** The user who has been active 10+ days as free and has clear engagement signals (habit streaks, goal completions). Message them directly if possible.

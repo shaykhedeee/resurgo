@@ -14,7 +14,7 @@ const LINKEDIN_ORG_URN = process.env.LINKEDIN_ORG_URN || ''; // urn:li:organizat
 const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
 
 const LINKEDIN_API_BASE = 'https://api.linkedin.com/v2';
-const LINKEDIN_COMMUNITY_API = 'https://api.linkedin.com/rest';
+const _LINKEDIN_COMMUNITY_API = 'https://api.linkedin.com/rest';
 
 // ── Post templates ──────────────────────────────────────────────────────────
 const POST_TEMPLATES = {
@@ -121,7 +121,12 @@ async function getProfile(): Promise<Record<string, unknown> | null> {
 }
 
 // ── GET: Status ─────────────────────────────────────────────────────────────
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const adminSecret = req.headers.get('x-admin-secret');
+  if (adminSecret !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const hasToken = !!LINKEDIN_ACCESS_TOKEN;
   const hasPersonUrn = !!LINKEDIN_PERSON_URN;
   const hasOrgUrn = !!LINKEDIN_ORG_URN;

@@ -145,6 +145,11 @@ async function submitPost(token: string, subreddit: string, title: string, text:
 }
 
 export async function GET(request: NextRequest) {
+  const adminSecret = request.headers.get('x-admin-secret');
+  if (adminSecret !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
 

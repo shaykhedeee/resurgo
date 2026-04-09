@@ -48,6 +48,7 @@ export const WIDGET_REGISTRY: WidgetDef[] = [
   { id: 'sleep',          label: 'Sleep Tracker',     icon: 'Moon',         section: 'context', defaultOrder: 10, defaultVisible: true },
   { id: 'quick-actions',  label: 'Quick Actions',     icon: 'Zap',          section: 'context', defaultOrder: 11, defaultVisible: true },
   { id: 'vision-board',   label: 'Vision Board',      icon: 'Image',        section: 'context', defaultOrder: 12, defaultVisible: true },
+  { id: 'xp-leaderboard', label: 'XP Leaderboard',    icon: 'Trophy',       section: 'core',    defaultOrder: 13, defaultVisible: false },
 ];
 
 /** Map of widget id → WidgetDef for O(1) lookups */

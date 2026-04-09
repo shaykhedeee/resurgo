@@ -133,7 +133,7 @@ export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalPr
         aria-labelledby="add-habit-title"
       >
         {/* Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-white/10 bg-[#12121A]/90 backdrop-blur-xl">
+        <div className="sticky top-0 z-10 flex items-center justify-between p-4 border-b border-white/10 bg-[var(--background-secondary)]/90 backdrop-blur-xl">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-ascend-500/20 flex items-center justify-center">
               <Plus className="w-5 h-5 text-ascend-400" aria-hidden="true" />
@@ -300,7 +300,7 @@ export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalPr
               
               {showCategoryDropdown && (
                 <div className="absolute top-full left-0 right-0 mt-1 z-20 
-                              bg-[#1A1A24] border border-white/10 rounded-xl 
+                              bg-[var(--surface-hover)] border border-white/10 rounded-xl 
                               shadow-xl overflow-hidden">
                   {(Object.keys(CATEGORY_LABELS) as HabitCategory[]).map((cat) => (
                     <button
@@ -464,7 +464,7 @@ export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalPr
         )}
 
         {/* Footer */}
-        <div className="sticky bottom-0 p-4 border-t border-white/10 bg-[#12121A]/90 backdrop-blur-xl">
+        <div className="sticky bottom-0 p-4 border-t border-white/10 bg-[var(--background-secondary)]/90 backdrop-blur-xl">
           <div className="flex gap-3">
             <button
               onClick={onClose}

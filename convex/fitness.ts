@@ -1,16 +1,17 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// RESURGO — Fitness Workout Logs & Templates
-// ─────────────────────────────────────────────────────────────────────────────
+﻿// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// RESURGO â€” Fitness Workout Logs & Templates
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 import { query, mutation } from './_generated/server';
+import type { QueryCtx, MutationCtx } from './_generated/server';
 import { v } from 'convex/values';
 
-async function getUser(ctx: any) {
+async function getUser(ctx: QueryCtx | MutationCtx) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) return null;
   return ctx.db
     .query('users')
-    .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+    .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
     .first();
 }
 
@@ -73,7 +74,7 @@ export const listWorkouts = query({
     if (!user) return [];
     const logs = await ctx.db
       .query('workoutLogs')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
     return logs
       .filter((l) => {
@@ -103,7 +104,7 @@ export const getWeekStats = query({
 
     const logs = await ctx.db
       .query('workoutLogs')
-      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
       .collect();
 
     const recent = logs.filter((l) => l.date >= startDate);
@@ -115,7 +116,7 @@ export const getWeekStats = query({
   },
 });
 
-// ─── Workout Templates ─────────────────────────────────────────────────────
+// â”€â”€â”€ Workout Templates â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 export const getWorkoutTemplates = query({
   args: {},

@@ -40,6 +40,11 @@ const ENV_SCHEMA: EnvVar[] = [
     description: 'Google Analytics measurement ID',
   },
   {
+    key: 'NEXT_PUBLIC_CLARITY_ID',
+    required: false,
+    description: 'Microsoft Clarity project ID',
+  },
+  {
     key: 'BRAVE_SEARCH_API_KEY',
     required: false,
     description: 'Server-side Brave Search API key for researcher mode',

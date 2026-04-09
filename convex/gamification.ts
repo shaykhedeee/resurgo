@@ -292,7 +292,21 @@ export const awardXP = internalMutation({
 
     if (!gamification) return null;
 
-    const newXP = gamification.totalXP + amount;
+    // ── Daily XP cap (500 XP/day) to prevent gaming ──
+    const DAILY_XP_CAP = 500;
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+    const todayEntries = await ctx.db
+      .query('xpHistory')
+      .withIndex('by_userId_createdAt', (q: any) =>
+        q.eq('userId', userId).gte('createdAt', todayStart.getTime())
+      )
+      .collect();
+    const xpEarnedToday = todayEntries.reduce((sum, e) => sum + e.amount, 0);
+    const effectiveAmount = Math.min(amount, DAILY_XP_CAP - xpEarnedToday);
+    if (effectiveAmount <= 0) return null;
+
+    const newXP = gamification.totalXP + effectiveAmount;
     const newLevel = calculateLevel(newXP);
     const oldLevel = gamification.level;
 
@@ -303,7 +317,7 @@ export const awardXP = internalMutation({
     };
 
     // Auto-award coins (10% of XP)
-    updates.coins = (gamification.coins ?? 0) + Math.ceil(amount * 0.1);
+    updates.coins = (gamification.coins ?? 0) + Math.ceil(effectiveAmount * 0.1);
 
     // Check for level-up
     if (newLevel > oldLevel) {
@@ -327,10 +341,10 @@ export const awardXP = internalMutation({
 
     await ctx.db.patch(gamification._id, updates);
 
-    // Log XP history
+    // Log XP history (only the effective amount)
     await ctx.db.insert('xpHistory', {
       userId,
-      amount,
+      amount: effectiveAmount,
       source: source ?? 'other',
       description: reason,
       createdAt: Date.now(),
@@ -687,5 +701,74 @@ export const getPowerUpShop = query({
         owned: ownedMap.get(p.id) ?? 0,
       })),
     };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// XP LEADERBOARD — Top 20 users by XP + calling user's rank
+// ─────────────────────────────────────────────────────────────────────────────
+export const getLeaderboard = query({
+  args: {},
+  returns: v.object({
+    entries: v.array(v.object({
+      rank: v.number(),
+      userId: v.id('users'),
+      name: v.string(),
+      imageUrl: v.optional(v.string()),
+      level: v.number(),
+      levelName: v.string(),
+      totalXP: v.number(),
+      isCurrentUser: v.boolean(),
+    })),
+    myRank: v.optional(v.number()),
+    myXP: v.optional(v.number()),
+  }),
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    const currentUser = identity
+      ? await ctx.db
+          .query('users')
+          .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+          .unique()
+      : null;
+
+    // Collect all gamification records (max 1000 at this scale)
+    const allRecords = await ctx.db.query('gamification').collect();
+
+    // Sort by totalXP descending
+    allRecords.sort((a, b) => (b.totalXP ?? 0) - (a.totalXP ?? 0));
+
+    // Load user details for top 20
+    const top20 = allRecords.slice(0, 20);
+    const entries = await Promise.all(
+      top20.map(async (rec, idx) => {
+        const user = await ctx.db.get(rec.userId);
+        const levelInfo = LEVEL_THRESHOLDS.find((t) => t.level === (rec.level ?? 1))
+          ?? LEVEL_THRESHOLDS[0];
+        return {
+          rank: idx + 1,
+          userId: rec.userId,
+          name: user?.name ?? 'Resurgo User',
+          imageUrl: user?.imageUrl,
+          level: rec.level ?? 1,
+          levelName: levelInfo.name,
+          totalXP: rec.totalXP ?? 0,
+          isCurrentUser: currentUser ? rec.userId === currentUser._id : false,
+        };
+      })
+    );
+
+    // Find calling user's rank if not in top 20
+    let myRank: number | undefined;
+    let myXP: number | undefined;
+    if (currentUser) {
+      const myIdx = allRecords.findIndex((r) => r.userId === currentUser._id);
+      if (myIdx >= 0) {
+        myRank = myIdx + 1;
+        myXP = allRecords[myIdx].totalXP ?? 0;
+      }
+    }
+
+    return { entries, myRank, myXP };
   },
 });

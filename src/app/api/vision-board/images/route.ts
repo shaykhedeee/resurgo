@@ -11,18 +11,23 @@ export async function GET(req: NextRequest) {
   const { userId } = await auth();
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const { searchParams } = req.nextUrl;
-  const query = searchParams.get('q') ?? '';
-  const domain = searchParams.get('domain') ?? '';
-  const limit = Math.min(30, Math.max(1, Number(searchParams.get('limit')) || 12));
+  try {
+    const { searchParams } = req.nextUrl;
+    const query = searchParams.get('q') ?? '';
+    const domain = searchParams.get('domain') ?? '';
+    const limit = Math.min(30, Math.max(1, Number(searchParams.get('limit')) || 12));
 
-  // domain search uses the domain name itself as the query term
-  const searchTerm = domain.trim() || query.trim();
+    // domain search uses the domain name itself as the query term
+    const searchTerm = domain.trim() || query.trim();
 
-  if (!searchTerm) {
-    return NextResponse.json({ error: 'Missing ?q= or ?domain= parameter' }, { status: 400 });
+    if (!searchTerm) {
+      return NextResponse.json({ error: 'Missing ?q= or ?domain= parameter' }, { status: 400 });
+    }
+
+    const images = await searchStockImages(searchTerm, limit);
+    return NextResponse.json({ images, query: searchTerm });
+  } catch (error) {
+    console.error('[vision-board/images] GET failed:', error);
+    return NextResponse.json({ error: 'Failed to search images' }, { status: 500 });
   }
-
-  const images = await searchStockImages(searchTerm, limit);
-  return NextResponse.json({ images, query: searchTerm });
 }

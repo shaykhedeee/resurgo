@@ -1,6 +1,6 @@
 ﻿'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { PixelIcon, type PixelIconName } from '@/components/PixelIcon';
@@ -9,11 +9,12 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import { TerminalDemo } from '@/components/TerminalDemo';
 import { MarketingFooter } from '@/components/MarketingFooter';
 // DemoSandbox available for future interactive demos
-import InteractiveDemoCarousel from '@/components/marketing/InteractiveDemoCarousel';
-import SocialProof from '@/components/marketing/SocialProof';
-import ProductShowcase from '@/components/marketing/ProductShowcase';
+// Below-the-fold components lazy-loaded for better LCP
+const InteractiveDemoCarousel = lazy(() => import('@/components/marketing/InteractiveDemoCarousel'));
+const SocialProof = lazy(() => import('@/components/marketing/SocialProof'));
+const ProductShowcase = lazy(() => import('@/components/marketing/ProductShowcase'));
 
-import ExitIntent from '@/components/marketing/ExitIntent';
+const ExitIntent = lazy(() => import('@/components/marketing/ExitIntent'));
 import StickyCTA from '@/components/marketing/StickyCTA';
 import { CookieConsent } from '@/components/CookieConsent';
 import { TermLinkButton } from '@/components/ui/TermButton';
@@ -623,7 +624,9 @@ function LandingPageV2() {
         </section>
 
         {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
-        <ProductShowcase />
+        <Suspense fallback={null}>
+          <ProductShowcase />
+        </Suspense>
 
         {/* THE_FRAMEWORK section merged into HOW_IT_WORKS below */}
 
@@ -1190,10 +1193,14 @@ function LandingPageV2() {
               </p>
             </div>
 
-            <InteractiveDemoCarousel />
+            <Suspense fallback={null}>
+              <InteractiveDemoCarousel />
+            </Suspense>
 
             <div className="mt-8">
-              <SocialProof />
+              <Suspense fallback={null}>
+                <SocialProof />
+              </Suspense>
             </div>
 
             <div className="mt-8 border-2 border-orange-900/50 bg-gradient-to-br from-orange-950/20 to-black p-8 text-center shadow-[3px_3px_0px_rgba(0,0,0,0.7)]">
@@ -1354,7 +1361,9 @@ function LandingPageV2() {
       <MarketingFooter />
 
       <StickyCTA />
-      <ExitIntent />
+      <Suspense fallback={null}>
+        <ExitIntent />
+      </Suspense>
       <CookieConsent />
       <ScrollToTop />
     </div>

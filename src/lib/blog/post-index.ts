@@ -410,6 +410,26 @@ export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
     tags: ['habits', 'AI productivity', 'planning', 'consistency'],
     heroImage: '/blog/default-productivity-hero.svg',
   },
+  {
+    slug: 'adhd-executive-function-productivity-2026',
+    title: 'ADHD Executive Function and Productivity: Why You Cannot Start Tasks (and What Actually Works)',
+    desc: "ADHD is not a willpower problem. Executive function deficits affect task initiation, working memory, and time perception -- the exact systems modern productivity apps assume you have. This guide explains the neuroscience and gives you a practical system built for how ADHD brains actually operate.",
+    date: 'March 10, 2026',
+    lastModified: '2026-03-10T10:00:00.000Z',
+    readTime: '14 min',
+    tags: ['ADHD', 'focus', 'psychology', 'planning', 'AI productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
+    slug: 'best-free-productivity-apps-2026',
+    title: 'Best Free Productivity Apps in 2026 (No Credit Card, No Catch)',
+    desc: "Most free productivity apps lock everything useful behind a paywall. This is the list of apps that are genuinely free -- usable without entering a card number -- ranked by how much they help you actually execute, not just plan.",
+    date: 'March 11, 2026',
+    lastModified: '2026-03-11T10:00:00.000Z',
+    readTime: '10 min',
+    tags: ['AI productivity', 'habits', 'goal setting', 'planning', 'AI coaching'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
 ];
 
 export const BLOG_TOPIC_CLUSTERS: Array<TopicCluster> = [

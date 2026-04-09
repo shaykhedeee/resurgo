@@ -5,7 +5,22 @@ import { getAllTemplates } from '../../../lib/marketing/templates';
 export const metadata: Metadata = {
   title: 'Goal Templates — Free AI Planning Blueprints | RESURGO',
   description: 'Browse free goal templates for fitness, career, finance, learning, and burnout recovery. Start with structure, then let AI adapt your plan.',
+  keywords: [
+    'goal templates', 'free goal planner', 'habit templates', 'AI planning blueprints',
+    'fitness goal template', 'career goal template', 'productivity templates', 'Resurgo templates',
+  ],
   alternates: { canonical: '/templates' },
+  openGraph: {
+    title: 'Free Goal Templates — AI Planning Blueprints | Resurgo',
+    description: 'Browse free goal templates for fitness, career, finance, and learning. AI adapts the plan to you.',
+    type: 'website',
+    url: 'https://resurgo.life/templates',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Free Goal Templates — Resurgo',
+    description: 'Free AI planning blueprints for fitness, career, finance, and learning.',
+  },
 };
 
 export default async function TemplatesIndexPage() {

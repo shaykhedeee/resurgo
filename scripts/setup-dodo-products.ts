@@ -7,7 +7,8 @@
 
 import DodoPayments from 'dodopayments';
 
-const API_KEY = process.env.DODO_API_KEY || 'E9_7a0lkl-b2Uubh.YHXEAmxMIL_1RWwoDXXARXaMwWOO3uiaY9rA1iUWVPHJ6lwO';
+const API_KEY = process.env.DODO_API_KEY;
+if (!API_KEY) { console.error('❌ Set DODO_API_KEY env var before running.'); process.exit(1); }
 
 const client = new DodoPayments({
   bearerToken: API_KEY,

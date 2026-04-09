@@ -6,6 +6,37 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 
+// Simple level calculator (matches gamification.ts)
+function calculateLevel(xp: number): number {
+  if (xp < 100) return 1;
+  if (xp < 300) return 2;
+  if (xp < 600) return 3;
+  if (xp < 1000) return 4;
+  if (xp < 1500) return 5;
+  if (xp < 2200) return 6;
+  if (xp < 3000) return 7;
+  if (xp < 4000) return 8;
+  if (xp < 5500) return 9;
+  if (xp < 7500) return 10;
+  if (xp < 10000) return 11;
+  if (xp < 13000) return 12;
+  if (xp < 17000) return 13;
+  if (xp < 22000) return 14;
+  if (xp < 28000) return 15;
+  return 16;
+}
+
+// Check-in streak milestones → XP reward
+const CHECK_IN_MILESTONES: Record<number, number> = {
+  3: 25,
+  7: 50,
+  14: 75,
+  21: 100,
+  30: 150,
+  60: 250,
+  100: 500,
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Query: Get today's check-in
 // ─────────────────────────────────────────────────────────────────────────────
@@ -108,7 +139,7 @@ export const saveMorning = mutation({
       return existing._id;
     }
 
-    return await ctx.db.insert('dailyCheckIns', {
+    const id = await ctx.db.insert('dailyCheckIns', {
       userId: user._id,
       date: today,
       morningMood: args.mood,
@@ -121,6 +152,64 @@ export const saveMorning = mutation({
       createdAt: now,
       updatedAt: now,
     });
+
+    // ── Compute check-in streak and award milestone XP ──
+    const recentCheckIns = await ctx.db
+      .query('dailyCheckIns')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .order('desc')
+      .take(100);
+
+    let streak = 0;
+    for (let i = 0; i < recentCheckIns.length; i++) {
+      const expected = new Date(Date.now() - i * 86400000).toISOString().split('T')[0];
+      if (recentCheckIns[i].date === expected) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    const milestoneXP = CHECK_IN_MILESTONES[streak];
+    if (milestoneXP) {
+      const gamification = await ctx.db
+        .query('gamification')
+        .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+        .unique();
+
+      if (gamification) {
+        // Apply daily XP cap
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const todayXPEntries = await ctx.db
+          .query('xpHistory')
+          .withIndex('by_userId_createdAt', (q: any) =>
+            q.eq('userId', user._id).gte('createdAt', todayStart.getTime())
+          )
+          .collect();
+        const xpEarnedToday = todayXPEntries.reduce((s, e) => s + e.amount, 0);
+        const effective = Math.min(milestoneXP, 500 - xpEarnedToday);
+
+        if (effective > 0) {
+          const newXP = gamification.totalXP + effective;
+          await ctx.db.patch(gamification._id, {
+            totalXP: newXP,
+            level: calculateLevel(newXP),
+            coins: (gamification.coins ?? 0) + Math.ceil(effective * 0.1),
+            updatedAt: now,
+          });
+          await ctx.db.insert('xpHistory', {
+            userId: user._id,
+            amount: effective,
+            source: 'streak_bonus',
+            description: `${streak}-day check-in streak milestone!`,
+            createdAt: now,
+          });
+        }
+      }
+    }
+
+    return id;
   },
 });
 

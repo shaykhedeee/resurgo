@@ -9,16 +9,16 @@ import { internal } from './_generated/api';
 const crons = cronJobs();
 
 // ── Morning digest (Telegram): every day at 07:00 UTC ─────────────────────────
-crons.daily(
+crons.cron(
   'telegram-morning-digest',
-  { hourUTC: 7, minuteUTC: 0 },
+  '0 7 * * *',
   internal.telegramActions.sendMorningDigests
 );
 
 // ── Morning digest (FCM Push): every day at 07:00 UTC ─────────────────────────
-crons.daily(
+crons.cron(
   'push-morning-digest',
-  { hourUTC: 7, minuteUTC: 0 },
+  '0 7 * * *',
   internal.pushNotifications.sendMorningDigestsPush
 );
 
@@ -37,10 +37,37 @@ crons.interval(
 );
 
 // ── Lifecycle email automation: every day at 09:00 UTC ────────────────────────
-crons.daily(
+crons.cron(
   'lifecycle-email-automation',
-  { hourUTC: 9, minuteUTC: 0 },
+  '0 9 * * *',
   internal.emailAutomation.processLifecycleEmails
+);
+
+// ── Local-time nudges (hourly fan-out; action checks user local time) ─────────
+crons.cron(
+  'push-morning-nudge-local-time',
+  '0 * * * *',
+  internal.pushNotifications.sendMorningNudgesLocalTimePush
+);
+
+crons.cron(
+  'push-evening-prompt-local-time',
+  '0 * * * *',
+  internal.pushNotifications.sendEveningPromptsLocalTimePush
+);
+
+// ── Weekly AI summary generation (Sunday 18:00 UTC) ──────────────────────────
+crons.cron(
+  'weekly-ai-summary-generation',
+  '0 18 * * 0',
+  internal.insights.generateWeeklySummariesForActiveUsers
+);
+
+// ── Weekly Customer Engagement Score recompute (Sunday 19:00 UTC) ────────────
+crons.cron(
+  'weekly-engagement-score-recompute',
+  '0 19 * * 0',
+  internal.users.recomputeAllEngagementScores
 );
 
 export default crons;

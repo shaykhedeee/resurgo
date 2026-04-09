@@ -11,7 +11,26 @@ type AnalyticsApiShape = {
 const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 const convex = convexUrl ? new ConvexHttpClient(convexUrl) : null;
 
+// IP rate limit: 30 events per minute
+const rateMap = new Map<string, { count: number; resetAt: number }>();
+function checkRate(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateMap.set(ip, { count: 1, resetAt: now + 60000 });
+    return true;
+  }
+  if (entry.count >= 30) return false;
+  entry.count++;
+  return true;
+}
+
 export async function POST(req: NextRequest) {
+  const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
+  if (!checkRate(ip)) {
+    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+  }
+
   try {
     const body = (await req.json().catch(() => ({}))) as {
       event?: unknown;

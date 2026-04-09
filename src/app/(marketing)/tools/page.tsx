@@ -11,6 +11,17 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/tools',
   },
+  openGraph: {
+    title: 'Free AI Productivity Tools — Resurgo',
+    description: 'Free planning tools: brain dump cleanup, goal planning, prioritization, and weekly reviews.',
+    type: 'website',
+    url: 'https://resurgo.life/tools',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Free AI Tools — Resurgo',
+    description: 'Free planning tools: brain dump cleanup, goal planning, prioritization, and weekly reviews.',
+  },
 };
 
 export default async function ToolsPage() {

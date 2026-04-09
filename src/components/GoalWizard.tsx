@@ -237,7 +237,7 @@ export function GoalWizard({ isOpen, onClose }: GoalWizardProps) {
       
       {/* Modal */}
       <div 
-        className="relative w-full max-w-2xl max-h-[90vh] bg-[#141416] border border-white/10 rounded-2xl 
+        className="relative w-full max-w-2xl max-h-[90vh] bg-[var(--background-secondary)] border border-white/10 rounded-2xl 
                   shadow-2xl overflow-hidden animate-scale-in flex flex-col"
         role="dialog"
         aria-modal="true"

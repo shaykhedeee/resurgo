@@ -29,6 +29,41 @@ interface UseNotificationsReturn {
 }
 
 const REMINDERS_KEY = 'resurgo-notification-reminders';
+const THROTTLE_KEY = 'resurgo-notification-timestamps';
+const MAX_PER_HOUR = 3;
+const QUIET_START = 23; // 11 PM
+const QUIET_END = 7;   // 7 AM
+
+function isQuietHours(): boolean {
+  const h = new Date().getHours();
+  return h >= QUIET_START || h < QUIET_END;
+}
+
+function isThrottled(): boolean {
+  try {
+    const raw = localStorage.getItem(THROTTLE_KEY);
+    if (!raw) return false;
+    const timestamps: number[] = JSON.parse(raw);
+    const oneHourAgo = Date.now() - 3600000;
+    const recent = timestamps.filter((t) => t > oneHourAgo);
+    return recent.length >= MAX_PER_HOUR;
+  } catch {
+    return false;
+  }
+}
+
+function recordNotification(): void {
+  try {
+    const raw = localStorage.getItem(THROTTLE_KEY);
+    const timestamps: number[] = raw ? JSON.parse(raw) : [];
+    const oneHourAgo = Date.now() - 3600000;
+    const recent = timestamps.filter((t) => t > oneHourAgo);
+    recent.push(Date.now());
+    localStorage.setItem(THROTTLE_KEY, JSON.stringify(recent));
+  } catch {
+    // ignore storage errors
+  }
+}
 
 export function useNotifications(): UseNotificationsReturn {
   const [permission, setPermission] = useState<NotificationPermission>('default');
@@ -116,6 +151,9 @@ export function useNotifications(): UseNotificationsReturn {
 
   const sendNotificationDirect = (title: string, body: string, options?: NotificationOptions) => {
     if (!isSupported || Notification.permission !== 'granted') return;
+    if (isQuietHours() || isThrottled()) return;
+
+    recordNotification();
 
     // Try service worker notification first (works in background)
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {

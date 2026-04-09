@@ -131,7 +131,7 @@ export function AuthScreens({ onClose, onSuccess, initialView = 'login' }: AuthS
 
       {/* Auth Card */}
       <div className="relative w-full max-w-md">
-        <div className="relative bg-[#141416] rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
+        <div className="relative bg-[var(--background-secondary)] rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="p-6 sm:p-8 pb-0">
             <div className="flex items-center justify-between mb-6">
@@ -372,7 +372,7 @@ export function AuthScreens({ onClose, onSuccess, initialView = 'login' }: AuthS
                   <div className="w-full border-t border-white/10" />
                 </div>
                 <div className="relative flex justify-center text-sm">
-                  <span className="px-3 bg-[#141416] text-white/40">or continue with</span>
+                  <span className="px-3 bg-[var(--background-secondary)] text-white/40">or continue with</span>
                 </div>
               </div>
             )}

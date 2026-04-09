@@ -51,15 +51,15 @@ function mapDodoEventToPlan(event: DodoWebhookEvent): UserPlan | null {
     const productId = data.product_id ?? data.metadata?.product_id ?? '';
     const amount = data.amount ?? 0;
 
+    // Pro: check specific product IDs FIRST (before amount threshold)
+    const proMonthlyId = process.env.DODO_PRODUCT_ID_PRO_MONTHLY ?? '';
+    const proYearlyId = process.env.DODO_PRODUCT_ID_PRO_YEARLY ?? '';
+    if (productId && (productId === proMonthlyId || productId === proYearlyId)) return 'pro';
+
     // Lifetime: check product_id env var or amount threshold ($49.99+)
     const lifetimeProductId = process.env.DODO_PRODUCT_ID_LIFETIME ?? '';
     if (lifetimeProductId && productId === lifetimeProductId) return 'lifetime';
     if (amount >= 4999) return 'lifetime'; // $49.99 in cents
-
-    // Pro: any other successful payment
-    const proMonthlyId = process.env.DODO_PRODUCT_ID_PRO_MONTHLY ?? '';
-    const proYearlyId = process.env.DODO_PRODUCT_ID_PRO_YEARLY ?? '';
-    if (productId && (productId === proMonthlyId || productId === proYearlyId)) return 'pro';
 
     // Fall back: any paid amount = pro
     if (amount > 0) return 'pro';

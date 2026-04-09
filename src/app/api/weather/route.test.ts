@@ -2,6 +2,10 @@
 
 export {};
 
+jest.mock('@clerk/nextjs/server', () => ({
+  auth: jest.fn(async () => ({ userId: 'test_user_123' })),
+}));
+
 const mockFetch = jest.fn();
 global.fetch = mockFetch as unknown as typeof fetch;
 

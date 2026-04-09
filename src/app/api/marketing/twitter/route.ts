@@ -155,7 +155,12 @@ async function searchMentions(query: string, maxResults = 10): Promise<unknown[]
 }
 
 // ── GET: Status & templates ─────────────────────────────────────────────────
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const adminSecret = req.headers.get('x-admin-secret');
+  if (adminSecret !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const hasBearer = !!TWITTER_BEARER_TOKEN;
   const hasOAuth = !!TWITTER_CONSUMER_KEY && !!TWITTER_ACCESS_TOKEN;
   const hasOAuth2 = !!TWITTER_OAUTH2_CLIENT_ID;

@@ -6,9 +6,7 @@
  * Configures UptimeRobot to monitor the Resurgo health endpoint
  * 
  * API Keys:
- * - Main: u3344698-2d524904b7d148634b0a406a
- * - Read-only: ur3344698-71374e8890c90c189a400830
- * - Monitor: m802469450-022b656ca4ac87708d715c5f
+ * - Set UPTIMEROBOT_API_KEY env var before running
  * 
  * To use this script:
  * 1. npm install node-fetch (or use native fetch in Node 18+)
@@ -17,7 +15,8 @@
  * ═══════════════════════════════════════════════════════════════════════════════
  */
 
-const UPTIMEROBOT_API_KEY = process.env.UPTIMEROBOT_API_KEY || 'u3344698-2d524904b7d148634b0a406a';
+const UPTIMEROBOT_API_KEY = process.env.UPTIMEROBOT_API_KEY;
+if (!UPTIMEROBOT_API_KEY) { console.error('❌ Set UPTIMEROBOT_API_KEY env var before running.'); process.exit(1); }
 const BASE_URL = 'https://api.uptimerobot.com/v2';
 const HEALTH_ENDPOINT = 'https://resurgo.life/api/health';
 

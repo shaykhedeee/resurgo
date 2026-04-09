@@ -71,6 +71,7 @@ interface HabitTemplate {
 const FOCUS_AREAS: FocusArea[] = [
   { id: 'habits', label: 'Build Better Habits', description: 'Create routines that stick', icon: <Flame className="w-5 h-5" />, color: 'from-orange-500 to-amber-500' },
   { id: 'goals', label: 'Achieve Big Goals', description: 'Break down & conquer goals', icon: <Target className="w-5 h-5" />, color: 'from-blue-500 to-indigo-500' },
+  { id: 'adhd', label: 'Get Organized (ADHD)', description: 'Executive function & focus support', icon: <Brain className="w-5 h-5" />, color: 'from-violet-500 to-purple-500' },
   { id: 'health', label: 'Health & Fitness', description: 'Move more, feel better', icon: <Dumbbell className="w-5 h-5" />, color: 'from-green-500 to-emerald-500' },
   { id: 'productivity', label: 'Boost Productivity', description: 'Get more done, stress less', icon: <Zap className="w-5 h-5" />, color: 'from-yellow-500 to-orange-500' },
   { id: 'learning', label: 'Personal Growth', description: 'Learn & grow every day', icon: <BookOpen className="w-5 h-5" />, color: 'from-purple-500 to-violet-500' },
@@ -78,18 +79,18 @@ const FOCUS_AREAS: FocusArea[] = [
 ];
 
 const HABIT_TEMPLATES: HabitTemplate[] = [
-  { id: 'morning-routine', name: 'Morning Routine', icon: <Sparkles className="w-5 h-5" />, description: 'Start your day with intention', frequency: 'Daily', focusAreas: ['habits', 'productivity'] },
+  { id: 'morning-routine', name: 'Morning Routine', icon: <Sparkles className="w-5 h-5" />, description: 'Start your day with intention', frequency: 'Daily', focusAreas: ['habits', 'productivity', 'adhd'] },
   { id: 'exercise-30', name: 'Exercise 30 min', icon: <Dumbbell className="w-5 h-5" />, description: 'Move your body every day', frequency: 'Daily', focusAreas: ['health', 'habits'] },
   { id: 'read-20', name: 'Read 20 pages', icon: <BookOpen className="w-5 h-5" />, description: 'Build a reading habit', frequency: 'Daily', focusAreas: ['learning', 'habits'] },
-  { id: 'meditate', name: 'Meditate 10 min', icon: <Heart className="w-5 h-5" />, description: 'Find your calm center', frequency: 'Daily', focusAreas: ['wellness', 'habits'] },
-  { id: 'journal', name: 'Daily Journal', icon: <Brain className="w-5 h-5" />, description: 'Reflect and grow', frequency: 'Daily', focusAreas: ['wellness', 'learning'] },
-  { id: 'water-8', name: 'Drink 8 glasses', icon: <Heart className="w-5 h-5" />, description: 'Stay hydrated all day', frequency: 'Daily', focusAreas: ['health', 'habits'] },
-  { id: 'no-phone-bed', name: 'No phone in bed', icon: <Moon className="w-5 h-5" />, description: 'Better sleep starts here', frequency: 'Daily', focusAreas: ['wellness', 'productivity'] },
+  { id: 'meditate', name: 'Meditate 10 min', icon: <Heart className="w-5 h-5" />, description: 'Find your calm center', frequency: 'Daily', focusAreas: ['wellness', 'habits', 'adhd'] },
+  { id: 'journal', name: 'Daily Journal', icon: <Brain className="w-5 h-5" />, description: 'Reflect and grow', frequency: 'Daily', focusAreas: ['wellness', 'learning', 'adhd'] },
+  { id: 'water-8', name: 'Drink 8 glasses', icon: <Heart className="w-5 h-5" />, description: 'Stay hydrated all day', frequency: 'Daily', focusAreas: ['health', 'habits', 'adhd'] },
+  { id: 'no-phone-bed', name: 'No phone in bed', icon: <Moon className="w-5 h-5" />, description: 'Better sleep starts here', frequency: 'Daily', focusAreas: ['wellness', 'productivity', 'adhd'] },
   { id: 'learn-new', name: 'Learn something new', icon: <Target className="w-5 h-5" />, description: '15 min of skill building', frequency: 'Daily', focusAreas: ['learning', 'goals'] },
-  { id: 'gratitude', name: 'Gratitude practice', icon: <Star className="w-5 h-5" />, description: 'Write 3 things grateful for', frequency: 'Daily', focusAreas: ['wellness', 'habits'] },
+  { id: 'gratitude', name: 'Gratitude practice', icon: <Star className="w-5 h-5" />, description: 'Write 3 things grateful for', frequency: 'Daily', focusAreas: ['wellness', 'habits', 'adhd'] },
   { id: 'walk-10k', name: 'Walk 10,000 steps', icon: <Flame className="w-5 h-5" />, description: 'Keep moving through the day', frequency: 'Daily', focusAreas: ['health'] },
   { id: 'meal-prep', name: 'Eat healthy meals', icon: <Heart className="w-5 h-5" />, description: 'Nourish your body', frequency: 'Daily', focusAreas: ['health'] },
-  { id: 'deep-work', name: 'Deep work session', icon: <Zap className="w-5 h-5" />, description: '90 min focused work block', frequency: 'Weekdays', focusAreas: ['productivity', 'goals'] },
+  { id: 'deep-work', name: 'Deep work session', icon: <Zap className="w-5 h-5" />, description: '90 min focused work block', frequency: 'Weekdays', focusAreas: ['productivity', 'goals', 'adhd'] },
 ];
 
 const TIME_OPTIONS = [
@@ -250,6 +251,15 @@ export default function OnboardingPage() {
     } catch (err) {
       // Non-fatal: log but always proceed
       console.warn('Onboarding save failed, proceeding anyway:', err);
+    }
+    // Track activation metric: first meaningful action in session (§4)
+    if (typeof window !== 'undefined' && (window as unknown as Record<string, unknown>).gtag) {
+      (window as unknown as Record<string, (cmd: string, evt: string, params: Record<string, unknown>) => void>).gtag('event', 'activation_complete', {
+        event_category: 'onboarding',
+        primary_focus: selectedFocus[0] ?? 'none',
+        habits_selected: selectedHabits.length,
+        has_goal: primaryGoal.trim().length > 0,
+      });
     }
     // Route to first-contact AI briefing instead of dashboard directly
     router.replace('/first-contact');

@@ -38,6 +38,7 @@ const weeklyReviewDoc = v.object({
   highlights: v.optional(v.array(v.string())),
   areasToImprove: v.optional(v.array(v.string())),
   aiSummary: v.optional(v.string()),
+  nextWeekFocus: v.optional(v.string()),
   userReflection: v.optional(v.string()),
   nextWeekGoals: v.optional(v.array(v.string())),
   overallRating: v.optional(v.number()),
@@ -243,6 +244,7 @@ export const storeAISummary = mutation({
     aiSummary: v.string(),
     highlights: v.optional(v.array(v.string())),
     areasToImprove: v.optional(v.array(v.string())),
+    nextWeekFocus: v.optional(v.string()),
   },
   returns: v.null(),
   handler: async (ctx, { reviewId, ...fields }) => {

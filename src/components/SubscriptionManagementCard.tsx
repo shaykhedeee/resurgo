@@ -19,6 +19,7 @@ import {
   ChevronDown,
   ChevronUp,
 } from 'lucide-react';
+import CancellationSurvey from './CancellationSurvey';
 
 type SubscriptionStatus = 'pending' | 'active' | 'on_hold' | 'cancelled' | 'failed' | 'expired';
 
@@ -57,6 +58,7 @@ export default function SubscriptionManagementCard() {
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  const [showSurvey, setShowSurvey] = useState(false);
 
   const getSubscriptionDetails = useAction(api.payments.getSubscriptionDetails);
   const cancelSubscription = useAction(api.payments.cancelSubscription);
@@ -82,7 +84,7 @@ export default function SubscriptionManagementCard() {
 
   const handleCancel = useCallback(async () => {
     if (!confirmCancel) {
-      setConfirmCancel(true);
+      setShowSurvey(true);
       return;
     }
     setActionLoading('cancel');
@@ -90,6 +92,7 @@ export default function SubscriptionManagementCard() {
     try {
       await cancelSubscription({ immediately: false });
       setConfirmCancel(false);
+      setShowSurvey(false);
       await fetchDetails();
     } catch (_err) {
       setError('Failed to cancel. Please try again or use the billing portal.');
@@ -248,6 +251,20 @@ export default function SubscriptionManagementCard() {
             </p>
           )}
         </div>
+      )}
+
+      {/* Cancellation survey modal */}
+      {showSurvey && (
+        <CancellationSurvey
+          onComplete={() => {
+            setShowSurvey(false);
+            setConfirmCancel(true);
+          }}
+          onDismiss={() => {
+            setShowSurvey(false);
+            setConfirmCancel(false);
+          }}
+        />
       )}
     </div>
   );

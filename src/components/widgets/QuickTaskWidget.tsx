@@ -5,16 +5,19 @@
 // Add an ad-hoc task from the dashboard; shows last 3 pending tasks
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { useState } from 'react';
-import { useQuery, useMutation } from 'convex/react';
+import { useCallback, useRef, useState } from 'react';import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import Link from 'next/link';
 import { Id } from '../../../convex/_generated/dataModel';
+import { MicroCelebration, type MicroCelebrationHandle } from '@/components/MicroCelebration';
 
 export default function QuickTaskWidget() {
   const [input, setInput] = useState('');
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState('');
+  const [estimatedMinutes, setEstimatedMinutes] = useState<number | null>(null);
+  const celebrationRef = useRef<MicroCelebrationHandle | null>(null);
+  const onCelebrationMount = useCallback((h: MicroCelebrationHandle) => { celebrationRef.current = h; }, []);
 
   const createTask = useMutation(api.tasks.create);
   const toggleTask = useMutation(api.tasks.toggleComplete);
@@ -29,8 +32,9 @@ export default function QuickTaskWidget() {
     setAdding(true);
     setError('');
     try {
-      await createTask({ title: text, priority: 'medium' });
+      await createTask({ title: text, priority: 'medium', ...(estimatedMinutes ? { estimatedMinutes } : {}) });
       setInput('');
+      setEstimatedMinutes(null);
     } catch (err) {
       setError('ERR: Could not add task');
       console.error(err);
@@ -42,13 +46,15 @@ export default function QuickTaskWidget() {
   async function handleComplete(id: Id<'tasks'>) {
     try {
       await toggleTask({ taskId: id });
+      celebrationRef.current?.trigger();
     } catch (err) {
       console.error(err);
     }
   }
 
   return (
-    <div className="border border-zinc-900 bg-black h-full flex flex-col">
+    <div className="border border-zinc-900 bg-black h-full flex flex-col relative">
+      <MicroCelebration onMount={onCelebrationMount} />
       {/* Header */}
       <div className="border-b border-zinc-900 px-3 py-1.5 flex items-center justify-between">
         <span className="font-pixel text-[0.5rem] tracking-widest text-zinc-600">QUICK_TASK</span>
@@ -82,6 +88,27 @@ export default function QuickTaskWidget() {
         </button>
       </form>
 
+      {/* Time estimate chips */}
+      {input.trim() && (
+        <div className="px-3 pb-1.5 flex items-center gap-1.5">
+          <span className="font-pixel text-[0.38rem] tracking-widest text-zinc-700 shrink-0">EST:</span>
+          {[5, 15, 30, 60, 90].map((m) => (
+            <button
+              key={m}
+              type="button"
+              onClick={() => setEstimatedMinutes(estimatedMinutes === m ? null : m)}
+              className={`font-terminal text-[0.6rem] px-1.5 py-0.5 border transition-colors ${
+                estimatedMinutes === m
+                  ? 'border-orange-700 bg-orange-950/40 text-orange-400'
+                  : 'border-zinc-800 text-zinc-600 hover:border-zinc-600 hover:text-zinc-400'
+              }`}
+            >
+              {m}m
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Error */}
       {error && (
         <p className="px-3 font-pixel text-[0.38rem] tracking-widest text-red-500">{error}</p>
@@ -94,7 +121,7 @@ export default function QuickTaskWidget() {
         ) : pendingTasks.length === 0 ? (
           <p className="font-pixel text-[0.38rem] tracking-widest text-zinc-700 mt-2">[ NO_PENDING_TASKS ]</p>
         ) : (
-          pendingTasks.map((task: { _id: Id<'tasks'>; title: string; priority: string; status: string }) => (
+          pendingTasks.map((task: { _id: Id<'tasks'>; title: string; priority: string; status: string; estimatedMinutes?: number }) => (
             <div key={task._id} className="flex items-center gap-2 group">
               <button
                 onClick={() => handleComplete(task._id)}
@@ -105,6 +132,11 @@ export default function QuickTaskWidget() {
               <span className="font-terminal text-sm text-zinc-400 group-hover:text-zinc-300 transition-colors truncate">
                 {task.title}
               </span>
+              {task.estimatedMinutes && (
+                <span className="font-terminal text-[0.6rem] text-zinc-600 shrink-0 border border-zinc-800 px-1 py-0.5">
+                  {task.estimatedMinutes}m
+                </span>
+              )}
               {task.priority === 'high' && (
                 <span className="font-pixel text-[0.35rem] tracking-widest text-red-600 shrink-0">!</span>
               )}

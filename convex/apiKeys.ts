@@ -1,11 +1,12 @@
-import { v } from 'convex/values';
+﻿import { v } from 'convex/values';
 import { mutation, query, action, internalMutation } from './_generated/server';
+import type { QueryCtx, MutationCtx } from './_generated/server';
 import { api, internal } from './_generated/api';
 
-async function requireUser(ctx: any) {
+async function requireUser(ctx: QueryCtx | MutationCtx) {
   const identity = await ctx.auth.getUserIdentity();
   if (!identity) throw new Error('Unauthenticated');
-  const user = await ctx.db.query('users').withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject)).first();
+  const user = await ctx.db.query('users').withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject)).first();
   if (!user) throw new Error('User not found');
   return user;
 }
@@ -29,10 +30,10 @@ export const listApiKeys = query({
   args: {},
   handler: async (ctx) => {
     const user = await requireUser(ctx);
-    const keys = await ctx.db.query('apiKeys').withIndex('by_userId', (q: any) => q.eq('userId', user._id)).collect();
+    const keys = await ctx.db.query('apiKeys').withIndex('by_userId', (q) => q.eq('userId', user._id)).collect();
     return keys
-      .filter((k: any) => !k.revokedAt)
-      .map((k: any) => ({
+      .filter((k) => !k.revokedAt)
+      .map((k) => ({
         _id: k._id,
         name: k.name,
         keyPrefix: k.keyPrefix,
@@ -45,7 +46,7 @@ export const listApiKeys = query({
 
 export const generateKey = action({
   args: { name: v.string() },
-  handler: async (ctx, { name }): Promise<{ keyPrefix: string; fullKey: string; id: any }> => {
+  handler: async (ctx, { name }): Promise<{ keyPrefix: string; fullKey: string; id: string }> => {
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) throw new Error('Unauthenticated');
     const user = await ctx.runQuery(api.users.current);
@@ -90,13 +91,13 @@ export const revokeKey = mutation({
   },
 });
 
-// Used by REST API v1 routes — validates API key hash and returns userId
+// Used by REST API v1 routes â€” validates API key hash and returns userId
 export const validateByHash = query({
   args: { keyHash: v.string() },
   handler: async (ctx, { keyHash }) => {
     const key = await ctx.db
       .query('apiKeys')
-      .withIndex('by_keyHash', (q: any) => q.eq('keyHash', keyHash))
+      .withIndex('by_keyHash', (q) => q.eq('keyHash', keyHash))
       .first();
     if (!key || key.revokedAt) return null;
     return { userId: key._id, ownerId: key.userId, rateLimitPerHour: key.rateLimitPerHour };
@@ -108,7 +109,7 @@ export const touchLastUsed = mutation({
   handler: async (ctx, { keyHash }) => {
     const key = await ctx.db
       .query('apiKeys')
-      .withIndex('by_keyHash', (q: any) => q.eq('keyHash', keyHash))
+      .withIndex('by_keyHash', (q) => q.eq('keyHash', keyHash))
       .first();
     if (key && !key.revokedAt) await ctx.db.patch(key._id, { lastUsedAt: Date.now() });
   },

@@ -2,7 +2,8 @@
 // Run: node scripts/create-dodo-products.mjs
 // Delete after running.
 
-const API_KEY = process.env.DODO_PAYMENTS_API_KEY || 'lQ57QyKMgYbrtXLl.EE0SuFqjhu7tOU8pvmcxJaSJTOHL5J_XLFbkrrDcBMh5mfS1';
+const API_KEY = process.env.DODO_PAYMENTS_API_KEY;
+if (!API_KEY) { console.error('❌ Set DODO_PAYMENTS_API_KEY env var before running.'); process.exit(1); }
 const BASE = 'https://live.dodopayments.com';
 
 const products = [

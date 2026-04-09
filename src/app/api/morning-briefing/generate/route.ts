@@ -31,13 +31,18 @@ CONTEXT:
 ${intention ? `- Intention: "${intention}"` : ''}
 ${priorities?.length ? `- Top priorities: ${priorities.join(', ')}` : ''}
 
+ENERGY ADJUSTMENT RULES (apply these strictly based on energy score):
+- Energy 1-2 (Empty/Low): Scale the day back. Recovery mode. Suggest focusing ONLY on 1-2 non-negotiable habits — the ones that take under 5 minutes. Recommend the single most critical task and deprioritize everything else. No new commitments today. Be direct about this.
+- Energy 3 (Mid): Balanced day. Suggest 3-4 habits, tackle medium-priority work in the morning when focus is highest, take a real break at midday.
+- Energy 4-5 (High/Peak): Stretch day. Front-load the hardest, most cognitively demanding task first. Run the full habit stack. Ideal day for deep work sprints, difficult decisions, or creative output.
+
 INSTRUCTIONS:
 Generate a punchy, actionable morning briefing (3-5 paragraphs, ~150 words). Include:
-1. A brief energy/mood-calibrated greeting (acknowledge their state honestly)
-2. Based on their energy/sleep, suggest how to structure the day (deep work timing, break cadence)
-3. If priorities given, prioritize and suggest order of attack
-4. One specific micro-action to start the day with momentum
-5. A motivating closer that matches their energy level (don't be overly cheerful if they're low)
+1. A brief energy/mood-calibrated greeting (acknowledge their state honestly — no false positivity)
+2. Apply the ENERGY ADJUSTMENT RULES above — explicitly say how many habits to attempt and what kind of work is realistic today
+3. If priorities given, order them by what makes sense given their current energy level
+4. One specific micro-action to start the day with momentum (must match energy level — no "crush it" language for energy ≤ 2)
+5. A closing that matches their energy level honestly
 
 Tone: Direct, supportive, slightly tactical. Like a smart friend who's also a performance coach.
 Do NOT use emojis. Keep it terminal-style clean.`;

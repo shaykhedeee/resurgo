@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('[Meta Campaigns GET]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Failed to fetch campaigns' },
       { status: 500 }
     );
   }
@@ -102,7 +102,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error('[Meta Campaigns POST]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Campaign operation failed' },
       { status: 500 }
     );
   }

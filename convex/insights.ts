@@ -3,7 +3,7 @@
 // 8 insight types with confidence scoring, feedback & interaction tracking
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { mutation, query } from './_generated/server';
+import { internalMutation, mutation, query } from './_generated/server';
 import { v } from 'convex/values';
 
 async function getAuthUser(ctx: any) {
@@ -246,5 +246,117 @@ export const cleanupExpired = mutation({
     }
 
     return expired.length;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// generateWeeklySummariesForActiveUsers — Internal cron entrypoint
+// Creates one weekly_summary insight per active user (if missing for week)
+// ─────────────────────────────────────────────────────────────────────────────
+export const generateWeeklySummariesForActiveUsers = internalMutation({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    const now = Date.now();
+    const fourteenDaysAgo = now - 14 * 24 * 60 * 60 * 1000;
+
+    // Determine previous full week (Monday → Sunday)
+    const currentDate = new Date();
+    const currentDay = (currentDate.getUTCDay() + 6) % 7; // Monday=0 ... Sunday=6
+    const thisWeekMonday = new Date(Date.UTC(
+      currentDate.getUTCFullYear(),
+      currentDate.getUTCMonth(),
+      currentDate.getUTCDate() - currentDay,
+      0,
+      0,
+      0,
+      0
+    ));
+    const prevWeekStart = new Date(thisWeekMonday.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const prevWeekEnd = new Date(thisWeekMonday.getTime() - 1);
+
+    const weekStartDate = prevWeekStart.toISOString().slice(0, 10);
+    const weekEndDate = prevWeekEnd.toISOString().slice(0, 10);
+    const weekStartMs = prevWeekStart.getTime();
+    const weekEndMs = prevWeekEnd.getTime();
+
+    const users = await ctx.db.query('users').collect();
+    let generated = 0;
+
+    for (const user of users) {
+      if (user.lastActiveAt && user.lastActiveAt < fourteenDaysAgo) continue;
+
+      const existing = await ctx.db
+        .query('insights')
+        .withIndex('by_userId_type', (q) => q.eq('userId', user._id).eq('type', 'weekly_summary'))
+        .collect();
+
+      const alreadyGenerated = existing.some((insight) => {
+        const metadata = insight.metadata as { weekStartDate?: string } | undefined;
+        return metadata?.weekStartDate === weekStartDate;
+      });
+      if (alreadyGenerated) continue;
+
+      const tasks = await ctx.db
+        .query('tasks')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const completedTasks = tasks.filter(
+        (task) => task.status === 'done' && !!task.completedAt && task.completedAt >= weekStartMs && task.completedAt <= weekEndMs
+      ).length;
+
+      const habitLogs = await ctx.db
+        .query('habitLogs')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const weekHabitLogs = habitLogs.filter((log) => log.date >= weekStartDate && log.date <= weekEndDate);
+      const completedHabitLogs = weekHabitLogs.filter((log) => log.status === 'completed').length;
+      const habitCompletionRate = weekHabitLogs.length > 0
+        ? Math.round((completedHabitLogs / weekHabitLogs.length) * 100)
+        : 0;
+
+      const focusSessions = await ctx.db
+        .query('focusSessions')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const focusMinutes = focusSessions
+        .filter((session) => session.completedAt >= weekStartMs && session.completedAt <= weekEndMs)
+        .reduce((sum, session) => sum + (session.actualDuration ?? session.duration), 0);
+
+      const xpHistory = await ctx.db
+        .query('xpHistory')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const xpEarned = xpHistory
+        .filter((event) => event.createdAt >= weekStartMs && event.createdAt <= weekEndMs)
+        .reduce((sum, event) => sum + event.amount, 0);
+
+      const summary = `Week recap (${weekStartDate} → ${weekEndDate}): ${completedTasks} tasks completed, ${habitCompletionRate}% habit completion, ${focusMinutes} focus minutes, ${xpEarned} XP earned.`;
+
+      await ctx.db.insert('insights', {
+        userId: user._id,
+        type: 'weekly_summary',
+        title: 'Your Weekly AI Summary',
+        content: summary,
+        confidenceScore: 0.92,
+        metadata: {
+          weekStartDate,
+          weekEndDate,
+          completedTasks,
+          habitCompletionRate,
+          focusMinutes,
+          xpEarned,
+        },
+        viewed: false,
+        dismissed: false,
+        actionTaken: false,
+        expiresAt: now + 14 * 24 * 60 * 60 * 1000,
+        createdAt: now,
+      });
+
+      generated += 1;
+    }
+
+    return generated;
   },
 });

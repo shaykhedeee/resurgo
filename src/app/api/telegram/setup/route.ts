@@ -60,6 +60,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (action === 'status') {
+    if (!isAdmin) return NextResponse.json({ error: 'Admin secret required' }, { status: 401 });
     const [botInfo, webhookInfo] = await Promise.all([
       tgCall('getMe'),
       tgCall('getWebhookInfo'),

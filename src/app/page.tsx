@@ -59,10 +59,11 @@ export const metadata: Metadata = {
     siteName: 'Resurgo',
     images: [
       {
-        url: `${APP_URL}/og-image.png`,
+        url: `${APP_URL}/og-image.svg`,
         width: 1200,
         height: 630,
         alt: 'Resurgo dashboard showing tasks, planning, focus sessions, and AI assistance',
+        type: 'image/svg+xml',
       },
     ],
     locale: 'en_US',
@@ -72,7 +73,7 @@ export const metadata: Metadata = {
     title: 'Resurgo — AI Productivity Assistant',
     description:
       'Turn mental clutter into a clear plan. Tasks, focus, habits, AI guidance, and reviews in one system.',
-    images: [`${APP_URL}/og-image.png`],
+    images: [`${APP_URL}/og-image.svg`],
     creator: '@resurgolife',
     site: '@resurgolife',
   },
@@ -171,7 +172,7 @@ const softwareSchema = {
       description: 'Pay once, use forever. All future updates included. Founding member badge.',
     },
   ],
-  screenshot: `${APP_URL}/og-image.png`,
+  screenshot: `${APP_URL}/og-image.svg`,
   softwareVersion: '1.4',
   releaseNotes: `${APP_URL}/changelog`,
   datePublished: '2024-01-01',

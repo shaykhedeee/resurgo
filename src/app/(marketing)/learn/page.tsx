@@ -5,7 +5,22 @@ import { TermLinkButton } from '@/components/ui/TermButton';
 export const metadata: Metadata = {
   title: 'Learn — Productivity Glossary | RESURGO',
   description: 'Learn productivity and habit-building concepts through practical, plain-language explainers linked to real execution.',
+  keywords: [
+    'productivity glossary', 'habit building concepts', 'productivity terms', 'goal setting glossary',
+    'habit tracker explained', 'productivity learning', 'Resurgo learn',
+  ],
   alternates: { canonical: '/learn' },
+  openGraph: {
+    title: 'Productivity Glossary — Resurgo Learn',
+    description: 'Practical explainers for productivity and habit-building concepts, linked to real execution in Resurgo.',
+    type: 'website',
+    url: 'https://resurgo.life/learn',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Productivity Glossary — Resurgo',
+    description: 'Practical explainers for productivity and habit-building concepts.',
+  },
 };
 
 export default async function LearnIndexPage() {

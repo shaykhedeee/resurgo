@@ -12,14 +12,44 @@ export async function generateStaticParams() {
   return pages.map((page) => ({ slug: page.slug }));
 }
 
+const SLUG_KEYWORDS: Record<string, string[]> = {
+  adhd: ['best productivity app for ADHD 2026', 'ADHD daily planner app', 'ADHD goal tracker app', 'productivity system for ADHD adults', 'habit tracker for ADHD brains'],
+  solopreneurs: ['productivity app for solopreneurs', 'AI goal tracker for solopreneurs', 'habit tracker solo founder'],
+  'indie-hackers': ['productivity app indie hacker', 'goal tracker indie founder', 'habit system maker'],
+  'freelance-developers': ['habit tracker for freelancers', 'AI productivity app freelance developer', 'freelance goal system'],
+  'content-creators': ['productivity app for content creators', 'content creator habit tracker', 'AI coach for creators'],
+  'digital-nomads': ['habit tracker digital nomad', 'productivity app remote worker', 'AI coach nomads'],
+};
+
 export async function generateMetadata({ params }: UseCaseProps): Promise<Metadata> {
   const { slug } = await params;
   const page = await getUseCaseBySlug(slug);
   if (!page) return {};
+
+  const title = `The Best Habit Tracker for ${page.persona} | RESURGO`;
+  const description = page.summary;
+  const url = `https://resurgo.life/use-cases/${slug}`;
+  const keywords = SLUG_KEYWORDS[slug] ?? [`habit tracker for ${page.persona}`, `productivity app ${page.persona}`, 'AI life coach'];
+
   return {
-    title: `The Best Habit Tracker for ${page.persona} | RESURGO`,
-    description: page.summary,
+    title,
+    description,
+    keywords,
     alternates: { canonical: `/use-cases/${slug}` },
+    openGraph: {
+      title,
+      description,
+      url,
+      siteName: 'RESURGO',
+      type: 'article',
+      images: [{ url: 'https://resurgo.life/og-image.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['https://resurgo.life/og-image.png'],
+    },
   };
 }
 

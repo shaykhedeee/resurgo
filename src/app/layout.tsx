@@ -4,7 +4,7 @@ import Script from 'next/script';
 import './globals.css';
 import '@/lib/env'; // Env validation — runs at startup (server-side)
 import { ThemeProvider } from '@/components/ThemeProvider';
-import { GoogleAnalytics } from '@/lib/analytics';
+import { GoogleAnalytics, MicrosoftClarity } from '@/lib/analytics';
 import { MetaPixel } from '@/components/MetaPixel';
 import { CustomCursor } from '@/components/Cursor';
 import { ErrorTrackingInit } from '@/components/ErrorTrackingInit';
@@ -13,6 +13,7 @@ import ConvexClientProvider from '@/components/ConvexClientProvider';
 import ClerkProviderWrapper from '@/components/ClerkProviderWrapper';
 import { CookieConsent } from '@/components/CookieConsent';
 import OfflineSyncProvider from '@/components/OfflineSyncProvider';
+import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { MARKETING_SOCIAL_URLS } from '@/lib/marketing/social-links';
 
 
@@ -465,6 +466,16 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
+        {/* DNS Prefetch & Preconnect for critical third-party origins (improves LCP) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Convex — primary data connection (auth + all app data) */}
+        {process.env.NEXT_PUBLIC_CONVEX_URL && (
+          <link rel="preconnect" href={process.env.NEXT_PUBLIC_CONVEX_URL} />
+        )}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
         <link rel="icon" type="image/svg+xml" href="/icons/icon.svg" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         {/* Font loaded via next/font - no render-blocking link needed */}
@@ -548,6 +559,12 @@ export default function RootLayout({
 
         {/* Google Analytics */}
         <GoogleAnalytics />
+
+        {/* Microsoft Clarity (session replay + heatmaps) */}
+        <MicrosoftClarity />
+
+        {/* Core Web Vitals → GA4 */}
+        <WebVitalsReporter />
 
         {/* Meta Pixel (Facebook) — Conversion Tracking */}
         <MetaPixel />

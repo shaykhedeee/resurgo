@@ -21,7 +21,7 @@ Write-Host ""
 
 # Production environment variables (with the ones provided by user)
 $envVars = @(
-    @{ key = "RESEND_API_KEY"; value = "re_7gMehfmx_4yGwYArG2LmCFfWq9SMnMzmf"; description = "Resend email API key" }
+    @{ key = "RESEND_API_KEY"; value = "<SET_FROM_RESEND_DASHBOARD>"; description = "Resend email API key" }
     @{ key = "RESEND_FROM_EMAIL"; value = "Resurgo <noreply@resurgo.life>"; description = "Resend from email" }
     @{ key = "EMAIL_INTERNAL_SECRET"; value = "resurgo-email-internal-secret"; description = "Internal email API secret (change this!)" }
 )
@@ -37,9 +37,9 @@ Write-Host "`n🔗 UptimeRobot Configuration" -ForegroundColor Cyan
 Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 Write-Host ""
 Write-Host "UptimeRobot API Keys Provided:" -ForegroundColor Magenta
-Write-Host "  Main API Key: u3344698-2d524904b7d148634b0a406a" -ForegroundColor Green
-Write-Host "  Read-Only Key: ur3344698-71374e8890c90c189a400830" -ForegroundColor Green
-Write-Host "  Monitor API Key: m802469450-022b656ca4ac87708d715c5f" -ForegroundColor Green
+Write-Host "  Main API Key: <SET_UPTIMEROBOT_API_KEY>" -ForegroundColor Green
+Write-Host "  Read-Only Key: <SET_UPTIMEROBOT_READONLY_KEY>" -ForegroundColor Green
+Write-Host "  Monitor API Key: <SET_UPTIMEROBOT_MONITOR_KEY>" -ForegroundColor Green
 Write-Host ""
 Write-Host "Create UptimeRobot Monitor:" -ForegroundColor Magenta
 Write-Host "  1. Go to https://uptimerobot.com/dashboard" -ForegroundColor Gray

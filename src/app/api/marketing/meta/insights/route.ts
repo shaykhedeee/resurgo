@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error('[Meta Insights GET]', error);
     return NextResponse.json(
-      { error: (error as Error).message },
+      { error: 'Failed to fetch insights' },
       { status: 500 }
     );
   }

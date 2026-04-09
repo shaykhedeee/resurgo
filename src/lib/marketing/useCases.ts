@@ -109,6 +109,31 @@ const PERSONA_OVERRIDES: Partial<Record<string, Partial<Omit<UseCasePage, 'slug'
       role: 'YouTube creator, 45k subscribers',
     },
   },
+  adhd: {
+    summary: 'Standard productivity apps are designed for neurotypical brains. ADHD needs low-friction systems with immediate feedback, built-in recovery, and an AI coach that does not add guilt. Resurgo was designed for exactly this.',
+    pains: [
+      'White-page paralysis -- knowing what to do but unable to start without a trigger',
+      'Task-switching every 20 minutes because nothing holds attention long enough',
+      'Missing streaks by one day and abandoning the whole system entirely',
+      'Forgetting commitments made yesterday because working memory does not retain them',
+    ],
+    solutions: [
+      'Brain dump everything in one go -- AI instantly sorts tasks, habits, goals, and ideas so nothing stays in your head',
+      'Break any goal into the single smallest possible next step -- no ambiguity, no activation energy required',
+      'Streak freeze tokens let you protect a streak across missed days so one bad day does not erase momentum',
+      'Marcus or Aurora coach adapts tone to your current energy -- no lecture, just the next move',
+    ],
+    sampleSetup: [
+      'Morning check-in (60 seconds): energy level + one word mood -- AI adjusts your task list to match',
+      'Three micro-habits anchored to existing triggers: morning coffee, lunch, before bed',
+      'Focus sessions in 25-minute blocks with 5-minute resets -- no 90-minute marathons',
+      'End-of-day brain dump: everything still in your head into Resurgo in 2 minutes',
+    ],
+    testimonial: {
+      quote: '"I have tried every productivity app for ADHD. Most of them are still productivity apps with an ADHD sticker on them. Resurgo actually adjusts to how my brain works. The brain dump feature alone is worth the whole app."',
+      role: 'ADHD adult, software developer',
+    },
+  },
   'digital-nomads': {
     summary: 'Digital nomads face a unique productivity challenge: time zones shift, environments change, routines break constantly. Resurgo adapts with you -- keeping the system stable when the location is not.',
     pains: [

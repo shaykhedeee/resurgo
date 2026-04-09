@@ -7,8 +7,24 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Security — Resurgo',
-  description: 'How Resurgo protects your data: authentication, encryption, privacy, and compliance.',
+  title: 'Security & Data Protection — Resurgo',
+  description: 'How Resurgo protects your data: Clerk authentication, AES-256 encryption, GDPR compliance, SOC 2-grade infrastructure, and privacy-first architecture.',
+  keywords: [
+    'Resurgo security', 'data protection', 'privacy', 'encryption', 'GDPR', 'Clerk authentication',
+    'productivity app security', 'secure habit tracker', 'data compliance',
+  ],
+  alternates: { canonical: 'https://resurgo.life/security' },
+  openGraph: {
+    title: 'Security & Data Protection — Resurgo',
+    description: 'How Resurgo protects your data: authentication, encryption, privacy, and compliance.',
+    type: 'website',
+    url: 'https://resurgo.life/security',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Resurgo Security',
+    description: 'How Resurgo protects your data: authentication, encryption, privacy, and compliance.',
+  },
 };
 
 interface SecuritySection {
@@ -115,7 +131,7 @@ export default function SecurityPage() {
                 </span>
                 <h2 className="font-pixel text-[0.6rem] tracking-widest text-zinc-200">{section.title}</h2>
               </div>
-              <span className="font-terminal text-xs text-zinc-600 hidden sm:block">// {section.subtitle}</span>
+              <span className="font-terminal text-xs text-zinc-600 hidden sm:block">{/* // */}{section.subtitle}</span>
             </div>
 
             {/* Items */}

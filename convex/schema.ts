@@ -177,6 +177,15 @@ export default defineSchema({
     )),
     nextBillingDate: v.optional(v.string()), // ISO date of next renewal
     cancelAtNextBillingDate: v.optional(v.boolean()),
+    // ── Customer Engagement Score (0-100, recomputed weekly) ──
+    engagementScore: v.optional(v.number()),
+    engagementBand: v.optional(v.union(
+      v.literal('power'),     // 80-100: upsell + referral
+      v.literal('active'),    // 50-79:  healthy, nurture
+      v.literal('at_risk'),   // 20-49:  win-back push + nudge
+      v.literal('churning'),  // 0-19:   urgent email + offer
+    )),
+    engagementUpdatedAt: v.optional(v.number()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })
@@ -569,7 +578,8 @@ export default defineSchema({
     description: v.string(),
     createdAt: v.number(),
   })
-    .index('by_userId', ['userId']),
+    .index('by_userId', ['userId'])
+    .index('by_userId_createdAt', ['userId', 'createdAt']),
 
   // ─────────────────────────────────────────────────────────────────────────────
   // MOOD / WELLNESS
@@ -774,6 +784,7 @@ export default defineSchema({
     highlights: v.optional(v.array(v.string())),
     areasToImprove: v.optional(v.array(v.string())),
     aiSummary: v.optional(v.string()),
+    nextWeekFocus: v.optional(v.string()),
     // ── User input ──
     userReflection: v.optional(v.string()),
     nextWeekGoals: v.optional(v.array(v.string())),
@@ -1632,4 +1643,18 @@ export default defineSchema({
   })
     .index('by_userId', ['userId'])
     .index('by_userId_emailType', ['userId', 'emailType']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
+  // CANCELLATION SURVEYS — Churn insights from departing users
+  // ─────────────────────────────────────────────────────────────────────────────
+  cancellationSurveys: defineTable({
+    userId: v.id('users'),
+    reason: v.string(),
+    otherReason: v.optional(v.string()),
+    feedback: v.optional(v.string()),
+    wouldReturn: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_reason', ['reason']),
 });

@@ -5,7 +5,22 @@ import { TermLinkButton } from '@/components/ui/TermButton';
 export const metadata: Metadata = {
   title: 'Use Cases — The Best Habit Tracker for Your Situation | RESURGO',
   description: 'Explore persona-specific Resurgo use cases for ADHD, students, entrepreneurs, remote workers, parents, and more.',
+  keywords: [
+    'habit tracker use cases', 'best habit tracker for ADHD', 'habit tracker for students',
+    'habit tracker for entrepreneurs', 'habit tracker for remote workers', 'Resurgo use cases',
+  ],
   alternates: { canonical: '/use-cases' },
+  openGraph: {
+    title: 'Resurgo Use Cases — Best Habit Tracker for Your Situation',
+    description: 'Persona-specific habit tracker use cases for ADHD, students, entrepreneurs, remote workers, and more.',
+    type: 'website',
+    url: 'https://resurgo.life/use-cases',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Resurgo Use Cases',
+    description: 'Best habit tracker for ADHD, students, entrepreneurs, remote workers, and more.',
+  },
 };
 
 export default async function UseCasesIndexPage() {

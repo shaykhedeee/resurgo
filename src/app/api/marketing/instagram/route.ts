@@ -143,7 +143,12 @@ async function getRecentMedia(limit = 10): Promise<unknown[]> {
 }
 
 // ── GET: Status & engagement ────────────────────────────────────────────────
-export async function GET() {
+export async function GET(req: NextRequest) {
+  const adminSecret = req.headers.get('x-admin-secret');
+  if (adminSecret !== process.env.ADMIN_SECRET) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const hasToken = !!INSTAGRAM_ACCESS_TOKEN;
   const hasAccountId = !!INSTAGRAM_BUSINESS_ACCOUNT_ID;
 

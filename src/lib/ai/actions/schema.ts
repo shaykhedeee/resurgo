@@ -96,6 +96,16 @@ const LogExpenseAction = z.object({
   }),
 });
 
+// just_start: ADHD-friendly micro-task mode — one absurdly tiny action
+const JustStartAction = z.object({
+  action: z.literal('just_start'),
+  data: z.object({
+    microTask: z.string().min(1).max(200), // The tiny 1-2 minute action step
+    fullTask: z.string().max(200).optional(), // The real task they are avoiding
+    nextMicroTask: z.string().max(200).optional(), // Optional: what comes right after
+  }),
+});
+
 // Suggest requires user confirmation before executing
 const SuggestAction = z.object({
   action: z.literal('suggest'),
@@ -122,6 +132,7 @@ export const AIAction = z.discriminatedUnion('action', [
   TriggerEmergencyModeAction,
   ScheduleReminderAction,
   LogExpenseAction,
+  JustStartAction,
   SuggestAction,
 ]);
 

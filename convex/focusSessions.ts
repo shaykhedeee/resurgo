@@ -333,3 +333,27 @@ export const getById = query({
     return session;
   },
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BODY DOUBLING — Count of users actively focusing right now
+// Active = completedAt === 0 (in-progress placeholder) + started within 4 hrs
+// ─────────────────────────────────────────────────────────────────────────────
+export const getActiveFocusCount = query({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    const cutoff = Date.now() - 4 * 60 * 60 * 1000; // 4 hours ago
+
+    const activeSessions = await ctx.db
+      .query('focusSessions')
+      .filter((q: any) =>
+        q.and(
+          q.eq(q.field('completedAt'), 0),
+          q.gte(q.field('_creationTime'), cutoff)
+        )
+      )
+      .collect();
+
+    return activeSessions.length;
+  },
+});

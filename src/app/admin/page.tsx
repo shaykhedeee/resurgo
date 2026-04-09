@@ -96,7 +96,7 @@ export default async function AdminPage() {
 
   const user = await currentUser();
   const userEmail = user?.emailAddresses?.[0]?.emailAddress || '';
-  const isAuthorized = ADMIN_EMAILS.length === 0 || ADMIN_EMAILS.includes(userEmail);
+  const isAuthorized = ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(userEmail);
   if (!isAuthorized) redirect('/dashboard');
 
   const metrics = await getSystemMetrics();

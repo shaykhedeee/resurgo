@@ -25,7 +25,15 @@ const DIET_CATEGORIES: Record<string, string[]> = {
   high_protein: ['Chicken', 'Beef', 'Seafood', 'Lamb'],
 };
 
-async function fetchRandomFromCategory(category: string): Promise<any | null> {
+interface MealDBMeal {
+  idMeal: string;
+  strMeal: string;
+  strCategory?: string;
+  strMealThumb?: string;
+  strYoutube?: string;
+}
+
+async function fetchRandomFromCategory(category: string): Promise<MealDBMeal | null> {
   try {
     const res = await fetch(`${MEALDB_BASE}/filter.php?c=${encodeURIComponent(category)}`);
     const data = await res.json();
@@ -45,7 +53,7 @@ function buildMealPlan(
   goal: string,
   diet: string,
   days: number
-): Promise<any[][]> {
+): Promise<{ slot: string; meal: { id: string; name: string; category: string; thumbnail?: string; youtubeUrl?: string } | null; targetCalories: number; day: number }[][]> {
   const targetCalories = CALORIE_GOALS[goal] ?? 2000;
   const categories = DIET_CATEGORIES[diet] ?? DIET_CATEGORIES.balanced;
 

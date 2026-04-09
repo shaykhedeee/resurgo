@@ -207,7 +207,7 @@ Add the following JSON-LD schema to resurgo.life pages:
     "priceCurrency": "USD",
     "description": "Free forever tier available"
   },
-  "description": "Resurgo is an AI-powered life operating system that combines goal planning, habit tracking, focus timers, wellness tracking, and 8 specialized AI coaches to help you achieve your most ambitious goals.",
+  "description": "Resurgo is an AI-powered life operating system that combines goal planning, habit tracking, focus timers, wellness tracking, and 5 specialized AI coaches to help you achieve your most ambitious goals.",
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingValue": "4.8",
@@ -254,7 +254,7 @@ Add the following JSON-LD schema to resurgo.life pages:
     "name": "What is Resurgo?",
     "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Resurgo is an AI-powered productivity app and life operating system that helps you set goals, build habits, track focus sessions, and get personalized coaching from 8 specialized AI coaches including MARCUS (stoic mentor), AURORA (wellness coach), and TITAN (performance coach)."
+      "text": "Resurgo is an AI-powered productivity app and life operating system that helps you set goals, build habits, track focus sessions, and get personalized coaching from 5 specialized AI coaches including Marcus, Titan, Aurora, Phoenix, and Nexus."
     }
   }]
 }
@@ -266,7 +266,7 @@ Add the following JSON-LD schema to resurgo.life pages:
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Resurgo AI Coaches",
-  "description": "8 specialized AI coaches: MARCUS (stoic), AURORA (wellness), TITAN (performance), SAGE (wisdom), PHOENIX (transformation), NOVA (creativity), ORACLE (strategy), NEXUS (systems).",
+  "description": "5 specialized AI coaches: Marcus (stoic), Titan (performance), Aurora (wellness), Phoenix (resilience), Nexus (systems).",
   "brand": {
     "@type": "Brand",
     "name": "Resurgo"
@@ -295,7 +295,7 @@ Add the following JSON-LD schema to resurgo.life pages:
 **Entity Consistency Rules:**
 - Your brand name MUST be "Resurgo" everywhere — no variations like "Resurgo App" or "Resurgo.life"
 - Your description MUST be consistent. Use this exact description across all platforms:
-  > *"Resurgo is an AI-powered life operating system that combines goal planning, habit tracking, focus timers, and 8 specialized AI coaches to help ambitious people achieve their goals."*
+  > *"Resurgo is an AI-powered life operating system that combines goal planning, habit tracking, focus timers, and 5 specialized AI coaches to help ambitious people execute consistently."*
 - Your URL MUST always be `resurgo.life` (not resurgo.life/ or www.resurgo.life inconsistently)
 
 ---
@@ -789,7 +789,7 @@ Content:
 **Email 3 — Day 3:**
 ```
 Subject: Meet your AI coaches, [First Name]
-Preview: 8 coaches, each with a different superpower
+Preview: 5 coaches, each with a different superpower
 
 Content:
 - Brief intro to each coach (one line per coach)
@@ -1343,7 +1343,7 @@ Place in `src/app/layout.tsx` `<head>` section:
 ```
 🚀 [TAGLINE — max 60 chars]
 
-What if you had 8 specialized AI coaches, a habit tracker with streaks, 
+What if you had 5 specialized AI coaches, a habit tracker with streaks, 
 AI goal planning, focus timers, and wellness tracking — all in one free app?
 
 That's Resurgo.
@@ -1375,7 +1375,7 @@ We'd love your feedback and support! 🙌
 5. **Comment helpfully** on others' posts about productivity and goal-setting
 6. **Weekly launches thread:** Post in the IH "Show your product" threads
 
-**Sample Indie Hackers Post Title:** "How I tackled the ADHD productivity problem with AI: 6 months, 8 coaches, and 1000+ users"
+**Sample Indie Hackers Post Title:** "How I tackled the ADHD productivity problem with AI: 6 months, 5 coaches, and 1000+ users"
 
 ---
 
@@ -1403,7 +1403,7 @@ We'd love your feedback and support! 🙌
 **Days 8–14: Content Engine Start**
 
 4. **Publish your first 2 blog posts** (from Section 4.1 Tier 1 list)
-5. **Post to Hacker News:** "Show HN: Resurgo — An AI-powered life OS with 8 specialized coaches (free tier)"
+5. **Post to Hacker News:** "Show HN: Resurgo — An AI-powered life OS with 5 specialized coaches (free tier)"
 6. **Start Twitter thread series** on productivity topics
 7. **Answer 10 Quora questions** related to productivity/habits with genuinely helpful answers, mention Resurgo in 2–3 where directly relevant
 

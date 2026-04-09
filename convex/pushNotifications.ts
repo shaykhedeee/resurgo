@@ -90,6 +90,21 @@ export const getUsersWithPush = internalQuery({
   },
 });
 
+function getLocalHour(timezone: string | undefined): number {
+  const tz = timezone && timezone.trim() ? timezone : 'UTC';
+  try {
+    const formatted = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      hour12: false,
+      timeZone: tz,
+    }).format(new Date());
+    const parsed = Number.parseInt(formatted, 10);
+    return Number.isFinite(parsed) ? parsed : new Date().getUTCHours();
+  } catch {
+    return new Date().getUTCHours();
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // getUserFcmToken — Internal query: get a single user's FCM token by userId
 // ─────────────────────────────────────────────────────────────────────────────
@@ -258,6 +273,73 @@ export const deliverDueRemindersPush = internalAction({
         // The Telegram action already marks it, but this is a safe no-op duplicate
       } catch (err) {
         console.error(`[FCM] Failed to deliver reminder ${reminder._id}:`, err);
+      }
+    }
+
+    return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// sendMorningNudgesLocalTimePush — hourly cron fan-out at user-local 08:00
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendMorningNudgesLocalTimePush = internalAction({
+  args: {},
+  returns: v.null(),
+  handler: async (ctx) => {
+    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    if (!serviceAccountJson) return null;
+
+    const users = await ctx.runQuery(internal.pushNotifications.getUsersWithPush, {});
+    const { api } = await import('./_generated/api');
+
+    for (const user of users) {
+      if (getLocalHour(user.timezone) !== 8) continue;
+
+      try {
+        const summary = await ctx.runQuery(api.telegram.getUserSummary, { userId: user._id });
+        const topThree = summary.topTasks.slice(0, 3).map((t) => `• ${t.title}`).join('\n');
+        const fallback = '• Pick one meaningful task and start for 10 minutes.';
+
+        await ctx.runAction(internal.pushNotifications.sendPushNotification, {
+          fcmToken: user.fcmToken,
+          title: `☀️ Morning nudge, ${user.name.split(' ')[0]}`,
+          body: `Top 3 for today:\n${topThree || fallback}`,
+          data: { type: 'morning_nudge', route: '/dashboard' },
+        });
+      } catch (err) {
+        console.error(`[FCM] Morning nudge failed for user ${user._id}:`, err);
+      }
+    }
+
+    return null;
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// sendEveningPromptsLocalTimePush — hourly cron fan-out at user-local 20:00
+// ─────────────────────────────────────────────────────────────────────────────
+export const sendEveningPromptsLocalTimePush = internalAction({
+  args: {},
+  returns: v.null(),
+  handler: async (ctx) => {
+    const serviceAccountJson = process.env.FIREBASE_SERVICE_ACCOUNT_JSON;
+    if (!serviceAccountJson) return null;
+
+    const users = await ctx.runQuery(internal.pushNotifications.getUsersWithPush, {});
+
+    for (const user of users) {
+      if (getLocalHour(user.timezone) !== 20) continue;
+
+      try {
+        await ctx.runAction(internal.pushNotifications.sendPushNotification, {
+          fcmToken: user.fcmToken,
+          title: '🌙 Evening prompt',
+          body: 'Quick debrief: what went well, what blocked you, and what is tomorrow\'s first move?',
+          data: { type: 'evening_prompt', route: '/dashboard' },
+        });
+      } catch (err) {
+        console.error(`[FCM] Evening prompt failed for user ${user._id}:`, err);
       }
     }
 

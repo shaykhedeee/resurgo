@@ -76,7 +76,7 @@ export default function ContactPage() {
         <div className="mt-8 grid grid-cols-2 gap-4">
           <a href="https://t.me/ResurgoApp" target="_blank" rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 border border-zinc-800 bg-zinc-950 py-4 font-mono text-xs text-zinc-400 transition hover:bg-zinc-900 hover:text-zinc-200">
-            <span className="text-lg">✈️</span>
+            <span className="font-mono text-xs tracking-widest text-zinc-500">[TG]</span>
             <span>TELEGRAM</span>
           </a>
           <a href="https://twitter.com/resurgolife" target="_blank" rel="noopener noreferrer"

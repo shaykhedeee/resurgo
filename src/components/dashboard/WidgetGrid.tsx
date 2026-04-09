@@ -40,6 +40,7 @@ import WaterTrackingWidget from '@/components/widgets/WaterTrackingWidget';
 import XPStatusWidget from '@/components/widgets/XPStatusWidget';
 import ActivityFeedWidget from '@/components/widgets/ActivityFeedWidget';
 import StreakHeatmapWidget from '@/components/widgets/StreakHeatmapWidget';
+import XPLeaderboardWidget from '@/components/widgets/XPLeaderboardWidget';
 
 const WIDGET_COMPONENTS: Record<string, () => ReactElement> = {
   'focus-timer':     () => <FocusTimerWidget />,
@@ -58,6 +59,7 @@ const WIDGET_COMPONENTS: Record<string, () => ReactElement> = {
   'xp-status':       () => <XPStatusWidget />,
   'activity-feed':   () => <ActivityFeedWidget />,
   'streak-heatmap':  () => <StreakHeatmapWidget />,
+  'xp-leaderboard':  () => <XPLeaderboardWidget />,
 };
 
 interface WidgetGridProps {

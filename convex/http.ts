@@ -281,15 +281,9 @@ http.route({
       const user = await ctx.runQuery(internal.users.getByClerkIdInternal, {
         clerkId: resolvedClerkId,
       });
-      if (user?.dodoCustomerId) {
-        // Only downgrade if not lifetime
-        const fullUser = await ctx.runQuery(internal.users.getByDodoCustomerIdInternal, {
-          dodoCustomerId: user.dodoCustomerId,
-        });
-        if (fullUser?.plan === 'lifetime') {
-          console.log(`[dodo-webhook] Skipping cancellation for lifetime user ${resolvedClerkId}`);
-          return;
-        }
+      if (user?.plan === 'lifetime') {
+        console.log(`[dodo-webhook] Skipping cancellation for lifetime user ${resolvedClerkId}`);
+        return;
       }
 
       await ctx.runMutation(internal.users.updatePlanFromWebhookInternal, {
@@ -322,6 +316,15 @@ http.route({
 
       if (!resolvedClerkId) {
         console.warn(`[dodo-webhook] subscription.expired: Could not resolve clerkId`);
+        return;
+      }
+
+      // Check if user is lifetime before downgrading
+      const expiredUser = await ctx.runQuery(internal.users.getByClerkIdInternal, {
+        clerkId: resolvedClerkId,
+      });
+      if (expiredUser?.plan === 'lifetime') {
+        console.log(`[dodo-webhook] Skipping expiration for lifetime user ${resolvedClerkId}`);
         return;
       }
 

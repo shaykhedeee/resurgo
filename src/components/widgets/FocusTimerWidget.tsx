@@ -6,21 +6,26 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { Play, Pause, RotateCcw, Coffee } from 'lucide-react';
+import { Play, Pause, RotateCcw, Coffee, Users } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
+import { useQuery } from 'convex/react';
+import { api } from '../../../convex/_generated/api';
 
 type Mode = 'work' | 'break';
+
+const WORK_DURATION = 25 * 60;
+const BREAK_DURATION = 5 * 60;
 
 export default function FocusTimerWidget() {
   const [mode, setMode] = useState<Mode>('work');
   const [running, setRunning] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(25 * 60); // 25 min
+  const [timeLeft, setTimeLeft] = useState(WORK_DURATION);
   const [sessions, setSessions] = useState(0);
   const [taskLabel, setTaskLabel] = useState('');
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const workDuration = 25 * 60;
-  const breakDuration = 5 * 60;
+  // Body doubling: how many users are actively focusing right now
+  const activeFocusCount = useQuery(api.focusSessions.getActiveFocusCount) ?? 0;
 
   useEffect(() => {
     if (running && timeLeft > 0) {
@@ -31,13 +36,13 @@ export default function FocusTimerWidget() {
       // Session complete
       if (mode === 'work') {
         setSessions((s) => s + 1);
-        analytics.focusSessionCompleted(Math.round(workDuration / 60));
+        analytics.focusSessionCompleted(Math.round(WORK_DURATION / 60));
         setMode('break');
-        setTimeLeft(breakDuration);
+        setTimeLeft(BREAK_DURATION);
         setRunning(false);
       } else {
         setMode('work');
-        setTimeLeft(workDuration);
+        setTimeLeft(WORK_DURATION);
         setRunning(false);
       }
     }
@@ -50,12 +55,12 @@ export default function FocusTimerWidget() {
   const reset = useCallback(() => {
     setRunning(false);
     setMode('work');
-    setTimeLeft(workDuration);
+    setTimeLeft(WORK_DURATION);
   }, []);
 
   const mins = String(Math.floor(timeLeft / 60)).padStart(2, '0');
   const secs = String(timeLeft % 60).padStart(2, '0');
-  const total = mode === 'work' ? workDuration : breakDuration;
+  const total = mode === 'work' ? WORK_DURATION : BREAK_DURATION;
   const pct = ((total - timeLeft) / total) * 100;
 
   return (
@@ -72,6 +77,17 @@ export default function FocusTimerWidget() {
           {sessions === 0 && '0 sessions'}
         </span>
       </div>
+
+      {/* Body doubling indicator */}
+      {activeFocusCount > 0 && (
+        <div className="flex items-center gap-1.5 border-b border-zinc-900 bg-zinc-900/40 px-4 py-1.5">
+          <Users className="h-3 w-3 text-emerald-500" />
+          <span className="font-terminal text-[0.65rem] text-emerald-400">
+            {activeFocusCount} {activeFocusCount === 1 ? 'person' : 'people'} focusing right now
+          </span>
+          <span className="ml-1 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
+        </div>
+      )}
 
       <div className="p-4 space-y-3">
         {/* Timer display */}
@@ -124,7 +140,7 @@ export default function FocusTimerWidget() {
               onClick={() => {
                 setRunning(false);
                 setMode('break');
-                setTimeLeft(breakDuration);
+                setTimeLeft(BREAK_DURATION);
               }}
               className="flex items-center gap-1.5 border border-zinc-800 bg-zinc-900 px-3 py-2 font-terminal text-xs text-cyan-400 transition hover:border-cyan-700"
             >

@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
   } catch (err) {
     console.error('[admin/metrics] Convex query failed:', err);
     return NextResponse.json(
-      { error: 'Failed to fetch metrics', detail: err instanceof Error ? err.message : String(err) },
+      { error: 'Failed to fetch metrics' },
       { status: 502 }
     );
   }

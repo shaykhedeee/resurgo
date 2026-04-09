@@ -13,6 +13,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { resolveLayout, WIDGET_REGISTRY, type LayoutEntry } from '@/lib/dashboard/widgetRegistry';
+import { useProgressiveDisclosure } from '@/hooks/useProgressiveDisclosure';
 import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
 import { UpsellPrompt } from '@/components/UpsellPrompt';
@@ -27,6 +28,7 @@ const OpenSenseMapWidget = dynamic(() => import('@/components/OpenSenseMapWidget
 const DailyQuote = dynamic(() => import('@/components/DailyQuote'), { ssr: false });
 const WidgetGrid = dynamic(() => import('@/components/dashboard/WidgetGrid'), { ssr: false });
 const WidgetPanel = dynamic(() => import('@/components/dashboard/WidgetPanel'), { ssr: false });
+const DiscoverMorePanel = dynamic(() => import('@/components/dashboard/DiscoverMorePanel').then(m => ({ default: m.DiscoverMorePanel })), { ssr: false });
 const MobileDashboard = dynamic(() => import('@/components/MobileDashboard'), { ssr: false });
 const QuickAddPalette = dynamic(() => import('@/components/QuickAddPalette'), { ssr: false });
 const Tutorial = dynamic(() => import('@/components/Tutorial').then(m => ({ default: m.Tutorial })), { ssr: false });
@@ -121,6 +123,24 @@ export default function DashboardPage() {
   const savedLayout = useQuery(api.users.getDashboardLayout);
   const saveLayoutMutation = useMutation(api.users.saveDashboardLayout);
   const layout = useMemo(() => resolveLayout(savedLayout ?? null), [savedLayout]);
+
+  // ── Progressive disclosure: tier-based defaults for fresh accounts ──
+  const disclosure = useProgressiveDisclosure({
+    createdAt: (user as unknown as { _creationTime?: number })?._creationTime,
+    currentStreak: (gamificationProfile as unknown as { currentStreak?: number })?.currentStreak ?? 0,
+    habitCount: (habits ?? []).length,
+    goalCount: (goals ?? []).length,
+    taskCount: (tasks ?? []).length,
+    hasCustomLayout: savedLayout !== null && savedLayout !== undefined,
+  });
+  // Apply tier filter only for newcomers who haven't yet touched their layout
+  const displayLayout = useMemo(() => {
+    if (savedLayout !== null && savedLayout !== undefined) return layout;
+    if (disclosure.tier !== 'newcomer') return layout;
+    return layout.map((e) => ({ ...e, visible: disclosure.defaultVisibleWidgets.has(e.id) }));
+  }, [layout, savedLayout, disclosure.tier, disclosure.defaultVisibleWidgets]);
+
+  const [hintDismissed, setHintDismissed] = useState(false);
 
   const handleReorder = useCallback(
     (newLayout: LayoutEntry[]) => {
@@ -756,15 +776,36 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* -- NEWCOMER HINT -- */}
+      {disclosure.hintText && !savedLayout && !hintDismissed && (
+        <div className="mb-4 flex items-center justify-between border border-orange-800/50 bg-orange-950/20 px-4 py-3">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-4 w-4 shrink-0 text-orange-400" />
+            <p className="font-terminal text-sm text-orange-300">{disclosure.hintText}</p>
+          </div>
+          <button
+            onClick={() => setHintDismissed(true)}
+            className="ml-4 shrink-0 font-terminal text-xs text-zinc-500 hover:text-zinc-300"
+          >
+            dismiss
+          </button>
+        </div>
+      )}
+
       {/* -- CUSTOMISABLE WIDGET GRID -- */}
       <div className="mb-6">
         <WidgetGrid
-          layout={layout}
+          layout={displayLayout}
           editMode={editMode}
           onReorder={handleReorder}
           onHide={handleHideWidget}
         />
       </div>
+
+      {/* -- DISCOVER MORE (locked features for newcomers/explorers) -- */}
+      {disclosure.tier !== 'builder' && (
+        <DiscoverMorePanel tier={disclosure.tier} />
+      )}
 
       {/* Widget customisation panel */}
       <WidgetPanel

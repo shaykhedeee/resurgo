@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 const FEATURES = [
   {
     category: 'GOAL_SYSTEM',
-    icon: '🎯',
+    icon: '◎',
     features: [
       { name: 'AI Goal Decomposition', desc: 'Enter a goal and AI creates milestones, weekly targets, and daily tasks automatically' },
       { name: 'Progress Visualization', desc: 'Real-time progress bars, completion percentages, and streak tracking' },
@@ -35,7 +35,7 @@ const FEATURES = [
   },
   {
     category: 'HABIT_BUILDER',
-    icon: '🔁',
+    icon: '↺',
     features: [
       { name: 'Daily Habit Tracking', desc: 'Check off habits with one tap and build unbreakable consistency streaks' },
       { name: 'Habit Stacking', desc: 'Chain habits together using Atomic Habits principles for compound behavior change' },
@@ -45,7 +45,7 @@ const FEATURES = [
   },
   {
     category: 'AI_COACHING',
-    icon: '🤖',
+    icon: '◈',
     features: [
       { name: '5 AI Coaches', desc: 'Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), Nexus (Integration Engine). Marcus & Titan free. Pro unlocks all 5. Each coach creates tasks, goals, habits & plans directly from chat.' },
       { name: 'Context-Aware Intelligence', desc: 'Your coach knows your real goals, tasks, habits, and streaks — delivering hyper-personalized advice based on actual data' },
@@ -55,7 +55,7 @@ const FEATURES = [
   },
   {
     category: 'FOCUS_ENGINE',
-    icon: '⏱️',
+    icon: '▶',
     features: [
       { name: 'Multiple Timer Modes', desc: 'Pomodoro 25/5, Deep Work 90 min, Flowtime (flexible), and fully custom timers' },
       { name: 'Distraction Logging', desc: 'Track and categorize interruptions during sessions so you can eliminate them' },
@@ -65,7 +65,7 @@ const FEATURES = [
   },
   {
     category: 'HEALTH_SUITE',
-    icon: '💚',
+    icon: '◉',
     features: [
       { name: 'Mood Tracking', desc: 'Log daily mood scores with tags, notes, and track emotional patterns over time' },
       { name: 'Journal', desc: 'Structured journaling with 4 types: daily reflection, gratitude, planning, and free-form' },
@@ -75,7 +75,7 @@ const FEATURES = [
   },
   {
     category: 'GAMIFICATION',
-    icon: '🏆',
+    icon: '◆',
     features: [
       { name: 'XP and Leveling', desc: 'Earn experience points for completing habits, tasks, and milestones. Level up over time' },
       { name: 'Achievements', desc: 'Unlock badges for milestones like 7-day streaks, 30-day streaks, and completing goals' },
@@ -85,7 +85,7 @@ const FEATURES = [
   },
   {
     category: 'INTEGRATIONS',
-    icon: '🔌',
+    icon: '⇌',
     features: [
       { name: 'Telegram Bot', desc: 'Quick habit check-ins, reminders, and progress updates directly from Telegram' },
       { name: 'Webhooks', desc: 'Send real-time events to any URL when habits complete or goals are reached' },
