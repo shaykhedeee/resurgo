@@ -17,8 +17,14 @@ interface ErrorProps {
 export default function Error({ error, reset }: ErrorProps) {
   const [errorId, setErrorId] = useState<string>('');
   const [copied, setCopied] = useState(false);
+  const [isAuthRoute, setIsAuthRoute] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname;
+      setIsAuthRoute(path.startsWith('/sign-in') || path.startsWith('/sign-up'));
+    }
+
     // Capture and log the error
     const id = captureError(error, {
       digest: error.digest,
@@ -54,13 +60,19 @@ export default function Error({ error, reset }: ErrorProps) {
         <div className="mb-6 border border-zinc-900 bg-zinc-950">
           <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2">
             <span className="h-1.5 w-1.5 rounded-full bg-red-600" />
-            <span className="font-mono text-xs tracking-widest text-red-600">RESURGO_OS :: RUNTIME_EXCEPTION</span>
+            <span className="font-mono text-xs tracking-widest text-red-600">
+              {isAuthRoute ? 'RESURGO_OS :: AUTH_RUNTIME_EXCEPTION' : 'RESURGO_OS :: RUNTIME_EXCEPTION'}
+            </span>
           </div>
           <div className="px-4 py-4">
             <p className="font-mono text-xs tracking-widest text-zinc-400">FAULT_HANDLER v2.1.0</p>
-            <h1 className="mt-1 font-mono text-xl font-bold tracking-tight text-zinc-100">UNHANDLED_ERROR_DETECTED</h1>
+            <h1 className="mt-1 font-mono text-xl font-bold tracking-tight text-zinc-100">
+              {isAuthRoute ? 'AUTH_COMPONENT_LOAD_FAILED' : 'UNHANDLED_ERROR_DETECTED'}
+            </h1>
             <p className="mt-1 font-mono text-xs text-zinc-400">
-              EXCEPTION_LOGGED :: DATA_INTEGRITY_MAINTAINED :: RECOVERY_OPTIONS_BELOW
+              {isAuthRoute
+                ? 'AUTH_ERROR_LOGGED :: RETRY_OR_RETURN_HOME'
+                : 'EXCEPTION_LOGGED :: DATA_INTEGRITY_MAINTAINED :: RECOVERY_OPTIONS_BELOW'}
             </p>
           </div>
         </div>

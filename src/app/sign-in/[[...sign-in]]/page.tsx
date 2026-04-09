@@ -1,5 +1,12 @@
 import Link from 'next/link';
 import { SignIn } from '@clerk/nextjs';
+import { AuthRuntimeBoundary } from '@/components/AuthRuntimeBoundary';
+
+const hasValidClerkKey =
+  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== 'YOUR_PUBLISHABLE_KEY' &&
+  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') &&
+  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
 // Inline-style approach ensures Clerk elements are visible regardless of
 // Tailwind JIT purging or CSS specificity battles.
@@ -134,6 +141,27 @@ const clerkAppearance = {
 };
 
 export default function Page() {
+  if (!hasValidClerkKey) {
+    return (
+      <main className="relative flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-10 overflow-hidden">
+        <div className="w-full max-w-lg rounded-2xl border border-red-900/50 bg-red-950/15 p-6">
+          <p className="font-mono text-xs tracking-widest text-red-400">AUTH_CONFIG_ERROR</p>
+          <h1 className="mt-2 text-xl font-semibold text-zinc-100">Sign-in is temporarily unavailable</h1>
+          <p className="mt-3 text-sm leading-relaxed text-zinc-300">
+            Clerk is not configured correctly in this deployment. Add a valid
+            <code className="mx-1 rounded bg-black/40 px-1.5 py-0.5 text-zinc-100">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</code>
+            and redeploy.
+          </p>
+          <div className="mt-5">
+            <Link href="/" className="inline-flex items-center rounded-md border border-zinc-700 px-3 py-2 text-sm text-zinc-200 hover:bg-zinc-900">
+              Back to home
+            </Link>
+          </div>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-10 overflow-hidden">
       {/* Background glow */}
@@ -176,13 +204,15 @@ export default function Page() {
           </div>
 
           <div className="p-6">
-            <SignIn
-              routing="path"
-              path="/sign-in"
-              signUpUrl="/sign-up"
-              fallbackRedirectUrl="/dashboard"
-              appearance={clerkAppearance}
-            />
+            <AuthRuntimeBoundary mode="sign-in">
+              <SignIn
+                routing="path"
+                path="/sign-in"
+                signUpUrl="/sign-up"
+                fallbackRedirectUrl="/dashboard"
+                appearance={clerkAppearance}
+              />
+            </AuthRuntimeBoundary>
 
             {/* Help note */}
             <p className="mt-4 text-[11px] leading-relaxed text-zinc-600 border-t border-zinc-800 pt-3">

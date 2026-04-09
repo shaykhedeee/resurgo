@@ -16,10 +16,14 @@ const signInFallbackRedirectUrl =
   process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL || '/dashboard';
 const signUpFallbackRedirectUrl =
   process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL || '/dashboard';
+const isPlaceholderKey =
+  !publishableKey ||
+  /REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(publishableKey);
 const hasValidKey =
   publishableKey &&
   publishableKey !== 'YOUR_PUBLISHABLE_KEY' &&
-  publishableKey.startsWith('pk_');
+  publishableKey.startsWith('pk_') &&
+  !isPlaceholderKey;
 
 export default function ClerkProviderWrapper({
   children,

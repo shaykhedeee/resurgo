@@ -9,7 +9,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Id } from '../../../../convex/_generated/dataModel';
 import { useStoreUser } from '@/hooks/useStoreUser';
-import { useState, useMemo, useCallback, useEffect } from 'react';
+import { useState, useMemo, useCallback, useEffect, Component, ReactNode } from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { resolveLayout, WIDGET_REGISTRY, type LayoutEntry } from '@/lib/dashboard/widgetRegistry';
@@ -83,6 +83,40 @@ function streakBadge(days: number): { emoji: string; color: string; label?: stri
   if (days >= 7) return { emoji: '🔥', color: 'text-amber-600', label: '7d+' };
   if (days > 0) return { emoji: '🔥', color: 'text-zinc-500' };
   return { emoji: '', color: 'text-zinc-700' };
+}
+
+class WidgetErrorBoundary extends Component<
+  { name: string; children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { name: string; children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.error(`[DashboardWidget:${this.props.name}]`, error);
+  }
+
+  render() {
+    if (!this.state.hasError) return this.props.children;
+    return (
+      <div className="rounded border border-red-900/50 bg-red-950/20 p-4">
+        <p className="font-pixel text-[0.45rem] tracking-widest text-red-400">WIDGET_RECOVERY_MODE</p>
+        <p className="mt-2 font-terminal text-sm text-zinc-200">
+          {this.props.name} is temporarily unavailable. The rest of your dashboard is still active.
+        </p>
+      </div>
+    );
+  }
+}
+
+function SafeWidget({ name, children }: { name: string; children: ReactNode }) {
+  return <WidgetErrorBoundary name={name}>{children}</WidgetErrorBoundary>;
 }
 
 export default function DashboardPage() {
@@ -209,7 +243,12 @@ export default function DashboardPage() {
   }, [recentCheckIns]);
 
   useEffect(() => {
-    if (!localStorage.getItem('resurgo-tutorial-completed')) {
+    try {
+      if (!localStorage.getItem('resurgo-tutorial-completed')) {
+        setShowTutorial(true);
+      }
+    } catch (error) {
+      console.warn('[Dashboard] Tutorial storage unavailable:', error);
       setShowTutorial(true);
     }
   }, []);
@@ -221,10 +260,15 @@ export default function DashboardPage() {
     const MILESTONES = [7, 21, 30, 66, 100];
     const hit = MILESTONES.find(m => best >= m);
     if (hit) {
-      const key = `resurgo_streak_milestone_${hit}`;
-      if (!sessionStorage.getItem(key)) {
+      try {
+        const key = `resurgo_streak_milestone_${hit}`;
+        if (!sessionStorage.getItem(key)) {
+          analytics.streakMilestone(hit);
+          sessionStorage.setItem(key, '1');
+        }
+      } catch (error) {
+        console.warn('[Dashboard] Session storage unavailable:', error);
         analytics.streakMilestone(hit);
-        sessionStorage.setItem(key, '1');
       }
     }
   }, [habits]);
@@ -355,7 +399,9 @@ export default function DashboardPage() {
       )}
       {/* ── Mobile: full native-like tabbed dashboard ── */}
       <div className="block md:hidden">
-        <MobileDashboard />
+        <SafeWidget name="Mobile Dashboard">
+          <MobileDashboard />
+        </SafeWidget>
       </div>
 
       {/* ── Desktop: original full dashboard ── */}
@@ -544,7 +590,9 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick Add Command Palette */}
-      <QuickAddPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <SafeWidget name="Quick Add Palette">
+        <QuickAddPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      </SafeWidget>
 
       {/* -- YOUR FOCUS: #1 priority task banner -- */}
       {openTasks.length > 0 && (
@@ -586,15 +634,17 @@ export default function DashboardPage() {
 
       {showMorningCheckIn && !morningDone && (
         <div className="mb-6">
-          <MorningCheckIn
-            userName={user.name?.split(' ')[0]}
-            todayHabits={activeHabits.slice(0, 5).map(h => h.title)}
-            topTasks={openTasks.slice(0, 3).map(t => t.title)}
-            onComplete={() => {
-              setCheckInJustCompleted(true);
-              setShowMorningCheckIn(false);
-            }}
-          />
+          <SafeWidget name="Morning Check-In">
+            <MorningCheckIn
+              userName={user.name?.split(' ')[0]}
+              todayHabits={activeHabits.slice(0, 5).map(h => h.title)}
+              topTasks={openTasks.slice(0, 3).map(t => t.title)}
+              onComplete={() => {
+                setCheckInJustCompleted(true);
+                setShowMorningCheckIn(false);
+              }}
+            />
+          </SafeWidget>
         </div>
       )}
 
@@ -614,15 +664,17 @@ export default function DashboardPage() {
 
       {showEveningDebrief && !eveningDone && (
         <div className="mb-6">
-          <EveningDebrief
-            userName={user.name?.split(' ')[0]}
-            tasksCompleted={todayCheckIn?.tasksCompleted}
-            habitsCompleted={todayCheckIn?.habitsCompleted}
-            onComplete={() => {
-              setDebriefJustCompleted(true);
-              setShowEveningDebrief(false);
-            }}
-          />
+          <SafeWidget name="Evening Debrief">
+            <EveningDebrief
+              userName={user.name?.split(' ')[0]}
+              tasksCompleted={todayCheckIn?.tasksCompleted}
+              habitsCompleted={todayCheckIn?.habitsCompleted}
+              onComplete={() => {
+                setDebriefJustCompleted(true);
+                setShowEveningDebrief(false);
+              }}
+            />
+          </SafeWidget>
         </div>
       )}
 
@@ -794,27 +846,33 @@ export default function DashboardPage() {
 
       {/* -- CUSTOMISABLE WIDGET GRID -- */}
       <div className="mb-6">
-        <WidgetGrid
-          layout={displayLayout}
-          editMode={editMode}
-          onReorder={handleReorder}
-          onHide={handleHideWidget}
-        />
+        <SafeWidget name="Widget Grid">
+          <WidgetGrid
+            layout={displayLayout}
+            editMode={editMode}
+            onReorder={handleReorder}
+            onHide={handleHideWidget}
+          />
+        </SafeWidget>
       </div>
 
       {/* -- DISCOVER MORE (locked features for newcomers/explorers) -- */}
       {disclosure.tier !== 'builder' && (
-        <DiscoverMorePanel tier={disclosure.tier} />
+        <SafeWidget name="Discover More">
+          <DiscoverMorePanel tier={disclosure.tier} />
+        </SafeWidget>
       )}
 
       {/* Widget customisation panel */}
-      <WidgetPanel
-        open={panelOpen}
-        layout={layout}
-        onToggle={handleToggleWidget}
-        onReset={handleResetLayout}
-        onClose={() => setPanelOpen(false)}
-      />
+      <SafeWidget name="Widget Panel">
+        <WidgetPanel
+          open={panelOpen}
+          layout={layout}
+          onToggle={handleToggleWidget}
+          onReset={handleResetLayout}
+          onClose={() => setPanelOpen(false)}
+        />
+      </SafeWidget>
 
       <div className="mb-3 flex items-center justify-between">
         <div>
@@ -828,17 +886,23 @@ export default function DashboardPage() {
 
       {/* -- WEATHER WIDGET -- */}
       <div className="mb-6">
-        <WeatherWidget />
+        <SafeWidget name="Weather Widget">
+          <WeatherWidget />
+        </SafeWidget>
       </div>
 
       {/* -- ENVIRONMENT MAP (OpenSenseMap + location) -- */}
       <div className="mb-6">
-        <OpenSenseMapWidget />
+        <SafeWidget name="OpenSenseMap Widget">
+          <OpenSenseMapWidget />
+        </SafeWidget>
       </div>
 
       {/* -- DAILY QUOTE -- */}
       <div className="mb-6">
-        <DailyQuote />
+        <SafeWidget name="Daily Quote">
+          <DailyQuote />
+        </SafeWidget>
       </div>
 
       {/* -- AI Morning Briefing (if done) -- */}
@@ -1069,7 +1133,9 @@ export default function DashboardPage() {
 
         {/* -- ADAPTIVE DIFFICULTY -- */}
         <section className="lg:col-span-2">
-          <AdaptiveDifficultyWidget />
+          <SafeWidget name="Adaptive Difficulty">
+            <AdaptiveDifficultyWidget />
+          </SafeWidget>
         </section>
 
         {/* -- QUICK ACTIONS -- */}
@@ -1103,10 +1169,12 @@ export default function DashboardPage() {
     </div>
       </div>{/* /hidden md:block */}
       {showTutorial && (
-        <Tutorial
-          onComplete={() => setShowTutorial(false)}
-          onSkip={() => setShowTutorial(false)}
-        />
+        <SafeWidget name="Tutorial">
+          <Tutorial
+            onComplete={() => setShowTutorial(false)}
+            onSkip={() => setShowTutorial(false)}
+          />
+        </SafeWidget>
       )}
     </>
   );

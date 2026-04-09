@@ -446,7 +446,7 @@ function LandingPageV2() {
         </section>}
 
         {/* ────────────────────── HERO ────────────────────── */}
-        <section id="system" className="relative flex h-screen min-h-[600px] items-center overflow-hidden px-4 sm:px-6 lg:px-8">
+        <section id="system" className="relative flex min-h-[calc(100svh-56px)] items-center overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:min-h-[calc(100svh-64px)] lg:px-8 lg:py-20">
           {/* Pixel dot-grid background */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.04]">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -458,36 +458,34 @@ function LandingPageV2() {
               <rect width="100%" height="100%" fill="url(#hero-pixel-grid)" />
             </svg>
           </div>
-          <div className="mx-auto max-w-7xl">
-
-
-            <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="mx-auto w-full max-w-7xl">
+            <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
               {/* Left — copy */}
-              <div>
+              <div className="max-w-2xl">
                 {/* Status badge */}
-                <div className="mb-5 flex items-center gap-3">
-                  <span className="inline-flex items-center gap-2 border border-orange-900/50 bg-orange-950/20 px-3 py-1.5">
+                <div className="mb-6 flex flex-wrap items-center gap-3">
+                  <span className="inline-flex items-center gap-2 rounded-md border border-orange-900/50 bg-orange-950/20 px-3 py-1.5">
                     <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
                     <span className="font-pixel text-[0.45rem] tracking-widest text-orange-500/90">RESURGO · LIFE OS · v2.4</span>
                   </span>
-                  <span className="hidden sm:inline-flex items-center gap-1.5 border border-green-900/40 bg-green-950/20 px-2.5 py-1">
+                  <span className="inline-flex items-center gap-1.5 rounded-md border border-green-900/40 bg-green-950/20 px-2.5 py-1">
                     <span className="h-1.5 w-1.5 rounded-full bg-green-500/80" />
                     <span className="font-terminal text-xs text-green-400/80">All systems active</span>
                   </span>
                 </div>
 
-                <h1 className="font-pixel text-3xl leading-[1.1] tracking-tight text-zinc-100 sm:text-4xl lg:text-5xl xl:text-6xl">
+                <h1 className="font-sans text-3xl font-semibold leading-[1.08] tracking-tight text-zinc-100 text-balance sm:text-4xl md:text-5xl lg:text-6xl">
                   {heroContent.headingMain}
-                  <span className="block text-orange-500">
+                  <span className="mt-1 block text-orange-500">
                     {heroContent.headingAccent}
                   </span>
                 </h1>
-                <p className="mt-6 max-w-xl font-terminal text-lg leading-relaxed text-zinc-200 sm:text-xl">
+                <p className="mt-5 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300 sm:mt-6 sm:text-xl">
                   {heroContent.subcopy}
                 </p>
 
                 {/* CTAs */}
-                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
                   <TermLinkButton href="/sign-up" variant="primary" size="lg">
                     Start Free — No Credit Card
                   </TermLinkButton>
@@ -497,11 +495,11 @@ function LandingPageV2() {
                 </div>
 
                 {/* Metrics bar */}
-                <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4 md:gap-4">
                   {METRICS.map((m) => (
-                    <div key={m.label} className="border-2 border-zinc-800 bg-black px-4 py-4 shadow-[2px_2px_0px_rgba(0,0,0,0.5)]">
-                      <p className="font-pixel text-sm text-orange-400">{m.value}</p>
-                      <p className="mt-1 font-terminal text-base text-zinc-400">{m.label}</p>
+                    <div key={m.label} className="rounded-lg bg-zinc-950/70 px-3 py-3 sm:px-4 sm:py-4">
+                      <p className="font-sans text-xl font-semibold text-orange-400 sm:text-2xl">{m.value}</p>
+                      <p className="mt-1 font-terminal text-sm text-zinc-400 sm:text-base">{m.label}</p>
                     </div>
                   ))}
                 </div>
@@ -536,20 +534,20 @@ function LandingPageV2() {
                       compact
                     />
                   }
-                  className="shadow-[4px_4px_0px_rgba(0,0,0,0.7)]"
+                  className="rounded-lg shadow-[0_12px_30px_rgba(0,0,0,0.45)]"
                 />
 
                 {/* Quick progress snapshot below terminal */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2 rounded-sm">
+                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
                     <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">HABITS</p>
                     <ProgressBar value={60} variant="blocks" color="green" size="sm" showLabel />
                   </div>
-                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2 rounded-sm">
+                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
                     <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">FOCUS</p>
                     <ProgressBar value={75} variant="ascii" color="cyan" size="sm" showLabel />
                   </div>
-                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2 rounded-sm">
+                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
                     <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">XP</p>
                     <ProgressBar value={88} variant="gradient" color="orange" size="sm" showLabel />
                   </div>
@@ -562,6 +560,17 @@ function LandingPageV2() {
                   variant="minimal"
                   className="justify-center opacity-60 mt-1"
                 />
+              </div>
+
+              {/* Mobile/tablet preview (prevents visual emptiness and clipping) */}
+              <div className="rounded-xl bg-zinc-950/60 p-4 lg:hidden">
+                <p className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">RESURGO.TERMINAL PREVIEW</p>
+                <div className="mt-3 rounded-md bg-black/70 p-3">
+                  <p className="font-terminal text-sm text-zinc-400">$ resurgo init --goal &quot;launch startup&quot;</p>
+                  <p className="mt-1 font-terminal text-sm text-green-400">→ 4 milestones generated</p>
+                  <p className="mt-1 font-terminal text-sm text-cyan-400">→ 12 weekly targets created</p>
+                  <p className="mt-1 font-terminal text-sm text-orange-400">→ Coach MARCUS assigned</p>
+                </div>
               </div>
             </div>
           </div>
@@ -599,7 +608,7 @@ function LandingPageV2() {
             </div>
 
             {/* Mission / Philosophy / Promise */}
-            <div className="mt-10 grid grid-cols-1 gap-px border-2 border-zinc-800 bg-zinc-800 sm:grid-cols-3">
+            <div className="mt-10 grid grid-cols-1 gap-px bg-zinc-900 sm:grid-cols-3">
               {[
                 {
                   label: 'MISSION',
@@ -851,7 +860,7 @@ function LandingPageV2() {
               </div>
             </div>
 
-            <div className="mt-8 grid gap-4 sm:grid-cols-3">
+            <div className="mt-8 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
               {ACCESS_TIERS.map((plan) => (
                 <article
                   key={plan.tier}

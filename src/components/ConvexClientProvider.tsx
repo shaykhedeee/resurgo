@@ -9,7 +9,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
-import { ConvexReactClient } from 'convex/react';
+import { ConvexReactClient, ConvexProviderWithAuth } from 'convex/react';
 import { useAuth } from '@clerk/nextjs';
 import React, { Component, ReactNode, Suspense, lazy } from 'react';
 
@@ -19,6 +19,15 @@ const NativePushInitializer = lazy(() => import('./NativePushInitializer'));
 // ── Convex client (safe to instantiate at module level) ──────────────────────
 const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
 const convex = convexUrl ? new ConvexReactClient(convexUrl) : null;
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const isPlaceholderClerkKey =
+  !clerkPublishableKey ||
+  /REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(clerkPublishableKey);
+const hasValidClerkKey =
+  !!clerkPublishableKey &&
+  clerkPublishableKey !== 'YOUR_PUBLISHABLE_KEY' &&
+  clerkPublishableKey.startsWith('pk_') &&
+  !isPlaceholderClerkKey;
 
 // ── Error boundary: catches Clerk/Convex init crashes during hydration ───────
 class ConvexErrorBoundary extends Component<
@@ -54,6 +63,22 @@ export default function ConvexClientProvider({
   if (!convex) {
     console.warn('[ConvexClientProvider] NEXT_PUBLIC_CONVEX_URL not set — running without Convex.');
     return <>{children}</>;
+  }
+
+  // If Clerk is unavailable/misconfigured, use plain Convex provider to avoid
+  // crashing public pages (e.g. /sign-in) with a runtime exception.
+  if (!hasValidClerkKey) {
+    console.warn('[ConvexClientProvider] Clerk key missing/invalid — running Convex without Clerk auth context.');
+    return (
+      <ConvexErrorBoundary>
+        <ConvexProviderWithAuth
+          client={convex}
+          useAuth={() => ({ isLoading: false, isAuthenticated: false })}
+        >
+          {children}
+        </ConvexProviderWithAuth>
+      </ConvexErrorBoundary>
+    );
   }
 
   return (
