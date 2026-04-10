@@ -73,7 +73,11 @@ export default function ConvexClientProvider({
       <ConvexErrorBoundary>
         <ConvexProviderWithAuth
           client={convex}
-          useAuth={() => ({ isLoading: false, isAuthenticated: false })}
+          useAuth={() => ({
+            isLoading: false,
+            isAuthenticated: false,
+            fetchAccessToken: async () => null,
+          })}
         >
           {children}
         </ConvexProviderWithAuth>
