@@ -608,7 +608,7 @@ function LandingPageV2() {
             </div>
 
             {/* Mission / Philosophy / Promise */}
-            <div className="mt-10 grid grid-cols-1 gap-px bg-zinc-900 sm:grid-cols-3">
+            <div className="mt-10 grid grid-cols-1 gap-px bg-zinc-900 md:grid-cols-3">
               {[
                 {
                   label: 'MISSION',
@@ -735,7 +735,7 @@ function LandingPageV2() {
               </p>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {CORE_BENEFITS.map((benefit) => (
                 <article
                   key={benefit.id}
