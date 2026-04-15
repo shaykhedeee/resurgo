@@ -1,7 +1,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO.life — Billing Plans
 // Central pricing + feature matrix used by billing and pricing surfaces.
-// Pricing: $4.99/mo | $29.99/yr | $49.99 lifetime (raise lifetime to $99 after 100 users)
+// Pricing: $4.99/mo | $29.99/yr | $49.99 lifetime (founding offer)
 // ═══════════════════════════════════════════════════════════════════════════════
 
 export type BillingCadence = 'monthly' | 'yearly' | 'lifetime';
@@ -22,10 +22,10 @@ export interface BillingPlan {
 }
 
 // Pricing strategy (2026):
-// - Free forever plan with 3-goal / 5-dump-per-day / 10-AI-message-per-day limits
+// - Free forever plan with 3-goal / 5-habit-per-day / 10-AI-message-per-day limits
 // - Pro Monthly $4.99/mo — accessible pricing to undercut $12-$25 competitors
 // - Pro Annual  $29.99/yr ($2.50/mo effective) — 50% discount drives conversions
-// - Lifetime    $49.99 one-time — raise to $99 after first 100 users
+// - Lifetime    $49.99 one-time — 1,000 founding spots
 // Target: ADHD users, developers, productivity-seekers priced-out of $20+/mo apps
 export const BILLING_PLANS: BillingPlan[] = [
   {
@@ -93,7 +93,7 @@ export const BILLING_PLANS: BillingPlan[] = [
     key: 'lifetime',
     title: 'Lifetime',
     badge: 'Founding Lifetime',
-    description: '1,000 founding spots at $49.99. First 100 sold — price locks in forever.',
+    description: '1,000 founding spots at $49.99 one-time. Lifetime access to all Pro features.',
     cadence: 'lifetime',
     priceUsd: 49.99,
     yearlyEquivalentUsd: 49.99,
@@ -106,8 +106,8 @@ export const BILLING_PLANS: BillingPlan[] = [
       'No recurring charges, ever',
       'Lifetime updates included',
       'Founder badge + direct founder access',
-      '1,000 founding spots only — First 100 sold',
-      'Price increases to $99 after first 100 users',
+      '1,000 founding spots only',
+      'Founding lifetime price: $49.99 one-time',
     ],
   },
 ];

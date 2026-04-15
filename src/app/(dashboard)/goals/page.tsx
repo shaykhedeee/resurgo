@@ -23,14 +23,14 @@ const GOAL_TYPES = [
 ] as const;
 
 const DOMAIN_COLORS: Record<string, string> = {
-  health: 'border-zinc-800 text-zinc-500',
-  career: 'border-zinc-800 text-zinc-500',
-  finance: 'border-zinc-800 text-zinc-500',
-  learning: 'border-zinc-800 text-zinc-500',
-  relationships: 'border-zinc-800 text-zinc-500',
-  creativity: 'border-zinc-800 text-zinc-500',
-  mindfulness: 'border-zinc-800 text-zinc-500',
-  personal_growth: 'border-orange-900 text-orange-700',
+  health: 'border-green-900/60 text-green-600',
+  career: 'border-blue-900/60 text-blue-500',
+  finance: 'border-emerald-900/60 text-emerald-600',
+  learning: 'border-violet-900/60 text-violet-500',
+  relationships: 'border-pink-900/60 text-pink-600',
+  creativity: 'border-amber-900/60 text-amber-500',
+  mindfulness: 'border-cyan-900/60 text-cyan-500',
+  personal_growth: 'border-orange-900/60 text-orange-500',
 };
 
 type GoalItem = {
@@ -120,7 +120,7 @@ export default function GoalsPage() {
                 <p className="surface-kicker">Strategic planning</p>
               </div>
               <h1 className="surface-title mt-2">Goals</h1>
-              <p className="surface-subtitle mt-2 max-w-2xl">Define what matters, keep progress visible, and reduce the odds of drifting into busywork with impressive typography.</p>
+              <p className="surface-subtitle mt-2 max-w-2xl">Define what matters. Keep progress visible. Every goal you set here drives your daily habits and tasks.</p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <span className="surface-chip">{activeGoals.length} active</span>
                 <span className="surface-chip">{completedGoals.length} completed</span>

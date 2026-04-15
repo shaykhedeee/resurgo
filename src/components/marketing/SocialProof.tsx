@@ -58,7 +58,7 @@ export default function SocialProof() {
           <span className="h-2.5 w-2.5 rounded-full bg-yellow-700" />
           <span className="h-2.5 w-2.5 rounded-full bg-green-700" />
         </div>
-        <span className="font-pixel text-[0.4rem] tracking-widest text-zinc-500">
+        <span className="font-pixel text-[0.5rem] tracking-widest text-zinc-500">
           RESURGO :: LIVE_PLATFORM_STATS
         </span>
         <div className="flex items-center gap-1.5">
@@ -66,7 +66,7 @@ export default function SocialProof() {
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-500 opacity-50" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
           </span>
-          <span className="font-pixel text-[0.35rem] tracking-widest text-green-500">LIVE</span>
+          <span className="font-pixel text-[0.5rem] tracking-widest text-green-500">LIVE</span>
         </div>
       </div>
 

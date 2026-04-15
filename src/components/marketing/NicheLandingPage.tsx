@@ -21,7 +21,7 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
 
         {/* ── HERO ── */}
         <header className="mb-12 border-b border-zinc-900 pb-10">
-          <p className="mb-3 font-pixel text-[0.5rem] tracking-widest text-orange-600">
+          <p className="mb-3 font-pixel text-[0.6rem] tracking-widest text-orange-600">
             RESURGO FOR {page.persona.toUpperCase()}
           </p>
           <h1 className="font-mono text-3xl font-bold leading-snug text-zinc-100 md:text-4xl">
@@ -33,13 +33,13 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
           <div className="mt-6 flex flex-wrap gap-3">
             <Link
               href={`/sign-up?ref=${page.slug}`}
-              className="border border-orange-700 bg-orange-600 px-5 py-2.5 font-pixel text-[0.55rem] tracking-widest text-black transition hover:bg-orange-500"
+              className="min-h-[44px] border border-orange-700 bg-orange-600 px-5 py-2.5 font-pixel text-[0.65rem] tracking-widest text-black transition hover:bg-orange-500"
             >
               {heroCta}
             </Link>
             <Link
               href="/pricing"
-              className="border border-zinc-800 px-5 py-2.5 font-pixel text-[0.55rem] tracking-widest text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-200"
+              className="min-h-[44px] border border-zinc-800 px-5 py-2.5 font-pixel text-[0.65rem] tracking-widest text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-200"
             >
               SEE PRICING
             </Link>
@@ -107,13 +107,13 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
 
         {/* ── BOTTOM CTA ── */}
         <div className="border border-orange-900/60 bg-orange-950/10 p-6 text-center">
-          <p className="mb-2 font-pixel text-[0.5rem] tracking-widest text-orange-500">FREE PLAN AVAILABLE</p>
+          <p className="mb-2 font-pixel text-[0.6rem] tracking-widest text-orange-500">FREE PLAN AVAILABLE</p>
           <p className="mb-4 font-mono text-sm text-zinc-300">
             3 goals, 5 habits, AI coaching, full dashboard. No credit card.
           </p>
           <Link
             href={`/sign-up?ref=${page.slug}`}
-            className="inline-block border border-orange-700 bg-orange-600 px-8 py-3 font-pixel text-[0.55rem] tracking-widest text-black transition hover:bg-orange-500"
+            className="inline-block min-h-[44px] border border-orange-700 bg-orange-600 px-8 py-3 font-pixel text-[0.65rem] tracking-widest text-black transition hover:bg-orange-500"
           >
             START FREE — {page.persona.toUpperCase()}
           </Link>

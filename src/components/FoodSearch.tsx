@@ -8,6 +8,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { Search, Plus, X, Loader2, ChevronDown, ChevronUp, Flame, Beef, Wheat, Droplets } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface FoodItem {
   id: string;
@@ -135,7 +136,14 @@ export function FoodSearch({ onAddMeal, className }: FoodSearchProps) {
               <div key={item.id} className="border-b border-zinc-900 last:border-0">
                 <div className="flex items-center gap-3 px-3 py-2.5 hover:bg-zinc-900/50 transition">
                   {item.image ? (
-                    <img src={item.image} alt="" className="h-8 w-8 object-cover rounded-sm flex-shrink-0 bg-zinc-800" />
+                    <Image
+                      src={item.image}
+                      alt={item.brand ? `${item.name} by ${item.brand}` : item.name}
+                      width={32}
+                      height={32}
+                      unoptimized
+                      className="h-8 w-8 object-cover rounded-sm flex-shrink-0 bg-zinc-800"
+                    />
                   ) : (
                     <div className="h-8 w-8 bg-zinc-800 flex items-center justify-center flex-shrink-0 text-xs text-zinc-600 font-mono">
                       {item.source === 'usda' ? 'FDA' : 'OFF'}

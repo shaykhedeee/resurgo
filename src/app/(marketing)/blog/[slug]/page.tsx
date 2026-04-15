@@ -10,7 +10,7 @@ import {
   HabitFormationChart,
   ProcrastinationLoopChart,
 } from '@/components/blog/PixelatedCharts';
-import { BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/blog/post-index';
+import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/blog/post-index';
 
 type FaqItem = {
   question: string;
@@ -23,6 +23,10 @@ const AUTHOR = {
   bio: 'We publish practical, evidence-informed playbooks on habits, focus, goals, and execution systems that work in real life.',
   image: '/blog/author-resurgo.svg',
 };
+
+const LAST_MODIFIED_BY_SLUG = new Map(
+  BLOG_POST_INDEX.map((post) => [post.slug, post.lastModified ?? post.date])
+);
 
 const POSTS: Record<string, {
   title: string;
@@ -3340,6 +3344,351 @@ No. Start with high-leverage habits that affect multiple outcomes.
 Aim for 80-90% consistency, not perfection.
     `,
   },
+  'beta-launch-week-productivity-system': {
+    title: 'The Beta Launch Week Productivity System for Solo Operators',
+    desc: 'A practical 7-day execution playbook for launch week: what to ship daily, what to measure, and how to avoid cognitive overload while momentum is highest.',
+    date: 'April 14, 2026',
+    readTime: '9 min',
+    tags: ['founder productivity', 'weekly planning', 'marketing strategy', 'execution'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['beta launch week plan', 'founder launch playbook', 'solo operator launch execution'],
+    content: `
+## Launch Week Is an Execution Problem, Not an Ideas Problem
+
+Most launches fail because attention is scattered, not because strategy is missing.
+
+During beta launch week, your job is to preserve execution quality under pressure.
+
+## The 7-Day Launch Loop
+
+### Day 1 — Publish the core launch asset
+Ship your primary thread or launch post. Do not split energy across channels first.
+
+### Day 2 — Distribute where your ICP already lives
+Republish with channel-native framing: one founder recap, one value-first community post.
+
+### Day 3 — Tighten activation friction
+Watch signup-to-first-action dropoff. Improve the first 5-minute experience immediately.
+
+### Day 4 — Convert objections into copy
+Take real comments, FAQs, and objections. Feed them into pricing and onboarding copy.
+
+### Day 5 — Run one conversion experiment
+Change one CTA or value proof block. Measure impact in 24 hours.
+
+### Day 6 — Publish one proof artifact
+Share behavior-backed early results: activation %, first-message rate, user wins.
+
+### Day 7 — Close loop and plan next sprint
+Summarize what worked, what failed, and what gets doubled next week.
+
+## KPI Stack (Minimum)
+
+- social-driven signups
+- signup to first meaningful action
+- first AI message rate
+- upgrade starts
+
+## FAQ
+
+### What if traffic is high but activation is low?
+Fix onboarding and first action clarity before increasing distribution.
+
+### How many experiments should I run in launch week?
+One per day maximum. Speed with clean attribution beats parallel chaos.
+
+### What is the highest leverage daily behavior?
+Publishing one clear asset and responding to feedback within one hour.
+    `,
+  },
+  'email-first-auth-ux-best-practices-2026': {
+    title: 'Email-First Auth UX in 2026: How to Build Sign-In That Feels Professional',
+    desc: 'A direct implementation guide for clean sign-in and sign-up flows: clear instructions, low-friction email login, secure defaults, and conversion-safe design.',
+    date: 'April 14, 2026',
+    readTime: '8 min',
+    tags: ['productivity', 'conversion optimization', 'AEO', 'AI productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['email first sign in UX', 'professional auth page design', 'clerk sign in best practices'],
+    content: `
+## Auth UX Is a Trust Surface
+
+If sign-in feels confusing, users assume the product is unstable.
+
+Professional auth UX needs clarity, not decoration.
+
+## Email-First Principles
+
+1. Tell users exactly what to do first.
+2. Keep the email path obvious even when social buttons exist.
+3. Explain account recovery in plain language.
+4. Maintain visual consistency with core product identity.
+
+## The Minimal Auth Content Framework
+
+### Sign-in page must include
+- short instruction block
+- one-line security expectation
+- explicit recovery path
+
+### Sign-up page must include
+- short setup steps
+- what happens after account creation
+- low-friction free plan expectation
+
+## Common Failure Modes
+
+- no instructions when identity preview appears
+- visual mismatch between auth and app
+- unclear redirect after successful sign-in
+
+## FAQ
+
+### Should social login be primary?
+Not always. Keep it available, but ensure email login remains discoverable and clear.
+
+### How do I reduce login confusion quickly?
+Add numbered instructions and remove ambiguous microcopy.
+
+### What is the best post-auth redirect?
+A stable, expected dashboard route where users can immediately take one action.
+    `,
+  },
+  'operator-content-refresh-framework': {
+    title: 'The Operator Content Refresh Framework: Keep Every Page Current Without Rewrites',
+    desc: 'A repeatable process to keep blog and marketing pages fresh: metadata updates, structured FAQs, weekly revisions, and conversion pathway maintenance.',
+    date: 'April 14, 2026',
+    readTime: '10 min',
+    tags: ['AEO', 'marketing strategy', 'conversion optimization', 'founder productivity'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['content refresh framework', 'update blog content systematically', 'operator SEO maintenance'],
+    content: `
+## Most Content Dies from Neglect, Not Competition
+
+Old pages silently lose trust, rankings, and conversion quality.
+
+You do not need full rewrites every month. You need a refresh system.
+
+## Weekly Content Refresh Loop
+
+### Step 1 — Prioritize by revenue impact
+Start with pages nearest signup and upgrade decisions.
+
+### Step 2 — Update reality-sensitive copy
+Refresh pricing, coach counts, feature availability, and roadmap claims.
+
+### Step 3 — Improve extraction readiness
+Add concise answers, FAQ structure, and consistent heading hierarchy.
+
+### Step 4 — Tighten conversion pathway
+Ensure each page has one clear next action based on user intent.
+
+### Step 5 — Log changes and outcomes
+Track what changed and what moved (CTR, activation, upgrade intent).
+
+## What to Refresh Without Fail
+
+- page metadata (title, description, OG)
+- FAQ answers for current objections
+- internal links to current highest-value pages
+- CTA copy aligned to current plan logic
+
+## FAQ
+
+### How often should core pages be refreshed?
+Weekly for high-intent pages, biweekly for educational content clusters.
+
+### Do I need to rewrite every article?
+No. Strategic metadata and FAQ updates often create most of the gain.
+
+### What is the biggest content maintenance mistake?
+Letting outdated claims survive on high-traffic pages.
+    `,
+  },
+  'beta-launch-funnel-audit-checklist-2026': {
+    title: 'Beta Launch Funnel Audit Checklist (2026): What to Verify Before You Push Traffic',
+    desc: 'A pre-launch quality checklist for founders: auth flow, event instrumentation, activation path clarity, upgrade triggers, and post-conversion UX.',
+    date: 'April 14, 2026',
+    readTime: '9 min',
+    tags: ['marketing strategy', 'conversion optimization', 'founder productivity', 'execution'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['beta launch checklist', 'saas funnel audit', 'pre launch conversion checklist'],
+    content: `
+## Launch Traffic Is Expensive. Audit Before You Buy It.
+
+Most launch-day failures are not growth problems. They are quality problems hiding inside the funnel.
+
+Use this checklist before publishing your next distribution wave.
+
+## 1) Auth Flow Integrity
+
+- Verify sign-in and sign-up are visually consistent with your product.
+- Confirm email-first instructions are explicit.
+- Test edge case: returning user sees identity preview and can still switch email.
+- Confirm successful auth redirects to one clear first action.
+
+## 2) Activation Path Clarity
+
+- New user must complete one meaningful action in under 5 minutes.
+- Remove optional complexity from first session.
+- Ensure empty states always include one immediate action CTA.
+
+## 3) Event Instrumentation
+
+At minimum, track:
+- sign_up
+- first_habit_created (or equivalent first win event)
+- first_ai_message
+- upgrade_started
+
+If you cannot see these in realtime, your launch is blind.
+
+## 4) Offer and Pricing Consistency
+
+Every high-intent page must match canonical pricing:
+- Pro: $4.99/mo
+- Pro Yearly: $29.99/yr
+- Lifetime: $49.99
+
+No old numbers. No contradictory feature lists.
+
+## 5) Post-Conversion UX
+
+After payment, the page should:
+- confirm plan clearly
+- reinforce unlocked value
+- route users directly into product usage (dashboard or coaching)
+
+Do not waste this moment with generic confirmation copy.
+
+## FAQ
+
+### What should I audit first if I only have one hour?
+Auth flow, first-win path, and event visibility. These three determine whether launch traffic turns into usable growth data.
+
+### What is the most common pre-launch miss?
+Inconsistent copy between pricing, blog content, and onboarding. Trust drops immediately when numbers disagree.
+
+### How often should this checklist run?
+Before each launch wave and after major UX updates.
+    `,
+  },
+  'professional-auth-design-system-for-saas-2026': {
+    title: 'Professional Auth Design System for SaaS in 2026 (Email-First, Trust-First)',
+    desc: 'A practical auth design blueprint for sign-in and sign-up pages that feel premium: clear instruction architecture, trust surfaces, and low-friction recovery.',
+    date: 'April 14, 2026',
+    readTime: '8 min',
+    tags: ['conversion optimization', 'AEO', 'productivity', 'execution'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['professional sign in page', 'email first auth UX', 'saas auth design system'],
+    content: `
+## Auth Is Your First Security and Quality Signal
+
+People decide if your product is trustworthy in seconds. Auth UX is where that decision starts.
+
+## Core Principles
+
+### 1) Email-First Clarity
+Say exactly what users should do:
+- enter account email
+- continue with password or code
+- use account switch if identity preview is incorrect
+
+### 2) Instruction Architecture
+One short instruction block beats scattered helper text. Keep it operational and numbered.
+
+### 3) Visual Continuity
+Auth pages should feel like your product, not an external service dropped into the experience.
+
+### 4) Recovery Without Friction
+Password reset and account-switching paths must be obvious.
+
+## What Professional Looks Like
+
+- Clear hierarchy and consistent spacing
+- Calm microcopy with no hype
+- Accessible controls and error states
+- Predictable redirects after success
+
+## Anti-Patterns
+
+- Hidden email path behind social-first UI
+- Vague error messages with no next action
+- Auth styling that does not match product identity
+
+## FAQ
+
+### Should social login be removed?
+No. Keep social login available, but never at the cost of hiding the primary email path.
+
+### How do I reduce “weird login behavior” complaints?
+Add explicit account-switch guidance and show expected flow near the form.
+
+### What is the best redirect after sign-in?
+A stable dashboard route where users can perform one immediate action.
+    `,
+  },
+  'launch-week-content-ops-for-solo-operators': {
+    title: 'Launch-Week Content Ops for Solo Operators: Daily Publishing Without Burnout',
+    desc: 'A daily content operations loop for launch week: one core asset, multi-channel repurposing, objection capture, and next-day iteration.',
+    date: 'April 14, 2026',
+    readTime: '10 min',
+    tags: ['marketing strategy', 'founder productivity', 'weekly planning', 'AEO'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['launch week content plan', 'solo founder content ops', 'daily distribution system'],
+    content: `
+## Launch Week Is an Ops Problem, Not an Inspiration Problem
+
+Most founders fail launch week because every day starts from zero.
+
+Use this loop to ship daily without cognitive overload.
+
+## Daily Loop (Repeat 7 Days)
+
+### Step 1 — Publish One Core Asset
+Choose one high-leverage artifact per day:
+- thread
+- founder memo
+- tactical post
+- short demo clip
+
+### Step 2 — Repurpose Immediately
+Convert the same asset into:
+- one LinkedIn post
+- one Reddit value-first summary
+- one short CTA comment or reply
+
+### Step 3 — Capture Objections
+Log repeated comments and friction language. This becomes tomorrow’s copy input.
+
+### Step 4 — Close with Metrics
+Track:
+- signups from social
+- first meaningful action rate
+- first AI message rate
+
+Then adjust the next day’s hook and CTA.
+
+## Workload Protection Rules
+
+- one core asset per day max
+- one distribution burst window
+- one review window
+- no new channel additions mid-week
+
+This keeps quality high and context-switching low.
+
+## FAQ
+
+### How much time should daily content ops take?
+60-120 minutes if your core asset is scoped correctly.
+
+### Should I post everywhere every day?
+No. Prioritize one primary channel and one secondary channel.
+
+### What matters more: impressions or activation?
+Activation quality. Reach without first-win behavior is wasted acquisition.
+    `,
+  },
 };
 
 function extractFaqItemsFromContent(content: string): Array<FaqItem> {
@@ -3440,9 +3789,50 @@ function extractHowToSteps(content: string): Array<string> {
   return stepHeadings.slice(0, 8);
 }
 
+function normalizeLegacyCopy(content: string): string {
+  return content
+    .replace(/Resurgoify/gi, 'Resurgo')
+    .replace(/PERFORMANCE OS/gi, 'Execution OS')
+    .replace(/all 4 coaches/gi, 'all 5 coaches')
+    .replace(/unlimited habits and goals on the free plan/gi, '3 goals and up to 5 habits per day on the free plan')
+    .replace(/free plan:?\s*unlimited habits/gi, 'Free plan: 3 goals and up to 5 habits/day')
+    .replace(/free tier is unlimited habits, 2 AI coaches/gi, 'Free tier includes 3 goals, up to 5 habits/day, and 2 AI coaches')
+    .replace(/free tier.*unlimited habits.*2 AI coaches/gi, 'Free tier includes 3 goals, up to 5 habits/day, and 2 AI coaches')
+    .replace(/free plan includes[^\n]*unlimited habits[^\n]*/gi, 'Free plan includes 3 goals, up to 5 habits/day, and 2 AI coaches (Marcus and Titan).')
+    .replace(/the free plan includes:\s*\n-\s*Unlimited habits/gi, 'The free plan includes:\n- 3 goals\n- Up to 5 habits per day')
+    .replace(/weekly reviews\. Everything in this protocol works on the free plan\./gi, 'core planning and coaching essentials. Everything in this protocol can start on the free plan.')
+    .replace(/\s{2,}/g, ' ')
+    .replace(/\n \n/g, '\n\n');
+}
+
+function buildOperationalChecklist(tags: Array<string>): Array<string> {
+  const checklist: Array<string> = [
+    'Define one measurable outcome for this week.',
+    'Schedule one high-leverage action in your calendar today.',
+    'Run a 10-minute review before ending the week.',
+  ];
+
+  if (tags.includes('AI coaching') || tags.includes('AI productivity')) {
+    checklist.unshift('Ask your coach for one tactical adjustment based on this article.');
+  }
+
+  if (tags.includes('habits') || tags.includes('consistency')) {
+    checklist.push('Use the never-miss-twice recovery rule for any missed day.');
+  }
+
+  if (tags.includes('weekly planning') || tags.includes('planning')) {
+    checklist.push('Convert one idea from this article into a Monday priority.');
+  }
+
+  return checklist.slice(0, 5);
+}
+
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   const post = POSTS[params.slug];
   if (!post) return { title: 'Not Found' };
+  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(params.slug) ?? post.date;
+  const isoModified = getIsoDate(modifiedSource);
+  const isoPublished = getIsoDate(post.date);
 
   const canonicalUrl = `https://resurgo.life/blog/${params.slug}`;
 
@@ -3460,6 +3850,8 @@ export async function generateMetadata({ params }: { params: { slug: string } })
       url: canonicalUrl,
       images: [{ url: `https://resurgo.life${post.heroImage}` }],
       tags: post.tags,
+      publishedTime: isoPublished,
+      modifiedTime: isoModified,
     },
     twitter: {
       card: 'summary_large_image',
@@ -3477,6 +3869,8 @@ export async function generateStaticParams() {
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = POSTS[params.slug];
   if (!post) notFound();
+  const normalizedContent = normalizeLegacyCopy(post.content);
+  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(params.slug) ?? post.date;
 
   const primaryCluster = BLOG_TOPIC_CLUSTERS
     .map((cluster) => ({
@@ -3494,7 +3888,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     : null;
 
   const faqItems = (() => {
-    const extracted = extractFaqItemsFromContent(post.content);
+    const extracted = extractFaqItemsFromContent(normalizedContent);
     return extracted.length > 0 ? extracted : buildFallbackFaq(post.title);
   })();
 
@@ -3514,8 +3908,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     .slice(0, 4);
 
   const nextBestRead = relatedPosts[0] ?? null;
-  const toc = extractH2Headings(post.content);
-  const howToSteps = extractHowToSteps(post.content);
+  const toc = extractH2Headings(normalizedContent);
+  const howToSteps = extractHowToSteps(normalizedContent);
+  const operationalChecklist = buildOperationalChecklist(post.tags);
   const keyTakeaways = [post.desc, ...post.tags.map((tag) => `Use ${tag} as a practical execution lever this week.`)].slice(0, 4);
   const ctaVariant = pickCtaVariant(params.slug);
   const ctaConfig = ctaVariant === 'A'
@@ -3533,8 +3928,8 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       };
 
   const isoPublished = getIsoDate(post.date);
-  const isoModified = isoPublished;
-  const wordCount = getWordCount(post.content);
+  const isoModified = getIsoDate(modifiedSource);
+  const wordCount = getWordCount(normalizedContent);
 
   const blogPostingJsonLd = {
     '@context': 'https://schema.org',
@@ -3750,8 +4145,19 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
               <span className="inline-flex items-center gap-1"><PixelIcon name="calendar" size={10} className="text-orange-500" />{post.date}</span>
               <span>·</span>
               <span className="inline-flex items-center gap-1"><PixelIcon name="timer" size={10} className="text-orange-500" />{post.readTime} read</span>
+              <span>·</span>
+              <span className="inline-flex items-center gap-1 text-orange-400"><PixelIcon name="check" size={10} className="text-orange-500" />updated {new Date(modifiedSource).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             </div>
           </div>
+        </div>
+
+        <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
+          <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500"><PixelIcon name="check" size={10} />CANONICAL_PRODUCT_FACTS</p>
+          <ul className="mt-2 space-y-1 font-mono text-xs text-zinc-400">
+            <li>• 5 coaches total. Free includes Marcus + Titan.</li>
+            <li>• Free plan: 3 goals, up to 5 habits/day, 10 AI messages/day.</li>
+            <li>• Pro: $4.99/mo or $29.99/yr. Lifetime: $49.99 one-time.</li>
+          </ul>
         </div>
 
         {/* Content with Charts */}
@@ -3786,7 +4192,23 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           prose-strong:text-zinc-200
           prose-a:text-orange-400 prose-a:no-underline hover:prose-a:underline
           prose-blockquote:border-orange-800 prose-blockquote:text-zinc-500">
-          {renderContent(post.content, post.chartComponent)}
+          {renderContent(normalizedContent, post.chartComponent)}
+        </div>
+
+        <div className="mt-6 border border-zinc-800 bg-zinc-950 p-4">
+          <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500"><PixelIcon name="check" size={10} />OPERATOR_CHECKLIST</p>
+          <ul className="mt-2 space-y-1">
+            {operationalChecklist.map((item) => (
+              <li key={item} className="font-mono text-xs text-zinc-400">- {item}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="mt-6 border border-orange-900/40 bg-orange-950/10 p-4">
+          <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500"><PixelIcon name="calendar" size={10} />BETA_FRESHNESS_NOTE</p>
+          <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-400">
+            This article is maintained for the Resurgo beta launch cycle. Expect ongoing updates as new user behavior data and execution insights are validated.
+          </p>
         </div>
 
         <div className="mt-10 border border-zinc-800 bg-zinc-950 p-5">

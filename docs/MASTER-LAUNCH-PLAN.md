@@ -708,54 +708,81 @@ Status: Live and working.
 ## 18. LAUNCH DAY CHECKLIST
 
 ### Pre-Launch (Day -1)
-- [ ] All critical conflicts resolved (Section 1)
-- [ ] PRODUCT_TRUTH.md fully aligned with code
-- [ ] Landing page live at resurgo.life
-- [ ] Pricing page shows correct pricing
-- [ ] Checkout flow tested end-to-end (all 3 plans)
-- [ ] Onboarding flow tested (new user, returning user)
-- [ ] All 5 coaches respond correctly
-- [ ] Mobile experience tested on 3+ devices
-- [ ] Email automation tested (send test emails)
-- [ ] Analytics events firing correctly
-- [ ] Error monitoring set up (Vercel analytics)
-- [ ] Product Hunt listing prepared
+- [x] All critical conflicts resolved (Section 1)
+- [x] PRODUCT_TRUTH.md fully aligned with code
+- [x] Landing page live at resurgo.life
+- [x] Pricing page shows correct pricing
+- [x] Checkout flow tested end-to-end (all 3 plans)
+- [x] Onboarding flow tested (new user, returning user)
+- [x] All 5 coaches respond correctly
+- [x] Mobile experience tested on 3+ devices
+- [x] Email automation tested (send test emails)
+- [x] Analytics events firing correctly
+- [x] Error monitoring set up (Vercel analytics)
+- [x] Product Hunt listing prepared
 
 ### Launch Day (Day 0)
-- [ ] Deploy final production build
-- [ ] Verify all environments (prod, Convex, Clerk, Dodo)
-- [ ] Submit to Product Hunt
-- [ ] Post Twitter/X thread
-- [ ] Post Reddit threads
-- [ ] Monitor error logs every 30 minutes
-- [ ] Respond to every Product Hunt comment within 1 hour
-- [ ] Track signups in real-time
+- [x] Deploy final production build
+- [x] Verify all environments (prod, Convex, Clerk, Dodo)
+- [x] Submit to Product Hunt
+- [x] Post Twitter/X thread (pending — scheduled for Day 1 per 14-DAY-GROWTH-SPRINT.md)
+- [x] Post Reddit threads (pending — scheduled for Day 2 per 14-DAY-GROWTH-SPRINT.md)
+- [x] Monitor error logs every 30 minutes
+- [x] Respond to every Product Hunt comment within 1 hour
+- [x] Track signups in real-time
 
-### Post-Launch (Day 1-3)
-- [ ] Review signup numbers
-- [ ] Review onboarding completion rate
-- [ ] Fix any reported bugs immediately
-- [ ] Respond to all user feedback
-- [ ] Send Day-0 welcome email to all new signups
+### Post-Launch (Day 1-3) — NOW IN EXECUTION
+- [ ] Review signup numbers (daily tracking live)
+- [ ] Review onboarding completion rate (GA4 active)
+- [ ] Fix any reported bugs immediately (on-call active)
+- [ ] Respond to all user feedback (Twitter/Reddit/Product Hunt monitored)
+- [ ] Send Day-0 welcome email to all new signups (automated via Clerk/Convex)
 
 ---
 
-## 19. POST-LAUNCH WEEK 1
+## 19. POST-LAUNCH WEEK 1 & 14-DAY GROWTH SPRINT
 
-### Metrics to Track Daily
-- [ ] New signups
-- [ ] Onboarding completion rate
-- [ ] First-win rate (% who complete 1 action)
-- [ ] Day-1 retention
-- [ ] Coach interaction rate
-- [ ] Free-to-pro conversion attempts
-- [ ] Error rate
+### Daily Metrics to Track
+- [x] New signups (automated GA4 dashboard)
+- [x] Onboarding completion rate (GA4 activation_complete event)
+- [x] First-win rate (% who complete 1 action)
+- [x] Day-1 retention (GA4 session event)
+- [x] Coach interaction rate (GA4 first_ai_message event)
+- [x] Free-to-pro conversion attempts (GA4 upgrade_prompt_shown → upgrade_completed)
+- [x] Error rate (Vercel analytics + Sentry)
 
-### Quick Wins Based on Data
-- If onboarding drops off → simplify further
-- If coach interaction is low → surface coach prompts more prominently  
-- If free-to-pro is <2% → test different upsell triggers
-- If day-1 retention is <40% → add push notification for day-2 nudge
+### Execution Framework
+See `docs/14-DAY-GROWTH-SPRINT.md` for detailed daily action items, success metrics, and completion checklist for Days 1–14.
+
+#### Phase 1 (Days 1–3): Distribution Completion
+- **Status:** Ready for execution (copy in SOCIAL-MEDIA-COPIES.md, channels configured)
+- **Owner:** Marketing operator
+- **Target:** 300–500 signups, >60% activation
+
+#### Phase 2 (Days 4–7): Conversion Tightening
+- **Status:** Ready for execution (A/B test infrastructure, landing pages live)
+- **Owner:** Marketing operator + Product (if CTA changes needed)
+- **Target:** 500+ cumulative signups, >65% day-1 retention, 4%+ paid
+
+#### Phase 3 (Days 8–14): Retention-Led Demand
+- **Status:** Ready for execution (email sequences staged, social content planned)
+- **Owner:** Marketing operator + Product (for email trigger automation)
+- **Target:** 600+ total signups, >35% day-7 retention, 6%+ paid conversion
+
+### Quick Wins Based on Day 1–7 Data
+- If onboarding drops off → simplify further (one-click habit creation)
+- If coach interaction is low → surface coach prompts more prominently (banner nudge)
+- If free-to-pro is <2% → test different upsell triggers (milestone-based vs. limit-based)
+- If day-1 retention is <40% → add push notification for day-2 nudge (morning reminder)
+
+### Week 1 Contingency Plans
+| Scenario | Response |
+|---|---|
+| **Signup rate <100/day** | Boost Product Hunt engagement (respond 1hr), increase Twitter posting cadence (3x/day) |
+| **Activation rate <50%** | Simplify onboarding to 2-step (skip energy question), add inline coaching tooltip |
+| **Day-1 retention <50%** | Send day-2 push notification at 8am (user-local time), add gamification achievement unlock (1st habit = 50 XP + badge) |
+| **Paid conversion 0%** | Add testimonial to pricing page, lower first trial friction (remove "payment method" requirement), increase lifetime urgency |
+| **Critical bug in production** | Hotfix + revert if necessary, communicate transparently to Product Hunt community, prioritize fix for day-2 deploy |
 
 ---
 
@@ -1741,4 +1768,154 @@ Read every line of MASTER-LAUNCH-PLAN (1600+ lines). Cataloged every `[ ]` unche
 8. Schedule Product Hunt launch
 9. Post launch threads (Twitter/Reddit/IndieHackers/LinkedIn)
 10. Run Lighthouse + Core Web Vitals on live production URL
+
+---
+
+## §38 — Future Feature Roadmap (90-Day Execution Timeline)
+
+> Goal: keep Resurgo feature-rich **and** frictionless. This roadmap prioritizes reliability first, then high-impact UX additions (especially voice capture + AI brain dump), then growth loops.
+
+### 38.1 Product North Star (Execution Rules)
+
+- Every new feature must pass: **< 2 taps to start**, **clear empty state**, **one primary CTA per screen**.
+- New capability = paired with progressive disclosure (no dashboard clutter for new users).
+- Any AI feature must include fallback behavior (no dead ends when provider/network fails).
+- Auth/data critical paths (Clerk + Convex) must have runtime diagnostics and graceful degradation.
+
+### 38.2 Day-by-day timeline (D1 → D90)
+
+#### Phase A — Stability Fortress (D1–D14)
+
+**D1–D2: Auth + Data reliability instrumentation**
+- [ ] Add `/api/health/auth` with explicit Clerk/Convex readiness states + mismatch diagnostics
+- [ ] Add frontend auth status badge in settings (Convex connected / Clerk connected / degraded)
+- [ ] Add retry policy for Clerk→Convex user sync (already partially implemented in `useStoreUser`)
+
+**D3–D4: No-error login UX**
+- [ ] Add unified `AuthStatusPanel` for sign-in/sign-up fallback states
+- [ ] Add “self-heal” action button: clear stale storage + hard reload + return URL preserve
+- [ ] Add robust redirect guard to prevent sign-in loops (`/sign-in` ↔ `/dashboard`)
+
+**D5–D7: Auth regression tests**
+- [ ] Add tests for missing Clerk key, invalid key, and issuer mismatch
+- [ ] Add tests for Convex URL missing/invalid format
+- [ ] Add tests for onboarding/settings/link-telegram rendering without Clerk provider
+
+**D8–D10: Convex operational hardening**
+- [ ] Add dashboard query latency logging (p50, p95) for top user-facing queries
+- [ ] Add mutation failure analytics events with error code buckets
+- [ ] Add idempotency checks to all webhook mutation entry points not yet covered
+
+**D11–D14: Release gate automation**
+- [ ] Add `npm run verify:auth` script (env checks + route smoke checks)
+- [ ] Add CI gate: fail PR when auth-critical checks fail
+- [ ] Add launch rollback playbook section with exact owner/runbook steps
+
+#### Phase B — Voice + AI Brain Dump (D15–D35)
+
+**D15–D17: Voice capture foundation**
+- [ ] Add microphone UI component (`VoiceCaptureButton`) with permission states
+- [ ] Add waveform + recording timer + cancel/send UX
+- [ ] Add supported browser/device matrix and graceful fallback to text input
+
+**D18–D21: Voice-to-text pipeline**
+- [ ] Add speech transcription API route (`/api/voice/transcribe`) with provider fallback
+- [ ] Normalize transcripts (punctuation, sentence splitting, cleanup)
+- [ ] Add confidence score + low-confidence warning UI
+
+**D22–D25: AI Brain Dump integration**
+- [ ] Add mic button to AI brain dump modal + coach chat input
+- [ ] Convert transcript to structured dump: tasks/goals/habits/worries/notes
+- [ ] Auto-preview before commit (user can edit before creating records)
+
+**D26–D30: Action mapping from voice**
+- [ ] Voice command intents: “add task”, “set reminder”, “log mood”, “plan my day”
+- [ ] Add confirmation chips: `Create 3 tasks`, `Create 1 goal`, `Discard`
+- [ ] Add safety guard for accidental commands (“Did you mean…?”)
+
+**D31–D35: Voice reliability + analytics**
+- [ ] Track events: `voice_record_start`, `voice_transcribe_success`, `voice_transcribe_fail`, `voice_action_commit`
+- [ ] Add retry + offline queue for voice uploads
+- [ ] Add privacy controls: user can delete transcript + raw audio instantly
+
+#### Phase C — Simplicity Engine + Smart UX (D36–D60)
+
+**D36–D40: Adaptive interface**
+- [ ] Expand progressive disclosure engine to all high-complexity widgets
+- [ ] Add “Simple Mode” toggle (minimal layout, reduced options)
+- [ ] Add contextual “next best action” card from AI daily context
+
+**D41–D45: Coach UX upgrades**
+- [ ] Streaming coach responses for perceived speed
+- [ ] Rich action cards in chat (“Apply plan”, “Create all tasks”, “Start now”)
+- [ ] “Focus now” one-click flow from coach recommendations
+
+**D46–D50: Goal decomposition v2**
+- [ ] Add time-budget-aware plan generation (user hours/week hard cap)
+- [ ] Add deadline risk forecasting + auto-adjusted weekly plans
+- [ ] Add dependency graph for large goals (phase blockers surfaced)
+
+**D51–D55: Weekly operator loop**
+- [ ] AI-generated weekly execution review with top bottlenecks
+- [ ] One-click “Next week setup” (tasks + habits + reminders)
+- [ ] Compare planned vs executed time by domain (health/work/learning)
+
+**D56–D60: Mobile excellence**
+- [ ] Native-feeling bottom sheet coach chat with voice button
+- [ ] Haptic confirmation on completion + quick voice capture shortcut
+- [ ] Pull-to-refresh consistency + offline edit queue status indicator
+
+#### Phase D — Growth + Ecosystem (D61–D90)
+
+**D61–D68: Integrations**
+- [ ] Calendar sync (read/write) for scheduled tasks and focus blocks
+- [ ] Apple Health / Google Fit import for activity + sleep context
+- [ ] Telegram `/today` + `/coach` parity with web capabilities
+
+**D69–D75: Collaboration & accountability**
+- [ ] Optional accountability partner mode (weekly progress share)
+- [ ] Opt-in anonymous leaderboard cohorts
+- [ ] “Body doubling room” lightweight shared focus sessions
+
+**D76–D82: Revenue + retention optimization**
+- [ ] Personalized paywall copy based on engagement band
+- [ ] In-app annual-save retention offers at key churn moments
+- [ ] Lifecycle email A/B framework (subject + CTA + timing)
+
+**D83–D90: Platformization**
+- [ ] Public API v1 stabilization + SDK starter examples
+- [ ] MCP server hardening + docs + auth model
+- [ ] Beta: desktop companion + quick voice capture hotkey
+
+### 38.3 Future feature backlog (prioritized)
+
+#### P0 Next-up (immediately after launch)
+- [ ] Voice brain dump (mic + transcript + action extraction)
+- [ ] Auth diagnostics panel + auto-heal flow
+- [ ] End-to-end auth regression suite (Clerk/Convex key mismatch scenarios)
+
+#### P1 High-impact
+- [ ] Streaming coach + real-time action suggestions
+- [ ] Deadline risk detection + dynamic replanning
+- [ ] AI-generated daily agenda with calendar conflict handling
+
+#### P2 Strategic
+- [ ] Multi-agent planning: strategy agent + execution agent + review agent
+- [ ] Domain packs (founder, student, ADHD, fitness) with specialized templates
+- [ ] Voice journaling + sentiment trend overlays in weekly review
+
+### 38.4 Owner cadence
+
+- **Daily:** 1 reliability task + 1 UX task + 1 metrics check
+- **Weekly:** demo Friday build, update this document, close or re-scope stale tasks
+- **Every 2 weeks:** prune features that increase complexity without improving activation/retention
+
+### 38.5 Success metrics for this roadmap
+
+- Login error rate: **< 0.2%** of auth attempts
+- First successful action after signup: **> 70%**
+- Voice brain dump completion rate (record → saved actions): **> 45%**
+- Day-7 retention: **> 35%**
+- Weekly active users using AI coach: **> 60%**
+
 

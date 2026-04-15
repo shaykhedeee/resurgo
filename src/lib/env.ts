@@ -24,6 +24,12 @@ const ENV_SCHEMA: EnvVar[] = [
     description: 'Clerk publishable key — auth will not function without it',
   },
   {
+    key: 'CLERK_JWT_ISSUER_DOMAIN',
+    required: true,
+    description: 'Clerk JWT issuer domain required by Convex auth.config.ts',
+    serverOnly: true,
+  },
+  {
     key: 'CLERK_WEBHOOK_SECRET',
     required: true,
     description: 'Clerk webhook signing secret for billing events',
@@ -79,6 +85,49 @@ export function validateEnv(): EnvValidationResult {
     } else if (isMissing && !v.required) {
       warnings.push(`${v.key} — ${v.description}`);
     }
+  }
+
+  // ── Auth-specific sanity checks (prevents silent login failures) ──────────
+  const clerkPk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL;
+  const issuer = process.env.CLERK_JWT_ISSUER_DOMAIN;
+  const frontendApi = process.env.CLERK_FRONTEND_API_URL;
+
+  if (clerkPk) {
+    const isPlaceholder = /REPLACE_ME|YOUR_|PLACEHOLDER/i.test(clerkPk);
+    if (!clerkPk.startsWith('pk_') || isPlaceholder) {
+      missing.push(
+        'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY — appears invalid/placeholder (must start with pk_ and be a real key)'
+      );
+    }
+
+    const isLivePk = clerkPk.startsWith('pk_live_');
+    const isTestPk = clerkPk.startsWith('pk_test_');
+    if (isLivePk && issuer && issuer.includes('.clerk.accounts.dev')) {
+      warnings.push(
+        'CLERK_JWT_ISSUER_DOMAIN — live Clerk key with .clerk.accounts.dev issuer detected (possible prod mismatch)'
+      );
+    }
+    if (isTestPk && process.env.NODE_ENV === 'production') {
+      warnings.push(
+        'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY — test key detected in production environment'
+      );
+    }
+  }
+
+  if (convexUrl) {
+    const looksValid = /^https:\/\/.+\.convex\.cloud$/i.test(convexUrl);
+    if (!looksValid) {
+      warnings.push(
+        'NEXT_PUBLIC_CONVEX_URL — unexpected format (expected https://<deployment>.convex.cloud)'
+      );
+    }
+  }
+
+  if (issuer && frontendApi && issuer !== frontendApi) {
+    warnings.push(
+      'CLERK_JWT_ISSUER_DOMAIN and CLERK_FRONTEND_API_URL differ — ensure Convex auth uses the intended issuer domain'
+    );
   }
 
   const valid = missing.length === 0;

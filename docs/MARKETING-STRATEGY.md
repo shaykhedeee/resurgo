@@ -1,9 +1,194 @@
 # RESURGO Marketing Strategy (Execution Version)
 ## Comprehensive SaaS Launch & Growth Playbook
 
-> **Last updated:** 2026-04-05
+> **Last updated:** 2026-04-14
 > **Status source:** live codebase + build/typecheck/test scan + launch-readiness execution review.
 > **Merged from:** This file now includes content previously in `CONTENT-AND-ADS-PLAYBOOK-2026.md` (5 article briefs, Meta/Google ads strategy, email drip sequence, 30-day launch calendar). That file has been deleted.
+
+## ✅ 2026-04-14 Product + Content Execution Update (Auth + Blog Refresh)
+
+Shipped today:
+
+- Sign-in and sign-up experience redesigned for a professional email-first flow with clear operator instructions and consistent Resurgo terminal styling.
+- Shared authentication styling system implemented to enforce visual consistency across auth surfaces.
+- Blog stack refreshed globally with:
+  - launch-freshness framing blocks,
+  - operator checklists for actionable execution,
+  - sorted latest-first publishing surface,
+  - three new launch-cycle articles.
+
+New launch-cycle content added:
+
+1. `beta-launch-week-productivity-system`
+2. `email-first-auth-ux-best-practices-2026`
+3. `operator-content-refresh-framework`
+
+Impact expectation:
+
+- Improved signup confidence (professional auth UX clarity)
+- Better post-click activation quality (clearer instruction architecture)
+- Higher content freshness signal for SEO/AEO and conversion journeys
+
+## ✅ 2026-04-14 Additional Execution Delta (Auth Precision + Blog Expansion)
+
+Completed after the initial refresh block:
+
+- Sign-in and sign-up instructions tightened for explicit **email-first** behavior (including account-switch guidance when identity preview appears).
+- Blog engine upgraded to display and use true `lastModified` freshness per slug for metadata + on-page trust signal.
+- Canonical product facts injected into all blog pages to prevent stale plan/coach contradictions:
+  - 5 coaches total
+  - Free: 3 goals, 5 habits/day, 10 AI messages/day
+  - Pro/Lifetime pricing canonicalized
+- Legacy auth component removed (`src/components/AuthScreens.tsx`) to eliminate stale fallback UX and old messaging.
+- Three new launch-cycle articles added:
+  1. `beta-launch-funnel-audit-checklist-2026`
+  2. `professional-auth-design-system-for-saas-2026`
+  3. `launch-week-content-ops-for-solo-operators`
+
+Validation snapshot:
+
+- ✅ Typecheck passes.
+- ✅ Build passes and static routes generate.
+- ⚠️ Remaining environment hygiene blockers: real values required for `CLERK_JWT_ISSUER_DOMAIN` and `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`.
+
+---
+
+# ✅ 2026-04-14 Operator Update (Today)
+
+## Current day priority
+
+Today is a **growth execution day**, not a planning day.
+
+The immediate goal is to increase:
+
+- **signup volume**
+- **signup → first meaningful action rate**
+- **social proof density across channels**
+
+## Operator branch logic for today
+
+### If the X/Twitter launch thread is still unpublished
+
+Do this first, before anything else:
+
+1. Publish the final 12-post thread from `docs/SOCIAL-MEDIA-COPIES.md` §7
+2. Pin the thread
+3. Add the tracked CTA reply within 5 minutes
+4. Watch GA4 realtime for `sign_up`, `first_habit_created`, `first_ai_message`, and `upgrade_started`
+
+**Why:** this is still the highest-leverage acquisition move available.
+
+### If the X/Twitter thread is already live
+
+Run the Day 2 distribution stack:
+
+1. Publish the LinkedIn founder recap
+2. Publish the Reddit value-first post in `r/productivity`
+3. Publish the ADHD-specific post in `r/ADHD`
+4. Respond to every meaningful comment inside 1 hour
+
+**Why:** once the primary launch artifact exists, the next bottleneck is channel spread and proof accumulation.
+
+## Today’s KPI targets
+
+| Metric | Target | Why it matters |
+|---|---|---|
+| Social-driven signups | **50+** | Validates distribution quality |
+| Signup → first meaningful action | **> 60%** | Prevents wasted acquisition |
+| First AI message rate | **> 35%** of signups | Strong proxy for product engagement |
+| Upgrade starts | **Track baseline today** | Establishes conversion intent benchmark |
+
+## Today’s operating sequence
+
+### 1. Publish the highest-leverage asset
+- X thread if not yet live
+- Otherwise LinkedIn + Reddit sequence
+
+### 2. Monitor realtime funnel health
+- GA4 realtime
+- source / medium from tracked links
+- activation event quality, not just click volume
+
+### 3. Capture objections and proof
+- Save screenshots of strong comments
+- Note repeated friction language
+- turn those into tomorrow’s social proof and conversion copy
+
+### 4. Close the day with an operator recap
+- total social signups
+- activation rate
+- highest-performing source
+- strongest objection
+- one thing to tighten tomorrow
+
+---
+
+# ✅ 2026-04-13 Post-Launch GTM Update (Current Reality)
+
+## Launch status snapshot
+
+- ✅ Product Hunt launch completed
+- ✅ First Reddit post completed
+- ✅ First LinkedIn post completed
+- ⏳ X/Twitter launch thread not published yet
+
+## Validation delta (run on 2026-04-13)
+
+- ✅ `npm run typecheck` passes.
+- ✅ `npm run build` passes (282 routes generated).
+- ⚠️ Non-blocking warning: Next.js `middleware` convention deprecation (migrate to `proxy` soon).
+- ⚠️ Environment hygiene warning in build logs: `CLERK_JWT_ISSUER_DOMAIN` and valid `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` must be set correctly in production/staging.
+
+### Immediate operator actions (today)
+
+1. Publish X/Twitter 12-post launch thread from `docs/SOCIAL-MEDIA-COPIES.md`.
+2. Verify GA4 realtime `sign_up` and activation events while thread traffic lands.
+3. Keep Product Hunt + Reddit + LinkedIn responses within 1 hour during launch window.
+4. Log Day-1 sprint metrics at end of day (signup, activation, D1 retention proxy, upgrade starts).
+
+## Immediate 14-day growth sprint (post-launch)
+
+### Day 1-3 — Distribution completion
+- Publish first X/Twitter launch thread (12-post thread + demo clip) using the final variant in `docs/SOCIAL-MEDIA-COPIES.md` §7
+- Repurpose Product Hunt comments/testimonials into social proof snippets
+- Add Product Hunt and LinkedIn links in all footer/social surfaces (now in code)
+
+#### Day 1 execution protocol (advanced)
+
+- Use UTM-tracked URLs for all Day 1 posts and comments (X, LinkedIn, Reddit, Product Hunt) per `docs/SOCIAL-MEDIA-COPIES.md` §7–§8.
+- Run the “Visible Everywhere” amplification sequence in the first 6 hours:
+  1) publish X thread,
+  2) pin post,
+  3) reply with tracked CTA,
+  4) publish LinkedIn recap,
+  5) Reddit value post + tracked comment link,
+  6) Product Hunt comment update.
+- Monitor GA4 realtime for `sign_up`, `first_habit_created`, `first_ai_message`, and `upgrade_started` during the launch window.
+- End-of-day publish one short “what we learned today” post to compound engagement and authority.
+
+### Day 4-7 — Conversion tightening
+- Publish one founder narrative post on X and LinkedIn: "what worked after launch"
+- Run one CTA copy test on `/pricing` and one on `/features`
+- Add one case-study style landing block to `/solopreneurs` and `/indie-hackers`
+
+### Day 8-14 — Retention-led demand
+- Publish one retention story: week-1 user behavior wins
+- Launch 3-post social mini-series: AI Brain Dump → plan → execution result
+- Publish one comparison page refresh based on live objections from launch feedback
+
+## Channel-specific content priorities
+
+- **X/Twitter:** founder voice, fast iteration, demo clips, threads with strong hooks
+- **LinkedIn:** transformation stories, outcomes, and professional positioning
+- **Reddit:** tactical transparency, no hype language, value-first replies
+- **Product Hunt:** daily comment responses for week 1 and social proof recycling
+
+## North-star metrics for post-launch month
+
+- Visitor → signup conversion: **> 6%**
+- Signup → first meaningful action: **> 70%**
+- D7 retention (activated users): **> 35%**
+- Paid conversion from activated: **> 4%**
 
 ---
 

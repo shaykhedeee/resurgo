@@ -24,6 +24,23 @@ interface EventParams {
   [key: string]: string | number | boolean | undefined;
 }
 
+const ATTRIBUTION_STORAGE_KEY = 'resurgo_attribution_v1';
+const ATTRIBUTION_KEYS = [
+  'utm_source',
+  'utm_medium',
+  'utm_campaign',
+  'utm_content',
+  'utm_term',
+  'ref',
+  'gclid',
+  'fbclid',
+  'ttclid',
+] as const;
+
+type AttributionKey = (typeof ATTRIBUTION_KEYS)[number];
+
+type AttributionParams = Partial<Record<AttributionKey, string>>;
+
 declare global {
   interface Window {
     gtag: (
@@ -111,6 +128,56 @@ export function pageview(url: string, title?: string): void {
   });
 }
 
+function readAttributionFromUrl(): AttributionParams {
+  if (typeof window === 'undefined') return {};
+
+  const searchParams = new URLSearchParams(window.location.search);
+  const fromUrl: AttributionParams = {};
+
+  for (const key of ATTRIBUTION_KEYS) {
+    const value = searchParams.get(key);
+    if (value) fromUrl[key] = value;
+  }
+
+  return fromUrl;
+}
+
+function readAttributionFromStorage(): AttributionParams {
+  if (typeof window === 'undefined') return {};
+
+  try {
+    const raw = window.localStorage.getItem(ATTRIBUTION_STORAGE_KEY);
+    if (!raw) return {};
+
+    const parsed = JSON.parse(raw) as AttributionParams;
+    return parsed ?? {};
+  } catch {
+    return {};
+  }
+}
+
+function persistAttribution(value: AttributionParams): void {
+  if (typeof window === 'undefined') return;
+  if (!Object.keys(value).length) return;
+
+  try {
+    window.localStorage.setItem(ATTRIBUTION_STORAGE_KEY, JSON.stringify(value));
+  } catch {
+    // Ignore storage write failures silently
+  }
+}
+
+function getAttributionParams(): AttributionParams {
+  const stored = readAttributionFromStorage();
+  const fromUrl = readAttributionFromUrl();
+
+  // URL values take precedence, then persisted values.
+  const merged: AttributionParams = { ...stored, ...fromUrl };
+
+  persistAttribution(merged);
+  return merged;
+}
+
 /**
  * Track a custom event
  */
@@ -122,11 +189,14 @@ export function trackEvent(
   params?: EventParams
 ): void {
   if (!ANALYTICS_ENABLED || typeof window === 'undefined') return;
+
+  const attribution = getAttributionParams();
   
   window.gtag('event', action, {
     event_category: category,
     event_label: label,
     value: value,
+    ...attribution,
     ...params,
   });
 }
@@ -277,11 +347,13 @@ export const analytics = {
     trackEvent('upgrade_completed', 'conversion', plan, value, { currency: 'USD' });
     // GA4 conversion event for purchase funnel
     if (typeof window !== 'undefined' && window.gtag) {
+      const attribution = getAttributionParams();
       window.gtag('event', 'purchase', {
         transaction_id: `${Date.now()}`,
         value,
         currency: 'USD',
         items: [{ item_name: plan }],
+        ...attribution,
       });
     }
   },
@@ -311,6 +383,9 @@ export const analytics = {
 export function usePageTracking(): void {
   useEffect(() => {
     if (!ANALYTICS_ENABLED) return;
+
+    // Capture and persist attribution params as early as possible.
+    getAttributionParams();
     
     // Track initial page view
     pageview(window.location.pathname, document.title);

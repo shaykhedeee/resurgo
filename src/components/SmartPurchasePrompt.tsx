@@ -65,8 +65,8 @@ const PROMPT_CONTENT: Record<PromptTrigger, {
   habit_limit: {
     icon: TrendingUp,
     title: 'Ready to Grow',
-    message: "You've reached the free limit of 10 habits. Upgrade to track unlimited habits and transform faster.",
-    highlight: "Unlimited habits & goals",
+    message: "You've reached the free limit of 5 habits per day. Upgrade to remove limits and scale faster.",
+    highlight: "Unlimited habits, goals, and AI messages",
     cta: "Remove Limits",
     gradient: "from-ascend-500 to-emerald-500"
   },
@@ -106,7 +106,7 @@ const PROMPT_CONTENT: Record<PromptTrigger, {
     icon: Sparkles,
     title: "Enjoying RESURGO?",
     message: "Upgrade to Pro for the full transformation experience. Support the app and unlock everything.",
-    highlight: 'Starting at $12/month',
+    highlight: 'Pro starts at $4.99/month',
     cta: "See Pro Features",
     gradient: "from-ascend-500 to-gold-400"
   }
@@ -185,9 +185,9 @@ export function SmartPurchasePrompt({
           {/* Quick Benefits */}
           <div className="space-y-3 mb-6">
             {[
-              'Unlimited habits & goals',
-              'AI goal decomposition',
-              'Advanced analytics',
+              'Unlimited habits, goals, and AI messages',
+              'All 5 AI coaches',
+              'Advanced analytics and weekly reviews',
               'Priority support'
             ].slice(0, 3).map((benefit, i) => (
               <div key={i} className="flex items-center gap-3 text-sm">

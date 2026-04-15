@@ -38,12 +38,10 @@ interface OrchestrateResponse {
 type Phase = 'idle' | 'decomposing' | 'executing' | 'synthesizing' | 'complete' | 'error';
 
 const PROVIDER_COLORS: Record<string, string> = {
+  ollama: 'text-violet-400',
   groq: 'text-green-400',
   cerebras: 'text-cyan-400',
   gemini: 'text-blue-400',
-  mistral: 'text-purple-400',
-  fireworks: 'text-red-400',
-  scaleway: 'text-teal-400',
   openrouter: 'text-yellow-400',
   together: 'text-amber-400',
   aiml: 'text-pink-400',

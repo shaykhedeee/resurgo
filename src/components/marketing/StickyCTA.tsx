@@ -7,7 +7,7 @@ const STICKY_DISMISSED_KEY = 'resurgo_sticky_cta_dismissed';
 
 const MESSAGES = [
   { headline: 'Turn your goals into a daily plan — AI does the work.', sub: 'Free forever. No credit card.' },
-  { headline: 'Set one goal. AI builds your entire system.', sub: '8 specialized AI coaches working for you.' },
+  { headline: 'Set one goal. AI builds your entire system.', sub: '5 specialized AI coaches working for you.' },
   { headline: 'Your AI coach is waiting. Start in 30 seconds.', sub: 'Brain Dump → Plan → Execute → Win.' },
 ];
 
@@ -69,7 +69,7 @@ export default function StickyCTA() {
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
         {/* Left: terminal prefix + rotating message */}
         <div className="flex items-center gap-3 min-w-0">
-          <span className="hidden shrink-0 font-pixel text-[0.5rem] text-orange-500 sm:inline">&gt;_</span>
+          <span className="hidden shrink-0 font-pixel text-[0.6rem] text-orange-500 sm:inline">&gt;_</span>
           <div
             className="min-w-0 transition-opacity duration-300"
             style={{ opacity: animate ? 0 : 1 }}
@@ -77,7 +77,7 @@ export default function StickyCTA() {
             <p className="truncate font-terminal text-sm font-semibold text-zinc-100 sm:text-base">
               {msg.headline}
             </p>
-            <p className="hidden font-pixel text-[0.45rem] tracking-widest text-zinc-500 sm:block">
+            <p className="hidden font-pixel text-[0.55rem] tracking-widest text-zinc-500 sm:block">
               {msg.sub}
             </p>
           </div>
@@ -87,7 +87,7 @@ export default function StickyCTA() {
         <div className="flex shrink-0 items-center gap-2">
           <Link
             href="/sign-up"
-            className="border-2 border-orange-600 bg-orange-600 px-4 py-2 font-terminal text-sm font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,0.7)] transition-all hover:bg-orange-500 active:translate-x-px active:translate-y-px active:shadow-none"
+            className="min-h-[44px] border-2 border-orange-600 bg-orange-600 px-4 py-2 font-terminal text-sm font-bold text-black shadow-[2px_2px_0px_rgba(0,0,0,0.7)] transition-all hover:bg-orange-500 active:translate-x-px active:translate-y-px active:shadow-none"
           >
             Start Free →
           </Link>

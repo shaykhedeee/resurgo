@@ -83,7 +83,7 @@ export function MarketingFooter() {
       {/* ── Version bar ── */}
       <div className="border-b border-zinc-900 bg-zinc-950">
         <div className="mx-auto flex max-w-7xl items-center justify-end px-4 py-2.5 sm:px-6">
-          <span className="font-pixel text-[0.4rem] tracking-widest text-zinc-700">v1.4.0</span>
+          <span className="font-pixel text-[0.5rem] tracking-widest text-zinc-700">v1.4.0</span>
         </div>
       </div>
 
@@ -124,7 +124,7 @@ export function MarketingFooter() {
 
             {/* Newsletter sub */}
             <div>
-              <p className="mb-2.5 font-pixel text-[0.45rem] tracking-widest text-zinc-500">
+              <p className="mb-2.5 font-pixel text-[0.55rem] tracking-widest text-zinc-500">
                 SYSTEM_UPDATES → YOUR_INBOX
               </p>
               {footerStatus === 'done' ? (
@@ -144,7 +144,7 @@ export function MarketingFooter() {
                     type="button"
                     onClick={handleFooterSubscribe}
                     disabled={footerStatus === 'loading'}
-                    className="border-2 border-l-0 border-orange-600 bg-orange-600 px-4 py-2 font-pixel text-[0.45rem] tracking-widest text-black transition hover:bg-orange-500 active:translate-y-[1px] disabled:opacity-50"
+                    className="min-h-[44px] border-2 border-l-0 border-orange-600 bg-orange-600 px-4 py-2 font-pixel text-[0.55rem] tracking-widest text-black transition hover:bg-orange-500 active:translate-y-[1px] disabled:opacity-50"
                   >
                     {footerStatus === 'loading' ? '...' : 'SUBSCRIBE'}
                   </button>
@@ -162,7 +162,7 @@ export function MarketingFooter() {
             <div key={heading} className="space-y-4">
               <div className="flex items-center gap-2 border-b border-zinc-900 pb-3">
                 <span className="text-orange-600/70">{icon}</span>
-                <p className="font-pixel text-[0.5rem] tracking-[0.2em] text-zinc-300">{heading}</p>
+                <p className="font-pixel text-[0.6rem] tracking-[0.2em] text-zinc-300">{heading}</p>
               </div>
               <ul className="space-y-2.5">
                 {links.map(({ href, label }) => (
@@ -171,7 +171,7 @@ export function MarketingFooter() {
                       href={href}
                       className="group flex items-center gap-2 font-terminal text-sm text-zinc-500 transition-colors hover:text-orange-400"
                     >
-                      <span className="font-pixel text-[0.4rem] text-zinc-800 transition group-hover:text-orange-700">›</span>
+                      <span className="font-pixel text-[0.5rem] text-zinc-800 transition group-hover:text-orange-700">›</span>
                       {label}
                     </Link>
                   </li>
@@ -209,7 +209,7 @@ export function MarketingFooter() {
               <span
                 key={t.label}
                 className={cn(
-                  'border border-zinc-900 px-2 py-0.5 font-pixel text-[0.4rem] tracking-widest',
+                  'border border-zinc-900 px-2 py-0.5 font-pixel text-[0.5rem] tracking-widest',
                   t.color,
                 )}
               >

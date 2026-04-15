@@ -9,6 +9,9 @@ import { useState, useCallback } from 'react';
 import { useAction } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { analytics } from '@/lib/analytics';
+import { trackMarketingEvent } from '@/lib/marketing/analytics';
+
+const PRICING_EXPERIMENT_STORAGE_KEY = 'resurgo_exp_experiment_pricing_layout_v1';
 
 interface DodoCheckoutButtonProps {
   productId: string;
@@ -32,6 +35,18 @@ export default function DodoCheckoutButton({
     setLoading(true);
     // Fire checkout_start analytics event before redirecting
     analytics.startTrial(label);
+    const pricingExperimentVariant =
+      typeof window !== 'undefined'
+        ? window.localStorage.getItem(PRICING_EXPERIMENT_STORAGE_KEY)
+        : null;
+
+    trackMarketingEvent('pricing_click', {
+      source: 'billing_page',
+      planLabel: label,
+      experimentId: 'experiment_pricing_layout_v1',
+      variant: pricingExperimentVariant ?? 'unknown',
+    });
+
     try {
       const result = await createCheckout({
         productId,

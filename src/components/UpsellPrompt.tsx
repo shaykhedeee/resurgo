@@ -37,26 +37,26 @@ interface UpsellPromptProps {
 const TRIGGER_CONFIG: Record<UpsellTrigger, { icon: typeof Sparkles; headline: string; description: string; cta: string }> = {
   goal_limit: {
     icon: Zap,
-    headline: 'Unlock unlimited goals',
-    description: 'You\'ve reached the free plan limit of 3 goals. Upgrade to Pro for unlimited goals and all 5 AI coaches.',
+    headline: 'You have outgrown the free goal limit',
+    description: 'You already filled all 3 free goals. Pro removes the ceiling and unlocks all 5 AI coaches so your system can keep expanding.',
     cta: 'Upgrade to Pro — $4.99/mo',
   },
   ai_message_limit: {
     icon: Sparkles,
-    headline: 'You\'ve used all 10 messages today',
-    description: 'Pro members get unlimited AI coaching messages. Keep your momentum going.',
-    cta: 'Get Unlimited Messages',
+    headline: 'You have used all 10 AI messages today',
+    description: 'You hit the free daily cap while you were still in motion. Pro keeps the conversation going with unlimited coaching messages.',
+    cta: 'Keep the conversation going',
   },
   coach_locked: {
     icon: Lock,
-    headline: 'This coach is Pro-only',
-    description: 'Upgrade to access all 5 AI coaches including Aurora, Phoenix, and Nexus.',
-    cta: 'Unlock All Coaches',
+    headline: 'This coach is part of Pro',
+    description: 'Upgrade to access all 5 AI coaches — Marcus, Titan, Aurora, Phoenix, and Nexus — whenever the situation changes.',
+    cta: 'Unlock all 5 coaches',
   },
   streak_milestone: {
     icon: Crown,
     headline: 'You\'re serious about this',
-    description: 'You\'ve built a 7-day streak. Lock in the Lifetime deal and never worry about subscriptions again.',
+    description: 'You built a 7-day streak. Pro helps protect that momentum with deeper coaching, more flexibility, and zero daily message limits.',
     cta: 'Claim Lifetime — $49.99',
   },
   feature_locked: {
@@ -67,9 +67,9 @@ const TRIGGER_CONFIG: Record<UpsellTrigger, { icon: typeof Sparkles; headline: s
   },
   usage_milestone: {
     icon: Crown,
-    headline: 'You\'ve been here a month',
-    description: 'You\'re using Resurgo consistently. Pro is $4.99/mo — less than a coffee. Worth it?',
-    cta: 'Go Pro',
+    headline: 'You are using Resurgo like an operator',
+    description: 'A month of consistent use is a strong signal. Pro removes the limits you have already proven you can use.',
+    cta: 'Remove the limits',
   },
 };
 

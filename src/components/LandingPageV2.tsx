@@ -187,7 +187,7 @@ const ACCESS_TIERS = [
     price: { monthly: '$0', annual: '$0' },
     period: { monthly: '/forever', annual: '/forever' },
     specs: [
-      'Unlimited habits & goals',
+      '3 goals + 5 habits/day',
       'Focus timer (all modes)',
       '2 AI coaches (Marcus & Titan)',
       'Daily planning',
@@ -205,7 +205,7 @@ const ACCESS_TIERS = [
     annualBilled: '$29.99/yr',
     savings: 'SAVE $29.88/yr',
     specs: [
-      'Everything in Free',
+      'Unlimited goals, habits, and messages',
       'All 5 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus)',
       'Advanced analytics & insights',
       'Weekly AI reviews',
@@ -229,7 +229,7 @@ const ACCESS_TIERS = [
       'Pay once, use forever',
       'All future updates included',
       'Founding member badge',
-      'First 100 sold — price locks in',
+      '1,000 founding spots total',
     ],
     cta: 'CLAIM FOUNDING LIFETIME',
     highlight: true,
@@ -369,15 +369,15 @@ function LandingPageV2() {
   const heroContent =
     heroVariant === 'clarity'
       ? {
-          headingMain: 'Drop your goal.',
-          headingAccent: 'Get a real plan in 90 seconds.',
+          headingMain: 'One clear goal.',
+          headingAccent: 'One focused daily plan.',
           subcopy:
             'Go from mental clutter to crystal-clear action in under 90 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
         }
       : heroVariant === 'adhd'
         ? {
-            headingMain: 'Drop your goal.',
-            headingAccent: 'Get a real plan in 90 seconds.',
+            headingMain: 'Too much on your head?',
+            headingAccent: 'One calm step forward.',
             subcopy:
               'When everything feels loud, Resurgo gives you one calm next step. Gentle accountability, flexible structure, and momentum that meets you where you are.',
           }
@@ -447,8 +447,10 @@ function LandingPageV2() {
 
         {/* ────────────────────── HERO ────────────────────── */}
         <section id="system" className="relative flex min-h-[calc(100svh-56px)] items-center overflow-hidden px-4 py-10 sm:px-6 sm:py-14 lg:min-h-[calc(100svh-64px)] lg:px-8 lg:py-20">
-          {/* Pixel dot-grid background */}
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.04]">
+
+          {/* ── Background layers ─────────────────────────── */}
+          {/* Pixel dot-grid */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-[0.055]">
             <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <pattern id="hero-pixel-grid" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
@@ -458,29 +460,56 @@ function LandingPageV2() {
               <rect width="100%" height="100%" fill="url(#hero-pixel-grid)" />
             </svg>
           </div>
-          <div className="mx-auto w-full max-w-7xl">
-            <div className="grid items-start gap-6 sm:gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
-              {/* Left — copy */}
-              <div className="max-w-2xl">
-                {/* Status badge */}
-                <div className="mb-6 flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-2 rounded-md border border-orange-900/50 bg-orange-950/20 px-3 py-1.5">
+          {/* Ambient orange glow — right panel area */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+            <div className="absolute -right-24 top-1/2 h-[560px] w-[560px] -translate-y-1/2 rounded-full bg-orange-600/[0.07] blur-[110px]" />
+            <div className="absolute right-1/3 bottom-0 h-[250px] w-[350px] rounded-full bg-amber-800/[0.05] blur-[70px]" />
+            <div className="absolute left-0 top-0 h-[200px] w-[300px] rounded-full bg-orange-950/[0.08] blur-[80px]" />
+          </div>
+
+          <div className="relative mx-auto w-full max-w-7xl">
+            <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14 xl:gap-20">
+
+              {/* ── LEFT: copy ──────────────────────────────── */}
+              <div className="max-w-[640px]">
+
+                {/* Status row */}
+                <div className="mb-7 flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-2 border border-orange-900/50 bg-orange-950/25 px-3 py-1.5">
                     <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
-                    <span className="font-pixel text-[0.45rem] tracking-widest text-orange-500/90">RESURGO · LIFE OS · v2.4</span>
+                    <span className="font-pixel text-[0.42rem] tracking-widest text-orange-400">LIFE OS · v2.4 · ONLINE</span>
                   </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-md border border-green-900/40 bg-green-950/20 px-2.5 py-1">
-                    <span className="h-1.5 w-1.5 rounded-full bg-green-500/80" />
-                    <span className="font-terminal text-xs text-green-400/80">All systems active</span>
+                  <span className="inline-flex items-center gap-1.5 border border-green-900/35 bg-green-950/15 px-2.5 py-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-green-500" />
+                    <span className="font-terminal text-xs text-green-400/90">All systems nominal</span>
+                  </span>
+                  <span className="inline-flex items-center border border-zinc-800/50 bg-zinc-900/30 px-2.5 py-1.5">
+                    <span className="font-pixel text-[0.38rem] tracking-widest text-zinc-500">FREE TO START</span>
                   </span>
                 </div>
 
-                <h1 className="font-sans text-3xl font-semibold leading-[1.08] tracking-tight text-zinc-100 text-balance sm:text-4xl md:text-5xl lg:text-6xl">
+                {/* Command line strip — distinctive left-border accent */}
+                <div className="mb-7 border-l-[3px] border-orange-600/70 bg-zinc-950/40 py-3 pl-4 pr-4">
+                  <span className="font-pixel text-[0.37rem] tracking-widest text-zinc-600">EXECUTION ENGINE</span>
+                  <div className="mt-2 flex items-start gap-2">
+                    <span className="mt-[3px] shrink-0 font-terminal text-sm text-orange-500 select-none">→</span>
+                    <p className="font-terminal text-sm leading-relaxed text-zinc-300 sm:text-[0.95rem]">
+                      <span className="text-zinc-500">goal </span>
+                      <span className="text-orange-400">&quot;launch my startup in 90 days&quot;</span>
+                      <span className="text-zinc-600"> --ai-coach MARCUS --create-plan</span>
+                    </p>
+                  </div>
+                </div>
+
+                {/* Main headline */}
+                <h1 className="font-sans text-[2.15rem] font-bold leading-[1.04] tracking-tight text-zinc-50 text-balance sm:text-5xl lg:text-[3.4rem] xl:text-[3.75rem]">
                   {heroContent.headingMain}
-                  <span className="mt-1 block text-orange-500">
+                  <span className="mt-2 block bg-gradient-to-r from-orange-500 via-orange-400 to-amber-400 bg-clip-text text-transparent leading-[1.1]">
                     {heroContent.headingAccent}
                   </span>
                 </h1>
-                <p className="mt-5 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300 sm:mt-6 sm:text-xl">
+
+                <p className="mt-5 font-terminal text-base leading-relaxed text-zinc-400 sm:mt-6 sm:text-lg">
                   {heroContent.subcopy}
                 </p>
 
@@ -490,23 +519,27 @@ function LandingPageV2() {
                     Start Free — No Credit Card
                   </TermLinkButton>
                   <TermLinkButton href="/sign-up?plan=lifetime" variant="gold" size="lg">
-                    Lock In Lifetime — $49.99
+                    Lifetime Access — $49.99
                   </TermLinkButton>
                 </div>
+                <p className="mt-3 font-terminal text-xs text-zinc-600">
+                  ★★★★★ &nbsp;No credit card &nbsp;·&nbsp; Free forever &nbsp;·&nbsp; Cancel anytime
+                </p>
 
-                {/* Metrics bar */}
-                <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-4 md:gap-4">
+                {/* Metrics — terminal-labelled */}
+                <div className="mt-8 grid grid-cols-2 gap-2 md:grid-cols-4">
                   {METRICS.map((m) => (
-                    <div key={m.label} className="rounded-lg bg-zinc-950/70 px-3 py-3 sm:px-4 sm:py-4">
-                      <p className="font-sans text-xl font-semibold text-orange-400 sm:text-2xl">{m.value}</p>
-                      <p className="mt-1 font-terminal text-sm text-zinc-400 sm:text-base">{m.label}</p>
+                    <div key={m.label} className="border border-zinc-800/70 bg-zinc-950/55 px-3 py-3 sm:px-4">
+                      <p className="font-pixel text-[0.33rem] tracking-widest text-zinc-600 mb-2">{m.label.toUpperCase()}</p>
+                      <p className="font-sans text-xl font-bold text-orange-400 sm:text-[1.4rem]">{m.value}</p>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Right — Enhanced Terminal Preview */}
-              <div className="hidden lg:flex flex-col gap-3">
+              {/* ── RIGHT: terminal visual ────────────────── */}
+              <div className="hidden lg:flex flex-col gap-2.5">
+                {/* Main terminal */}
                 <TerminalWindow
                   title="resurgo.terminal"
                   variant="bordered"
@@ -514,9 +547,9 @@ function LandingPageV2() {
                   crtGlow
                   lines={HERO_TERMINAL_LINES}
                   autoType
-                  typeSpeed={25}
-                  lineDelay={350}
-                  maxBodyHeight="240px"
+                  typeSpeed={22}
+                  lineDelay={320}
+                  maxBodyHeight="260px"
                   prompt="$"
                   headerRight={
                     <SparklineBars
@@ -527,110 +560,74 @@ function LandingPageV2() {
                       color="orange"
                     />
                   }
-                  footer={
-                    <StatusBar
-                      items={HERO_STATUS_LEFT}
-                      rightItems={HERO_STATUS_RIGHT}
-                      compact
-                    />
-                  }
-                  className="rounded-lg shadow-[0_12px_30px_rgba(0,0,0,0.45)]"
+                  footer={<StatusBar items={HERO_STATUS_LEFT} rightItems={HERO_STATUS_RIGHT} compact />}
+                  className="shadow-[0_0_60px_rgba(234,88,12,0.09),0_16px_40px_rgba(0,0,0,0.55)]"
                 />
 
-                {/* Quick progress snapshot below terminal */}
+                {/* Live metric strip */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
-                    <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">HABITS</p>
+                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2.5">
+                    <p className="mb-1.5 font-pixel text-[0.32rem] tracking-widest text-[var(--term-fg-dimmer)]">HABITS</p>
                     <ProgressBar value={60} variant="blocks" color="green" size="sm" showLabel />
                   </div>
-                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
-                    <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">FOCUS</p>
+                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2.5">
+                    <p className="mb-1.5 font-pixel text-[0.32rem] tracking-widest text-[var(--term-fg-dimmer)]">FOCUS</p>
                     <ProgressBar value={75} variant="ascii" color="cyan" size="sm" showLabel />
                   </div>
-                  <div className="rounded-md border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2">
-                    <p className="font-pixel text-[0.35rem] tracking-widest text-[var(--term-fg-dimmer)] mb-1">XP</p>
+                  <div className="border border-[var(--term-border)] bg-[var(--term-bg)] px-3 py-2.5">
+                    <p className="mb-1.5 font-pixel text-[0.32rem] tracking-widest text-[var(--term-fg-dimmer)]">XP</p>
                     <ProgressBar value={88} variant="gradient" color="orange" size="sm" showLabel />
                   </div>
                 </div>
 
-                {/* Keyboard hints */}
-                <KeyboardHints
-                  hints={HERO_KEY_HINTS}
-                  compact
-                  variant="minimal"
-                  className="justify-center opacity-60 mt-1"
-                />
+                {/* Coaches online strip */}
+                <div className="flex items-center justify-between border border-zinc-800/50 bg-zinc-950/50 px-3 py-2.5">
+                  <span className="font-pixel text-[0.32rem] tracking-widest text-zinc-600">COACHES ONLINE</span>
+                  <div className="flex items-center gap-3">
+                    {[
+                      { id: 'MARCUS', color: 'bg-yellow-500' },
+                      { id: 'TITAN',  color: 'bg-red-500' },
+                      { id: 'AURORA', color: 'bg-purple-500' },
+                      { id: 'PHOENIX',color: 'bg-orange-500' },
+                      { id: 'NEXUS',  color: 'bg-pink-500' },
+                    ].map((c) => (
+                      <span key={c.id} className="flex items-center gap-1">
+                        <span className={`h-1.5 w-1.5 rounded-full ${c.color}`} />
+                        <span className="font-pixel text-[0.28rem] tracking-widest text-zinc-700">{c.id}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <KeyboardHints hints={HERO_KEY_HINTS} compact variant="minimal" className="mt-0.5 justify-center opacity-45" />
               </div>
 
-              {/* Mobile/tablet preview (prevents visual emptiness and clipping) */}
-              <div className="rounded-xl bg-zinc-950/60 p-4 lg:hidden">
-                <p className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">RESURGO.TERMINAL PREVIEW</p>
-                <div className="mt-3 rounded-md bg-black/70 p-3">
-                  <p className="font-terminal text-sm text-zinc-400">$ resurgo init --goal &quot;launch startup&quot;</p>
-                  <p className="mt-1 font-terminal text-sm text-green-400">→ 4 milestones generated</p>
-                  <p className="mt-1 font-terminal text-sm text-cyan-400">→ 12 weekly targets created</p>
-                  <p className="mt-1 font-terminal text-sm text-orange-400">→ Coach MARCUS assigned</p>
+              {/* ── Mobile terminal chrome ───────────────── */}
+              <div className="lg:hidden border border-zinc-800/50 bg-zinc-950/40">
+                {/* Window titlebar */}
+                <div className="flex items-center gap-1.5 border-b border-zinc-800/50 bg-zinc-900/60 px-3 py-2">
+                  <span className="h-2 w-2 rounded-full bg-red-600/70" />
+                  <span className="h-2 w-2 rounded-full bg-yellow-600/70" />
+                  <span className="h-2 w-2 rounded-full bg-green-600/70" />
+                  <span className="ml-2 font-pixel text-[0.33rem] tracking-widest text-zinc-600">resurgo.terminal — execution engine</span>
+                </div>
+                <div className="space-y-1.5 p-4">
+                  <p className="font-terminal text-sm text-zinc-500">$ resurgo init --goal &quot;launch startup&quot;</p>
+                  <p className="font-terminal text-[0.82rem] text-zinc-500 pl-2">✦ Analyzing goal complexity…</p>
+                  <p className="font-terminal text-[0.82rem] text-green-400 pl-2">→ 4 milestones generated</p>
+                  <p className="font-terminal text-[0.82rem] text-cyan-400 pl-2">→ 12 weekly targets created</p>
+                  <p className="font-terminal text-[0.82rem] text-orange-400 pl-2">→ Coach MARCUS assigned (Stoic Strategist)</p>
+                  <p className="font-terminal text-[0.82rem] text-green-500 pl-2">✓ Day 1 plan ready. Execute now.</p>
+                  <p className="font-terminal text-xs text-zinc-700 pt-1">$ <span className="animate-pulse">_</span></p>
                 </div>
               </div>
+
             </div>
           </div>
         </section>
 
         {/* ────────────────── INTERACTIVE TERMINAL DEMO ──────────────── */}
         <TerminalDemo />
-
-        {/* ────────────────── BRAND STORY ────────────────── */}
-        <section className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
-          <div className="mx-auto max-w-4xl text-center">
-            <p className="font-pixel text-[0.6rem] tracking-widest text-orange-600">OUR_STORY</p>
-            <h2 className="mt-3 font-pixel text-lg text-zinc-100 sm:text-xl">
-              Why we built the Resurgo life command center
-            </h2>
-
-            <div className="mt-8 space-y-6 text-left">
-              <p className="font-terminal text-lg leading-relaxed text-zinc-300">
-                We were tired of switching between five different apps just to stay organized. One for tasks, one for
-                goals, one for focus timers, one for journaling, one for wellness. None of them talked to each other.
-                None of them understood the full picture of what you&apos;re trying to execute.
-              </p>
-              <p className="font-terminal text-lg leading-relaxed text-zinc-300">
-                So we built <span className="font-bold text-orange-400">Resurgo</span> —{' '}
-                <span className="italic text-zinc-200">Latin for &ldquo;to rise again&rdquo;</span>. A single platform
-                where you capture what matters, break it down with AI, execute daily with habits and focus sessions, and
-                review your progress weekly with an AI coach that actually knows your journey.
-              </p>
-              <p className="font-terminal text-lg leading-relaxed text-zinc-300">
-                Resurgo isn&apos;t about doing more. It&apos;s about doing{' '}
-                <span className="text-zinc-100">what matters</span>, consistently, with clarity. Whether you&apos;re
-                building a business, studying for exams, training for a marathon, or just trying to drink more water —
-                the system adapts to you.
-              </p>
-            </div>
-
-            {/* Mission / Philosophy / Promise */}
-            <div className="mt-10 grid grid-cols-1 gap-px bg-zinc-900 md:grid-cols-3">
-              {[
-                {
-                  label: 'MISSION',
-                  value: 'Help people build consistency through AI-powered clarity and daily execution.',
-                },
-                {
-                  label: 'PHILOSOPHY',
-                  value: 'One goal. Daily execution. Weekly review. Continuous growth.',
-                },
-                {
-                  label: 'PROMISE',
-                  value: 'Your data stays yours. Free forever tier. No dark patterns. No data selling.',
-                },
-              ].map((item) => (
-                <div key={item.label} className="bg-black p-4 sm:p-5">
-                  <p className="font-pixel text-[0.6rem] tracking-widest text-orange-500">{item.label}</p>
-                  <p className="mt-2 font-terminal text-base leading-relaxed text-zinc-300">{item.value}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
         <Suspense fallback={null}>
@@ -984,7 +981,7 @@ function LandingPageV2() {
                   Real outcomes from people using Resurgo
                 </h2>
                 <p className="mt-1 font-terminal text-lg text-zinc-400">
-                  Real outcomes from people using Resurgo to plan clearly and follow through daily
+                  Verified results from daily users — no marketing copy, just real progress.
                 </p>
               </div>
               <p className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">

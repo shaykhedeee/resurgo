@@ -9,14 +9,13 @@
 // 4. SYNTHESIZE — A "synthesizer" AI merges all sub-results into one coherent answer
 //
 // PROVIDER SPECIALIZATIONS:
+//   ollama     → local inference, free, private (first choice when available)
 //   cerebras   → ultra-fast quick tasks, data extraction
 //   groq       → fast general-purpose, coaching responses
 //   gemini     → long-context analysis, document understanding
-//   mistral    → reasoning, multilingual, structured output
-//   fireworks  → fast inference, creative generation
-//   scaleway   → EU-hosted analysis, privacy-sensitive tasks
 //   together   → balanced fallback
 //   openrouter → free-tier overflow
+//   aiml       → free tier models
 //   openai     → complex synthesis (last resort)
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -98,14 +97,14 @@ export interface OrchestrationOptions {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const PROVIDER_SPECIALIZATIONS: Record<SubTaskType, AIProvider[]> = {
-  analysis:    ['gemini', 'mistral', 'groq', 'fireworks'],
-  creative:    ['mistral', 'fireworks', 'groq', 'together'],
-  extraction:  ['cerebras', 'groq', 'fireworks', 'scaleway'],
-  planning:    ['mistral', 'gemini', 'groq', 'together'],
+  analysis:    ['gemini', 'ollama', 'groq', 'cerebras'],
+  creative:    ['ollama', 'groq', 'together', 'openrouter'],
+  extraction:  ['cerebras', 'groq', 'ollama', 'aiml'],
+  planning:    ['ollama', 'gemini', 'groq', 'together'],
   research:    ['gemini', 'groq', 'openrouter', 'together'],
-  emotional:   ['groq', 'mistral', 'fireworks', 'together'],
-  technical:   ['cerebras', 'groq', 'mistral', 'fireworks'],
-  synthesis:   ['mistral', 'gemini', 'groq', 'fireworks'],
+  emotional:   ['groq', 'ollama', 'together', 'openrouter'],
+  technical:   ['cerebras', 'groq', 'ollama', 'gemini'],
+  synthesis:   ['ollama', 'gemini', 'groq', 'together'],
 };
 
 const SUBTASK_TO_TASKTYPE: Record<SubTaskType, TaskType> = {
@@ -220,8 +219,8 @@ Return ONLY a JSON object:
 // Step 2: CLASSIFY — Assign each sub-task to the best available provider
 // ─────────────────────────────────────────────────────────────────────────────
 
-function assignProviders(subTasks: SubTask[]): SubTask[] {
-  const available = getAvailableProviders();
+async function assignProviders(subTasks: SubTask[]): Promise<SubTask[]> {
+  const available = await getAvailableProviders();
   const providerLoad = new Map<AIProvider, number>(); // Track load balancing
 
   return subTasks.map((task) => {
@@ -465,7 +464,7 @@ export async function orchestrate(
   }
 
   // ── Step 2: Assign providers ──
-  subTasks = assignProviders(subTasks);
+  subTasks = await assignProviders(subTasks);
   console.log(
     `[Orchestrator] Provider assignments:`,
     subTasks.map((t) => `${t.title} → ${t.provider}`).join(', ')

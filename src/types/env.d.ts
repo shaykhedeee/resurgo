@@ -28,9 +28,7 @@ declare namespace NodeJS {
     AIML_API_KEY?: string;
     CEREBRAS_API_KEY?: string;
     TOGETHER_API_KEY?: string;
-    MISTRAL_API_KEY?: string;
-    FIREWORKS_API_KEY?: string;
-    SCALEWAY_API_KEY?: string;
+    OLLAMA_BASE_URL?: string;
 
     // App config
     NEXT_PUBLIC_APP_NAME?: string;

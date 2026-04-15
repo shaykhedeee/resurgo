@@ -705,9 +705,9 @@ export function Onboarding() {
                     <span className="font-bold text-lg">Resurgo Pro</span>
                   </div>
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-2xl font-bold text-themed">$4</span>
+                    <span className="text-2xl font-bold text-themed">$4.99</span>
                     <span className="text-themed-muted">/month</span>
-                    <span className="text-sm line-through text-themed-muted">$5</span>
+                    <span className="text-xs text-themed-muted">or $29.99/year</span>
                   </div>
                 </div>
                 
@@ -749,8 +749,8 @@ export function Onboarding() {
                     <p className="text-xs text-themed-muted">Pay once, yours forever</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-themed">$79 <span className="text-xs line-through text-themed-muted">$99</span></p>
-                    <p className="text-xs text-green-400">Save $20</p>
+                    <p className="font-bold text-themed">$49.99</p>
+                    <p className="text-xs text-green-400">Founding lifetime price</p>
                   </div>
                 </div>
               </div>
@@ -765,7 +765,7 @@ export function Onboarding() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <p className="text-xs text-themed-muted mt-2">
-                  5 habits • 2 goals • Basic features
+                  5 habits/day • 3 goals • Basic features
                 </p>
               </div>
             </div>

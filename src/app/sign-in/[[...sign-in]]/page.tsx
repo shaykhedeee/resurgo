@@ -1,144 +1,7 @@
 import Link from 'next/link';
 import { SignIn } from '@clerk/nextjs';
 import { AuthRuntimeBoundary } from '@/components/AuthRuntimeBoundary';
-
-const hasValidClerkKey =
-  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== 'YOUR_PUBLISHABLE_KEY' &&
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') &&
-  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-
-// Inline-style approach ensures Clerk elements are visible regardless of
-// Tailwind JIT purging or CSS specificity battles.
-const clerkAppearance = {
-  variables: {
-    colorPrimary: '#EA580C',
-    colorBackground: '#18181b',
-    colorInputBackground: '#27272a',
-    colorInputText: '#f4f4f5',
-    colorText: '#f4f4f5',
-    colorTextSecondary: '#d4d4d8',
-    colorTextOnPrimaryBackground: '#ffffff',
-    colorNeutral: '#a1a1aa',
-    colorDanger: '#f87171',
-    colorSuccess: '#4ade80',
-    colorWarning: '#fbbf24',
-    borderRadius: '0.5rem',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-    fontSize: '14px',
-    spacingUnit: '4px',
-  },
-  elements: {
-    rootBox: { width: '100%' },
-    card: {
-      background: 'transparent',
-      boxShadow: 'none',
-      border: 'none',
-      padding: 0,
-      width: '100%',
-    },
-    headerTitle: {
-      color: '#f4f4f5',
-      fontWeight: '700',
-      fontSize: '1.125rem',
-    },
-    headerSubtitle: {
-      color: '#a1a1aa',
-      fontSize: '0.875rem',
-    },
-    socialButtonsBlockButton: {
-      background: '#27272a',
-      border: '1px solid #3f3f46',
-      borderRadius: '0.5rem',
-      color: '#e4e4e7',
-      fontWeight: '500',
-      transition: 'background 0.15s, border-color 0.15s',
-    },
-    socialButtonsBlockButtonText: {
-      color: '#e4e4e7',
-      fontWeight: '500',
-    },
-    dividerLine: { background: '#3f3f46' },
-    dividerText: {
-      color: '#71717a',
-      fontSize: '0.75rem',
-      background: '#18181b',
-      padding: '0 0.5rem',
-    },
-    formFieldLabel: {
-      color: '#e4e4e7',
-      fontSize: '0.875rem',
-      fontWeight: '500',
-      marginBottom: '4px',
-      display: 'block',
-    },
-    formFieldInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '0.5rem',
-      color: '#f4f4f5',
-      fontSize: '0.875rem',
-      padding: '10px 12px',
-      width: '100%',
-      outline: 'none',
-      transition: 'border-color 0.15s',
-    },
-    formFieldInputShowPasswordButton: {
-      color: '#a1a1aa',
-    },
-    formButtonPrimary: {
-      background: '#EA580C',
-      borderRadius: '0.5rem',
-      color: '#ffffff',
-      fontWeight: '700',
-      fontSize: '0.875rem',
-      padding: '10px 16px',
-      width: '100%',
-      border: 'none',
-      cursor: 'pointer',
-      transition: 'background 0.15s',
-    },
-    footerActionLink: {
-      color: '#f97316',
-      fontWeight: '500',
-      textDecoration: 'none',
-    },
-    footerActionText: { color: '#a1a1aa' },
-    footerAction: {
-      borderTop: '1px solid #27272a',
-      paddingTop: '1rem',
-      marginTop: '1rem',
-    },
-    identityPreviewText: { color: '#d4d4d8' },
-    identityPreviewEditButton: { color: '#f97316' },
-    formFieldSuccessText: { color: '#4ade80', fontSize: '0.75rem' },
-    formFieldErrorText: { color: '#f87171', fontSize: '0.75rem', marginTop: '4px' },
-    alert: {
-      background: 'rgba(127,29,29,0.3)',
-      border: '1px solid rgba(239,68,68,0.4)',
-      borderRadius: '0.5rem',
-      padding: '12px',
-    },
-    alertText: { color: '#fca5a5', fontSize: '0.875rem' },
-    formResendCodeLink: { color: '#f97316' },
-    otpCodeFieldInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '0.5rem',
-      color: '#f4f4f5',
-      textAlign: 'center',
-      fontWeight: '700',
-    },
-    formFieldCheckboxInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '4px',
-    },
-    formFieldCheckboxLabel: { color: '#d4d4d8' },
-    navbar: { display: 'none' },
-    pageScrollBox: { padding: 0 },
-  },
-};
+import { clerkAppearance, hasValidClerkKey } from '@/lib/auth/clerkAppearance';
 
 export default function Page() {
   if (!hasValidClerkKey) {
@@ -174,14 +37,26 @@ export default function Page() {
 
       <div className="relative w-full max-w-md">
         {/* Brand header */}
-        <div className="mb-6 text-center">
+        <div className="mb-4 text-center">
           <Link href="/" className="inline-flex items-center gap-2 group">
             <div className="w-7 h-7 bg-orange-600 rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">R</span>
             </div>
             <span className="font-bold text-white text-lg tracking-tight">RESURGO</span>
           </Link>
-          <p className="text-zinc-500 text-xs mt-2 font-mono tracking-widest">PERFORMANCE OS · SIGN IN</p>
+          <p className="text-zinc-500 text-xs mt-2 font-mono tracking-widest">EXECUTION OS · SIGN IN</p>
+        </div>
+
+        <div className="mb-4 border border-zinc-800 bg-zinc-900/70 p-4">
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">EMAIL_FIRST_SIGN_IN_FLOW</p>
+          <ol className="mt-2 space-y-1 font-mono text-xs text-zinc-400">
+            <li>1. Enter your account email in the form below.</li>
+            <li>2. If a previous identity appears, select <span className="text-zinc-200">Use another account</span> to enter a different email.</li>
+            <li>3. Use <span className="text-zinc-200">Forgot password</span> if you need a secure reset link.</li>
+          </ol>
+          <p className="mt-3 font-mono text-[11px] leading-relaxed text-zinc-500">
+            Expected behavior: sign in with your email, then continue directly to your execution dashboard.
+          </p>
         </div>
 
         {/* Card */}
@@ -210,16 +85,13 @@ export default function Page() {
                 path="/sign-in"
                 signUpUrl="/sign-up"
                 fallbackRedirectUrl="/dashboard"
+                forceRedirectUrl="/dashboard"
                 appearance={clerkAppearance}
               />
             </AuthRuntimeBoundary>
 
-            {/* Help note */}
             <p className="mt-4 text-[11px] leading-relaxed text-zinc-600 border-t border-zinc-800 pt-3">
-              <span className="text-zinc-500 font-medium">PASSWORD_BREACH_ERROR?</span>{' '}
-              Use the{' '}
-              <span className="text-orange-500">Forgot password?</span> link above to reset,
-              or choose a unique password.
+              For account security, always sign in with your registered email. If an email is preselected and incorrect, switch account before continuing.
             </p>
           </div>
         </div>

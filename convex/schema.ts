@@ -1082,6 +1082,7 @@ export default defineSchema({
     successPatterns: v.optional(v.array(v.string())),        // what advice/approaches led to action
     struggleAreas: v.optional(v.array(v.string())),          // recurring blockers/challenges
     emotionalTriggers: v.optional(v.array(v.string())),      // what motivates or demotivates them
+    goalDecompositionProfile: v.optional(v.string()),           // how this user prefers plans broken down (micro vs macro, domains, detail level)
     coachingEffectiveness: v.optional(v.object({
       totalAdviceGiven: v.number(),
       adviceActedOn: v.number(),

@@ -188,6 +188,57 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.3,
     },
     // ─────────────────────────────────────────────────────────────────────────
+    // KEYWORD LANDING PAGES (niche audiences)
+    // ─────────────────────────────────────────────────────────────────────────
+    {
+      url: `${siteUrl}/adhd`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
+    {
+      url: `${siteUrl}/solopreneurs`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.87,
+    },
+    {
+      url: `${siteUrl}/indie-hackers`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.86,
+    },
+    {
+      url: `${siteUrl}/freelance-developers`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.86,
+    },
+    {
+      url: `${siteUrl}/digital-nomads`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/content-creators`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${siteUrl}/ai-productivity-assistant`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.88,
+    },
+    {
+      url: `${siteUrl}/vision-board-studio`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    // ─────────────────────────────────────────────────────────────────────────
     // KEY MARKETING PAGES
     // ─────────────────────────────────────────────────────────────────────────
     {

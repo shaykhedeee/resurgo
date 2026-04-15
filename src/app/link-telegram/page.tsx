@@ -13,9 +13,15 @@ import { useUser, SignInButton } from '@clerk/nextjs';
 import { useMutation } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const hasValidClerkKey =
+  !!clerkPublishableKey &&
+  clerkPublishableKey.startsWith('pk_') &&
+  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(clerkPublishableKey);
+
 type LinkState = 'idle' | 'linking' | 'success' | 'error' | 'already_linked';
 
-export default function LinkTelegramPage() {
+function LinkTelegramPageWithAuth() {
   const searchParams = useSearchParams();
   const token = searchParams.get('token') ?? '';
 
@@ -41,7 +47,7 @@ export default function LinkTelegramPage() {
           setErrorMsg(result.error);
           setState('error');
         }
-      } catch (err) {
+      } catch (_err) {
         setErrorMsg('Something went wrong. Please try again.');
         setState('error');
       }
@@ -149,6 +155,21 @@ export default function LinkTelegramPage() {
       </div>
     </Shell>
   );
+}
+
+export default function LinkTelegramPage() {
+  if (!hasValidClerkKey) {
+    return (
+      <Shell>
+        <p className="text-red-400 font-mono text-sm mb-2">Telegram linking unavailable</p>
+        <p className="text-zinc-400 font-mono text-xs">
+          Clerk authentication is not configured for this environment.
+        </p>
+      </Shell>
+    );
+  }
+
+  return <LinkTelegramPageWithAuth />;
 }
 
 // ── Shared shell wrapper ──────────────────────────────────────────────────────

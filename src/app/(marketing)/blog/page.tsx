@@ -27,7 +27,11 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://resurgo.life/blog' },
 };
 
-const POSTS = BLOG_POST_INDEX;
+const POSTS = [...BLOG_POST_INDEX].sort((a, b) => {
+  const aTime = new Date(a.lastModified ?? a.date).getTime();
+  const bTime = new Date(b.lastModified ?? b.date).getTime();
+  return bTime - aTime;
+});
 
 function toIsoDate(value: string): string {
   const parsed = new Date(value);
@@ -87,6 +91,10 @@ export default function BlogPage() {
               <PixelIcon name="terminal" size={11} />
               SIGNAL_FEED
             </div>
+            <div className="mt-2 inline-flex items-center gap-2 border border-orange-900/50 bg-orange-950/20 px-3 py-1 font-mono text-[10px] tracking-widest text-orange-400">
+              <PixelIcon name="check" size={11} />
+              BETA_READY_CONTENT
+            </div>
             <h1 className="mt-3 font-mono text-2xl font-bold text-zinc-100">Dispatches from the Grind</h1>
             <p className="mt-1 font-mono text-xs text-zinc-500">
               Evidence-based insights on productivity, habit science, and human performance. Simple ideas that actually work.
@@ -139,6 +147,12 @@ export default function BlogPage() {
                 <span className="inline-flex items-center gap-1"><PixelIcon name="calendar" size={11} className="text-orange-500" />{post.date}</span>
                 <span>&middot;</span>
                 <span className="inline-flex items-center gap-1"><PixelIcon name="timer" size={11} className="text-orange-500" />{post.readTime} read</span>
+                {post.lastModified && (
+                  <>
+                    <span>&middot;</span>
+                    <span className="inline-flex items-center gap-1 text-orange-400"><PixelIcon name="check" size={11} className="text-orange-500" />updated</span>
+                  </>
+                )}
               </div>
             </Link>
           ))}

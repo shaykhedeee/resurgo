@@ -19,8 +19,14 @@ import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState, ReactNode } from 'react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
-import { UserButton, useClerk } from '@clerk/nextjs';
+import { UserButton } from '@clerk/nextjs';
 import { Search, Brain, Settings as SettingsIcon } from 'lucide-react';
+
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const hasValidClerkKey =
+  !!clerkPublishableKey &&
+  clerkPublishableKey.startsWith('pk_') &&
+  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(clerkPublishableKey);
 
 // Lazy-load non-critical overlay components to improve initial bundle
 const BrainDump = dynamic(() => import('@/components/BrainDump'), { ssr: false });
@@ -50,6 +56,7 @@ const NAV_SECTIONS = [
       { href: '/coach', label: 'AI Coach' },
       { href: '/plan-builder', label: 'Plan Builder' },
       { href: '/vision-board', label: 'Vision Board' },
+      { href: '/ai-brain', label: 'AI Brain' },
     ],
   },
   {
@@ -154,7 +161,6 @@ function AiCentreButton({ pathname }: { pathname: string }) {
 
 function DashboardLayoutContent({ children }: { children: ReactNode }) {
   const { user, isLoading, isAuthenticated } = useStoreUser();
-  const { signOut } = useClerk();
   const router = useRouter();
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
@@ -376,7 +382,13 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
             'mt-2 flex items-center gap-2 border-t border-zinc-900 px-2.5 py-2.5',
             collapsed && 'justify-center'
           )}>
-            <UserButton afterSignOutUrl="/" />
+            {hasValidClerkKey ? (
+              <UserButton afterSignOutUrl="/" />
+            ) : (
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-zinc-700 bg-zinc-900 font-pixel text-[0.5rem] text-zinc-400">
+                G
+              </div>
+            )}
             {!collapsed && (
               <>
                 {user && (
@@ -389,7 +401,19 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                 )}
                 <button
                   className="font-terminal text-sm text-zinc-500 hover:text-orange-500 transition-colors duration-100"
-                  onClick={() => { void signOut({ redirectUrl: '/' }); }}
+                  onClick={() => {
+                    void (async () => {
+                      try {
+                        if (typeof window !== 'undefined' && window.Clerk?.signOut) {
+                          await window.Clerk.signOut();
+                        }
+                      } catch (error) {
+                        console.warn('[dashboard] Clerk signOut failed, redirecting to home', error);
+                      } finally {
+                        router.push('/');
+                      }
+                    })();
+                  }}
                 >
                   EXIT
                 </button>

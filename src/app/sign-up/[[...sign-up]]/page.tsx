@@ -1,141 +1,7 @@
 import Link from 'next/link';
 import { SignUp } from '@clerk/nextjs';
 import { AuthRuntimeBoundary } from '@/components/AuthRuntimeBoundary';
-
-const hasValidClerkKey =
-  !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY !== 'YOUR_PUBLISHABLE_KEY' &&
-  process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith('pk_') &&
-  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
-
-// Inline-style approach: guaranteed visibility regardless of Tailwind purging
-const clerkAppearance = {
-  variables: {
-    colorPrimary: '#EA580C',
-    colorBackground: '#18181b',
-    colorInputBackground: '#27272a',
-    colorInputText: '#f4f4f5',
-    colorText: '#f4f4f5',
-    colorTextSecondary: '#d4d4d8',
-    colorTextOnPrimaryBackground: '#ffffff',
-    colorNeutral: '#a1a1aa',
-    colorDanger: '#f87171',
-    colorSuccess: '#4ade80',
-    colorWarning: '#fbbf24',
-    borderRadius: '0.5rem',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
-    fontSize: '14px',
-    spacingUnit: '4px',
-  },
-  elements: {
-    rootBox: { width: '100%' },
-    card: {
-      background: 'transparent',
-      boxShadow: 'none',
-      border: 'none',
-      padding: 0,
-      width: '100%',
-    },
-    headerTitle: {
-      color: '#f4f4f5',
-      fontWeight: '700',
-      fontSize: '1.125rem',
-    },
-    headerSubtitle: {
-      color: '#a1a1aa',
-      fontSize: '0.875rem',
-    },
-    socialButtonsBlockButton: {
-      background: '#27272a',
-      border: '1px solid #3f3f46',
-      borderRadius: '0.5rem',
-      color: '#e4e4e7',
-      fontWeight: '500',
-      transition: 'background 0.15s, border-color 0.15s',
-    },
-    socialButtonsBlockButtonText: {
-      color: '#e4e4e7',
-      fontWeight: '500',
-    },
-    dividerLine: { background: '#3f3f46' },
-    dividerText: {
-      color: '#71717a',
-      fontSize: '0.75rem',
-      background: '#18181b',
-      padding: '0 0.5rem',
-    },
-    formFieldLabel: {
-      color: '#e4e4e7',
-      fontSize: '0.875rem',
-      fontWeight: '500',
-      marginBottom: '4px',
-      display: 'block',
-    },
-    formFieldInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '0.5rem',
-      color: '#f4f4f5',
-      fontSize: '0.875rem',
-      padding: '10px 12px',
-      width: '100%',
-      outline: 'none',
-      transition: 'border-color 0.15s',
-    },
-    formFieldInputShowPasswordButton: { color: '#a1a1aa' },
-    formButtonPrimary: {
-      background: '#EA580C',
-      borderRadius: '0.5rem',
-      color: '#ffffff',
-      fontWeight: '700',
-      fontSize: '0.875rem',
-      padding: '10px 16px',
-      width: '100%',
-      border: 'none',
-      cursor: 'pointer',
-      transition: 'background 0.15s',
-    },
-    footerActionLink: {
-      color: '#f97316',
-      fontWeight: '500',
-      textDecoration: 'none',
-    },
-    footerActionText: { color: '#a1a1aa' },
-    footerAction: {
-      borderTop: '1px solid #27272a',
-      paddingTop: '1rem',
-      marginTop: '1rem',
-    },
-    identityPreviewText: { color: '#d4d4d8' },
-    identityPreviewEditButton: { color: '#f97316' },
-    formFieldSuccessText: { color: '#4ade80', fontSize: '0.75rem' },
-    formFieldErrorText: { color: '#f87171', fontSize: '0.75rem', marginTop: '4px' },
-    alert: {
-      background: 'rgba(127,29,29,0.3)',
-      border: '1px solid rgba(239,68,68,0.4)',
-      borderRadius: '0.5rem',
-      padding: '12px',
-    },
-    alertText: { color: '#fca5a5', fontSize: '0.875rem' },
-    formResendCodeLink: { color: '#f97316' },
-    otpCodeFieldInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '0.5rem',
-      color: '#f4f4f5',
-      textAlign: 'center',
-      fontWeight: '700',
-    },
-    formFieldCheckboxInput: {
-      background: '#27272a',
-      border: '1.5px solid #52525b',
-      borderRadius: '4px',
-    },
-    formFieldCheckboxLabel: { color: '#d4d4d8' },
-    navbar: { display: 'none' },
-    pageScrollBox: { padding: 0 },
-  },
-};
+import { clerkAppearance, hasValidClerkKey } from '@/lib/auth/clerkAppearance';
 
 export default function Page() {
   if (!hasValidClerkKey) {
@@ -170,23 +36,26 @@ export default function Page() {
 
       <div className="relative w-full max-w-md">
         {/* Brand header */}
-        <div className="mb-6 text-center">
+        <div className="mb-4 text-center">
           <Link href="/" className="inline-flex items-center gap-2 group">
             <div className="w-7 h-7 bg-orange-600 rounded flex items-center justify-center">
               <span className="text-white font-bold text-sm">R</span>
             </div>
             <span className="font-bold text-white text-lg tracking-tight">RESURGO</span>
           </Link>
-          <p className="text-zinc-500 text-xs mt-2 font-mono tracking-widest">PERFORMANCE OS · CREATE ACCOUNT</p>
+          <p className="text-zinc-500 text-xs mt-2 font-mono tracking-widest">EXECUTION OS · CREATE ACCOUNT</p>
         </div>
 
-        {/* Value prop strip */}
-        <div className="flex items-center justify-center gap-4 mb-5">
-          {['AI Goals', 'Vision Board', 'Habit OS', 'Daily Coach'].map((feat) => (
-            <span key={feat} className="text-[10px] text-zinc-500 flex items-center gap-1">
-              <span className="text-orange-500">✦</span> {feat}
-            </span>
-          ))}
+        <div className="mb-4 border border-zinc-800 bg-zinc-900/70 p-4">
+          <p className="font-mono text-[10px] tracking-widest text-orange-500">EMAIL_FIRST_ACCOUNT_SETUP</p>
+          <ol className="mt-2 space-y-1 font-mono text-xs text-zinc-400">
+            <li>1. Create your account with your primary email address.</li>
+            <li>2. Complete verification if prompted by security checks.</li>
+            <li>3. Land in onboarding and set your first goal in under 5 minutes.</li>
+          </ol>
+          <p className="mt-3 font-mono text-[11px] leading-relaxed text-zinc-500">
+            Professional default: clear email setup, secure verification, immediate first win.
+          </p>
         </div>
 
         {/* Card */}
@@ -215,6 +84,7 @@ export default function Page() {
                 path="/sign-up"
                 signInUrl="/sign-in"
                 fallbackRedirectUrl="/dashboard"
+                forceRedirectUrl="/dashboard"
                 appearance={clerkAppearance}
               />
             </AuthRuntimeBoundary>
@@ -223,14 +93,14 @@ export default function Page() {
 
         {/* Trust signals */}
         <div className="mt-5 flex items-center justify-center gap-6">
-          <span className="text-zinc-600 text-[10px] flex items-center gap-1">
-            <span className="text-green-500">🔒</span> Secure & encrypted
+          <span className="text-zinc-600 text-[10px] flex items-center gap-1 font-mono">
+            <span className="text-green-500">●</span> Secure authentication
           </span>
-          <span className="text-zinc-600 text-[10px] flex items-center gap-1">
-            <span className="text-orange-500">✦</span> Free to start
+          <span className="text-zinc-600 text-[10px] flex items-center gap-1 font-mono">
+            <span className="text-orange-500">●</span> Free plan available
           </span>
-          <span className="text-zinc-600 text-[10px] flex items-center gap-1">
-            <span className="text-blue-400">◉</span> No spam ever
+          <span className="text-zinc-600 text-[10px] flex items-center gap-1 font-mono">
+            <span className="text-blue-400">●</span> Privacy respected
           </span>
         </div>
 

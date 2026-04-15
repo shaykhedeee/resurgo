@@ -230,14 +230,14 @@ const jsonLd = {
       'name': 'Resurgo',
       'applicationCategory': 'LifestyleApplication',
       'applicationSubCategory': 'Productivity',
-      'operatingSystem': 'Web, iOS, Android',
+      'operatingSystem': 'Web (PWA)',
       'offers': [
         {
           '@type': 'Offer',
           'price': '0',
           'priceCurrency': 'USD',
           'name': 'Free Plan',
-          'description': 'Basic habit tracking with up to 10 habits',
+          'description': '3 goals, 5 habits/day, and 10 AI messages/day on the free forever plan',
         },
         {
           '@type': 'Offer',

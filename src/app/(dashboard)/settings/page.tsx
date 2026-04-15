@@ -17,6 +17,12 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const hasValidClerkKey =
+  !!clerkPublishableKey &&
+  clerkPublishableKey.startsWith('pk_') &&
+  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(clerkPublishableKey);
+
 function SettingsSection({
   title,
   children,
@@ -34,7 +40,7 @@ function SettingsSection({
   );
 }
 
-export default function SettingsPage() {
+function SettingsPageWithAuth() {
   const { user: clerkUser } = useUser();
   const currentUser = useQuery(api.users.current);
   const updateProfile = useMutation(api.users.updateProfile);
@@ -514,4 +520,22 @@ export default function SettingsPage() {
       </div>
     </div>
   );
+}
+
+export default function SettingsPage() {
+  if (!hasValidClerkKey) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black px-4">
+        <div className="w-full max-w-lg rounded-xl border border-red-900/50 bg-red-950/20 p-5">
+          <p className="font-mono text-[10px] tracking-widest text-red-400">AUTH_CONFIG_ERROR</p>
+          <h1 className="mt-2 font-mono text-lg text-zinc-100">Settings unavailable</h1>
+          <p className="mt-2 font-mono text-xs text-zinc-300">
+            Clerk auth is not configured in this environment.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return <SettingsPageWithAuth />;
 }

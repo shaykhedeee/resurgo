@@ -99,7 +99,7 @@ export default function ProductShowcase() {
         <div className="mb-12 text-center">
           <div className="mb-5 inline-flex items-center gap-2 border border-orange-900/50 bg-orange-950/20 px-3 py-1.5">
             <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
-            <span className="font-pixel text-[0.45rem] tracking-widest text-orange-500">
+            <span className="font-pixel text-[0.55rem] tracking-widest text-orange-500">
               SYSTEM_PREVIEW :: LIVE_INTERFACE
             </span>
           </div>
@@ -321,7 +321,7 @@ export default function ProductShowcase() {
                     active === i ? 'opacity-100' : 'opacity-0 group-hover:opacity-100',
                   )}
                 >
-                  <span className="w-full text-center font-pixel text-[0.28rem] tracking-widest text-orange-400">
+                  <span className="w-full text-center font-pixel text-[0.45rem] tracking-widest text-orange-400">
                     {s.tag}
                   </span>
                 </div>
@@ -349,7 +349,7 @@ export default function ProductShowcase() {
         <div className="mx-auto mt-12 max-w-[860px] grid grid-cols-2 gap-px border border-zinc-800 bg-zinc-800 sm:grid-cols-4">
           {[
             { value: '5+', label: 'Apps replaced' },
-            { value: '8',  label: 'AI coaches' },
+            { value: '5',  label: 'AI coaches' },
             { value: '0',  label: 'Setup friction' },
             { value: '<2m', label: 'To first plan' },
           ].map((stat) => (
@@ -362,7 +362,7 @@ export default function ProductShowcase() {
 
         {/* ── Bottom CTA ── */}
         <div className="mx-auto mt-12 max-w-lg border-2 border-orange-900/40 bg-orange-950/10 p-8 text-center">
-          <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500 mb-2">
+          <p className="mb-2 font-pixel text-[0.6rem] tracking-widest text-orange-500">
             █ READY_TO_EXECUTE
           </p>
           <p className="font-terminal text-xl text-zinc-200 leading-snug">

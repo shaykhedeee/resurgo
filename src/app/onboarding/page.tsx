@@ -28,6 +28,12 @@ import {
   Moon,
 } from 'lucide-react';
 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+const hasValidClerkKey =
+  !!clerkPublishableKey &&
+  clerkPublishableKey.startsWith('pk_') &&
+  !/REPLACE_ME|YOUR_PUBLISHABLE_KEY|YOUR_KEY|PLACEHOLDER/i.test(clerkPublishableKey);
+
 // Map of habit template IDs to their Convex-compatible data
 const HABIT_TEMPLATE_DATA: Record<string, { title: string; description: string; category: string; frequency: 'daily' | 'weekdays'; timeOfDay: 'morning' | 'afternoon' | 'evening' | 'anytime'; estimatedMinutes: number }> = {
   'morning-routine': { title: 'Morning Routine', description: 'Start your day with intention', category: 'productivity', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 30 },
@@ -125,7 +131,7 @@ function cn(...classes: (string | boolean | undefined)[]) {
 
 // -- Component ---------------------------------------------------------------
 
-export default function OnboardingPage() {
+function OnboardingPageWithAuth() {
   const { user, isLoading } = useStoreUser();
   const { user: clerkUser } = useUser();
   const router = useRouter();
@@ -723,4 +729,26 @@ export default function OnboardingPage() {
       </div>
     </div>
   );
+}
+
+export default function OnboardingPage() {
+  if (!hasValidClerkKey) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-black px-4">
+        <div className="w-full max-w-lg rounded-xl border border-red-900/50 bg-red-950/20 p-5">
+          <p className="font-mono text-[10px] tracking-widest text-red-400">AUTH_CONFIG_ERROR</p>
+          <h1 className="mt-2 font-mono text-lg text-zinc-100">Onboarding is unavailable</h1>
+          <p className="mt-2 font-mono text-xs leading-relaxed text-zinc-300">
+            Clerk is not configured correctly in this environment. Set a valid
+            <span className="mx-1 rounded bg-black/40 px-1.5 py-0.5 text-zinc-100">NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY</span>
+            and
+            <span className="mx-1 rounded bg-black/40 px-1.5 py-0.5 text-zinc-100">CLERK_JWT_ISSUER_DOMAIN</span>
+            then redeploy.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return <OnboardingPageWithAuth />;
 }

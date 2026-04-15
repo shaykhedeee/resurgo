@@ -10,6 +10,50 @@ import { internal } from './_generated/api';
 import { v } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 
+// ─── Web Search via Tavily ────────────────────────────────────────────────────
+// Add TAVILY_API_KEY to Convex environment variables to enable internet access.
+// Free tier: 1,000 searches/month. Sign up at: https://tavily.com
+
+async function performWebSearches(queries: string[]): Promise<string> {
+  const tavilyKey = process.env.TAVILY_API_KEY;
+  if (!tavilyKey) return '';
+
+  const results: string[] = [];
+  for (const query of queries.slice(0, 2)) {
+    try {
+      const res = await fetch('https://api.tavily.com/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          api_key: tavilyKey,
+          query,
+          search_depth: 'basic',
+          max_results: 3,
+          include_answer: true,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json() as {
+          answer?: string;
+          results?: Array<{ title: string; content: string; url: string }>;
+        };
+        const parts: string[] = [`Search: "${query}"`];
+        if (data.answer) parts.push(`Summary: ${data.answer}`);
+        if (data.results) {
+          const topResults = data.results.slice(0, 3)
+            .map(r => `• ${r.title}: ${r.content.substring(0, 250)}`)
+            .join('\n');
+          parts.push(topResults);
+        }
+        results.push(parts.join('\n'));
+      }
+    } catch {
+      // skip failed search — don't break the conversation
+    }
+  }
+  return results.join('\n\n---\n\n');
+}
+
 // ─── Multi-Provider AI Cascade ───────────────────────────────────────────────
 // Groq 70B → Cerebras 70B → Gemini 2.0 Flash → Groq 8B (emergency fallback)
 // Each provider gets 1 attempt. On failure, cascade to the next.
@@ -161,6 +205,93 @@ Each action block must be on its own line, formatted EXACTLY like this:
 ── FINANCE ──
 [ACTION:LOG_TRANSACTION] {"amount":50,"type":"expense","category":"food","description":"Groceries","date":"2026-03-05"}
 
+── RESEARCH & INTERNET ──
+[ACTION:WEB_SEARCH] {"query":"latest ADHD productivity research 2025"}
+
+── GOAL DECOMPOSITION ENGINE ──
+This is the CORE feature of RESURGO. When a user mentions any goal, aspiration, or challenge they want to overcome, your most powerful move is to generate a fully tailored, micro-task execution plan. Generic plans are FAILURES. Every plan must feel like it was built specifically for THIS person.
+
+DECOMPOSITION HIERARCHY (always follow this order):
+Vision → Goal (SMART) → Milestones → Phases → Weekly Targets → Daily Tasks → Micro-tasks (15-90 min each)
+
+━━ STEP 1: UNDERSTAND THE USER BEFORE GENERATING ━━
+Before producing a plan, you MUST know:
+• Exact desired outcome (what does success look, feel, sound like in concrete detail?)
+• Current baseline (complete beginner vs. has tried before vs. intermediate?)
+• Available time per day/week (be realistic — ask if unknown)
+• Past attempts: what was tried before? What broke down and WHY?
+• Hard constraints: job, family, budget, health, timezone, tools available
+• Non-negotiables: what MUST stay in their life (don't schedule over it)
+• Deadline or target date (open-ended plans fail — all goals need a date)
+
+If fewer than 4 of these are clear from context, ask 1-3 focused clarifying questions FIRST. Never generate a generic plan. The plan should feel impossible to have been written for anyone else.
+
+━━ STEP 2: SMART GOAL TRANSFORMATION ━━
+Transform every vague goal into a SMART goal before planning. Show the transformation explicitly:
+• "Get fit" → "Complete 3 strength sessions/week and run 5km in under 29 minutes by [date]"
+• "Learn coding" → "Build and deploy a full-stack web app by [date] — 1 hour/day, 5 days/week"
+• "Start a business" → "Sign first 3 paying customers for [product] by [date] — 2 hours/day"
+• "Save money" → "Save $600/month via automated transfer → $7,200 in 12 months by [date]"
+• "Get better at writing" → "Publish one 800-word essay per week for 12 weeks starting [date]"
+• "Lose weight" → "Reach [X] kg by [date] via 300-calorie daily deficit + 3 workouts/week"
+State: "Here's the SMART version of your goal: [transformation]" before creating the plan.
+
+━━ STEP 3: MICRO-TASK GENERATION RULES ━━
+Every single task in a plan MUST follow ALL of these rules:
+✓ 15–90 minutes maximum. If a task would take longer → break it into smaller pieces.
+✓ VERB + SPECIFIC NOUN format: "Draft the first 3 sections of the business plan" ✓  vs  "Work on business plan" ✗
+✓ ONE clear deliverable per task. Define what "DONE" looks like in the task description.
+✓ Sequenced by dependency: Task B cannot appear before Task A if B depends on A.
+✓ Front-load momentum: the FIRST 2-3 tasks must be completable in under 20 minutes each (builds identity + removes inertia).
+✓ Label by energy requirement in the description: HIGH-FOCUS (deep work), LOW-ENERGY OK (admin/research), CREATIVE (brainstorming), PHYSICAL (movement).
+✓ Batch by type: group similar tasks to minimize context-switching (all research together, all writing together, etc.).
+✓ Include a "why this matters" note in the description so users stay connected to the purpose.
+
+━━ STEP 4: PHASE ARCHITECTURE ━━
+Structure every plan across phases that match the user's timeline:
+• PHASE 1 — "FOUNDATION": Research, setup, environment design, skill acquisition basics, easy wins. Remove ALL friction. (Weeks 1-2, or first 15-20% of timeline)
+• PHASE 2 — "BUILD": Core execution, skill development, establishing consistency. Daily/weekly reps. (Weeks 3-6, or middle 40% of timeline)
+• PHASE 3 — "ACCELERATE": Optimization, harder challenges, increased load/intensity. Compound the gains. (Next 30% of timeline)
+• PHASE 4 — "SUSTAIN" (if timeline allows): Systems, automation of routines, identity lock-in. Make it effortless and permanent. (Final 15% of timeline)
+Scale phase durations proportionally to the total goal timeline. A 2-week sprint has 4 mini-phases. A 12-month goal has full phases.
+
+━━ STEP 5: PERSONALIZATION SIGNALS — USE ALL OF THEM ━━
+You have the user's FULL DATA. Use every signal:
+• Their active goals → new tasks should COMPOUND existing goals, never conflict with them
+• Their existing habits → anchor new tasks to existing habit triggers ("After your morning workout, immediately do X for 25 min")
+• Their coach memory (struggle areas, emotional triggers) → pre-empt the exact failure point they've hit before
+• Their communication style → adjust tonality of task names and descriptions
+• Their profession / domain → use accurate domain terminology and real-world examples from their field
+• Their typical schedule / time of day patterns → suggest specific optimal time slots for HIGH-FOCUS tasks
+• Their current mood/energy (from conversation) → if user seems overwhelmed, offer a smaller, gentler version of the plan first
+
+━━ STEP 6: HABIT INTEGRATION ━━
+Every meaningful plan must include supporting HABITS, not just tasks. Identify:
+• Which core habits, if made automatic, would make 80% of the goal inevitable?
+• Create those habits with [ACTION:CREATE_HABIT] alongside the plan.
+• Link habit to an existing anchor if possible: "Every morning after waking, spend 25 min on [skill]"
+• Start habits at minimum viable dose (5-15 min) — build duration gradually in Phase 3.
+
+━━ TRIGGER PHRASES — ALWAYS DECOMPOSE WHEN YOU HEAR: ━━
+"I want to...", "Help me...", "I'm trying to...", "My goal is...", "How do I...", 
+"I need to start...", "Plan for...", "Break this down...", "Give me a roadmap...",
+"I don't know where to start...", "I keep failing at...", "Make me accountable for..."
+
+COMBINED ACTION PATTERN (use this for maximum impact):
+When a user asks for a plan → fire ALL of these in ONE response:
+[ACTION:CREATE_GOAL] → creates the goal entry
+[ACTION:CREATE_PLAN] → creates the structured phases with micro-tasks
+[ACTION:CREATE_TASK] × 3-5 → creates the most important immediate action items
+[ACTION:CREATE_HABIT] × 1-2 → creates the key supporting daily habits
+
+━━ ANTI-PATTERNS — NEVER DO THESE: ━━
+✗ Generic plans ("Day 1: Start exercising. Day 2: Continue exercising.")
+✗ Tasks with no time estimate or clear deliverable
+✗ Plans that ignore the user's existing schedule, goals, or commitments
+✗ Starting Phase 1 with hard, high-effort tasks (kills momentum immediately)
+✗ Creating a plan without confirming what "success" looks like to THIS specific user
+✗ Vague habit names ("Be healthier", "Study more") — always specific and measurable
+
 RULES FOR ACTIONS:
 - Only create actions when the user ASKS you to, or when it's clearly implied (e.g. "plan my week" = create tasks, "I ate a burger" = log meal, "I slept 6 hours" = log sleep).
 - VALIDATE USER DATA: If a user says something impossible (e.g., "I drank 7 liters in 2 hours" or "I slept 20 hours"), CHALLENGE IT politely before logging. Ask for clarification.
@@ -168,13 +299,14 @@ RULES FOR ACTIONS:
 - Always explain WHAT you're creating and WHY before the action blocks.
 - You can include multiple action blocks in one response for combined actions.
 - The action blocks are INVISIBLE to the user — they only see the results. So describe what you're doing in your message text.
-- For CREATE_PLAN: include 3-6 phases with 3-5 subTasks each.
+- For CREATE_PLAN: Apply the GOAL DECOMPOSITION ENGINE above. Include 3-6 phases following the FOUNDATION → BUILD → ACCELERATE → SUSTAIN architecture. Each phase MUST have 4-8 subTasks written in exact "verb + noun" format with clear deliverables (e.g. "Draft the opening 3 paragraphs of the landing page copy" not "Write content"). Phase 1 must always begin with 2-3 tasks completable in under 20 minutes each. Tailor the ENTIRE plan to the user's timeline, current skill level, available hours/week, and existing goals — never generate a template plan.
 - For LOG_MOOD: score is 1-10 (1=terrible, 10=amazing). Detect mood from conversation context.
 - For LOG_SLEEP: quality is 1-5. Auto-calculate if user gives bedtime/waketime.
 - For LOG_MEAL: estimate calories/macros if user doesn't provide them. Be reasonably accurate.
 - For LOG_WATER: 1 glass = ~250ml. Convert if user says liters/ounces.
 - For LOG_WORKOUT: type must be "cardio", "strength", "flexibility", "sport", or "other". Include exercises with sets/reps/weight when mentioned. Estimate calories burned from exercise type and duration if user doesn't specify.
 - For LOG_TRANSACTION: type is "income" or "expense". Infer category from context.
+- For WEB_SEARCH: Use when the user asks about current events, news, recent research, statistics, product recommendations, best tools/apps, anything time-sensitive, or any fact you're uncertain about. Examples: "latest research on X", "best supplements for Y", "current mortgage rates", "top productivity apps 2025". Keep queries concise and specific. Maximum 2 web searches per response.
 - Categories: health, productivity, learning, finance, wellness, career, personal_growth, mindfulness, social
 - Priorities: low, medium, high, urgent
 - Frequencies: daily, weekdays, weekends, 3x_week, weekly
@@ -188,6 +320,8 @@ PROACTIVE INTELLIGENCE:
 - If they mention feeling a certain way, offer to log their mood.
 - Cross-reference: If user has a goal about fitness but hasn't logged workouts, mention it.
 - Data validation: Catch impossible numbers, typos, unrealistic entries.
+- Research proactively: If discussing a topic where current data matters (supplements, market trends, study methods, financial rates, app recommendations), use WEB_SEARCH to give evidence-based answers.
+- Goal decomposition proactively: If user mentions any goal, aspiration, struggle, or "I want to..." statement → offer to generate a fully decomposed micro-task plan immediately. Ask 1-3 clarifying questions if context is thin. This is the #1 most valuable thing you can do for any user.
 `;
 
 const _USER_CONTEXT_TEMPLATE = `
@@ -1571,6 +1705,9 @@ PERSONALIZATION DIRECTIVES:
       if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
         contextBlock += `\n- Emotional triggers: ${coachMem.emotionalTriggers.join('; ')}`;
       }
+      if (coachMem.goalDecompositionProfile) {
+        contextBlock += `\n- Goal planning profile: ${coachMem.goalDecompositionProfile}`;
+      }
       if (coachMem.coachingEffectiveness) {
         const eff = coachMem.coachingEffectiveness;
         const effectivenessRate = eff.totalAdviceGiven > 0 ? Math.round((eff.adviceActedOn / eff.totalAdviceGiven) * 100) : 0;
@@ -1591,6 +1728,9 @@ PERSONALIZATION DIRECTIVES:
       }
       if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
         contextBlock += `\n- Use their emotional triggers wisely: leverage motivators, avoid demotivators.`;
+      }
+      if (coachMem.goalDecompositionProfile) {
+        contextBlock += `\n- PLAN GENERATION PROFILE: "${coachMem.goalDecompositionProfile}" — apply this profile to every plan you create for this user. Adjust task granularity, phase structure, and time estimates accordingly.`;
       }
       if (coachMem.coachingEffectiveness && coachMem.coachingEffectiveness.avgResponseEngagement < 0.3) {
         contextBlock += `\n- Engagement is low — try a different approach. Be more concise, ask questions, or change strategy.`;
@@ -1631,6 +1771,35 @@ PERSONALIZATION DIRECTIVES:
     if (!reply) {
       reply = buildFallbackReply(args.coachId, args.content);
     }
+
+    // ── Web Search: detect [ACTION:WEB_SEARCH] and resolve before final response ──
+    const webSearchRegex = /\[ACTION:WEB_SEARCH\]\s*\{"query"\s*:\s*"([^"]+)"[^}]*\}/g;
+    const webQueries: string[] = [];
+    let wsMatch: RegExpExecArray | null;
+    while ((wsMatch = webSearchRegex.exec(reply)) !== null) {
+      webQueries.push(wsMatch[1]);
+    }
+
+    if (webQueries.length > 0 && process.env.TAVILY_API_KEY) {
+      const searchResults = await performWebSearches(webQueries);
+      if (searchResults) {
+        const messagesWithSearch: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+          ...messages,
+          { role: 'assistant', content: reply },
+          {
+            role: 'user',
+            content: `INTERNET SEARCH RESULTS (fresh data retrieved for you):\n${searchResults}\n\nIncorporate these search results naturally into your response. Cite sources briefly. Do NOT include any [ACTION:WEB_SEARCH] blocks in your final response.`,
+          },
+        ];
+        const refinedReply = await callAICascade(messagesWithSearch, { max_tokens: 2000, temperature: 0.72 });
+        if (refinedReply) {
+          reply = refinedReply;
+        }
+      }
+    }
+
+    // Remove any remaining WEB_SEARCH action blocks from the reply
+    reply = reply.replace(/\[ACTION:WEB_SEARCH\][^\n]*/g, '').trim();
 
     // Parse and execute action blocks from AI response
     const actionRegex = /\[ACTION:(\w+)\]\s*(\{[^\n]+\})/g;
@@ -1749,6 +1918,7 @@ export const getCoachMemory = internalQuery({
       successPatterns: v.optional(v.array(v.string())),
       struggleAreas: v.optional(v.array(v.string())),
       emotionalTriggers: v.optional(v.array(v.string())),
+      goalDecompositionProfile: v.optional(v.string()),
       coachingEffectiveness: v.optional(v.object({
         totalAdviceGiven: v.number(),
         adviceActedOn: v.number(),
@@ -1783,6 +1953,7 @@ export const getCoachMemory = internalQuery({
       successPatterns: mem.successPatterns,
       struggleAreas: mem.struggleAreas,
       emotionalTriggers: mem.emotionalTriggers,
+      goalDecompositionProfile: mem.goalDecompositionProfile,
       coachingEffectiveness: mem.coachingEffectiveness,
       messageCount: mem.messageCount ?? 0,
     };
@@ -1949,9 +2120,18 @@ export const extractMemoryInsights = internalAction({
 5. SUCCESS_PATTERNS: 1-3 patterns about what works for this user (e.g., "follows through when given small incremental steps", "more motivated after celebrating wins", "responds to accountability check-ins")
 6. STRUGGLE_AREAS: 1-3 recurring blockers or challenges (e.g., "consistency with evening routines", "overwhelmed by large goals", "skips meals when stressed")
 7. EMOTIONAL_TRIGGERS: 1-3 emotional patterns (e.g., "energized by progress tracking", "discouraged by missed streaks", "motivated by competition")
+8. GOAL_DECOMPOSITION_PROFILE: How this user responds to plans and tasks. Focus on:
+   - Do they prefer many small micro-tasks or fewer larger tasks?
+   - Do they need more structure or more flexibility in their plans?
+   - What goal domains have they mentioned (fitness, career, learning, finance, health, relationships, creativity)?
+   - Have any plans been created for them? Did they seem to engage, request changes, or ignore them?
+   - How specific do they need task descriptions to be (high detail vs high-level)?
+   - What is their apparent planning horizon (daily, weekly, monthly, long-term)?
+   - Any goal-setting patterns worth noting for future plan generation?
+Format this as a single descriptive sentence, e.g.: "Prefers daily micro-tasks under 30 min, responds well to fitness and career goals, needs high-detail task descriptions, plans weekly, gets overwhelmed by multi-phase plans"
 
 Respond in this EXACT JSON format only, no other text:
-{"insights":["..."],"patterns":["..."],"preferredTopics":["..."],"communicationStyle":"...","successPatterns":["..."],"struggleAreas":["..."],"emotionalTriggers":["..."]}
+{"insights":["..."],"patterns":["..."],"preferredTopics":["..."],"communicationStyle":"...","successPatterns":["..."],"struggleAreas":["..."],"emotionalTriggers":["..."],"goalDecompositionProfile":"..."}
 
 CONVERSATION:
 ${convoText}`;
@@ -1975,6 +2155,7 @@ ${convoText}`;
         successPatterns?: string[];
         struggleAreas?: string[];
         emotionalTriggers?: string[];
+        goalDecompositionProfile?: string;
       };
       const insights = (parsed.insights || []).slice(0, 5).map(s => String(s).substring(0, 200));
       const patterns = (parsed.patterns || []).slice(0, 3).map(s => String(s).substring(0, 200));
@@ -1994,6 +2175,7 @@ ${convoText}`;
           successPatterns,
           struggleAreas,
           emotionalTriggers,
+          goalDecompositionProfile: parsed.goalDecompositionProfile ? String(parsed.goalDecompositionProfile).substring(0, 300) : undefined,
         });
       }
     } catch {
@@ -2014,6 +2196,7 @@ export const updateMemoryInsights = internalMutation({
     successPatterns: v.optional(v.array(v.string())),
     struggleAreas: v.optional(v.array(v.string())),
     emotionalTriggers: v.optional(v.array(v.string())),
+    goalDecompositionProfile: v.optional(v.string()),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
@@ -2063,6 +2246,7 @@ export const updateMemoryInsights = internalMutation({
         successPatterns: mergedSuccess,
         struggleAreas: mergedStruggles,
         emotionalTriggers: mergedTriggers,
+        goalDecompositionProfile: args.goalDecompositionProfile ?? mem.goalDecompositionProfile,
         coachingEffectiveness: {
           totalAdviceGiven: prevEff.totalAdviceGiven + 1,
           adviceActedOn: prevEff.adviceActedOn + (args.successPatterns && args.successPatterns.length > 0 ? 1 : 0),

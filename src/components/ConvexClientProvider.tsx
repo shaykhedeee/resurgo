@@ -28,6 +28,8 @@ const hasValidClerkKey =
   clerkPublishableKey !== 'YOUR_PUBLISHABLE_KEY' &&
   clerkPublishableKey.startsWith('pk_') &&
   !isPlaceholderClerkKey;
+let didWarnMissingConvexUrl = false;
+let didWarnInvalidClerkKey = false;
 
 // ── Error boundary: catches Clerk/Convex init crashes during hydration ───────
 class ConvexErrorBoundary extends Component<
@@ -61,14 +63,20 @@ export default function ConvexClientProvider({
 }) {
   // If Convex URL is missing, render children without provider (graceful degradation)
   if (!convex) {
-    console.warn('[ConvexClientProvider] NEXT_PUBLIC_CONVEX_URL not set — running without Convex.');
+    if (!didWarnMissingConvexUrl) {
+      console.warn('[ConvexClientProvider] NEXT_PUBLIC_CONVEX_URL not set — running without Convex.');
+      didWarnMissingConvexUrl = true;
+    }
     return <>{children}</>;
   }
 
   // If Clerk is unavailable/misconfigured, use plain Convex provider to avoid
   // crashing public pages (e.g. /sign-in) with a runtime exception.
   if (!hasValidClerkKey) {
-    console.warn('[ConvexClientProvider] Clerk key missing/invalid — running Convex without Clerk auth context.');
+    if (!didWarnInvalidClerkKey) {
+      console.warn('[ConvexClientProvider] Clerk key missing/invalid — running Convex without Clerk auth context.');
+      didWarnInvalidClerkKey = true;
+    }
     return (
       <ConvexErrorBoundary>
         <ConvexProviderWithAuth

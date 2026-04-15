@@ -85,7 +85,7 @@ const TEMPLATES: Record<string, {
       <p class="p">Your Resurgo account is active. You now have access to one of the most powerful AI life operating systems ever built.</p>
       <p class="p">Your free plan includes:</p>
       <ul style="color:#aaa; font-size:13px; line-height:2; padding-left:20px;">
-        <li>2 AI life coaches (MARCUS + AURORA) — available 24/7</li>
+        <li>2 AI life coaches (MARCUS + TITAN) — available 24/7</li>
         <li>Goal tracker with AI decomposition</li>
         <li>Habit tracker with streak system</li>
         <li>Daily check-in protocol</li>
@@ -156,7 +156,7 @@ const TEMPLATES: Record<string, {
   },
 
   upgrade_nudge: {
-    subject: 'Unlock 6 More AI Coaches + Advanced Features',
+    subject: 'Unlock 3 More AI Coaches + Advanced Features',
     from: FROM_MARKETING,
     badge: 'PRO',
     html: (v) => wrapEmail('UPGRADE', 'Upgrade to Pro', `
@@ -165,13 +165,13 @@ const TEMPLATES: Record<string, {
       <p class="p">You've been using Resurgo for ${v.daysActive || 'a while'}. You've seen what's possible with the basics.</p>
       <p class="p">Here's what unlocking Pro gives you:</p>
       <ul style="color:#aaa; font-size:13px; line-height:2; padding-left:20px;">
-        <li>All 5 AI coaches (MARCUS + AURORA + TITAN + PHOENIX + NEXUS)</li>
+        <li>All 5 AI coaches (MARCUS + TITAN + AURORA + PHOENIX + NEXUS)</li>
         <li>Unlimited habit tracking</li>
         <li>Advanced goal analytics</li>
         <li>Vision board with AI insights</li>
         <li>Priority AI response speed</li>
       </ul>
-      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $29.99/year = $2.49/month</p>
+      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $29.99/year = $2.50/month</p>
       <a href="${SITE_URL}/pricing" class="cta">[UPGRADE_NOW]</a>
     `),
     text: (_v) => `Upgrade to Resurgo Pro — unlock all 5 AI coaches: ${SITE_URL}/pricing`,

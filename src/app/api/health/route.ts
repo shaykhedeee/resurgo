@@ -20,8 +20,22 @@ export async function GET() {
   const region = process.env.VERCEL_REGION ?? process.env.VERCEL_ENV ?? 'local';
 
   // ── Readiness checks (boolean only — never leak secret values) ─────────────
-  const hasConvex = !!process.env.NEXT_PUBLIC_CONVEX_URL;
-  const hasClerk = !!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+  const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL ?? '';
+  const clerkPk = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? '';
+  const clerkIssuerDomain = process.env.CLERK_JWT_ISSUER_DOMAIN ?? process.env.CLERK_FRONTEND_API_URL ?? '';
+
+  const hasConvex = !!convexUrl;
+  const hasClerk = !!clerkPk;
+  const hasClerkIssuer = !!clerkIssuerDomain;
+  const isPlaceholderClerkKey = /REPLACE_ME|YOUR_|PLACEHOLDER/i.test(clerkPk);
+  const hasValidClerkKey = hasClerk && clerkPk.startsWith('pk_') && !isPlaceholderClerkKey;
+  const hasValidConvexUrl = /^https:\/\/.+\.convex\.cloud$/i.test(convexUrl);
+  const authMode = clerkPk.startsWith('pk_live_') ? 'live' : clerkPk.startsWith('pk_test_') ? 'test' : 'unknown';
+  const issuerLooksProd = clerkIssuerDomain.includes('clerk.resurgo.life') || clerkIssuerDomain.includes('.clerk.accounts.com');
+  const issuerLooksDev = clerkIssuerDomain.includes('.clerk.accounts.dev');
+  const keyIssuerMismatch =
+    (authMode === 'live' && issuerLooksDev) ||
+    (authMode === 'test' && issuerLooksProd);
   const hasGroq = !!process.env.GROQ_API_KEY;
   const hasGA = !!(
     process.env.NEXT_PUBLIC_GA_ID &&
@@ -37,7 +51,7 @@ export async function GET() {
 
   // ── Derive overall status ─────────────────────────────────────────────────
   // CRITICAL: app cannot function without Convex + Clerk
-  const isCriticalReady = hasConvex && hasClerk;
+  const isCriticalReady = hasValidConvexUrl && hasValidClerkKey && hasClerkIssuer && !keyIssuerMismatch;
   // BILLING: paid features won't work without Dodo config
   const isBillingReady = hasDodoWebhookSecret && hasDodoApiKey && hasBillingSync;
   // AI: coaching features degraded without Groq
@@ -59,8 +73,11 @@ export async function GET() {
       region,
       checks: {
         // Critical infrastructure
-        convex: hasConvex ? 'configured' : 'missing',
-        clerk: hasClerk ? 'configured' : 'missing',
+        convex: hasValidConvexUrl ? 'configured' : hasConvex ? 'invalid_format' : 'missing',
+        clerk: hasValidClerkKey ? 'configured' : hasClerk ? 'invalid_or_placeholder' : 'missing',
+        clerk_jwt_issuer: hasClerkIssuer ? 'configured' : 'missing',
+        auth_mode: authMode,
+        key_issuer_mismatch: keyIssuerMismatch,
         // AI services
         groq: hasGroq ? 'configured' : 'not_set',
         // Analytics (non-critical — app works without them)

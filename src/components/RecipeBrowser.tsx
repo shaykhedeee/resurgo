@@ -6,8 +6,9 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useEffect, useCallback } from 'react';
-import { Search, ExternalLink, Youtube, ChefHat, Loader2, Shuffle, BookOpen } from 'lucide-react';
+import { Search, ExternalLink, Youtube, ChefHat, Loader2, Shuffle } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import Image from 'next/image';
 
 interface Recipe {
   id: string;
@@ -23,7 +24,7 @@ interface Recipe {
 }
 
 const CATEGORIES = ['Beef', 'Chicken', 'Seafood', 'Vegetarian', 'Pasta', 'Lamb', 'Side', 'Dessert'];
-const DIET_FILTERS: Record<string, string> = {
+const _DIET_FILTERS: Record<string, string> = {
   All: '',
   'High Protein': 'high_protein',
   Keto: 'keto',
@@ -35,7 +36,7 @@ interface RecipeBrowserProps {
   className?: string;
 }
 
-export function RecipeBrowser({ goal, className }: RecipeBrowserProps) {
+export function RecipeBrowser({ goal: _goal, className }: RecipeBrowserProps) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [query, setQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -178,9 +179,12 @@ export function RecipeBrowser({ goal, className }: RecipeBrowserProps) {
             >
               {recipe.thumbnail && (
                 <div className="aspect-video bg-zinc-900 overflow-hidden">
-                  <img
+                  <Image
                     src={`${recipe.thumbnail}/medium`}
                     alt={recipe.name}
+                    width={320}
+                    height={180}
+                    unoptimized
                     className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                   />
                 </div>
@@ -213,7 +217,14 @@ export function RecipeBrowser({ goal, className }: RecipeBrowserProps) {
 
             <div className="p-4 space-y-4">
               {selected.thumbnail && (
-                <img src={`${selected.thumbnail}/medium`} alt={selected.name} className="w-full h-40 object-cover" />
+                <Image
+                  src={`${selected.thumbnail}/medium`}
+                  alt={selected.name}
+                  width={640}
+                  height={160}
+                  unoptimized
+                  className="w-full h-40 object-cover"
+                />
               )}
               <h3 className="text-zinc-100 text-sm font-mono font-bold">{selected.name}</h3>
               {(selected.category || selected.cuisine) && (

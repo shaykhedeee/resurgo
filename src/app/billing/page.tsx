@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { BillingCheckoutCTA, BillingPortalCTA } from '@/components/BillingCTA';
 import RestoreArchivedCTA from '@/components/RestoreArchivedCTA';
 import BillingPageAnalytics from '@/components/BillingPageAnalytics';
+import BillingHeroExperiment from '@/components/BillingHeroExperiment';
 import { BillingWaitlistCapture } from '@/components/BillingWaitlistCapture';
 import SubscriptionManagementCard from '@/components/SubscriptionManagementCard';
 import PromoCodeBanner from '@/components/PromoCodeBanner';
@@ -19,7 +20,6 @@ import {
   Star,
   ArrowRight,
   Sparkles,
-  Clock,
   TrendingUp,
   Target,
   BarChart3,
@@ -217,20 +217,7 @@ export default async function BillingPage() {
               Start free with 5 daily habits, 3 goals, and AI insights. Upgrade when you&apos;re ready
               for unlimited power.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-[var(--text-muted)]">
-              <span className="flex items-center gap-1.5">
-                <Shield className="w-4 h-4 text-emerald-400" />
-                30-day money-back guarantee
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Clock className="w-4 h-4 text-blue-400" />
-                Cancel anytime
-              </span>
-              <span className="flex items-center gap-1.5">
-                <Zap className="w-4 h-4 text-amber-400" />
-                No credit card for free plan
-              </span>
-            </div>
+            <BillingHeroExperiment />
           </div>
         </section>
 
@@ -413,7 +400,7 @@ export default async function BillingPage() {
                     <th className="text-center py-4 px-5 font-semibold w-[23%]">
                       <span className="text-ascend-400">Pro</span>
                       <p className="text-xs text-[var(--text-muted)] font-normal mt-0.5">
-                        from $8/mo
+                        from $4.99/mo
                       </p>
                     </th>
                   </tr>

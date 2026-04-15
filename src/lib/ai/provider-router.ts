@@ -1,11 +1,10 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Unified AI Provider Router
-// Multi-provider cascade: Groq → Gemini → OpenRouter → AIML → fallback
+// Multi-provider cascade: Ollama → Groq → Cerebras → Gemini → OpenRouter → AIML → OpenAI
 //
-// COST STRATEGY: Free-tier first, paid only as last resort.
-// Free tiers used: Groq (generous free), Gemini Flash (free tier),
-//   OpenRouter free models (google/gemma-2-9b-it:free), AIML API (free tier).
-// No OpenAI unless OPENAI_API_KEY is explicitly set (most expensive).
+// COST STRATEGY: Local first, free-tier second, paid only as last resort.
+// Ollama (local, free) → Groq (generous free) → Cerebras (free) → Gemini Flash (free) →
+//   OpenRouter free models → Together (free credit) → AIML API (free tier) → OpenAI (last resort).
 //
 // TASK TYPES determine model selection:
 //   'quick'    → smallest/fastest models (FAQ, simple responses)
@@ -14,7 +13,7 @@
 //   'json'     → balanced models with JSON mode forced
 // ═══════════════════════════════════════════════════════════════════════════════
 
-export type AIProvider = 'groq' | 'cerebras' | 'gemini' | 'together' | 'openrouter' | 'aiml' | 'mistral' | 'fireworks' | 'scaleway' | 'openai';
+export type AIProvider = 'ollama' | 'groq' | 'cerebras' | 'gemini' | 'together' | 'openrouter' | 'aiml' | 'openai';
 export type TaskType = 'quick' | 'coaching' | 'analyze' | 'json' | 'creative' | 'synthesize';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -97,6 +96,15 @@ export interface AIResponse {
 // ─────────────────────────────────────────────────────────────────────────────
 
 const MODELS = {
+  ollama: {
+    // Local Ollama — model names depend on what the user has pulled
+    quick:      'dolphin-phi:latest',
+    coaching:   'dolphin3:latest',
+    analyze:    'dolphin3:latest',
+    json:       'dolphin-phi:latest',
+    creative:   'dolphin3:latest',
+    synthesize: 'dolphin3:latest',
+  },
   cerebras: {
     // cloud.cerebras.ai — free, extremely fast (1000+ tok/sec)
     quick:    'llama3.1-8b',
@@ -146,33 +154,6 @@ const MODELS = {
     json: 'mistralai/Mistral-7B-Instruct-v0.2',
     creative: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
     synthesize: 'meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo',
-  },
-  mistral: {
-    // api.mistral.ai — free tier available, strong reasoning
-    quick:      'mistral-small-latest',
-    coaching:   'mistral-large-latest',
-    analyze:    'mistral-large-latest',
-    json:       'mistral-small-latest',
-    creative:   'mistral-large-latest',
-    synthesize: 'mistral-large-latest',
-  },
-  fireworks: {
-    // fireworks.ai — very fast inference, competitive pricing
-    quick:      'accounts/fireworks/models/llama-v3p1-8b-instruct',
-    coaching:   'accounts/fireworks/models/llama-v3p1-70b-instruct',
-    analyze:    'accounts/fireworks/models/llama-v3p1-70b-instruct',
-    json:       'accounts/fireworks/models/llama-v3p1-8b-instruct',
-    creative:   'accounts/fireworks/models/llama-v3p1-70b-instruct',
-    synthesize: 'accounts/fireworks/models/llama-v3p1-70b-instruct',
-  },
-  scaleway: {
-    // api.scaleway.ai — EU-hosted, OpenAI-compatible
-    quick:      'llama-3.1-8b-instruct',
-    coaching:   'llama-3.1-70b-instruct',
-    analyze:    'llama-3.1-70b-instruct',
-    json:       'llama-3.1-8b-instruct',
-    creative:   'llama-3.1-70b-instruct',
-    synthesize: 'llama-3.1-70b-instruct',
   },
   openai: {
     quick: 'gpt-4o-mini',
@@ -403,106 +384,47 @@ async function callAIML(
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Mistral AI — Strong reasoning, multilingual, free tier available
-// Sign up at console.mistral.ai — env var: MISTRAL_API_KEY
+// Ollama — Local AI inference (free, private, no API key needed)
+// Requires Ollama running at OLLAMA_BASE_URL (default: http://localhost:11434)
 // ─────────────────────────────────────────────────────────────────────────────
-async function callMistral(
-  messages: AIMessage[],
-  model: string,
-  maxTokens: number,
-  temperature: number,
-  requireJson: boolean
-): Promise<AIResponse> {
-  const apiKey = process.env.MISTRAL_API_KEY;
-  if (!apiKey) throw new Error('MISTRAL_API_KEY not configured');
-
-  const body: Record<string, unknown> = {
-    model,
-    messages: messages.map((m) => ({ role: m.role, content: m.content })),
-    max_tokens: maxTokens,
-    temperature,
-  };
-  if (requireJson) body.response_format = { type: 'json_object' };
-
-  const res = await fetch('https://api.mistral.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`Mistral error ${res.status}: ${await res.text()}`);
-
-  const data = await res.json();
-  return {
-    content: data.choices[0].message.content,
-    provider: 'mistral',
-    model,
-    tokensUsed: data.usage?.total_tokens,
-  };
+async function isOllamaReachable(): Promise<boolean> {
+  const base = process.env.OLLAMA_BASE_URL;
+  if (!base) return false;
+  try {
+    const res = await fetch(`${base}/api/tags`, { signal: AbortSignal.timeout(2000) });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Fireworks AI — Very fast inference, competitive pricing
-// Sign up at fireworks.ai — env var: FIREWORKS_API_KEY
-// ─────────────────────────────────────────────────────────────────────────────
-async function callFireworks(
+async function callOllama(
   messages: AIMessage[],
   model: string,
   maxTokens: number,
-  temperature: number,
-  requireJson: boolean
+  temperature: number
 ): Promise<AIResponse> {
-  const apiKey = process.env.FIREWORKS_API_KEY;
-  if (!apiKey) throw new Error('FIREWORKS_API_KEY not configured');
+  const base = process.env.OLLAMA_BASE_URL;
+  if (!base) throw new Error('OLLAMA_BASE_URL not configured');
 
-  const body: Record<string, unknown> = { model, messages, max_tokens: maxTokens, temperature };
-  if (requireJson) body.response_format = { type: 'json_object' };
-
-  const res = await fetch('https://api.fireworks.ai/inference/v1/chat/completions', {
+  const res = await fetch(`${base}/api/chat`, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model,
+      messages: messages.map((m) => ({ role: m.role, content: m.content })),
+      stream: false,
+      options: { num_predict: maxTokens, temperature },
+    }),
   });
-  if (!res.ok) throw new Error(`Fireworks error ${res.status}: ${await res.text()}`);
+  if (!res.ok) throw new Error(`Ollama error ${res.status}: ${await res.text()}`);
 
   const data = await res.json();
   return {
-    content: data.choices[0].message.content,
-    provider: 'fireworks',
+    content: data.message?.content ?? '',
+    provider: 'ollama',
     model,
-    tokensUsed: data.usage?.total_tokens,
-  };
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Scaleway AI — EU-hosted, OpenAI-compatible API
-// Sign up at console.scaleway.com — env var: SCALEWAY_API_KEY
-// ─────────────────────────────────────────────────────────────────────────────
-async function callScaleway(
-  messages: AIMessage[],
-  model: string,
-  maxTokens: number,
-  temperature: number,
-  requireJson: boolean
-): Promise<AIResponse> {
-  const apiKey = process.env.SCALEWAY_API_KEY;
-  if (!apiKey) throw new Error('SCALEWAY_API_KEY not configured');
-
-  const body: Record<string, unknown> = { model, messages, max_tokens: maxTokens, temperature };
-  if (requireJson) body.response_format = { type: 'json_object' };
-
-  const res = await fetch('https://api.scaleway.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) throw new Error(`Scaleway error ${res.status}: ${await res.text()}`);
-
-  const data = await res.json();
-  return {
-    content: data.choices[0].message.content,
-    provider: 'scaleway',
-    model,
-    tokensUsed: data.usage?.total_tokens,
+    tokensUsed: (data.prompt_eval_count ?? 0) + (data.eval_count ?? 0),
   };
 }
 
@@ -551,27 +473,23 @@ export async function callAI(
   const requireJson = options.requireJson ?? false;
   const timeoutMs = PROVIDER_TIMEOUT_MS[taskType];
 
-  // Provider cascade — priority order (free tiers first; paid last resort)
+  // Provider cascade — priority order (local → free tiers → paid last resort)
   const providers: Array<{ id: AIProvider; call: () => Promise<AIResponse> }> = [
-    // 1. Groq — fastest + most generous free tier
+    // 1. Ollama — local models, free, private
+    { id: 'ollama',     call: () => callOllama(messages, MODELS.ollama[taskType], maxTokens, temperature) },
+    // 2. Groq — fastest + most generous free tier
     { id: 'groq',       call: () => callGroq(messages, MODELS.groq[taskType], maxTokens, temperature, requireJson) },
-    // 2. Cerebras — extremely fast, free tier
+    // 3. Cerebras — extremely fast, free tier
     { id: 'cerebras',   call: () => callCerebras(messages, MODELS.cerebras[taskType], maxTokens, temperature, requireJson) },
-    // 3. Gemini — Google free tier
+    // 4. Gemini — Google free tier
     { id: 'gemini',     call: () => callGemini(messages, MODELS.gemini[taskType], maxTokens, temperature, requireJson) },
-    // 4. OpenRouter — completely free models
+    // 5. OpenRouter — completely free models
     { id: 'openrouter', call: () => callOpenRouter(messages, MODELS.openrouter[taskType], maxTokens, temperature) },
-    // 5. Together AI — free credit + cheap
+    // 6. Together AI — free credit + cheap
     { id: 'together',   call: () => callTogether(messages, MODELS.together[taskType], maxTokens, temperature) },
-    // 6. AIML API — free tier
+    // 7. AIML API — free tier
     { id: 'aiml',       call: () => callAIML(messages, MODELS.aiml[taskType], maxTokens, temperature) },
-    // 7. Mistral — strong reasoning, free tier
-    { id: 'mistral',    call: () => callMistral(messages, MODELS.mistral[taskType], maxTokens, temperature, requireJson) },
-    // 8. Fireworks — very fast inference
-    { id: 'fireworks',  call: () => callFireworks(messages, MODELS.fireworks[taskType], maxTokens, temperature, requireJson) },
-    // 9. Scaleway — EU-hosted fallback
-    { id: 'scaleway',   call: () => callScaleway(messages, MODELS.scaleway[taskType], maxTokens, temperature, requireJson) },
-    // 10. OpenAI — last resort, only if key configured (most expensive)
+    // 8. OpenAI — last resort, only if key configured (most expensive)
     { id: 'openai',     call: () => callOpenAI(messages, MODELS.openai[taskType], maxTokens, temperature, requireJson) },
   ];
 
@@ -636,15 +554,13 @@ type ProviderCallFn = (
 ) => Promise<AIResponse>;
 
 const PROVIDER_FNS: Record<AIProvider, ProviderCallFn> = {
+  ollama:     (m, mod, mt, t, _j) => callOllama(m, mod, mt, t),
   groq:       (m, mod, mt, t, j) => callGroq(m, mod, mt, t, j),
   cerebras:   (m, mod, mt, t, j) => callCerebras(m, mod, mt, t, j),
   gemini:     (m, mod, mt, t, j) => callGemini(m, mod, mt, t, j),
   openrouter: (m, mod, mt, t, _j) => callOpenRouter(m, mod, mt, t),
   together:   (m, mod, mt, t, _j) => callTogether(m, mod, mt, t),
   aiml:       (m, mod, mt, t, _j) => callAIML(m, mod, mt, t),
-  mistral:    (m, mod, mt, t, j) => callMistral(m, mod, mt, t, j),
-  fireworks:  (m, mod, mt, t, j) => callFireworks(m, mod, mt, t, j),
-  scaleway:   (m, mod, mt, t, j) => callScaleway(m, mod, mt, t, j),
   openai:     (m, mod, mt, t, j) => callOpenAI(m, mod, mt, t, j),
 };
 
@@ -687,21 +603,25 @@ export async function callAIWithProvider(
 // getAvailableProviders() — Returns list of providers with configured API keys
 // Used by orchestrator to know which providers can be targeted
 // ─────────────────────────────────────────────────────────────────────────────
-export function getAvailableProviders(): AIProvider[] {
-  const keyMap: Record<AIProvider, string> = {
+export async function getAvailableProviders(): Promise<AIProvider[]> {
+  const keyMap: Record<Exclude<AIProvider, 'ollama'>, string> = {
     groq: 'GROQ_API_KEY',
     cerebras: 'CEREBRAS_API_KEY',
     gemini: 'GOOGLE_AI_STUDIO_KEY',
     openrouter: 'OPENROUTER_API_KEY',
     together: 'TOGETHER_API_KEY',
     aiml: 'AIML_API_KEY',
-    mistral: 'MISTRAL_API_KEY',
-    fireworks: 'FIREWORKS_API_KEY',
-    scaleway: 'SCALEWAY_API_KEY',
     openai: 'OPENAI_API_KEY',
   };
 
-  return (Object.entries(keyMap) as [AIProvider, string][])
-    .filter(([provider, envVar]) => !!process.env[envVar] && !isCircuitOpen(provider))
-    .map(([provider]) => provider);
+  const available: AIProvider[] = [];
+
+  // Ollama: check if reachable (no API key needed)
+  if (await isOllamaReachable()) available.push('ollama');
+
+  for (const [provider, envVar] of Object.entries(keyMap) as [Exclude<AIProvider, 'ollama'>, string][]) {
+    if (process.env[envVar] && !isCircuitOpen(provider)) available.push(provider);
+  }
+
+  return available;
 }

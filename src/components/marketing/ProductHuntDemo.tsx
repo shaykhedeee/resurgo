@@ -554,9 +554,9 @@ function PricingPanel() {
           color: 'zinc',
           highlight: false,
           features: [
-            'Unlimited habits & goals',
+            '3 goals + 5 habits/day',
             'Focus timer (all modes)',
-            '2 AI coaches (Marcus & Aurora)',
+            '2 AI coaches (Marcus & Titan)',
             'Daily planning',
             'Basic analytics',
             'Mobile PWA',
