@@ -527,7 +527,7 @@ function LandingPageV2() {
                 </p>
 
                 {/* Metrics — terminal-labelled */}
-                <div className="mt-8 grid grid-cols-2 gap-2 md:grid-cols-4">
+                <div className="mt-8 grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-4">
                   {METRICS.map((m) => (
                     <div key={m.label} className="border border-zinc-800/70 bg-zinc-950/55 px-3 py-3 sm:px-4">
                       <p className="font-pixel text-[0.33rem] tracking-widest text-zinc-600 mb-2">{m.label.toUpperCase()}</p>
@@ -770,7 +770,7 @@ function LandingPageV2() {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-px bg-zinc-900 md:grid-cols-3">
+            <div className="grid grid-cols-2 gap-1 bg-zinc-900 md:grid-cols-3">
               {AI_COACHES.map((coach) => (
                 <article
                   key={coach.name}
@@ -1029,7 +1029,7 @@ function LandingPageV2() {
             </div>
 
             {/* All testimonials grid */}
-            <div className="mt-6 grid grid-cols-1 gap-px border-2 border-zinc-800 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-1 border-2 border-zinc-800 sm:grid-cols-2 lg:grid-cols-3">
               {TESTIMONIALS.map((t) => (
                 <div key={t.name} className="bg-black p-4 sm:p-5">
                   <p className="font-terminal text-sm leading-relaxed text-zinc-300 sm:text-base">
