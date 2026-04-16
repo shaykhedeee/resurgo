@@ -140,6 +140,7 @@ jobs:
           cp dist/resurgo-latest.apk out/resurgo-latest.apk
 
       - name: Deploy to Firebase Hosting
+        if: ${{ secrets.FIREBASE_SERVICE_ACCOUNT != '' }}
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
