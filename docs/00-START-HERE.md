@@ -6,8 +6,17 @@
 
 ## WHAT YOU JUST COMPLETED
 
+### Landing Page & Content Audit (April 16 — v2 polish)
+- ✅ **Landing page:** Complete deep audit + enhancements (LandingPageV2.tsx — 1809 lines)
+- ✅ **Font consistency:** 100% terminal-style (zero font-sans violations confirmed)
+- ✅ **NEW section:** WHAT_IS_A_LIFE_OS — 6-step OS pipeline + 12 module tags
+- ✅ **NEW section:** TARGET_USER personas — 6 mode cards (FOUNDER/STUDENT/ADHD/FITNESS/FREELANCER/GROWTH)
+- ✅ **NEW section:** PROGRESS_LOG — DAY_01→DAY_07→DAY_30→DAY_90 journey timeline
+- ✅ **Coach titles fixed:** All 5 coaches now match PRODUCT_TRUTH.md exactly
+- ✅ **Docs cleaned:** Deleted VISION-BOARD-STUDIO-PRD.md (archived) + refinedresurgo.md (superseded)
+
 ### Code Quality & Validation (April 16 audit)
-- ✅ **Build:** `npm run build` PASS (288 routes, 0 errors)
+- ✅ **Build:** `npm run build` PASS (298 routes, 0 errors)
 - ✅ **Tests:** 17 suites, 134/134 tests passing
 - ✅ **Typecheck:** `npm run typecheck` PASS (0 real errors)
 - ✅ **Security:** Timing-safe admin secret comparisons applied

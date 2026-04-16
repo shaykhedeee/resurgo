@@ -182,7 +182,7 @@ const FAQS = [
   {
     question: 'How does AI coaching work?',
     answer:
-      'You choose from 5 AI coaches, each with a unique personality and approach — Marcus (Stoic Strategist), Titan (Physical Performance), Aurora (Mindful Catalyst), Phoenix (Comeback Specialist), and Nexus (Integration Engine). Marcus and Titan are free. Pro and Lifetime unlock Aurora, Phoenix, and Nexus. Coaches respond based on your goals, habits, and recent progress.',
+      'You choose from 5 AI coaches, each with a unique personality and approach — Marcus (Stoic Strategist), Titan (High-Performance Coach), Aurora (Wellness Guide), Phoenix (Comeback Specialist), and Nexus (Systems Builder). Marcus and Titan are free. Pro and Lifetime unlock Aurora, Phoenix, and Nexus. Coaches respond based on your goals, habits, and recent progress.',
   },
   {
     question: 'How is Resurgo different from Habitica, Streaks, or Notion?',
@@ -291,15 +291,15 @@ const AI_COACHES = [
   },
   {
     name: 'AURORA',
-    style: 'Mindful Catalyst',
-    desc: 'Wellness, mindfulness, and emotional intelligence. Aurora helps you build inner peace alongside outer performance.',
+    style: 'Wellness Guide',
+    desc: 'Sleep, recovery, and emotional balance. Aurora helps you build inner peace alongside outer performance.',
     free: false,
     accent: 'purple',
   },
   {
     name: 'TITAN',
-    style: 'Physical Performance',
-    desc: 'Your body is the foundation. Titan creates workout plans, nutrition protocols, and energy optimization systems — all action-capable.',
+    style: 'High-Performance Coach',
+    desc: 'Physical performance, energy, and output. Titan creates workout plans, nutrition protocols, and energy optimization systems — all action-capable.',
     free: true,
     accent: 'red',
   },
@@ -312,8 +312,8 @@ const AI_COACHES = [
   },
   {
     name: 'NEXUS',
-    style: 'Integration Engine',
-    desc: 'Merges mind, body, finance, and creativity into one adaptive engine. Nexus builds custom neural mastery stacks with no limits.',
+    style: 'Systems Builder',
+    desc: 'Habits, routines, and automation. Nexus merges all your life areas into one adaptive engine with no limits.',
     free: false,
     accent: 'pink',
   },
@@ -570,7 +570,7 @@ function LandingPageV2() {
                 </div>
 
                 {/* Main headline */}
-                <h1 className="font-sans text-[2.15rem] font-bold leading-[1.04] tracking-tight text-zinc-50 text-balance sm:text-5xl lg:text-[3.4rem] xl:text-[3.75rem]">
+                <h1 className="font-mono text-[2.15rem] font-bold leading-[1.04] tracking-tight text-zinc-50 text-balance sm:text-5xl lg:text-[3.4rem] xl:text-[3.75rem]">
                   {heroContent.headingMain}
                   <span className="mt-2 block bg-gradient-to-r from-orange-500 via-orange-400 to-amber-400 bg-clip-text text-transparent leading-[1.1]">
                     {heroContent.headingAccent}
@@ -599,7 +599,7 @@ function LandingPageV2() {
                   {METRICS.map((m) => (
                     <div key={m.label} className="border border-zinc-800/70 bg-zinc-950/55 px-3 py-3 sm:px-4">
                       <p className="font-pixel text-[0.33rem] tracking-widest text-zinc-600 mb-2">{m.label.toUpperCase()}</p>
-                      <p className="font-sans text-xl font-bold text-orange-400 sm:text-[1.4rem]">{m.value}</p>
+                      <p className="font-mono text-xl font-bold text-orange-400 sm:text-[1.4rem]">{m.value}</p>
                     </div>
                   ))}
                 </div>
@@ -694,6 +694,68 @@ function LandingPageV2() {
           </div>
         </section>
 
+        {/* ════════════════ CONCEPT: WHAT IS A LIFE OS ════════════════ */}
+        <section className="border-y border-zinc-900 bg-zinc-950/60 px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-6xl">
+            {/* Header */}
+            <div className="mb-8 text-center">
+              <div className="inline-flex items-center gap-2 border border-orange-900/40 bg-orange-950/20 px-4 py-2">
+                <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
+                <span className="font-pixel text-[0.42rem] tracking-widest text-orange-400">RESURGO_SYSTEM :: WHAT_IS_A_LIFE_OS</span>
+              </div>
+              <h2 className="mt-5 font-mono text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+                One system to replace <span className="text-orange-400">everything</span>.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-400">
+                Resurgo connects your goals, habits, focus sessions, AI coaching, health data, and weekly reviews —
+                so every action compounds toward what actually matters to you.
+              </p>
+            </div>
+
+            {/* OS Pipeline flow */}
+            <div className="overflow-x-auto">
+              <div className="flex min-w-[600px] items-stretch">
+                {([
+                  { step: '01', cmd: 'goal.input()', label: 'SET GOAL', desc: 'Any goal, any domain', color: 'border-orange-800', text: 'text-orange-400', bg: 'bg-orange-950/20' },
+                  { step: '02', cmd: 'ai.plan()',    label: 'AI PLANS',    desc: 'Milestones + tasks', color: 'border-cyan-800',   text: 'text-cyan-400',   bg: 'bg-cyan-950/20' },
+                  { step: '03', cmd: 'exec.daily()', label: 'YOU EXECUTE', desc: 'Focus + check-ins',  color: 'border-green-800',  text: 'text-green-400',  bg: 'bg-green-950/20' },
+                  { step: '04', cmd: 'xp.earn()',    label: 'EARN XP',     desc: 'Streaks + badges',   color: 'border-purple-800', text: 'text-purple-400', bg: 'bg-purple-950/20' },
+                  { step: '05', cmd: 'ai.review()',  label: 'AI REVIEWS',  desc: 'Weekly analysis',    color: 'border-yellow-800', text: 'text-yellow-400', bg: 'bg-yellow-950/20' },
+                  { step: '06', cmd: 'goal.done ✓',  label: 'GOAL HIT',    desc: 'Load next target',   color: 'border-orange-700', text: 'text-orange-300', bg: 'bg-orange-950/30' },
+                ] as const).map((s, i, arr) => (
+                  <React.Fragment key={s.step}>
+                    <div className={`flex-1 border ${s.color} ${s.bg} p-4`}>
+                      <p className="mb-2 font-pixel text-[0.28rem] tracking-widest text-zinc-600">{s.step}</p>
+                      <p className={`font-mono text-xs font-bold ${s.text}`}>{s.cmd}</p>
+                      <p className="mt-2 font-pixel text-[0.33rem] tracking-widest text-zinc-300">{s.label}</p>
+                      <p className="mt-1 font-terminal text-sm text-zinc-500">{s.desc}</p>
+                    </div>
+                    {i < arr.length - 1 && (
+                      <div className="flex items-center bg-zinc-950 px-1.5">
+                        <span className="font-mono text-sm text-zinc-600">→</span>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+            {/* Module tags */}
+            <div className="mt-8 flex flex-wrap justify-center gap-2">
+              {['GOALS', 'HABITS', 'FOCUS_TIMER', 'AI_COACHING', 'NUTRITION', 'FITNESS', 'SLEEP', 'FINANCE', 'XP_SYSTEM', 'VISION_BOARD', 'WEEKLY_REVIEWS', 'ADHD_MODE'].map((tag) => (
+                <span key={tag} className="border border-zinc-800 bg-zinc-950 px-3 py-1 font-pixel text-[0.33rem] tracking-widest text-zinc-500 hover:border-orange-900/50 hover:text-orange-500 transition-colors cursor-default">
+                  {tag}
+                </span>
+              ))}
+            </div>
+
+            {/* One-liner proof */}
+            <p className="mt-6 text-center font-terminal text-base text-zinc-500">
+              <span className="text-orange-500">12 modules.</span> All integrated. All included in the free tier.
+            </p>
+          </div>
+        </section>
+
         {/* ────────────────── INTERACTIVE TERMINAL DEMO ──────────────── */}
         <TerminalDemo />
 
@@ -745,6 +807,45 @@ function LandingPageV2() {
                   </span>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════ FOR_YOU :: PERSONA SECTION ════════════════ */}
+        <section className="border-y border-zinc-900 bg-zinc-950/40 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-8 text-center">
+              <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500">TARGET_USER</p>
+              <h2 className="mt-2 font-mono text-xl font-bold text-zinc-100 sm:text-2xl">
+                Resurgo is for you if&hellip;
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl font-terminal text-lg text-zinc-400">
+                Pick your mode. The system adapts.
+              </p>
+            </div>
+            <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+              {([
+                { tag: 'FOUNDER_MODE',    prompt: '> build --startup --90days',     desc: 'You\'re building something and need to track goals, execution, and health without switching between 5 apps.' },
+                { tag: 'STUDENT_MODE',    prompt: '> study --exam --focus',          desc: 'You need study plans, focus sessions, habit consistency, and AI coaching to stay on top during intense periods.' },
+                { tag: 'ADHD_MODE',       prompt: '> calm --one-step-forward',       desc: 'You need flexible, judgment-free structure. One calm next step. Gentle accountability. No guilt spirals.' },
+                { tag: 'FITNESS_MODE',    prompt: '> train --build --track-macros',  desc: 'AI workout plans, nutrition tracking with 2M+ foods, and sleep + recovery analytics in one dashboard.' },
+                { tag: 'FREELANCER_MODE', prompt: '> client --deliver --stay-sane',  desc: 'Working solo? Get daily structure, focus blocks, and a system that keeps you accountable without a boss.' },
+                { tag: 'GROWTH_MODE',     prompt: '> become --best-version --data',  desc: 'Serious about getting better. You want XP, streaks, coaches, analytics, and real results — not motivation quotes.' },
+              ] as const).map((p) => (
+                <div key={p.tag} className="group border border-zinc-800 bg-black p-5 transition hover:border-orange-900/50 hover:bg-orange-950/5">
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 bg-orange-500" />
+                    <span className="font-pixel text-[0.37rem] tracking-widest text-orange-400">{p.tag}</span>
+                  </div>
+                  <p className="mb-3 font-mono text-xs text-zinc-600">{p.prompt}</p>
+                  <p className="font-terminal text-base leading-relaxed text-zinc-300 group-hover:text-zinc-200 transition-colors">{p.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-8 text-center">
+              <TermLinkButton href="/sign-up" variant="primary" size="md">
+                YES — THIS IS FOR ME → START FREE
+              </TermLinkButton>
             </div>
           </div>
         </section>
@@ -1242,6 +1343,96 @@ function LandingPageV2() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ════════════════ THE JOURNEY :: PROGRESS_LOG ════════════════ */}
+        <section className="border-y border-zinc-900 bg-zinc-950/40 px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl">
+            <div className="mb-10 text-center">
+              <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500">PROGRESS_LOG</p>
+              <h2 className="mt-2 font-mono text-xl font-bold text-zinc-100 sm:text-2xl">
+                What changes when you use Resurgo
+              </h2>
+              <p className="mx-auto mt-3 max-w-xl font-terminal text-lg text-zinc-400">
+                Results compound. Here&apos;s what the data looks like over 90 days.
+              </p>
+            </div>
+
+            <div className="space-y-0">
+              {([
+                {
+                  day: 'DAY_01',
+                  title: 'System boot — first goal set',
+                  metrics: ['1 goal created', 'AI plan: 12 tasks generated', 'Coach MARCUS assigned'],
+                  border: 'border-zinc-700',
+                  dot: 'bg-zinc-500',
+                  label: 'text-zinc-400',
+                },
+                {
+                  day: 'DAY_07',
+                  title: 'Momentum building',
+                  metrics: ['5.3 habits/day avg', '7-day streak locked', '+840 XP earned'],
+                  border: 'border-cyan-900',
+                  dot: 'bg-cyan-500',
+                  label: 'text-cyan-400',
+                },
+                {
+                  day: 'DAY_30',
+                  title: 'Consistency compounding',
+                  metrics: ['83% habit completion', 'First milestone reached', 'Weekly AI review: insights'],
+                  border: 'border-orange-900',
+                  dot: 'bg-orange-500',
+                  label: 'text-orange-400',
+                },
+                {
+                  day: 'DAY_90',
+                  title: 'Goal achieved — next loaded',
+                  metrics: ['GOAL: COMPLETE ✓', '90-day streak maintained', 'XP: Level 8 unlocked'],
+                  border: 'border-green-900',
+                  dot: 'bg-green-500',
+                  label: 'text-green-400',
+                },
+              ] as const).map((j, i, arr) => (
+                <div key={j.day} className="flex gap-4">
+                  <div className="flex flex-col items-center">
+                    <div className={`mt-4 h-3 w-3 shrink-0 rounded-full border-2 ${j.border} ${j.dot} shadow-[0_0_8px_rgba(0,0,0,0.5)]`} />
+                    {i < arr.length - 1 && <div className="w-px flex-1 bg-zinc-800 my-1" />}
+                  </div>
+                  <div className={`mb-3 flex-1 border ${j.border} bg-black p-4`}>
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <p className={`font-pixel text-[0.38rem] tracking-widest ${j.label}`}>{j.day}</p>
+                        <p className="mt-1 font-mono text-sm font-bold text-zinc-200">{j.title}</p>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {j.metrics.map((m) => (
+                          <span key={m} className={`border ${j.border} bg-zinc-950 px-2.5 py-1 font-mono text-xs text-zinc-400`}>{m}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+              {/* Output line */}
+              <div className="flex gap-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-px h-4 bg-zinc-800" />
+                </div>
+                <div className="mb-0 ml-4 border-2 border-green-900 bg-green-950/20 px-6 py-3">
+                  <span className="font-pixel text-[0.45rem] tracking-widest text-green-400">
+                    █ LIFE_CHANGED ▋ — CYCLE_2: INITIATING
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-10 text-center">
+              <TermLinkButton href="/sign-up" variant="primary" size="md">
+                START YOUR DAY_01 → FREE
+              </TermLinkButton>
             </div>
           </div>
         </section>

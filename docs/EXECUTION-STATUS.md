@@ -2,6 +2,8 @@
 
 **Date:** 2026-04-16 | **Status:** 🟢 PRODUCTION LIVE + 14-DAY GROWTH SPRINT ACTIVE
 
+> **Latest update (April 16 v2):** Landing page overhauled — 3 new sections, full font audit, coach titles aligned to PRODUCT_TRUTH. Build: 298 routes, 0 errors, 134/134 tests passing. Commit: see git log.
+
 ---
 
 ## EXECUTIVE SUMMARY
