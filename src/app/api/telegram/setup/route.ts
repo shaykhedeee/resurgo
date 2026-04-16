@@ -8,6 +8,17 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
+
+/** Constant-time string comparison to prevent timing attacks */
+function timingSafeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  try {
+    return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  } catch {
+    return false;
+  }
+}
 
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN || '';
 const WEBHOOK_SECRET = process.env.TELEGRAM_WEBHOOK_SECRET || '';
@@ -42,8 +53,8 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action') || 'status';
   const secret = searchParams.get('secret');
 
-  // Require admin secret for mutating actions
-  const isAdmin = !ADMIN_SECRET || secret === ADMIN_SECRET;
+  // Require admin secret for mutating actions (timing-safe comparison)
+  const isAdmin = !ADMIN_SECRET || (!!secret && timingSafeCompare(secret, ADMIN_SECRET));
 
   if (!BOT_TOKEN) {
     return NextResponse.json({

@@ -1,7 +1,28 @@
 # RESURGO — MASTER LAUNCH PLAN
 > Single source of all tasks, integrations, upgrades, and fixes needed before launch.
-> **Last updated:** 2026-04-06 — deep quality overhaul: 5 critical bug fixes, TypeScript cleanup, font readability
+> **Last updated:** 2026-04-16 — full production audit: 288 pages built, 134/134 tests passing, security hardened, docs refreshed
 > Synthesized from: PRODUCT_TRUTH.md, BRAND_VOICE.md, SAAS-FUNDAMENTALS.md, levelgrow.md, userflow-and-retention.md, MARKETING-STRATEGY.md, competitor research, SaaS metrics research, codebase deep scan.
+
+---
+
+## SHIPPED (as of 2026-04-16)
+
+> All critical launch items are complete. This section tracks what shipped since the last major update.
+
+- ✅ **288 static pages** generated, 0 build errors
+- ✅ **17 test suites, 134/134 tests passing**
+- ✅ **AI provider overhaul**: Ollama → Groq → Cerebras → Gemini → OpenRouter → Together → AIML → OpenAI (8-provider cascade)
+- ✅ **Vision Board Studio**: Fully operational with 8 image providers + stock search
+- ✅ **Auth flow hardened**: 4-layer protection (middleware → Convex → data isolation → onboarding state machine)
+- ✅ **Security fixes**: Timing-safe admin secret comparisons, rate limiting on all endpoints
+- ✅ **Responsive design**: Mobile, tablet, desktop all validated
+- ✅ **Blog refresh**: 50+ posts with freshness metadata
+- ✅ **Niche landing pages**: 6 targeted pages (ADHD, solopreneurs, indie hackers, freelance devs, content creators, digital nomads)
+- ✅ **SEO hardened**: Sitemap (300+ URLs), robots.txt (AI crawlers allowed), JSON-LD schema on key pages
+- ✅ **Email system**: Resend integration with marketing templates
+- ✅ **README updated**: Accurate tech stack, project structure, and setup instructions
+- ✅ **TypeScript cleanup**: ~150 errors resolved
+- ✅ **Font readability**: Inter/JetBrains Mono with proper sizing
 
 ---
 

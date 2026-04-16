@@ -6,6 +6,17 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import { timingSafeEqual } from 'crypto';
+
+/** Constant-time string comparison to prevent timing attacks */
+function timingSafeCompare(a: string, b: string): boolean {
+  if (a.length !== b.length) return false;
+  try {
+    return timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  } catch {
+    return false;
+  }
+}
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 const FROM_MARKETING = process.env.RESEND_FROM_MARKETING || 'Resurgo <marketing@resurgo.life>';
@@ -215,7 +226,13 @@ async function sendEmail(opts: {
 
 // ─── Route Handlers ───────────────────────────────────────────────────────────
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  const adminSecret = request.headers.get('x-admin-secret');
+  const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
+  if (!ADMIN_SECRET || !adminSecret || !timingSafeCompare(adminSecret, ADMIN_SECRET)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const templateList = Object.entries(TEMPLATES).map(([id, t]) => ({
     id,
     subject: t.subject,
@@ -235,7 +252,7 @@ export async function POST(request: NextRequest) {
     // Admin auth required for all sends (prevents open relay abuse)
     const adminSecret = request.headers.get('x-admin-secret');
     const ADMIN_SECRET = process.env.ADMIN_SECRET || '';
-    if (!ADMIN_SECRET || adminSecret !== ADMIN_SECRET) {
+    if (!ADMIN_SECRET || !adminSecret || !timingSafeCompare(adminSecret, ADMIN_SECRET)) {
       return NextResponse.json({ error: 'Unauthorized. x-admin-secret header required.' }, { status: 401 });
     }
     const isAdmin = true;

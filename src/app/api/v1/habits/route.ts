@@ -11,6 +11,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const auth = await resolveApiKey(req.headers.get('authorization'));
   if (!auth) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
-  const habits = await convexClient.query(api.habits.listActive, {}).catch(() => []);
+  const habits = await convexClient.query(api.restApi.listHabits, { userId: auth.ownerId }).catch(() => []);
   return NextResponse.json({ habits });
 }

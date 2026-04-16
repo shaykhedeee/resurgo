@@ -72,26 +72,10 @@ export async function GET() {
       env,
       region,
       checks: {
-        // Critical infrastructure
-        convex: hasValidConvexUrl ? 'configured' : hasConvex ? 'invalid_format' : 'missing',
-        clerk: hasValidClerkKey ? 'configured' : hasClerk ? 'invalid_or_placeholder' : 'missing',
-        clerk_jwt_issuer: hasClerkIssuer ? 'configured' : 'missing',
-        auth_mode: authMode,
-        key_issuer_mismatch: keyIssuerMismatch,
-        // AI services
-        groq: hasGroq ? 'configured' : 'not_set',
-        // Analytics (non-critical — app works without them)
-        analytics: {
-          ga4: hasGA ? 'configured' : 'not_set',
-          meta_pixel: hasMetaPixel ? 'configured' : 'not_set',
-        },
-        // Billing
-        billing: {
-          dodo_webhook: hasDodoWebhookSecret ? 'configured' : 'not_set',
-          dodo_api: hasDodoApiKey ? 'configured' : 'not_set',
-          billing_sync: hasBillingSync ? 'configured' : 'not_set',
-          ready: isBillingReady,
-        },
+        // Only expose boolean readiness — never reveal service identities
+        core: isCriticalReady ? 'ok' : 'error',
+        billing: isBillingReady ? 'ok' : 'not_configured',
+        ai: isAIReady ? 'ok' : 'not_configured',
       },
     },
     {

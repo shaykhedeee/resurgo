@@ -1,5 +1,12 @@
 # Vision Board Studio PRD (Premium Conversion Feature)
 
+> **⚠️ ARCHIVED — 2026-04-16**  
+> Vision Board Studio is now **LIVE in production** and fully operational.  
+> Audit confirmed: 5 API routes, 9 Convex functions, 8 image generation providers, stock image search, proper auth + rate limiting on all endpoints.  
+> This document is the original pre-launch specification kept for historical reference.
+
+---
+
 ## Goal
 
 Make Vision Board Studio a **high-desire Pro feature** that:

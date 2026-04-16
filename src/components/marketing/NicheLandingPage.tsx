@@ -1,22 +1,55 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // NicheLandingPage — Shared template for niche persona landing pages
 // Used by /solopreneurs, /indie-hackers, /freelance-developers,
-//         /content-creators, /digital-nomads
+//         /content-creators, /digital-nomads, /adhd
 // ─────────────────────────────────────────────────────────────────────────────
 
 import Link from 'next/link';
 import type { UseCasePage } from '@/lib/marketing/types';
+
+export interface NicheFaq {
+  question: string;
+  answer: string;
+}
 
 interface Props {
   page: UseCasePage;
   keywords: string[];
   heroHeadline: string;
   heroCta: string;
+  faq?: NicheFaq[];
+  stats?: Array<{ value: string; label: string }>;
 }
 
-export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta }: Props) {
+export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta, faq, stats }: Props) {
+  const defaultStats = stats ?? [
+    { value: '10,000+', label: 'Goals Tracked' },
+    { value: '94%', label: 'Habit Consistency Rate' },
+    { value: '4.9★', label: 'Average Rating' },
+    { value: '3 min', label: 'Daily Check-in Time' },
+  ];
+
+  const faqJsonLd = faq && faq.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  } : null;
+
   return (
     <main className="min-h-screen bg-black">
+      {faqJsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+        />
+      )}
       <article className="mx-auto max-w-4xl px-4 pb-20 pt-14">
 
         {/* ── HERO ── */}
@@ -95,6 +128,16 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
           </footer>
         </blockquote>
 
+        {/* ── STATS BAR ── */}
+        <section className="mb-10 grid grid-cols-2 gap-px border border-zinc-900 bg-zinc-900 md:grid-cols-4">
+          {defaultStats.map((stat) => (
+            <div key={stat.label} className="bg-black px-4 py-5 text-center">
+              <p className="font-mono text-xl font-bold text-orange-500">{stat.value}</p>
+              <p className="mt-1 font-mono text-[0.6rem] tracking-widest text-zinc-500">{stat.label}</p>
+            </div>
+          ))}
+        </section>
+
         {/* ── KEYWORDS ── */}
         <section className="mb-10 border border-zinc-900 bg-zinc-950 p-5">
           <h2 className="mb-3 font-mono text-xs font-bold tracking-widest text-zinc-500">RESURGO_FOR</h2>
@@ -104,6 +147,31 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
             ))}
           </div>
         </section>
+
+        {/* ── FAQ ── */}
+        {faq && faq.length > 0 && (
+          <section className="mb-10" aria-label="Frequently Asked Questions">
+            <h2 className="mb-6 font-mono text-sm font-bold tracking-widest text-zinc-100">
+              FREQUENTLY_ASKED_QUESTIONS
+            </h2>
+            <div className="space-y-4">
+              {faq.map((item) => (
+                <details
+                  key={item.question}
+                  className="group border border-zinc-900 bg-zinc-950"
+                >
+                  <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 font-mono text-xs font-semibold text-zinc-200 marker:content-none">
+                    {item.question}
+                    <span className="shrink-0 text-orange-600 transition group-open:rotate-45">+</span>
+                  </summary>
+                  <p className="border-t border-zinc-900 px-5 py-4 font-mono text-xs leading-relaxed text-zinc-400">
+                    {item.answer}
+                  </p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── BOTTOM CTA ── */}
         <div className="border border-orange-900/60 bg-orange-950/10 p-6 text-center">

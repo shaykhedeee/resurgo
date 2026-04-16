@@ -46,6 +46,12 @@ const QUICK_WORKOUTS = [
   { name: 'Yoga Flow', type: 'flexibility' as WorkoutType, duration: 45, calories: 180 },
   { name: 'Upper Body', type: 'strength' as WorkoutType, duration: 45, calories: 350 },
   { name: 'Lower Body', type: 'strength' as WorkoutType, duration: 50, calories: 380 },
+  { name: 'Bodyweight EMOM', type: 'strength' as WorkoutType, duration: 25, calories: 260 },
+  { name: '5K Recovery Jog', type: 'cardio' as WorkoutType, duration: 35, calories: 250 },
+  { name: 'Mobility Routine', type: 'flexibility' as WorkoutType, duration: 20, calories: 90 },
+  { name: 'Basketball Pickup', type: 'sport' as WorkoutType, duration: 60, calories: 500 },
+  { name: 'Swimming Laps', type: 'cardio' as WorkoutType, duration: 40, calories: 400 },
+  { name: 'Jump Rope Tabata', type: 'cardio' as WorkoutType, duration: 15, calories: 220 },
 ];
 
 const WORKOUT_PLANS = [
@@ -65,6 +71,43 @@ const WORKOUT_PLANS = [
       { day: 'TUE', focus: 'Zone 2 Cardio', exercises: ['30 min steady run @65% HR', 'Heart rate zone 2 (130-150 bpm)'] },
       { day: 'THU', focus: 'HIIT Intervals', exercises: ['5 min warm-up', '8×1 min sprint @90% HR', '2 min recovery', '5 min cool-down'] },
       { day: 'SAT', focus: 'Long Run', exercises: ['50-60 min easy run @60% HR', 'Build aerobic base'] },
+    ],
+  },
+  {
+    name: 'HIIT_PROTOCOL_v1',
+    days: ['MON', 'WED', 'FRI'],
+    sessions: [
+      { day: 'MON', focus: 'Metabolic Blast', exercises: ['Burpees 4×12', 'Box Jumps 4×10', 'KB Swings 4×15', 'Battle Ropes 3×30s', 'Mountain Climbers 3×20'] },
+      { day: 'WED', focus: 'AMRAP 20', exercises: ['5 Push-ups', '10 Air Squats', '15 Sit-ups', 'Repeat max rounds in 20 min'] },
+      { day: 'FRI', focus: 'Tabata Combo', exercises: ['8 rounds: 20s work / 10s rest', 'Rd 1-2 Thrusters', 'Rd 3-4 Jump Squats', 'Rd 5-6 Push Press', 'Rd 7-8 Burpees'] },
+    ],
+  },
+  {
+    name: 'FLEXIBILITY_PROTOCOL_v1',
+    days: ['TUE', 'THU', 'SAT'],
+    sessions: [
+      { day: 'TUE', focus: 'Vinyasa Flow', exercises: ['Sun Salutation A ×5', 'Warrior I/II/III sequence', 'Triangle → Half Moon', 'Pigeon Pose 2 min each', 'Savasana 5 min'] },
+      { day: 'THU', focus: 'Deep Stretch', exercises: ['Foam Roll 10 min', 'Hip Flexor Stretch 2×90s', 'Hamstring PNF 3×30s', 'Thoracic Spine Rotation 2×10', 'Figure-4 Glute Stretch 2 min each'] },
+      { day: 'SAT', focus: 'Active Recovery', exercises: ['20 min easy walk', 'Full body dynamic stretching', 'Lacrosse ball trigger points 10 min', 'Diaphragmatic breathing 5 min'] },
+    ],
+  },
+  {
+    name: 'BODYWEIGHT_PROTOCOL_v1',
+    days: ['MON', 'WED', 'FRI', 'SUN'],
+    sessions: [
+      { day: 'MON', focus: 'Push Day', exercises: ['Push-ups 4×20', 'Diamond Push-ups 3×12', 'Pike Push-ups 3×10', 'Dips 3×15', 'Plank 3×60s'] },
+      { day: 'WED', focus: 'Pull Day', exercises: ['Pull-ups 4×8', 'Chin-ups 3×10', 'Inverted Rows 3×12', 'Dead Hang 3×30s', 'Superman Hold 3×20s'] },
+      { day: 'FRI', focus: 'Legs Day', exercises: ['Pistol Squats 3×6 each', 'Jump Squats 4×15', 'Walking Lunges 3×20', 'Wall Sit 3×45s', 'Calf Raises 4×25'] },
+      { day: 'SUN', focus: 'Core & Mobility', exercises: ['Hollow Body 3×30s', 'L-Sit Progression 3×15s', 'Bicycle Crunches 3×20', 'Side Plank 3×30s each', 'Yoga Flow 15 min'] },
+    ],
+  },
+  {
+    name: 'SPORT_PERFORMANCE_v1',
+    days: ['MON', 'WED', 'FRI'],
+    sessions: [
+      { day: 'MON', focus: 'Speed & Agility', exercises: ['Ladder Drills 4×30s', 'Cone Shuttle 5×20m', 'Box Jump 4×8', 'Sprint 6×40m', 'Cool-down jog 5 min'] },
+      { day: 'WED', focus: 'Power & Explosiveness', exercises: ['Clean & Jerk 5×3', 'Med Ball Slams 4×10', 'Broad Jumps 4×6', 'Plyometric Push-ups 3×8', 'Sled Push 4×20m'] },
+      { day: 'FRI', focus: 'Endurance & Recovery', exercises: ['Tempo Run 25 min', 'Farmer Walks 4×40m', 'Battle Ropes 3×30s', 'Band Pull-aparts 3×20', 'Stretch routine 10 min'] },
     ],
   },
 ];

@@ -3689,6 +3689,904 @@ No. Prioritize one primary channel and one secondary channel.
 Activation quality. Reach without first-win behavior is wasted acquisition.
     `,
   },
+
+  // ── 10 New Life-OS / ADHD / Health Posts (May 2026 batch) ──────────────
+  'adhd-productivity-ai-replaces-willpower-with-structure': {
+    title: 'ADHD Productivity: How an AI-Powered System Replaces Willpower with Structure',
+    desc: 'Traditional productivity advice fails most ADHD brains. Here is how an AI-adaptive system provides external structure, gentle accountability, and micro-task breakdowns that actually work.',
+    date: 'May 25, 2026',
+    readTime: '14 min',
+    tags: ['ADHD', 'AI productivity', 'neurodivergent', 'executive function', 'habits'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['adhd productivity system', 'adhd ai app', 'adhd task management', 'executive function support app', 'neurodivergent productivity'],
+    content: `
+## Why Traditional Productivity Advice Fails ADHD Brains
+
+Conventional wisdom says "just plan it, then do it." That assumes working memory, task initiation, and sustained attention function reliably. For ADHD brains, they often do not.
+
+The gap is not motivation. It is executive function: the cognitive infrastructure that turns intent into action.
+
+## The Executive Function Gap
+
+ADHD affects five critical executive domains:
+1. **Working memory** — forgetting what you planned 10 minutes ago
+2. **Task initiation** — knowing what to do but being unable to start
+3. **Time blindness** — misjudging how long things take
+4. **Emotional regulation** — frustration spirals after small setbacks
+5. **Priority shifting** — hyperfocusing on the wrong thing
+
+No to-do list solves these. You need external structure that compensates for internal variability.
+
+## How AI-Adaptive Systems Help
+
+An AI system designed for ADHD does three things traditional apps cannot:
+
+### 1. Micro-Task Decomposition
+Instead of "Write blog post," the system generates:
+- Open document (2 min)
+- Write one paragraph about the core problem (5 min)
+- Take a break (3 min)
+- Write the solution section header (2 min)
+
+Each step is small enough to bypass initiation resistance.
+
+### 2. Context-Aware Nudges
+The system learns your energy patterns. Low-energy afternoon? It suggests review tasks, not creative work. High-focus morning window? It queues your hardest task first.
+
+### 3. Flexible Streak Recovery
+Missing a day does not reset everything. The system uses a "never miss twice" protocol with automatic difficulty adjustment after gaps.
+
+## Building Your ADHD-Friendly System
+
+### Step 1 — Reduce daily decisions to 3
+Pick your top 3 tasks the night before. Morning decision fatigue is an ADHD trap.
+
+### Step 2 — Use body-doubling or timer anchors
+Start every work block with a visible timer. The external time pressure compensates for time blindness.
+
+### Step 3 — Build transition rituals
+ADHD brains struggle with task switching. Use a 2-minute ritual between tasks: stand, breathe, state the next task aloud.
+
+### Step 4 — Track energy, not just completion
+Log energy level (1-5) alongside each task. After two weeks, you will see your biological prime time clearly.
+
+### Step 5 — Celebrate micro-wins immediately
+Dopamine systems in ADHD brains need faster feedback loops. Mark completions visually and let the system acknowledge them.
+
+## What Resurgo Does Differently for ADHD Users
+
+- **Low-friction check-ins**: 30-second daily logging, not 15-minute journaling
+- **Flexible streaks**: Grace periods and recovery protocols built in
+- **Dopamine-aware design**: Visual progress, animations, and coach celebrations
+- **Calm mode**: Reduced visual complexity when overwhelm hits
+- **AI coach that adapts**: Adjusts task size and pacing based on your recent patterns
+
+## FAQ
+
+### Is this a replacement for ADHD medication or therapy?
+No. This is a behavioral support system. It works alongside professional treatment, not instead of it.
+
+### How is this different from a regular to-do app?
+Regular apps assume consistent executive function. This system compensates for variability with adaptive task sizing, energy-aware scheduling, and recovery protocols.
+
+### Can I use this if I suspect ADHD but am not diagnosed?
+Yes. The principles of external structure, micro-tasks, and flexible accountability help anyone with executive function challenges.
+
+### How quickly will I see improvement?
+Most users report reduced overwhelm within 1 week and measurable consistency improvement within 3-4 weeks.
+    `,
+  },
+
+  'nutrition-tracking-for-beginners-without-obsession': {
+    title: 'Nutrition Tracking for Beginners: How to Start Without Obsessing Over Every Calorie',
+    desc: 'A mindful, evidence-based guide to food tracking that builds awareness without anxiety. Learn flexible methods, realistic macro targets, and when to stop counting.',
+    date: 'May 25, 2026',
+    readTime: '12 min',
+    tags: ['nutrition', 'health', 'food tracking', 'wellness', 'beginners'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['nutrition tracking beginners', 'how to track food without obsessing', 'mindful calorie tracking', 'macro tracking guide', 'healthy eating app'],
+    content: `
+## The Nutrition Tracking Paradox
+
+Tracking food improves outcomes — research consistently shows that people who log meals make better choices. But rigid tracking creates anxiety, guilt, and disordered patterns for many people.
+
+The solution is not "track everything" or "track nothing." It is building awareness without obsession.
+
+## Three Levels of Food Tracking
+
+### Level 1 — Photo Logging (Easiest)
+Take a photo of every meal. No counting, no weighing. After one week, review the photos and notice patterns: portion sizes, vegetable frequency, snack timing.
+
+This builds awareness with zero math.
+
+### Level 2 — Plate Method
+Divide every plate mentally: half vegetables/fruit, quarter protein, quarter complex carbs. Log whether each meal hit this ratio. Binary tracking (yes/no) removes the precision trap.
+
+### Level 3 — Macro Awareness
+Track protein grams and total calories only. Ignore micromanaging fat and carb splits until you have 8+ weeks of consistent logging.
+
+**Start at Level 1. Graduate when it feels easy, not when you feel motivated.**
+
+## Realistic Macro Targets for Beginners
+
+Instead of precise calculations, use these simplified anchors:
+
+- **Protein**: 0.7-1g per pound of body weight (prioritize this one)
+- **Calories**: Maintenance ±200 for most goals
+- **Fiber**: 25-35g daily (most people under-eat this)
+- **Water**: Half your body weight in ounces
+
+Do not optimize fat/carb ratios until protein and fiber are consistent.
+
+## Common Mistakes That Create Obsession
+
+1. **Tracking every condiment and seasoning** — irrelevant noise
+2. **Weighing food at restaurants** — use palm/fist estimates instead
+3. **Guilt-logging "bad" foods** — all foods provide data, not moral judgment
+4. **Daily weigh-ins tied to food logs** — weight fluctuates; weekly averages matter
+5. **Perfection streaks** — one imperfect day does not erase a good week
+
+## When to Stop Counting
+
+Tracking is a training tool, not a lifestyle. Stop when:
+- You can estimate portions accurately without measuring
+- You consistently hit protein targets from habit
+- Logging creates more stress than insight
+- You have maintained your target for 8+ weeks
+
+Then switch to weekly spot-checks instead of daily logging.
+
+## How AI Makes Tracking Smarter
+
+Modern nutrition tracking with AI offers:
+- **Meal recognition**: Snap a photo and get approximate macros
+- **Pattern detection**: AI notices you under-eat protein on weekends
+- **Gentle nudges**: "You have not logged water today" instead of guilt-driven alerts
+- **Recipe suggestions**: Based on your actual eating patterns and nutritional gaps
+
+## FAQ
+
+### Should I track on weekends?
+Yes, but use Level 1 (photo logging) if full tracking feels restrictive on rest days.
+
+### What if I have a history of disordered eating?
+Consult a professional before starting any tracking. Photo logging (Level 1) is generally the safest entry point.
+
+### How long should I track before seeing results?
+Awareness shifts happen in 1-2 weeks. Body composition changes require 4-8 weeks of consistent patterns.
+
+### Is calorie counting necessary for weight loss?
+Not always. A protein-first, vegetable-heavy approach often creates a natural deficit without counting.
+    `,
+  },
+
+  'science-of-habit-stacking-morning-to-night-routine': {
+    title: 'The Science of Habit Stacking: Building a Complete Morning-to-Night Routine System',
+    desc: 'Move beyond single habits. Learn the research-backed architecture for stacking habits across your entire day — from waking ritual to evening wind-down.',
+    date: 'May 25, 2026',
+    readTime: '13 min',
+    tags: ['habit stacking', 'habits', 'morning routine', 'behavior design', 'consistency'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['habit stacking science', 'morning to night routine', 'habit chain system', 'daily routine builder', 'behavior design habits'],
+    content: `
+## Beyond Single Habits: The Stack Architecture
+
+Most habit advice focuses on building one habit at a time. That works for beginners, but real transformation requires a connected system — habits that trigger each other across your entire day.
+
+Habit stacking uses existing behaviors as anchors for new ones, creating chains that run on autopilot.
+
+## The Neuroscience of Stacking
+
+Your brain builds habits through synaptic pathways. When two behaviors consistently follow each other, the neural connection strengthens. Eventually, completing behavior A automatically primes behavior B.
+
+This is why "after I pour coffee, I journal for 2 minutes" works better than "journal at 7:15 AM." The trigger is behavioral, not temporal.
+
+## The Full-Day Stack Architecture
+
+### Morning Stack (First 60 minutes)
+1. **Anchor**: Feet hit floor
+2. **Stack**: Make bed (2 min) → Glass of water (1 min) → 5-minute movement (stretching/walk) → Review today's top 3 priorities (2 min) → First focus block begins
+
+Total additional time: ~10 minutes. Each step triggers the next.
+
+### Midday Stack (Around lunch)
+1. **Anchor**: Close laptop for lunch
+2. **Stack**: 5-minute walk → Eat without screens → Log energy level (30 sec) → One gratitude note (30 sec)
+
+### Afternoon Stack (Energy dip window)
+1. **Anchor**: Post-lunch slump feeling
+2. **Stack**: 2-minute breathing exercise → Review remaining priorities → Start easiest remaining task (momentum builder)
+
+### Evening Stack (Last 60 minutes)
+1. **Anchor**: Dinner cleanup complete
+2. **Stack**: Tomorrow's top 3 priorities (2 min) → 10-minute reading → Screen brightness reduction → Sleep routine begins
+
+## Stack Design Rules
+
+### Rule 1 — Each new habit must be under 5 minutes
+Long habits break chains. Keep each link small enough that skipping feels harder than doing.
+
+### Rule 2 — Use sensory triggers
+Visual cues (journal on nightstand), tactile cues (yoga mat by bed), or location cues (specific chair for reading) strengthen the automatic trigger.
+
+### Rule 3 — Never stack more than 2 new habits at once
+Add one new link per week. Adding three simultaneously ensures none of them stick.
+
+### Rule 4 — Build recovery into the chain
+If you miss one link, the rule is: skip it and continue the chain from the next anchor. Never restart from the beginning of a missed chain.
+
+## Tracking Your Stacks
+
+Track completion of each stack as a unit, not individual habits. This reduces logging friction:
+- Morning stack: ✓ or ✗
+- Midday stack: ✓ or ✗
+- Evening stack: ✓ or ✗
+
+After 2 weeks, break down which specific links are weakest and reinforce those.
+
+## Common Stacking Failures
+
+1. **Too many new habits at once** — chain breaks under its own weight
+2. **Time-based triggers instead of behavior-based** — "at 7 AM" fails when schedules shift
+3. **No recovery protocol** — one missed link collapses the entire day
+4. **Stacking during high-variability times** — do not anchor to events that frequently change
+
+## FAQ
+
+### How long until a stack feels automatic?
+Individual links: 2-4 weeks. A full 4-5 link chain: 6-8 weeks of consistent practice.
+
+### Can I stack habits on weekends too?
+Yes, but use a simplified weekend stack. Trying to maintain weekday complexity on rest days increases dropout.
+
+### What if my morning routine keeps getting interrupted?
+Shorten the stack or split it: 2 habits before disruption window, 2 habits after.
+
+### Should I track habits individually or as stacks?
+Start with stacks (morning/midday/evening). Drill into individual habits only when diagnosing weak links.
+    `,
+  },
+
+  'why-most-fitness-apps-fail-ai-workout-planning': {
+    title: 'Why Most Fitness Apps Fail (And What AI Workout Planning Gets Right)',
+    desc: 'Fitness apps have a 96% churn rate. Here is why static programs fail, what adaptive AI training fixes, and how to choose a system that evolves with you.',
+    date: 'May 25, 2026',
+    readTime: '11 min',
+    tags: ['fitness', 'AI productivity', 'workout', 'health', 'app comparison'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['why fitness apps fail', 'ai workout planning', 'adaptive fitness app', 'best workout tracker 2026', 'ai personal trainer app'],
+    content: `
+## The 96% Problem
+
+Research shows 96% of fitness app users stop within 30 days. The problem is not laziness. It is design failure.
+
+Most fitness apps deliver static programs to dynamic humans. Your energy, schedule, recovery status, and motivation fluctuate daily. A fixed 12-week plan cannot account for any of that.
+
+## Why Static Programs Fail
+
+### Problem 1 — No adaptation to real life
+Missed Monday's workout? The program does not know. You either skip it or double up, both suboptimal.
+
+### Problem 2 — No energy awareness
+Prescribing heavy squats on your worst sleep night is counterproductive. Without recovery data, programs guess wrong constantly.
+
+### Problem 3 — No progressive feedback
+Did the workout feel easy or crushing? Static programs do not ask and cannot adjust.
+
+### Problem 4 — Motivation cliff after novelty
+The first week is exciting. By week three, the same routine with no visible progress triggers abandonment.
+
+## What AI Workout Planning Changes
+
+### Adaptive Difficulty
+AI systems adjust workout intensity based on your recent sleep, energy logs, and completion patterns. Low-energy day? The system offers a lighter session that still moves you forward.
+
+### Smart Substitutions
+Cannot access a gym today? AI suggests equipment-free alternatives that target the same muscle groups with similar volume.
+
+### Progressive Overload Intelligence
+Instead of arbitrary weight increases every week, AI tracks your actual performance trends and suggests increases only when your data supports them.
+
+### Recovery Integration
+By cross-referencing sleep quality, stress levels, and workout intensity, AI identifies when you need a deload week before burnout symptoms appear.
+
+## How to Choose a Fitness System That Lasts
+
+1. **Does it adapt to missed days?** If missing one session breaks the program, it will not survive real life.
+2. **Does it ask how you feel?** Energy and RPE (rate of perceived exertion) logging is a minimum requirement.
+3. **Does it connect to other health data?** Sleep, nutrition, and stress all affect training outcomes.
+4. **Is the minimum viable workout under 20 minutes?** Flexibility in session length prevents all-or-nothing thinking.
+5. **Does it celebrate consistency over performance?** Showing up matters more than PRs for long-term adherence.
+
+## The Integration Advantage
+
+Standalone fitness apps fail because exercise does not exist in isolation. Your workout quality depends on:
+- Last night's sleep (wellness tracking)
+- Today's nutrition (food logging)
+- Current stress level (mood/energy check-in)
+- Weekly goal alignment (are you training for the right reasons?)
+
+A system that integrates all of these into one adaptive loop outperforms any single-purpose fitness tracker.
+
+## FAQ
+
+### Can AI replace a personal trainer?
+For programming and basic accountability, yes. For form correction and complex injury rehabilitation, a human trainer is still recommended.
+
+### How many days per week should I train?
+3-4 days is optimal for most beginners. Consistency at 3 days beats inconsistency at 6 days.
+
+### What if I do not know any exercises?
+Good AI systems include exercise libraries with descriptions. Start with fundamental movements: squat, hinge, push, pull, carry.
+
+### How long until I see physical results?
+Strength improvements: 2-4 weeks. Visible body composition changes: 8-12 weeks with consistent training and nutrition.
+    `,
+  },
+
+  'mental-health-and-productivity-todo-list-wont-fix-burnout': {
+    title: "Mental Health and Productivity: Why Your To-Do List Won't Fix Burnout",
+    desc: 'Burnout is not a productivity problem — it is a recovery problem. Learn to identify the warning signs, build recovery rituals, and use systems that protect your mental health.',
+    date: 'May 25, 2026',
+    readTime: '13 min',
+    tags: ['mental health', 'burnout', 'wellness', 'self care', 'psychology'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['mental health productivity', 'burnout recovery', 'productivity and wellbeing', 'prevent burnout system', 'wellness tracking app'],
+    content: `
+## The Productivity Trap
+
+When you feel behind, the instinct is to do more: more tasks, more hours, more optimization. But burnout is not caused by insufficient output. It is caused by insufficient recovery.
+
+Adding more tasks to a burned-out system is like redlining an overheated engine. The solution is not more fuel — it is cooling down.
+
+## Recognizing Burnout vs. Laziness
+
+Burnout and laziness feel similar but have opposite causes:
+
+**Laziness**: Low effort despite adequate energy. Solution: accountability and structure.
+
+**Burnout**: Low effort despite high desire. Solution: recovery and boundary protection.
+
+### Early Warning Signs of Burnout
+- Dreading tasks you used to enjoy
+- Consistent energy crashes despite adequate sleep
+- Irritability disproportionate to triggers
+- Cynicism about your own goals
+- Physical symptoms: headaches, tension, digestive issues
+
+If three or more of these persist for two weeks, you are likely burned out, not lazy.
+
+## The Recovery-First Framework
+
+### Step 1 — Audit Your Non-Negotiables
+List the activities that restore you: sleep, exercise, social connection, nature, creative play. How many have you skipped this month?
+
+### Step 2 — Protect Recovery Time First
+Schedule recovery before work. Not "if I finish early." Recovery is the foundation that makes productive work possible.
+
+### Step 3 — Reduce Decision Load
+Burnout worsens with decision fatigue. Simplify meal choices, clothing, and daily planning. Use templates and defaults wherever possible.
+
+### Step 4 — Set Hard Boundaries
+Define a daily shutdown time. After that point, no work communication. This is not optional — it is the mechanism that allows your nervous system to recover.
+
+### Step 5 — Track Wellness, Not Just Output
+Log energy (1-5), mood (1-5), and sleep quality daily. After two weeks, you will see which behaviors protect your wellbeing and which deplete it.
+
+## Systems That Protect Mental Health
+
+A productivity system should prevent burnout, not cause it. Look for:
+
+- **Energy-aware scheduling**: Do not stack hard tasks on low-energy days
+- **Automatic scope reduction**: When wellness scores drop, the system suggests lighter loads
+- **Celebration of rest**: Recovery days logged as productive, not as failures
+- **Mood tracking integration**: Connecting emotional data to behavior patterns
+- **Gentle accountability**: Nudges that encourage, not guilt-trip
+
+## The Weekly Wellness Review
+
+Every Sunday, spend 10 minutes on:
+1. Average energy this week (1-5)
+2. Number of recovery activities completed
+3. Biggest energy drain this week
+4. One boundary to strengthen next week
+5. One recovery activity to protect
+
+This review is more important than any task review when you are in a burnout risk zone.
+
+## FAQ
+
+### How long does burnout recovery take?
+Mild burnout: 2-4 weeks of consistent recovery. Severe burnout: 3-6 months with professional support.
+
+### Should I stop working entirely during recovery?
+Usually no. Reduce load and protect boundaries. Complete cessation can create anxiety about returning.
+
+### Can a productivity app cause burnout?
+Yes, if it gamifies output without monitoring wellness. Streak pressure without grace periods is a known burnout accelerator.
+
+### When should I seek professional help?
+If symptoms persist beyond 4 weeks despite recovery efforts, or if you experience persistent hopelessness, consult a mental health professional.
+    `,
+  },
+
+  'building-personal-operating-system-complete-guide-2026': {
+    title: 'Building a Personal Operating System: The Complete Guide for 2026',
+    desc: 'A personal operating system unifies goals, habits, health, finances, and learning into one adaptive framework. This guide shows you how to build yours from scratch.',
+    date: 'May 25, 2026',
+    readTime: '16 min',
+    tags: ['personal OS', 'life management', 'goal setting', 'AI productivity', 'systems thinking'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['personal operating system', 'life operating system', 'life management system', 'personal OS 2026', 'life system app'],
+    content: `
+## What Is a Personal Operating System?
+
+A Personal Operating System (Personal OS) is an integrated framework that manages your goals, habits, health, energy, and growth from a single command center.
+
+Instead of using 7 apps for 7 life domains, a Personal OS connects everything so that your sleep data informs your work schedule, your nutrition supports your training, and your weekly review adapts your priorities based on real data.
+
+## Why You Need a System, Not More Apps
+
+The average person uses 4-7 productivity apps. They spend more time switching between tools than executing within any single one.
+
+A system differs from a tool stack in three ways:
+1. **Integration**: Data flows between domains automatically
+2. **Adaptation**: The system adjusts to your current state
+3. **Coherence**: All parts serve the same overarching objectives
+
+## The 6 Pillars of a Personal OS
+
+### Pillar 1 — Goals and Milestones
+Every OS needs a direction layer. Define 1-3 primary outcomes per quarter, decompose them into monthly milestones, then convert milestones into weekly actions.
+
+### Pillar 2 — Daily Habits and Routines
+The behavior engine. Morning stacks, evening stacks, and keystone habits that create compound returns over months.
+
+### Pillar 3 — Focus and Deep Work
+Attention management: focus blocks, distraction protocols, and energy-aligned scheduling. Protect your best cognitive hours for your hardest problems.
+
+### Pillar 4 — Health and Fitness
+Physical foundation: exercise programming, nutrition awareness, sleep optimization. These are not nice-to-haves — they are performance multipliers.
+
+### Pillar 5 — Wellness and Recovery
+Mental health monitoring: energy tracking, mood logging, stress management, and boundary protection. The system that prevents burnout.
+
+### Pillar 6 — Learning and Growth
+Continuous improvement: reading, skill development, reflection practices. Weekly reviews and monthly retrospectives close the feedback loop.
+
+## Building Your OS: Week-by-Week
+
+### Week 1 — Foundation
+- Set up your central dashboard
+- Define 1-3 quarterly goals
+- Create morning and evening habit stacks (3 habits each max)
+- Start daily energy logging (1-5 scale)
+
+### Week 2 — Behavior Engine
+- Add 2-3 keystone habits connected to your quarterly goals
+- Set up focus blocks for your high-energy hours
+- Begin basic meal logging (photo method)
+- Run your first weekly review
+
+### Week 3 — Integration
+- Connect wellness data to scheduling (lighter tasks on low-energy days)
+- Add fitness or movement tracking
+- Review and adjust habit stacks based on Week 1-2 data
+- Identify your biggest friction point and address it
+
+### Week 4 — Optimization
+- Run a full monthly review
+- Adjust quarterly goals if needed
+- Add one advanced feature (sleep tracking, nutrition targets, etc.)
+- Document what is working and what needs simplification
+
+## The Weekly Review Protocol
+
+Every Sunday, 20 minutes:
+1. Score the week: goals progress, habit completion %, energy average
+2. Identify the top win and top blocker
+3. Adjust next week's priorities based on data
+4. Protect one recovery activity in next week's calendar
+5. Set Monday's top 3 actions
+
+This review is the single most important practice in your entire OS. Skip everything else before you skip this.
+
+## Common OS Building Mistakes
+
+1. **Over-engineering from day one** — Start simple, add complexity only when needed
+2. **Tracking everything** — Track 5 things well instead of 20 things poorly
+3. **No review cadence** — A system without feedback loops is just a fancy to-do list
+4. **Ignoring health data** — Your cognitive output depends on physical recovery
+5. **Tool-switching instead of system-using** — Commit to one platform for 90 days minimum
+
+## FAQ
+
+### How long does it take to build a functional Personal OS?
+A basic functional system: 1-2 weeks. A fully integrated adaptive system: 4-8 weeks of iterative refinement.
+
+### Do I need a specific app for this?
+An app that integrates goals, habits, health, and AI coaching in one place is ideal. Resurgo is designed specifically as a Personal OS.
+
+### What if I fail at maintaining the system?
+Systems fail when they are too complex. Simplify until the maintenance burden is under 15 minutes per day.
+
+### Can teams use a Personal OS?
+The core framework is individual, but weekly review outputs can be shared for team alignment.
+    `,
+  },
+
+  'how-ai-coaches-work-technology-behind-goal-achievement': {
+    title: 'How AI Coaches Work: The Technology Behind Personalized Goal Achievement',
+    desc: 'Demystifying AI coaching: how pattern recognition, behavioral nudges, and adaptive scheduling combine to create a coach that knows your patterns better than you do.',
+    date: 'May 25, 2026',
+    readTime: '12 min',
+    tags: ['AI coaching', 'AI productivity', 'technology', 'goal execution', 'behavior design'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['how ai coaching works', 'ai life coach technology', 'ai accountability coach', 'ai goal tracking', 'personalized ai coaching'],
+    content: `
+## AI Coaching Is Not Chatbot Advice
+
+When most people hear "AI coach," they picture a chatbot that says "You can do it!" That is not coaching. That is a motivational poster with a text input.
+
+Real AI coaching uses your behavioral data to deliver personalized, timely interventions that change what you actually do — not just how you feel for 30 seconds.
+
+## The Three Layers of AI Coaching
+
+### Layer 1 — Pattern Recognition
+The AI analyzes your behavior over time:
+- When do you consistently complete tasks vs. procrastinate?
+- Which habits stick and which collapse after week two?
+- What time of day is your focus highest?
+- How does sleep quality affect next-day output?
+
+After 2-3 weeks of data, the system knows your patterns better than your conscious awareness does.
+
+### Layer 2 — Behavioral Nudges
+Using recognized patterns, the AI delivers timely interventions:
+- **Pre-emptive**: "Your energy typically drops at 2 PM. Start your deep work block now."
+- **Recovery**: "You missed your morning stack. Here is a 5-minute version to maintain momentum."
+- **Celebration**: "You have hit your reading habit 7 days straight. Longest streak this quarter."
+- **Reframing**: "You completed 4 of 5 planned tasks. That is 80% — well above your monthly average."
+
+### Layer 3 — Adaptive Scheduling
+The AI adjusts your plan based on current conditions:
+- Low energy day → lighter task load, recovery suggestions
+- Consecutive high-output days → proactive rest recommendation
+- Approaching a deadline → focus mode with distraction blocking
+- Post-travel or post-illness → graduated re-entry plan
+
+## What Makes a Good AI Coach
+
+Not all AI coaching is equal. Key differentiators:
+
+1. **Data depth**: Does it track beyond task completion? Energy, mood, sleep, and nutrition data create richer coaching.
+2. **Response timing**: Does it intervene when you need it, not just when you open the app?
+3. **Personality fit**: Can you choose a coaching style (direct, gentle, analytical)?
+4. **Privacy-first**: Your behavioral data should be encrypted and never sold.
+5. **Human escalation**: Good AI coaches know their limits and suggest professional help when appropriate.
+
+## Resurgo's Coach System
+
+Resurgo offers five distinct AI coaches, each with a different behavioral specialty:
+- **Marcus** (Stoic resilience) — When you need tough-love accountability
+- **Sage** (Reflective wisdom) — When you need perspective and patience
+- **Nova** (Energetic optimizer) — When you need momentum and excitement
+- **Atlas** (Strategic planner) — When you need systems and structure
+- **Titan** (Performance focus) — When you need output and intensity
+
+The system learns which coach style produces the best results for different situations and adjusts recommendations accordingly.
+
+## FAQ
+
+### Can AI coaching replace a human coach?
+For daily accountability, habit support, and scheduling — yes. For complex life transitions, relationship issues, or clinical mental health — pair with human professionals.
+
+### How much data does AI coaching need?
+Basic patterns emerge after 5-7 days. Reliable personalization starts at 2-3 weeks. Deep behavioral modeling develops over 2-3 months.
+
+### Is my coaching data private?
+With Resurgo, all coaching data is encrypted and never shared with third parties.
+
+### What if the AI gives bad advice?
+Legitimate AI coaches frame suggestions as options, not commands. You always have override control.
+    `,
+  },
+
+  'executive-function-goal-setting-guide-neurodivergent-adults': {
+    title: 'Executive Function and Goal Setting: A Guide for Neurodivergent Adults',
+    desc: 'Working memory, task initiation, and emotional regulation challenges make traditional goal frameworks inadequate. This guide offers neurodivergent-first alternatives.',
+    date: 'May 25, 2026',
+    readTime: '15 min',
+    tags: ['executive function', 'neurodivergent', 'ADHD', 'goal setting', 'mental health'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['executive function goal setting', 'neurodivergent goal planning', 'adhd goal framework', 'executive dysfunction productivity', 'goal setting for adhd adults'],
+    content: `
+## Why Standard Goal Frameworks Fail Neurodivergent Adults
+
+SMART goals, OKRs, and "just break it down" advice assume consistent access to executive functions: working memory to hold the plan, task initiation to start, sustained attention to continue, and emotional regulation to handle setbacks.
+
+For neurodivergent adults — particularly those with ADHD, autism, or both — these functions fluctuate unpredictably. A goal framework built on neurotypical assumptions creates shame, not progress.
+
+## Understanding Executive Function Variability
+
+Executive function is not a personality trait. It is a set of cognitive processes that vary based on:
+- **Sleep quality** — one bad night can halve your working memory capacity
+- **Emotional state** — anxiety consumes executive bandwidth
+- **Interest level** — neurodivergent brains allocate more resources to intrinsically interesting tasks
+- **Environmental factors** — noise, visual clutter, and social demands compete for limited executive resources
+
+The key insight: your executive function capacity changes daily. Your system must account for this variability.
+
+## The Neurodivergent Goal Framework
+
+### Step 1 — Choose Based on Energy, Not Importance
+Instead of prioritizing by urgency or impact, sort tasks by executive function cost:
+- **Low-cost**: Routine, familiar, low-decision tasks
+- **Medium-cost**: Somewhat novel, requires planning but not creativity
+- **High-cost**: Novel, complex, requires sustained focus and decision-making
+
+Match task cost to current energy. Do not attempt high-cost tasks on low-energy days.
+
+### Step 2 — Use Implementation Intentions, Not Deadlines
+"I will write for 10 minutes after I make coffee" works better than "Write by Friday." Implementation intentions bypass the initiation gap by linking actions to existing behaviors.
+
+### Step 3 — Build External Memory Systems
+Do not rely on remembering your goals. Make them visible:
+- Physical: Whiteboard next to your desk with this week's top 3
+- Digital: Dashboard that opens automatically at startup
+- Environmental: Dedicated workspace zones for specific goal domains
+
+### Step 4 — Design for Variable Days
+Create three versions of your daily plan:
+- **Full day** (high executive function): All planned tasks
+- **Medium day**: Top 3 tasks only, flexible order
+- **Low day**: One maintenance task + rest. This is still a valid day.
+
+### Step 5 — Replace Streak Pressure with Trend Tracking
+Streaks create binary pass/fail dynamics that trigger the rejection sensitivity common in ADHD. Instead, track weekly trends: "I completed habit X on 5 of 7 days this week" is more sustainable than "Day 47 streak."
+
+## Emotional Regulation and Goal Persistence
+
+Neurodivergent adults often experience intense emotional responses to setbacks. One missed day can trigger a shame spiral that derails the entire goal.
+
+### Counter-Strategies
+- **Pre-commit to imperfection**: Write down "I will miss days and that is part of the process" and review it weekly
+- **Separate behavior from identity**: "I missed a day" not "I am a failure"
+- **Use coach reframing**: AI coaches that respond to misses with data instead of disappointment
+
+## Tools and Accommodations
+
+- **Body doubling**: Work alongside someone (in person or virtually) to support task initiation
+- **Transition objects**: A specific song, movement, or ritual that signals "focus time starts now"
+- **Noise management**: Brown noise, lo-fi music, or noise-canceling headphones based on sensory preference
+- **Visual timers**: External time representation compensates for time blindness
+- **Reduced-choice interfaces**: Apps that show fewer options reduce decision paralysis
+
+## FAQ
+
+### Is this only for people with ADHD?
+No. Anyone with executive function challenges benefits from these strategies, including autistic adults, people with depression, and those recovering from burnout.
+
+### Should I disclose neurodivergence to use accommodations?
+No disclosure is needed for personal productivity accommodations. These strategies work whether or not you have a formal diagnosis.
+
+### How do I handle days when I cannot do anything?
+Those days are data, not failures. Log them, look for patterns (sleep, stress, cycle, seasonal), and design proactive rest days when you see trends.
+
+### Can AI tools help with executive function?
+Yes. AI systems that decompose tasks, provide external reminders, and adapt to energy levels effectively extend executive function capacity.
+    `,
+  },
+
+  'compound-effect-daily-check-ins-small-data-big-transformations': {
+    title: 'The Compound Effect of Daily Check-Ins: Small Data, Big Transformations',
+    desc: 'A 2-minute daily check-in generates the personal data that powers genuine self-awareness. Learn why micro-tracking beats elaborate journaling and how to start today.',
+    date: 'May 25, 2026',
+    readTime: '11 min',
+    tags: ['daily check-in', 'self tracking', 'data', 'habits', 'consistency'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['daily check in benefits', 'micro tracking', 'self tracking app', 'daily reflection habit', 'personal data tracking'],
+    content: `
+## The Smallest Habit with the Biggest Return
+
+A 2-minute daily check-in is the highest-leverage habit you can build. It costs almost nothing but generates the personal data that makes every other improvement possible.
+
+Without data, you are optimizing blind. With even minimal daily data, you can see patterns that transform how you work, rest, and grow.
+
+## What to Track (The Minimum Viable Check-In)
+
+Track exactly five things. More than five creates friction. Fewer than five misses critical patterns.
+
+1. **Energy level** (1-5): How is your physical and mental energy right now?
+2. **Mood** (1-5): How are you feeling emotionally?
+3. **Sleep quality** (1-5): How well did you sleep last night?
+4. **Top win**: What is one thing you accomplished or are proud of today?
+5. **Top friction**: What was your biggest obstacle or frustration today?
+
+Total time: 90 seconds to 2 minutes. That is it.
+
+## Why This Works: The Compound Data Effect
+
+### Week 1 — Awareness
+You start noticing energy patterns you never paid attention to. "I always crash at 2 PM" becomes visible data instead of a vague feeling.
+
+### Week 2-3 — Correlation
+You begin connecting dots: low sleep scores precede low energy days. High mood days correlate with specific activities. Patterns emerge from the noise.
+
+### Month 1 — Prediction
+You can now predict your best and worst days before they happen. You schedule hard tasks on high-energy days and protect low-energy days proactively.
+
+### Month 2-3 — Optimization
+You start systematically testing: "Does exercise in the morning improve my energy score?" With 60+ data points, the answer is clear and personal to you.
+
+### Month 6+ — Transformation
+You have a personal dataset that no generic advice can match. Your system is tuned to your biology, psychology, and life circumstances.
+
+## Micro-Tracking vs. Elaborate Journaling
+
+Long-form journaling has value but suffers from consistency problems:
+- Takes 15-30 minutes (high friction)
+- Feels like a chore when energy is low
+- Produces unstructured text that is hard to analyze
+
+Micro-tracking advantages:
+- Under 2 minutes (sustainable daily)
+- Structured data enables pattern detection
+- Works on worst days, not just good ones
+- AI can analyze trends automatically
+
+## How to Start Today
+
+### Step 1 — Choose your time
+Attach the check-in to an existing daily behavior: after dinner, before bed, or during your evening wind-down.
+
+### Step 2 — Use the simplest interface
+A dedicated app with 5 tappable fields is ideal. If you must start analog, use a single index card with today's date.
+
+### Step 3 — Do not skip the hard days
+The most valuable data comes from your worst days. A check-in that says "Energy: 1, Mood: 2, Sleep: 2, Win: survived, Friction: everything" is more useful than a skipped day.
+
+### Step 4 — Review weekly
+Every Sunday, scan the week's data. What patterns emerge? What surprised you? One insight per week compounds dramatically over months.
+
+## FAQ
+
+### What if I forget to check in?
+Set a single daily reminder tied to an evening behavior. If you still miss, log it the next morning from memory. Imprecise data beats no data.
+
+### Is this the same as journaling?
+No. This is structured micro-data collection. Journaling is freeform reflection. Both are valuable but serve different purposes.
+
+### How long before I see useful patterns?
+Basic patterns: 7-10 days. Reliable correlations: 3-4 weeks. Predictive insights: 6-8 weeks.
+
+### Can AI help analyze check-in data?
+Yes. AI can surface patterns, correlations, and trends from check-in data that would take hours to find manually. This is one of its highest-value applications.
+    `,
+  },
+
+  'overwhelmed-to-organized-7-day-system-reset': {
+    title: 'From Overwhelmed to Organized: A 7-Day System Reset for Your Entire Life',
+    desc: 'A structured day-by-day plan to triage the chaos, build your first system, and go from scattered to focused in just seven days.',
+    date: 'May 25, 2026',
+    readTime: '14 min',
+    tags: ['organization', 'systems thinking', 'weekly planning', 'getting started', 'overwhelm'],
+    heroImage: '/blog/default-productivity-hero.svg',
+    seoKeywords: ['overwhelmed to organized', 'life organization system', '7 day organization plan', 'how to get organized', 'system reset plan'],
+    content: `
+## You Are Not Lazy. You Are Overloaded.
+
+Feeling overwhelmed is not a character flaw. It is a systems failure. When your brain holds too many open loops — unfinished tasks, vague goals, unprocessed decisions — everything feels urgent and nothing gets done.
+
+The fix is not "try harder." It is building external systems that hold the complexity for you.
+
+This 7-day reset gives you a structured path from chaos to clarity.
+
+## Day 1 — The Brain Dump (Clear the Mental Cache)
+
+Set a 30-minute timer. Write down absolutely everything in your head:
+- Tasks you have been meaning to do
+- Worries and anxieties
+- Ideas and someday-maybes
+- Commitments to others
+- Things you have been avoiding
+
+Do not organize. Do not prioritize. Just dump. The goal is to move open loops from your brain to an external surface.
+
+Expected result: 30-100 items. This is normal. You have been carrying all of these in working memory.
+
+## Day 2 — Triage (Decide What Actually Matters)
+
+Take your brain dump and sort every item into four buckets:
+1. **Do this week** — Urgent and important (max 10 items)
+2. **Schedule** — Important but not urgent (add to calendar)
+3. **Delegate or automate** — Someone else should handle this
+4. **Delete** — Not actually important. Let it go.
+
+Most people discover that 60-70% of their open loops can be deleted or deferred. The overwhelm was largely phantom.
+
+## Day 3 — Set 3 Quarterly Goals
+
+Pick three outcomes you want to achieve in the next 90 days. Not 10. Not 7. Three.
+
+Rules:
+- Each goal must be specific and measurable
+- Each goal should connect to what you value most right now
+- At least one should be health or wellness related
+
+Write them somewhere visible. These three goals become your decision filter for every other request.
+
+## Day 4 — Build Your Morning and Evening Stacks
+
+Create two minimal habit stacks:
+
+**Morning (10 min total)**:
+1. Make bed
+2. Glass of water
+3. Review today's top 3 tasks
+4. 5 minutes of movement
+
+**Evening (10 min total)**:
+1. Set tomorrow's top 3 tasks
+2. 2-minute check-in (energy, mood, sleep, win, friction)
+3. Screen reduction ritual
+
+These two bookends create structure that holds the day together.
+
+## Day 5 — Set Up Your Command Center
+
+Choose one tool as your primary system. It should handle:
+- Task management
+- Habit tracking
+- Goal visibility
+- Daily check-ins
+
+Set it up with your 3 quarterly goals, your morning/evening stacks, and this week's tasks from Day 2.
+
+Key rule: one command center. Not three apps, not a notebook plus an app plus a spreadsheet. One.
+
+## Day 6 — Run Your First Weekly Review
+
+Spend 20 minutes reviewing:
+1. Did I complete my top tasks this week?
+2. Did I maintain my morning and evening stacks?
+3. What was my average energy and mood?
+4. What is the one thing I should adjust next week?
+5. What are next week's top 3 priorities?
+
+This review is now a permanent weekly ritual. Schedule it.
+
+## Day 7 — Rest and Protect
+
+Day 7 is deliberately light. Your only job:
+- Maintain your morning and evening stacks
+- Do one enjoyable, non-productive activity
+- Reflect: What felt different this week?
+
+Rest is not a reward for finishing. It is the foundation for next week's capacity.
+
+## After the Reset: Maintenance Rules
+
+1. **Never skip the weekly review** — this is the keystone habit of your entire system
+2. **Add complexity slowly** — one new habit or tracking dimension per week maximum
+3. **Simplify when overwhelmed** — if the system itself becomes stressful, reduce scope
+4. **Trust the data** — after 4 weeks, your check-in data will show what actually works for you
+
+## FAQ
+
+### What if I cannot finish the 7-day reset?
+Spread it over two weeks. The sequence matters more than the speed.
+
+### I have tried organizational systems before and they all failed. Why is this different?
+Most systems start with tools. This starts with clearing your mental cache and making decisions about what matters. The structure serves the clarity, not the other way around.
+
+### What is the minimum I should maintain after the reset?
+Morning stack, evening stack (including check-in), and weekly review. Everything else is optional until these three are automated habits.
+
+### Can I do this reset with a partner or team?
+Yes. Days 1-2 are individual. Days 3-7 can be done collaboratively with shared goals and mutual accountability.
+    `,
+  },
 };
 
 function extractFaqItemsFromContent(content: string): Array<FaqItem> {

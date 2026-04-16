@@ -14,9 +14,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
   const { searchParams } = new URL(req.url);
   const statusParam = searchParams.get('status') ?? 'todo';
-  const status: 'todo' | 'done' | 'in_progress' | undefined = statusParam === 'all' ? undefined : (statusParam as 'todo' | 'done' | 'in_progress');
+  const allowedStatuses = ['todo', 'done', 'in_progress', 'all'] as const;
+  if (!(allowedStatuses as readonly string[]).includes(statusParam)) {
+    return NextResponse.json({ error: `Invalid status. Allowed: ${allowedStatuses.join(', ')}` }, { status: 400 });
+  }
+  const status = statusParam === 'all' ? undefined : (statusParam as 'todo' | 'done' | 'in_progress');
 
-  const tasks = await convexClient.query(api.tasks.list, { status }).catch(() => []);
+  const tasks = await convexClient.query(api.restApi.listTasks, { userId: auth.ownerId, status }).catch(() => []);
   return NextResponse.json({ tasks });
 }
 
@@ -39,16 +43,21 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   const validPriorities = ['high', 'medium', 'low', 'urgent'] as const;
   const validEnergy = ['high', 'medium', 'low'] as const;
-  const priorityVal = typeof priority === 'string' && (validPriorities as readonly string[]).includes(priority) ? priority as typeof validPriorities[number] : 'medium';
-  const energyVal = typeof energyRequired === 'string' && (validEnergy as readonly string[]).includes(energyRequired) ? energyRequired as typeof validEnergy[number] : undefined;
+  const priorityVal = typeof priority === 'string' && (validPriorities as readonly string[]).includes(priority)
+    ? priority as typeof validPriorities[number]
+    : 'medium';
+  const energyVal = typeof energyRequired === 'string' && (validEnergy as readonly string[]).includes(energyRequired)
+    ? energyRequired as typeof validEnergy[number]
+    : undefined;
 
-  const id = await convexClient.mutation(api.tasks.create, {
+  const result = await convexClient.mutation(api.restApi.createTask, {
+    userId: auth.ownerId,
     title: title.trim(),
     priority: priorityVal,
-    dueDate: (dueDate as string) ?? undefined,
+    dueDate: typeof dueDate === 'string' ? dueDate : undefined,
     energyRequired: energyVal,
     tags: Array.isArray(tags) ? (tags as string[]) : undefined,
   });
 
-  return NextResponse.json({ id }, { status: 201 });
+  return NextResponse.json(result, { status: 201 });
 }

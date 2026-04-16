@@ -30,6 +30,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing or too-short "text" field' }, { status: 400 });
   }
 
+  if (body.text.length > 10000) {
+    return NextResponse.json({ error: 'Text too long (max 10,000 characters)' }, { status: 400 });
+  }
+
   // ── Get user context from Convex ──
   let userName = 'User';
   let existingTaskCount = 0;

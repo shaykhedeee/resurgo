@@ -1,290 +1,217 @@
-# 🚀 RESURGO - AI-Powered Life Transformation System
+# RESURGO — AI-Powered Life Operating System
 
 <div align="center">
   <img src="public/icons/icon.svg" alt="RESURGO Logo" width="120" height="120" />
   <br />
   <strong>Rise to Your Potential</strong>
   <br />
-  <em>Intelligent goal decomposition, habit tracking, and gamified progress</em>
+  <em>The personal productivity SaaS that combines AI coaching, goal decomposition, habit engineering, and holistic wellness tracking — all in one brutalist-minimalist interface.</em>
+  <br /><br />
+  <a href="https://resurgo.life">resurgo.life</a> · <a href="https://resurgo.life/pricing">Pricing</a> · <a href="https://resurgo.life/docs">Docs</a> · <a href="https://resurgo.life/changelog">Changelog</a>
 </div>
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎯 AI Goal Decomposition
-- Transform any life goal into actionable steps
+### AI Goal Decomposition
+- Transform any life goal into actionable steps via AI
 - Automatic breakdown: Ultimate Goal → Milestones → Weekly Objectives → Daily Tasks
-- Multi-provider AI: Groq, Gemini, OpenRouter (with smart fallback)
+- 8-provider AI cascade with automatic fallback (Ollama → Groq → Cerebras → Gemini → OpenRouter → Together → AIML → OpenAI)
 
-### 📊 Habit Tracking
-- Create and track daily/weekly habits
-- Visual progress with streaks and completion rates
-- Heatmap calendar view
+### 5 AI Coaches
+- **Marcus** — Stoic discipline & mental clarity
+- **Titan** — Peak performance & relentless execution
+- **Aurora** — Creative growth & emotional intelligence
+- **Phoenix** — Transformation & resilience
+- **Nexus** — Systems thinking & strategic planning
 
-### 🎮 Gamification System
-- Earn XP for completing tasks and habits
-- Level up with meaningful titles
+### Habit Tracking & Stacking
+- Create and track daily/weekly habits with streaks
+- Habit stacking system for compound growth
+- Heatmap calendar view + completion rates
+
+### Vision Board Studio
+- AI-generated vision boards (8 image providers: HuggingFace, ImagineArt, Freepik, Pollinations, and more)
+- Stock image search (Pexels)
+- 5-step guided wizard with 12 life domains
+- HD download + panel regeneration
+
+### Focus Sessions
+- Pomodoro and deep work timers
+- Session tracking with XP rewards
+
+### Gamification
+- Earn XP for tasks, habits, and milestones
+- Level progression with meaningful titles
 - Achievement badges and streak rewards
 
-### 📅 Interactive Calendar
-- Monthly view of all activities
-- Track perfect days and streaks
-- Visual completion indicators
+### Wellness Suite
+- Daily mood & energy tracking
+- Sleep logging and analysis
+- Nutrition tracking (OpenFoodFacts integration)
+- Fitness activity logging
+- Recovery protocols
 
-### 🌙 Dark/Light Theme
-- Beautiful dark mode by default
-- Easy toggle in header
-- Theme persists across sessions
+### Budget & Finance
+- Income/expense tracking
+- Budget categories and spending analysis
+- Financial goal alignment
 
-### 💾 Data Management
-- Export data to JSON backup
-- Generate PDF progress reports
-- Import backups to restore data
+### Analytics & Insights
+- Comprehensive dashboard with progress charts
+- AI-generated weekly reviews
+- Growth analytics and pattern detection
 
-### 📱 Progressive Web App (PWA)
-- Install on mobile or desktop
-- Offline-capable (static content)
-- Native app-like experience
+### Additional Features
+- Brain dump / scratch notes
+- AI orchestrator for complex planning
+- Referral system
+- Wishlist tracking
+- Telegram bot integration
+- Progressive Web App (installable)
+- Dark mode by default
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
-- **Framework:** Next.js 14 (App Router)
-- **Language:** TypeScript
-- **Auth:** Clerk
-- **Backend/Database:** Convex (real-time)
+- **Framework:** Next.js 16.1.6 (App Router + Turbopack)
+- **Language:** TypeScript (strict)
+- **Auth:** Clerk (clerk.resurgo.life)
+- **Backend/Database:** Convex (real-time, EU-West-1)
+- **Payments:** Dodo Payments
 - **Styling:** Tailwind CSS
-- **State Management:** Convex queries (primary), Zustand (UI state)
-- **Charts:** Recharts
-- **Icons:** Lucide React
-- **PDF Generation:** jsPDF + jspdf-autotable
-- **AI:** Groq / Gemini / OpenRouter (multi-provider fallback)
-- **Payments:** Clerk Billing
+- **State:** Convex queries (primary), Zustand (UI)
+- **AI:** 8-provider cascade (Ollama → Groq → Cerebras → Gemini → OpenRouter → Together → AIML → OpenAI)
+- **Image Gen:** HuggingFace FLUX, ImagineArt, Freepik, Pollinations, Stability AI, Gemini
+- **Email:** Resend (transactional + marketing)
+- **Analytics:** GA4, GTM, Meta Pixel
+- **Testing:** Jest (17 suites, 134 tests)
+- **Hosting:** Vercel
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 - Node.js 18.x or later
-- npm or yarn
+- npm
 
 ### Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/resurgo.git
+git clone https://github.com/shaykhedeee/resurgo.git
 cd resurgo
-
-# Install dependencies
 npm install
-
-# Create environment file
 cp .env.example .env.local
-# Edit .env.local and add Clerk/Convex/AI/Billing values
-
-# Start development server
+# Fill in all env vars (see .env for documentation)
 npm run dev
 ```
 
-### Environment Variables
-
-Create a `.env.local` file based on `.env.example`:
+### Key Environment Variables
 
 ```env
-# Clerk
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-CLERK_WEBHOOK_SECRET=whsec_...
+# Clerk Auth
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_live_...
+CLERK_SECRET_KEY=sk_live_...
 
 # Convex
-CONVEX_DEPLOYMENT=dev:your-project
-NEXT_PUBLIC_CONVEX_URL=https://your-project.convex.cloud
+NEXT_PUBLIC_CONVEX_URL=https://your-deployment.convex.cloud
 
-# AI (server-side only)
+# AI (at least one required)
 GROQ_API_KEY=
 GOOGLE_AI_STUDIO_KEY=
-OPENROUTER_API_KEY=
-AIML_API_KEY=
+CEREBRAS_API_KEY=
 
-# Billing
-BILLING_WEBHOOK_SYNC_SECRET=
-NEXT_PUBLIC_CLERK_CHECKOUT_PRO_MONTHLY_URL=
-NEXT_PUBLIC_CLERK_CHECKOUT_PRO_YEARLY_URL=
-NEXT_PUBLIC_CLERK_CHECKOUT_LIFETIME_URL=
-NEXT_PUBLIC_CLERK_BILLING_PORTAL_URL=
-
+# Payments
+DODO_PAYMENTS_API_KEY=
+DODO_PAYMENTS_WEBHOOK_SECRET=
 ```
 
-**Note:** The app can still run without AI keys (limited/fallback AI behavior), but launch-ready billing requires Clerk + webhook env vars configured.
+See `.env` for the full list with setup instructions for each provider.
 
-### Free Tier Limits
-- 10 habits
-- 3 goals
-- AI insights
-- Focus timer
-- Mood tracking
+### Plans & Pricing
 
-### Pro Plan ($4.99/month or $29.99/year)
-- Unlimited habits & goals
-- All 5 AI Coaches (Marcus, Titan, Aurora, Phoenix, Nexus)
-- Unlimited AI messages
-- Advanced analytics
-- Vision boards
-- Priority support
-
-### Lifetime Plan ($49.99 one-time — 1,000 founding spots)
-- Everything in Pro, forever
+| Plan | Price | Includes |
+|------|-------|----------|
+| **Free** | $0 | 3 goals, 5 habits/day, 10 AI messages/day, focus timer, mood tracking |
+| **Pro Monthly** | $4.99/mo | Unlimited everything, all 5 coaches, vision boards, advanced analytics |
+| **Pro Yearly** | $29.99/yr | Same as Pro Monthly (save 50%) |
+| **Lifetime** | $49.99 | Everything in Pro, forever — 1,000 founding member spots |
 
 ---
 
-## 📦 Production Deployment
-
-### Build for Production
+## Production Deployment
 
 ```bash
-# Create optimized production build
-npm run build
-
-# Start production server
-npm run start
+npm run build    # 288 static pages generated
+npm run start    # Start production server
 ```
 
 ### Deploy to Vercel (Recommended)
 
-1. Push your code to GitHub
-2. Import your repo at [vercel.com/new](https://vercel.com/new)
-3. Add environment variables in Vercel dashboard (if using OpenAI)
-4. Deploy!
+1. Push to GitHub (`shaykhedeee/resurgo`)
+2. Import at [vercel.com/new](https://vercel.com/new)
+3. Add all environment variables from `.env`
+4. Deploy
 
-### Deploy to Other Platforms
-
-The app exports as static files when possible. For other platforms:
-
-```bash
-# Build the app
-npm run build
-
-# The .next folder contains the build output
-# For static export (if needed):
-# Add "output": "export" to next.config.js
-```
-
-### Docker Deployment
-
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm ci
-COPY . .
-RUN npm run build
-
-FROM node:18-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV production
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-EXPOSE 3000
-CMD ["node", "server.js"]
-```
+### Post-Deploy Checklist
+1. Set Convex env vars in dashboard.convex.dev
+2. Switch Dodo Payments from `test_mode` to `live_mode`
+3. Register Telegram webhook (if using)
+4. Verify Clerk webhook endpoint
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 src/
 ├── app/
-│   ├── globals.css          # Global styles & CSS variables
-│   ├── layout.tsx           # Root layout (Clerk/Convex providers)
-│   ├── page.tsx             # Landing page (server component)
-│   ├── (dashboard)/         # Auth-gated dashboard routes
-│   │   ├── layout.tsx       # Dashboard layout with sidebar
-│   │   ├── page.tsx         # Dashboard home
-│   │   ├── habits/          # Habit tracking
-│   │   ├── goals/           # Goal management
-│   │   ├── focus/           # Focus timer (Pomodoro/Deep Work)
-│   │   ├── calendar/        # Calendar view
-│   │   ├── analytics/       # Statistics & charts
-│   │   ├── wellness/        # Mood tracking
-│   │   └── settings/        # User settings
-│   ├── api/
-│   │   ├── ai/              # AI chat, decompose, suggestions
-│   │   ├── webhooks/        # Clerk billing webhooks
-│   │   └── chatbot/         # Kai chatbot endpoint
-│   ├── billing/             # Billing/pricing pages
-│   └── help/                # Help center
+│   ├── (marketing)/         # 34 public pages (landing, pricing, blog, niche, etc.)
+│   ├── (dashboard)/         # 25 protected pages (goals, habits, coach, analytics, etc.)
+│   ├── api/                 # 60+ API routes (AI, vision-board, webhooks, marketing, etc.)
+│   ├── sign-in/             # Clerk auth (catch-all)
+│   ├── sign-up/             # Clerk auth (catch-all)
+│   └── onboarding/          # 3-step new user wizard
 ├── components/              # Shared UI components
-├── hooks/                   # Custom React hooks
-│   ├── useStoreUser.ts      # Clerk → Convex user sync
-│   └── usePlanGating.ts     # Feature gating by plan
-├── lib/                     # Utilities & config
-│   ├── store.ts             # Zustand store (UI state)
-│   ├── plans.ts             # Plan definitions
-│   └── security.ts          # Rate limiting & CSRF
-└── types/                   # TypeScript types
-convex/                      # Convex backend
-├── schema.ts                # Database schema
-├── users.ts                 # User management
-├── goals.ts                 # Goal CRUD
-├── habits.ts                # Habit engine + streaks
-├── focusSessions.ts         # Focus timer sessions
+├── hooks/                   # Custom hooks (useStoreUser, usePlanGating, etc.)
+├── lib/                     # AI providers, plans, security, utilities
+│   └── ai/                  # Provider router, coach system, vision board generators
+└── types/                   # TypeScript definitions
+convex/                      # Convex backend (40+ modules)
+├── schema.ts                # Full database schema
+├── users.ts                 # User management + onboarding
+├── goals.ts / habits.ts     # Core tracking
+├── coachAI.ts               # AI coach conversations
+├── visionBoards.ts          # Vision board CRUD
+├── payments.ts              # Dodo Payments integration
 ├── gamification.ts          # XP, levels, achievements
-└── wellness.ts              # Mood tracking
+└── ...                      # 30+ more modules
+docs/                        # Strategy, marketing, brand, API docs
 ```
 
 ---
 
-## 🧪 Testing the App
+## Testing
 
-1. **Onboarding:** First launch shows goal setup wizard
-2. **Dashboard:** View stats, today's tasks, habits
-3. **Goals Tab:** Manage goals and milestones
-4. **Habits Tab:** Track daily habits with streaks
-5. **Analytics Tab:** Charts and progress insights
-6. **Calendar Tab:** Monthly activity view
-7. **Settings:** Export data, view profile
-
----
-
-## 🎨 Customization
-
-### Theme Colors
-
-Edit `src/app/globals.css`:
-
-```css
-:root {
-  --resurgo-primary: #F97316;  /* Main accent - orange */
-  --gold-primary: #F59E0B;    /* Secondary accent */
-  --background: #0A0A0B;      /* Dark background */
-}
+```bash
+npm test              # Run all tests (17 suites, 134 tests)
+npm run typecheck     # TypeScript strict check
+npm run build         # Full production build validation
 ```
 
-### Add New Goal Categories
-
-Edit `src/lib/ai-goal-decomposer.ts` to add templates for new categories.
-
 ---
 
-## 📄 License
+## License
 
-MIT License - feel free to use for personal or commercial projects.
-
----
-
-## 🤝 Contributing
-
-Contributions welcome! Please open an issue or PR.
+MIT License — free for personal or commercial use.
 
 ---
 
 <div align="center">
-  <strong>Built with ❤️ using Next.js and AI</strong>
+  <strong>Built with discipline using Next.js, Convex, and AI</strong>
   <br />
-  <em>Start your transformation journey today</em>
+  <a href="https://resurgo.life">resurgo.life</a> — Rise to your potential.
 </div>

@@ -54,9 +54,24 @@ const MEAL_PRESETS = [
   { name: 'Greek Yogurt',     calories: 150, protein: 17, carbs: 8,  fat: 4,  meal: 'snack'     },
   { name: 'Oats + Berries',   calories: 320, protein: 10, carbs: 55, fat: 6,  meal: 'breakfast' },
   { name: 'Mixed Nuts',       calories: 200, protein: 5,  carbs: 6,  fat: 18, meal: 'snack'     },
+  { name: 'Egg Whites + Toast', calories: 220, protein: 22, carbs: 24, fat: 3, meal: 'breakfast' },
+  { name: 'Turkey Wrap',      calories: 380, protein: 32, carbs: 35, fat: 10, meal: 'lunch'     },
+  { name: 'Tuna Salad',       calories: 300, protein: 35, carbs: 12, fat: 12, meal: 'lunch'     },
+  { name: 'Stir-Fry Tofu',    calories: 350, protein: 22, carbs: 30, fat: 14, meal: 'dinner'    },
+  { name: 'Cottage Cheese',   calories: 120, protein: 14, carbs: 5,  fat: 5,  meal: 'snack'     },
+  { name: 'Banana + PB',      calories: 260, protein: 8,  carbs: 34, fat: 12, meal: 'snack'     },
 ];
 
-const DAILY_GOALS = { calories: 2200, protein: 160, carbs: 220, fat: 70, water: 2500 };
+// Dynamic daily goals based on goal type — users can customize in settings
+const GOAL_PROFILES = {
+  maintain:     { calories: 2200, protein: 160, carbs: 220, fat: 70,  water: 2500 },
+  lose_weight:  { calories: 1800, protein: 180, carbs: 150, fat: 60,  water: 3000 },
+  build_muscle: { calories: 2800, protein: 200, carbs: 300, fat: 80,  water: 3000 },
+  performance:  { calories: 2500, protein: 170, carbs: 280, fat: 75,  water: 3500 },
+} as const;
+type GoalProfile = keyof typeof GOAL_PROFILES;
+const DEFAULT_PROFILE: GoalProfile = 'maintain';
+const DAILY_GOALS = GOAL_PROFILES[DEFAULT_PROFILE];
 const WATER_AMOUNTS = [250, 330, 500, 750];
 
 export default function FoodPage() {

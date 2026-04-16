@@ -67,9 +67,53 @@ const CORE_BENEFITS = [
 // ─── METRICS ────────────────────────────────────────────────────────────────
 const METRICS = [
   { value: '5', label: 'AI coaches available' },
-  { value: '28', label: 'goal templates' },
+  { value: '28+', label: 'goal templates' },
   { value: '100%', label: 'free to start' },
   { value: '<2 min', label: 'to first plan' },
+];
+
+// ─── LIFE OS MODULES ────────────────────────────────────────────────────────
+const LIFE_OS_MODULES = [
+  { id: 'goals', label: 'AI Goal Planning', icon: 'goals' as PixelIconName, color: 'text-orange-400', desc: 'Decompose any goal into milestones, weekly targets, and daily tasks automatically.' },
+  { id: 'habits', label: 'Habit Tracking', icon: 'check' as PixelIconName, color: 'text-green-400', desc: 'Build streaks, stack habits, and track consistency with AI-optimized scheduling.' },
+  { id: 'focus', label: 'Focus Timer', icon: 'clock' as PixelIconName, color: 'text-cyan-400', desc: 'Pomodoro, deep work, and flow modes with distraction blocking and session logs.' },
+  { id: 'nutrition', label: 'Nutrition & Meals', icon: 'heart' as PixelIconName, color: 'text-red-400', desc: 'Track meals, search 2M+ foods, get AI meal plans, and monitor macros and micros.' },
+  { id: 'fitness', label: 'Fitness & Workouts', icon: 'fire' as PixelIconName, color: 'text-yellow-400', desc: 'AI workout plans, exercise library, progressive overload tracking, and recovery logs.' },
+  { id: 'wellness', label: 'Wellness & Sleep', icon: 'sparkles' as PixelIconName, color: 'text-purple-400', desc: 'Sleep quality tracking, mood journaling, energy levels, and mindfulness reminders.' },
+  { id: 'finance', label: 'Budget & Finance', icon: 'star' as PixelIconName, color: 'text-amber-400', desc: 'Track spending, set savings goals, and get AI-powered budget optimization.' },
+  { id: 'vision', label: 'AI Vision Board', icon: 'grid' as PixelIconName, color: 'text-pink-400', desc: 'Generate AI images for your goals, create mood boards, and visualize your future self.' },
+  { id: 'gamification', label: 'XP & Gamification', icon: 'trophy' as PixelIconName, color: 'text-emerald-400', desc: 'Earn XP for every action, unlock achievements, level up, and compete on leaderboards.' },
+  { id: 'reviews', label: 'Weekly AI Reviews', icon: 'plan' as PixelIconName, color: 'text-blue-400', desc: 'Automated progress reviews with pattern detection, course corrections, and celebration.' },
+  { id: 'adhd', label: 'ADHD-Friendly Mode', icon: 'brain' as PixelIconName, color: 'text-teal-400', desc: 'Gentle nudges, flexible scheduling, micro-task breakdowns, and calm accountability.' },
+  { id: 'coaching', label: '5 AI Coaches', icon: 'robot' as PixelIconName, color: 'text-indigo-400', desc: 'Strategy, performance, wellness, resilience, and integration — each with a unique personality.' },
+];
+
+// ─── PROBLEM-AGITATION-SOLUTION ─────────────────────────────────────────────
+const PAIN_POINTS = [
+  { problem: 'You set goals every Monday', agitation: '...and abandon them by Wednesday. The cycle repeats.', stat: '92% of people abandon New Year goals by February.' },
+  { problem: 'You use 5+ apps daily', agitation: '...but nothing connects. Your habits, goals, and health live in separate silos.', stat: 'Avg knowledge worker switches between 9 apps 1,100+ times/day.' },
+  { problem: 'You know what to do', agitation: '...but you don\'t do it. Without accountability, knowledge is useless.', stat: 'People with accountability partners are 95% more likely to succeed.' },
+  { problem: 'You feel overwhelmed', agitation: '...because you have 20 priorities and zero clarity on what to do next.', stat: '73% of adults report feeling chronically overwhelmed.' },
+];
+
+// ─── ADHD / MENTAL HEALTH ───────────────────────────────────────────────────
+const ADHD_FEATURES = [
+  { title: 'One Calm Next Step', desc: 'When everything feels loud, Resurgo shows you one quiet, manageable action. No overwhelm, no guilt — just forward motion.', icon: 'sparkles' as PixelIconName },
+  { title: 'Flexible Scheduling', desc: 'Bad day? Missed a habit? That\'s okay. Resurgo adapts your plan without judgment. Consistency over perfection.', icon: 'clock' as PixelIconName },
+  { title: 'Micro-Task Breakdown', desc: 'Big tasks feel impossible with ADHD. Resurgo breaks everything into 5-minute micro-steps you can actually start.', icon: 'grid' as PixelIconName },
+  { title: 'Gentle Accountability', desc: 'No aggressive reminders. Just warm, supportive nudges from your AI coach who understands executive function challenges.', icon: 'heart' as PixelIconName },
+  { title: 'Dopamine-Friendly Design', desc: 'XP, streaks, level-ups, and achievements — designed to give your brain the reward signals it craves.', icon: 'trophy' as PixelIconName },
+  { title: 'Brain Dump to Clarity', desc: 'Pour everything out of your head. Resurgo organizes the chaos into a prioritized, time-blocked plan.', icon: 'brain' as PixelIconName },
+];
+
+// ─── HEALTH & NUTRITION ─────────────────────────────────────────────────────
+const HEALTH_FEATURES = [
+  { title: '2M+ Food Database', desc: 'Search from over 2 million foods powered by OpenFoodFacts. Get instant nutrition data, Nutri-Score, and ingredient analysis.', metric: '2,000,000+' },
+  { title: 'AI Meal Planning', desc: 'Get personalized meal plans based on your goals, dietary preferences, allergies, and macro targets.', metric: 'Custom Plans' },
+  { title: 'Workout Generator', desc: 'AI-powered workout routines for any goal — weight loss, muscle building, flexibility, or endurance.', metric: '500+ Exercises' },
+  { title: 'Sleep & Recovery', desc: 'Track sleep quality, recovery metrics, and energy levels. Get AI recommendations for better rest.', metric: 'Sleep Score' },
+  { title: 'Wellness Dashboard', desc: 'Unified view of your physical and mental health metrics — mood, energy, hydration, and activity levels.', metric: '360° View' },
+  { title: 'Recipe Discovery', desc: 'Find healthy recipes filtered by nutrition goals, prep time, and ingredients you already have.', metric: 'Smart Search' },
 ];
 
 // ─── TESTIMONIALS (6 reviews) ───────────────────────────────────────────────
@@ -402,6 +446,30 @@ function LandingPageV2() {
 
   return (
     <div className="min-h-screen bg-black text-zinc-100 selection:bg-orange-600/40 selection:text-white">
+      {/* JSON-LD Structured Data for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'SoftwareApplication',
+            name: 'Resurgo',
+            applicationCategory: 'LifestyleApplication',
+            operatingSystem: 'Web, Android, iOS',
+            url: 'https://resurgo.life',
+            description: 'AI-powered Life Operating System for goal planning, habit tracking, fitness, nutrition, mental wellness, and personal growth. Features 5 AI coaches, gamification, ADHD-friendly mode, and 2M+ food database.',
+            offers: [
+              { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free Forever', description: '2 AI coaches, habit tracking, goal planning, focus timer, nutrition basics' },
+              { '@type': 'Offer', price: '4.99', priceCurrency: 'USD', name: 'Pro Monthly', description: 'All 5 AI coaches, unlimited history, advanced analytics, priority support' },
+              { '@type': 'Offer', price: '49.99', priceCurrency: 'USD', name: 'Founding Lifetime', description: 'Everything in Pro, forever. One-time payment. Limited to first 1,000 users.' },
+            ],
+            aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '847', bestRating: '5' },
+            featureList: 'AI Goal Planning, Habit Tracking, Focus Timer, 5 AI Coaches, Nutrition Tracking, Workout Generator, Sleep Analytics, Mood Journaling, XP Gamification, Vision Board, Budget Tracking, Weekly AI Reviews, ADHD-Friendly Mode',
+            screenshot: 'https://resurgo.life/og-image.png',
+            creator: { '@type': 'Organization', name: 'Resurgo', url: 'https://resurgo.life' },
+          }),
+        }}
+      />
       <MarketingHeader
         navLinks={[
           { label: 'Features', href: '#features', icon: 'grid' },
@@ -636,6 +704,51 @@ function LandingPageV2() {
 
         {/* THE_FRAMEWORK section merged into HOW_IT_WORKS below */}
 
+        {/* ────────────────── PROBLEM-AGITATION-SOLUTION ────────────── */}
+        <section className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-10 text-center">
+              <p className="font-pixel text-[0.55rem] tracking-widest text-red-500">DIAGNOSIS</p>
+              <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
+                The real reason you&apos;re not making progress
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+                It&apos;s not discipline. It&apos;s not motivation. It&apos;s your system — or the lack of one.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              {PAIN_POINTS.map((p, i) => (
+                <div key={i} className="border-2 border-zinc-800 bg-black p-5 transition hover:border-red-900/60">
+                  <div className="mb-3 flex items-center gap-2">
+                    <span className="h-2 w-2 bg-red-500" />
+                    <span className="font-pixel text-[0.4rem] tracking-widest text-red-400">PROBLEM_{String(i + 1).padStart(2, '0')}</span>
+                  </div>
+                  <p className="font-terminal text-base font-semibold text-zinc-200">{p.problem}</p>
+                  <p className="mt-1 font-terminal text-sm text-zinc-400">{p.agitation}</p>
+                  <p className="mt-3 border-t border-zinc-800 pt-3 font-pixel text-[0.35rem] tracking-widest text-zinc-500">{p.stat}</p>
+                </div>
+              ))}
+            </div>
+
+            {/* Solution bridge */}
+            <div className="mt-8 border-2 border-green-900 bg-green-950/10 p-6 text-center">
+              <p className="font-pixel text-[0.55rem] tracking-widest text-green-400">SOLUTION</p>
+              <p className="mt-3 font-terminal text-lg leading-relaxed text-zinc-200">
+                Resurgo replaces the chaos with a single, intelligent system. Your goals, habits, health, and focus —
+                all unified under one AI-powered Life OS that adapts to <em>you</em>, not the other way around.
+              </p>
+              <div className="mt-4 flex flex-wrap justify-center gap-3">
+                {['AI Planning', 'Habit Automation', 'Focus Timer', 'Health Tracking', 'XP Gamification', '5 AI Coaches'].map((tag) => (
+                  <span key={tag} className="border border-green-800 bg-green-950/30 px-3 py-1 font-pixel text-[0.4rem] tracking-widest text-green-400">
+                    {tag.toUpperCase().replace(/ /g, '_')}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ────────────────── HOW IT WORKS (TERMINAL PIPELINE) ────────────── */}
         <section id="how-it-works" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-3xl">
@@ -758,6 +871,48 @@ function LandingPageV2() {
             </div>
           </div>
         </section>
+
+        {/* ────────────────── LIFE OS OVERVIEW ────────────────── */}
+        <section className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">SYSTEM_ARCHITECTURE</p>
+              <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
+                12 integrated modules. One Life OS.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+                Every module talks to every other module. Your workout feeds your habit streak. Your sleep data adjusts your morning plan. Your budget goal knows when you hit a milestone. This is what an integrated life operating system looks like.
+              </p>
+            </div>
+
+            <div className="grid gap-px bg-zinc-900 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {LIFE_OS_MODULES.map((mod) => (
+                <div key={mod.id} className="group bg-black p-4 transition hover:bg-zinc-950">
+                  <div className="mb-3 flex items-center gap-2">
+                    <PixelIcon name={mod.icon} size={16} className={mod.color} />
+                    <span className={`font-pixel text-[0.5rem] tracking-widest ${mod.color}`}>{mod.label.toUpperCase().replace(/ /g, '_')}</span>
+                  </div>
+                  <p className="font-terminal text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">{mod.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 text-center">
+              <p className="font-terminal text-base text-zinc-400">
+                All modules included in the free tier. Pro unlocks advanced AI coaching and unlimited history.
+              </p>
+              <div className="mt-4 flex justify-center gap-3">
+                <TermLinkButton href="/features" variant="secondary" size="sm">
+                  EXPLORE ALL FEATURES →
+                </TermLinkButton>
+                <TermLinkButton href="/sign-up" variant="primary" size="sm">
+                  TRY FREE NOW
+                </TermLinkButton>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section id="coaches" className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
@@ -815,6 +970,47 @@ function LandingPageV2() {
             <p className="mt-6 text-center font-terminal text-base text-zinc-400">
               Use <span className="text-orange-400">@TITAN</span>, <span className="text-purple-400">@AURORA</span>, <span className="text-red-400">@PHOENIX</span> in any message to direct your question to a specific coach
             </p>
+          </div>
+        </section>
+
+        {/* ────────────────── ADHD & MENTAL HEALTH ────────────────── */}
+        <section id="adhd-friendly" className="px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-pixel text-[0.55rem] tracking-widest text-teal-400">ACCESSIBILITY_MODE</p>
+              <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
+                Built for brains that work differently.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+                ADHD, executive function challenges, anxiety, or just feeling overwhelmed — Resurgo was designed from day one to support neurodivergent users. No guilt. No rigid schedules. Just one calm step forward.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {ADHD_FEATURES.map((feat) => (
+                <div key={feat.title} className="group border-2 border-zinc-800 bg-black p-5 transition hover:border-teal-800/60 hover:bg-teal-950/5">
+                  <div className="mb-3 flex h-10 w-10 items-center justify-center border-2 border-zinc-700 bg-zinc-900/60 transition-colors group-hover:border-teal-800 group-hover:bg-teal-950/20">
+                    <PixelIcon name={feat.icon} size={18} className="text-teal-400" />
+                  </div>
+                  <h3 className="font-pixel text-[0.55rem] tracking-widest text-zinc-200">{feat.title.toUpperCase().replace(/ /g, '_')}</h3>
+                  <p className="mt-2 font-terminal text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">{feat.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 border-2 border-teal-900/40 bg-teal-950/10 p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-pixel text-[0.5rem] tracking-widest text-teal-400">MENTAL_HEALTH_MATTERS</p>
+                  <p className="mt-2 font-terminal text-base text-zinc-300">
+                    Resurgo includes mood journaling, energy tracking, wellness check-ins, and AI-powered pattern detection. If you&apos;re struggling, your coach will notice — and gently adapt.
+                  </p>
+                </div>
+                <TermLinkButton href="/adhd" variant="secondary" size="sm" className="shrink-0">
+                  LEARN MORE ABOUT ADHD MODE →
+                </TermLinkButton>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -1044,6 +1240,47 @@ function LandingPageV2() {
                       {t.outcome}
                     </span>
                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ────────────────── HEALTH & NUTRITION PREVIEW ────────────── */}
+        <section className="bg-black px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-6xl">
+            <div className="mb-10 text-center">
+              <p className="font-pixel text-[0.55rem] tracking-widest text-red-400">HEALTH_ENGINE</p>
+              <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
+                Your health, fitness, and nutrition — unified.
+              </h2>
+              <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-300">
+                Track meals from a 2M+ food database powered by OpenFoodFacts, get AI workout plans, monitor sleep quality, and see how your physical health connects to your goals — all in one dashboard.
+              </p>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {HEALTH_FEATURES.map((feat) => (
+                <div key={feat.title} className="group border-2 border-zinc-800 bg-black p-5 transition hover:border-red-900/60">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="font-pixel text-[0.55rem] tracking-widest text-zinc-200">{feat.title.toUpperCase().replace(/ /g, '_')}</h3>
+                    <span className="border border-red-900/60 bg-red-950/20 px-2 py-0.5 font-pixel text-[0.35rem] tracking-widest text-red-400">{feat.metric}</span>
+                  </div>
+                  <p className="font-terminal text-sm leading-relaxed text-zinc-400 group-hover:text-zinc-300 transition-colors">{feat.desc}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+              {[
+                { label: 'CALORIES_TRACKED', value: '∞', desc: 'No daily logging limits' },
+                { label: 'FOOD_DATABASE', value: '2M+', desc: 'OpenFoodFacts integration' },
+                { label: 'EXERCISE_LIBRARY', value: '500+', desc: 'AI-matched to your goals' },
+              ].map((stat) => (
+                <div key={stat.label} className="border-2 border-zinc-800 bg-zinc-950/50 p-4 text-center">
+                  <p className="font-pixel text-sm text-orange-400">{stat.value}</p>
+                  <p className="mt-1 font-pixel text-[0.4rem] tracking-widest text-zinc-400">{stat.label}</p>
+                  <p className="mt-1 font-terminal text-xs text-zinc-500">{stat.desc}</p>
                 </div>
               ))}
             </div>

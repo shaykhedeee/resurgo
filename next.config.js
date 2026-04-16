@@ -81,7 +81,7 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.puter.com https://www.googletagmanager.com https://www.google-analytics.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://challenges.cloudflare.com https://*.cloudflare.com https://www.google.com https://www.gstatic.com https://www.recaptcha.net https://connect.facebook.net https://www.clarity.ms",
+              "script-src 'self' 'unsafe-inline' https://js.puter.com https://www.googletagmanager.com https://www.google-analytics.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://challenges.cloudflare.com https://*.cloudflare.com https://www.google.com https://www.gstatic.com https://www.recaptcha.net https://connect.facebook.net https://www.clarity.ms",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com http://fonts.googleapis.com https://*.clerk.accounts.dev https://clerk.resurgo.life https://challenges.cloudflare.com https://*.cloudflare.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob: https: https://www.facebook.com",

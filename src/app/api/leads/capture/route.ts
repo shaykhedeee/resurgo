@@ -135,7 +135,8 @@ export async function POST(req: NextRequest) {
     await sendToButtondown(email);
 
     return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ success: true });
+  } catch (err) {
+    console.error('[leads/capture] Error processing lead:', err);
+    return NextResponse.json({ error: 'Internal error' }, { status: 500 });
   }
 }

@@ -539,7 +539,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Webhook secret not configured' }, { status: 500 });
   }
   const incoming = req.headers.get('x-telegram-bot-api-secret-token') || '';
-  if (incoming.length !== WEBHOOK_SECRET.length || incoming !== WEBHOOK_SECRET) {
+  if (incoming.length !== WEBHOOK_SECRET.length) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  let mismatch = 0;
+  for (let i = 0; i < WEBHOOK_SECRET.length; i++) {
+    mismatch |= incoming.charCodeAt(i) ^ WEBHOOK_SECRET.charCodeAt(i);
+  }
+  if (mismatch !== 0) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

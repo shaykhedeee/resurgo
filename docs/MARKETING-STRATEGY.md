@@ -9309,10 +9309,10 @@ Common Questions About Using Resurgo's AI Life Management System
     <h3 itemprop="name">Can I switch from other apps like Notion or Todoist?</h3>
     <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
       <div itemprop="text">
-        <p>Yes! We offer import tools for popular apps (Notion, Todoist, Trello, 
-        Google Tasks). You can also manually migrate by using our bulk import feature 
-        or Brain Dump (paste everything, AI organizes it). Most users complete 
-        migration in under 30 minutes.</p>
+        <p>Yes! Switching is easy. Use Brain Dump to paste all your goals, tasks, and 
+        notes — our AI organizes everything for you automatically. Most users complete 
+        their setup in under 10 minutes. Direct import from other apps is on our 
+        roadmap for Q3 2026.</p>
       </div>
     </div>
   </div>
@@ -9613,7 +9613,7 @@ exams—all in one AI-powered system. Free for students.
 - Assignment tracker with due dates
 - Study habit formation
 - Exam prep planner
-- Note-taking integration (import from Notion)
+- Note-taking integration (Brain Dump + AI organization)
 - 50% student discount
 
 **CTA:**

@@ -17,9 +17,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   const today = new Date().toISOString().split('T')[0];
 
   const [tasks, habits, goals] = await Promise.all([
-    convexClient.query(api.tasks.list, { status: 'todo' }).catch(() => []),
-    convexClient.query(api.habits.listActive, {}).catch(() => []),
-    convexClient.query(api.goals.listActive, {}).catch(() => []),
+    convexClient.query(api.restApi.listTasks, { userId: auth.ownerId, status: 'todo' }).catch(() => []),
+    convexClient.query(api.restApi.listHabits, { userId: auth.ownerId }).catch(() => []),
+    convexClient.query(api.restApi.listGoals, { userId: auth.ownerId }).catch(() => []),
   ]);
 
   return NextResponse.json({
