@@ -11,7 +11,7 @@
     "build:convex": "npx convex deploy --cmd \"next build\"",
     "start": "next start",
     "verify:deploy": "npm run typecheck && npm run build",
-    "lint": "next lint",
+    "lint": "eslint src --ext .ts,.tsx,.js,.jsx",
     "typecheck": "tsc --noEmit",
     "test": "jest",
     "test:ics": "jest src/lib/__tests__/ics.compatibility.test.ts",
