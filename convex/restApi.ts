@@ -119,7 +119,7 @@ export const logHabitCompletion = mutation({
     // Check for existing log
     const existing = await ctx.db
       .query('habitLogs')
-      .withIndex('by_habitId_date', (q: any) => q.eq('habitId', hid).eq('date', date))
+      .withIndex('by_habitId_date', (q) => q.eq('habitId', hid).eq('date', date))
       .unique();
 
     if (existing) {
@@ -174,7 +174,7 @@ export const listGoals = query({
     const uid = userId as Id<'users'>;
     const goals = await ctx.db
       .query('goals')
-      .withIndex('by_userId_status', (q: any) => q.eq('userId', uid).eq('status', 'in_progress'))
+      .withIndex('by_userId_status', (q) => q.eq('userId', uid).eq('status', 'in_progress'))
       .order('desc')
       .take(50);
     return goals.map((g) => ({
@@ -234,10 +234,10 @@ export const dashboardStats = query({
     const uid = userId as Id<'users'>;
 
     const [activeTasks, completedToday, activeHabits, activeGoals] = await Promise.all([
-      ctx.db.query('tasks').withIndex('by_userId_status', (q: any) => q.eq('userId', uid).eq('status', 'todo')).take(200),
-      ctx.db.query('tasks').withIndex('by_userId_status', (q: any) => q.eq('userId', uid).eq('status', 'done')).take(200),
-      ctx.db.query('habits').withIndex('by_userId_active', (q: any) => q.eq('userId', uid).eq('isActive', true)).take(50),
-      ctx.db.query('goals').withIndex('by_userId_status', (q: any) => q.eq('userId', uid).eq('status', 'in_progress')).take(50),
+      ctx.db.query('tasks').withIndex('by_userId_status', (q) => q.eq('userId', uid).eq('status', 'todo')).take(200),
+      ctx.db.query('tasks').withIndex('by_userId_status', (q) => q.eq('userId', uid).eq('status', 'done')).take(200),
+      ctx.db.query('habits').withIndex('by_userId_active', (q) => q.eq('userId', uid).eq('isActive', true)).take(50),
+      ctx.db.query('goals').withIndex('by_userId_status', (q) => q.eq('userId', uid).eq('status', 'in_progress')).take(50),
     ]);
 
     const today = new Date().toISOString().split('T')[0];

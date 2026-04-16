@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState, FormEvent } from 'react';
-import { Puzzle, Plus, Trash2, Eye, EyeOff, Copy, Check, Zap, Key, Webhook } from 'lucide-react';
+import { Plus, Trash2, Copy, Check, Zap, Key, Webhook } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const SUPPORTED_EVENTS = [
@@ -162,7 +162,7 @@ export default function IntegrationsPage() {
 
             {webhooks && webhooks.length > 0 && (
               <div className="border border-zinc-900 bg-zinc-950 divide-y divide-zinc-900">
-                {webhooks.map((wh: any) => (
+                {webhooks.map((wh) => (
                   <div key={wh._id} className="flex items-start gap-3 p-4">
                     <div className="flex-1 min-w-0">
                       {wh.name && <p className="font-mono text-xs font-bold text-zinc-300">{wh.name}</p>}
@@ -240,7 +240,7 @@ export default function IntegrationsPage() {
             {/* Existing keys */}
             {apiKeys && apiKeys.length > 0 && (
               <div className="border border-zinc-900 bg-zinc-950 divide-y divide-zinc-900">
-                {apiKeys.map((key: any) => (
+                {apiKeys.map((key) => (
                   <div key={key._id} className="flex items-center gap-3 p-4">
                     <Key className="h-4 w-4 shrink-0 text-zinc-400" />
                     <div className="flex-1">
