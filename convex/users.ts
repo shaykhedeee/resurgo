@@ -8,6 +8,12 @@ import { internal } from './_generated/api';
 import { v } from 'convex/values';
 import { Id } from './_generated/dataModel';
 
+// ── Permanent lifetime premium users (never downgrade these) ────────────────
+const LIFETIME_PREMIUM_EMAILS = [
+  'zebbroka@gmail.com',
+  'mridulajidagam@gmail.com',
+] as const;
+
 // ─────────────────────────────────────────────────────────────────────────────
 // STORE USER — Called after Clerk sign-in to upsert user record
 // ─────────────────────────────────────────────────────────────────────────────
@@ -37,13 +43,17 @@ export const store = mutation({
       return existing._id;
     }
 
-    // Create new user
+    // Create new user — auto-grant lifetime if email is in the permanent list
+    const userEmail = identity.email ?? '';
+    const isLifetimePremium = LIFETIME_PREMIUM_EMAILS.includes(
+      userEmail.toLowerCase() as typeof LIFETIME_PREMIUM_EMAILS[number]
+    );
     const userId = await ctx.db.insert('users', {
       clerkId,
-      email: identity.email ?? '',
+      email: userEmail,
       name: identity.name ?? 'User',
       imageUrl: identity.pictureUrl,
-      plan: 'free',
+      plan: isLifetimePremium ? 'lifetime' : 'free',
       onboardingComplete: false,
       streakFreezeCount: 1, // Start with 1 free freeze
       createdAt: Date.now(),
@@ -992,11 +1002,29 @@ export const updatePlanFromWebhookInternal = internalMutation({
       return { applied: false, reason: 'user_not_found' };
     }
 
+    // Guard: never downgrade lifetime premium users
+    const isProtected = LIFETIME_PREMIUM_EMAILS.includes(
+      user.email.toLowerCase() as typeof LIFETIME_PREMIUM_EMAILS[number]
+    );
+    if (isProtected && plan === 'free') {
+      console.log(`[updatePlanFromWebhookInternal] Blocked downgrade for protected user ${user.email}`);
+      await ctx.db.insert('billingWebhookEvents', {
+        eventId,
+        eventType,
+        clerkId,
+        plan,
+        status: 'ignored',
+        reason: 'protected_lifetime_user',
+        processedAt: Date.now(),
+      });
+      return { applied: false, reason: 'protected_lifetime_user' };
+    }
+
     const prevPlan = user.plan;
     const now = Date.now();
 
     await ctx.db.patch(user._id, {
-      plan,
+      plan: isProtected ? 'lifetime' : plan,
       planVersion: (user.planVersion ?? 0) + 1,
       planUpdatedAt: now,
       lastBillingEventId: eventId,
@@ -1460,6 +1488,47 @@ export const getMyEngagementScore = query({
       score: user.engagementScore ?? null,
       band: user.engagementBand ?? null,
       updatedAt: user.engagementUpdatedAt ?? null,
+    };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GRANT LIFETIME PREMIUM — Internal admin mutation (run via dashboard/CLI)
+// ─────────────────────────────────────────────────────────────────────────────
+export const grantLifetimePremium = internalMutation({
+  args: { email: v.string() },
+  returns: v.object({
+    success: v.boolean(),
+    message: v.string(),
+  }),
+  handler: async (ctx, { email }) => {
+    const users = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', email))
+      .collect();
+
+    if (users.length === 0) {
+      return { success: false, message: `User not found: ${email}` };
+    }
+
+    let upgraded = 0;
+    for (const user of users) {
+      if (user.plan !== 'lifetime') {
+        await ctx.db.patch(user._id, {
+          plan: 'lifetime',
+          billingPeriod: 'lifetime',
+          planVersion: (user.planVersion ?? 0) + 1,
+          planUpdatedAt: Date.now(),
+          updatedAt: Date.now(),
+        });
+        upgraded++;
+        console.log(`[grantLifetimePremium] ${email}: ${user.plan} → lifetime (${user._id})`);
+      }
+    }
+
+    return {
+      success: true,
+      message: `${email}: ${upgraded} of ${users.length} record(s) upgraded to lifetime`,
     };
   },
 });
