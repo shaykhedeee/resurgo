@@ -38,3 +38,9 @@ jobs:
 
       - name: Build
         run: npm run build
+        env:
+          NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL || 'https://ci-placeholder.convex.cloud' }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_ci_placeholder_key_xxxxxxxxxxxxx' }}
+          CLERK_JWT_ISSUER_DOMAIN: ${{ secrets.CLERK_JWT_ISSUER_DOMAIN || 'https://clerk.resurgo.life' }}
+          CLERK_WEBHOOK_SECRET: ${{ secrets.CLERK_WEBHOOK_SECRET || 'whsec_ci_placeholder_secret_xxxxxxxxxx' }}
+          NEXT_TELEMETRY_DISABLED: '1'
