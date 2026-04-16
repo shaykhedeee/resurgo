@@ -52,6 +52,7 @@
     "openfoodfacts-server",
     "Pixela",
     "rest-api-doc",
-    "android"
+    "android",
+    "mcp-server"
   ]
 }
