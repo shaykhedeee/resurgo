@@ -41,6 +41,6 @@ clerk-nextjs/
 android/
 
 # ─── GENERATED ──────────────────────────────────────────────────────
-convex/_generated/
+# convex/_generated/ — committed so CI/Vercel/Android builds work without credentials
 public/uploads/
 
