@@ -570,7 +570,7 @@ function LandingPageV2() {
                 </div>
 
                 {/* Main headline */}
-                <h1 className="font-mono text-[2.15rem] font-bold leading-[1.04] tracking-tight text-zinc-50 text-balance sm:text-5xl lg:text-[3.4rem] xl:text-[3.75rem]">
+                <h1 className="font-pixel text-lg font-bold leading-[1.15] tracking-tight text-zinc-50 text-balance sm:text-xl lg:text-2xl xl:text-3xl">
                   {heroContent.headingMain}
                   <span className="mt-2 block bg-gradient-to-r from-orange-500 via-orange-400 to-amber-400 bg-clip-text text-transparent leading-[1.1]">
                     {heroContent.headingAccent}
@@ -703,7 +703,7 @@ function LandingPageV2() {
                 <span className="h-1.5 w-1.5 animate-pulse bg-orange-500" />
                 <span className="font-pixel text-[0.42rem] tracking-widest text-orange-400">RESURGO_SYSTEM :: WHAT_IS_A_LIFE_OS</span>
               </div>
-              <h2 className="mt-5 font-mono text-2xl font-bold tracking-tight text-zinc-100 sm:text-3xl">
+              <h2 className="mt-5 font-pixel text-lg font-bold tracking-tight text-zinc-100 sm:text-xl">
                 One system to replace <span className="text-orange-400">everything</span>.
               </h2>
               <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-400">
@@ -816,7 +816,7 @@ function LandingPageV2() {
           <div className="mx-auto max-w-5xl">
             <div className="mb-8 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500">TARGET_USER</p>
-              <h2 className="mt-2 font-mono text-xl font-bold text-zinc-100 sm:text-2xl">
+              <h2 className="mt-2 font-pixel text-lg font-bold text-zinc-100 sm:text-xl">
                 Resurgo is for you if&hellip;
               </h2>
               <p className="mx-auto mt-3 max-w-xl font-terminal text-lg text-zinc-400">
@@ -1352,7 +1352,7 @@ function LandingPageV2() {
           <div className="mx-auto max-w-4xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500">PROGRESS_LOG</p>
-              <h2 className="mt-2 font-mono text-xl font-bold text-zinc-100 sm:text-2xl">
+              <h2 className="mt-2 font-pixel text-lg font-bold text-zinc-100 sm:text-xl">
                 What changes when you use Resurgo
               </h2>
               <p className="mx-auto mt-3 max-w-xl font-terminal text-lg text-zinc-400">
