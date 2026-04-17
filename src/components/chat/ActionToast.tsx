@@ -99,7 +99,7 @@ export function ActionToast({
                 );
                 toast.dismiss(key);
               }}
-              className="px-3 py-1 text-xs rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors"
+              className="px-3 py-1 text-xs rounded-md bg-orange-600 text-white hover:bg-orange-700 transition-colors"
             >
               Yes, do it
             </button>

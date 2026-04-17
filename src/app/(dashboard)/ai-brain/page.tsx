@@ -1,9 +1,9 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// RESURGO — Digital AI Brain
-// Terminal-themed dashboard showing AI cascade status, memory, coach feeds,
-// learned patterns, and what the AI knows about the current user.
+// RESURGO — Digital AI Brain (Holographic Jarvis Edition)
+// Jarvis-themed dashboard: neural pulse visualizer, holographic grid,
+// AI cascade, memory ring, coach network, learned patterns.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useQuery } from 'convex/react';
@@ -11,7 +11,7 @@ import { api } from '../../../../convex/_generated/api';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import { useMemo } from 'react';
 import Link from 'next/link';
-import { Brain, Activity, Shield, Server, Cpu, Database, GitBranch, MessageSquare } from 'lucide-react';
+import { Brain, Activity, Shield, Server, Cpu, Database, GitBranch, MessageSquare, Zap, Eye, Wifi, Radio } from 'lucide-react';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 interface CoachInfo {
@@ -228,10 +228,10 @@ function SystemSection({ messageCount, xp, streak }: { messageCount: number; xp?
     <section>
       <SectionHeader icon={<Server size={13} />} label="SYSTEM STATUS" sub="Infrastructure health — all green" />
       <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">
-        <StatBox label="AI MESSAGES" value={String(messageCount)} color="text-orange-400" />
-        <StatBox label="XP EARNED" value={xp ? `${xp.toLocaleString()} XP` : '—'} color="text-yellow-400" />
-        <StatBox label="STREAK" value={streak ? `${streak}d` : '—'} color="text-green-400" />
-        <StatBox label="CASCADE" value="4 MODELS" color="text-cyan-400" />
+        <StatBox label="AI MESSAGES" value={String(messageCount)} color="text-orange-400" icon={<MessageSquare size={11} />} />
+        <StatBox label="XP EARNED" value={xp ? `${xp.toLocaleString()} XP` : '—'} color="text-yellow-400" icon={<Zap size={11} />} />
+        <StatBox label="STREAK" value={streak ? `${streak}d` : '—'} color="text-green-400" icon={<Activity size={11} />} />
+        <StatBox label="CASCADE" value="4 MODELS" color="text-cyan-400" icon={<Wifi size={11} />} />
       </div>
     </section>
   );
@@ -259,12 +259,147 @@ function MemoryRow({ label, value, highlight }: { label: string; value: string; 
   );
 }
 
-function StatBox({ label, value, color }: { label: string; value: string; color: string }) {
+function StatBox({ label, value, color, icon }: { label: string; value: string; color: string; icon?: React.ReactNode }) {
   return (
-    <div className="border border-zinc-800/50 bg-zinc-950/50 p-3">
-      <p className="font-pixel text-[0.28rem] tracking-widest text-zinc-600">{label}</p>
-      <p className={`mt-1.5 font-terminal text-sm font-semibold ${color}`}>{value}</p>
+    <div className="group relative overflow-hidden border border-zinc-800/50 bg-zinc-950/50 p-3 transition-colors hover:border-zinc-700/50">
+      {/* Subtle glow on hover */}
+      <div className="absolute inset-0 bg-gradient-to-br from-orange-500/0 to-transparent opacity-0 transition-opacity group-hover:opacity-5" />
+      <div className="relative flex items-center gap-1.5">
+        {icon && <span className="text-zinc-700">{icon}</span>}
+        <p className="font-pixel text-[0.28rem] tracking-widest text-zinc-600">{label}</p>
+      </div>
+      <p className={`relative mt-1.5 font-terminal text-sm font-semibold ${color}`}>{value}</p>
     </div>
+  );
+}
+
+// ── Neural Core Visualizer ───────────────────────────────────────────────────
+function NeuralCoreSection({ messageCount, xp }: { messageCount: number; xp?: number }) {
+  const activity = Math.min(messageCount / 50, 1);
+  const ringCount = 3;
+
+  return (
+    <section>
+      <SectionHeader icon={<Eye size={13} />} label="NEURAL CORE" sub="Real-time AI brain activity visualization" />
+      <div className="mt-3 flex flex-col items-center gap-6 border border-zinc-800/50 bg-zinc-950/30 p-8 sm:flex-row sm:justify-center sm:gap-12">
+        {/* Pulsing core */}
+        <div className="relative flex h-44 w-44 shrink-0 items-center justify-center">
+          {/* Holographic grid lines */}
+          <div className="absolute inset-0 opacity-10" style={{
+            backgroundImage: 'linear-gradient(rgba(234,88,12,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(234,88,12,0.3) 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+          }} />
+
+          {/* Concentric rings */}
+          {Array.from({ length: ringCount }).map((_, i) => {
+            const size = 60 + i * 36;
+            const delay = i * 0.8;
+            return (
+              <div
+                key={i}
+                className="absolute rounded-full border border-orange-500/20"
+                style={{
+                  width: size,
+                  height: size,
+                  animation: `pulse ${2 + i * 0.5}s ease-in-out ${delay}s infinite`,
+                }}
+              />
+            );
+          })}
+
+          {/* Core brain icon */}
+          <div className="relative z-10 flex flex-col items-center gap-1">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full border border-orange-500/40 bg-orange-950/40" style={{
+              boxShadow: '0 0 30px rgba(234,88,12,0.2), 0 0 60px rgba(234,88,12,0.1)',
+            }}>
+              <Brain size={28} className="text-orange-500" style={{ animation: 'pulse 3s ease-in-out infinite' }} />
+            </div>
+            <span className="font-pixel text-[0.3rem] tracking-widest text-orange-500/80">ACTIVE</span>
+          </div>
+        </div>
+
+        {/* Core stats */}
+        <div className="space-y-3">
+          <div>
+            <p className="font-pixel text-[0.3rem] tracking-widest text-zinc-600">NEURAL ACTIVITY</p>
+            <div className="mt-1 flex items-center gap-2">
+              <div className="h-1.5 w-32 overflow-hidden bg-zinc-900">
+                <div
+                  className="h-full bg-gradient-to-r from-orange-600 to-orange-400 transition-all duration-1000"
+                  style={{ width: `${Math.max(activity * 100, 10)}%` }}
+                />
+              </div>
+              <span className="font-terminal text-xs text-orange-400">{Math.round(activity * 100)}%</span>
+            </div>
+          </div>
+          <div>
+            <p className="font-pixel text-[0.3rem] tracking-widest text-zinc-600">MEMORY NODES</p>
+            <p className="font-terminal text-lg font-semibold text-cyan-400">{messageCount}</p>
+          </div>
+          <div>
+            <p className="font-pixel text-[0.3rem] tracking-widest text-zinc-600">POWER LEVEL</p>
+            <p className="font-terminal text-lg font-semibold text-yellow-400">{xp ? xp.toLocaleString() : '0'} <span className="text-xs text-zinc-600">XP</span></p>
+          </div>
+          <div>
+            <p className="font-pixel text-[0.3rem] tracking-widest text-zinc-600">AI MODELS ONLINE</p>
+            <div className="flex items-center gap-1.5">
+              {['Groq 70B', 'Cerebras', 'Gemini', '8B'].map((m) => (
+                <span key={m} className="flex items-center gap-1 border border-green-900/40 bg-green-950/20 px-1.5 py-0.5">
+                  <span className="h-1 w-1 rounded-full bg-green-500" />
+                  <span className="font-terminal text-[0.55rem] text-green-400">{m}</span>
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ── AI Insights Panel ────────────────────────────────────────────────────────
+function InsightsSection({ patterns, streak, messageCount }: { patterns: string[]; streak?: number; messageCount: number }) {
+  const insights = useMemo(() => {
+    const items: Array<{ icon: React.ReactNode; title: string; detail: string; color: string }> = [];
+
+    if ((streak ?? 0) >= 7) {
+      items.push({ icon: <Zap size={14} />, title: 'HOT STREAK', detail: `${streak}d streak — your consistency is building compound results`, color: 'text-yellow-400 border-yellow-800/50 bg-yellow-950/20' });
+    }
+    if (messageCount >= 50) {
+      items.push({ icon: <Radio size={14} />, title: 'DEEP MEMORY', detail: `${messageCount} messages analyzed — your AI deeply understands your patterns`, color: 'text-purple-400 border-purple-800/50 bg-purple-950/20' });
+    } else if (messageCount >= 10) {
+      items.push({ icon: <Radio size={14} />, title: 'MEMORY GROWING', detail: `${messageCount} messages — keep chatting to unlock deeper insights`, color: 'text-cyan-400 border-cyan-800/50 bg-cyan-950/20' });
+    }
+    if (patterns.some(p => p.includes('Entrepreneurial'))) {
+      items.push({ icon: <Zap size={14} />, title: 'BUILDER DETECTED', detail: 'Your AI sees a founder/builder pattern — leveraging this in all coaching', color: 'text-orange-400 border-orange-800/50 bg-orange-950/20' });
+    }
+    if (patterns.some(p => p.includes('Stress'))) {
+      items.push({ icon: <Shield size={14} />, title: 'STRESS WATCH', detail: 'Elevated stress signals detected — Aurora and Phoenix are prioritizing recovery', color: 'text-red-400 border-red-800/50 bg-red-950/20' });
+    }
+    if (patterns.some(p => p.includes('routine'))) {
+      items.push({ icon: <Activity size={14} />, title: 'SYSTEM BUILDER', detail: 'You gravitate toward systems and routines — Nexus is optimized for you', color: 'text-emerald-400 border-emerald-800/50 bg-emerald-950/20' });
+    }
+    if (items.length === 0) {
+      items.push({ icon: <Eye size={14} />, title: 'CALIBRATING', detail: 'Your AI is still learning — chat with coaches to unlock personalized insights', color: 'text-zinc-400 border-zinc-700/50 bg-zinc-900/20' });
+    }
+    return items;
+  }, [patterns, streak, messageCount]);
+
+  return (
+    <section>
+      <SectionHeader icon={<Eye size={13} />} label="AI INSIGHTS" sub="Personalized intelligence from your AI brain" />
+      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+        {insights.map((ins, i) => (
+          <div key={i} className={`border p-4 ${ins.color}`}>
+            <div className="flex items-center gap-2">
+              {ins.icon}
+              <span className="font-pixel text-[0.32rem] tracking-widest">{ins.title}</span>
+            </div>
+            <p className="mt-2 font-terminal text-xs leading-relaxed text-zinc-400">{ins.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -284,9 +419,17 @@ export default function AIBrainPage() {
   const streak = (gamification as { streakCurrent?: number } | null | undefined)?.streakCurrent;
 
   return (
-    <div className="min-h-screen bg-black px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative min-h-screen bg-black px-4 py-8 sm:px-6 lg:px-8">
+      {/* Holographic background grid */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(rgba(234,88,12,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(234,88,12,0.5) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+      }} />
+      {/* Radial glow */}
+      <div className="pointer-events-none fixed left-1/2 top-0 z-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-orange-500/5 blur-3xl" />
+
       {/* ── Header ── */}
-      <div className="mx-auto mb-8 flex max-w-7xl items-start justify-between gap-6 border-b border-zinc-800/50 pb-6">
+      <div className="relative z-10 mx-auto mb-8 flex max-w-7xl items-start justify-between gap-6 border-b border-zinc-800/50 pb-6">
         <div>
           <div className="mb-2 flex items-center gap-2">
             <Brain size={18} className="text-orange-500" />
@@ -311,8 +454,10 @@ export default function AIBrainPage() {
       </div>
 
       {/* ── Sections ── */}
-      <div className="mx-auto max-w-7xl space-y-10">
+      <div className="relative z-10 mx-auto max-w-7xl space-y-10">
+        <NeuralCoreSection messageCount={messages.length} xp={xp} />
         <SystemSection messageCount={messages.length} xp={xp} streak={streak} />
+        <InsightsSection patterns={patterns} streak={streak} messageCount={messages.length} />
         <CascadeSection />
         <CoachesSection favoriteId={favoriteCoach} />
         <MemorySection

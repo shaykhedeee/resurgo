@@ -123,7 +123,7 @@ export default function FocusTimerWidget() {
             className={`flex items-center gap-1.5 border px-4 py-2 font-terminal text-xs transition ${
               running
                 ? 'border-orange-700 bg-orange-950/30 text-orange-400 hover:bg-orange-950/50'
-                : 'border-emerald-700 bg-emerald-950/30 text-emerald-400 hover:bg-emerald-950/50'
+                : 'border-orange-700 bg-orange-950/30 text-orange-400 hover:bg-orange-950/50'
             }`}
           >
             {running ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}

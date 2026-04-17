@@ -118,6 +118,7 @@ module.exports = {
         'pixel-bounce': 'pixelBounce 0.5s steps(4) infinite',
         'pixel-pulse': 'pixelPulse 2s steps(4) infinite',
         'matrix-rain': 'matrixRain 10s linear infinite',
+        'marquee': 'marquee 30s linear infinite',
       },
       keyframes: {
         fadeIn: {
@@ -175,6 +176,10 @@ module.exports = {
         matrixRain: {
           '0%': { transform: 'translateY(-100%)' },
           '100%': { transform: 'translateY(100%)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
       boxShadow: {

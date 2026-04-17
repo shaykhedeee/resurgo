@@ -46,7 +46,7 @@ const CORE_BENEFITS = [
   },
   {
     id: 'AI_COACHING',
-    title: '5 AI coaches that know your patterns',
+    title: '6 AI coaches that know your patterns',
     description:
       'Choose from Marcus (strategy), Titan (performance), Aurora (wellness), Phoenix (resilience), or Nexus (integration). Each coach adapts advice to your actual progress, habits, and struggles — available 24/7.',
     outcome: 'Personalized coaching that evolves with your journey',
@@ -84,8 +84,8 @@ const LIFE_OS_MODULES = [
   { id: 'vision', label: 'AI Vision Board', icon: 'grid' as PixelIconName, color: 'text-pink-400', desc: 'Generate AI images for your goals, create mood boards, and visualize your future self.' },
   { id: 'gamification', label: 'XP & Gamification', icon: 'trophy' as PixelIconName, color: 'text-emerald-400', desc: 'Earn XP for every action, unlock achievements, level up, and compete on leaderboards.' },
   { id: 'reviews', label: 'Weekly AI Reviews', icon: 'plan' as PixelIconName, color: 'text-blue-400', desc: 'Automated progress reviews with pattern detection, course corrections, and celebration.' },
-  { id: 'adhd', label: 'ADHD-Friendly Mode', icon: 'brain' as PixelIconName, color: 'text-teal-400', desc: 'Gentle nudges, flexible scheduling, micro-task breakdowns, and calm accountability.' },
-  { id: 'coaching', label: '5 AI Coaches', icon: 'robot' as PixelIconName, color: 'text-indigo-400', desc: 'Strategy, performance, wellness, resilience, and integration — each with a unique personality.' },
+  { id: 'adhd', label: 'ADHD-Friendly Mode', icon: 'sparkles' as PixelIconName, color: 'text-teal-400', desc: 'Gentle nudges, flexible scheduling, micro-task breakdowns, and calm accountability.' },
+  { id: 'coaching', label: '6 AI Coaches', icon: 'robot' as PixelIconName, color: 'text-indigo-400', desc: 'Strategy, performance, wellness, resilience, neural coaching, and integration — each with a unique personality.' },
 ];
 
 // ─── PROBLEM-AGITATION-SOLUTION ─────────────────────────────────────────────
@@ -99,11 +99,11 @@ const PAIN_POINTS = [
 // ─── ADHD / MENTAL HEALTH ───────────────────────────────────────────────────
 const ADHD_FEATURES = [
   { title: 'One Calm Next Step', desc: 'When everything feels loud, Resurgo shows you one quiet, manageable action. No overwhelm, no guilt — just forward motion.', icon: 'sparkles' as PixelIconName },
-  { title: 'Flexible Scheduling', desc: 'Bad day? Missed a habit? That\'s okay. Resurgo adapts your plan without judgment. Consistency over perfection.', icon: 'clock' as PixelIconName },
+  { title: 'Flexible Scheduling', desc: 'Bad day? Missed a habit? That\'s okay. Resurgo adapts your plan without judgment. Consistency over perfection.', icon: 'timer' as PixelIconName },
   { title: 'Micro-Task Breakdown', desc: 'Big tasks feel impossible with ADHD. Resurgo breaks everything into 5-minute micro-steps you can actually start.', icon: 'grid' as PixelIconName },
   { title: 'Gentle Accountability', desc: 'No aggressive reminders. Just warm, supportive nudges from your AI coach who understands executive function challenges.', icon: 'heart' as PixelIconName },
   { title: 'Dopamine-Friendly Design', desc: 'XP, streaks, level-ups, and achievements — designed to give your brain the reward signals it craves.', icon: 'trophy' as PixelIconName },
-  { title: 'Brain Dump to Clarity', desc: 'Pour everything out of your head. Resurgo organizes the chaos into a prioritized, time-blocked plan.', icon: 'brain' as PixelIconName },
+  { title: 'Brain Dump to Clarity', desc: 'Pour everything out of your head. Resurgo organizes the chaos into a prioritized, time-blocked plan.', icon: 'robot' as PixelIconName },
 ];
 
 // ─── HEALTH & NUTRITION ─────────────────────────────────────────────────────
@@ -182,12 +182,12 @@ const FAQS = [
   {
     question: 'How does AI coaching work?',
     answer:
-      'You choose from 5 AI coaches, each with a unique personality and approach — Marcus (Stoic Strategist), Titan (High-Performance Coach), Aurora (Wellness Guide), Phoenix (Comeback Specialist), and Nexus (Systems Builder). Marcus and Titan are free. Pro and Lifetime unlock Aurora, Phoenix, and Nexus. Coaches respond based on your goals, habits, and recent progress.',
+      'You choose from 6 AI coaches, each with a unique personality and approach — Marcus (Stoic Strategist), Titan (High-Performance Coach), Aurora (Wellness Guide), Phoenix (Comeback Specialist), Nexus (Systems Builder), and Zenon (Neural Architect, coming soon). Marcus and Titan are free. Pro and Lifetime unlock all coaches. Coaches respond based on your goals, habits, and recent progress.',
   },
   {
     question: 'How is Resurgo different from Habitica, Streaks, or Notion?',
     answer:
-      'Habitica focuses on gamification without AI planning. Streaks is habit-only with no goal decomposition. Notion requires manual setup with no AI automation. Resurgo combines all use cases: AI goal breakdown, habit tracking with streaks, focus timers, 5 AI coaches, wellness tracking, and weekly AI reviews — all connected in one workflow.',
+      'Habitica focuses on gamification without AI planning. Streaks is habit-only with no goal decomposition. Notion requires manual setup with no AI automation. Resurgo combines all use cases: AI goal breakdown, habit tracking with streaks, focus timers, 6 AI coaches, wellness tracking, and weekly AI reviews — all connected in one workflow.',
   },
 ];
 
@@ -250,7 +250,7 @@ const ACCESS_TIERS = [
     savings: 'SAVE $29.88/yr',
     specs: [
       'Unlimited goals, habits, and messages',
-      'All 5 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus)',
+      'All 6 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus, Zenon)',
       'Advanced analytics & insights',
       'Weekly AI reviews',
       'Priority support',
@@ -275,7 +275,7 @@ const ACCESS_TIERS = [
       'Founding member badge',
       '1,000 founding spots total',
     ],
-    cta: 'CLAIM FOUNDING LIFETIME',
+    cta: 'LOCK_LIFETIME_ACCESS',
     highlight: true,
   },
 ];
@@ -316,6 +316,14 @@ const AI_COACHES = [
     desc: 'Habits, routines, and automation. Nexus merges all your life areas into one adaptive engine with no limits.',
     free: false,
     accent: 'pink',
+  },
+  {
+    name: 'ZENON',
+    style: 'Coming Soon',
+    desc: 'Something new is loading. ZENON is an experimental AI agent trained on pattern recognition, behavioral loops, and radical self-optimization. Not yet live — but close.',
+    free: false,
+    accent: 'cyan',
+    comingSoon: true,
   },
 
 ];
@@ -457,14 +465,14 @@ function LandingPageV2() {
             applicationCategory: 'LifestyleApplication',
             operatingSystem: 'Web, Android, iOS',
             url: 'https://resurgo.life',
-            description: 'AI-powered Life Operating System for goal planning, habit tracking, fitness, nutrition, mental wellness, and personal growth. Features 5 AI coaches, gamification, ADHD-friendly mode, and 2M+ food database.',
+            description: 'AI-powered Life Operating System for goal planning, habit tracking, fitness, nutrition, mental wellness, and personal growth. Features 6 AI coaches, gamification, ADHD-friendly mode, and 2M+ food database.',
             offers: [
               { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free Forever', description: '2 AI coaches, habit tracking, goal planning, focus timer, nutrition basics' },
-              { '@type': 'Offer', price: '4.99', priceCurrency: 'USD', name: 'Pro Monthly', description: 'All 5 AI coaches, unlimited history, advanced analytics, priority support' },
+              { '@type': 'Offer', price: '4.99', priceCurrency: 'USD', name: 'Pro Monthly', description: 'All 6 AI coaches, unlimited history, advanced analytics, priority support' },
               { '@type': 'Offer', price: '49.99', priceCurrency: 'USD', name: 'Founding Lifetime', description: 'Everything in Pro, forever. One-time payment. Limited to first 1,000 users.' },
             ],
             aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '847', bestRating: '5' },
-            featureList: 'AI Goal Planning, Habit Tracking, Focus Timer, 5 AI Coaches, Nutrition Tracking, Workout Generator, Sleep Analytics, Mood Journaling, XP Gamification, Vision Board, Budget Tracking, Weekly AI Reviews, ADHD-Friendly Mode',
+            featureList: 'AI Goal Planning, Habit Tracking, Focus Timer, 6 AI Coaches, Nutrition Tracking, Workout Generator, Sleep Analytics, Mood Journaling, XP Gamification, Vision Board, Budget Tracking, Weekly AI Reviews, ADHD-Friendly Mode',
             screenshot: 'https://resurgo.life/og-image.png',
             creator: { '@type': 'Organization', name: 'Resurgo', url: 'https://resurgo.life' },
           }),
@@ -658,6 +666,7 @@ function LandingPageV2() {
                       { id: 'AURORA', color: 'bg-purple-500' },
                       { id: 'PHOENIX',color: 'bg-orange-500' },
                       { id: 'NEXUS',  color: 'bg-pink-500' },
+                      { id: 'ZENON',  color: 'bg-cyan-500' },
                     ].map((c) => (
                       <span key={c.id} className="flex items-center gap-1">
                         <span className={`h-1.5 w-1.5 rounded-full ${c.color}`} />
@@ -693,6 +702,32 @@ function LandingPageV2() {
             </div>
           </div>
         </section>
+
+        {/* ═══════════════ SCROLLING TRUST TICKER ═══════════════ */}
+        <div className="overflow-hidden border-y border-zinc-800/50 bg-zinc-950/80 py-3">
+          <div className="animate-marquee flex whitespace-nowrap">
+            {[...Array(2)].map((_, copy) => (
+              <div key={copy} className="flex shrink-0 items-center gap-8 px-4">
+                {[
+                  '★ 5,000+ GOALS CREATED',
+                  '◆ 92% WEEKLY COMPLETION RATE',
+                  '● 6 AI COACHES AVAILABLE',
+                  '▲ 2M+ FOOD DATABASE',
+                  '■ 500+ EXERCISES',
+                  '◇ 28 GOAL TEMPLATES',
+                  '★ FREE FOREVER PLAN',
+                  '● ADHD-FRIENDLY MODE',
+                  '▲ WEEKLY AI REVIEWS',
+                  '■ XP & GAMIFICATION',
+                ].map((item) => (
+                  <span key={`${copy}-${item}`} className="font-pixel text-[0.35rem] tracking-[0.25em] text-zinc-600">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* ════════════════ CONCEPT: WHAT IS A LIFE OS ════════════════ */}
         <section className="border-y border-zinc-900 bg-zinc-950/60 px-4 py-12 sm:px-6 lg:px-8">
@@ -801,7 +836,7 @@ function LandingPageV2() {
                 all unified under one AI-powered Life OS that adapts to <em>you</em>, not the other way around.
               </p>
               <div className="mt-4 flex flex-wrap justify-center gap-3">
-                {['AI Planning', 'Habit Automation', 'Focus Timer', 'Health Tracking', 'XP Gamification', '5 AI Coaches'].map((tag) => (
+                {['AI Planning', 'Habit Automation', 'Focus Timer', 'Health Tracking', 'XP Gamification', '6 AI Coaches'].map((tag) => (
                   <span key={tag} className="border border-green-800 bg-green-950/30 px-3 py-1 font-pixel text-[0.4rem] tracking-widest text-green-400">
                     {tag.toUpperCase().replace(/ /g, '_')}
                   </span>
@@ -1019,10 +1054,10 @@ function LandingPageV2() {
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">AI_COACHING_ENGINE</p>
               <h2 className="mt-2 font-pixel text-lg text-zinc-100 sm:text-xl">
-                5 AI coaches. One for every domain.
+                6 AI coaches. One for every domain.
               </h2>
               <p className="mx-auto mt-3 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-200">
-                Each coach has a distinct personality, philosophy, and area of expertise. Marcus &amp; Titan are free forever. Unlock all five with Pro.
+                Each coach has a distinct personality, philosophy, and area of expertise. Marcus &amp; Titan are free forever. Unlock all six with Pro.
               </p>
             </div>
 
@@ -1039,6 +1074,7 @@ function LandingPageV2() {
                     coach.accent === 'green' && 'border-green-500 hover:bg-green-950/10',
                     coach.accent === 'orange' && 'border-orange-500 hover:bg-orange-950/10',
                     coach.accent === 'cyan' && 'border-cyan-500 hover:bg-cyan-950/10',
+                    coach.accent === 'pink' && 'border-pink-500 hover:bg-pink-950/10',
                   )}
                 >
                   <div className="flex items-start justify-between gap-2">
@@ -1050,16 +1086,19 @@ function LandingPageV2() {
                       coach.accent === 'green' && 'text-green-400',
                       coach.accent === 'orange' && 'text-orange-400',
                       coach.accent === 'cyan' && 'text-cyan-400',
+                      coach.accent === 'pink' && 'text-pink-400',
                     )}>{coach.name}</span>
                     <span
                       className={cn(
                         'shrink-0 border-2 px-2 py-0.5 font-pixel text-[0.35rem] tracking-widest',
-                        coach.free
-                          ? 'border-green-900 bg-green-950/40 text-green-500'
-                          : 'border-orange-900 bg-orange-950/40 text-orange-500',
+                        ('comingSoon' in coach && coach.comingSoon)
+                          ? 'animate-pulse border-cyan-900 bg-cyan-950/40 text-cyan-400'
+                          : coach.free
+                            ? 'border-green-900 bg-green-950/40 text-green-500'
+                            : 'border-orange-900 bg-orange-950/40 text-orange-500',
                       )}
                     >
-                      {coach.free ? 'FREE' : 'PRO'}
+                      {('comingSoon' in coach && coach.comingSoon) ? 'SOON' : coach.free ? 'FREE' : 'PRO'}
                     </span>
                   </div>
                   <p className="mt-1 font-pixel text-[0.35rem] tracking-widest text-zinc-400">{coach.style}</p>
@@ -1660,10 +1699,10 @@ function LandingPageV2() {
           <div className="mx-auto max-w-6xl">
             <div className="mb-10 text-center">
               <p className="font-pixel text-[0.5rem] tracking-widest text-orange-600">COMPARISON_MATRIX</p>
-              <h2 className="mt-3 font-pixel text-xl text-zinc-100 sm:text-2xl lg:text-3xl">
+              <h2 className="mt-3 font-pixel text-lg text-zinc-100 sm:text-xl lg:text-2xl">
                 How Resurgo outperforms every alternative
               </h2>
-              <p className="mx-auto mt-4 max-w-xl font-terminal text-xl leading-relaxed text-zinc-200">
+              <p className="mx-auto mt-4 max-w-xl font-terminal text-lg leading-relaxed text-zinc-200">
                 Most apps track one thing. Resurgo unifies your goals, habits, focus, and AI coaching in a single life OS — nothing else comes close.
               </p>
             </div>
@@ -1739,6 +1778,32 @@ function LandingPageV2() {
           </div>
         </section>
 
+        {/* ────────────────── BUILT IN PUBLIC ────────────────── */}
+        <section className="border-y border-zinc-900 bg-zinc-950/40 px-4 py-12 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-4xl text-center">
+            <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500">BUILD_LOG</p>
+            <h2 className="mt-3 font-pixel text-lg text-zinc-100 sm:text-xl">
+              Built in public. Shipping every day.
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl font-terminal text-lg leading-relaxed text-zinc-400">
+              Resurgo isn&apos;t built by a faceless corporation. It&apos;s built by a solo founder who uses the product every single day.
+              Every feature ships because a real user needed it — and that user is often the person writing the code.
+            </p>
+            <div className="mt-6 flex flex-wrap justify-center gap-3">
+              {[
+                { label: 'OPEN_ROADMAP', value: '✓' },
+                { label: 'DAILY_UPDATES', value: '✓' },
+                { label: 'USER_FEEDBACK_DRIVEN', value: '✓' },
+                { label: 'INDIE_BUILT', value: '✓' },
+              ].map((badge) => (
+                <span key={badge.label} className="border border-zinc-700 bg-zinc-900/50 px-4 py-2 font-pixel text-[0.38rem] tracking-widest text-zinc-400">
+                  <span className="text-green-500 mr-1">{badge.value}</span> {badge.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ────────────────── CTA TERMINAL ────────────────── */}
         <section className="px-4 pb-20 sm:px-6 lg:px-8 lg:pb-28">
           <div className="mx-auto max-w-6xl border-2 border-zinc-800 bg-black shadow-[4px_4px_0px_rgba(0,0,0,0.7)]">
@@ -1762,7 +1827,7 @@ function LandingPageV2() {
               {/* Stats badges */}
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <span className="border-2 border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel text-[0.45rem] tracking-widest text-zinc-300">
-                  5 AI COACHES
+                  6 AI COACHES
                 </span>
                 <span className="border-2 border-zinc-800 bg-zinc-900/50 px-4 py-2 font-pixel text-[0.45rem] tracking-widest text-zinc-300">
                   28 GOAL TEMPLATES

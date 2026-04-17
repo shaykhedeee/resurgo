@@ -91,7 +91,7 @@ export function StreakFreeze({ className, variant = 'card', onUse }: StreakFreez
         {streakAtRisk && freezesAvailable > 0 && (
           <button
             onClick={() => setShowConfirm(true)}
-            className="px-2 py-0.5 bg-cyan-500/20 hover:bg-cyan-500/30 rounded text-cyan-400 
+            className="px-2 py-0.5 bg-orange-500/20 hover:bg-orange-500/30 rounded text-orange-400 
                      text-xs font-medium transition-colors"
           >
             Use Now
@@ -171,7 +171,7 @@ export function StreakFreeze({ className, variant = 'card', onUse }: StreakFreez
               </button>
               <button
                 onClick={handleUseFreeze}
-                className="flex-1 btn-primary text-sm bg-cyan-500 hover:bg-cyan-600"
+                className="flex-1 btn-primary text-sm bg-orange-500 hover:bg-orange-600"
               >
                 <Shield className="w-4 h-4 mr-2" />
                 Use Freeze
@@ -188,7 +188,7 @@ export function StreakFreeze({ className, variant = 'card', onUse }: StreakFreez
             className={cn(
               "w-full py-3 px-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2",
               streakAtRisk && currentStreak > 0
-                ? "bg-cyan-500 hover:bg-cyan-600 text-white"
+                ? "bg-orange-500 hover:bg-orange-600 text-white"
                 : "bg-[var(--surface)] text-themed-muted cursor-not-allowed"
             )}
           >

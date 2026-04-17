@@ -724,12 +724,12 @@ Score should be 1-10 based on the wins vs blockers balance. Be direct and action
                   onChange={(e) => setWeekGoal(e.target.value)}
                   placeholder="e.g. Launch landing page, Complete fitness phase 1, Study for exam"
                   required
-                  className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-blue-800 focus:outline-none"
+                  className="h-10 w-full border border-zinc-800 bg-black px-3 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
                 />
                 <button
                   type="submit"
                   disabled={weekBuilding || !weekGoal.trim()}
-                  className="flex items-center gap-2 border border-blue-800 bg-blue-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-blue-400 transition hover:bg-blue-950/60 disabled:opacity-40"
+                  className="flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-6 py-2.5 font-mono text-xs tracking-widest text-orange-400 transition hover:bg-orange-950/60 disabled:opacity-40"
                 >
                   <CalendarDays className="h-3.5 w-3.5" />
                   {weekBuilding ? 'PLANNING_WEEK_' : '[PLAN MY WEEK]'}
@@ -738,7 +738,7 @@ Score should be 1-10 based on the wins vs blockers balance. Be direct and action
             </div>
             {weekBuilding && (
               <div className="border border-zinc-900 bg-zinc-950 p-8 text-center">
-                <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-blue-600" />
+                <div className="mx-auto mb-4 h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-orange-600" />
                 <p className="font-mono text-xs tracking-widest text-zinc-500">PLANNING_7_DAYS_</p>
               </div>
             )}

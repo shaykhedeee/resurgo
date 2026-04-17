@@ -122,7 +122,7 @@ export default function AICoachWidget() {
           </button>
           <Link
             href="/coach"
-            className="flex items-center gap-1.5 border border-violet-700 bg-violet-950/30 px-3 py-1.5 font-terminal text-xs text-violet-400 transition hover:bg-violet-950/50"
+            className="flex items-center gap-1.5 border border-orange-700 bg-orange-950/30 px-3 py-1.5 font-terminal text-xs text-orange-400 transition hover:bg-orange-950/50"
           >
             <Brain className="h-3 w-3" />
             Full Coach

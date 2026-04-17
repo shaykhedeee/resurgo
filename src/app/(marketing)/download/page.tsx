@@ -142,7 +142,7 @@ export default function DownloadPage() {
               href={APK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-green-700 bg-green-700 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-green-600 active:translate-x-px active:translate-y-px"
+              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
             >
               ⬇&nbsp;&nbsp;Download APK ({APK_VERSION})
             </a>

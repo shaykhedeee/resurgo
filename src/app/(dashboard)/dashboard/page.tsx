@@ -651,14 +651,14 @@ export default function DashboardPage() {
       {isEvening && !eveningDone && !showEveningDebrief && (
         <button
           onClick={() => setShowEveningDebrief(true)}
-          className="mb-6 flex w-full items-center gap-3 border border-violet-900/60 bg-violet-950/20 px-5 py-4 text-left transition hover:border-violet-700 hover:bg-violet-950/30"
+          className="mb-6 flex w-full items-center gap-3 border border-orange-900/60 bg-orange-950/20 px-5 py-4 text-left transition hover:border-orange-700 hover:bg-orange-950/30"
         >
-          <Moon className="h-5 w-5 text-violet-500 shrink-0" />
+          <Moon className="h-5 w-5 text-orange-500 shrink-0" />
           <div className="flex-1">
-            <p className="font-terminal text-sm font-bold text-violet-400">Time for your evening debrief</p>
+            <p className="font-terminal text-sm font-bold text-orange-400">Time for your evening debrief</p>
             <p className="font-terminal text-xs text-zinc-500">Reflect on wins, log gratitude, and plan tomorrow</p>
           </div>
-          <span className="font-pixel text-[0.35rem] tracking-widest text-violet-500">START &gt;</span>
+          <span className="font-pixel text-[0.35rem] tracking-widest text-orange-500">START &gt;</span>
         </button>
       )}
 

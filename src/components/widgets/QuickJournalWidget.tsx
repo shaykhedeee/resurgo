@@ -137,14 +137,14 @@ export default function QuickJournalWidget() {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               rows={2}
-              className="w-full resize-none border border-zinc-800 bg-zinc-900 px-3 py-2 font-terminal text-xs text-zinc-300 placeholder-zinc-600 outline-none focus:border-violet-700"
+              className="w-full resize-none border border-zinc-800 bg-zinc-900 px-3 py-2 font-terminal text-xs text-zinc-300 placeholder-zinc-600 outline-none focus:border-orange-700"
             />
 
             {/* Save */}
             <button
               onClick={handleSave}
               disabled={mood === 0 || saving}
-              className="flex w-full items-center justify-center gap-1.5 border border-violet-700 bg-violet-950/30 px-4 py-2 font-terminal text-xs text-violet-400 transition hover:bg-violet-950/50 disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex w-full items-center justify-center gap-1.5 border border-orange-700 bg-orange-950/30 px-4 py-2 font-terminal text-xs text-orange-400 transition hover:bg-orange-950/50 disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {saving ? (
                 <Loader2 className="h-3 w-3 animate-spin" />

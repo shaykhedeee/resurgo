@@ -315,7 +315,7 @@ export function EveningDebrief({ onComplete, userName, tasksCompleted, habitsCom
 
             <button
               onClick={() => setStep('reflection')}
-              className="mt-4 flex w-full items-center justify-center gap-2 border border-violet-700 bg-violet-950/30 px-4 py-2.5 font-terminal text-sm text-violet-400 transition hover:bg-violet-950/50"
+              className="mt-4 flex w-full items-center justify-center gap-2 border border-orange-700 bg-orange-950/30 px-4 py-2.5 font-terminal text-sm text-orange-400 transition hover:bg-orange-950/50"
             >
               <Moon className="h-3.5 w-3.5" /> Generate AI Reflection
             </button>
@@ -365,7 +365,7 @@ export function EveningDebrief({ onComplete, userName, tasksCompleted, habitsCom
             <button
               disabled={isGenerating || isSaving}
               onClick={handleFinish}
-              className="mt-4 flex w-full items-center justify-center gap-2 border border-violet-700 bg-violet-950/30 px-4 py-2.5 font-terminal text-sm text-violet-400 transition hover:bg-violet-950/50 disabled:opacity-40"
+              className="mt-4 flex w-full items-center justify-center gap-2 border border-orange-700 bg-orange-950/30 px-4 py-2.5 font-terminal text-sm text-orange-400 transition hover:bg-orange-950/50 disabled:opacity-40"
             >
               {isSaving ? (
                 <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Saving...</>

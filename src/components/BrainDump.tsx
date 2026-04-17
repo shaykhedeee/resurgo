@@ -318,7 +318,7 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
               <button
                 onClick={handleSubmit}
                 disabled={loading || rawText.trim().length < 10}
-                className="flex w-full items-center justify-center gap-2 border border-purple-700 bg-purple-900/20 px-4 py-3 font-pixel text-[0.6rem] tracking-widest text-purple-300 transition hover:bg-purple-900/40 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex w-full items-center justify-center gap-2 border border-orange-700 bg-orange-900/20 px-4 py-3 font-pixel text-[0.6rem] tracking-widest text-orange-300 transition hover:bg-orange-900/40 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -480,7 +480,7 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
                   <button
                     onClick={handleAddTasks}
                     disabled={addingTasks || selectedTasks.size === 0}
-                    className="flex flex-1 items-center justify-center gap-2 border border-emerald-700 bg-emerald-900/20 px-4 py-3 font-pixel text-[0.55rem] tracking-widest text-emerald-300 transition hover:bg-emerald-900/40 disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="flex flex-1 items-center justify-center gap-2 border border-orange-700 bg-orange-900/20 px-4 py-3 font-pixel text-[0.55rem] tracking-widest text-orange-300 transition hover:bg-orange-900/40 disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {addingTasks ? (
                       <>
@@ -495,9 +495,9 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
                     )}
                   </button>
                 ) : (
-                  <div className="flex flex-1 items-center justify-center gap-2 border border-emerald-700 bg-emerald-900/30 px-4 py-3">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                    <span className="font-pixel text-[0.55rem] tracking-widest text-emerald-300">TASKS ADDED!</span>
+                  <div className="flex flex-1 items-center justify-center gap-2 border border-orange-700 bg-orange-900/30 px-4 py-3">
+                    <CheckCircle2 className="h-4 w-4 text-orange-400" />
+                    <span className="font-pixel text-[0.55rem] tracking-widest text-orange-300">TASKS ADDED!</span>
                   </div>
                 )}
 

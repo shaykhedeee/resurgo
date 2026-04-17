@@ -349,16 +349,16 @@ export default function WellnessPage() {
                     {[1,2,3,4,5].map((q) => (
                       <button key={q} type="button" onClick={() => setSleepQuality(q)}
                         className={cn('flex-1 border py-2 font-mono text-xs transition',
-                          sleepQuality === q ? 'border-blue-700 bg-blue-950/30 text-blue-400' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                          sleepQuality === q ? 'border-orange-700 bg-orange-950/30 text-orange-400' : 'border-zinc-800 text-zinc-400 hover:border-zinc-700'
                         )}>{q}</button>
                     ))}
                   </div>
                 </div>
                 <textarea value={sleepNotes} onChange={(e) => setSleepNotes(e.target.value)}
                   placeholder="Notes (optional)..." rows={2}
-                  className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-blue-800 focus:outline-none" />
+                  className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                 <button type="submit" disabled={sleepSaving}
-                  className="border border-blue-800 bg-blue-950/30 px-6 py-2 font-mono text-xs tracking-widest text-blue-500 transition hover:bg-blue-950/60 disabled:opacity-40">
+                  className="border border-orange-800 bg-orange-950/30 px-6 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">
                   {sleepSaving ? 'SAVING_' : '[LOG_SLEEP]'}
                 </button>
               </form>
@@ -661,7 +661,7 @@ function MeditationTab() {
           <div className="flex gap-3">
             {!active ? (
               <button onClick={start}
-                className="flex items-center gap-2 border border-purple-700 bg-purple-950/30 px-8 py-3 font-mono text-sm tracking-widest text-purple-400 transition hover:bg-purple-950/60">
+                className="flex items-center gap-2 border border-orange-700 bg-orange-950/30 px-8 py-3 font-mono text-sm tracking-widest text-orange-400 transition hover:bg-orange-950/60">
                 <Wind className="h-4 w-4" /> [START]
               </button>
             ) : (

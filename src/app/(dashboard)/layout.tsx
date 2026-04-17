@@ -31,7 +31,7 @@ const hasValidClerkKey =
 // Lazy-load non-critical overlay components to improve initial bundle
 const BrainDump = dynamic(() => import('@/components/BrainDump'), { ssr: false });
 const LevelUpDetector = dynamic(() => import('@/components/LevelUpDetector'), { ssr: false });
-const GlobalFAB = dynamic(() => import('@/components/GlobalFAB'), { ssr: false });
+const TerminalFAB = dynamic(() => import('@/components/TerminalFAB'), { ssr: false });
 
 // ── Navigation Sections (ASCII-grouped, collapsible) ──
 const NAV_SECTIONS = [
@@ -569,8 +569,8 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
       {/* ── Brain Dump Modal ── */}
       <BrainDump isOpen={brainDumpOpen} onClose={() => setBrainDumpOpen(false)} />
 
-      {/* ── Global Quick Add FAB ── */}
-      <GlobalFAB />
+      {/* ── Global Terminal FAB (Unified Quick Actions) ── */}
+      <TerminalFAB onBrainDump={() => setBrainDumpOpen(true)} />
     </div>
   );
 }

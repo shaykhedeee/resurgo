@@ -122,6 +122,9 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   const [focusPanelIndex, setFocusPanelIndex] = useState(0);
   // Share
   const [shareStatus, setShareStatus] = useState<'idle' | 'copied'>('idle');
+  // Manifest mode — daily affirmation cycling overlay
+  const [manifestMode, setManifestMode] = useState(false);
+  const [manifestIndex, setManifestIndex] = useState(0);
 
   // Convex queries
   const boardDoc = useQuery(api.visionBoards.getActive, {});
@@ -410,45 +413,63 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
   // ── PRO GATE ──────────────────────────────────────────────────────────────
   if (!proUnlocked) {
     return (
-      <div className="border border-zinc-900 bg-zinc-950 p-6 rounded-xl">
-        <div className="flex items-center justify-center mb-3">
-          <div className="inline-flex items-center gap-2 border border-amber-800 bg-amber-950/20 px-3 py-1 rounded-full">
-            <Crown className="h-4 w-4 text-amber-400" />
-            <span className="text-[10px] tracking-widest font-mono text-amber-400">PRO_FEATURE</span>
-          </div>
-        </div>
+      <div className="relative border border-zinc-900 bg-zinc-950 overflow-hidden rounded-xl">
+        {/* Subtle scanline overlay */}
+        <div className="pointer-events-none absolute inset-0 opacity-[0.04]" style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)' }} />
 
-        <h2 className="text-xl font-bold text-zinc-100 text-center">Premium Vision Board Studio</h2>
-        <p className="text-zinc-400 text-sm text-center mt-2 max-w-xl mx-auto leading-relaxed">
-          Turn goals into a Pinterest-style, AI-generated mood board with custom layouts, archetype-aware affirmations,
-          and hybrid uploads. Available on <span className="text-amber-400">Pro</span> and <span className="text-amber-400">Lifetime</span> plans.
-        </p>
+        {/* Animated glow border */}
+        <div className="absolute -inset-px rounded-xl pointer-events-none" style={{ background: 'linear-gradient(135deg, rgba(245,158,11,0.1), transparent 40%, transparent 60%, rgba(245,158,11,0.1))', animation: 'pulse 3s ease-in-out infinite' }} />
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-5 text-xs text-zinc-300">
-          {[
-            'AI-generated panel images (multi-provider cascade)',
-            'Premium style presets (Pinterest bold, cinematic, editorial)',
-            'Hybrid mode: upload your own images + AI composition',
-            'Stock image search (Getty, Unsplash, Pexels)',
-            'Board history & version gallery',
-            'Pinterest masonry & collage layouts',
-          ].map((feature) => (
-            <div key={feature} className="border border-zinc-800 bg-black/40 p-3 rounded-lg">
-              <span className="text-orange-400 mr-1.5">•</span>{feature}
+        <div className="relative p-8">
+          {/* Lock icon + badge */}
+          <div className="flex flex-col items-center gap-2 mb-5">
+            <div className="relative">
+              <div className="h-12 w-12 rounded-full border border-amber-800/40 bg-amber-950/20 flex items-center justify-center">
+                <Crown className="h-5 w-5 text-amber-400" />
+              </div>
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-orange-500 animate-pulse" />
             </div>
-          ))}
-        </div>
+            <span className="font-pixel text-[0.4rem] tracking-widest text-amber-400">▪ PRO_FEATURE ▪</span>
+          </div>
 
-        <div className="mt-6 flex items-center justify-center gap-3">
-          <Link
-            href="/pricing"
-            onClick={() => void sendGrowthEvent('upgrade_clicked', { source: 'vision_board_paywall', plan })}
-            className="inline-flex items-center gap-2 border border-amber-800 bg-amber-950/30 px-5 py-2.5 rounded-lg font-mono text-xs tracking-widest text-amber-400 hover:bg-amber-950/50 transition"
-          >
-            <Crown className="h-3.5 w-3.5" />
-            [UPGRADE_TO_PRO]
-          </Link>
-          <span className="font-mono text-[10px] text-zinc-500">Current plan: {plan.toUpperCase()}</span>
+          <h2 className="font-pixel text-sm md:text-base tracking-tight text-zinc-100 text-center">AI Vision Board Studio</h2>
+          <p className="text-zinc-500 text-xs text-center mt-2 max-w-lg mx-auto leading-relaxed font-pixel tracking-wide">
+            Turn goals into Pinterest-style AI mood boards with archetype-aware affirmations,
+            hybrid uploads &middot; custom layouts &middot; HD export.
+          </p>
+
+          {/* Feature grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-6 text-xs text-zinc-300">
+            {[
+              { icon: '🎨', text: 'AI-generated panel images (multi-provider cascade)' },
+              { icon: '🖼️', text: 'Premium presets: Pinterest bold, cinematic, editorial' },
+              { icon: '📸', text: 'Hybrid: upload your own images + AI composition' },
+              { icon: '🔍', text: 'Stock image search (Getty, Unsplash, Pexels)' },
+              { icon: '📚', text: 'Board history, versioning & gallery' },
+              { icon: '📐', text: 'Masonry, collage, mosaic & grid layouts' },
+              { icon: '⬇️', text: 'HD PNG download & cinema focus mode' },
+              { icon: '🧘', text: 'Daily manifest mode with affirmation cycling' },
+            ].map((f) => (
+              <div key={f.text} className="flex items-start gap-2 border border-zinc-800/60 bg-black/40 p-2.5 rounded">
+                <span className="text-sm shrink-0">{f.icon}</span>
+                <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-400 leading-relaxed">{f.text}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <div className="mt-7 flex flex-col items-center gap-3">
+            <Link
+              href="/pricing"
+              onClick={() => void sendGrowthEvent('upgrade_clicked', { source: 'vision_board_paywall', plan })}
+              className="group relative inline-flex items-center gap-2 border border-amber-700 bg-amber-950/30 px-6 py-3 rounded font-pixel text-[0.45rem] tracking-widest text-amber-400 hover:bg-amber-950/60 transition-all"
+            >
+              <Crown className="h-3.5 w-3.5" />
+              <span>[UPGRADE_TO_PRO]</span>
+              <span className="absolute -right-1 -top-1 h-2 w-2 rounded-full bg-orange-500 animate-ping" />
+            </Link>
+            <span className="font-pixel text-[0.3rem] tracking-widest text-zinc-600">CURRENT_PLAN: {plan.toUpperCase()}</span>
+          </div>
         </div>
       </div>
     );
@@ -618,6 +639,13 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
               <Maximize2 size={12} />
             </button>
             <button
+              onClick={() => { setManifestIndex(0); setManifestMode(true); }}
+              title="Daily manifest — cycle through affirmations"
+              className="p-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-amber-400 hover:border-amber-700 transition font-pixel text-[8px]"
+            >
+              🧘
+            </button>
+            <button
               onClick={() => void handleShare()}
               title={shareStatus === 'copied' ? 'Link copied!' : 'Copy page link'}
               className="p-1.5 rounded border border-zinc-700 text-zinc-400 hover:text-green-400 hover:border-green-700 transition"
@@ -676,6 +704,30 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
                 {(boardDoc as { boardType?: string }).boardType}
               </span>
             ) : null}
+
+            {/* Aggregate progress stats */}
+            {(() => {
+              const totalPanels = board.panels.length;
+              const withImages = board.panels.filter((p: VisionBoardPanel) => p.imageData).length;
+              const avgProg = totalPanels > 0
+                ? Math.round(board.panels.reduce((s: number, p: VisionBoardPanel) => s + (p.progress ?? 0), 0) / totalPanels)
+                : 0;
+              return (
+                <div className="mt-2 flex flex-col items-center gap-1">
+                  <div className="flex items-center gap-4 font-pixel text-[0.35rem] tracking-widest text-zinc-600">
+                    <span>PANELS: <span className="text-zinc-400">{totalPanels}</span></span>
+                    <span>IMAGES: <span className="text-zinc-400">{withImages}/{totalPanels}</span></span>
+                    <span>PROGRESS: <span className={avgProg > 0 ? 'text-orange-500' : 'text-zinc-400'}>{avgProg}%</span></span>
+                  </div>
+                  <div className="w-40 h-1 bg-zinc-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-500"
+                      style={{ width: `${avgProg}%`, background: `linear-gradient(90deg, ${primaryColor}, ${secondaryColor})` }}
+                    />
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           {/* Category filter */}
@@ -922,6 +974,74 @@ export function VisionBoard({ canRegenerate = false }: VisionBoardProps) {
           regenningPanelId={regenningPanelId}
         />
       )}
+      {/* ── MANIFEST MODE OVERLAY ── */}
+      {manifestMode && board && (() => {
+        const affirmations = board.panels
+          .map((p: VisionBoardPanel) => ({ goal: p.goalTitle, affirmation: p.affirmation, category: p.category, imageData: p.imageData }))
+          .filter((a) => a.affirmation);
+        if (affirmations.length === 0) return null;
+        const current = affirmations[manifestIndex % affirmations.length];
+        return (
+          <div className="fixed inset-0 z-[70] bg-black/95 flex flex-col items-center justify-center"
+            onClick={(e) => { if (e.target === e.currentTarget) setManifestMode(false); }}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') setManifestMode(false);
+              if (e.key === 'ArrowRight' || e.key === ' ') setManifestIndex((i) => (i + 1) % affirmations.length);
+              if (e.key === 'ArrowLeft') setManifestIndex((i) => (i - 1 + affirmations.length) % affirmations.length);
+            }}
+            tabIndex={0}
+            role="dialog"
+            aria-label="Daily manifest mode"
+          >
+            {/* Scanline */}
+            <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.03) 2px, rgba(255,255,255,0.03) 4px)' }} />
+
+            {/* Close */}
+            <button onClick={() => setManifestMode(false)} className="absolute top-4 right-4 text-zinc-600 hover:text-zinc-300 transition" aria-label="Close manifest mode">
+              <X size={20} />
+            </button>
+
+            {/* Header */}
+            <div className="mb-8 text-center">
+              <span className="font-pixel text-[0.4rem] tracking-widest text-orange-600 animate-pulse">▪ MANIFEST_MODE ▪</span>
+              <p className="font-pixel text-[0.3rem] tracking-widest text-zinc-700 mt-1">Breathe &middot; Visualize &middot; Affirm</p>
+            </div>
+
+            {/* Panel image (if exists) */}
+            {current.imageData && (
+              <div className="mb-6 w-48 h-48 md:w-64 md:h-64 rounded overflow-hidden border border-zinc-800 shadow-2xl shadow-orange-500/5">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={current.imageData} alt={current.goal} className="w-full h-full object-cover" />
+              </div>
+            )}
+
+            {/* Affirmation */}
+            <div className="max-w-lg text-center px-4">
+              <p className="text-zinc-200 text-lg md:text-2xl italic leading-relaxed">&ldquo;{current.affirmation}&rdquo;</p>
+              <p className="mt-3 font-pixel text-[0.4rem] tracking-widest text-zinc-600">
+                {CATEGORY_ICONS[current.category] ?? '🎯'} {current.goal}
+              </p>
+            </div>
+
+            {/* Progress dots */}
+            <div className="mt-8 flex items-center gap-2">
+              {affirmations.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setManifestIndex(idx)}
+                  className={`h-1.5 rounded-full transition-all ${
+                    idx === manifestIndex % affirmations.length ? 'w-4 bg-orange-500' : 'w-1.5 bg-zinc-700 hover:bg-zinc-500'
+                  }`}
+                  aria-label={`Affirmation ${idx + 1}`}
+                />
+              ))}
+            </div>
+
+            {/* Nav hint */}
+            <p className="mt-4 font-pixel text-[0.25rem] tracking-widest text-zinc-700">← → or SPACE to navigate &middot; ESC to close</p>
+          </div>
+        );
+      })()}
     </div>
   );
 }

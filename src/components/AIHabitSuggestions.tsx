@@ -248,7 +248,7 @@ export function AIHabitSuggestions({ className, onAddHabit }: AIHabitSuggestions
                       'flex-shrink-0 p-2 rounded-lg transition-all',
                       isAdded
                         ? 'bg-green-500/20 text-green-400 cursor-not-allowed'
-                        : 'bg-purple-500/20 text-purple-400 hover:bg-purple-500/30'
+                        : 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30'
                     )}
                   >
                     {isAdded ? <Check className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
