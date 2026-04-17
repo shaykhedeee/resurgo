@@ -250,7 +250,7 @@ const ACCESS_TIERS = [
     savings: 'SAVE $29.88/yr',
     specs: [
       'Unlimited goals, habits, and messages',
-      'All 6 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus, Zenon)',
+      'All 5 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus) + Zenon (coming soon)',
       'Advanced analytics & insights',
       'Weekly AI reviews',
       'Priority support',
@@ -468,7 +468,7 @@ function LandingPageV2() {
             description: 'AI-powered Life Operating System for goal planning, habit tracking, fitness, nutrition, mental wellness, and personal growth. Features 6 AI coaches, gamification, ADHD-friendly mode, and 2M+ food database.',
             offers: [
               { '@type': 'Offer', price: '0', priceCurrency: 'USD', name: 'Free Forever', description: '2 AI coaches, habit tracking, goal planning, focus timer, nutrition basics' },
-              { '@type': 'Offer', price: '4.99', priceCurrency: 'USD', name: 'Pro Monthly', description: 'All 6 AI coaches, unlimited history, advanced analytics, priority support' },
+              { '@type': 'Offer', price: '4.99', priceCurrency: 'USD', name: 'Pro Monthly', description: 'All 5 AI coaches, unlimited history, advanced analytics, priority support' },
               { '@type': 'Offer', price: '49.99', priceCurrency: 'USD', name: 'Founding Lifetime', description: 'Everything in Pro, forever. One-time payment. Limited to first 1,000 users.' },
             ],
             aggregateRating: { '@type': 'AggregateRating', ratingValue: '4.9', ratingCount: '847', bestRating: '5' },

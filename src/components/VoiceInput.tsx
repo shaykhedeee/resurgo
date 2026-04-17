@@ -6,6 +6,37 @@
 // Captures speech, shows a live waveform, and returns transcribed text.
 // ═══════════════════════════════════════════════════════════════════════════════
 
+// ── Speech Recognition type declarations (Web Speech API) ──────────────────
+interface SpeechRecognitionAPI extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  maxAlternatives: number;
+  onstart: ((ev: Event) => void) | null;
+  onend: ((ev: Event) => void) | null;
+  onresult: ((ev: SpeechRecognitionEvent) => void) | null;
+  onerror: ((ev: SpeechRecognitionErrorEvent) => void) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+interface SpeechRecognitionEvent extends Event {
+  readonly resultIndex: number;
+  readonly results: SpeechRecognitionResultList;
+}
+interface SpeechRecognitionErrorEvent extends Event {
+  readonly error: string;
+  readonly message: string;
+}
+declare global {
+  interface Window {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    SpeechRecognition: new () => SpeechRecognitionAPI;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    webkitSpeechRecognition: new () => SpeechRecognitionAPI;
+  }
+}
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, MicOff, X, Copy, CheckCircle2, Terminal } from 'lucide-react';
@@ -48,7 +79,7 @@ function WaveformBar({ index, active }: { index: number; active: boolean }) {
 }
 
 // ── Check browser support ────────────────────────────────────────────────────
-function getSpeechRecognition(): typeof SpeechRecognition | null {
+function getSpeechRecognition(): (new () => SpeechRecognitionAPI) | null {
   if (typeof window === 'undefined') return null;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
@@ -66,7 +97,7 @@ export default function VoiceInput({ isOpen, onClose, onTranscript }: VoiceInput
   const [copied, setCopied] = useState(false);
   const [supported, setSupported] = useState(true);
 
-  const recognitionRef = useRef<SpeechRecognition | null>(null);
+  const recognitionRef = useRef<SpeechRecognitionAPI | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Check support on mount

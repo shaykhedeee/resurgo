@@ -82,7 +82,7 @@ export default function VisionBoardPage() {
                 PROGRESS: <span className={avgProgress > 0 ? 'text-orange-500' : 'text-zinc-400'}>{active ? `${avgProgress}%` : '—'}</span>
               </span>
               <span>
-                STATUS: <span className={isPro ? 'text-green-500' : 'text-zinc-500'}>{isPro ? 'PRO_ACTIVE' : 'FREE_TIER'}</span>
+                STATUS: <span className={isPro() ? 'text-green-500' : 'text-zinc-500'}>{isPro() ? 'PRO_ACTIVE' : 'FREE_TIER'}</span>
               </span>
             </div>
           </div>

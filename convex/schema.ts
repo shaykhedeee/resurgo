@@ -146,6 +146,7 @@ export default defineSchema({
       v.literal('NOVA'),
       v.literal('ORACLE'),
       v.literal('NEXUS'),
+      v.literal('ZENON'),
     )),
     // ── Emergency mode (AI-triggered) ──
     emergencyMode: v.optional(v.boolean()),
@@ -1073,6 +1074,7 @@ export default defineSchema({
       v.literal('NOVA'),
       v.literal('ORACLE'),
       v.literal('NEXUS'),
+      v.literal('ZENON'),
     ),
     insights: v.array(v.string()),       // inferred behavioral patterns
     patterns: v.array(v.string()),       // recurring themes from history
@@ -1521,6 +1523,8 @@ export default defineSchema({
       v.literal('domain'),     // Domain-specific (health, wealth, etc.)
       v.literal('gratitude'),  // What you're grateful for + future
       v.literal('custom'),     // Fully custom
+      v.literal('vision'),     // Pure vision board
+      v.literal('manifesting'), // Manifestation board
     )),
     title: v.optional(v.string()),
     description: v.optional(v.string()),

@@ -29,7 +29,7 @@ Return ONLY a JSON object:
     { "title": "...", "description": "...", "action": "...", "priority": 2 },
     { "title": "...", "description": "...", "action": "...", "priority": 3 }
   ],
-  "coachMatch": "NOVA or TITAN or SAGE or PHOENIX — which coach personality matches this user best and why in one sentence",
+  "coachMatch": "MARCUS or TITAN or AURORA or PHOENIX or NEXUS — which coach personality matches this user best and why in one sentence",
   "warningPatterns": ["list of 1-3 specific behavioral patterns to watch for based on their sabotage patterns and stress response"],
   "strengthSignals": ["list of 1-3 existing strengths or advantages they can leverage"]
 }
@@ -82,7 +82,7 @@ Commitment:
         { title: 'Set your primary goal', description: 'One clear target gives AI the context it needs', action: '/goals', priority: 2 },
         { title: 'Meet your AI coach', description: 'Your coach will adapt to your personality and patterns', action: '/coach', priority: 3 },
       ],
-      coachMatch: 'NOVA — your analytical nature pairs well with a systems-thinking coach who focuses on leverage points.',
+      coachMatch: 'NEXUS — your analytical nature pairs well with a systems-thinking coach who focuses on leverage points.',
       warningPatterns: ['Watch for the "restart syndrome" — starting fresh feels good but kills momentum'],
       strengthSignals: ['Self-awareness about your patterns is your biggest advantage'],
     });
