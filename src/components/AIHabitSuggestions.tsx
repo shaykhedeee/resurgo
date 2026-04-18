@@ -119,6 +119,7 @@ export function AIHabitSuggestions({ className, onAddHabit }: AIHabitSuggestions
   };
 
   // Generate on mount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     generateSuggestions();
   }, []);

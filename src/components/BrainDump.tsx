@@ -24,6 +24,9 @@ import {
   ChevronDown,
   ChevronUp,
   X,
+  Network,
+  List,
+  ArrowRight,
 } from 'lucide-react';
 import type { BrainDumpResponse, ParsedTask, TaskPriorityType, TaskCategoryType } from '@/lib/ai/brain-dump/schema';
 
@@ -101,6 +104,7 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
   const [tasksAdded, setTasksAdded] = useState(false);
   const [showAllTasks, setShowAllTasks] = useState(false);
   const [offlineSaved, setOfflineSaved] = useState(false);
+  const [viewMode, setViewMode] = useState<'list' | 'neural_map'>('list');
   const { isOnline, pendingBrainDumpCount, recentBrainDumpDrafts, syncingCount } = useOfflineQueue();
 
   const createTask = useMutation(api.tasks.create);
@@ -216,6 +220,7 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
     setTasksAdded(false);
     setMeta({});
     setOfflineSaved(false);
+    setViewMode('list');
   };
 
   if (!isOpen) return null;
@@ -376,8 +381,140 @@ export default function BrainDump({ isOpen, onClose }: BrainDumpProps) {
                 </div>
               )}
 
-              {/* ── Tasks ── */}
-              {result.tasks.length > 0 && (
+              {/* ── View Toggle ── */}
+              {result.neural_map && result.neural_map.clusters.length > 0 && (
+                <div className="flex items-center gap-1 border border-zinc-800 bg-zinc-900/50 p-1">
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex flex-1 items-center justify-center gap-2 px-3 py-2 font-pixel text-[0.45rem] tracking-widest transition ${
+                      viewMode === 'list'
+                        ? 'bg-zinc-800 text-zinc-200'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
+                  >
+                    <List className="h-3.5 w-3.5" />
+                    TASK_LIST
+                  </button>
+                  <button
+                    onClick={() => setViewMode('neural_map')}
+                    className={`flex flex-1 items-center justify-center gap-2 px-3 py-2 font-pixel text-[0.45rem] tracking-widest transition ${
+                      viewMode === 'neural_map'
+                        ? 'bg-purple-900/40 text-purple-300 border border-purple-800/50'
+                        : 'text-zinc-500 hover:text-purple-300'
+                    }`}
+                  >
+                    <Network className="h-3.5 w-3.5" />
+                    NEURAL_MAP
+                  </button>
+                </div>
+              )}
+
+              {/* ── Neural Map View ── */}
+              {viewMode === 'neural_map' && result.neural_map && result.neural_map.clusters.length > 0 && (
+                <div className="space-y-4">
+                  {/* Root Priority */}
+                  <div className="relative border border-purple-700/60 bg-purple-950/30 p-4 overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-r from-purple-500/5 via-transparent to-purple-500/5 animate-pulse" />
+                    <div className="relative flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center border border-purple-600 bg-purple-900/50">
+                        <Target className="h-4 w-4 text-purple-300" />
+                      </div>
+                      <div>
+                        <span className="font-pixel text-[0.4rem] tracking-widest text-purple-500">ROOT_PRIORITY</span>
+                        <p className="font-terminal text-sm text-purple-200">{result.neural_map.root_priority}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Clusters */}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {result.neural_map.clusters.map((cluster) => (
+                      <div
+                        key={cluster.id}
+                        className="border bg-zinc-950/80 p-3 space-y-2"
+                        style={{ borderColor: `${cluster.color}40` }}
+                      >
+                        <div className="flex items-center gap-2">
+                          <div
+                            className="h-2.5 w-2.5 rounded-full shadow-lg"
+                            style={{
+                              backgroundColor: cluster.color,
+                              boxShadow: `0 0 8px ${cluster.color}60`,
+                            }}
+                          />
+                          <span
+                            className="font-pixel text-[0.45rem] tracking-widest"
+                            style={{ color: cluster.color }}
+                          >
+                            {cluster.label}
+                          </span>
+                        </div>
+                        <div className="space-y-1 pl-4 border-l"
+                          style={{ borderColor: `${cluster.color}30` }}
+                        >
+                          {cluster.tasks.map((taskTitle, tIdx) => {
+                            const taskData = result.tasks.find(t => t.title === taskTitle);
+                            const isConnected = result.neural_map!.connections.some(
+                              c => c.from === taskTitle || c.to === taskTitle
+                            );
+                            return (
+                              <div
+                                key={tIdx}
+                                className={`flex items-center gap-2 px-2 py-1.5 font-terminal text-xs transition ${
+                                  isConnected
+                                    ? 'bg-zinc-900/60 text-zinc-200'
+                                    : 'text-zinc-400'
+                                }`}
+                              >
+                                <span className="text-xs">
+                                  {taskData ? CATEGORY_ICONS[taskData.category] || '📌' : '•'}
+                                </span>
+                                <span className="flex-1 truncate">{taskTitle}</span>
+                                {taskData && (
+                                  <span className={`shrink-0 px-1 py-px font-pixel text-[0.3rem] tracking-widest ${PRIORITY_BADGE[taskData.priority]}`}>
+                                    {taskData.priority}
+                                  </span>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Connections */}
+                  {result.neural_map.connections.length > 0 && (
+                    <div className="space-y-2">
+                      <span className="font-pixel text-[0.4rem] tracking-widest text-zinc-500">CONNECTIONS</span>
+                      <div className="space-y-1">
+                        {result.neural_map.connections.map((conn, cIdx) => (
+                          <div
+                            key={cIdx}
+                            className="flex items-center gap-2 border border-zinc-800/50 bg-zinc-900/30 px-3 py-1.5 font-terminal text-xs"
+                          >
+                            <span className="truncate text-zinc-300 max-w-[35%]">{conn.from}</span>
+                            <span className={`shrink-0 flex items-center gap-1 px-1.5 py-px font-pixel text-[0.35rem] tracking-widest ${
+                              conn.relationship === 'blocks'
+                                ? 'text-red-400 bg-red-950/40'
+                                : conn.relationship === 'enables'
+                                ? 'text-emerald-400 bg-emerald-950/40'
+                                : 'text-zinc-500 bg-zinc-800/40'
+                            }`}>
+                              <ArrowRight className="h-2.5 w-2.5" />
+                              {conn.relationship.toUpperCase()}
+                            </span>
+                            <span className="truncate text-zinc-300 max-w-[35%]">{conn.to}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* ── Tasks (list view) ── */}
+              {viewMode === 'list' && result.tasks.length > 0 && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">

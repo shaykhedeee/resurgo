@@ -98,44 +98,62 @@ export default function PlanBuilderPage() {
     setActivated(false);
     setActivationResult(null);
 
-    const prompt = `BUILD A DETAILED PLAN for this goal: "${goalTitle}"
-${goalContext ? `Additional context: ${goalContext}` : ''}
+    const today = new Date();
+    const dayOfWeek = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][today.getDay()];
+    const dateStr = today.toISOString().split('T')[0];
 
-Create a structured, unique, actionable plan broken into phases. Each phase should have:
-- Specific phase name
-- Clear description
-- Estimated duration in days
-- 3-5 specific sub-tasks (concrete actions, not vague)
+    const coachStrategy: Record<string, string> = {
+      NOVA: 'You think in SYSTEMS and LEVERAGE. Design the plan like an engineer: find the 20% of actions that drive 80% of results. Use automation, batching, and elimination of waste. Every phase should have a clear input→output pipeline. You believe motivation is unreliable — build systems that work even on bad days.',
+      TITAN: 'You think in PROGRESSIVE OVERLOAD and DISCIPLINE. Structure the plan like a training program: start with foundational capacity, increase intensity gradually, schedule deload/recovery periods, and build mental toughness through deliberate challenge. Every phase should push slightly beyond comfort zone.',
+      SAGE: 'You think in COMPOUND GROWTH and STRATEGIC LEVERAGE. Design the plan like an investment portfolio: identify high-ROI actions early, build compounding assets, minimize waste, and create systems that generate returns over time. Every phase should increase the user\'s leverage.',
+      PHOENIX: 'You think in TRANSFORMATION and MOMENTUM. Design the plan for someone who may be starting from zero or rebuilding. Begin with quick wins to build confidence, then gradually raise the bar. Acknowledge the difficulty of change while making each phase feel achievable. Build emotional resilience into the plan.',
+    };
 
-ALSO suggest 2-4 daily/weekly habits that would support achieving this goal.
+    const prompt = `You are building a PERSONALIZED, UNIQUE action plan. Today is ${dayOfWeek}, ${dateStr}.
 
-RESPOND WITH ONLY A VALID JSON OBJECT in this exact format:
+GOAL: "${goalTitle}"
+${goalContext ? `USER CONTEXT: ${goalContext}` : ''}
+
+YOUR STRATEGIC APPROACH:
+${coachStrategy[coachType] || coachStrategy.NOVA}
+
+CRITICAL RULES — READ CAREFULLY:
+1. NEVER use generic phase names like "Foundation & Research", "Planning & Design", "Execution", "Review & Optimize". Be SPECIFIC to this exact goal.
+2. Every sub-task must be so specific someone could do it in one sitting without asking "but how?"
+3. Phase names should reflect the ACTUAL work (e.g., for "Lose 15lbs": "Kitchen Reset & Meal Prep System" not "Foundation")
+4. Include real tools, apps, resources, or techniques specific to this domain
+5. Vary phase durations — not all 7 days. Some might be 3 days, some 14 days
+6. Sub-tasks should include specific quantities, durations, or metrics where possible
+7. The overview should be a compelling 1-2 sentence vision of what achieving this goal looks and feels like
+8. Suggested habits must be ones that DIRECTLY accelerate this specific goal — not generic "journal daily" unless journaling specifically helps this goal
+
+RESPOND WITH ONLY A VALID JSON OBJECT:
 {
   "goal": "${goalTitle}",
-  "overview": "Brief overview sentence",
-  "totalDuration": "X weeks/months",
+  "overview": "Compelling vision statement — what life looks like when this is achieved",
+  "totalDuration": "X weeks",
   "phases": [
     {
-      "title": "Phase 1 name",
-      "description": "What this phase accomplishes",
+      "title": "Specific phase name tied to THIS goal",
+      "description": "What this phase accomplishes and WHY it comes at this point",
       "estimatedDays": 7,
       "phase": "Phase 1",
-      "subTasks": ["Specific task 1", "Specific task 2", "Specific task 3"]
+      "subTasks": ["Very specific task with numbers/tools/details", "Another concrete action", "Third actionable step", "Fourth step if needed"]
     }
   ],
   "suggestedHabits": [
     {
-      "title": "Habit name",
-      "description": "What this habit does",
+      "title": "Habit directly tied to this goal",
+      "description": "Why this habit accelerates THIS specific goal",
       "category": "health|productivity|learning|wellness",
-      "frequency": "daily|weekdays",
+      "frequency": "daily|weekdays|3x_week",
       "timeOfDay": "morning|afternoon|evening|anytime",
       "estimatedMinutes": 15
     }
   ]
 }
 
-Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`;
+Include 4-6 phases and 2-4 habits. Make it IMPOSSIBLE to confuse this plan with any other goal's plan.`;
 
     try {
       const response = await sendWithPersona({
@@ -153,17 +171,17 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
       } else {
         setPlan({
           goal: goalTitle,
-          overview: (response.reply ?? '').slice(0, 200),
-          totalDuration: '6-8 weeks',
+          overview: (response.reply ?? '').slice(0, 200) || `A focused plan to achieve: ${goalTitle}`,
+          totalDuration: '4-8 weeks',
           phases: [
-            { phase: 'Phase 1', title: 'Foundation & Research', description: 'Establish the groundwork and gather necessary information', estimatedDays: 7, subTasks: ['Define success criteria clearly', 'Research existing solutions/competition', 'List all required resources', 'Set up tracking system'] },
-            { phase: 'Phase 2', title: 'Planning & Design', description: 'Create detailed plans and designs before execution', estimatedDays: 7, subTasks: ['Create detailed roadmap', 'Break down into weekly milestones', 'Identify potential blockers', 'Define first action to take'] },
-            { phase: 'Phase 3', title: 'Execution — Sprint 1', description: 'Begin active work on the first major deliverable', estimatedDays: 14, subTasks: ['Execute first high-priority task', 'Daily progress check-in', 'Adjust plan based on learnings', 'Complete milestone 1'] },
-            { phase: 'Phase 4', title: 'Review & Optimize', description: 'Evaluate progress, fix issues, optimize approach', estimatedDays: 7, subTasks: ['Review what is working', 'Eliminate non-essential tasks', 'Focus on 20% that creates 80% of results', 'Set next phase goals'] },
+            { phase: 'Phase 1', title: `${goalTitle} — Quick Assessment & Setup`, description: `Audit your current situation relative to "${goalTitle}" and set up the tools/environment you need`, estimatedDays: 5, subTasks: [`Write down exactly where you stand today regarding "${goalTitle}"`, 'Identify the single biggest obstacle in your way right now', 'Set up a simple tracking method (app, spreadsheet, or notebook)', 'Define what "done" looks like — specific measurable outcome'] },
+            { phase: 'Phase 2', title: `First Real Action Sprint`, description: 'Take the first meaningful actions — build momentum through doing, not planning', estimatedDays: 10, subTasks: [`Complete the single most impactful task for "${goalTitle}"`, 'Do a 2-hour deep work block on the hardest part', 'Get feedback from someone who has done this before', 'Document what worked and what surprised you'] },
+            { phase: 'Phase 3', title: `Build the System`, description: 'Turn your initial actions into a repeatable system you can sustain', estimatedDays: 14, subTasks: ['Create a daily/weekly routine around this goal', 'Automate or batch repetitive parts of the process', 'Set up accountability — tell someone or schedule check-ins', 'Handle the #1 excuse you keep using to avoid progress'] },
+            { phase: 'Phase 4', title: `Push Through the Plateau`, description: 'Expect resistance here — this is where most people quit. Push through.', estimatedDays: 10, subTasks: ['Review your progress honestly — what is actually moving the needle?', 'Cut anything that feels productive but is not creating real results', 'Increase intensity or difficulty by 10-20%', 'Celebrate one specific win from this journey so far'] },
           ],
           suggestedHabits: [
-            { title: 'Daily progress reflection', description: 'Spend 5 minutes reviewing what you accomplished today', category: 'productivity', frequency: 'daily', timeOfDay: 'evening', estimatedMinutes: 5 },
-            { title: 'Morning intention setting', description: 'Define your top 3 priorities before starting work', category: 'productivity', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 5 },
+            { title: `5-min ${goalTitle.split(' ').slice(0, 3).join(' ')} check-in`, description: `Review today\'s progress on ${goalTitle} and plan tomorrow\'s single most important action`, category: 'productivity', frequency: 'daily', timeOfDay: 'evening', estimatedMinutes: 5 },
+            { title: 'Morning #1 priority lock-in', description: 'Before checking phone/email, write down THE one thing that moves this goal forward today', category: 'productivity', frequency: 'daily', timeOfDay: 'morning', estimatedMinutes: 3 },
           ],
         });
         setSelectedHabits(new Set([0, 1]));
@@ -246,19 +264,34 @@ Make it realistic, specific to THIS goal (not generic), and include 4-6 phases.`
     if (!weekGoal.trim() || weekBuilding) return;
     setWeekBuilding(true);
     setWeekPlan(null);
-    const prompt = `You are a Week Planner bot. Create a focused 7-day execution plan for: "${weekGoal}"
+    const todayName = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date().getDay()];
+    const prompt = `You are an elite Week Execution Planner. Today is ${todayName}.
+
+GOAL FOR THIS WEEK: "${weekGoal}"
+
+DESIGN RULES:
+1. Start the 7-day plan from TOMORROW (the day after ${todayName}). Label days correctly.
+2. Front-load the hardest/most important tasks on days 1-3 when willpower is highest.
+3. Day 4 should be lighter — a "strategic recovery" day with easier admin/reflection tasks.
+4. Days 5-6 are execution sprints for remaining high-priority work.
+5. Day 7 is review + prep for the next week.
+6. Each task must be completable in ONE sitting — no multi-day tasks.
+7. Include specific time blocks ("90 min deep work 8-9:30am", not just "morning").
+8. At least one task per day should be something the user can START within 2 minutes (tiny action to build momentum).
+9. Mix high-energy tasks with low-energy ones within each day.
+10. NEVER say "research" or "brainstorm" without specifying WHAT and for HOW LONG.
 
 RESPOND WITH ONLY A VALID JSON ARRAY of 7 day objects:
 [
   {
-    "day": "Monday",
-    "focus": "One-sentence focus for the day",
-    "tasks": ["Task 1", "Task 2", "Task 3"],
-    "timeBlock": "e.g. 2 hours morning"
+    "day": "Day name",
+    "focus": "One compelling sentence — the theme and WHY this day matters",
+    "tasks": ["Specific task with duration/detail", "Another concrete task", "Third task"],
+    "timeBlock": "e.g. 90 min deep work 8-9:30am + 45 min admin 2pm"
   }
 ]
 
-Make tasks specific and achievable in one day. No generic advice.`;
+Make this plan feel like a personal trainer wrote it — structured, progressive, no fluff.`;
     try {
       const response = await sendWithPersona({ content: prompt, coachId: coachType });
       const jsonMatch = response.reply?.match(/\[[\s\S]*\]/);
@@ -275,22 +308,34 @@ Make tasks specific and achievable in one day. No generic advice.`;
     if (!habitGoalInput.trim() || habitBuilding) return;
     setHabitBuilding(true);
     setHabitStack(null);
-    const prompt = `You are a Habit Designer bot. Design a supporting habit stack for this goal: "${habitGoalInput}"
+    const prompt = `You are a Habit Architect using proven frameworks from BJ Fogg (Tiny Habits), James Clear (Atomic Habits), and behavioral psychology.
+
+GOAL THE HABITS MUST SUPPORT: "${habitGoalInput}"
+
+DESIGN RULES:
+1. Use the CUE → ROUTINE → REWARD chain for every habit. The cue must be an EXISTING behavior ("After I pour my morning coffee" not "At 7am").
+2. Start TINY — the initial version should take 2 minutes or less. Include a "scaled up" version for week 3+.
+3. Stack habits in a SEQUENCE — habit 2 should be cued by completing habit 1. Create a domino chain.
+4. Include at least one "identity habit" — something that makes the user FEEL like the person who achieves this goal.
+5. One habit should be a "keystone habit" — one that naturally triggers other positive behaviors.
+6. Include the specific FAILURE MODE for each habit (what usually kills it) and a prevention strategy.
+7. The reward must be IMMEDIATE (not "you'll feel better in 6 months").
+8. Mix effort levels: 1-2 effortless habits, 2-3 moderate, 1 challenging.
 
 RESPOND WITH ONLY A VALID JSON ARRAY of 4-6 habit objects:
 [
   {
-    "title": "Habit name",
-    "why": "Why this habit supports the goal",
-    "when": "Best time to do it",
-    "duration": "e.g. 10 minutes",
-    "cue": "Trigger/cue for this habit",
-    "reward": "Built-in reward or celebration",
-    "science": "Brief science backing (1 sentence)"
+    "title": "Specific habit name (verb + object)",
+    "why": "Direct causal link to the goal — HOW this habit moves the needle",
+    "when": "After [existing behavior] — specific anchor moment",
+    "duration": "Start: 2 min → Week 3+: 15 min",
+    "cue": "Existing behavior or environmental trigger",
+    "reward": "Immediate satisfying reward (not delayed gratification)",
+    "science": "One-sentence research backing with specific mechanism"
   }
 ]
 
-Make habits specific, sustainable, and directly tied to the goal.`;
+Make each habit feel like it was designed specifically for someone pursuing "${habitGoalInput}" — not generic self-improvement.`;
     try {
       const response = await sendWithPersona({ content: prompt, coachId: coachType });
       const jsonMatch = response.reply?.match(/\[[\s\S]*\]/);
@@ -307,22 +352,34 @@ Make habits specific, sustainable, and directly tied to the goal.`;
     if (!reviewWins.trim() || reviewBuilding) return;
     setReviewBuilding(true);
     setReviewResult(null);
-    const prompt = `You are a Weekly Review bot. Analyze this week's reflection and generate insights.
+    const weekNum = Math.ceil((new Date().getTime() - new Date(new Date().getFullYear(), 0, 1).getTime()) / 604800000);
+    const prompt = `You are a Performance Analyst running a deep-dive weekly review. Week ${weekNum} of ${new Date().getFullYear()}.
 
-WINS THIS WEEK: ${reviewWins}
-BLOCKERS / CHALLENGES: ${reviewBlocks || 'None noted'}
+WINS THIS WEEK:
+${reviewWins}
+
+BLOCKERS / CHALLENGES:
+${reviewBlocks || 'None reported — which itself is worth examining. Were there really no obstacles, or is the user not reflecting deeply enough?'}
+
+ANALYSIS FRAMEWORK:
+1. WINS: Don't just list them back — identify the BEHAVIOR or SYSTEM that created each win. What can be repeated or scaled?
+2. BLOCKERS: Diagnose each one. Is it a skill gap, energy issue, environment problem, or priority conflict? Different root causes need different solutions.
+3. PATTERN DETECTION: Look for recurring themes. If someone keeps winning at execution but struggling with planning, that's a pattern worth naming.
+4. MOMENTUM SCORE: Rate 1-10 honestly. 7 is "good week". 5 is "survived". 9+ requires exceptional evidence. Don't inflate.
+5. NEXT WEEK: Give exactly 3 priorities. The first should be the highest-leverage action. The third should be a "protect" priority (something to NOT let slip).
+6. INSIGHTS: Go beyond obvious. Find the non-obvious connection between wins and blockers. What would a world-class coach notice that the user might miss?
 
 RESPOND WITH ONLY A VALID JSON OBJECT:
 {
-  "summary": "One-sentence week summary",
-  "wins": ["Key win 1", "Key win 2", "Key win 3"],
-  "blockers": ["Blocker insight 1", "Blocker insight 2"],
-  "insights": ["Strategic insight 1", "Strategic insight 2", "Strategic insight 3"],
-  "nextWeekFocus": ["Priority 1 for next week", "Priority 2", "Priority 3"],
+  "summary": "One brutally honest sentence capturing this week's essence",
+  "wins": ["Win + the system/behavior that caused it", "Win 2 + why it matters", "Win 3 + what to repeat"],
+  "blockers": ["Blocker + root cause diagnosis + specific fix", "Blocker 2 + diagnosis + fix"],
+  "insights": ["Non-obvious pattern or connection", "Strategic insight about trajectory", "What a coach would say that the user doesn't want to hear"],
+  "nextWeekFocus": ["#1 highest-leverage priority", "#2 execution priority", "#3 protect/don't-let-slip priority"],
   "score": 7
 }
 
-Score should be 1-10 based on the wins vs blockers balance. Be direct and actionable.`;
+Be direct. Be specific. No motivational fluff — just signal.`;
     try {
       const response = await sendWithPersona({ content: prompt, coachId: coachType });
       const jsonMatch = response.reply?.match(/\{[\s\S]*\}/);

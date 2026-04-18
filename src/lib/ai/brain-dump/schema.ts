@@ -47,6 +47,21 @@ export const BrainDumpResponseSchema = z.object({
   total_estimated_hours: z.number().nullable(),
   overcommitment_warning: z.boolean(),
   overcommitment_message: z.string().max(300).nullable(),
+  // Neural map: task connections and clusters for flowchart visualization
+  neural_map: z.object({
+    clusters: z.array(z.object({
+      id: z.string(),
+      label: z.string(),
+      tasks: z.array(z.string()),
+      color: z.string(),
+    })),
+    connections: z.array(z.object({
+      from: z.string(),
+      to: z.string(),
+      relationship: z.enum(['blocks', 'enables', 'relates_to', 'same_cluster']),
+    })),
+    root_priority: z.string().max(200),
+  }).optional(),
 });
 
 export type ParsedTask = z.infer<typeof ParsedTaskSchema>;

@@ -5,7 +5,7 @@
 // Shows contextual AI suggestion based on current user state
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { useQuery } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { Brain, RefreshCw, ArrowRight, Sparkles } from 'lucide-react';
@@ -43,7 +43,7 @@ export default function AICoachWidget() {
     const hour = new Date().getHours();
     const morningDone = !!todayCheckIn?.morningCompletedAt;
     const taskCount = tasks?.length ?? 0;
-    const activeStreaks = (habits ?? []).filter((h: any) => h.streakCurrent > 0).length;
+    const activeStreaks = (habits ?? []).filter(h => h.streakCurrent > 0).length;
     const totalHabits = habits?.length ?? 0;
     const level = gamification?.level ?? 1;
 

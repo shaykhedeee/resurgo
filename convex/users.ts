@@ -12,6 +12,7 @@ import { Id } from './_generated/dataModel';
 const LIFETIME_PREMIUM_EMAILS = [
   'zebbroka@gmail.com',
   'mridulajidagam@gmail.com',
+  'methebeast666@gmail.com',
 ] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1529,6 +1530,44 @@ export const grantLifetimePremium = internalMutation({
     return {
       success: true,
       message: `${email}: ${upgraded} of ${users.length} record(s) upgraded to lifetime`,
+    };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// GRANT PREMIUM + RESET ONBOARDING — So user can re-experience onboarding flow
+// ─────────────────────────────────────────────────────────────────────────────
+export const grantPremiumAndReset = internalMutation({
+  args: { email: v.string() },
+  returns: v.object({
+    success: v.boolean(),
+    message: v.string(),
+  }),
+  handler: async (ctx, { email }) => {
+    const users = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q) => q.eq('email', email))
+      .collect();
+
+    if (users.length === 0) {
+      return { success: false, message: `User not found: ${email}` };
+    }
+
+    for (const user of users) {
+      await ctx.db.patch(user._id, {
+        plan: 'lifetime',
+        billingPeriod: 'lifetime',
+        planVersion: (user.planVersion ?? 0) + 1,
+        planUpdatedAt: Date.now(),
+        onboardingComplete: false,
+        updatedAt: Date.now(),
+      });
+      console.log(`[grantPremiumAndReset] ${email}: plan→lifetime, onboarding→reset (${user._id})`);
+    }
+
+    return {
+      success: true,
+      message: `${email}: ${users.length} record(s) → lifetime + onboarding reset`,
     };
   },
 });
