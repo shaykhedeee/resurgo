@@ -717,7 +717,9 @@ export const getLeaderboard = query({
       imageUrl: v.optional(v.string()),
       level: v.number(),
       levelName: v.string(),
+      tier: v.string(),
       totalXP: v.number(),
+      currentStreak: v.number(),
       isCurrentUser: v.boolean(),
     })),
     myRank: v.optional(v.number()),
@@ -728,15 +730,23 @@ export const getLeaderboard = query({
     const currentUser = identity
       ? await ctx.db
           .query('users')
-          .withIndex('by_clerkId', (q: any) => q.eq('clerkId', identity.subject))
+          .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
           .unique()
       : null;
 
     // Collect all gamification records (max 1000 at this scale)
     const allRecords = await ctx.db.query('gamification').collect();
 
-    // Sort by totalXP descending
-    allRecords.sort((a, b) => (b.totalXP ?? 0) - (a.totalXP ?? 0));
+    // Sort by totalXP descending, then streak, then recency
+    allRecords.sort((a, b) => {
+      const xpDelta = (b.totalXP ?? 0) - (a.totalXP ?? 0);
+      if (xpDelta !== 0) return xpDelta;
+
+      const streakDelta = (b.currentStreak ?? 0) - (a.currentStreak ?? 0);
+      if (streakDelta !== 0) return streakDelta;
+
+      return (b.updatedAt ?? 0) - (a.updatedAt ?? 0);
+    });
 
     // Load user details for top 20
     const top20 = allRecords.slice(0, 20);
@@ -752,7 +762,9 @@ export const getLeaderboard = query({
           imageUrl: user?.imageUrl,
           level: rec.level ?? 1,
           levelName: levelInfo.name,
+          tier: rec.tier ?? levelInfo.tier,
           totalXP: rec.totalXP ?? 0,
+          currentStreak: rec.currentStreak ?? 0,
           isCurrentUser: currentUser ? rec.userId === currentUser._id : false,
         };
       })

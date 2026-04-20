@@ -13,6 +13,8 @@ const LIFETIME_PREMIUM_EMAILS = [
   'zebbroka@gmail.com',
   'mridulajidagam@gmail.com',
   'methebeast666@gmail.com',
+  'fact.monk8@gmail.com',
+  'surajprakash24895@gmail.com',
 ] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1568,6 +1570,103 @@ export const grantPremiumAndReset = internalMutation({
     return {
       success: true,
       message: `${email}: ${users.length} record(s) → lifetime + onboarding reset`,
+    };
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN ACCOUNT RECONCILIATION (TARGETED)
+// - Upgrades selected emails to lifetime
+// - Deletes ONLY free-plan users with selected names
+// - Preserves explicitly protected emails and all lifetime/pro users
+// ─────────────────────────────────────────────────────────────────────────────
+export const adminReconcileAccounts = internalMutation({
+  args: {
+    lifetimeEmails: v.array(v.string()),
+    deleteNameVariants: v.array(v.string()),
+    preserveEmails: v.array(v.string()),
+    dryRun: v.optional(v.boolean()),
+  },
+  returns: v.object({
+    upgradedCount: v.number(),
+    deletedCount: v.number(),
+    skippedProtectedCount: v.number(),
+    upgradedEmails: v.array(v.string()),
+    deletedEmails: v.array(v.string()),
+  }),
+  handler: async (ctx, { lifetimeEmails, deleteNameVariants, preserveEmails, dryRun }) => {
+    const normalize = (value: string) => value.trim().toLowerCase();
+
+    const lifetimeSet = new Set<string>([
+      ...LIFETIME_PREMIUM_EMAILS.map(normalize),
+      ...lifetimeEmails.map(normalize),
+    ]);
+    const preserveSet = new Set<string>([
+      ...preserveEmails.map(normalize),
+      ...lifetimeSet,
+    ]);
+    const deleteNameSet = new Set<string>(deleteNameVariants.map(normalize));
+
+    const users = await ctx.db.query('users').collect();
+
+    let upgradedCount = 0;
+    let deletedCount = 0;
+    let skippedProtectedCount = 0;
+    const upgradedEmails: Array<string> = [];
+    const deletedEmails: Array<string> = [];
+
+    // 1) Upgrade requested emails to lifetime
+    for (const user of users) {
+      const userEmail = normalize(user.email);
+      if (!lifetimeSet.has(userEmail)) continue;
+
+      if (user.plan !== 'lifetime') {
+        if (!dryRun) {
+          await ctx.db.patch(user._id, {
+            plan: 'lifetime',
+            billingPeriod: 'lifetime',
+            planVersion: (user.planVersion ?? 0) + 1,
+            planUpdatedAt: Date.now(),
+            updatedAt: Date.now(),
+          });
+        }
+        upgradedCount++;
+        upgradedEmails.push(user.email);
+      }
+    }
+
+    // 2) Delete only free users named in deleteNameVariants, excluding preserved emails
+    for (const user of users) {
+      const normalizedName = normalize(user.name);
+      const userEmail = normalize(user.email);
+
+      if (!deleteNameSet.has(normalizedName)) continue;
+
+      const isProtected = preserveSet.has(userEmail) || user.plan !== 'free';
+      if (isProtected) {
+        skippedProtectedCount++;
+        continue;
+      }
+
+      if (!dryRun) {
+        const gamification = await ctx.db
+          .query('gamification')
+          .withIndex('by_userId', (q) => q.eq('userId', user._id))
+          .unique();
+        if (gamification) await ctx.db.delete(gamification._id);
+        await ctx.db.delete(user._id);
+      }
+
+      deletedCount++;
+      deletedEmails.push(user.email);
+    }
+
+    return {
+      upgradedCount,
+      deletedCount,
+      skippedProtectedCount,
+      upgradedEmails,
+      deletedEmails,
     };
   },
 });

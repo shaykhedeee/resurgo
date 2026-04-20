@@ -44,7 +44,7 @@ export default function XPLeaderboardWidget() {
       <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2.5 shrink-0">
         <Trophy className="h-3.5 w-3.5 text-yellow-500" />
         <span className="font-pixel text-[0.6rem] tracking-widest text-yellow-500">LEADERBOARD</span>
-        <span className="ml-auto font-terminal text-[0.65rem] text-zinc-500">TOP 20 · ALL TIME</span>
+        <span className="ml-auto font-terminal text-[0.65rem] tracking-widest text-zinc-500">TOP 20 · ALL TIME</span>
       </div>
 
       {entries.length === 0 ? (
@@ -104,8 +104,8 @@ export default function XPLeaderboardWidget() {
                       {entry.name}
                       {isMe && <span className="ml-1 text-orange-500 text-[0.55rem]">(you)</span>}
                     </p>
-                    <p className="font-pixel text-[0.4rem] tracking-widest text-zinc-600 uppercase">
-                      Lv {entry.level} · {entry.levelName}
+                    <p className="font-terminal text-[0.62rem] tracking-wide text-zinc-500 uppercase">
+                      Lv {entry.level} · {entry.levelName} · {entry.tier}
                     </p>
                   </div>
 
@@ -114,7 +114,7 @@ export default function XPLeaderboardWidget() {
                     <p className={`font-terminal text-xs font-bold ${isMe ? 'text-orange-400' : 'text-zinc-400'}`}>
                       {entry.totalXP.toLocaleString()}
                     </p>
-                    <p className="font-pixel text-[0.35rem] tracking-widest text-zinc-700">XP</p>
+                    <p className="font-terminal text-[0.62rem] tracking-wide text-zinc-600">XP · 🔥 {entry.currentStreak}</p>
                   </div>
                 </li>
               );
