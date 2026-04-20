@@ -18,6 +18,7 @@ import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
 import { UpsellPrompt } from '@/components/UpsellPrompt';
 import { analytics } from '@/lib/analytics';
+import { BirthdayEntry, getBirthdaysFromStorage, getNextBirthdayDate, isBirthdayToday } from '@/lib/birthdays';
 
 // Dynamic imports for heavy / conditional components
 const MorningCheckIn = dynamic(() => import('@/components/MorningCheckIn').then(m => ({ default: m.MorningCheckIn })), { ssr: false });
@@ -49,6 +50,7 @@ import {
   Star,
   Settings,
   LayoutGrid,
+  Gift,
 } from 'lucide-react';
 
 type HabitView = {
@@ -148,11 +150,12 @@ export default function DashboardPage() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [greetingDismissed, setGreetingDismissed] = useState(false);
   const [streakUpsellDismissed, setStreakUpsellDismissed] = useState(false);
+  const [birthdays, setBirthdays] = useState<BirthdayEntry[]>([]);
 
   // ── Dashboard customisation state ──
   const [editMode, setEditMode] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
-  const [armoryOpen, setArmoryOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'today' | 'progress' | 'systems'>('today');
   const [emergencyMode, setEmergencyMode] = useState(false);
   const savedLayout = useQuery(api.users.getDashboardLayout);
   const saveLayoutMutation = useMutation(api.users.saveDashboardLayout);
@@ -175,6 +178,26 @@ export default function DashboardPage() {
   }, [layout, savedLayout, disclosure.tier, disclosure.defaultVisibleWidgets]);
 
   const [hintDismissed, setHintDismissed] = useState(false);
+
+  useEffect(() => {
+    const syncBirthdays = () => {
+      setBirthdays(getBirthdaysFromStorage());
+    };
+
+    syncBirthdays();
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.addEventListener('focus', syncBirthdays);
+    window.addEventListener('storage', syncBirthdays);
+
+    return () => {
+      window.removeEventListener('focus', syncBirthdays);
+      window.removeEventListener('storage', syncBirthdays);
+    };
+  }, []);
 
   const handleReorder = useCallback(
     (newLayout: LayoutEntry[]) => {
@@ -278,6 +301,8 @@ export default function DashboardPage() {
   if (!user) return null;
 
   const today = new Date();
+  const todayStart = new Date(today);
+  todayStart.setHours(0, 0, 0, 0);
 
   const totalHabits = habits?.length ?? 0;
   const activeHabits: HabitView[] = (habits ?? []) as HabitView[];
@@ -291,6 +316,24 @@ export default function DashboardPage() {
   // Best streak from habits
   const bestStreak = activeHabits.reduce((max, h) => Math.max(max, h.streakCurrent ?? 0), 0);
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
+  const birthdayMoments = birthdays
+    .map((entry) => {
+      const nextDate = getNextBirthdayDate(entry.date);
+      const nextDateStart = new Date(nextDate);
+      nextDateStart.setHours(0, 0, 0, 0);
+      const daysUntil = Math.round((nextDateStart.getTime() - todayStart.getTime()) / (1000 * 60 * 60 * 24));
+
+      return {
+        ...entry,
+        nextDate,
+        daysUntil,
+        isToday: isBirthdayToday(entry.date),
+      };
+    })
+    .sort((a, b) => a.nextDate.getTime() - b.nextDate.getTime());
+  const todaysBirthdays = birthdayMoments.filter((entry) => entry.isToday);
+  const upcomingBirthdayHighlights = birthdayMoments.filter((entry) => entry.daysUntil > 0 && entry.daysUntil <= 14).slice(0, 3);
+  const upcomingBirthdays = birthdayMoments.filter((entry) => entry.daysUntil >= 0 && entry.daysUntil <= 30).slice(0, 5);
 
   // Emotional state derived from today's check-in (mirrors convex/coachAI.ts deriveEmotionalState)
   const _mood = todayCheckIn?.morningMood;
@@ -404,7 +447,7 @@ export default function DashboardPage() {
         </SafeWidget>
       </div>
 
-      {/* ── Desktop: original full dashboard ── */}
+      {/* ── Desktop: tabbed dashboard ── */}
       <div className="hidden md:block">
       <div className="mx-auto min-h-screen w-full max-w-7xl px-4 py-4 md:px-6 md:py-6">
 
@@ -424,6 +467,37 @@ export default function DashboardPage() {
           >
             ✕
           </button>
+        </div>
+      )}
+
+      {(todaysBirthdays.length > 0 || upcomingBirthdayHighlights.length > 0) && (
+        <div className="mb-4 border border-pink-900/60 bg-pink-950/20 px-4 py-3">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-3">
+              <Gift className="mt-0.5 h-4 w-4 shrink-0 text-pink-400" />
+              <div>
+                <p className="font-pixel text-[0.55rem] tracking-widest text-pink-300">RELATIONSHIP_SIGNAL — BIRTHDAYS</p>
+                {todaysBirthdays.length > 0 ? (
+                  <p className="mt-1 font-terminal text-sm text-pink-100">
+                    🎉 Happy birthday to {todaysBirthdays.map((entry) => entry.name).join(', ')}. Resurgo already queued your gift and message prompts.
+                  </p>
+                ) : (
+                  <p className="mt-1 font-terminal text-sm text-zinc-300">
+                    Upcoming birthday cadence is live — keep the relationship flywheel turning before dates sneak up on you.
+                  </p>
+                )}
+              </div>
+            </div>
+            {upcomingBirthdayHighlights.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {upcomingBirthdayHighlights.map((entry) => (
+                  <span key={`${entry.name}-${entry.date}`} className="border border-pink-800/80 bg-pink-950/40 px-3 py-1.5 font-terminal text-xs text-pink-200">
+                    {entry.name} · {entry.daysUntil === 1 ? 'tomorrow' : `in ${entry.daysUntil} days`}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       )}
 
@@ -483,6 +557,743 @@ export default function DashboardPage() {
                   <PixelIcon name="tasks" size={14} className="text-orange-400" />
                   <p className="surface-kicker">Next task</p>
                 </div>
+                <p className="mt-1 font-terminal text-lg font-semibold text-zinc-100">{nextTask?.title ?? 'Capture one meaningful task'}</p>
+                <p className="mt-1 font-terminal text-sm text-zinc-400">
+                  {nextTask ? `Priority: ${nextTask.priority}${nextTask.dueDate ? ` • due ${nextTask.dueDate}` : ''}` : 'Keep the queue small and obvious.'}
+                </p>
+              </div>
+              <div className="border border-zinc-900 bg-black/40 p-3">
+                <div className="mb-2 flex items-center gap-2">
+                  <PixelIcon name="habits" size={14} className="text-emerald-400" />
+                  <p className="surface-kicker">Stability habit</p>
+                </div>
+                <p className="mt-1 font-terminal text-lg font-semibold text-zinc-100">{nextHabit?.title ?? 'Choose one repeatable habit'}</p>
+                <p className="mt-1 font-terminal text-sm text-zinc-400">
+                  {nextHabit ? `${nextHabit.streakCurrent} day streak in ${nextHabit.category}.` : 'Consistency beats intensity here.'}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {upcomingBirthdays.length > 0 && (
+        <div className="surface-panel mb-6 overflow-hidden">
+          <div className="surface-header">
+            <Gift className="h-3.5 w-3.5 text-pink-400" />
+            <span className="surface-kicker-accent">Birthday radar</span>
+            <span className="ml-auto font-terminal text-xs tracking-widest text-zinc-500">NEXT 30 DAYS</span>
+          </div>
+          <div className="grid gap-px bg-zinc-900 p-px md:grid-cols-2 xl:grid-cols-3">
+            {upcomingBirthdays.map((entry) => (
+              <div key={`${entry.name}-${entry.date}`} className="bg-black/70 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-terminal text-base font-semibold text-zinc-100">{entry.name}</p>
+                    <p className="mt-1 font-terminal text-xs text-zinc-500">{entry.relation || 'Important person'}</p>
+                  </div>
+                  <span className="border border-pink-800/80 bg-pink-950/30 px-2 py-1 font-pixel text-[0.45rem] tracking-widest text-pink-300">
+                    {entry.daysUntil === 0 ? 'TODAY' : entry.daysUntil === 1 ? 'TOMORROW' : `${entry.daysUntil}_DAYS`}
+                  </span>
+                </div>
+                <p className="mt-3 font-terminal text-sm text-pink-200">
+                  {entry.nextDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                </p>
+                <p className="mt-1 font-terminal text-xs text-zinc-400">
+                  Gift reminder lands 7 days early. Message reminder lands 1 day early.
+                </p>
+                {entry.notes && (
+                  <p className="mt-3 border-l border-pink-900/60 pl-3 font-terminal text-xs text-zinc-300">
+                    {entry.notes}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── TAB NAVIGATION ── */}
+      <div className="mb-6 flex border-b border-zinc-900">
+        {([
+          { id: 'today', label: 'TODAY', sub: 'Command center' },
+          { id: 'progress', label: 'PROGRESS', sub: 'Stats & data' },
+          { id: 'systems', label: 'SYSTEMS', sub: 'Widgets & env' },
+        ] as const).map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`flex flex-col gap-0.5 px-5 py-3 transition-colors ${
+              activeTab === tab.id
+                ? 'border-b-2 border-orange-500 text-orange-400'
+                : 'border-b-2 border-transparent text-zinc-500 hover:text-zinc-300'
+            }`}
+          >
+            <span className={`font-pixel text-[0.55rem] tracking-widest ${activeTab === tab.id ? 'text-orange-400' : 'text-zinc-400'}`}>{tab.label}</span>
+            <span className="font-terminal text-[0.65rem] text-zinc-600">{tab.sub}</span>
+          </button>
+        ))}
+      </div>
+
+      {/* ═══════════════════════════════════════════════════════════
+          TAB: TODAY — Daily command center
+          ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'today' && (
+        <>
+          {/* -- EMERGENCY MODE BANNER -- */}
+          {emergencyMode && (
+            <div className="mb-6 border border-red-900 bg-red-950/30 p-4">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <p className="font-pixel text-[0.55rem] tracking-widest text-red-400 mb-1">EMERGENCY MODE — SIMPLIFIED VIEW</p>
+                  <p className="font-terminal text-sm text-zinc-300">
+                    You only need to do <strong className="text-red-300">one thing</strong> right now.
+                    Everything else can wait. Take a breath.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setEmergencyMode(false)}
+                  className="shrink-0 border border-zinc-700 px-3 py-1.5 font-pixel text-[0.5rem] tracking-widest text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
+                >
+                  SNAP OUT
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* -- QUICK ADD STRIP -- */}
+          <div className="mb-6 flex flex-wrap items-center gap-2">
+            <button
+              onClick={() => setPaletteOpen(true)}
+              className="flex items-center gap-2 border border-orange-700 bg-orange-600 px-4 py-2 font-terminal text-xs font-bold text-black transition hover:bg-orange-500"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Quick Add
+              <kbd className="ml-1 hidden border border-orange-800 bg-orange-700/80 px-1 py-0.5 font-terminal text-[0.6rem] text-orange-200 md:inline">⌘K</kbd>
+            </button>
+            {!quickAddOpen && (
+              <button
+                onClick={() => setEmergencyMode((v) => !v)}
+                className={`flex items-center gap-1.5 border px-3 py-2 font-pixel text-[0.5rem] tracking-widest transition ${
+                  emergencyMode
+                    ? 'border-red-800 bg-red-950/40 text-red-400 hover:border-red-600'
+                    : 'border-zinc-900 bg-zinc-950 text-zinc-500 hover:border-red-900 hover:text-red-500'
+                }`}
+              >
+                {emergencyMode ? 'EXIT SIMPLIFY' : 'SIMPLIFY TODAY'}
+              </button>
+            )}
+            {quickAddOpen ? (
+              <form onSubmit={handleQuickAddTask} className="flex flex-1 items-center gap-2">
+                <input
+                  autoFocus
+                  type="text"
+                  value={quickAddTitle}
+                  onChange={(e) => setQuickAddTitle(e.target.value)}
+                  placeholder="Task title..."
+                  className="flex-1 border border-orange-800 bg-black px-3 py-2 font-terminal text-sm text-zinc-100 placeholder-zinc-600 outline-none focus:border-orange-600"
+                />
+                <button
+                  type="submit"
+                  disabled={quickAddSaving || !quickAddTitle.trim()}
+                  className="border border-orange-700 bg-orange-950/60 px-4 py-2 font-terminal text-xs text-orange-400 transition hover:bg-orange-950 disabled:opacity-50"
+                >
+                  {quickAddSaving ? '...' : 'ADD'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => { setQuickAddOpen(false); setQuickAddTitle(''); }}
+                  className="border border-zinc-700 px-3 py-2 font-terminal text-xs text-zinc-400 transition hover:text-zinc-200"
+                >
+                  ✕
+                </button>
+              </form>
+            ) : (
+              <button
+                onClick={() => setQuickAddOpen(true)}
+                className="flex items-center gap-1.5 border border-orange-900 bg-orange-950/30 px-3 py-2 font-terminal text-xs text-orange-400 transition hover:border-orange-700 hover:bg-orange-950/60"
+              >
+                <Plus className="h-3 w-3" /> Task
+              </button>
+            )}
+          </div>
+
+          {/* Quick Add Command Palette */}
+          <SafeWidget name="Quick Add Palette">
+            <QuickAddPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+          </SafeWidget>
+
+          {/* -- #1 PRIORITY FOCUS BANNER -- */}
+          {openTasks.length > 0 && (
+            <div className="mb-6 border-2 border-orange-800 bg-orange-950/20 p-4">
+              <div className="flex items-center justify-between gap-4">
+                <div className="min-w-0 flex-1">
+                  <p className="font-pixel text-[0.5rem] tracking-widest text-orange-500 mb-1">YOUR_FOCUS — #1 PRIORITY</p>
+                  <p className="font-terminal text-lg font-bold text-zinc-100 truncate">{openTasks[0].title}</p>
+                  {openTasks[0].dueDate && (
+                    <p className="mt-1 font-terminal text-xs text-zinc-500">Due {openTasks[0].dueDate}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleToggleTask(openTasks[0]._id)}
+                  disabled={togglingTask === openTasks[0]._id}
+                  className="shrink-0 flex items-center gap-2 border-2 border-orange-600 bg-orange-600 px-5 py-2.5 font-pixel text-[0.55rem] tracking-widest text-black transition hover:bg-orange-500 disabled:opacity-50"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  COMPLETE
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* -- DAILY CHECK-IN PROMPTS -- */}
+          {isMorning && !morningDone && !showMorningCheckIn && (
+            <button
+              onClick={() => setShowMorningCheckIn(true)}
+              className="mb-6 flex w-full items-center gap-3 border border-amber-900/60 bg-amber-950/20 px-5 py-4 text-left transition hover:border-amber-700 hover:bg-amber-950/30"
+            >
+              <Sun className="h-5 w-5 text-amber-500 shrink-0" />
+              <div className="flex-1">
+                <p className="font-terminal text-sm font-bold text-amber-400">Start your morning check-in</p>
+                <p className="font-terminal text-xs text-zinc-500">Log mood, energy, and get your AI-powered morning briefing</p>
+              </div>
+              <span className="font-pixel text-[0.35rem] tracking-widest text-amber-500">START &gt;</span>
+            </button>
+          )}
+
+          {showMorningCheckIn && !morningDone && (
+            <div className="mb-6">
+              <SafeWidget name="Morning Check-In">
+                <MorningCheckIn
+                  userName={user.name?.split(' ')[0]}
+                  todayHabits={activeHabits.slice(0, 5).map(h => h.title)}
+                  topTasks={openTasks.slice(0, 3).map(t => t.title)}
+                  onComplete={() => {
+                    setCheckInJustCompleted(true);
+                    setShowMorningCheckIn(false);
+                  }}
+                />
+              </SafeWidget>
+            </div>
+          )}
+
+          {isEvening && !eveningDone && !showEveningDebrief && (
+            <button
+              onClick={() => setShowEveningDebrief(true)}
+              className="mb-6 flex w-full items-center gap-3 border border-orange-900/60 bg-orange-950/20 px-5 py-4 text-left transition hover:border-orange-700 hover:bg-orange-950/30"
+            >
+              <Moon className="h-5 w-5 text-orange-500 shrink-0" />
+              <div className="flex-1">
+                <p className="font-terminal text-sm font-bold text-orange-400">Time for your evening debrief</p>
+                <p className="font-terminal text-xs text-zinc-500">Reflect on wins, log gratitude, and plan tomorrow</p>
+              </div>
+              <span className="font-pixel text-[0.35rem] tracking-widest text-orange-500">START &gt;</span>
+            </button>
+          )}
+
+          {showEveningDebrief && !eveningDone && (
+            <div className="mb-6">
+              <SafeWidget name="Evening Debrief">
+                <EveningDebrief
+                  userName={user.name?.split(' ')[0]}
+                  tasksCompleted={todayCheckIn?.tasksCompleted}
+                  habitsCompleted={todayCheckIn?.habitsCompleted}
+                  onComplete={() => {
+                    setDebriefJustCompleted(true);
+                    setShowEveningDebrief(false);
+                  }}
+                />
+              </SafeWidget>
+            </div>
+          )}
+
+          {/* -- TODAY: Top 3 Tasks + 3 Habits + Coach Prompt -- */}
+          <div className="mb-6 grid gap-4 md:grid-cols-3">
+            {/* Top 3 Tasks */}
+            <div className="surface-panel overflow-hidden">
+              <div className="surface-header">
+                <PixelIcon name="tasks" size={13} className="text-orange-400" />
+                <span className="font-pixel text-[0.55rem] tracking-widest text-orange-500">TODAY&apos;S TOP 3 TASKS</span>
+                <Link href="/tasks" className="ml-auto font-pixel text-[0.4rem] tracking-widest text-zinc-500 hover:text-orange-400">+ALL</Link>
+              </div>
+              <div className="space-y-1 p-4">
+                {openTasks.slice(0, emergencyMode ? 1 : 3).map((task, i) => (
+                  <button
+                    key={task._id}
+                    onClick={() => handleToggleTask(task._id)}
+                    disabled={togglingTask === task._id}
+                    className="flex w-full items-start gap-2 text-left group disabled:opacity-50 border border-transparent px-2 py-2 transition hover:border-zinc-900 hover:bg-zinc-900/50"
+                  >
+                    <span className="font-pixel text-[0.5rem] text-zinc-600 mt-1 shrink-0">{i + 1}.</span>
+                    <p className="font-terminal text-sm text-zinc-200 group-hover:text-orange-300 transition leading-tight">{task.title}</p>
+                  </button>
+                ))}
+                {!openTasks.length && (
+                  <div className="py-4 text-center">
+                    <p className="font-terminal text-xs text-zinc-600 mb-3">No tasks yet</p>
+                    <button
+                      onClick={() => setPaletteOpen(true)}
+                      className="inline-flex items-center gap-1.5 border border-orange-800 bg-orange-950/30 px-3 py-1.5 font-pixel text-[0.45rem] tracking-widest text-orange-400 transition hover:bg-orange-950/60"
+                    >
+                      <Plus className="h-3 w-3" /> ADD YOUR FIRST TASK
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Top 3 Habits */}
+            <div className="surface-panel overflow-hidden">
+              <div className="surface-header">
+                <PixelIcon name="habits" size={13} className="text-emerald-400" />
+                <span className="font-pixel text-[0.55rem] tracking-widest text-orange-500">TODAY&apos;S TOP 3 HABITS</span>
+                <Link href="/habits" className="ml-auto font-pixel text-[0.4rem] tracking-widest text-zinc-500 hover:text-orange-400">+ALL</Link>
+              </div>
+              <div className="space-y-1 p-4">
+                {activeHabits.slice(0, emergencyMode ? 1 : 3).map((habit) => (
+                  <button
+                    key={habit._id}
+                    onClick={() => handleToggleHabit(habit._id)}
+                    disabled={togglingHabit === habit._id}
+                    className="flex w-full items-center gap-2 text-left group disabled:opacity-50 border border-transparent px-2 py-2 transition hover:border-zinc-900 hover:bg-zinc-900/50"
+                  >
+                    <Circle className="h-3.5 w-3.5 shrink-0 text-zinc-600 group-hover:text-orange-400 transition" />
+                    <div className="min-w-0">
+                      <p className="font-terminal text-sm text-zinc-200 group-hover:text-orange-300 transition truncate">{habit.title}</p>
+                      {habit.streakCurrent > 0 && (
+                        <p className={`font-terminal text-xs ${streakBadge(habit.streakCurrent).color}`}>
+                          {streakBadge(habit.streakCurrent).emoji} {habit.streakCurrent}d
+                        </p>
+                      )}
+                    </div>
+                  </button>
+                ))}
+                {!activeHabits.length && (
+                  <div className="py-4 text-center">
+                    <p className="font-terminal text-xs text-zinc-600 mb-3">No habits yet</p>
+                    <Link
+                      href="/habits"
+                      className="inline-flex items-center gap-1.5 border border-emerald-800 bg-emerald-950/30 px-3 py-1.5 font-pixel text-[0.45rem] tracking-widest text-emerald-400 transition hover:bg-emerald-950/60"
+                    >
+                      <Plus className="h-3 w-3" /> START A HABIT
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Coach Prompt */}
+            <Link
+              href="/coach"
+              className="surface-panel flex flex-col justify-between overflow-hidden hover:border-orange-800 transition group"
+            >
+              <div className="surface-header">
+                <MessageSquare className="h-3.5 w-3.5 text-orange-500" />
+                <span className="font-pixel text-[0.55rem] tracking-widest text-orange-500">AI COACH PROMPT</span>
+              </div>
+              <div className="flex-1 p-4">
+                <p className="font-terminal text-sm text-zinc-300 leading-relaxed group-hover:text-zinc-100 transition">
+                  {emergencyMode
+                    ? "I'm overwhelmed. Help me pick just one thing to do right now."
+                    : openTasks[0]
+                    ? `How do I break down: "${openTasks[0].title.slice(0, 60)}${openTasks[0].title.length > 60 ? '...' : ''}"?`
+                    : 'What should I focus on today to move my biggest goal forward?'}
+                </p>
+              </div>
+              <div className="border-t border-zinc-900 px-4 py-3">
+                <span className="font-pixel text-[0.5rem] tracking-widest text-orange-500">ASK YOUR COACH &rsaquo;</span>
+              </div>
+            </Link>
+          </div>
+
+          {/* -- WEATHER (prominent on Today tab) -- */}
+          <div className="surface-panel mb-6 overflow-hidden">
+            <div className="surface-header">
+              <PixelIcon name="dashboard" size={13} className="text-sky-400" />
+              <span className="surface-kicker">Environment</span>
+              <span className="ml-auto font-terminal text-xs text-zinc-600">LIVE CONDITIONS</span>
+            </div>
+            <div className="p-4">
+              <SafeWidget name="Weather Widget">
+                <WeatherWidget />
+              </SafeWidget>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════
+          TAB: PROGRESS — Stats, habits, tasks, goals, AI insight
+          ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'progress' && (
+        <>
+          {/* -- STATS GRID -- */}
+          <div data-tutorial="progress" className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-6 lg:gap-4">
+            <TermStatCard label="Habits" value={totalHabits} />
+            <TermStatCard label="Goals" value={activeGoals.length} />
+            <TermStatCard label="Tasks" value={openTasks.length} />
+            <TermStatCard label="Progress" value={`${avgGoalProgress}%`} />
+            <TermStatCard label="Best Streak" value={bestStreak > 0 ? `${bestStreak}d` : '—'} icon={<span className="text-sm">{bestStreak > 0 ? streakBadge(bestStreak).emoji : '🔥'}</span>} />
+            <TermStatCard label="Level" value={gamificationProfile ? `${gamificationProfile.level}` : '1'} icon={<Star className="h-3 w-3 text-yellow-500" />} highlight />
+          </div>
+
+          <div className="mb-6 grid gap-4 lg:grid-cols-2">
+            {/* -- HABITS PANEL -- */}
+            <section data-tutorial="habits" className="surface-panel overflow-hidden">
+              <div className="surface-header">
+                <Sparkles className="h-3.5 w-3.5 text-orange-500" />
+                <span className="font-terminal text-sm font-bold text-zinc-100">Habits — Today</span>
+                <Link href="/habits" className="ml-auto font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:text-orange-500">[VIEW_ALL]</Link>
+              </div>
+              {!activeHabits.length ? (
+                <TermEmptyState label="No habits yet" sub="Start tracking a habit to build your streak." href="/habits" action="Add your first habit" />
+              ) : (
+                <div className="space-y-px p-1">
+                  {activeHabits.slice(0, 5).map((habit) => (
+                    <button
+                      key={habit._id}
+                      onClick={() => handleToggleHabit(habit._id)}
+                      disabled={togglingHabit === habit._id}
+                      className="flex w-full items-center gap-3 border border-transparent px-3 py-2.5 text-left transition hover:border-zinc-900 hover:bg-zinc-900 disabled:opacity-50"
+                    >
+                      <Circle className="h-4 w-4 shrink-0 text-zinc-400" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-terminal text-sm text-zinc-200">{habit.title}</p>
+                        <p className="font-terminal text-xs text-zinc-500">{habit.category} · {habit.streakCurrent}d streak</p>
+                      </div>
+                      <span className={`border px-2 py-0.5 font-terminal text-xs ${habit.streakCurrent > 0 ? 'border-orange-900/50 bg-orange-950/30 text-orange-400' : 'border-zinc-900 bg-zinc-950 text-zinc-500'}`}>
+                        {habit.streakCurrent > 0 ? `${streakBadge(habit.streakCurrent).emoji} ${habit.streakCurrent}d` : 'Idle'}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* -- TASK QUEUE PANEL -- */}
+            <section data-tutorial="tasks" className="surface-panel overflow-hidden">
+              <div className="surface-header">
+                <CheckCircle2 className="h-3.5 w-3.5 text-zinc-500" />
+                <span className="font-terminal text-sm font-bold text-zinc-100">Task Queue</span>
+                <Link href="/tasks" className="ml-auto font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:text-orange-500">[VIEW_ALL]</Link>
+              </div>
+              {!openTasks.length ? (
+                <TermEmptyState label="No tasks pending" sub="Your queue is clear. Add something to work on." href="/tasks" action="Add a task" />
+              ) : (
+                <div className="space-y-px p-1">
+                  {openTasks.slice(0, 5).map((task) => (
+                    <button
+                      key={task._id}
+                      onClick={() => handleToggleTask(task._id)}
+                      disabled={togglingTask === task._id}
+                      className="flex w-full items-center gap-3 border border-transparent px-3 py-2.5 text-left transition hover:border-zinc-900 hover:bg-zinc-900 disabled:opacity-50"
+                    >
+                      <Circle className="h-4 w-4 shrink-0 text-zinc-400" />
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-terminal text-sm text-zinc-200">{task.title}</p>
+                        <div className="flex items-center gap-2 mt-0.5">
+                          <TermPriorityChip priority={task.priority} />
+                          {task.dueDate && <span className="font-terminal text-xs text-zinc-500">Due {task.dueDate}</span>}
+                        </div>
+                      </div>
+                      {task.xpValue && (
+                        <span className="font-terminal text-xs text-orange-500">
+                          <Zap className="inline h-3.5 w-3.5" /> {task.xpValue}xp
+                        </span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* -- GOALS PANEL -- */}
+            <section data-tutorial="goal-card" className="surface-panel overflow-hidden lg:col-span-2">
+              <div className="surface-header">
+                <Target className="h-3.5 w-3.5 text-zinc-500" />
+                <span className="font-terminal text-sm font-bold text-zinc-100">Goals</span>
+                <Link href="/goals" className="ml-auto font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:text-orange-500">[VIEW_ALL]</Link>
+              </div>
+              {!activeGoals.length ? (
+                <TermEmptyState label="No goals set" sub="Define a goal to drive your daily habits." href="/goals" action="Create your first goal" />
+              ) : (
+                <div className="grid gap-px p-1 md:grid-cols-2">
+                  {activeGoals.map((goal) => (
+                    <Link
+                      key={goal._id}
+                      href={`/goals/${goal._id}`}
+                      className="border border-transparent p-3 transition hover:border-zinc-900 hover:bg-zinc-900/50"
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="truncate font-terminal text-sm text-zinc-200">{goal.title}</p>
+                        <span className="shrink-0 font-terminal text-sm font-bold text-orange-400">{goal.progress ?? 0}%</span>
+                      </div>
+                      <div className="mt-2 h-px w-full bg-zinc-900">
+                        <div className="h-px bg-orange-600 transition-all duration-500" style={{ width: `${goal.progress ?? 0}%` }} />
+                      </div>
+                      <div className="mt-1.5 flex items-center justify-between font-terminal text-xs text-zinc-500">
+                        <span>{goal.category}</span>
+                        {goal.targetDate && <span>Target: {goal.targetDate}</span>}
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </section>
+
+            {/* -- AI INSIGHT PANEL -- */}
+            <section className="surface-panel overflow-hidden lg:col-span-2">
+              <div className="surface-header">
+                <Brain className="h-3.5 w-3.5 text-zinc-500" />
+                <span className="font-terminal text-sm font-bold text-zinc-100">AI Insight</span>
+                <span className="ml-auto border border-green-900 bg-green-950/30 px-2 py-0.5 font-pixel text-[0.55rem] tracking-widest text-green-600">LIVE</span>
+              </div>
+              <div className="p-4">
+                {morningDone ? (
+                  <div className="space-y-3">
+                    <p className="font-terminal text-sm leading-relaxed text-zinc-300">
+                      State: <span className="font-bold text-zinc-100">{dashboardEmotionalState}</span>
+                      {' '}&mdash; {activeHabits.length} habits tracked, {activeGoals.length} goals active.
+                    </p>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">ENERGY</span>
+                        <div className="mt-1 font-terminal text-sm tracking-widest text-emerald-400">
+                          {'\u2593'.repeat(Math.max(0, Math.min(5, _energy ?? 0)))}
+                          {'\u2591'.repeat(Math.max(0, 5 - Math.min(5, _energy ?? 0)))}
+                          <span className="ml-2 font-terminal text-xs text-zinc-500">{_energy ?? 0}/5</span>
+                        </div>
+                      </div>
+                      <div>
+                        <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">MOOD</span>
+                        <div className="mt-1 font-terminal text-sm tracking-widest text-cyan-400">
+                          {'\u2593'.repeat(Math.max(0, Math.min(5, _mood ?? 0)))}
+                          {'\u2591'.repeat(Math.max(0, 5 - Math.min(5, _mood ?? 0)))}
+                          <span className="ml-2 font-terminal text-xs text-zinc-500">{_mood ?? 0}/5</span>
+                        </div>
+                      </div>
+                    </div>
+                    {Array.isArray(todayCheckIn?.topThreePriorities) && todayCheckIn.topThreePriorities.length > 0 && (
+                      <div>
+                        <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">TODAY&apos;S PRIORITIES</span>
+                        <ol className="mt-1 space-y-0.5">
+                          {(todayCheckIn?.topThreePriorities as string[]).map((p, i) => (
+                            <li key={i} className="font-terminal text-xs text-zinc-300">
+                              <span className="text-zinc-600">{i + 1}.</span> {p}
+                            </li>
+                          ))}
+                        </ol>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    <p className="font-terminal text-sm leading-relaxed text-zinc-400">
+                      Complete your morning check-in to unlock AI personalization.
+                    </p>
+                    <p className="font-terminal text-xs text-zinc-600">
+                      Mood + energy data powers every coach response and your daily plan.
+                    </p>
+                  </div>
+                )}
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {!morningDone && isMorning && (
+                    <span className="border border-amber-900 bg-amber-950/20 px-3 py-1.5 font-terminal text-xs text-amber-400">
+                      ☀ Morning check-in pending
+                    </span>
+                  )}
+                  {isEvening && !eveningDone && (
+                    <span className="border border-violet-900 bg-violet-950/20 px-3 py-1.5 font-terminal text-xs text-violet-400">
+                      🌙 Evening debrief pending
+                    </span>
+                  )}
+                  {isAfternoonNudge && bestStreak > 0 && activeHabits.length > 0 && (
+                    <span className="border border-orange-900 bg-orange-950/20 px-3 py-1.5 font-terminal text-xs text-orange-400 animate-pulse">
+                      ⛓ Don&apos;t break the chain — {bestStreak}d at stake!
+                    </span>
+                  )}
+                  {openTasks.length > 3 && (
+                    <span className="border border-orange-900 bg-orange-950/20 px-3 py-1.5 font-terminal text-xs text-orange-400">
+                      {openTasks.length} tasks pending — clear the queue
+                    </span>
+                  )}
+                  {bestStreak >= 7 && (
+                    <span className="border border-emerald-900 bg-emerald-950/20 px-3 py-1.5 font-terminal text-xs text-emerald-400">
+                      🔥 {bestStreak} day streak — keep it alive!
+                    </span>
+                  )}
+                </div>
+              </div>
+              {bestStreak >= 7 && !isPro && !streakUpsellDismissed && (
+                <div className="mt-2">
+                  <UpsellPrompt
+                    trigger="streak_milestone"
+                    variant="banner"
+                    onDismiss={() => setStreakUpsellDismissed(true)}
+                  />
+                </div>
+              )}
+            </section>
+
+            {/* -- ADAPTIVE DIFFICULTY -- */}
+            <section className="lg:col-span-2">
+              <SafeWidget name="Adaptive Difficulty">
+                <AdaptiveDifficultyWidget />
+              </SafeWidget>
+            </section>
+          </div>
+        </>
+      )}
+
+      {/* ═══════════════════════════════════════════════════════════
+          TAB: SYSTEMS — Widgets, environment, tools
+          ═══════════════════════════════════════════════════════════ */}
+      {activeTab === 'systems' && (
+        <>
+          {/* -- WIDGET CONTROLS -- */}
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <PixelIcon name="terminal" size={14} className="text-orange-400" />
+                <p className="surface-kicker">Your widgets</p>
+              </div>
+              <p className="font-terminal text-sm text-zinc-400">Drag to reorder, toggle visibility in the panel.</p>
+            </div>
+            <div className="flex items-center gap-2">
+              {editMode && (
+                <button
+                  onClick={() => setPanelOpen(true)}
+                  className="flex items-center gap-1.5 border border-zinc-900 bg-zinc-950 px-3 py-1.5 font-terminal text-xs text-zinc-300 hover:border-orange-600 hover:text-orange-400 transition"
+                >
+                  <LayoutGrid className="h-3.5 w-3.5" />
+                  <span>Widgets</span>
+                </button>
+              )}
+              <button
+                onClick={() => setEditMode((v) => !v)}
+                className={`flex items-center gap-1.5 border px-3 py-1.5 font-terminal text-xs transition ${
+                  editMode
+                    ? 'border-orange-600 bg-orange-600 text-black hover:bg-orange-500'
+                    : 'border-zinc-900 bg-zinc-950 text-zinc-300 hover:border-orange-600 hover:text-orange-400'
+                }`}
+              >
+                <Settings className="h-3.5 w-3.5" />
+                <span>{editMode ? 'Done' : 'Customise'}</span>
+              </button>
+            </div>
+          </div>
+
+          {/* -- NEWCOMER HINT -- */}
+          {disclosure.hintText && !savedLayout && !hintDismissed && (
+            <div className="mb-4 flex items-center justify-between border border-orange-800/50 bg-orange-950/20 px-4 py-3">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 shrink-0 text-orange-400" />
+                <p className="font-terminal text-sm text-orange-300">{disclosure.hintText}</p>
+              </div>
+              <button
+                onClick={() => setHintDismissed(true)}
+                className="ml-4 shrink-0 font-terminal text-xs text-zinc-500 hover:text-zinc-300"
+              >
+                dismiss
+              </button>
+            </div>
+          )}
+
+          {/* -- CUSTOMISABLE WIDGET GRID -- */}
+          <div className="mb-6">
+            <SafeWidget name="Widget Grid">
+              <WidgetGrid
+                layout={displayLayout}
+                editMode={editMode}
+                onReorder={handleReorder}
+                onHide={handleHideWidget}
+              />
+            </SafeWidget>
+          </div>
+
+          {/* -- DISCOVER MORE -- */}
+          {disclosure.tier !== 'builder' && (
+            <SafeWidget name="Discover More">
+              <DiscoverMorePanel tier={disclosure.tier} />
+            </SafeWidget>
+          )}
+
+          {/* Widget customisation panel */}
+          <SafeWidget name="Widget Panel">
+            <WidgetPanel
+              open={panelOpen}
+              layout={layout}
+              onToggle={handleToggleWidget}
+              onReset={handleResetLayout}
+              onClose={() => setPanelOpen(false)}
+            />
+          </SafeWidget>
+
+          {/* -- CONTEXT: Environment sensors + quote + AI briefing -- */}
+          <div className="mb-3 mt-6 flex items-center gap-2">
+            <PixelIcon name="grid" size={14} className="text-violet-400" />
+            <p className="surface-kicker">Context and support</p>
+          </div>
+          <p className="mb-4 font-terminal text-sm text-zinc-400">Signals that help you pace the day instead of just filling it.</p>
+
+          <div className="mb-6">
+            <SafeWidget name="OpenSenseMap Widget">
+              <OpenSenseMapWidget />
+            </SafeWidget>
+          </div>
+
+          <div className="mb-6">
+            <SafeWidget name="Daily Quote">
+              <DailyQuote />
+            </SafeWidget>
+          </div>
+
+          {morningDone && todayCheckIn?.morningAiBriefing && (
+            <MorningBriefingCard
+              briefing={todayCheckIn.morningAiBriefing as string}
+              mood={todayCheckIn.morningMood as number}
+              energy={todayCheckIn.morningEnergy as number}
+            />
+          )}
+
+          {/* -- QUICK ACTIONS -- */}
+          <section className="surface-panel overflow-hidden">
+            <div className="surface-header">
+              <Zap className="h-3.5 w-3.5 text-orange-500" />
+              <span className="font-terminal text-sm font-bold text-zinc-100">Quick Actions</span>
+            </div>
+            <div className="grid grid-cols-2 gap-px p-1 md:grid-cols-4">
+              {[
+                { label: 'AI Coach', href: '/coach', icon: MessageSquare, color: 'text-cyan-400' },
+                { label: 'Deep Scan', href: '/deep-scan', icon: Brain, color: 'text-amber-400' },
+                { label: 'Orchestrator', href: '/orchestrator', icon: Sparkles, color: 'text-violet-400' },
+                { label: 'Focus Session', href: '/focus', icon: Target, color: 'text-emerald-400' },
+              ].map((action) => (
+                <Link
+                  key={action.label}
+                  href={action.href}
+                  className="flex flex-col items-center gap-2 border border-transparent p-4 transition hover:border-zinc-900 hover:bg-zinc-900/50"
+                >
+                  <action.icon className={`h-5 w-5 ${action.color}`} />
+                  <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-400">{action.label.toUpperCase()}</span>
+                </Link>
+              ))}
+            </div>
+          </section>
+        </>
+      )}
+
+      </div>
+      </div>{/* /hidden md:block */}
+              </div>
+              <PixelArt variant="terminal" className="h-20 w-20 text-orange-400" title="Dashboard terminal artwork" />
+            </div>
+            <div className="mt-4 space-y-4">
+              <div className="border border-zinc-900 bg-black/40 p-3">
+                <div className="mb-2 flex items-center gap-2">
+                  <PixelIcon name="tasks" size={14} className="text-orange-400" />
+                  <p className="surface-kicker">Next task</p>
+                </div>
 
                 <p className="mt-1 font-terminal text-lg font-semibold text-zinc-100">{nextTask?.title ?? 'Capture one meaningful task'}</p>
                 <p className="mt-1 font-terminal text-sm text-zinc-400">
@@ -505,6 +1316,42 @@ export default function DashboardPage() {
 
 
       </div>
+
+      {upcomingBirthdays.length > 0 && (
+        <div className="surface-panel mb-6 overflow-hidden">
+          <div className="surface-header">
+            <Gift className="h-3.5 w-3.5 text-pink-400" />
+            <span className="surface-kicker-accent">Birthday radar</span>
+            <span className="ml-auto font-terminal text-xs tracking-widest text-zinc-500">NEXT 30 DAYS</span>
+          </div>
+          <div className="grid gap-px bg-zinc-900 p-px md:grid-cols-2 xl:grid-cols-3">
+            {upcomingBirthdays.map((entry) => (
+              <div key={`${entry.name}-${entry.date}`} className="bg-black/70 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-terminal text-base font-semibold text-zinc-100">{entry.name}</p>
+                    <p className="mt-1 font-terminal text-xs text-zinc-500">{entry.relation || 'Important person'}</p>
+                  </div>
+                  <span className="rounded border border-pink-800/80 bg-pink-950/30 px-2 py-1 font-pixel text-[0.45rem] tracking-widest text-pink-300">
+                    {entry.daysUntil === 0 ? 'TODAY' : entry.daysUntil === 1 ? 'TOMORROW' : `${entry.daysUntil}_DAYS`}
+                  </span>
+                </div>
+                <p className="mt-3 font-terminal text-sm text-pink-200">
+                  {entry.nextDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })}
+                </p>
+                <p className="mt-1 font-terminal text-xs text-zinc-400">
+                  Gift reminder lands 7 days early. Message reminder lands 1 day early.
+                </p>
+                {entry.notes && (
+                  <p className="mt-3 border-l border-pink-900/60 pl-3 font-terminal text-xs text-zinc-300">
+                    {entry.notes}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* -- EMERGENCY MODE BANNER -- */}
       {emergencyMode && (
@@ -1052,7 +1899,7 @@ export default function DashboardPage() {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">ENERGY</span>
-                    <div className="mt-1 font-mono text-sm tracking-widest text-emerald-400">
+                    <div className="mt-1 font-terminal text-sm tracking-widest text-emerald-400">
                       {'\u2593'.repeat(Math.max(0, Math.min(5, _energy ?? 0)))}
                       {'\u2591'.repeat(Math.max(0, 5 - Math.min(5, _energy ?? 0)))}
                       <span className="ml-2 font-terminal text-xs text-zinc-500">{_energy ?? 0}/5</span>
@@ -1060,7 +1907,7 @@ export default function DashboardPage() {
                   </div>
                   <div>
                     <span className="font-pixel text-[0.45rem] tracking-widest text-zinc-500">MOOD</span>
-                    <div className="mt-1 font-mono text-sm tracking-widest text-cyan-400">
+                    <div className="mt-1 font-terminal text-sm tracking-widest text-cyan-400">
                       {'\u2593'.repeat(Math.max(0, Math.min(5, _mood ?? 0)))}
                       {'\u2591'.repeat(Math.max(0, 5 - Math.min(5, _mood ?? 0)))}
                       <span className="ml-2 font-terminal text-xs text-zinc-500">{_mood ?? 0}/5</span>

@@ -13,6 +13,13 @@ export interface IcsTaskLike {
   };
 }
 
+export interface IcsBirthdayLike {
+  name: string;
+  relation?: string;
+  date: string; // YYYY-MM-DD
+  notes?: string;
+}
+
 function formatDate(date: Date, withTime: boolean): string {
   const yyyy = date.getUTCFullYear();
   const mm = String(date.getUTCMonth() + 1).padStart(2, '0');
@@ -106,6 +113,42 @@ export function generateTasksIcs(tasks: IcsTaskLike[], calendarName = 'Resurgo T
 
   lines.push('END:VCALENDAR');
 
+  return `${lines.join('\r\n')}\r\n`;
+}
+
+export function generateBirthdaysIcs(birthdays: IcsBirthdayLike[], calendarName = 'Resurgo Birthdays'): string {
+  const now = new Date();
+  const dtStamp = formatDate(now, true);
+
+  const lines: string[] = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//Resurgo//Birthday Calendar//EN',
+    'CALSCALE:GREGORIAN',
+    'METHOD:PUBLISH',
+    `X-WR-CALNAME:${escapeText(calendarName)}`,
+  ];
+
+  birthdays.forEach((birthday, index) => {
+    const parsed = new Date(`${birthday.date}T00:00:00`);
+    if (Number.isNaN(parsed.getTime())) return;
+
+    const start = new Date(Date.UTC(parsed.getFullYear(), parsed.getMonth(), parsed.getDate()));
+    const end = new Date(start.getTime() + 24 * 60 * 60 * 1000);
+
+    lines.push('BEGIN:VEVENT');
+    lines.push(`UID:birthday-${index}-${escapeText(birthday.name)}@Resurgo`);
+    lines.push(`DTSTAMP:${dtStamp}`);
+    lines.push(`DTSTART;VALUE=DATE:${formatDate(start, false)}`);
+    lines.push(`DTEND;VALUE=DATE:${formatDate(end, false)}`);
+    lines.push(`SUMMARY:${escapeText(`🎉 ${birthday.name}'s Birthday`)}`);
+    lines.push(`RRULE:FREQ=YEARLY;INTERVAL=1`);
+    lines.push(`DESCRIPTION:${escapeText(`${birthday.relation ? `${birthday.relation} · ` : ''}${birthday.notes ?? 'Remember to celebrate.'}`)}`);
+    lines.push('STATUS:CONFIRMED');
+    lines.push('END:VEVENT');
+  });
+
+  lines.push('END:VCALENDAR');
   return `${lines.join('\r\n')}\r\n`;
 }
 

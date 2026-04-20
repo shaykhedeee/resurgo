@@ -21,9 +21,13 @@ import {
   List,
   Clock,
   Zap,
+  Columns,
+  Tag,
+  Timer,
+  Play,
 } from 'lucide-react';
 
-type ViewMode = 'list' | 'eisenhower';
+type ViewMode = 'list' | 'eisenhower' | 'kanban';
 type StatusFilter = 'todo' | 'in_progress' | 'done' | undefined;
 
 const PRIORITY_OPTIONS = ['low', 'medium', 'high', 'urgent'] as const;
@@ -52,6 +56,7 @@ export default function TasksPage() {
   const createTask = useMutation(api.tasks.create);
   const toggleTask = useMutation(api.tasks.toggleComplete);
   const removeTask = useMutation(api.tasks.remove);
+  const updateTask = useMutation(api.tasks.update);
   const { isOnline, pendingTaskCount, recentTaskDrafts, syncingCount } = useOfflineQueue();
 
   // Form state
@@ -61,6 +66,8 @@ export default function TasksPage() {
   const [dueDate, setDueDate] = useState('');
   const [eisenhower, setEisenhower] = useState<typeof QUADRANT_OPTIONS[number] | ''>('');
   const [estimatedMinutes, setEstimatedMinutes] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +89,8 @@ export default function TasksPage() {
         setDueDate('');
         setEisenhower('');
         setEstimatedMinutes('');
+        setTags([]);
+        setTagInput('');
         setShowCreate(false);
         return;
       }
@@ -93,6 +102,7 @@ export default function TasksPage() {
         dueDate: dueDate || undefined,
         eisenhowerQuadrant: eisenhower || undefined,
         estimatedMinutes: estimatedMinutes ? parseInt(estimatedMinutes) : undefined,
+        tags: tags.length > 0 ? tags : undefined,
         source: 'manual',
       });
       setTitle('');
@@ -100,6 +110,8 @@ export default function TasksPage() {
       setDueDate('');
       setEisenhower('');
       setEstimatedMinutes('');
+      setTags([]);
+      setTagInput('');
       setShowCreate(false);
     } catch (e) {
       console.error('Failed to create task:', e);
@@ -121,6 +133,14 @@ export default function TasksPage() {
       await removeTask({ taskId: taskId as Id<"tasks"> });
     } catch (e) {
       console.error('Failed to delete task:', e);
+    }
+  };
+
+  const handleStatusChange = async (taskId: string, newStatus: 'todo' | 'in_progress' | 'done') => {
+    try {
+      await updateTask({ taskId: taskId as Id<"tasks">, status: newStatus });
+    } catch (e) {
+      console.error('Failed to update task status:', e);
     }
   };
 
@@ -182,6 +202,9 @@ export default function TasksPage() {
               </button>
               <button onClick={() => setViewMode('eisenhower')} className={`border p-2.5 transition ${viewMode === 'eisenhower' ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-300'}`} aria-label="Matrix view">
                 <Grid3X3 className="h-4 w-4" />
+              </button>
+              <button onClick={() => setViewMode('kanban')} className={`border p-2.5 transition ${viewMode === 'kanban' ? 'border-orange-800 bg-orange-950/30 text-orange-500' : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-zinc-300'}`} aria-label="Kanban view">
+                <Columns className="h-4 w-4" />
               </button>
               <button onClick={() => setShowCreate(true)} className="ml-px inline-flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-4 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:border-orange-600 hover:bg-orange-950/60">
                 <Plus className="h-3.5 w-3.5" /> QUEUE_TASK
@@ -295,6 +318,96 @@ export default function TasksPage() {
           </div>
         )}
 
+        {/* -- KANBAN BOARD VIEW -- */}
+        {viewMode === 'kanban' && (
+          <div className="grid gap-3 lg:grid-cols-3">
+            {([
+              { status: 'todo' as const, label: 'TO_DO', color: 'border-zinc-800', icon: Circle },
+              { status: 'in_progress' as const, label: 'IN_PROGRESS', color: 'border-orange-900', icon: Play },
+              { status: 'done' as const, label: 'COMPLETED', color: 'border-green-900', icon: CheckCircle2 },
+            ]).map(({ status, label, color, icon: Icon }) => {
+              const columnTasks = (allTasks ?? []).filter(t => t.status === status);
+              return (
+                <div
+                  key={status}
+                  className={`min-h-[300px] border ${color} bg-zinc-950`}
+                  onDragOver={(e) => { e.preventDefault(); e.currentTarget.classList.add('bg-zinc-900/50'); }}
+                  onDragLeave={(e) => { e.currentTarget.classList.remove('bg-zinc-900/50'); }}
+                  onDrop={(e) => {
+                    e.currentTarget.classList.remove('bg-zinc-900/50');
+                    const taskId = e.dataTransfer.getData('text/plain');
+                    if (taskId) handleStatusChange(taskId, status);
+                  }}
+                >
+                  <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-3">
+                    <div className="flex items-center gap-2">
+                      <Icon className="h-3.5 w-3.5 text-orange-500" />
+                      <span className="font-mono text-xs tracking-widest text-zinc-300">{label}</span>
+                    </div>
+                    <span className="font-mono text-xs text-zinc-500">{columnTasks.length}</span>
+                  </div>
+                  <div className="space-y-px p-2">
+                    {columnTasks.map((task) => (
+                      <div
+                        key={task._id}
+                        draggable
+                        onDragStart={(e) => { e.dataTransfer.setData('text/plain', task._id); e.dataTransfer.effectAllowed = 'move'; }}
+                        className="group cursor-grab border border-zinc-900 bg-zinc-950 p-3 transition hover:border-zinc-700 hover:bg-zinc-900 active:cursor-grabbing"
+                      >
+                        <p className={`font-mono text-sm ${task.status === 'done' ? 'text-zinc-500 line-through' : 'text-zinc-200'}`}>{task.title.toUpperCase()}</p>
+                        <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                          <span className={`border px-1.5 py-0.5 font-mono text-[10px] tracking-widest ${
+                            task.priority === 'urgent' ? 'border-red-900 text-red-500' :
+                            task.priority === 'high' ? 'border-orange-900 text-orange-500' :
+                            task.priority === 'medium' ? 'border-yellow-900 text-yellow-600' :
+                            'border-zinc-800 text-zinc-500'
+                          }`}>{task.priority.toUpperCase()}</span>
+                          {task.estimatedMinutes && (
+                            <span className="flex items-center gap-0.5 font-mono text-[10px] text-zinc-500">
+                              <Timer className="h-2.5 w-2.5" /> {task.estimatedMinutes}m
+                            </span>
+                          )}
+                          {task.dueDate && (
+                            <span className="flex items-center gap-0.5 font-mono text-[10px] text-zinc-500">
+                              <Clock className="h-2.5 w-2.5" /> {task.dueDate}
+                            </span>
+                          )}
+                          {task.tags && task.tags.length > 0 && task.tags.map((tag) => (
+                            <span key={tag} className="flex items-center gap-0.5 border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                              <Tag className="h-2 w-2" /> {tag}
+                            </span>
+                          ))}
+                        </div>
+                        {/* Kanban quick-move arrows */}
+                        <div className="mt-2 flex gap-1 opacity-0 transition group-hover:opacity-100">
+                          {status !== 'todo' && (
+                            <button onClick={() => handleStatusChange(task._id, status === 'done' ? 'in_progress' : 'todo')} className="border border-zinc-800 px-2 py-0.5 font-mono text-[10px] text-zinc-500 transition hover:border-orange-800 hover:text-orange-500">
+                              ← {status === 'done' ? 'IN_PROG' : 'TODO'}
+                            </button>
+                          )}
+                          {status !== 'done' && (
+                            <button onClick={() => handleStatusChange(task._id, status === 'todo' ? 'in_progress' : 'done')} className="border border-zinc-800 px-2 py-0.5 font-mono text-[10px] text-zinc-500 transition hover:border-orange-800 hover:text-orange-500">
+                              {status === 'todo' ? 'START' : 'DONE'} →
+                            </button>
+                          )}
+                          <button onClick={() => handleDelete(task._id)} className="ml-auto border border-zinc-800 px-2 py-0.5 font-mono text-[10px] text-zinc-500 transition hover:border-red-800 hover:text-red-500">
+                            <Trash2 className="h-2.5 w-2.5" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                    {columnTasks.length === 0 && (
+                      <div className="py-8 text-center">
+                        <p className="font-mono text-xs text-zinc-500">Drop tasks here</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
       </div>
 
       {showCreate && (
@@ -359,6 +472,34 @@ export default function TasksPage() {
                   </div>
                 </div>
               </div>
+              {/* TAGS INPUT */}
+              <div>
+                <label className="mb-1 block font-mono text-xs tracking-widest text-zinc-500">TAGS</label>
+                <div className="flex flex-wrap gap-1.5 mb-2">
+                  {tags.map((tag) => (
+                    <span key={tag} className="inline-flex items-center gap-1 border border-zinc-700 bg-zinc-900 px-2 py-1 font-mono text-xs text-zinc-300">
+                      <Tag className="h-2.5 w-2.5" /> {tag}
+                      <button type="button" onClick={() => setTags(tags.filter(t => t !== tag))} className="ml-0.5 text-zinc-500 hover:text-red-500">
+                        <X className="h-2.5 w-2.5" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+                <input
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ',') {
+                      e.preventDefault();
+                      const val = tagInput.trim().toLowerCase();
+                      if (val && !tags.includes(val)) setTags([...tags, val]);
+                      setTagInput('');
+                    }
+                  }}
+                  placeholder="Type tag + Enter"
+                  className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none"
+                />
+              </div>
               <div className="flex gap-px pt-1">
                 <button type="button" onClick={() => setShowCreate(false)} className="flex-1 border border-zinc-800 bg-zinc-900 py-2.5 font-mono text-xs tracking-widest text-zinc-500 transition hover:text-zinc-300">[CANCEL]</button>
                 <button type="submit" disabled={creating || !title.trim()} className="flex-1 border border-orange-800 bg-orange-950/40 py-2.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/70 disabled:opacity-40">
@@ -381,6 +522,8 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
     priority: string;
     dueDate?: string;
     xpValue?: number;
+    tags?: string[];
+    estimatedMinutes?: number;
   };
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
@@ -407,10 +550,15 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
           {task.title.toUpperCase()}
         </p>
         {!compact && (
-          <div className="mt-0.5 flex items-center gap-2">
+          <div className="mt-0.5 flex flex-wrap items-center gap-2">
             <span className={`border px-1.5 py-0.5 font-mono text-xs tracking-widest ${priorityMap[task.priority] ?? priorityMap.low}`}>
               {task.priority.toUpperCase()}
             </span>
+            {task.estimatedMinutes && (
+              <span className="flex items-center gap-1 font-mono text-xs text-zinc-500">
+                <Timer className="h-2.5 w-2.5" /> {task.estimatedMinutes}m
+              </span>
+            )}
             {task.dueDate && (
               <span className="flex items-center gap-1 font-mono text-xs text-zinc-400">
                 <Clock className="h-2.5 w-2.5" /> DUE_{task.dueDate.replace(/-/g, '')}
@@ -421,6 +569,11 @@ function TaskItem({ task, onToggle, onDelete, compact }: {
                 <Zap className="h-2.5 w-2.5" /> {task.xpValue}XP
               </span>
             )}
+            {task.tags && task.tags.length > 0 && task.tags.map((tag) => (
+              <span key={tag} className="border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[10px] text-zinc-400">
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </div>

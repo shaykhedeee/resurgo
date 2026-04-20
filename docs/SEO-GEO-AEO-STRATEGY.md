@@ -18,6 +18,118 @@
 
 ---
 
+## Operating Layer (Weekly SEO/GEO/AEO System)
+
+Use this section as the operating contract for every week.
+
+### North Star + Shared Definitions
+
+- **North Star:** Weekly activated signups from organic + answer engines.
+- **Activated signup (canonical):** User completes at least one meaningful action within first session.
+- **Citation hit:** Resurgo appears in top answer output for a tracked prompt in ChatGPT/Perplexity/Gemini.
+- **Money page:** `/`, `/pricing`, `/features`, `/compare/*`, high-intent niche pages.
+
+### Weekly Scorecard (Minimum)
+
+Track these every Sunday in one table:
+
+1. Branded search clicks (GSC)
+2. Non-branded clicks to money pages (GSC)
+3. AI citation hit rate across canonical prompts
+4. Content-to-signup assists (GA4)
+5. Comparison page conversion rate
+6. Indexation health (new pages indexed / submitted)
+
+### Decision Thresholds (Non-Negotiable)
+
+- If citation hit rate drops below **40%** for 2 consecutive weeks, prioritize citation repair content over new publishing.
+- If a money page has high impressions but CTR below **2.5%**, rewrite title + meta + first 120 words within 48 hours.
+- If a comparison page gets traffic but < **3% signup assist**, add proof block + objection FAQ + stronger CTA.
+- If indexation for new pages < **70% by day 10**, fix crawlability and internal link depth before publishing more.
+
+### Weekly Ritual
+
+- **Monday:** Publish/update two high-intent pages.
+- **Wednesday:** Run citation checks and update `docs/operations/AEO-GEO-CITATION-TRACKER.md`.
+- **Friday:** Refresh one money page with new proof (testimonial, metric, or case snippet).
+- **Sunday:** Scorecard review + keep/kill decisions for next week.
+
+### Quality Gate Before Publishing
+
+Ship only if all are true:
+
+- Direct answer appears in first 80 words.
+- One primary intent per page.
+- FAQ or answer block included where relevant.
+- Internal links: pillar + cluster + conversion page.
+- Metadata and schema align with visible content (no contradictions).
+
+### 90-Day Execution Targets
+
+Use these as the active operating targets for the next 12 weeks:
+
+| Surface | 30-Day Target | 60-Day Target | 90-Day Target |
+|---|---|---|---|
+| Comparison pages live | 6 | 10 | 14 |
+| High-intent niche pages refreshed | 6 | 12 | 18 |
+| New answer-first articles | 8 | 16 | 24 |
+| FAQ blocks added/refreshed | 10 | 20 | 30 |
+| Citation hit rate | 40%+ | 50%+ | 60%+ |
+| Money-page CTR | 2.5%+ | 3.0%+ | 3.5%+ |
+
+### Page Portfolio Rules
+
+Every page shipped should belong to one of these buckets:
+
+| Page Type | Purpose | Primary CTA | Review Cadence |
+|---|---|---|---|
+| Money page | Convert high-intent traffic | Start free / view pricing | Weekly |
+| Comparison page | Capture competitor-aware buyers | Compare plans / start free | Weekly |
+| Authority article | Win snippets, AI answers, links | Read next / try free | Biweekly |
+| FAQ / glossary page | Win AEO + zero-click awareness | Related guide / try free | Monthly |
+| Research / stats page | Earn citations + backlinks | Cite / share / try free | Monthly |
+
+If a page does not fit one of these buckets, it is likely content clutter, not content leverage.
+
+### Weekly SEO/GEO Work Split
+
+| Day | Main Output | Secondary Output |
+|---|---|---|
+| Monday | 1 new high-intent page | Internal-link pass on 1 existing page |
+| Tuesday | Comparison/page refresh | Title + meta rewrite on 1 money page |
+| Wednesday | Citation testing | Update `docs/operations/AEO-GEO-CITATION-TRACKER.md` |
+| Thursday | Outreach/distribution for newest asset | Add 2-3 FAQ answers to existing pages |
+| Friday | Performance review | Decide keep / refresh / kill list |
+| Sunday | Scorecard + backlog reset | Queue next week’s 2 priority pages |
+
+### Distribution Rule for Every New Page
+
+No page is considered shipped until it has been distributed through at least 3 surfaces:
+
+1. One owned channel: X, LinkedIn, email, or product update.
+2. One community surface: Reddit, Indie Hackers, Slack, Discord, or founder community.
+3. One internal funnel surface: homepage slot, blog hub, comparison page, pricing FAQ, or related-reads block.
+
+### Refresh / Kill Decision Rules
+
+- **Refresh immediately** if impressions are rising but CTR is weak.
+- **Refresh within 7 days** if a page ranks but does not assist signups.
+- **Consolidate** if two pages compete for the same intent.
+- **Kill or redirect** if a page has no rankings, no assists, and no strategic reason to exist after 90 days.
+
+### Definition of Done for Search Content
+
+A page is done only when:
+
+- primary query and intent are explicit,
+- answer appears near the top,
+- schema matches on-page copy,
+- internal links connect pillar → cluster → conversion,
+- distribution happened across 3 surfaces,
+- the page is added to the weekly review set.
+
+---
+
 ## 1. SEO KEYWORD STRATEGY
 
 ### 1.1 Primary Keywords (High Intent, High Volume)

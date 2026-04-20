@@ -36,7 +36,7 @@ const TerminalFAB = dynamic(() => import('@/components/TerminalFAB'), { ssr: fal
 // ── Navigation Sections (ASCII-grouped, collapsible) ──
 const NAV_SECTIONS = [
   {
-    label: 'HOME',
+    label: 'CORE',
     collapsible: true,
     defaultOpen: true,
     items: [
@@ -60,7 +60,7 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'HEALTH',
+    label: 'HEALTH & WELLNESS',
     collapsible: true,
     defaultOpen: true,
     items: [
@@ -78,7 +78,7 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'WEALTH',
+    label: 'BUSINESS & MONEY',
     collapsible: true,
     defaultOpen: false,
     items: [
@@ -88,7 +88,7 @@ const NAV_SECTIONS = [
     ],
   },
   {
-    label: 'SYSTEM',
+    label: 'SYSTEM & GROWTH',
     collapsible: true,
     defaultOpen: false,
     items: [
@@ -291,7 +291,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                 >
                   <span className={cn(
                     'font-pixel text-[0.42rem] tracking-[0.22em]',
-                    section.label === '★ AI COACH' ? 'text-orange-600' : 'text-zinc-600'
+                    section.label.includes('AI') ? 'text-orange-600' : 'text-zinc-600'
                   )}>
                     ── {section.label} ──
                   </span>
@@ -500,7 +500,9 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         </div>
         {/* Onboarding resume banner/modal (non-blocking) */}
         <OnboardingResume onboardingComplete={user?.onboardingComplete} />
-        {children}
+        <div className="dashboard-content-shell">
+          {children}
+        </div>
       </main>
 
       {/* ── Mobile bottom tab bar — enhanced with raised AI centre button ──

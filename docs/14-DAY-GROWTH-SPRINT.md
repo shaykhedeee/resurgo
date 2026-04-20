@@ -8,6 +8,47 @@
 
 ---
 
+## Sprint Command Rules
+
+### Win Conditions
+
+At the end of Day 14, this sprint is a success if most of these are true:
+
+- 500+ high-quality signups or a clearly validated growth channel,
+- 65%+ signup → first meaningful action,
+- 35%+ day-7 retention for activated users,
+- 4%+ activated-to-paid conversion,
+- one repeatable weekly growth system documented and running.
+
+### Non-Negotiables
+
+- Every day must create either **traffic**, **conversion lift**, or **retention lift**.
+- Do not publish new content if yesterday’s best asset has not been distributed properly.
+- Do not run experiments without logging a hypothesis and a winner/loser.
+- Do not celebrate raw traffic if activation quality drops.
+
+### Daily Closeout Template
+
+Log this at end of each day:
+
+| Field | Fill In |
+|---|---|
+| Highest-leverage action completed | — |
+| Best-performing channel today | — |
+| Signups generated | — |
+| Activation rate shift | — |
+| Biggest user objection heard | — |
+| Tomorrow’s bottleneck | — |
+
+### Escalation Rules
+
+- If signups are up but activation is weak, stop distribution and fix onboarding/first-action friction.
+- If activation is good but paid is weak, tighten pricing, trust proof, and upsell timing.
+- If retention is weak, pause vanity acquisition and publish proof/re-engagement assets.
+- If no channel clearly works by Day 7, narrow to the single most intent-rich channel and go deeper.
+
+---
+
 ## PHASE 1: DISTRIBUTION COMPLETION (Days 1–3)
 
 ### Objective

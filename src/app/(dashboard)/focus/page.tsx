@@ -19,6 +19,9 @@ import {
   Trophy,
   Clock,
   Zap,
+  CloudRain,
+  Volume2,
+  VolumeX,
 } from 'lucide-react';
 
 const FOCUS_METHODS = [
@@ -39,6 +42,8 @@ export default function FocusPage() {
   const logDistraction  = useMutation(api.focusSessions.logDistraction);
   const todaySessions   = useQuery(api.focusSessions.today);
   const stats           = useQuery(api.focusSessions.getStats, {});
+  const activeTasks     = useQuery(api.tasks.list, { status: 'in_progress' });
+  const todoTasks       = useQuery(api.tasks.list, { status: 'todo' });
 
   // ── Local state ─────────────────────────────────────────────────────────
   const [methodIdx, setMethodIdx]           = useState(0);
@@ -49,8 +54,70 @@ export default function FocusPage() {
   const [totalSeconds, setTotalSeconds]     = useState(0);
   const [sessionId, setSessionId]           = useState<string | null>(null);
   const [distractionCount, setDistractionCount] = useState(0);
+  const [rainEnabled, setRainEnabled] = useState(false);
+  const [rainVolume, setRainVolume] = useState(0.5);
+  const [selectedTaskId, setSelectedTaskId] = useState<string>('');
 
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const rainCtxRef = useRef<AudioContext | null>(null);
+  const rainGainRef = useRef<GainNode | null>(null);
+  const rainNodesRef = useRef<AudioBufferSourceNode[]>([]);
+
+  // ── Rain sound management (Web Audio API — no external file needed) ───
+  useEffect(() => {
+    if (rainEnabled) {
+      if (!rainCtxRef.current) {
+        const ctx = new AudioContext();
+        const gain = ctx.createGain();
+        gain.gain.value = rainVolume;
+        gain.connect(ctx.destination);
+
+        // Brown-noise rain generator
+        const sampleRate = ctx.sampleRate;
+        const bufferSize = sampleRate * 4; // 4-second loop
+        const buffer = ctx.createBuffer(2, bufferSize, sampleRate);
+        for (let ch = 0; ch < 2; ch++) {
+          const data = buffer.getChannelData(ch);
+          let last = 0;
+          for (let i = 0; i < bufferSize; i++) {
+            const white = Math.random() * 2 - 1;
+            last = (last + 0.02 * white) / 1.02;
+            data[i] = last * 3.5;
+          }
+        }
+
+        // Low-pass filter for raindrop feel
+        const filter = ctx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.value = 800;
+        filter.Q.value = 0.5;
+        filter.connect(gain);
+
+        const src = ctx.createBufferSource();
+        src.buffer = buffer;
+        src.loop = true;
+        src.connect(filter);
+        src.start();
+
+        rainCtxRef.current = ctx;
+        rainGainRef.current = gain;
+        rainNodesRef.current = [src];
+      } else {
+        rainCtxRef.current.resume();
+      }
+    } else {
+      if (rainCtxRef.current) {
+        rainCtxRef.current.suspend();
+      }
+    }
+  }, [rainEnabled]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Volume control
+  useEffect(() => {
+    if (rainGainRef.current) {
+      rainGainRef.current.gain.value = rainVolume;
+    }
+  }, [rainVolume]);
 
   const formatTime = (s: number) => {
     const m   = Math.floor(s / 60);
@@ -97,7 +164,12 @@ export default function FocusPage() {
     const flowtime = method.id === 'flowtime';
     const duration = flowtime ? 60 : workMinutes;
     try {
-      const id = await startSession({ type: method.id, durationMinutes: duration });
+      const id = await startSession({
+        type: method.id,
+        durationMinutes: duration,
+        taskId: selectedTaskId ? (selectedTaskId as Id<'tasks'>) : undefined,
+        ambientSound: rainEnabled ? 'rain' : undefined,
+      });
       setSessionId(id);
       setSecondsLeft(duration * 60);
       setTotalSeconds(duration * 60);
@@ -232,6 +304,28 @@ export default function FocusPage() {
                 <span className="font-mono text-xs tracking-widest text-zinc-400">MINUTES</span>
               </div>
             )}
+
+            {/* Task selector — link a task to your focus session */}
+            {!isActive && (() => {
+              const linkableTasks = [...(activeTasks ?? []), ...(todoTasks ?? [])];
+              return linkableTasks.length > 0 ? (
+                <div className="mb-6 w-full max-w-xs">
+                  <label className="mb-1 block font-mono text-[10px] tracking-widest text-zinc-500">LINK_TASK</label>
+                  <select
+                    value={selectedTaskId}
+                    onChange={(e) => setSelectedTaskId(e.target.value)}
+                    className="w-full border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none"
+                  >
+                    <option value="">No task linked</option>
+                    {linkableTasks.map((t) => (
+                      <option key={t._id} value={t._id}>
+                        {t.title.toUpperCase()} — {t.priority.toUpperCase()}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              ) : null;
+            })()}
 
             {/* Timer ring */}
             <div className="relative mb-8 flex h-64 w-64 items-center justify-center">
@@ -400,6 +494,45 @@ export default function FocusPage() {
                 </p>
               </div>
             )}
+
+            {/* Rain sounds */}
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="flex items-center gap-2 border-b border-zinc-900 px-4 py-2.5">
+                <CloudRain className="h-3 w-3 text-cyan-500" />
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">AMBIENT_SOUNDS</span>
+              </div>
+              <div className="space-y-3 p-4">
+                <button
+                  onClick={() => setRainEnabled((r) => !r)}
+                  className={`flex w-full items-center justify-between border px-4 py-3 font-mono text-xs tracking-widest transition ${
+                    rainEnabled
+                      ? 'border-cyan-800 bg-cyan-950/30 text-cyan-400'
+                      : 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:border-zinc-700 hover:text-zinc-300'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    <CloudRain className="h-3.5 w-3.5" />
+                    RAIN_SOUNDS
+                  </span>
+                  {rainEnabled ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+                </button>
+                {rainEnabled && (
+                  <div className="flex items-center gap-3 px-1">
+                    <VolumeX className="h-3 w-3 text-zinc-500" />
+                    <input
+                      type="range"
+                      min={0}
+                      max={1}
+                      step={0.05}
+                      value={rainVolume}
+                      onChange={(e) => setRainVolume(parseFloat(e.target.value))}
+                      className="h-1 flex-1 cursor-pointer appearance-none rounded bg-zinc-800 accent-cyan-500"
+                    />
+                    <Volume2 className="h-3 w-3 text-cyan-500" />
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

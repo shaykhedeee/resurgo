@@ -24,6 +24,53 @@
 - ✅ **TypeScript cleanup**: ~150 errors resolved
 - ✅ **Font readability**: Inter/JetBrains Mono with proper sizing
 
+## CURRENT OPERATOR MODE (Use This Before Anything Else)
+
+This launch plan is no longer a “what should we do someday?” document. It is an **execution control panel**.
+
+### Current Status
+
+- **Product state:** launch-ready
+- **Primary bottleneck:** distribution quality + activation consistency
+- **Secondary bottleneck:** retention proof + systematic promotion of wins
+- **Default mode:** optimize what exists before adding complexity
+
+### 7-Day Order of Operations
+
+1. Validate release health: build, typecheck, critical funnel checks.
+2. Push one high-leverage acquisition asset live.
+3. Review activation + upgrade signals the same day.
+4. Ship one retention or proof asset before publishing anything new.
+5. Log the decision and move the next bottleneck, not a random task.
+
+### Freeze Rules
+
+Do **not** start new feature work if any of these are true:
+
+- signup → first-action rate is slipping,
+- key launch metrics are unverified,
+- active users are reporting onboarding or billing friction,
+- distribution tasks for the last shipped asset are incomplete.
+
+### Launch Doc Reading Order
+
+When operating fast, read in this order:
+
+1. This section
+2. `docs/14-DAY-GROWTH-SPRINT.md`
+3. `docs/DAILY-CHECKLIST-14DAY.md`
+4. `docs/MARKETING-STRATEGY.md`
+5. `docs/operations/AEO-GEO-CITATION-TRACKER.md`
+
+### Definition of Done for Launch Work
+
+Launch work is only complete when:
+
+- the asset or fix is live,
+- the metric tied to it is checked,
+- the result is captured in docs,
+- the next highest-leverage action is obvious.
+
 ---
 
 ## TABLE OF CONTENTS

@@ -81,12 +81,12 @@ const variantClasses: Record<TermVariant, string> = {
     'disabled:border-zinc-700 disabled:bg-zinc-800 disabled:text-zinc-500 disabled:shadow-none disabled:cursor-not-allowed',
 };
 
-// ─── Size classes (INCREASED font sizes per user request) ────────────────────
+// ─── Size classes (balanced for desktop + mobile consistency) ────────────────
 const sizeClasses: Record<TermSize, string> = {
-  sm: 'px-4 py-2 text-base min-h-[40px] gap-1.5',
-  md: 'px-6 py-2.5 text-[1.125rem] min-h-[48px] gap-2',
-  lg: 'px-7 py-3 text-[1.125rem] min-h-[52px] gap-2',
-  xl: 'px-10 py-4 text-[1.5rem] min-h-[64px] gap-3',
+  sm: 'px-3 py-1.5 text-[0.72rem] sm:text-xs min-h-[36px] sm:min-h-[40px] gap-1.5',
+  md: 'px-4 py-2 text-[0.78rem] sm:text-sm min-h-[40px] sm:min-h-[44px] gap-2',
+  lg: 'px-5 py-2.5 text-[0.84rem] sm:text-[0.95rem] min-h-[44px] sm:min-h-[48px] gap-2',
+  xl: 'px-6 py-3 text-[0.95rem] sm:text-[1.05rem] min-h-[48px] sm:min-h-[56px] gap-3',
 };
 
 // ─── Shared base classes ─────────────────────────────────────────────────────
@@ -226,10 +226,10 @@ interface TermIconButtonProps extends Omit<TermButtonProps, 'icon' | 'rightIcon'
 }
 
 const iconOnlySizes: Record<TermSize, string> = {
-  sm: 'p-2 min-h-[40px] min-w-[40px]',
-  md: 'p-2.5 min-h-[48px] min-w-[48px]',
-  lg: 'p-3 min-h-[56px] min-w-[56px]',
-  xl: 'p-4 min-h-[64px] min-w-[64px]',
+  sm: 'p-2 min-h-[36px] min-w-[36px] sm:min-h-[40px] sm:min-w-[40px]',
+  md: 'p-2 min-h-[40px] min-w-[40px] sm:min-h-[44px] sm:min-w-[44px]',
+  lg: 'p-2.5 min-h-[44px] min-w-[44px] sm:min-h-[48px] sm:min-w-[48px]',
+  xl: 'p-3 min-h-[48px] min-w-[48px] sm:min-h-[56px] sm:min-w-[56px]',
 };
 
 export const TermIconButton = forwardRef<HTMLButtonElement, TermIconButtonProps>(

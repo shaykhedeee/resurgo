@@ -9,6 +9,11 @@ type MarketingNavLink = {
 	icon?: PixelIconName;
 };
 
+type MarketingNavGroup = {
+	label: string;
+	links: Array<MarketingNavLink>;
+};
+
 const DEFAULT_NAV_LINKS: Array<MarketingNavLink> = [
 	{ href: '/features', label: 'Features', icon: 'grid' },
 	{ href: '/pricing', label: 'Pricing', icon: 'star' },
@@ -17,8 +22,36 @@ const DEFAULT_NAV_LINKS: Array<MarketingNavLink> = [
 	{ href: '/docs', label: 'Docs', icon: 'plan' },
 ];
 
+const DEFAULT_NAV_GROUPS: Array<MarketingNavGroup> = [
+	{
+		label: 'Features',
+		links: [
+			{ href: '/features', label: 'Platform Overview', icon: 'grid' },
+			{ href: '/templates', label: 'Goal Templates', icon: 'goals' },
+			{ href: '/download', label: 'Mobile App (PWA)', icon: 'dashboard' },
+		],
+	},
+	{
+		label: 'Resources',
+		links: [
+			{ href: '/blog', label: 'Blog', icon: 'terminal' },
+			{ href: '/guides', label: 'Guides', icon: 'plan' },
+			{ href: '/docs', label: 'Docs', icon: 'sparkles' },
+		],
+	},
+	{
+		label: 'Company',
+		links: [
+			{ href: '/about', label: 'About', icon: 'star' },
+			{ href: '/pricing', label: 'Pricing', icon: 'grid' },
+			{ href: '/support', label: 'Support', icon: 'coach' },
+		],
+	},
+];
+
 interface MarketingHeaderProps {
 	navLinks?: Array<MarketingNavLink>;
+	navGroups?: Array<MarketingNavGroup>;
 	tickerText?: string;
 	secondaryCtaHref?: string;
 	secondaryCtaLabel?: string;
@@ -28,7 +61,8 @@ interface MarketingHeaderProps {
 }
 
 export function MarketingHeader({
-	navLinks = DEFAULT_NAV_LINKS,
+	navLinks,
+	navGroups = DEFAULT_NAV_GROUPS,
 	tickerText = 'RESURGO.life :: PIXEL_EXECUTION_LAYER_ACTIVE :: ALL_SYSTEMS_NOMINAL',
 	secondaryCtaHref = '/sign-in',
 	secondaryCtaLabel = 'Sign In',
@@ -36,6 +70,10 @@ export function MarketingHeader({
 	primaryCtaLabel = 'Get Started',
 	className,
 }: MarketingHeaderProps) {
+	const effectiveLinks = navLinks ?? DEFAULT_NAV_LINKS;
+	const useGroupedNav = !navLinks;
+	const flattenedGroupedLinks = navGroups.flatMap((group) => group.links);
+
 	return (
 		<header className={cn('sticky top-0 z-50 border-b border-zinc-900 bg-black', className)}>
 			<div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
@@ -47,18 +85,43 @@ export function MarketingHeader({
 					</div>
 				</Link>
 
-				<nav className="hidden items-center gap-1 lg:flex">
-					{navLinks.map(({ href, label, icon = 'grid' }) => (
-						<Link
-							key={`${href}-${label}`}
-							href={href}
-							className="inline-flex items-center gap-2 border border-transparent px-3 py-2 font-mono text-sm text-zinc-400 transition-colors hover:border-zinc-800 hover:text-orange-400"
-						>
-							<PixelIcon name={icon} size={12} className="text-orange-500/80" />
-							<span>{label}</span>
-						</Link>
-					))}
-				</nav>
+				{useGroupedNav ? (
+					<nav className="hidden items-center gap-1 lg:flex">
+						{navGroups.map((group) => (
+							<div key={group.label} className="group relative">
+								<button className="inline-flex items-center gap-2 border border-transparent px-3 py-2 font-mono text-sm text-zinc-400 transition-colors hover:border-zinc-800 hover:text-orange-400">
+									<span>{group.label}</span>
+									<span className="text-[10px] text-zinc-600 group-hover:text-orange-500">▾</span>
+								</button>
+								<div className="pointer-events-none absolute left-0 top-full z-40 mt-1 w-56 border border-zinc-800 bg-zinc-950/95 p-1 opacity-0 shadow-[0_12px_30px_rgba(0,0,0,0.55)] transition-opacity group-hover:pointer-events-auto group-hover:opacity-100">
+									{group.links.map(({ href, label, icon = 'grid' }) => (
+										<Link
+											key={`${group.label}-${href}-${label}`}
+											href={href}
+											className="flex items-center gap-2 border border-transparent px-2.5 py-2 font-mono text-xs text-zinc-300 transition-colors hover:border-zinc-800 hover:bg-black hover:text-orange-400"
+										>
+											<PixelIcon name={icon} size={11} className="text-orange-500/80" />
+											<span>{label}</span>
+										</Link>
+									))}
+								</div>
+							</div>
+						))}
+					</nav>
+				) : (
+					<nav className="hidden items-center gap-1 lg:flex">
+						{effectiveLinks.map(({ href, label, icon = 'grid' }) => (
+							<Link
+								key={`${href}-${label}`}
+								href={href}
+								className="inline-flex items-center gap-2 border border-transparent px-3 py-2 font-mono text-sm text-zinc-400 transition-colors hover:border-zinc-800 hover:text-orange-400"
+							>
+								<PixelIcon name={icon} size={12} className="text-orange-500/80" />
+								<span>{label}</span>
+							</Link>
+						))}
+					</nav>
+				)}
 
 				<div className="flex items-center gap-3">
 					<Link
@@ -104,7 +167,7 @@ export function MarketingHeader({
 
 			<nav className="border-t border-zinc-900 bg-black px-3 py-2 lg:hidden">
 				<div className="flex gap-2 overflow-x-auto pb-1">
-					{navLinks.map(({ href, label, icon = 'grid' }) => (
+					{(useGroupedNav ? flattenedGroupedLinks : effectiveLinks).map(({ href, label, icon = 'grid' }) => (
 						<Link
 							key={`mobile-${href}-${label}`}
 							href={href}

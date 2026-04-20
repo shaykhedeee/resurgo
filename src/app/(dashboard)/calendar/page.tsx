@@ -7,11 +7,12 @@
 
 import { useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight, CheckCircle2, Circle } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, CheckCircle2, Circle, Gift } from 'lucide-react';
 import { downloadIcs, generateTasksIcs } from '@/lib/ics';
 import { PixelArt } from '@/components/PixelArt';
 import { PixelIcon } from '@/components/PixelIcon';
+import { BirthdayEntry, getBirthdaysFromStorage } from '@/lib/birthdays';
 
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTHS = [
@@ -26,6 +27,7 @@ function pad(n: number) {
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [birthdays, setBirthdays] = useState<BirthdayEntry[]>([]);
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -48,6 +50,26 @@ export default function CalendarPage() {
 
   const tasks = useQuery(api.tasks.list, { status: 'done' });
   const allTasks = useQuery(api.tasks.list, {});
+
+  useEffect(() => {
+    const syncBirthdays = () => {
+      setBirthdays(getBirthdaysFromStorage());
+    };
+
+    syncBirthdays();
+
+    if (typeof window === 'undefined') {
+      return;
+    }
+
+    window.addEventListener('focus', syncBirthdays);
+    window.addEventListener('storage', syncBirthdays);
+
+    return () => {
+      window.removeEventListener('focus', syncBirthdays);
+      window.removeEventListener('storage', syncBirthdays);
+    };
+  }, []);
 
   // Build calendar grid
   const calendarDays = useMemo(() => {
@@ -83,6 +105,25 @@ export default function CalendarPage() {
     return map;
   }, [habitLogs, tasks]);
 
+  const birthdayMap = useMemo(() => {
+    const map: Record<string, BirthdayEntry[]> = {};
+
+    for (const birthday of birthdays) {
+      const parsed = new Date(birthday.date);
+      if (Number.isNaN(parsed.getTime()) || parsed.getMonth() !== month) continue;
+
+      const dateStr = `${year}-${pad(month + 1)}-${pad(parsed.getDate())}`;
+      if (!map[dateStr]) map[dateStr] = [];
+      map[dateStr].push(birthday);
+    }
+
+    return map;
+  }, [birthdays, month, year]);
+  const birthdaysThisMonth = useMemo(
+    () => Object.values(birthdayMap).flat(),
+    [birthdayMap],
+  );
+
   const today = new Date();
   const todayStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
 
@@ -91,11 +132,12 @@ export default function CalendarPage() {
   const goToday = () => setCurrentDate(new Date());
 
   const selectedInfo = selectedDate ? completionMap[selectedDate] : null;
+  const selectedBirthdays = selectedDate ? birthdayMap[selectedDate] ?? [] : [];
 
   const handleExportIcs = () => {
-    if (!allTasks || allTasks.length === 0) return;
+    if ((!allTasks || allTasks.length === 0) && birthdaysThisMonth.length === 0) return;
 
-    const exportableTasks = allTasks.filter((t) => t.scheduledDate || t.dueDate).map((t) => ({
+    const exportableTasks = (allTasks ?? []).filter((t) => t.scheduledDate || t.dueDate).map((t) => ({
       _id: String(t._id),
       title: t.title,
       description: t.description,
@@ -105,7 +147,13 @@ export default function CalendarPage() {
       isRecurring: t.isRecurring,
       recurrenceRule: t.recurrenceRule,
     }));
-    const ics = generateTasksIcs(exportableTasks, 'RESURGO Schedule');
+    const exportableBirthdays = birthdaysThisMonth.map((birthday) => ({
+      _id: `birthday-${birthday.name}-${birthday.date}`,
+      title: `Birthday: ${birthday.name}`,
+      description: [birthday.relation, birthday.notes].filter(Boolean).join(' · ') || 'Birthday reminder',
+      dueDate: `${year}-${pad(month + 1)}-${pad(new Date(birthday.date).getDate())}`,
+    }));
+    const ics = generateTasksIcs([...exportableTasks, ...exportableBirthdays], 'RESURGO Schedule');
     const fileName = `RESURGO-calendar-${year}-${pad(month + 1)}.ics`;
     downloadIcs(fileName, ics);
   };
@@ -132,6 +180,7 @@ export default function CalendarPage() {
                 <span className="surface-chip">{MONTHS[month]} {year}</span>
                 <span className="surface-chip">{tasks?.length ?? 0} completed tasks</span>
                 <span className="surface-chip">{habitLogs?.length ?? 0} habit logs</span>
+                <span className="surface-chip">{birthdaysThisMonth.length} birthdays</span>
               </div>
             </div>
             <div className="surface-panel-muted p-4">
@@ -145,7 +194,7 @@ export default function CalendarPage() {
               </div>
               <button
                 onClick={handleExportIcs}
-                disabled={!allTasks || allTasks.length === 0}
+                disabled={(!allTasks || allTasks.length === 0) && birthdaysThisMonth.length === 0}
                 className="action-tile mt-4 w-full justify-center text-cyan-300 hover:text-cyan-200 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <PixelIcon name="calendar" size={14} className="text-cyan-400" />
@@ -203,7 +252,9 @@ export default function CalendarPage() {
                 const isToday    = dateStr === todayStr;
                 const isSelected = dateStr === selectedDate;
                 const data       = completionMap[dateStr];
+                const birthdayEntries = birthdayMap[dateStr] ?? [];
                 const hasActivity = data && (data.habits > 0 || data.tasks > 0);
+                const hasBirthday = birthdayEntries.length > 0;
 
                 return (
                   <button
@@ -222,6 +273,12 @@ export default function CalendarPage() {
                       <div className="mt-0.5 flex gap-0.5">
                         {data.habits > 0 && <div className="h-1 w-1 bg-green-500" />}
                         {data.tasks  > 0 && <div className="h-1 w-1 bg-cyan-500" />}
+                        {hasBirthday && <div className="h-1 w-1 bg-pink-500" />}
+                      </div>
+                    )}
+                    {!hasActivity && hasBirthday && !isSelected && (
+                      <div className="mt-0.5 flex gap-0.5">
+                        <div className="h-1 w-1 bg-pink-500" />
                       </div>
                     )}
                   </button>
@@ -236,6 +293,9 @@ export default function CalendarPage() {
               </span>
               <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-cyan-500" /> TASKS_COMPLETED
+              </span>
+              <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
+                <div className="h-1.5 w-1.5 bg-pink-500" /> BIRTHDAYS
               </span>
             </div>
           </div>
@@ -264,9 +324,34 @@ export default function CalendarPage() {
                       {selectedInfo.tasks}_TASK{selectedInfo.tasks !== 1 ? 'S' : ''}_COMPLETED
                     </span>
                   </div>
+                  {selectedBirthdays.map((birthday) => (
+                    <div key={`${birthday.name}-${birthday.date}`} className="flex items-center gap-3">
+                      <Gift className="h-3.5 w-3.5 text-pink-500" />
+                      <span className="font-mono text-xs text-zinc-300">
+                        BIRTHDAY_{birthday.name.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}
+                        {birthday.relation ? ` · ${birthday.relation}` : ''}
+                        {birthday.notes ? ` · ${birthday.notes}` : ''}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               ) : (
-                <p className="font-mono text-xs tracking-widest text-zinc-400">NO_ACTIVITY_RECORDED</p>
+                selectedBirthdays.length > 0 ? (
+                  <div className="space-y-2">
+                    {selectedBirthdays.map((birthday) => (
+                      <div key={`${birthday.name}-${birthday.date}`} className="flex items-center gap-3">
+                        <Gift className="h-3.5 w-3.5 text-pink-500" />
+                        <span className="font-mono text-xs text-zinc-300">
+                          BIRTHDAY_{birthday.name.toUpperCase().replace(/[^A-Z0-9]+/g, '_')}
+                          {birthday.relation ? ` · ${birthday.relation}` : ''}
+                          {birthday.notes ? ` · ${birthday.notes}` : ''}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="font-mono text-xs tracking-widest text-zinc-400">NO_ACTIVITY_RECORDED</p>
+                )
               )}
             </div>
           </div>

@@ -38,6 +38,7 @@ import {
   GratitudeEntry,
   GentleModeSettings,
   DEFAULT_GENTLE_MODE,
+  UserProfile,
 } from '@/types';
 import { getDaysInMonth, format, startOfMonth, getDay, addDays, addWeeks, addMonths, addYears } from 'date-fns';
 
@@ -254,6 +255,7 @@ interface ResurgoStore {
   // Initialize
   initializeUser: (name: string) => void;
   completeOnboarding: () => void;
+  updateUserProfile: (profile: UserProfile) => void;
   updateNotificationSettings: (updates: Partial<User['preferences']['notifications']>) => void;
   
   // Plan Management
@@ -391,6 +393,15 @@ export const useResurgoStore = create<ResurgoStore>()(
           onboardingStep: 0,
         };
         set({ user, habits: defaultHabits.map(h => ({ ...h, userId: user.id })) });
+      },
+      
+      updateUserProfile: (profile: UserProfile) => {
+        set((state) => ({
+          user: {
+            ...state.user,
+            profile,
+          },
+        }));
       },
       
       completeOnboarding: () => set({ hasCompletedOnboarding: true }),

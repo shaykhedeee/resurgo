@@ -1,5 +1,5 @@
 // ═══════════════════════════════════════════════════════════════════════════════
-// RESURGO - Sidebar Navigation Component
+// RESURGO - Sidebar NavW3BGGGGGGGGGGG333333333333333igation Component
 // Modern sidebar navigation inspired by professional SaaS apps
 // ═══════════════════════════════════════════════════════════════════════════════
 

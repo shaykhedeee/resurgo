@@ -4,6 +4,25 @@
 
 ---
 
+## Daily Scoreboard (Fill This First)
+
+| Metric | Today | Target | Notes |
+|---|---|---|---|
+| Signups | _____ | Daily pace toward 500+ | |
+| Activation % | _____ | >65% | |
+| Paid conversions | _____ | Trend toward 4%+ activated-to-paid | |
+| Best source today | _____ | One clear winner | |
+| Biggest objection heard | _____ | Must inform tomorrow’s copy | |
+
+### Daily Rules
+
+- Finish the **one highest-leverage action** before doing maintenance work.
+- Respond to real user feedback before creating more assets.
+- End the day with one logged learning, not just checked boxes.
+- If the metric moves in the wrong direction, tomorrow’s work must address that metric first.
+
+---
+
 ## DAY 1 — 2026-04-13 (TOMORROW)
 
 ### Morning (9:00 AM)
@@ -44,6 +63,11 @@
 - ✅ 50+ thread impressions
 - ✅ 50+ signups
 - ✅ 3+ direct tweet signups (CTA clicks)
+
+### End-of-Day Notes
+- Best reply / objection heard: ________________________________
+- Most clicked CTA / link: ____________________________________
+- Tomorrow’s priority adjustment: _____________________________
 
 ---
 
@@ -91,6 +115,11 @@
 - ✅ 2 Reddit posts live
 - ✅ 100+ new signups (Days 1–2 cumulative)
 - ✅ 50+ Reddit upvotes combined
+
+### End-of-Day Notes
+- Which post attracted the best-fit users? ____________________
+- Which objections repeated? _________________________________
+- What should be reused tomorrow? ____________________________
 
 ---
 
@@ -143,6 +172,11 @@
 - ✅ 300+ total signups (Days 1–3 cumulative)
 - ✅ >60% activation rate
 
+### End-of-Day Notes
+- Strongest testimonial / proof asset: ________________________
+- Which audience responded best? _____________________________
+- What should be added to pricing/onboarding next? ___________
+
 ---
 
 ## WEEK 1 RECAP (After Day 7)
@@ -174,6 +208,11 @@
 - Was day-7 retention >30%? YES / NO
 - Did any channel outperform? YES / NO (which: _______)
 
+### Keep / Kill / Fix
+- Keep doing: ________________________________________________
+- Kill or pause: _____________________________________________
+- Fix next week: _____________________________________________
+
 ---
 
 ## CONTINGENCY PLAYBOOK
@@ -198,6 +237,12 @@
 - [ ] Add testimonial block to /pricing (from Product Hunt)
 - [ ] Test CTA copy (A/B test variation B vs. control)
 - [ ] Increase lifetime urgency (countdown: "847 of 1,000 founder seats")
+
+### If retention is weaker than expected by Day 10
+- [ ] Pause low-quality distribution for 24 hours
+- [ ] Publish one retention/proof asset instead of a new acquisition asset
+- [ ] Send one focused reactivation message tied to the user’s first win
+- [ ] Review whether onboarding sets up too much work too early
 
 ---
 
@@ -235,5 +280,9 @@ Expected completion: 2026-04-27
 ---
 
 **Print this page daily. Check off items. Track metrics. Report on Day 7 + Day 14.**
+
+### Daily Completion Rule
+
+This checklist is only complete when the boxes are checked **and** the metric row at the top is filled in.
 
 **Last updated:** 2026-04-13

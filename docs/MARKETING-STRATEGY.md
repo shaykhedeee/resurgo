@@ -5,6 +5,156 @@
 > **Status source:** live codebase + build/typecheck/test scan + launch-readiness execution review.
 > **Merged from:** This file now includes content previously in `CONTENT-AND-ADS-PLAYBOOK-2026.md` (5 article briefs, Meta/Google ads strategy, email drip sequence, 30-day launch calendar). That file has been deleted.
 
+## Growth Operating System (Single Weekly Rhythm)
+
+This strategy is execution-only. Every week must produce measurable pipeline movement.
+
+### Canonical KPI Stack
+
+- **Traffic quality:** sessions from high-intent pages and channels.
+- **Activation quality:** signup → first meaningful action rate.
+- **Retention quality:** day-1 and day-7 retention for activated users.
+- **Revenue quality:** upgrade starts, paid conversions, and plan mix.
+
+### Weekly Decision Rules
+
+- If signup volume rises but activation drops, prioritize onboarding + first-action UX over new acquisition.
+- If activation is stable but paid conversion drops, prioritize pricing/paywall copy + offer sequencing.
+- If social traffic is high with low retention, tighten message-to-product match and landing page intent.
+- If one channel drives best activated signups, scale it for 7 days before testing a new channel.
+
+### Experiment Protocol (Do Not Skip)
+
+For every test, log:
+
+1. Hypothesis (single sentence)
+2. Surface (page, email, social asset)
+3. Primary metric (one only)
+4. Success threshold
+5. Result + keep/kill decision
+
+Use one experiment owner and one review date. No orphaned tests.
+
+### Weekly Operator Cadence
+
+- **Mon:** acquisition push (new content or channel asset)
+- **Tue/Wed:** conversion tests (pricing/CTA/paywall/onboarding)
+- **Thu:** retention lever (email, in-app nudge, win-back)
+- **Fri:** metrics review + next-week commitments
+- **Sun:** strategic recalibration and backlog pruning
+
+### Definition of Done (Growth Work)
+
+Work is done only when:
+
+- asset is published,
+- tracking is verified,
+- result is logged,
+- decision is recorded,
+- follow-up action is assigned.
+
+## Growth Command Center (Use This First)
+
+Treat this section as the weekly command layer. The rest of this file is the reference library.
+
+### Quarter Priorities
+
+1. **Demand capture:** publish and refresh pages that attract high-intent organic + answer-engine traffic.
+2. **Activation quality:** improve signup → first meaningful action rate.
+3. **Retention proof:** turn week-1 user wins into conversion assets.
+4. **Offer clarity:** make Free, Pro, and Lifetime upgrade paths obvious and timely.
+
+### Non-Negotiable Weekly Outputs
+
+Every week must ship all 5:
+
+| Output | Minimum Weekly Target |
+|---|---|
+| New or refreshed conversion asset | 2 |
+| Social/community distribution assets | 5 |
+| Retention proof assets | 1 |
+| Funnel experiment | 1 |
+| KPI review + keep/kill decisions | 1 |
+
+### Channel Role Map
+
+| Channel | Job | Primary Metric | Failure Signal |
+|---|---|---|---|
+| Organic search | Capture high-intent demand | Sign-up assists | Traffic with low CTA clicks |
+| X / LinkedIn | Narrate momentum + distribute proof | Qualified clicks | High impressions, weak activations |
+| Reddit / communities | Validate pain + language | Engaged replies, assists | Pushback, low saves, low click quality |
+| Email | Activate and recover users | Return rate, click rate | Opens without return sessions |
+| Product surfaces | Convert intent into action | First meaningful action rate | Signups with weak day-1 behavior |
+
+### Offer Ladder Rules
+
+- **Free** should prove the system works.
+- **Pro** should remove limits and deepen coaching.
+- **Lifetime** should reward conviction and reduce future churn.
+
+If a message cannot clearly explain why someone should stay free, go Pro, or buy Lifetime, the copy is not ready.
+
+### Weekly Review Sheet
+
+Answer these every Friday:
+
+1. Which channel drove the highest-quality signups?
+2. Which page produced the most pricing clicks?
+3. Which user objection repeated most often?
+4. Which asset should be repurposed 3 more ways next week?
+5. What should be paused, simplified, or killed?
+
+### Asset Repurposing Standard
+
+Every strong asset must turn into:
+
+- 1 long-form source asset,
+- 1 founder/operator post,
+- 1 short-form social angle,
+- 1 community-safe value post,
+- 1 email or onboarding snippet,
+- 1 product-surface proof block or FAQ insertion.
+
+### Stop-Doing List
+
+Do **not** spend operator time on:
+
+- vanity pageviews without signup intent,
+- generic motivational posting with no product learning,
+- launching new channels before the current best one is saturated,
+- publishing net-new pages when refreshes would win faster,
+- vague experiments without one owner and one primary metric.
+
+## ✅ 2026-04-19 Growth Execution Delta (Release + Content Ops)
+
+Completed in this cycle:
+
+- Landing page canonicalization pass applied to align public copy with `PRODUCT_TRUTH.md`:
+  - 5 coaches only (Marcus, Titan, Aurora, Phoenix, Nexus)
+  - removed stale 6-coach/Zenon references from marketing copy + schema text
+- Published 5 new high-intent blog assets for SEO/AEO/GEO demand capture:
+  1. `best-ai-accountability-apps-2026`
+  2. `weekly-planning-for-solo-founders-ai-system`
+  3. `how-to-stop-procrastinating-when-overwhelmed-2026`
+  4. `habit-tracker-vs-task-manager-what-to-use-2026`
+  5. `aeo-geo-content-ops-playbook-2026`
+- Citation ops formalized for weekly execution in `docs/operations/AEO-GEO-CITATION-TRACKER.md` with explicit weekly workflow and accountability fields.
+
+Expected impact:
+
+- Higher citation eligibility for answer engines (question-led content + direct answers)
+- Better conversion quality from commercial-intent educational traffic
+- Reduced brand contradiction risk on money pages (coach/pricing consistency)
+
+Operator requirement before release announcement:
+
+- Validate full release gate in this order:
+  1. `npm run typecheck`
+  2. `npm run build`
+  3. `npm test`
+
+Only announce or promote after all three pass.
+
 ## ✅ 2026-04-14 Product + Content Execution Update (Auth + Blog Refresh)
 
 Shipped today:
