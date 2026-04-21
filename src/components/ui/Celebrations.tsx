@@ -289,8 +289,9 @@ export function CelebrationBurst({ active, x = 50, y = 50, onComplete }: Celebra
 
 interface FloatingXPProps {
   amount: number;
-  // x and y are kept for API compatibility but no longer used for positioning
+  /** @deprecated No longer used for positioning — XP popup now always appears at the bottom-right corner. */
   x?: number;
+  /** @deprecated No longer used for positioning — XP popup now always appears at the bottom-right corner. */
   y?: number;
   onComplete: () => void;
 }
