@@ -26,6 +26,7 @@ function pad(n: number) {
 export default function CalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
 
   const year = currentDate.getFullYear();
   const month = currentDate.getMonth();
@@ -155,6 +156,30 @@ export default function CalendarPage() {
           </div>
         </div>
 
+        {/* -- UPCOMING 7 DAYS PANEL -- */}
+        <div className="surface-panel mb-4 overflow-hidden">
+          <div className="surface-header">
+            <span className="h-1.5 w-1.5 rounded-full bg-cyan-600" />
+            <span className="surface-kicker-accent">Upcoming 7 days</span>
+          </div>
+          <div className="divide-y divide-zinc-900">
+            {Array.from({ length: 7 }).map((_, i) => {
+              const d = new Date(today);
+              d.setDate(d.getDate() + i);
+              const ds = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+              const tc = allTasks?.filter((t) => t.dueDate === ds && t.status !== 'done').length ?? 0;
+              const hc = habitLogs?.filter((h) => h.date === ds && h.completedAt).length ?? 0;
+              return (
+                <div key={ds} className="flex items-center gap-4 px-4 py-2">
+                  <span className="w-36 font-mono text-xs text-zinc-400">{ds === todayStr ? `${ds} (today)` : ds}</span>
+                  <span className="font-mono text-xs text-cyan-400">{tc} task{tc !== 1 ? 's' : ''}</span>
+                  <span className="font-mono text-xs text-green-400">{hc} habit{hc !== 1 ? 's' : ''}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* -- CALENDAR PANEL -- */}
         <div className="surface-panel overflow-hidden">
           {/* Month navigation */}
@@ -175,6 +200,17 @@ export default function CalendarPage() {
               >
                 [TODAY]
               </button>
+              <div className="mt-1 flex justify-center gap-1">
+                {(['month', 'week', 'day'] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setViewMode(m)}
+                    className={`border px-2 py-0.5 font-mono text-xs transition ${viewMode === m ? 'border-orange-600 text-orange-400' : 'border-zinc-800 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300'}`}
+                  >
+                    {m.toUpperCase()}
+                  </button>
+                ))}
+              </div>
             </div>
             <button
               onClick={nextMonth}
@@ -185,57 +221,132 @@ export default function CalendarPage() {
           </div>
 
           <div className="p-3 md:p-4">
-            {/* Days of week header */}
-            <div className="mb-1 grid grid-cols-7 gap-px">
-              {DAYS.map((d) => (
-                <div key={d} className="py-1.5 text-center font-mono text-xs tracking-widest text-zinc-400">
-                  {d.toUpperCase()}
+            {/* Month view */}
+            {viewMode === 'month' && (
+              <>
+                {/* Days of week header */}
+                <div className="mb-1 grid grid-cols-7 gap-px">
+                  {DAYS.map((d) => (
+                    <div key={d} className="py-1.5 text-center font-mono text-xs tracking-widest text-zinc-400">
+                      {d.toUpperCase()}
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
 
-            {/* Calendar grid */}
-            <div className="mb-4 grid grid-cols-7 gap-px bg-zinc-900">
-              {calendarDays.map((day, i) => {
-                if (day === null) return <div key={`empty-${i}`} className="bg-zinc-950" />;
+                {/* Calendar grid */}
+                <div className="mb-4 grid grid-cols-7 gap-px bg-zinc-900">
+                  {calendarDays.map((day, i) => {
+                    if (day === null) return <div key={`empty-${i}`} className="bg-zinc-950" />;
 
-                const dateStr = `${year}-${pad(month + 1)}-${pad(day)}`;
-                const isToday    = dateStr === todayStr;
-                const isSelected = dateStr === selectedDate;
-                const data       = completionMap[dateStr];
-                const hasActivity = data && (data.habits > 0 || data.tasks > 0);
+                    const dateStr = `${year}-${pad(month + 1)}-${pad(day)}`;
+                    const isToday    = dateStr === todayStr;
+                    const isSelected = dateStr === selectedDate;
+                    const data       = completionMap[dateStr];
+                    const hasActivity = data && (data.habits > 0 || data.tasks > 0);
 
-                return (
-                  <button
-                    key={dateStr}
-                    onClick={() => setSelectedDate(isSelected ? null : dateStr)}
-                    className={`flex h-12 flex-col items-center justify-center text-sm transition md:h-14 ${
-                      isSelected
-                        ? 'bg-orange-950/50 font-bold text-orange-500'
-                        : isToday
-                          ? 'bg-zinc-900 font-bold text-orange-400'
-                          : 'bg-zinc-950 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
-                    }`}
-                  >
-                    <span className="font-mono text-xs">{day}</span>
-                    {hasActivity && !isSelected && (
-                      <div className="mt-0.5 flex gap-0.5">
-                        {data.habits > 0 && <div className="h-1 w-1 bg-green-500" />}
-                        {data.tasks  > 0 && <div className="h-1 w-1 bg-cyan-500" />}
+                    return (
+                      <button
+                        key={dateStr}
+                        onClick={() => setSelectedDate(isSelected ? null : dateStr)}
+                        className={`flex h-12 flex-col items-center justify-center text-sm transition md:h-14 ${
+                          isSelected
+                            ? 'bg-orange-950/50 font-bold text-orange-500'
+                            : isToday
+                              ? 'bg-zinc-900 font-bold text-orange-400'
+                              : 'bg-zinc-950 text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300'
+                        }`}
+                      >
+                        <span className="font-mono text-xs">{day}</span>
+                        {hasActivity && !isSelected && (
+                          <div className="mt-0.5 flex items-center gap-0.5">
+                            {data.habits > 0 && <div className="h-1 w-1 bg-green-500" />}
+                            {data.tasks  > 0 && <div className="h-1 w-1 bg-cyan-500" />}
+                            {data.habits >= 3 && <span className="text-xs leading-none">🔥</span>}
+                          </div>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+
+            {/* Week view */}
+            {viewMode === 'week' && (() => {
+              const ws = new Date(currentDate);
+              const dow = ws.getDay();
+              ws.setDate(ws.getDate() + (dow === 0 ? -6 : 1 - dow));
+              const weekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+              return (
+                <div className="mb-4 grid grid-cols-7 gap-px bg-zinc-900">
+                  {weekLabels.map((label, i) => {
+                    const d = new Date(ws);
+                    d.setDate(d.getDate() + i);
+                    const ds = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+                    const dayTasks = allTasks?.filter((t) => t.dueDate === ds) ?? [];
+                    const dayHabits = habitLogs?.filter((h) => h.date === ds && h.completedAt).length ?? 0;
+                    const isTodayCol = ds === todayStr;
+                    return (
+                      <div key={ds} className="min-h-24 bg-zinc-950 p-1.5">
+                        <div className={`mb-1 font-mono text-xs font-bold ${isTodayCol ? 'text-orange-400' : 'text-zinc-400'}`}>
+                          {label} {d.getDate()}
+                        </div>
+                        {dayTasks.slice(0, 3).map((t) => (
+                          <div key={String(t._id)} className="truncate font-mono text-xs text-cyan-400">{t.title}</div>
+                        ))}
+                        {dayHabits > 0 && (
+                          <div className="mt-0.5 font-mono text-xs text-green-400">{dayHabits} ✓</div>
+                        )}
                       </div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
+
+            {/* Day view */}
+            {viewMode === 'day' && (() => {
+              const dayStr = selectedDate ?? todayStr;
+              const dayTasks = allTasks?.filter((t) => t.dueDate === dayStr) ?? [];
+              const dayHabits = habitLogs?.filter((h) => h.date === dayStr && h.completedAt).length ?? 0;
+              return (
+                <div className="mb-4">
+                  <p className="mb-3 font-mono text-xs font-bold tracking-widest text-zinc-300">
+                    DAY_VIEW_{dayStr}
+                  </p>
+                  {dayTasks.length === 0 && dayHabits === 0 ? (
+                    <p className="font-mono text-xs text-zinc-500">NO_ACTIVITY_FOR_THIS_DAY</p>
+                  ) : (
+                    <div className="space-y-1.5">
+                      {dayTasks.map((t) => (
+                        <div key={String(t._id)} className="flex items-center gap-2">
+                          <div className={`h-1.5 w-1.5 flex-shrink-0 ${t.status === 'done' ? 'bg-cyan-500' : 'bg-zinc-600'}`} />
+                          <span className="font-mono text-xs text-zinc-300">{t.title}</span>
+                          {t.status === 'done' && <span className="font-mono text-xs text-zinc-600">DONE</span>}
+                        </div>
+                      ))}
+                      {dayHabits > 0 && (
+                        <div className="flex items-center gap-2">
+                          <div className="h-1.5 w-1.5 flex-shrink-0 bg-green-500" />
+                          <span className="font-mono text-xs text-green-400">{dayHabits} habit{dayHabits !== 1 ? 's' : ''} completed</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Legend */}
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-green-500" /> HABITS_COMPLETED
               </span>
               <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
                 <div className="h-1.5 w-1.5 bg-cyan-500" /> TASKS_COMPLETED
+              </span>
+              <span className="flex items-center gap-1.5 font-mono text-xs tracking-widest text-zinc-400">
+                🔥 = streak day (3+ habits)
               </span>
             </div>
           </div>

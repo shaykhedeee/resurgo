@@ -263,3 +263,96 @@ export const logExpenseFromAI = mutation({
     });
   },
 });
+
+// ─── BUDGET PROFILE (AI-powered wizard data) ────────────────────────────────
+
+export const saveBudgetProfile = mutation({
+  args: {
+    lifeStage: v.string(),
+    householdType: v.string(),
+    incomeAmount: v.number(),
+    incomeFrequency: v.string(),
+    currency: v.string(),
+    budgetGoal: v.string(),
+    dietaryPreference: v.string(),
+    cooksAtHome: v.string(),
+    hasTransportCosts: v.boolean(),
+    fixedCommitments: v.optional(v.array(v.object({ name: v.string(), amount: v.number() }))),
+    duration: v.string(),
+    location: v.optional(v.string()),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const user = await getAuthUser(ctx);
+    const existing = await ctx.db
+      .query('budgetProfiles')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .unique();
+    if (existing) {
+      await ctx.db.patch(existing._id, { ...args, updatedAt: Date.now() });
+    } else {
+      await ctx.db.insert('budgetProfiles', {
+        userId: user._id,
+        ...args,
+        updatedAt: Date.now(),
+        createdAt: Date.now(),
+      });
+    }
+    return null;
+  },
+});
+
+export const getBudgetProfile = query({
+  args: {},
+  returns: v.union(v.any(), v.null()),
+  handler: async (ctx) => {
+    const user = await getAuthUser(ctx);
+    return await ctx.db
+      .query('budgetProfiles')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .unique();
+  },
+});
+
+export const saveBudgetPlan = mutation({
+  args: {
+    planJson: v.string(),
+    currency: v.string(),
+    totalBudget: v.number(),
+    month: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const user = await getAuthUser(ctx);
+    const existing = await ctx.db
+      .query('budgetPlans')
+      .withIndex('by_userId_month', (q: any) => q.eq('userId', user._id).eq('month', args.month))
+      .unique();
+    if (existing) {
+      await ctx.db.patch(existing._id, { planJson: args.planJson, currency: args.currency, totalBudget: args.totalBudget, updatedAt: Date.now() });
+    } else {
+      await ctx.db.insert('budgetPlans', {
+        userId: user._id,
+        planJson: args.planJson,
+        currency: args.currency,
+        totalBudget: args.totalBudget,
+        month: args.month,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+      });
+    }
+    return null;
+  },
+});
+
+export const getBudgetPlan = query({
+  args: { month: v.string() },
+  returns: v.union(v.any(), v.null()),
+  handler: async (ctx, { month }) => {
+    const user = await getAuthUser(ctx);
+    return await ctx.db
+      .query('budgetPlans')
+      .withIndex('by_userId_month', (q: any) => q.eq('userId', user._id).eq('month', month))
+      .unique();
+  },
+});

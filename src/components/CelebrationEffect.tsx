@@ -84,8 +84,8 @@ export function CelebrationLayer({
       {xpFloats.map((f) => (
         <div
           key={f.id}
-          className="absolute animate-xp-float font-pixel text-sm tracking-widest text-orange-400 drop-shadow-[0_0_6px_rgba(249,115,22,0.6)]"
-          style={{ left: f.x - 20, top: f.y }}
+          className="animate-xp-float font-pixel text-[14px] tracking-widest text-orange-400 drop-shadow-[0_0_6px_rgba(249,115,22,0.6)]"
+          style={{ position: 'fixed', bottom: '40px', right: '24px' }}
         >
           +{f.amount} XP
         </div>

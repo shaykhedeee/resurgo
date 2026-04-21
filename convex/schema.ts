@@ -1662,4 +1662,66 @@ export default defineSchema({
   })
     .index('by_userId', ['userId'])
     .index('by_reason', ['reason']),
+
+  // ─── Budget Profiles (AI wizard setup) ──────────────────────────────────────
+  budgetProfiles: defineTable({
+    userId: v.id('users'),
+    lifeStage: v.string(),
+    householdType: v.string(),
+    incomeAmount: v.number(),
+    incomeFrequency: v.string(),
+    currency: v.string(),
+    budgetGoal: v.string(),
+    dietaryPreference: v.string(),
+    cooksAtHome: v.string(),
+    hasTransportCosts: v.boolean(),
+    fixedCommitments: v.optional(v.array(v.object({ name: v.string(), amount: v.number() }))),
+    duration: v.string(),
+    location: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  // ─── Budget Plans (AI-generated monthly plans) ───────────────────────────────
+  budgetPlans: defineTable({
+    userId: v.id('users'),
+    planJson: v.string(),
+    currency: v.string(),
+    totalBudget: v.number(),
+    month: v.string(),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  }).index('by_userId_month', ['userId', 'month']),
+
+  // ─── Assets (Net Worth tracker) ──────────────────────────────────────────────
+  assets: defineTable({
+    userId: v.id('users'),
+    name: v.string(),
+    type: v.union(v.literal('savings'), v.literal('property'), v.literal('investment'), v.literal('crypto'), v.literal('vehicle'), v.literal('other')),
+    value: v.number(),
+    currency: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  // ─── Liabilities (Net Worth tracker) ─────────────────────────────────────────
+  liabilities: defineTable({
+    userId: v.id('users'),
+    name: v.string(),
+    type: v.union(v.literal('loan'), v.literal('credit_card'), v.literal('overdraft'), v.literal('mortgage'), v.literal('other')),
+    balance: v.number(),
+    interestRate: v.optional(v.number()),
+    minimumPayment: v.optional(v.number()),
+    currency: v.optional(v.string()),
+    createdAt: v.number(),
+  }).index('by_userId', ['userId']),
+
+  // ─── Net Worth Snapshots (monthly history) ────────────────────────────────────
+  netWorthSnapshots: defineTable({
+    userId: v.id('users'),
+    netWorth: v.number(),
+    totalAssets: v.number(),
+    totalLiabilities: v.number(),
+    month: v.string(),
+    recordedAt: v.number(),
+  }).index('by_userId', ['userId']).index('by_userId_month', ['userId', 'month']),
 });

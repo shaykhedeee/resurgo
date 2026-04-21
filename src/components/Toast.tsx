@@ -141,7 +141,7 @@ export function XPPopup({ amount, x, y, onComplete }: XPPopupProps) {
   return (
     <div
       className="fixed z-50 pointer-events-none animate-float-up"
-      style={{ left: x, top: y }}
+      style={{ bottom: '40px', right: '24px' }}
     >
       <div className="flex items-center gap-1 px-3 py-1.5 rounded-full 
                     bg-gold-400/20 border border-gold-400/30 backdrop-blur-sm">

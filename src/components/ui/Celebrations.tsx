@@ -309,9 +309,8 @@ export function FloatingXP({ amount, x, y, onComplete }: FloatingXPProps) {
     <div
       className="fixed pointer-events-none animate-xp-gain"
       style={{
-        left: x,
-        top: y,
-        transform: 'translate(-50%, -50%)',
+        bottom: '40px',
+        right: '24px',
         zIndex: 'var(--z-celebration)',
       }}
     >
