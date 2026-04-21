@@ -216,8 +216,12 @@ export async function routeBrainCall(
       return tryBYOK();
     }
     case 'cloud': {
-      await tryCloud(); // always throws — cloud is handled server-side
-      throw new Error('unreachable');
+      // Cloud routing is handled server-side by Next.js API routes (/api/coach etc.)
+      // Client-side code should call those endpoints directly, not this function.
+      throw new Error(
+        'Cloud routing must be done through the Next.js API routes (/api/coach, etc.). ' +
+        'Use callAI() from provider-router.ts in server components / API routes.'
+      );
     }
     case 'hybrid':
     default: {

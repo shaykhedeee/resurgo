@@ -51,14 +51,14 @@ const FEATURES = [
 ];
 
 
-// Desktop app download URLs
+// Desktop app download URL — points to the latest GitHub Release for all platforms
 const TAURI_RELEASE_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
 // APK download URL — update to self-hosted if APK is uploaded to /public/downloads/
 // If /public/downloads/resurgo-latest.apk exists, use the line below:
 // const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
 // Otherwise, fallback to GitHub Releases:
 const APK_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
-const APK_VERSION = 'v1.0.0';
+const APP_VERSION = 'v1.0.0';
 
 // ─── Shared step list ─────────────────────────────────────────────────────────
 function StepList({
@@ -135,7 +135,7 @@ export default function DownloadPage() {
                 <p className="mt-0.5 font-terminal text-xs text-zinc-500">APK direct download · or install via Chrome</p>
               </div>
               <span className="border border-green-800 bg-green-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-green-400">
-                {APK_VERSION}
+                {APP_VERSION}
               </span>
             </div>
 
@@ -146,7 +146,7 @@ export default function DownloadPage() {
               rel="noopener noreferrer"
               className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
             >
-              ⬇&nbsp;&nbsp;Download APK ({APK_VERSION})
+              ⬇&nbsp;&nbsp;Download APK ({APP_VERSION})
             </a>
             <p className="mb-5 font-terminal text-[0.6rem] text-zinc-600">
               SHA-256 checksum listed on the GitHub release page · Android 8.0+ required
@@ -213,7 +213,7 @@ export default function DownloadPage() {
                 <p className="mt-0.5 font-terminal text-xs text-zinc-500">Native .exe installer — Tauri v2</p>
               </div>
               <span className="border border-orange-800 bg-orange-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-orange-400">
-                {APK_VERSION}
+                {APP_VERSION}
               </span>
             </div>
 
@@ -257,7 +257,7 @@ export default function DownloadPage() {
                 <p className="mt-0.5 font-terminal text-xs text-zinc-500">Native .dmg installer — Tauri v2</p>
               </div>
               <span className="border border-orange-800 bg-orange-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-orange-400">
-                {APK_VERSION}
+                {APP_VERSION}
               </span>
             </div>
 
@@ -388,7 +388,7 @@ export default function DownloadPage() {
             applicationCategory: 'LifestyleApplication',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
             downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
-            softwareVersion: APK_VERSION,
+            softwareVersion: APP_VERSION,
             description:
               'AI-powered productivity assistant. Install on Android (APK), iPhone/iPad (PWA), Windows and macOS.',
             url: 'https://resurgo.life',

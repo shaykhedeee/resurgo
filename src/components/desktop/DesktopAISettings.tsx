@@ -220,13 +220,14 @@ function KeyInput({ id, label, placeholder, docsUrl, isConfigured, onSave, onDel
 
 interface DesktopAISettingsProps {
   /** Pass the runtime if already loaded in a parent; otherwise will load its own */
-  runtime?: ReturnType<typeof useDesktopRuntime>;
+  runtimeOverride?: Partial<ReturnType<typeof useDesktopRuntime>>;
 }
 
-export function DesktopAISettings({ runtime: externalRuntime }: DesktopAISettingsProps) {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+export function DesktopAISettings({ runtimeOverride }: DesktopAISettingsProps) {
+  // Always call the hook unconditionally (Rules of Hooks)
   const ownRuntime = useDesktopRuntime();
-  const runtime = externalRuntime ?? ownRuntime;
+  // Allow caller to override individual values (e.g. in tests or parent-managed state)
+  const runtime = runtimeOverride ? { ...ownRuntime, ...runtimeOverride } : ownRuntime;
 
   const { policy, setPolicy, checking, localAgent, byokProviders, saveKey, deleteKey, refresh } = runtime;
 
