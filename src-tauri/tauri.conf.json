@@ -1,0 +1,94 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Resurgo",
+  "version": "2.0.0",
+  "identifier": "life.resurgo.app",
+  "build": {
+    "frontendDist": "../out",
+    "devUrl": "http://localhost:3000",
+    "beforeDevCommand": "npm run dev:next",
+    "beforeBuildCommand": "npm run build:desktop"
+  },
+  "app": {
+    "withGlobalTauri": true,
+    "windows": [
+      {
+        "label": "main",
+        "title": "Resurgo",
+        "width": 1280,
+        "height": 800,
+        "minWidth": 900,
+        "minHeight": 600,
+        "center": true,
+        "resizable": true,
+        "decorations": true,
+        "transparent": false,
+        "titleBarStyle": "Visible",
+        "hiddenTitle": false,
+        "fullscreen": false,
+        "acceptFirstMouse": true,
+        "windowEffects": {
+          "effects": ["blur"],
+          "state": "active",
+          "radius": 0
+        }
+      }
+    ],
+    "macOSPrivateApi": false
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "resources": [],
+    "externalBin": [],
+    "copyright": "© 2025 Resurgo",
+    "category": "Productivity",
+    "shortDescription": "AI Productivity Assistant",
+    "longDescription": "Resurgo is an AI-powered life command center for habits, tasks, goals, focus, and coaching — now available as a desktop app with local AI support.",
+    "windows": {
+      "wix": {},
+      "nsis": {}
+    },
+    "macOS": {
+      "frameworks": [],
+      "signingIdentity": null,
+      "entitlements": null
+    },
+    "linux": {
+      "deb": {
+        "depends": []
+      },
+      "rpm": {
+        "depends": []
+      }
+    },
+    "publisher": "Resurgo",
+    "homepage": "https://resurgo.life",
+    "license": "UNLICENSED"
+  },
+  "plugins": {
+    "updater": {
+      "pubkey": "",
+      "endpoints": [
+        "https://resurgo.life/api/desktop/update/{{target}}/{{arch}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "windows": {
+        "installMode": "passive"
+      }
+    },
+    "window-state": {
+      "filename": "resurgo-window-state.json"
+    },
+    "autostart": {
+      "manager": "LaunchAgent"
+    }
+  }
+}

@@ -12,6 +12,12 @@ build/
 dist/
 tsconfig.tsbuildinfo
 
+# ─── TAURI / RUST ────────────────────────────────────────────────────
+src-tauri/target/
+src-tauri/WixTools/
+*.exe.pdb
+*.msi.pdb
+
 # ─── DEPENDENCIES ───────────────────────────────────────────────────
 node_modules/
 .pnpm-store/
