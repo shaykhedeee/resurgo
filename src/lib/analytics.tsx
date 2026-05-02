@@ -14,7 +14,7 @@ const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX';
 const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_ID || '';
 
 // Whether analytics is enabled
-const ANALYTICS_ENABLED = process.env.NODE_ENV === 'production' && GA_MEASUREMENT_ID !== 'G-XXXXXXXXXX';
+const ANALYTICS_ENABLED = false; // Temporarily disabled due to Script rendering issue
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // TYPE DEFINITIONS
@@ -61,29 +61,21 @@ export function GoogleAnalytics() {
     return null;
   }
 
+  const gaScriptUrl = `https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`;
+  const gaInitScript = `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','${GA_MEASUREMENT_ID}',{page_path:window.location.pathname,anonymize_ip:true,cookie_flags:'SameSite=None;Secure'});`;
+
   return (
     <>
       <Script
+        async
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        src={gaScriptUrl}
       />
       <Script
-        id="google-analytics"
+        id="google-analytics-init"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
-          __html: `
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', '${GA_MEASUREMENT_ID}', {
-              page_path: window.location.pathname,
-              anonymize_ip: true,
-              cookie_flags: 'SameSite=None;Secure',
-            });
-
-            // Mark key events as GA4 conversions
-            gtag('event', 'conversion', { send_to: '${GA_MEASUREMENT_ID}' });
-          `,
+          __html: gaInitScript,
         }}
       />
     </>
@@ -122,10 +114,13 @@ export function MicrosoftClarity() {
 export function pageview(url: string, title?: string): void {
   if (!ANALYTICS_ENABLED || typeof window === 'undefined') return;
   
-  window.gtag('config', GA_MEASUREMENT_ID, {
-    page_path: url,
-    page_title: title,
-  });
+  // Safely call gtag if it exists
+  if (typeof window.gtag === 'function') {
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_path: url,
+      page_title: title,
+    });
+  }
 }
 
 function readAttributionFromUrl(): AttributionParams {
@@ -190,15 +185,18 @@ export function trackEvent(
 ): void {
   if (!ANALYTICS_ENABLED || typeof window === 'undefined') return;
 
-  const attribution = getAttributionParams();
-  
-  window.gtag('event', action, {
-    event_category: category,
-    event_label: label,
-    value: value,
-    ...attribution,
-    ...params,
-  });
+  // Safely call gtag if it exists
+  if (typeof window.gtag === 'function') {
+    const attribution = getAttributionParams();
+    
+    window.gtag('event', action, {
+      event_category: category,
+      event_label: label,
+      value: value,
+      ...attribution,
+      ...params,
+    });
+  }
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────

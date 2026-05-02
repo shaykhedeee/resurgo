@@ -1,0 +1,15 @@
+[mcp_servers.dodo-knowledge]
+args = [
+    "-y",
+    "mcp-remote@latest",
+    "https://knowledge.dodopayments.com/mcp",
+]
+command = "npx"
+
+[mcp_servers.dodopayments]
+args = [
+    "-y",
+    "mcp-remote@latest",
+    "https://mcp.dodopayments.com/sse",
+]
+command = "npx"

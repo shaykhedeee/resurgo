@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { SignUp } from '@clerk/nextjs';
-import { AuthRuntimeBoundary } from '@/components/AuthRuntimeBoundary';
+import { AuthErrorBoundary } from '@/components/AuthErrorBoundary';
 import { clerkAppearance, hasValidClerkKey } from '@/lib/auth/clerkAppearance';
 
 export default function Page() {
@@ -84,7 +84,7 @@ export default function Page() {
           </div>
 
           <div className="p-6 sm:p-7">
-            <AuthRuntimeBoundary mode="sign-up">
+            <AuthErrorBoundary route="sign-up">
               <SignUp
                 routing="path"
                 path="/sign-up"
@@ -93,7 +93,7 @@ export default function Page() {
                 forceRedirectUrl="/dashboard"
                 appearance={clerkAppearance}
               />
-            </AuthRuntimeBoundary>
+            </AuthErrorBoundary>
           </div>
         </div>
 

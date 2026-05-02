@@ -8,6 +8,7 @@ import { auth, currentUser } from '@clerk/nextjs/server';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../../convex/_generated/api';
 import { parseBrainDump } from '@/lib/ai/brain-dump/parser';
+import { enhanceBrainDumpAnalysis } from '@/lib/ai/brain-dump/pattern-analyzer';
 
 const convex = new ConvexHttpClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
@@ -95,9 +96,20 @@ export async function POST(req: NextRequest) {
     // non-critical
   }
 
+  // ── Enhance analysis with patterns, emotions, cognitive load ──
+  const enhanced = result.data ? enhanceBrainDumpAnalysis(result.data, body.text) : null;
+
   return NextResponse.json({
     success: true,
     data: result.data,
+    enhanced: enhanced ? {
+      patterns: enhanced.patterns,
+      emotionalTrajectory: enhanced.emotionalTrajectory,
+      cognitiveLoad: enhanced.cognitiveLoad,
+      deepInsights: enhanced.deepInsights,
+      recommendedApproach: enhanced.recommendedApproach,
+      warningFlags: enhanced.warningFlags,
+    } : null,
     provider: result.provider,
     attempts: result.attempts,
     latencyMs: result.totalLatencyMs,

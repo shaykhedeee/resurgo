@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ConvexHttpClient } from 'convex/browser';
 import { api } from '../../../../../convex/_generated/api';
 
+// Ensure this route is always dynamic and not cached
+export const dynamic = 'force-dynamic';
+
 type AnalyticsApiShape = {
   marketing?: {
     logEvent?: unknown;
@@ -26,12 +29,12 @@ function checkRate(ip: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
-  if (!checkRate(ip)) {
-    return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
-  }
-
   try {
+    const ip = req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? 'unknown';
+    if (!checkRate(ip)) {
+      return NextResponse.json({ error: 'Rate limit exceeded' }, { status: 429 });
+    }
+
     const body = (await req.json().catch(() => ({}))) as {
       event?: unknown;
       properties?: Record<string, unknown>;
@@ -61,8 +64,23 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch {
-    return NextResponse.json({ success: true });
+    // Silently fail for analytics — don't break app
+    return NextResponse.json({ success: true }, { status: 200 });
   }
+}
+
+/**
+ * GET handler to prevent 404 errors on prefetch/health checks
+ */
+export async function GET() {
+  return NextResponse.json({ status: 'ok', message: 'Analytics event endpoint ready' }, { status: 200 });
+}
+
+/**
+ * HEAD handler for preflight checks
+ */
+export async function HEAD() {
+  return new NextResponse(null, { status: 200 });
 }

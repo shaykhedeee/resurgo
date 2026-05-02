@@ -54,6 +54,71 @@ const SCREENS = [
       { icon: '03', label: 'Free to Start',       desc: 'Marcus & Titan are free forever — upgrade for the rest.' },
     ],
   },
+  {
+    id: 'habits',
+    label: 'Habit Tracker',
+    tag: 'CONSISTENCY_ENGINE',
+    route: '/habits',
+    img: '/screenshots/975shots_so.png',
+    description: 'Build streaks and automate habit stacking with AI scheduling.',
+    features: [
+      { icon: '01', label: 'Streak Tracking',   desc: 'Visual consistency metrics and milestone celebrations.' },
+      { icon: '02', label: 'Habit Stacking',    desc: 'Link habits together for compound momentum.' },
+      { icon: '03', label: 'Smart Scheduling',  desc: 'AI recommends optimal timing based on your patterns.' },
+    ],
+  },
+  {
+    id: 'goals',
+    label: 'Goal Planner',
+    tag: 'DECOMPOSITION_ENGINE',
+    route: '/goals',
+    img: '/screenshots/530shots_so.png',
+    description: 'Turn goals into milestone-driven roadmaps in 90 seconds.',
+    features: [
+      { icon: '01', label: 'AI Decomposition', desc: 'From vague goal to detailed milestones instantly.' },
+      { icon: '02', label: 'Weekly Targets',   desc: 'Clear stepping stones toward each milestone.' },
+      { icon: '03', label: 'Daily Tasks',      desc: 'Always know the one thing you should do today.' },
+    ],
+  },
+  {
+    id: 'vision',
+    label: 'Vision Board',
+    tag: 'VISUAL_MOTIVATION',
+    route: '/vision-board',
+    img: '/screenshots/215_1x_shots_so.png',
+    description: 'AI-generated visual reminders of your dreams and goals.',
+    features: [
+      { icon: '01', label: 'AI Image Gen',     desc: 'Generate stunning board images using AI.' },
+      { icon: '02', label: 'Stock Library',    desc: 'Browse and add licensed imagery instantly.' },
+      { icon: '03', label: 'Mood Board Tool',  desc: 'Mix and match images to craft your future self.' },
+    ],
+  },
+  {
+    id: 'wellness',
+    label: 'Wellness Tracking',
+    tag: 'HEALTH_DASHBOARD',
+    route: '/wellness',
+    img: '/screenshots/223shots_so.png',
+    description: 'Unified health hub — sleep, nutrition, fitness, and mood.',
+    features: [
+      { icon: '01', label: 'Sleep Tracking',   desc: 'Log sleep quality and get recovery recommendations.' },
+      { icon: '02', label: 'Mood & Energy',    desc: 'Daily mood check-ins linked to your output.' },
+      { icon: '03', label: 'Health Metrics',   desc: 'See how wellness fuels your performance.' },
+    ],
+  },
+  {
+    id: 'braindump',
+    label: 'Brain Dump',
+    tag: 'CHAOS_TO_CLARITY',
+    route: '/brain-dump',
+    img: '/screenshots/106shots_so.png',
+    description: 'Pour everything out. AI organizes it into an actionable plan.',
+    features: [
+      { icon: '01', label: 'Freeform Input',   desc: 'Write or paste any jumble of thoughts and ideas.' },
+      { icon: '02', label: 'AI Parsing',       desc: 'Automatically categorized into tasks, goals, reminders.' },
+      { icon: '03', label: 'Instant Planning', desc: 'See priorities and next steps immediately.' },
+    ],
+  },
 ];
 
 // ── Component ─────────────────────────────────────────────────────────────────

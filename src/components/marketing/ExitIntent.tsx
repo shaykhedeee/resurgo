@@ -10,15 +10,19 @@ import { captureUtmParams, trackMarketingEvent } from '@/lib/marketing/analytics
 
 const EXIT_INTENT_LAST_SEEN_KEY = 'resurgo_exit_intent_last_seen';
 const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000;
+const EXIT_INTENT_SHOWN_SESSION = 'resurgo_exit_intent_shown_session';
 
 export default function ExitIntent() {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   const canShow = useMemo(() => {
     if (typeof window === 'undefined') return false;
+    // Don't show if already dismissed in this session
+    if (window.sessionStorage.getItem(EXIT_INTENT_SHOWN_SESSION) === 'true') return false;
     const raw = window.localStorage.getItem(EXIT_INTENT_LAST_SEEN_KEY);
     if (!raw) return true;
     const lastSeen = Number(raw);
@@ -27,15 +31,16 @@ export default function ExitIntent() {
   }, []);
 
   useEffect(() => {
-    if (!canShow) return;
+    if (!canShow || dismissed) return;
     const onMouseLeave = (event: MouseEvent) => {
       if (event.clientY > 10) return;
       setOpen(true);
       window.localStorage.setItem(EXIT_INTENT_LAST_SEEN_KEY, String(Date.now()));
+      window.sessionStorage.setItem(EXIT_INTENT_SHOWN_SESSION, 'true');
     };
     document.addEventListener('mouseleave', onMouseLeave);
     return () => document.removeEventListener('mouseleave', onMouseLeave);
-  }, [canShow]);
+  }, [canShow, dismissed]);
 
   useEffect(() => {
     captureUtmParams();
@@ -78,11 +83,12 @@ export default function ExitIntent() {
           <span className="font-pixel text-[0.45rem] tracking-widest text-orange-700">PROCESS_INTERRUPT</span>
           <button
             type="button"
-            onClick={() => setOpen(false)}
-            className="font-pixel text-[0.45rem] tracking-widest text-zinc-600 hover:text-zinc-300 transition-colors"
+            onClick={() => { setOpen(false); setDismissed(true); }}
+            className="font-pixel text-[0.45rem] tracking-widest text-orange-500 hover:text-orange-300 transition-colors font-bold"
             aria-label="Dismiss"
+            title="Close this popup"
           >
-            [ SKIP {'>>'} ]
+            [ ✕ CLOSE ]
           </button>
         </div>
 
@@ -151,10 +157,10 @@ export default function ExitIntent() {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setOpen(false)}
-                    className="font-pixel text-[0.45rem] tracking-widest text-zinc-600 hover:text-zinc-400 transition-colors whitespace-nowrap"
+                    onClick={() => { setOpen(false); setDismissed(true); }}
+                    className="font-pixel text-[0.45rem] tracking-widest text-orange-500 hover:text-orange-300 transition-colors whitespace-nowrap font-bold px-4 py-2 border border-orange-700 hover:border-orange-500 hover:bg-orange-950/30"
                   >
-                    SKIP {'>>'}
+                    [ SKIP OFFER ]
                   </button>
                 </div>
               </form>

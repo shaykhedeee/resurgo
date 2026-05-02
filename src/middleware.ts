@@ -37,6 +37,8 @@ const isPublicRoute = createRouteMatcher([
   '/api/health',
   '/api/webhooks/dodo',
   '/api/webhooks/clerk-billing',
+  '/api/analytics/event',
+  '/api/analytics/events',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

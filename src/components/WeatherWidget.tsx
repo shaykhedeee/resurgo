@@ -60,7 +60,7 @@ export default function WeatherWidget() {
         locationParam = `${loc.latitude},${loc.longitude}`;
       }
 
-      // Use server-side proxy to avoid CORS issues in production
+      // Use server-side proxy to avoid exposing API key in frontend
       const url = `/api/weather?q=${encodeURIComponent(locationParam)}`;
       const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
       if (!res.ok) throw new Error('Weather API error');
