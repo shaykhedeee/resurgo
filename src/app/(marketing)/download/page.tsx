@@ -51,12 +51,14 @@ const FEATURES = [
 ];
 
 
+// Desktop app download URL — points to the latest GitHub Release for all platforms
+const TAURI_RELEASE_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
 // APK download URL — update to self-hosted if APK is uploaded to /public/downloads/
 // If /public/downloads/resurgo-latest.apk exists, use the line below:
 // const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
 // Otherwise, fallback to GitHub Releases:
 const APK_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
-const APK_VERSION = 'v1.0.0';
+const APP_VERSION = 'v1.0.0';
 
 // ─── Shared step list ─────────────────────────────────────────────────────────
 function StepList({
@@ -105,8 +107,8 @@ export default function DownloadPage() {
             {[
               { label: '⬇ Android APK', color: 'border-green-800 text-green-400 bg-green-950/20' },
               { label: '◎ iOS Safari', color: 'border-blue-800 text-blue-400 bg-blue-950/20' },
-              { label: '◌ Windows', color: 'border-zinc-700 text-zinc-500 bg-zinc-900/40' },
-              { label: '◌ macOS', color: 'border-zinc-700 text-zinc-500 bg-zinc-900/40' },
+              { label: '⬇ Windows .exe', color: 'border-orange-800 text-orange-400 bg-orange-950/20' },
+              { label: '⬇ macOS .dmg', color: 'border-orange-800 text-orange-400 bg-orange-950/20' },
             ].map((p) => (
               <span key={p.label} className={`border px-3 py-1 font-pixel text-[0.45rem] tracking-wider ${p.color}`}>
                 {p.label}
@@ -133,7 +135,7 @@ export default function DownloadPage() {
                 <p className="mt-0.5 font-terminal text-xs text-zinc-500">APK direct download · or install via Chrome</p>
               </div>
               <span className="border border-green-800 bg-green-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-green-400">
-                {APK_VERSION}
+                {APP_VERSION}
               </span>
             </div>
 
@@ -144,7 +146,7 @@ export default function DownloadPage() {
               rel="noopener noreferrer"
               className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
             >
-              ⬇&nbsp;&nbsp;Download APK ({APK_VERSION})
+              ⬇&nbsp;&nbsp;Download APK ({APP_VERSION})
             </a>
             <p className="mb-5 font-terminal text-[0.6rem] text-zinc-600">
               SHA-256 checksum listed on the GitHub release page · Android 8.0+ required
@@ -203,87 +205,91 @@ export default function DownloadPage() {
           </div>
 
           {/* ── WINDOWS ───────────────────────────────────────────────────── */}
-          <div className="relative border-2 border-zinc-800 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.5)] opacity-80">
-            {/* Coming soon ribbon */}
-            <div className="absolute right-0 top-0 border-l border-b border-zinc-700 bg-zinc-800 px-3 py-1 font-pixel text-[0.38rem] tracking-widest text-zinc-400">
-              COMING_SOON
+          <div className="border-2 border-orange-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <Kicker text="WINDOWS" color="text-orange-400" />
+                <h3 className="font-pixel text-base text-zinc-100">Windows</h3>
+                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Native .exe installer — Tauri v2</p>
+              </div>
+              <span className="border border-orange-800 bg-orange-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-orange-400">
+                {APP_VERSION}
+              </span>
             </div>
 
-            <div className="mb-4">
-              <Kicker text="WINDOWS" color="text-zinc-500" />
-              <h3 className="font-pixel text-base text-zinc-500">Windows</h3>
-              <p className="mt-0.5 font-terminal text-xs text-zinc-600">Native .exe installer · Microsoft Store</p>
-            </div>
+            <a
+              href={TAURI_RELEASE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
+            >
+              ⬇&nbsp;&nbsp;Download for Windows (.exe)
+            </a>
+            <p className="mb-5 font-terminal text-[0.6rem] text-zinc-600">
+              Windows 10+ · 64-bit · Tauri v2 native shell · SHA-256 on release page
+            </p>
 
-            <div className="mb-5 border border-zinc-800 bg-zinc-900/40 px-4 py-3">
-              <p className="font-terminal text-xs leading-relaxed text-zinc-500">
-                A native Windows installer (.exe or MSIX via Microsoft Store) is in development. You can already install Resurgo as a desktop app via Chrome or Edge right now.
+            <details className="group mb-4">
+              <summary className="mb-3 cursor-pointer font-pixel text-[0.45rem] tracking-widest text-orange-500 group-open:text-orange-300">
+                HOW_TO_INSTALL ▾
+              </summary>
+              <StepList steps={[
+                { step: 1, text: 'Download the resurgo_setup.exe from the release page.' },
+                { step: 2, text: 'Run the installer and follow the prompts.' },
+                { step: 3, text: 'Resurgo appears in your Start Menu and system tray.' },
+                { step: 4, text: 'Sign in with your Resurgo account to sync data, or use Local AI mode offline.' },
+              ]} color="orange" />
+            </details>
+
+            <div className="border border-orange-900/40 bg-orange-950/10 px-4 py-3 mt-2">
+              <p className="font-terminal text-xs leading-relaxed text-orange-300/70">
+                🧠 <span className="font-bold">Local AI:</span> Download the app, go to Settings → AI and add your own provider keys or connect to a local Ollama model — no internet required for AI inference.
               </p>
             </div>
-
-            <div className="mb-3">
-              <p className="mb-2 font-pixel text-[0.4rem] tracking-widest text-zinc-600">USE_TODAY_VIA_BROWSER</p>
-              <ol className="space-y-2">
-                {[
-                  'Open resurgo.life in Chrome or Edge on Windows.',
-                  'Click the install icon (⊕) in the address bar, or go to ⋮ menu → "Install Resurgo".',
-                  'Click Install. Resurgo opens from your Start Menu and taskbar.',
-                ].map((t, i) => (
-                  <li key={i} className="flex gap-3">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-zinc-700 bg-zinc-900 font-pixel text-[0.5rem] text-zinc-500">
-                      {i + 1}
-                    </span>
-                    <p className="font-terminal text-xs leading-relaxed text-zinc-500">{t}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <p className="mt-2 font-terminal text-[0.6rem] text-zinc-700">
-              Native installer coming — join the waitlist at resurgo.life/roadmap
-            </p>
           </div>
 
           {/* ── macOS ─────────────────────────────────────────────────────── */}
-          <div className="relative border-2 border-zinc-800 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.5)] opacity-80">
-            {/* Coming soon ribbon */}
-            <div className="absolute right-0 top-0 border-l border-b border-zinc-700 bg-zinc-800 px-3 py-1 font-pixel text-[0.38rem] tracking-widest text-zinc-400">
-              COMING_SOON
+          <div className="border-2 border-orange-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <Kicker text="MACOS" color="text-orange-400" />
+                <h3 className="font-pixel text-base text-zinc-100">macOS</h3>
+                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Native .dmg installer — Tauri v2</p>
+              </div>
+              <span className="border border-orange-800 bg-orange-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-orange-400">
+                {APP_VERSION}
+              </span>
             </div>
 
-            <div className="mb-4">
-              <Kicker text="MACOS" color="text-zinc-500" />
-              <h3 className="font-pixel text-base text-zinc-500">macOS</h3>
-              <p className="mt-0.5 font-terminal text-xs text-zinc-600">Native .dmg installer · Mac App Store</p>
-            </div>
+            <a
+              href={TAURI_RELEASE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
+            >
+              ⬇&nbsp;&nbsp;Download for macOS (.dmg)
+            </a>
+            <p className="mb-5 font-terminal text-[0.6rem] text-zinc-600">
+              macOS 11+ · Apple Silicon &amp; Intel · Tauri v2 native shell
+            </p>
 
-            <div className="mb-5 border border-zinc-800 bg-zinc-900/40 px-4 py-3">
-              <p className="font-terminal text-xs leading-relaxed text-zinc-500">
-                A native macOS app (.dmg) is in development. Install Resurgo as a desktop app via Safari or Chrome now while the native version is being prepared.
+            <details className="group mb-4">
+              <summary className="mb-3 cursor-pointer font-pixel text-[0.45rem] tracking-widest text-orange-500 group-open:text-orange-300">
+                HOW_TO_INSTALL ▾
+              </summary>
+              <StepList steps={[
+                { step: 1, text: 'Download resurgo.dmg from the release page.' },
+                { step: 2, text: 'Open the .dmg and drag Resurgo to your Applications folder.' },
+                { step: 3, text: 'Right-click → Open (first launch only, to bypass Gatekeeper).' },
+                { step: 4, text: 'Resurgo appears in your Dock and menu bar.' },
+              ]} color="orange" />
+            </details>
+
+            <div className="border border-orange-900/40 bg-orange-950/10 px-4 py-3 mt-2">
+              <p className="font-terminal text-xs leading-relaxed text-orange-300/70">
+                🧠 <span className="font-bold">Local AI:</span> Download Ollama (<a href="https://ollama.ai" target="_blank" rel="noopener noreferrer" className="underline">ollama.ai</a>), pull a model, then configure Resurgo Settings → AI → Local Agent for fully offline AI.
               </p>
             </div>
-
-            <div className="mb-3">
-              <p className="mb-2 font-pixel text-[0.4rem] tracking-widest text-zinc-600">USE_TODAY_VIA_BROWSER</p>
-              <ol className="space-y-2">
-                {[
-                  'Open resurgo.life in Safari or Chrome on macOS.',
-                  'Safari: File → "Add to Dock". Chrome: ⋮ → "Install Resurgo".',
-                  'Resurgo opens in its own window, separate from your browser.',
-                ].map((t, i) => (
-                  <li key={i} className="flex gap-3">
-                    <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center border border-zinc-700 bg-zinc-900 font-pixel text-[0.5rem] text-zinc-500">
-                      {i + 1}
-                    </span>
-                    <p className="font-terminal text-xs leading-relaxed text-zinc-500">{t}</p>
-                  </li>
-                ))}
-              </ol>
-            </div>
-
-            <p className="mt-2 font-terminal text-[0.6rem] text-zinc-700">
-              Native installer coming — join the waitlist at resurgo.life/roadmap
-            </p>
           </div>
 
         </div>
@@ -382,7 +388,7 @@ export default function DownloadPage() {
             applicationCategory: 'LifestyleApplication',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
             downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
-            softwareVersion: APK_VERSION,
+            softwareVersion: APP_VERSION,
             description:
               'AI-powered productivity assistant. Install on Android (APK), iPhone/iPad (PWA), Windows and macOS.',
             url: 'https://resurgo.life',

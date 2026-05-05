@@ -22,10 +22,17 @@ import {
   LogOut,
   Bell,
   Volume2,
-  VolumeX
+  VolumeX,
+  Cpu,
 } from 'lucide-react';
 import { NotificationSettings } from './NotificationSettings';
 import { areSoundsEnabled, toggleSounds, playSound, initializeSounds } from '@/lib/sounds';
+import dynamic from 'next/dynamic';
+
+const DesktopAISettings = dynamic(
+  () => import('./desktop/DesktopAISettings').then((m) => ({ default: m.DesktopAISettings })),
+  { ssr: false, loading: () => <div className="py-8 text-center font-mono text-xs text-zinc-600">Loading AI settings...</div> }
+);
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -34,7 +41,7 @@ interface SettingsModalProps {
 
 export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
   const { user, habits, habitEntries, goals, addToast, logout, updateNotificationSettings } = useAscendStore();
-  const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'data' | 'danger'>('profile');
+  const [activeTab, setActiveTab] = useState<'profile' | 'notifications' | 'ai' | 'data' | 'danger'>('profile');
   const [isExporting, setIsExporting] = useState(false);
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -192,12 +199,13 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           {[
             { id: 'profile', label: 'Profile', icon: User },
             { id: 'notifications', label: 'Alerts', icon: Bell },
+            { id: 'ai', label: 'AI', icon: Cpu },
             { id: 'data', label: 'Data', icon: Download },
             { id: 'danger', label: 'Danger', icon: AlertTriangle },
           ].map(tab => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id as 'profile' | 'notifications' | 'data' | 'danger')}
+              onClick={() => setActiveTab(tab.id as 'profile' | 'notifications' | 'ai' | 'data' | 'danger')}
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`${tab.id}-panel`}
@@ -332,6 +340,11 @@ export function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
                 />
               </div>
             </div>
+          )}
+          
+          {/* AI Settings Tab */}
+          {activeTab === 'ai' && (
+            <DesktopAISettings />
           )}
           
           {/* Data Tab */}
