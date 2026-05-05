@@ -127,26 +127,23 @@ function ToastItem({ toast, onDismiss }: ToastItemProps) {
 
 interface XPPopupProps {
   amount: number;
-  x: number;
-  y: number;
+  // x and y kept for API compatibility but no longer used for positioning
+  x?: number;
+  y?: number;
   onComplete: () => void;
 }
 
-export function XPPopup({ amount, x, y, onComplete }: XPPopupProps) {
+export function XPPopup({ amount, onComplete }: XPPopupProps) {
   useEffect(() => {
-    const timer = setTimeout(onComplete, 1500);
+    const timer = setTimeout(onComplete, 1200);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   return (
-    <div
-      className="fixed z-50 pointer-events-none animate-float-up"
-      style={{ left: x, top: y }}
-    >
-      <div className="flex items-center gap-1 px-3 py-1.5 rounded-full 
-                    bg-gold-400/20 border border-gold-400/30 backdrop-blur-sm">
-        <Zap className="w-4 h-4 text-gold-400" />
-        <span className="text-sm font-bold text-gold-400">+{amount} XP</span>
+    <div className="xp-corner-popup animate-xp-gain">
+      <div className="flex items-center gap-1 px-2.5 py-1 border border-orange-500/40 bg-zinc-950/90 font-pixel text-[0.65rem] tracking-widest text-orange-400 shadow-lg">
+        <Zap className="w-3 h-3 text-orange-400" />
+        +{amount} XP
       </div>
     </div>
   );

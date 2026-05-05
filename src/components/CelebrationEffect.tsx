@@ -80,12 +80,11 @@ export function CelebrationLayer({
         />
       ))}
 
-      {/* XP float text */}
+      {/* XP float text — always bottom-right corner, never at click coords */}
       {xpFloats.map((f) => (
         <div
           key={f.id}
-          className="absolute animate-xp-float font-pixel text-sm tracking-widest text-orange-400 drop-shadow-[0_0_6px_rgba(249,115,22,0.6)]"
-          style={{ left: f.x - 20, top: f.y }}
+          className="xp-corner-popup animate-xp-float font-pixel text-[0.65rem] tracking-widest text-orange-400"
         >
           +{f.amount} XP
         </div>
