@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { Download, X, Shield, Calendar, Clock, CheckCircle } from 'lucide-react';
+import { PrimaryAction, SecondaryAction } from '@/components/layout/ResurgoLayout';
 
 const BACKUP_REMINDER_KEY = 'ascend-last-backup-reminder';
 const BACKUP_INTERVAL_DAYS = 14; // Remind every 2 weeks
@@ -146,22 +147,16 @@ export function DataBackupReminder({
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex gap-3">
-              <button
-                onClick={handleDismiss}
-                className="flex-1 btn-secondary"
-              >
-                Remind Later
-              </button>
-              <button
-                onClick={handleExport}
-                className="flex-1 btn-primary flex items-center justify-center gap-2"
-              >
-                <Download className="w-4 h-4" />
-                Export Now
-              </button>
-            </div>
+             {/* Actions */}
+             <div className="flex gap-3">
+               <SecondaryAction className="flex-1" onClick={handleDismiss}>
+                 Remind Later
+               </SecondaryAction>
+               <PrimaryAction className="flex-1 flex items-center justify-center gap-2" onClick={handleExport}>
+                 <Download className="w-4 h-4" />
+                 Export Now
+               </PrimaryAction>
+             </div>
 
             {/* Warning */}
             <p className="text-xs text-themed-muted text-center">

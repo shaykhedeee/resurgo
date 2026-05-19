@@ -266,6 +266,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.78,
     },
     {
+      url: `${siteUrl}/best-app-for-indie-founders`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.9,
+    },
+    {
       url: `${siteUrl}/use-cases`,
       lastModified: currentDate,
       changeFrequency: 'monthly',

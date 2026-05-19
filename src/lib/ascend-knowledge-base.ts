@@ -100,10 +100,10 @@ export const PRICING = {
   },
   pro: {
     name: 'Pro',
-    price: 4.99,
-    priceYearly: 29.99,
-    priceDisplay: '$4.99/month or $29.99/year',
-    savingsYearly: 'Save 50% with yearly',
+    price: 9.99,
+    priceYearly: 95.88,
+    priceDisplay: '$9.99/month or $95.88/year ($7.99/mo effective)',
+    savingsYearly: 'Save 20% with yearly',
     description: 'For serious goal-achievers who want full AI-powered growth',
     limits: {
       habits: 'unlimited',
@@ -127,9 +127,9 @@ export const PRICING = {
   },
   lifetime: {
     name: 'Lifetime',
-    price: 49.99,
-    priceDisplay: '$49.99 one-time',
-    description: 'Pay once, use forever - founding member pricing (1,000 spots)',
+    price: 89,
+    priceDisplay: '$89 one-time (first 100 relaunch signups)',
+    description: 'Pay once, use forever - founding member pricing for the first 100 relaunch signups',
     features: [
       'Everything in Pro',
       'Lifetime access - no renewals',
@@ -188,7 +188,7 @@ export const FAQ = {
   account: [
     {
       q: 'How do I upgrade to Pro?',
-      a: 'Go to Settings > Subscription > Upgrade to Pro. You can choose monthly ($4.99/mo) or yearly ($29.99/yr — save 50%) or Lifetime ($49.99 once). Payment is processed securely through Dodo Payments. You get instant access to all Pro features.',
+      a: 'Go to Settings > Subscription > Upgrade to Pro. You can choose monthly ($9.99/mo), yearly ($95.88/yr - save 20%), or Lifetime ($89 once for the first 100 relaunch signups). Payment is processed securely through Dodo Payments. You get instant access to all Pro features.',
     },
     {
       q: 'Can I cancel my subscription?',
@@ -215,7 +215,7 @@ export const FAQ = {
     },
     {
       q: 'The AI isn\'t responding',
-      a: 'AI features require an internet connection. If you\'re online and still having issues, try refreshing the page. Free users have limited AI requests (10/month) - upgrade to Pro for unlimited AI coaching.',
+      a: 'AI features require an internet connection. If you\'re online and still having issues, try refreshing the page. Free users have limited AI requests (10/day) - upgrade to Pro for unlimited AI coaching.',
     },
     {
       q: 'How do I reset my progress?',
@@ -235,9 +235,9 @@ export const FAQ = {
 export const SALES_TRIGGERS = {
   // User is hitting limits
   limitReached: {
-    habits: 'I see you\'ve hit the 3-habit limit on the free plan. That\'s actually a great sign - it means you\'re committed! Pro unlocks unlimited habits so you can track everything that matters to you. Want to learn more about Pro?',
+    habits: 'I see you\'ve hit the 5-habit daily limit on the free plan. That\'s actually a great sign - it means you\'re committed! Pro unlocks unlimited habits so you can track everything that matters to you. Want to learn more about Pro?',
     goals: 'You\'ve reached your goal limit. Many of our most successful users track multiple goals across different life areas - health, career, relationships. Pro removes all limits.',
-    ai: 'You\'ve used all your AI coaching requests this month. Our AI coach Kai becomes even more powerful with unlimited access - personalized insights, daily motivation, and smart recommendations. Would Pro be helpful?',
+    ai: 'You\'ve used all your AI coaching messages today. Our AI coach Kai becomes even more powerful with unlimited access - personalized insights, daily motivation, and smart recommendations. Would Pro be helpful?',
   },
   
   // User is succeeding
@@ -258,7 +258,7 @@ export const SALES_TRIGGERS = {
   interest: {
     analytics: 'You\'re interested in analytics? Pro gives you deep insights - best times for habits, success rate predictions, and personalized recommendations. It\'s like having a data scientist analyze your habits.',
     export: 'Data export is available in Pro! You can download all your data in JSON or CSV format anytime. Your data belongs to you.',
-    coaching: 'Our AI coach Kai uses Atomic Habits principles to give you personalized guidance. Free users get 10 messages/month; Pro users get unlimited coaching plus proactive suggestions.',
+    coaching: 'Our AI coach Kai uses Atomic Habits principles to give you personalized guidance. Free users get 10 messages/day; Pro users get unlimited coaching plus proactive suggestions.',
   },
 };
 
@@ -364,7 +364,7 @@ PRODUCT KNOWLEDGE:
 - Key features: ${PRODUCT_INFO.keyFeatures.slice(0, 5).map(f => f.name).join(', ')}
 - Free plan: ${PRICING.free.limits.habits} daily habits, ${PRICING.free.limits.goals} goals, ${PRICING.free.limits.aiRequests} AI messages/day, 2 coaches (Marcus + Titan)
 - Pro plan: $${PRICING.pro.price}/month - unlimited everything, all 5 AI coaches
-- Lifetime: $${PRICING.lifetime.price} one-time - everything forever (founding member pricing)
+- Lifetime: $${PRICING.lifetime.price} one-time - everything forever (first 100 relaunch signups)
 
 ${ctx.plan ? `USER CONTEXT:
 - Plan: ${ctx.plan}
@@ -474,7 +474,7 @@ export function getQuickResponse(intent: UserIntent): string | null {
       return CHATBOT_PERSONA.greetings[Math.floor(Math.random() * CHATBOT_PERSONA.greetings.length)];
     
     case 'pricing_question':
-      return `Here's our pricing:\n\n**Free**: 5 daily habits, 3 goals, 2 AI coaches (Marcus + Titan), 10 AI messages/day\n\n**Pro** ($4.99/mo): Unlimited everything, all 5 AI coaches\n\n**Pro Yearly** ($29.99/yr): Same Pro power, save 50%\n\n**Lifetime** ($49.99 once): Everything in Pro, forever! Founding member pricing.\n\nWhat would you like to know more about?`;
+      return `Here's our pricing:\n\n**Free**: 3 active goals, 5 habit check-ins/day, 10 AI messages/day, 2 AI coaches (Marcus + Titan)\n\n**Pro** ($9.99/mo): Unlimited everything, all 5 AI coaches\n\n**Pro Yearly** ($95.88/yr, effective $7.99/mo): Save 20% vs monthly\n\n**Lifetime** ($89 one-time): Everything in Pro, forever. Limited to the first 100 relaunch signups; after the founding allocation or July 5, it moves to $199.\n\nWhat would you like to know more about?`;
     
     case 'cancel_subscription':
       return `I'm sorry to hear you're considering canceling. You can cancel anytime from Settings > Subscription > Manage. Your access continues until the billing period ends.\n\nBefore you go - is there something that isn't working for you? I'd love to help if I can.`;

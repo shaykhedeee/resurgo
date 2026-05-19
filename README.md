@@ -136,9 +136,9 @@ See `.env` for the full list with setup instructions for each provider.
 | Plan | Price | Includes |
 |------|-------|----------|
 | **Free** | $0 | 3 goals, 5 habits/day, 10 AI messages/day, focus timer, mood tracking |
-| **Pro Monthly** | $4.99/mo | Unlimited everything, all 5 coaches, vision boards, advanced analytics |
-| **Pro Yearly** | $29.99/yr | Same as Pro Monthly (save 50%) |
-| **Lifetime** | $49.99 | Everything in Pro, forever — 1,000 founding member spots |
+| **Pro Monthly** | $9.99/mo | Unlimited everything, all 5 coaches, vision boards, advanced analytics |
+| **Pro Yearly** | $95.88/yr | Same as Pro Monthly (save 20%) |
+| **Lifetime** | $89 | Everything in Pro, forever - limited to the first 100 relaunch signups (founding price until July 5, 2026; after: $199) |
 
 ---
 
@@ -191,6 +191,97 @@ convex/                      # Convex backend (40+ modules)
 └── ...                      # 30+ more modules
 docs/                        # Strategy, marketing, brand, API docs
 ```
+
+---
+
+## Mobile Apps
+
+Resurgo is available as native mobile apps via Capacitor, wrapping the web app with native features (push notifications, haptics, splash screens).
+
+### Android
+
+Already setup in this repository. Build commands:
+
+```bash
+npm run android:build           # Debug APK
+npm run android:build:release   # Signed release APK
+npm run android:open            # Open Android Studio
+npm run android:sync            # Sync web assets to native project
+```
+
+Android builds work on any OS. See `scripts/build-android.js` and `docs/ANDROID-DEPLOYMENT.md` for details.
+
+---
+
+## iOS (macOS + Xcode Required)
+
+### Prerequisites
+- macOS 14 (Sonoma) or newer
+- Xcode 15+ (with Command Line Tools)
+- CocoaPods: `sudo gem install cocoapods`
+- Apple Developer account ($99/year)
+
+### One-Time Setup
+
+```bash
+# Add iOS platform (generates ios/ directory)
+npx cap add ios
+
+# Sync Capacitor config and web assets
+npx cap sync ios
+
+# Open Xcode to configure signing
+npx cap open ios
+```
+
+### Build Commands
+
+```bash
+# Build IPA for TestFlight or App Store
+npm run ios:build              # App Store build
+npm run ios:build:adhoc        # Ad Hoc build (direct distribution)
+npm run ios:build:enterprise   # Enterprise build (internal)
+
+# Sync assets before building
+npm run ios:sync
+
+# Open Xcode for manual signing configuration
+npm run ios:open
+```
+
+**Note:** iOS builds require macOS with Xcode CLI tools. The `scripts/build-ios.js` Node.js wrapper will error on Windows/Linux and display macOS-specific instructions.
+
+### Deployment
+
+Full iOS deployment guide: [docs/IOS-DEPLOYMENT.md](docs/IOS-DEPLOYMENT.md)
+
+Key steps:
+1. Register **App ID** in Apple Developer Portal
+2. Create **distribution certificate** and **provisioning profiles**
+3. Upload **APNs key** to Firebase Console (for push notifications)
+4. Configure **Universal Links** (apple-app-site-association file)
+5. Build **archive** in Xcode and export **IPA**
+6. Upload to **App Store Connect** via Transporter or Xcode Organizer
+7. Distribute via **TestFlight** or submit for App Store review
+
+### iOS Project Structure
+
+```
+ios/
+├── App/                        # Native iOS source
+│   └── App/
+│       ├── AppDelegate.swift   # App lifecycle
+│       ├── SceneDelegate.swift # Scene management
+│       ├── Info.plist          # App configuration
+│       ├── App.entitlements    # Capabilities
+│       ├── LaunchScreen.storyboard
+│       └── Assets.xcassets/    # Icons & images
+├── App.xcodeproj/              # Auto-generated Xcode project
+├── App.xcworkspace/            # Xcode workspace (CocoaPods)
+└── README.md                   # iOS project structure docs
+```
+
+**Important:** Files under `ios/App/` are **partially managed by Capacitor**. Manual changes may be overwritten on `npx cap sync ios`. To persist custom native code or config, create a Capacitor plugin or edit before syncing.
 
 ---
 

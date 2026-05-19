@@ -3,6 +3,10 @@
 import { useEffect, useMemo } from 'react';
 import { Clock, Crown, Shield, Sparkles, TrendingUp, Zap } from 'lucide-react';
 import { getExperimentVariant, trackExperimentExposure } from '@/lib/marketing/experiments';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_PRICE_USD,
+} from '@/lib/product-config';
 
 const EXPERIMENT_ID = 'experiment_pricing_layout_v1' as const;
 const FUNNEL_STEP = 'pricing_page_hero';
@@ -48,14 +52,14 @@ export default function BillingHeroExperiment() {
                 <TrendingUp className="h-4 w-4" />
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em]">best value</span>
               </div>
-              <p className="text-sm text-[var(--text-secondary)]">Yearly drops Pro to $2.50/mo.</p>
+               <p className="text-sm text-[var(--text-secondary)]">Yearly drops Pro to $7.99/mo.</p>
             </div>
             <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 text-left">
               <div className="mb-1 flex items-center gap-2 text-amber-400">
                 <Crown className="h-4 w-4" />
                 <span className="font-mono text-[11px] uppercase tracking-[0.2em]">founder pricing</span>
               </div>
-              <p className="text-sm text-[var(--text-secondary)]">Lifetime is still $49.99 for the first 1,000 operators.</p>
+               <p className="text-sm text-[var(--text-secondary)]">Lifetime is ${FOUNDING_LIFETIME_PRICE_USD}. {FOUNDING_LIFETIME_COPY}.</p>
             </div>
             <div className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-3 text-left">
               <div className="mb-1 flex items-center gap-2 text-blue-400">

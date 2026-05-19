@@ -17,7 +17,7 @@ Create the following three products:
 | Description | Unlimited goals, habits, and AI coaching. Cancel anytime. |
 | Tax Category | SaaS |
 | Pricing Type | Subscription |
-| Price | $4.99 USD |
+| Price | $9.99 USD |
 | Repeat every | 1 Month |
 | Subscription Period | 10 Years |
 | Trial Period Days | 7 |
@@ -32,10 +32,10 @@ This is your `NEXT_PUBLIC_DODO_PRODUCT_PRO_MONTHLY`.
 | Field | Value |
 |---|---|
 | Product Name | Resurgo Pro (Yearly) |
-| Description | Same Pro access at $2.50/month effective. Best value. |
+| Description | Same Pro access at $7.99/month effective. Best value. |
 | Tax Category | SaaS |
 | Pricing Type | Subscription |
-| Price | $29.99 USD |
+| Price | $95.88 USD |
 | Repeat every | 1 Year |
 | Subscription Period | 10 Years |
 | Trial Period Days | 7 |
@@ -52,7 +52,7 @@ Copy the Product ID → `NEXT_PUBLIC_DODO_PRODUCT_PRO_YEARLY`.
 | Description | One payment. All Pro features forever. Founding price. |
 | Tax Category | SaaS |
 | Pricing Type | Single Payment |
-| Price | $49.99 USD |
+| Price | $89 USD (founding price until July 5, 2026; after: $199) |
 
 Copy the Product ID → `NEXT_PUBLIC_DODO_PRODUCT_LIFETIME`.
 

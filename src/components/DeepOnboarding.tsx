@@ -43,6 +43,14 @@ import {
   X,
   Plus
 } from 'lucide-react';
+import {
+  AppContainer,
+  PrimaryAction,
+  SecondaryAction,
+  Grid,
+  Stack,
+  Inline,
+} from '@/components/layout/ResurgoLayout';
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // CONSTANTS
@@ -402,7 +410,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <h2 className="text-2xl font-bold text-themed mb-2">Choose Your Coach</h2>
               <p className="text-themed-muted">Select the coach whose style best fits your journey. Their persona will guide your motivational messages and coaching tips.</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <Grid cols={2} gap="sm">
               {COACH_PERSONAS.map(coach => (
                 <CoachCard
                   key={coach.id}
@@ -411,7 +419,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                   onSelect={() => updateProfile({ coachPersona: coach.id })}
                 />
               ))}
-            </div>
+            </Grid>
             {profile.coachPersona && (
               <div className="mt-6 text-center">
                 <span className="inline-block px-4 py-2 rounded-full bg-ascend-500/10 text-ascend-400 font-medium">
@@ -432,7 +440,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
             {/* Age */}
             <div>
               <label className="block text-sm font-medium text-themed-secondary mb-3">Age Group</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <Grid cols={3} gap="xs">
                 {AGE_GROUPS.map(({ value, label }) => (
                   <button
                     key={value}
@@ -447,13 +455,13 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     {label}
                   </button>
                 ))}
-              </div>
+              </Grid>
             </div>
 
             {/* Sex */}
             <div>
               <label className="block text-sm font-medium text-themed-secondary mb-3">Sex (optional)</label>
-              <div className="grid grid-cols-3 gap-2">
+              <Grid cols={3} gap="xs">
                 {(['male', 'female', 'prefer-not-to-say'] as UserSex[]).map(sex => (
                   <button
                     key={sex}
@@ -468,7 +476,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     {sex === 'prefer-not-to-say' ? "Skip" : sex.charAt(0).toUpperCase() + sex.slice(1)}
                   </button>
                 ))}
-              </div>
+              </Grid>
             </div>
           </div>
         );
@@ -482,7 +490,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
             </div>
 
             {/* Wake/Sleep Times */}
-            <div className="grid grid-cols-2 gap-4">
+            <Grid cols={2} gap="md">
               <div>
                 <label className="block text-sm font-medium text-themed-secondary mb-2">Wake up</label>
                 <input
@@ -501,12 +509,12 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                   className="w-full px-4 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-themed"
                 />
               </div>
-            </div>
+            </Grid>
 
             {/* Work Schedule */}
             <div>
               <label className="block text-sm font-medium text-themed-secondary mb-3">Work Schedule</label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              <Grid cols={3} gap="xs">
                 {WORK_SCHEDULES.map(({ value, label, icon: Icon }) => (
                   <button
                     key={value}
@@ -522,7 +530,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     {label}
                   </button>
                 ))}
-              </div>
+              </Grid>
             </div>
 
             {/* Preferred Time Blocks */}
@@ -530,7 +538,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 Best times for habits (select all that apply)
               </label>
-              <div className="space-y-2">
+              <Stack gap="sm">
                 {TIME_BLOCKS.map(({ value, label, icon: Icon }) => (
                   <button
                     key={value}
@@ -563,7 +571,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     )}
                   </button>
                 ))}
-              </div>
+              </Stack>
             </div>
 
             {/* Available Hours */}
@@ -571,7 +579,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 Hours available per day for self-improvement
               </label>
-              <div className="flex items-center gap-4">
+              <Inline gap="md" align="center">
                 <input
                   type="range"
                   min="0.5"
@@ -584,7 +592,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 <span className="text-lg font-bold text-ascend-400 min-w-[60px]">
                   {profile.availableHoursPerDay}h
                 </span>
-              </div>
+              </Inline>
             </div>
           </div>
         );
@@ -616,7 +624,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
             {/* Category */}
             <div>
               <label className="block text-sm font-medium text-themed-secondary mb-3">Category</label>
-              <div className="grid grid-cols-3 gap-2">
+              <Grid cols={3} gap="xs">
                 {CATEGORIES.map(({ value, label, icon }) => (
                   <button
                     key={value}
@@ -634,7 +642,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     <p className="mt-1">{label}</p>
                   </button>
                 ))}
-              </div>
+              </Grid>
             </div>
 
             {/* Identity Statement */}
@@ -667,7 +675,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
             </div>
 
             {/* Add Bad Habit */}
-            <div className="flex gap-2">
+            <Inline gap="sm">
               <input
                 type="text"
                 value={newBadHabit}
@@ -676,17 +684,13 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 placeholder="e.g., Scrolling social media, Eating junk food"
                 className="flex-1 px-4 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-themed"
               />
-              <button
-                onClick={addBadHabit}
-                disabled={!newBadHabit.trim()}
-                className="px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-xl disabled:opacity-50"
-              >
+              <PrimaryAction onClick={addBadHabit} disabled={!newBadHabit.trim()}>
                 <Plus className="w-5 h-5" />
-              </button>
-            </div>
+              </PrimaryAction>
+            </Inline>
 
             {/* Bad Habits List */}
-            <div className="space-y-2">
+            <Stack gap="sm">
               {profile.badHabitsToLeave?.map(habit => (
                 <div
                   key={habit.id}
@@ -694,12 +698,9 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 >
                   <X className="w-5 h-5 text-red-400" />
                   <span className="flex-1 text-themed">{habit.name}</span>
-                  <button
-                    onClick={() => removeBadHabit(habit.id)}
-                    className="p-1 hover:bg-red-500/20 rounded"
-                  >
+                  <SecondaryAction onClick={() => removeBadHabit(habit.id)} className="p-1">
                     <X className="w-4 h-4 text-red-400" />
-                  </button>
+                  </SecondaryAction>
                 </div>
               ))}
               {!profile.badHabitsToLeave?.length && (
@@ -707,7 +708,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                   No bad habits added yet. That&apos;s okay - you can skip this step!
                 </p>
               )}
-            </div>
+            </Stack>
 
             <div className="p-4 bg-[var(--surface)] rounded-xl">
               <p className="text-sm text-themed-muted">
@@ -727,7 +728,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
             </div>
 
             {/* Add Good Habit */}
-            <div className="flex gap-2">
+            <Inline gap="sm">
               <input
                 type="text"
                 value={newGoodHabit}
@@ -736,17 +737,13 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 placeholder="e.g., Exercise daily, Read 20 min, Meditate"
                 className="flex-1 px-4 py-3 bg-[var(--surface)] border border-[var(--border)] rounded-xl text-themed"
               />
-              <button
-                onClick={addGoodHabit}
-                disabled={!newGoodHabit.trim()}
-                className="px-4 py-3 bg-ascend-500 hover:bg-ascend-600 text-white rounded-xl disabled:opacity-50"
-              >
+              <PrimaryAction onClick={addGoodHabit} disabled={!newGoodHabit.trim()}>
                 <Plus className="w-5 h-5" />
-              </button>
-            </div>
+              </PrimaryAction>
+            </Inline>
 
             {/* Good Habits List */}
-            <div className="space-y-2">
+            <Stack gap="sm">
               {profile.goodHabitsToDevelop?.map(habit => (
                 <div
                   key={habit.id}
@@ -754,12 +751,9 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 >
                   <Flame className="w-5 h-5 text-ascend-400" />
                   <span className="flex-1 text-themed">{habit.name}</span>
-                  <button
-                    onClick={() => removeGoodHabit(habit.id)}
-                    className="p-1 hover:bg-red-500/20 rounded"
-                  >
+                  <SecondaryAction onClick={() => removeGoodHabit(habit.id)} className="p-1">
                     <X className="w-4 h-4 text-themed-muted" />
-                  </button>
+                  </SecondaryAction>
                 </div>
               ))}
               {!profile.goodHabitsToDevelop?.length && (
@@ -767,7 +761,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                   Add habits you want to build. We&apos;ll help you track them daily!
                 </p>
               )}
-            </div>
+            </Stack>
 
             <div className="p-4 bg-[var(--surface)] rounded-xl">
               <p className="text-sm text-themed-muted">
@@ -791,7 +785,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 Difficulty Level
               </label>
-              <div className="space-y-2">
+              <Stack gap="sm">
                 {DIFFICULTY_OPTIONS.map(({ value, label, description }) => (
                   <button
                     key={value}
@@ -812,7 +806,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     <p className="text-sm text-themed-muted mt-1">{description}</p>
                   </button>
                 ))}
-              </div>
+              </Stack>
             </div>
 
             {/* Skill Level */}
@@ -820,7 +814,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 Current Skill Level in your goal area
               </label>
-              <div className="grid grid-cols-4 gap-2">
+              <Grid cols={4} gap="xs">
                 {(['beginner', 'intermediate', 'advanced', 'expert'] as SkillLevel[]).map(level => (
                   <button
                     key={level}
@@ -835,7 +829,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     {level}
                   </button>
                 ))}
-              </div>
+              </Grid>
             </div>
           </div>
         );
@@ -853,7 +847,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 What motivates you most?
               </label>
-              <div className="space-y-2">
+              <Stack gap="sm">
                 {MOTIVATION_STYLES.map(({ value, label, description }) => (
                   <button
                     key={value}
@@ -874,7 +868,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                     <p className="text-sm text-themed-muted mt-1">{description}</p>
                   </button>
                 ))}
-              </div>
+              </Stack>
             </div>
 
             {/* Biggest Motivation */}
@@ -896,7 +890,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <label className="block text-sm font-medium text-themed-secondary mb-3">
                 Have you tried to achieve this before?
               </label>
-              <div className="grid grid-cols-2 gap-3">
+              <Grid cols={2} gap="sm">
                 <button
                   onClick={() => updateProfile({ hasTriedBefore: true })}
                   className={cn(
@@ -919,7 +913,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                 >
                   No, this is new
                 </button>
-              </div>
+              </Grid>
             </div>
 
             {profile.hasTriedBefore && (
@@ -951,7 +945,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
               <p className="text-themed-muted">Here&apos;s a summary of your profile</p>
             </div>
 
-            <div className="space-y-4">
+            <Stack gap="md">
               {/* Goal Summary */}
               {profile.ultimateGoal?.statement && (
                 <div className="p-4 bg-ascend-500/10 border border-ascend-500/20 rounded-xl">
@@ -977,7 +971,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
 
               {/* Habits Summary */}
               {(profile.badHabitsToLeave?.length || profile.goodHabitsToDevelop?.length) ? (
-                <div className="grid grid-cols-2 gap-3">
+                <Grid cols={2} gap="sm">
                   {profile.badHabitsToLeave?.length ? (
                     <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl">
                       <p className="text-xs text-red-400 font-medium mb-2">TO CHANGE</p>
@@ -998,13 +992,13 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                       </ul>
                     </div>
                   ) : null}
-                </div>
+                </Grid>
               ) : null}
 
               {/* Preferences */}
               <div className="p-4 bg-[var(--surface)] rounded-xl">
                 <p className="text-xs text-themed-muted font-medium mb-2">PREFERENCES</p>
-                <div className="flex flex-wrap gap-2">
+                <Inline gap="sm" wrap={false} className="flex-wrap">
                   <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-themed">
                     {profile.difficultyPreference} difficulty
                   </span>
@@ -1014,9 +1008,9 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
                   <span className="px-3 py-1 bg-white/5 rounded-full text-xs text-themed">
                     {profile.motivationStyle} motivation
                   </span>
-                </div>
+                </Inline>
               </div>
-            </div>
+            </Stack>
           </div>
         );
 
@@ -1025,7 +1019,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
     }
   };
 
-  return (
+return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--background)]">
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
@@ -1033,7 +1027,7 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-gold-400/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full max-w-lg">
+      <AppContainer maxWidth="lg">
         {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex justify-between text-xs text-themed-muted mb-2">
@@ -1076,72 +1070,54 @@ export function DeepOnboarding({ onComplete, onSkip }: DeepOnboardingProps) {
         </div>
 
         {/* Navigation */}
-        <div className="flex gap-3 mt-6">
-          {currentStepIndex > 0 && (
-            <button
-              onClick={goBack}
-              className="flex-1 py-3 bg-[var(--surface)] hover:bg-[var(--surface-hover)] rounded-xl 
-                       flex items-center justify-center gap-2 text-themed transition-colors"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Back
-            </button>
-          )}
-          
-          {currentStep !== 'review' ? (
-            <>
-              <button
-                onClick={goNext}
-                className="flex-1 py-3 bg-ascend-500 hover:bg-ascend-600 text-white rounded-xl 
-                         flex items-center justify-center gap-2 font-medium transition-colors"
-              >
-                Continue
-                <ArrowRight className="w-4 h-4" />
-              </button>
+        <Stack gap="sm" align="stretch" className="mt-6">
+          <Inline justify="between" gap="sm" className="flex-col sm:flex-row">
+            {currentStepIndex > 0 && (
+              <SecondaryAction onClick={goBack} className="w-full sm:w-auto">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back
+              </SecondaryAction>
+            )}
+            
+            {currentStep !== 'review' ? (
+              <>
+                <PrimaryAction onClick={goNext} className="w-full sm:w-auto">
+                  Continue
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </PrimaryAction>
 
-              <button
-                onClick={() => {
-                  saveDraft();
-                  if (onSkip) onSkip();
-                }}
-                className="flex-1 py-3 bg-[var(--surface)] hover:bg-[var(--surface-hover)] rounded-xl 
-                         flex items-center justify-center gap-2 text-themed transition-colors"
+                <SecondaryAction 
+                  onClick={() => {
+                    saveDraft();
+                    if (onSkip) onSkip();
+                  }} 
+                  className="w-full sm:w-auto"
+                >
+                  Save & Exit
+                </SecondaryAction>
+              </>
+            ) : (
+              <PrimaryAction 
+                onClick={handleComplete} 
+                className="w-full sm:w-auto"
+                loading={loading}
               >
-                Save & Exit
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={handleComplete}
-                className="flex-1 py-3 bg-gradient-to-r from-ascend-500 to-ascend-600 text-white rounded-xl 
-                         flex items-center justify-center gap-2 font-bold transition-all shadow-glow-sm hover:shadow-glow-md disabled:opacity-60"
-                disabled={loading}
-              >
-                {loading ? (
-                  <span className="animate-spin mr-2">⏳</span>
-                ) : (
-                  <Sparkles className="w-5 h-5" />
-                )}
                 {loading ? 'Saving...' : 'Start My Journey'}
-              </button>
-              {error && (
-                <div className="mt-2 text-red-500 text-sm text-center">{error}</div>
-              )}
-            </>
+              </PrimaryAction>
+            )}
+          </Inline>
+          {error && (
+            <div className="text-red-500 text-sm text-center">{error}</div>
           )}
-        </div>
+        </Stack>
 
         {/* Skip Option */}
         {onSkip && currentStep !== 'review' && (
-          <button
-            onClick={onSkip}
-            className="w-full mt-4 py-2 text-themed-muted hover:text-themed text-sm transition-colors"
-          >
+          <SecondaryAction onClick={onSkip} className="w-full mt-4">
             Skip for now
-          </button>
+          </SecondaryAction>
         )}
-      </div>
+      </AppContainer>
     </div>
   );
 }

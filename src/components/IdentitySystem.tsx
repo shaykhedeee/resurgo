@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { ProgressBar } from './TimedTasks';
 import { IDENTITY_ARCHETYPES, IDENTITY_THRESHOLDS, type IdentityArchetype, type IdentityLevel } from '@/types';
+import { PrimaryAction } from '@/components/layout/ResurgoLayout';
 
 interface IdentitySystemProps {
   userIdentities?: IdentityArchetype[];
@@ -287,9 +288,9 @@ export function IdentitySystem({
           <p className="text-sm text-themed-secondary mb-4">
             &quot;The goal is not to read a book, it&apos;s to become a reader.&quot;
           </p>
-          <button className="btn-primary text-sm">
+          <PrimaryAction>
             Choose Your Identities
-          </button>
+          </PrimaryAction>
         </div>
       ) : (
         <div className="grid gap-4">

@@ -2,18 +2,18 @@
 import { TermLinkButton } from '@/components/ui/TermButton';
 
 export const metadata: Metadata = {
-  title: 'Download Resurgo — Install on Android, iOS, Windows & macOS',
+  title: 'Download Resurgo App — Android APK & iOS Install | AI Productivity',
   description:
-    'Download Resurgo on Android (APK), iPhone, iPad, Windows or macOS. Install the AI productivity app directly — no app store required.',
+    'Download Resurgo for Android (APK) or install on iOS via Safari. Native app experience with push notifications, offline mode, AI coaching. Direct install.',
   keywords: [
     'Resurgo download', 'Resurgo APK', 'Resurgo Android download',
-    'install Resurgo iPhone', 'AI productivity app download',
-    'progressive web app install', 'Resurgo Windows', 'Resurgo macOS',
+    'install Resurgo iPhone', 'iOS PWA install', 'Resurgo iOS',
+    'AI productivity app download', 'habit tracker iOS', 'focus timer Android',
   ],
   alternates: { canonical: '/download' },
   openGraph: {
-    title: 'Download Resurgo — Android · iOS · Windows · macOS',
-    description: 'Download Resurgo on any device. Android APK ready. iOS, Windows & macOS installs available.',
+    title: 'Download Resurgo — Android APK · iOS Safari PWA',
+    description: 'Get Resurgo on any device. Android: direct APK download. iOS: Add to Home Screen via Safari. Both sync seamlessly.',
     type: 'website',
     url: '/download',
   },
@@ -51,12 +51,11 @@ const FEATURES = [
 ];
 
 
-// APK download URL — update to self-hosted if APK is uploaded to /public/downloads/
-// If /public/downloads/resurgo-latest.apk exists, use the line below:
-// const APK_URL = 'https://resurgo.life/downloads/resurgo-latest.apk';
-// Otherwise, fallback to GitHub Releases:
-const APK_URL = 'https://github.com/shaykhedeee/resurgo/releases/latest';
-const APK_VERSION = 'v1.0.0';
+// APK download URL — self-hosted from /public/downloads/
+const APK_URL = '/downloads/resurgo-latest.apk';
+const APK_VERSION = '2.0.0';
+const APK_SIZE = '1.3 MB';
+const ANDROID_MIN_VERSION = 'Android 8.0+ (Oreo)';
 
 // ─── Shared step list ─────────────────────────────────────────────────────────
 function StepList({
@@ -98,7 +97,7 @@ export default function DownloadPage() {
             Download Resurgo
           </h1>
           <p className="mx-auto mt-4 max-w-xl font-terminal text-sm leading-relaxed text-zinc-400">
-            Install Resurgo natively on Android, iPhone, Windows or macOS. No app store needed — download direct, install in under a minute.
+            Install Resurgo natively on Android (APK) or iOS (Safari PWA). Windows & macOS coming soon via web install.
           </p>
           {/* Platform pill badges */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
@@ -180,25 +179,25 @@ export default function DownloadPage() {
               <div>
                 <Kicker text="IPHONE_/_IPAD" color="text-blue-400" />
                 <h3 className="font-pixel text-base text-zinc-100">iOS</h3>
-                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Add to Home Screen via Safari</p>
+                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Safari PWA — Add to Home Screen</p>
               </div>
-              <span className="border border-zinc-700 bg-zinc-900/50 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-zinc-500">
-                APP_STORE SOON
+              <span className="border border-blue-800 bg-blue-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-blue-400">
+                AVAILABLE_NOW
               </span>
             </div>
 
             {/* PWA install note */}
-            <div className="mb-5 border border-blue-900/50 bg-blue-950/20 px-4 py-3">
+            <div className="mb-6 border border-blue-900/50 bg-blue-950/20 px-4 py-3">
               <p className="font-terminal text-xs leading-relaxed text-blue-300">
-                Add Resurgo to your iPhone or iPad home screen via Safari — it launches in full-screen, sends push notifications (iOS 16.4+), and works just like a native app.
+                Install Resurgo on iPhone/iPad via Safari "Add to Home Screen". Launches full-screen with push notifications (iOS 16.4+). No App Store required.
               </p>
             </div>
 
-            {/* iOS steps */}
+            {/* iOS PWA steps */}
             <StepList steps={IOS_STEPS} color="blue" />
 
             <p className="mt-4 font-terminal text-[0.6rem] text-zinc-600">
-              Must use Safari. Chrome on iOS does not support Add to Home Screen installation.
+              iOS 16.4+ required for push notifications. Older versions get limited functionality.
             </p>
           </div>
 

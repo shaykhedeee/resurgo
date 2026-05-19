@@ -12,6 +12,7 @@ import { MarketingHeader } from '@/components/MarketingHeader';
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/app', label: 'Get App', highlight: true },
   { href: '/about', label: 'About' },
   { href: '/blog', label: 'Blog' },
   { href: '/docs', label: 'Docs' },
@@ -28,11 +29,13 @@ export default function MarketingLayout({ children }: { children: ReactNode }) {
               ? 'grid'
               : link.label === 'Pricing'
                 ? 'star'
-                : link.label === 'About'
-                  ? 'sparkles'
-                  : link.label === 'Blog'
-                    ? 'terminal'
-                    : 'plan',
+                : link.label === 'Get App'
+                  ? 'download'
+                  : link.label === 'About'
+                    ? 'sparkles'
+                    : link.label === 'Blog'
+                      ? 'terminal'
+                      : 'plan',
         }))}
         tickerText={`RESURGO.life :: ${new Date().getFullYear()} :: PIXEL_EXECUTION_LAYER_ACTIVE`}
       />

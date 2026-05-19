@@ -566,7 +566,7 @@ function PricingPanel() {
         },
         {
           tier: 'PRO',
-          price: '$4.99',
+          price: '$9.99',
           period: '/month',
           color: 'orange',
           highlight: true,
@@ -583,11 +583,11 @@ function PricingPanel() {
         },
         {
           tier: 'LIFETIME',
-          price: '$49.99',
+          price: '$89',
           period: 'one-time',
           color: 'yellow',
           highlight: false,
-          badge: '⚡ Founding Price · Use code LTP50',
+          badge: '⚡ Founding Price — $89',
           features: [
             'Everything in Pro',
             'Pay once, use forever',
@@ -595,7 +595,7 @@ function PricingPanel() {
             'Founding member badge',
           ],
           cta: 'Claim Founding Price',
-          href: 'https://resurgo.life/billing?promo=LTP50',
+          href: 'https://resurgo.life/billing',
         },
       ].map((plan) => (
         <div

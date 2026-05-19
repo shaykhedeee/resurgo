@@ -18,15 +18,15 @@ const client = new DodoPayments({
 async function createProducts() {
   console.log('🚀 Creating Dodo Payments products for Resurgo...\n');
 
-  // ─── 1. Pro Monthly — $4.99/mo subscription ───
-  console.log('Creating Pro Monthly ($4.99/mo)...');
+   // ─── 1. Pro Monthly — $9.99/mo subscription ───
+   console.log('Creating Pro Monthly ($9.99/mo)...');
   const proMonthly = await client.products.create({
     name: 'Resurgo Pro Monthly',
     description: 'Unlimited goals, habits, AI coaching, analytics & more. Cancel anytime.',
     price: {
       currency: 'USD',
       discount: 0,
-      price: 499, // $4.99 in cents
+       price: 999, // $9.99 in cents
       purchasing_power_parity: false,
       type: 'recurring_price',
       payment_frequency_interval: 'Month',
@@ -39,15 +39,15 @@ async function createProducts() {
   });
   console.log(`  ✅ Pro Monthly created: ${proMonthly.product_id}`);
 
-  // ─── 2. Pro Yearly — $29.99/yr subscription ───
-  console.log('Creating Pro Yearly ($29.99/yr)...');
-  const proYearly = await client.products.create({
-    name: 'Resurgo Pro Yearly',
-    description: 'Same Pro features, billed yearly. Save 50% vs monthly ($2.50/mo effective).',
-    price: {
-      currency: 'USD',
-      discount: 0,
-      price: 2999, // $29.99 in cents
+   // ─── 2. Pro Yearly — $95.88/yr subscription ───
+   console.log('Creating Pro Yearly ($95.88/yr)...');
+   const proYearly = await client.products.create({
+     name: 'Resurgo Pro Yearly',
+     description: 'Same Pro features, billed yearly. Save 20% vs monthly ($7.99/mo effective).',
+     price: {
+       currency: 'USD',
+       discount: 0,
+       price: 9588, // $95.88 in cents
       purchasing_power_parity: false,
       type: 'recurring_price',
       payment_frequency_interval: 'Year',
@@ -60,15 +60,15 @@ async function createProducts() {
   });
   console.log(`  ✅ Pro Yearly created: ${proYearly.product_id}`);
 
-  // ─── 3. Lifetime — $49.99 one-time ───
-  console.log('Creating Lifetime ($49.99)...');
-  const lifetime = await client.products.create({
-    name: 'Resurgo Lifetime',
-    description: 'Pay once, use forever. All Pro features included for life. Founder deal — price increases after 100 users.',
-    price: {
-      currency: 'USD',
-      discount: 0,
-      price: 4999, // $49.99 in cents
+   // ─── 3. Lifetime — $89 one-time ───
+   console.log('Creating Lifetime ($89)...');
+   const lifetime = await client.products.create({
+     name: 'Resurgo Lifetime',
+     description: 'Pay once, use forever. All Pro features included for life. Founding price until July 5, 2026; after: $199.',
+     price: {
+       currency: 'USD',
+       discount: 0,
+       price: 8900, // $89 in cents
       purchasing_power_parity: false,
       type: 'one_time_price',
     },

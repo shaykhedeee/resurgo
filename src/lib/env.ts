@@ -13,50 +13,62 @@ type EnvVar = {
 };
 
 const ENV_SCHEMA: EnvVar[] = [
-  {
-    key: 'NEXT_PUBLIC_CONVEX_URL',
-    required: true,
-    description: 'Convex deployment URL — backend will not function without it',
-  },
-  {
-    key: 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
-    required: true,
-    description: 'Clerk publishable key — auth will not function without it',
-  },
-  {
-    key: 'CLERK_JWT_ISSUER_DOMAIN',
-    required: true,
-    description: 'Clerk JWT issuer domain required by Convex auth.config.ts',
-    serverOnly: true,
-  },
-  {
-    key: 'CLERK_WEBHOOK_SECRET',
-    required: true,
-    description: 'Clerk webhook signing secret for billing events',
-    serverOnly: true,
-  },
-  {
-    key: 'NEXT_PUBLIC_SITE_URL',
-    required: false,
-    description: 'Canonical site URL (defaults to localhost:3000)',
-  },
-  {
-    key: 'NEXT_PUBLIC_GA_ID',
-    required: false,
-    description: 'Google Analytics measurement ID',
-  },
-  {
-    key: 'NEXT_PUBLIC_CLARITY_ID',
-    required: false,
-    description: 'Microsoft Clarity project ID',
-  },
-  {
-    key: 'BRAVE_SEARCH_API_KEY',
-    required: false,
-    description: 'Server-side Brave Search API key for researcher mode',
-    serverOnly: true,
-  },
-];
+   {
+     key: 'NEXT_PUBLIC_CONVEX_URL',
+     required: true,
+     description: 'Convex deployment URL — backend will not function without it',
+   },
+   {
+     key: 'NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY',
+     required: true,
+     description: 'Clerk publishable key — auth will not function without it',
+   },
+   {
+     key: 'CLERK_JWT_ISSUER_DOMAIN',
+     required: true,
+     description: 'Clerk JWT issuer domain required by Convex auth.config.ts',
+     serverOnly: true,
+   },
+   {
+     key: 'CLERK_WEBHOOK_SECRET',
+     required: true,
+     description: 'Clerk webhook signing secret for billing events',
+     serverOnly: true,
+   },
+   {
+     key: 'NEXT_PUBLIC_SITE_URL',
+     required: false,
+     description: 'Canonical site URL (defaults to localhost:3000)',
+   },
+   {
+     key: 'NEXT_PUBLIC_GA_ID',
+     required: false,
+     description: 'Google Analytics measurement ID',
+   },
+   {
+     key: 'NEXT_PUBLIC_CLARITY_ID',
+     required: false,
+     description: 'Microsoft Clarity project ID',
+   },
+   {
+     key: 'BRAVE_SEARCH_API_KEY',
+     required: false,
+     description: 'Server-side Brave Search API key for researcher mode',
+     serverOnly: true,
+   },
+    {
+      key: 'PRODUCT_HUNT_DEVELOPER_TOKEN',
+      required: false,
+      description: 'Product Hunt Developer API token for fetching product data',
+      serverOnly: true,
+    },
+    {
+      key: 'TOGETHER_API_KEY',
+      required: false,
+      description: 'Together AI API key for Together AI inference tier',
+      serverOnly: true,
+    },
+ ];
 
 export interface EnvValidationResult {
   valid: boolean;

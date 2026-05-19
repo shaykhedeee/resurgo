@@ -11,6 +11,12 @@ import {
   ProcrastinationLoopChart,
 } from '@/components/blog/PixelatedCharts';
 import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/blog/post-index';
+import { habitTrackerAppsPost } from '@/lib/blog/posts/habit-tracker-apps';
+import { adhdProductivityAppsPost } from '@/lib/blog/posts/adhd-productivity-apps';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_PRICE_USD,
+} from '@/lib/product-config';
 
 type FaqItem = {
   question: string;
@@ -39,6 +45,26 @@ const POSTS: Record<string, {
   seoKeywords?: string[];
   chartComponent?: React.ComponentType;
 }> = {
+  '12-best-habit-tracker-apps-2026': {
+    title: habitTrackerAppsPost.title,
+    desc: habitTrackerAppsPost.desc,
+    date: habitTrackerAppsPost.date,
+    readTime: habitTrackerAppsPost.readTime,
+    tags: habitTrackerAppsPost.tags,
+    heroImage: habitTrackerAppsPost.heroImage,
+    seoKeywords: habitTrackerAppsPost.seoKeywords,
+    content: habitTrackerAppsPost.content,
+  },
+  'adhd-productivity-apps-that-work': {
+    title: adhdProductivityAppsPost.title,
+    desc: adhdProductivityAppsPost.desc,
+    date: adhdProductivityAppsPost.date,
+    readTime: adhdProductivityAppsPost.readTime,
+    tags: adhdProductivityAppsPost.tags,
+    heroImage: adhdProductivityAppsPost.heroImage,
+    seoKeywords: adhdProductivityAppsPost.seoKeywords,
+    content: adhdProductivityAppsPost.content,
+  },
   'ai-growth-system-2026-ultimate-playbook': {
     title: 'The AI Growth System for 2026: The Ultimate Playbook to Turn Attention into Revenue',
     desc: 'A research-backed operating system for founders and creators who want to convert AI-era discovery into pipeline, trust, and sales using one unified weekly execution loop.',
@@ -6938,12 +6964,23 @@ function normalizeLegacyCopy(content: string): string {
   return content
     .replace(/Resurgoify/gi, 'Resurgo')
     .replace(/PERFORMANCE OS/gi, 'Execution OS')
-    .replace(/all 4 coaches/gi, 'all 6 coaches')
-    .replace(/all 5 coaches/gi, 'all 6 coaches')
-    .replace(/5 AI coach(es|ing personas?)/gi, '6 AI coach$1')
-    .replace(/\| 5 coaches/g, '| 6 coaches')
-    .replace(/MARCUS, AURORA, TITAN, PHOENIX, NEXUS\)/g, 'MARCUS, AURORA, TITAN, PHOENIX, NEXUS, ZENON)')
-    .replace(/Marcus, Aurora, Titan, Phoenix, Nexus\)/g, 'MARCUS, AURORA, TITAN, PHOENIX, NEXUS, ZENON)')
+    .replace(/all 4 coaches/gi, 'all 5 coaches')
+    .replace(/all 6 coaches/gi, 'all 5 coaches')
+    .replace(/6 AI coach(es|ing personas?)/gi, '5 AI coach$1')
+    .replace(/4 specialized coaches/gi, '5 specialized coaches')
+    .replace(/\| 6 coaches/g, '| 5 coaches')
+    .replace(/\n-\s+\*\*ZENON:\*\*[^\n]*/gi, '')
+    .replace(/,\s*and ZENON/gi, '')
+    .replace(/,\s*ZENON/gi, '')
+    .replace(/\(ATLAS, DRIVE, NOVA, VITALIS, ATOM, and ZENON\)/gi, '(Marcus, Titan, Aurora, Phoenix, and Nexus)')
+    .replace(/Six AI coaches/gi, 'Five AI coaches')
+    .replace(/\$4\.99\/month/gi, '$9.99/month')
+    .replace(/\$4\.99\/mo/gi, '$9.99/mo')
+    .replace(/\$29\.99\/yr/gi, '$95.88/yr')
+    .replace(/\$49\.99 lifetime/gi, `$${FOUNDING_LIFETIME_PRICE_USD} lifetime`)
+    .replace(/\$49\.99 one-time/gi, `$${FOUNDING_LIFETIME_PRICE_USD} one-time`)
+    .replace(/Lifetime: \$49\.99/gi, `Lifetime: $${FOUNDING_LIFETIME_PRICE_USD}`)
+    .replace(/Pro: \$4\.99\/mo/gi, 'Pro: $9.99/mo')
     .replace(/unlimited habits and goals on the free plan/gi, '3 goals and up to 5 habits per day on the free plan')
     .replace(/free plan:?\s*unlimited habits/gi, 'Free plan: 3 goals and up to 5 habits/day')
     .replace(/free tier is unlimited habits, 2 AI coaches/gi, 'Free tier includes 3 goals, up to 5 habits/day, and 2 AI coaches')
@@ -7304,9 +7341,9 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="mb-6 border border-zinc-800 bg-zinc-950 p-4">
           <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500"><PixelIcon name="check" size={10} />CANONICAL_PRODUCT_FACTS</p>
           <ul className="mt-2 space-y-1 font-mono text-xs text-zinc-400">
-            <li>• 6 coaches total. Free includes Marcus + Titan.</li>
+            <li>• 5 coaches total. Free includes Marcus + Titan.</li>
             <li>• Free plan: 3 goals, up to 5 habits/day, 10 AI messages/day.</li>
-            <li>• Pro: $4.99/mo or $29.99/yr. Lifetime: $49.99 one-time.</li>
+            <li>• Pro: $9.99/mo or $95.88/yr. Lifetime: ${FOUNDING_LIFETIME_PRICE_USD} one-time ({FOUNDING_LIFETIME_COPY.toLowerCase()}).</li>
           </ul>
         </div>
 

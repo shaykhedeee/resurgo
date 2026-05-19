@@ -24,14 +24,14 @@ The terminal/brutalist aesthetic is not cosmetic. It signals to the right ICP (o
 | Tier | Price | Lever |
 |---|---|---|
 | Free | $0 forever | Acquisition funnel opener |
-| Pro Monthly | $4.99/mo | Conversion target |
-| Pro Yearly | $29.99/yr ($2.50/mo) | Churn reduction + cash flow |
-| Lifetime | $49.99 one-time | Founding revenue + zero churn |
+| Pro Monthly | $9.99/mo | Conversion target |
+| Pro Yearly | $95.88/yr ($7.99/mo) | Churn reduction + cash flow |
+| Lifetime | $89 one-time (until July 5) → $199 after | Founding revenue + zero churn |
 
 **LTV math at current pricing:**
-- Monthly churn 5% → avg lifespan 20 months → LTV = $4.99 × 20 = **$99.80**
-- Monthly churn 3% → avg lifespan 33 months → LTV = $4.99 × 33 = **$164.67**
-- Lifetime = $49.99 one-time → profitable at month 10 vs monthly
+- Monthly churn 5% → avg lifespan 20 months → LTV = $9.99 × 20 = **$199.80**
+- Monthly churn 3% → avg lifespan 33 months → LTV = $9.99 × 33 = **$329.67**
+- Lifetime = $89 one-time → profitable at month 9 vs monthly ($89/9.99 ≈ 8.9)
 
 **CAC ceiling (must stay under):** LTV ÷ 3 = **$33–55** per paid user (organic acquisition means this is effectively $0–3 now)
 
@@ -93,9 +93,9 @@ The terminal/brutalist aesthetic is not cosmetic. It signals to the right ICP (o
 | Context | CTA A | CTA B | CTA C |
 |---|---|---|---|
 | Hero (primary) | `START_FREE` | `BUILD_MY_PLAN` | `GET_MY_AI_COACH` |
-| Hero (secondary) | `LOCK_LIFETIME_$49` | `CLAIM_FOUNDING_ACCESS` | `PAY_ONCE_OWN_FOREVER` |
+| Hero (secondary) | `LOCK_LIFETIME_$89` | `CLAIM_FOUNDING_ACCESS` | `PAY_ONCE_OWN_FOREVER` |
 | Pricing page | `START_EXECUTING_FREE` | `OPEN_MY_ARMORY` | `GET_ORGANIZED_NOW` |
-| Lifetime urgency | `CLAIM_SPOT_(847_LEFT)` | `FOUNDING_PRICE_ENDS_SOON` | `LOCK_IN_$49.99` |
+| Lifetime urgency | `CLAIM_SPOT_(FOUNDING)` | `FOUNDING_PRICE_ENDS_JULY5` | `LOCK_IN_$89` |
 | Mid-page escape | `TRY_THE_GOAL_DIAGNOSTIC` | `SEE_IT_WORK_FIRST` | `RUN_FREE_SCAN` |
 | Post-scroll conversion | `STOP_PLANNING._START_NOW.` | `I'M_READY_TO_EXECUTE` | `SET_UP_IN_2_MIN` |
 
@@ -106,7 +106,7 @@ The terminal/brutalist aesthetic is not cosmetic. It signals to the right ICP (o
 **AI Goal Decomposition**
 > You type: "Launch my SaaS in 90 days." Resurgo returns: 4 milestones, 12 weekly targets, daily tasks, and a coach assignment — in under 90 seconds. No templates, no setup, no planning paralysis.
 
-**6 AI Coaches**
+**5 AI coaches**
 > Marcus gives you frameworks. Titan pushes performance. Aurora tracks your recovery. Phoenix rebuilds your momentum after a crash. Nexus wires your habits into a machine. All available 24/7. All adapting to your actual data — not generic advice.
 
 **Habit + Focus Integration**
@@ -116,7 +116,7 @@ The terminal/brutalist aesthetic is not cosmetic. It signals to the right ICP (o
 > No judgment. No 47-item onboarding. No guilt when you miss a day. Just one calm next step, a 5-minute micro-task, and a coach that knows executive function challenges aren't character flaws.
 
 **Lifetime Access**
-> $49.99. Once. Forever. Every future feature included. The same pro plan your competitor charges $60/year for — owned permanently. 847 founding spots remaining. When they're gone, the price doubles.
+> $89 (founding price until July 5, 2026). Once. Forever. Every future feature included. The same pro plan your competitor charges $120/year for — owned permanently. After July 5, price increases to $199.
 
 ---
 
@@ -161,7 +161,7 @@ The terminal/brutalist aesthetic is not cosmetic. It signals to the right ICP (o
 
 **Format A — The Diagnostic Thread**
 ```
-Tweet 1 (hook): "I tracked 5,000 goal attempts. Here's why 94% failed by week 2. [THREAD]"
+Tweet 1 (hook): "I analyzed why most productivity systems fail by week 2. Here's what works. [THREAD]"
 Tweet 2: "They had motivation. They lacked architecture."
 Tweet 3: "The 3 failure patterns: [list]"
 Tweet 4: "What actually works: [insight]"
@@ -276,7 +276,7 @@ The 1 thing I'd do differently: [specific lesson]
 
 **Template A — r/productivity**
 ```
-Title: "I mapped out why 94% of people quit habit apps by week 2. Here's the actual reason."
+Title: "I mapped out why most people quit habit apps by week 2. Here's the actual reason."
 
 [Insight-driven post about habit psychology]
 [Mention the problem Resurgo solves 2/3 through]
@@ -598,7 +598,7 @@ You've used all 3 goal slots on the free plan.
 Pro removes all limits — unlimited goals, habits, and AI messages.
 Plus: all 5 coaches, weekly AI reviews, and Vision Board Studio.
 
-$4.99/month. Or $49.99 once, forever.
+$9.99/month. Or $89 once, forever (founding price until July 5).
 
 [UPGRADE_TO_PRO →] [MAYBE_LATER]
 ```
@@ -618,15 +618,13 @@ Pro removes every limit. And unlocks the features most free users never get to:
 → Weekly AI pattern review
 → Unlimited history + analytics
 
-$4.99/month. Cancel anytime. 30-day refund if it's not right.
+$9.99/month. Cancel anytime. 30-day refund if it's not right.
 
 [UNLOCK_PRO →]
 
-Or: lock in lifetime access for $49.99 — one payment, no subscription, ever.
+Or: lock in lifetime access for $89 — one payment, no subscription, ever. Founding price ends July 5.
 
 [CLAIM_LIFETIME_ACCESS →]
-
-847 lifetime spots remaining as of today.
 
 [Founder name]
 ```
@@ -671,8 +669,10 @@ Or: lock in lifetime access for $49.99 — one payment, no subscription, ever.
 
 **Ad Set 5 — Lifetime urgency**
 
-**Headline:** "847 spots left at the founding price."
-**Body:** "Pro plan access, forever, for $49.99 — one payment. After the first 1,000 spots, the price doubles. 153 spots claimed this week alone."
+**Headline:** "Founding lifetime price ends July 5"
+
+**Body:** "Lock in lifetime access for $89 (one payment) before the price increases to $199. All Pro features included forever."
+
 **CTA:** Claim Lifetime → resurgo.life/pricing
 
 ---
@@ -706,7 +706,7 @@ URL: resurgo.life
 Ad — "ai habit tracker":
 ```
 Headline 1: AI Habit Tracker + Goal Planner
-Headline 2: 6 AI Coaches — Free to Start
+Headline 2: 5 AI Coaches — Free to Start
 Headline 3: Plan Built From Your Goal in 90 Sec
 Description 1: Type any goal. Get habits, milestones, and a daily execution plan — automatically. Used by 5,000+ solo operators and founders.
 Description 2: Free forever plan. PWA — no download. Works on any device. Start in 2 minutes.
@@ -744,7 +744,7 @@ Description 2: Free forever plan. PWA — no download. Works on any device. Star
 [Split screen showing 5 app icons]
 [Text: "Your current setup: $47/month in apps that don't talk to each other"]
 [Cut to Resurgo dashboard]
-[Text: "One app. All of it connected. $4.99/month."]
+[Text: "One app. All of it connected. $9.99/month or $7.99/month (annual)."]
 [Show workout → habit → XP → goal connection visually]
 [CTA: free forever plan available]
 ```
@@ -854,7 +854,7 @@ Description 2: Free forever plan. PWA — no download. Works on any device. Star
 >
 > **Goal decomposition** — Type any goal in plain language. AI returns milestones, weekly targets, and daily habits in 90 seconds. No templates, no planning sessions.
 >
-> **6 AI coaches** — Marcus (Stoic Strategist), Titan (High Performance), Aurora (Wellness), Phoenix (Resilience), Nexus (Systems). Each has a distinct voice and adapts to your actual data — not generic advice. Marcus and Titan are free forever.
+> **5 AI coaches** — Marcus (Stoic Strategist), Titan (High Performance), Aurora (Wellness), Phoenix (Resilience), Nexus (Systems). Each has a distinct voice and adapts to your actual data — not generic advice. Marcus and Titan are free forever.
 >
 > **Habit + focus integration** — Habits feed streaks. Streaks feed XP. XP connects to your weekly AI review. Everything compounds.
 >
@@ -863,8 +863,8 @@ Description 2: Free forever plan. PWA — no download. Works on any device. Star
 > **PWA** — No app store required. Installs on mobile in 2 taps. Works offline.
 >
 > Free plan: 3 goals, 5 habits/day, 2 AI coaches — genuinely useful, no time limit.
-> Pro: $4.99/month — unlimited everything.
-> Lifetime: $49.99 — founding price for first 1,000 spots.
+> Pro: $9.99/month or $7.99/month (annual) — unlimited everything.
+> Lifetime: $89 founding price until July 5, then $199 — all Pro features forever.
 >
 > We're building this in public. Every feature ships because a real operator needed it.
 >
@@ -912,7 +912,7 @@ Prioritized by impact/effort ratio. Execute in order.
 | Metric | Formula | Target | Current estimate |
 |---|---|---|---|
 | CAC (organic) | Founder time × hourly rate ÷ new signups | <$5 | ~$1–3 (organic) |
-| LTV (monthly) | $4.99 × (1/churn rate) | $100–165 | Unknown (track now) |
+| LTV (monthly) | $9.99 × (1/churn rate) | $100–330 | Unknown (track now) |
 | LTV:CAC | LTV ÷ CAC | >10:1 organic | ~50:1 if organic holds |
 | Payback period | CAC ÷ ARPU | <2 months | ~1 month organic |
 | MRR growth | Week-over-week | >15%/week early | Track from first sale |
@@ -934,7 +934,7 @@ Prioritized by impact/effort ratio. Execute in order.
 | Health integration | ✅ Full suite | ❌ | ❌ | ❌ | ✅ Wellness focus |
 | Gamification | ✅ XP/streaks/badges | ✅ Full RPG | ❌ | ❌ | ⚠️ Basic |
 | Weekly AI review | ✅ Auto-generated | ❌ | ❌ | ❌ | ❌ |
-| Pricing | ✅ $4.99 / $49.99 LT | ✅ Free | $5/mo | $10/mo | $13/mo |
+| Pricing | ✅ $9.99 / $89 LT | ✅ Free | $5/mo | $10/mo | $13/mo |
 
 ### Where Resurgo should NOT compete:
 - Team collaboration → Notion/Monday territory. Never enter this positioning.

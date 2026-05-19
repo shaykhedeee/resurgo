@@ -103,130 +103,155 @@ interface EmailContent {
 function welcomeEmail(name: string): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `${firstName}, your execution system is live`,
+    subject: `Your system is ready. Here's your first job.`,
     html: emailTemplate(`
-      <h2>SYSTEM_BOOT :: Welcome, ${firstName}</h2>
-      <p>Your Resurgo account is active. You now have a personal AI execution layer built around your goals, habits, and daily decisions.</p>
-      <p style="margin:16px 0;">Here is how to get your first win in the next 10 minutes:</p>
-      <ol style="padding-left:20px; margin:16px 0;">
-        <li style="margin-bottom:8px;"><strong>Set your first goal</strong> — Go to Goals, type one thing you want to achieve, and let AI decompose it into milestones and daily tasks.</li>
-        <li style="margin-bottom:8px;"><strong>Add 2 daily habits</strong> — Start with habits you already do (morning coffee, end-of-day review). Track them for 3 days straight and a streak begins.</li>
-        <li style="margin-bottom:8px;"><strong>Talk to your coach</strong> — Open the Coach tab and tell Marcus or Titan what you are working on. They will build a plan from your actual data.</li>
-      </ol>
-      <p><strong>Your plan access:</strong></p>
-      <ul style="padding-left:20px; margin:8px 0;">
-        <li>3 active goals</li>
-        <li>5 habit check-ins per day</li>
-        <li>10 AI messages per day</li>
-        <li>2 coaches: Marcus (Stoic Strategist) + Titan (Physical Performance)</li>
-      </ul>
-      <p style="margin:16px 0;">When you are ready to remove all limits, Pro starts at $4.99/month — or $49.99 once, forever.</p>
-      <a href="${SITE_URL}/goals" class="btn">OPEN_COMMAND_CENTER</a>
-      <p style="margin-top:16px; font-size:12px; color:#52525B;">If you have any questions, reply to this email or message us at support@resurgo.life</p>
+      <h2>Your system is ready</h2>
+      <p>Hey ${firstName},</p>
+      <p>You signed up. Good.</p>
+      <p>Here's the only thing that matters right now: add one habit.</p>
+      <p>Not three. Not a goal. One habit you want to build starting today.</p>
+      <p>That's it. Takes 30 seconds.</p>
+      <a href="${SITE_URL}/habits" class="btn">ADD_MY_FIRST_HABIT</a>
+      <p>Everything else — the AI coaches, the goal planning, the weekly reviews — unlocks from there.</p>
+      <p>See you tomorrow,<br/>[Founder name]</p>
+      <p style="margin-top:16px; font-size:12px; color:#71717A;">P.S. — If you want to go deeper today, open Marcus and type: "Help me plan my next 30 days."</p>
     `),
-    text: `Welcome to Resurgo, ${firstName}.\n\nYour execution system is live. In the next 10 minutes:\n1. Set your first goal (AI will decompose it for you)\n2. Add 2 daily habits\n3. Talk to your coach — tell Marcus or Titan what you are working on\n\nFree plan: 3 goals, 5 habits/day, 10 AI messages/day, 2 coaches (Marcus + Titan).\nPro: $4.99/month or $49.99 lifetime.\n\nGet started: ${SITE_URL}/goals\n\nQuestions? Reply here or email support@resurgo.life`,
+    text: `Hey ${firstName},\n\nYou signed up. Good.\n\nHere's the only thing that matters right now: add one habit.\n\nNot three. Not a goal. One habit you want to build starting today.\n\nThat's it. Takes 30 seconds.\n\n[ADD_MY_FIRST_HABIT → ${SITE_URL}/habits]\n\nEverything else — the AI coaches, the goal planning, the weekly reviews — unlocks from there.\n\nSee you tomorrow,\n[Founder name]\n\nP.S. — If you want to go deeper today, open Marcus and type: "Help me plan my next 30 days."`,
   };
 }
 
-function day3TipsEmail(name: string): EmailContent {
+function day2TipsEmail(name: string): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `${firstName}, 3 quick wins for your first week 🎯`,
+    subject: `Why habits die on day 10 (and what stops it)`,
     html: emailTemplate(`
-      <h2>Your first 3 days — nice work showing up!</h2>
-      <p>Most people quit before Day 3. You didn't. Here are 3 things that'll 10× your results this week:</p>
+      <h2>Why habits die on day 10 (and what stops it)</h2>
+      <p>${firstName},</p>
+      <p>80% of new habits are abandoned within 2 weeks. Not because people are lazy. Because the system fails, not the person.</p>
+      <p>Research is clear: habits stick when:</p>
       <ol style="padding-left:20px; margin:16px 0;">
-        <li style="margin-bottom:12px;"><strong style="color:#F97316;">Stack your habits</strong> — Attach a new habit to something you already do. "After I pour my coffee, I'll write 3 priorities."</li>
-        <li style="margin-bottom:12px;"><strong style="color:#F97316;">Use the 2-minute rule</strong> — If a habit takes less than 2 minutes, do it now. Start embarrassingly small.</li>
-        <li style="margin-bottom:12px;"><strong style="color:#F97316;">Talk to your AI Coach</strong> — Ask for a personalized plan. The AI gets smarter the more you use it.</li>
+        <li style="margin-bottom:12px;"><strong style="color:#F97316;">Specific cue (time + place) ✓</strong></li>
+        <li style="margin-bottom:12px;"><strong style="color:#F97316;">Immediate reward ✓</strong></li>
+        <li style="margin-bottom:12px;"><strong style="color:#F97316;">System that adjusts when life breaks the pattern ✓</strong></li>
       </ol>
-      <a href="${SITE_URL}/dashboard" class="btn">OPEN DASHBOARD →</a>
-      <p style="margin-top:16px;">Remember: consistency > intensity. One small win today compounds into transformation.</p>
+      <p>Resurgo handles #2 and #3 automatically.</p>
+      <p>Try this: open Marcus and say "Help me set a cue for your main habit."</p>
+      <a href="${SITE_URL}/coach" class="btn">OPEN_MARCUS</a>
+      <p style="margin-top:16px;">You're on day 2. Most quit on day 10. You're not most people.</p>
+      <p>[Founder name]</p>
     `),
-    text: `Hey ${firstName}! 3 days in — here are your quick wins: 1) Stack habits onto existing routines, 2) Use the 2-minute rule, 3) Talk to your AI Coach. ${SITE_URL}/dashboard`,
+    text: `${firstName},\n\n80% of new habits are abandoned within 2 weeks. Not because people are lazy. Because the system fails, not the person.\n\nResearch is clear: habits stick when:\n1) Specific cue (time + place)\n2) Immediate reward\n3) System that adjusts when life breaks the pattern\n\nResurgo handles #2 and #3 automatically.\n\nTry this: open Marcus and say "Help me set a cue for your main habit."\n\n[OPEN_MARCUS → ${SITE_URL}/coach]\n\nYou're on day 2. Most quit on day 10. You're not most people.\n\n[Founder name]`,
+  };
+}
+
+function day5GoalEmail(name: string): EmailContent {
+  const firstName = name.split(' ')[0] || 'there';
+  return {
+    subject: `Habits without goals are just routines`,
+    html: emailTemplate(`
+      <h2>Habits without goals are just routines</h2>
+      <p>${firstName},</p>
+      <p>You've been tracking habits. That's execution.</p>
+      <p>But execution without direction is just motion.</p>
+      <p>Your next step: set a 30-day goal in Resurgo.</p>
+      <p>Type it in plain English. The AI breaks it into milestones + daily tasks in 90 seconds.</p>
+      <p><em>Example:</em> "Get promoted this quarter" → 4 milestones + 12 weekly targets + daily habits.</p>
+      <a href="${SITE_URL}/goals" class="btn">SET_MY_GOAL</a>
+      <p style="margin-top:16px;">Five minutes. Then you have a full operating plan for the next month.</p>
+      <p>[Founder name]</p>
+    `),
+    text: `${firstName},\n\nYou've been tracking habits. That's execution.\n\nBut execution without direction is just motion.\n\nYour next step: set a 30-day goal in Resurgo.\n\nType it in plain English. The AI breaks it into milestones + daily tasks in 90 seconds.\n\nExample: "Get promoted this quarter" → 4 milestones + 12 weekly targets + daily habits.\n\n[SET_MY_GOAL → ${SITE_URL}/goals]\n\nFive minutes. Then you have a full operating plan for the next month.\n\n[Founder name]`,
   };
 }
 
 function day7StreakEmail(name: string, streak: number, habitsCompleted: number): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `🔥 One week down, ${firstName}! Here's your scorecard`,
+    subject: `You've been at it for 7 days. Here's what that means.`,
     html: emailTemplate(`
-      <h2>Week 1 Complete!</h2>
-      <p>You've been showing up for <strong>7 days</strong>. That puts you in the top 20% of users who actually stick with it.</p>
+      <h2>You've been at it for 7 days. Here's what that means.</h2>
+      <p>${firstName},</p>
+      <p>Seven days in. You're already in the top 30% of people who sign up for productivity apps.</p>
+      <p>The drop-off: 40% never return. 30% quit by day 7.</p>
+      <p>You're still here.</p>
+      <p>Here's what Week 2 unlocks: pattern recognition. Your coach will start seeing trends in what works for you.</p>
       <div style="text-align:center; margin:20px 0;">
         <div class="stat"><span class="stat-value">${streak}</span><span class="stat-label">Day Streak</span></div>
         <div class="stat"><span class="stat-value">${habitsCompleted}</span><span class="stat-label">Habits Done</span></div>
       </div>
-      <p><strong style="color:#FAFAFA;">Pro tip for Week 2:</strong> Set a "Weekly Review" every Sunday. Reflect on what worked, adjust what didn't. The review is where real growth happens.</p>
-      <a href="${SITE_URL}/dashboard/weekly-review" class="btn">START WEEKLY REVIEW →</a>
+      <a href="${SITE_URL}/dashboard/weekly-review" class="btn">VIEW_MY_WEEK_1_STATS</a>
+      <p style="margin-top:16px;">What's the hardest habit to keep? Reply to this email — I read every response.</p>
+      <p>[Founder name]</p>
     `),
-    text: `Week 1 done! ${streak}-day streak, ${habitsCompleted} habits completed. Pro tip: Set a Sunday weekly review. ${SITE_URL}/dashboard/weekly-review`,
+    text: `${firstName},\n\nSeven days in. You're already in the top 30% of people who sign up for productivity apps.\n\nThe drop-off: 40% never return. 30% quit by day 7.\n\nYou're still here.\n\nHere's what Week 2 unlocks: pattern recognition. Your coach will start seeing trends in what works for you.\n\n${streak}-day streak, ${habitsCompleted} habits completed.\n\n[VIEW_MY_WEEK_1_STATS → ${SITE_URL}/dashboard/weekly-review]\n\nWhat's the hardest habit to keep? Reply to this email — I read every response.\n\n[Founder name]`,
   };
 }
 
 function day14CheckinEmail(name: string, level: number, totalXp: number): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `${firstName}, you're building real momentum 📈`,
+    subject: `There's a feature you haven't unlocked yet`,
     html: emailTemplate(`
-      <h2>Two Weeks of Growth</h2>
-      <p>14 days. That's when habits start becoming automatic. Your brain is literally rewiring right now.</p>
-      <div style="text-align:center; margin:20px 0;">
-        <div class="stat"><span class="stat-value">LVL ${level}</span><span class="stat-label">Current Level</span></div>
-        <div class="stat"><span class="stat-value">${totalXp}</span><span class="stat-label">Total XP</span></div>
-      </div>
-      <p><strong style="color:#FAFAFA;">Unlock more:</strong></p>
-      <ul style="padding-left:20px;">
-        <li>Try a <strong>Focus Session</strong> — Pomodoro-style deep work blocks</li>
-        <li>Set a <strong>Milestone</strong> for your biggest goal</li>
-        <li>Explore the <strong>Insights</strong> tab to see your patterns</li>
-      </ul>
-      <a href="${SITE_URL}/dashboard" class="btn">CONTINUE YOUR JOURNEY →</a>
+      <h2>There's a feature you haven't unlocked yet</h2>
+      <p>${firstName},</p>
+      <p>Two weeks in.</p>
+      <p>Pro users unlock session memory — your AI coach remembers every conversation, pattern, and goal. Free tier resets context each session.</p>
+      <p>After two weeks of data, your Pro coach KNOWS your tendencies. Adjusts automatically.</p>
+      <p>Not a hard sell. Just want you to know it exists.</p>
+      <a href="${SITE_URL}/pricing" class="btn">SEE_WHAT_PRO_UNLOCKS</a>
+      <p style="margin-top:16px;">Still free to use everything you have.</p>
+      <p>[Founder name]</p>
     `),
-    text: `2 weeks of growth! Level ${level}, ${totalXp} XP. Try Focus Sessions and Milestones to level up faster. ${SITE_URL}/dashboard`,
+    text: `${firstName},\n\nTwo weeks in.\n\nPro users unlock session memory — your AI coach remembers every conversation, pattern, and goal. Free tier resets context each session.\n\nAfter two weeks of data, your Pro coach KNOWS your tendencies. Adjusts automatically.\n\nNot a hard sell. Just want you to know it exists.\n\n[SEE_WHAT_PRO_UNLOCKS → ${SITE_URL}/pricing]\n\nStill free to use everything you have.\n\n[Founder name]`,
   };
 }
 
 function day21HabitEmail(name: string): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `${firstName}, the 21-day mark — your habits are becoming automatic 🧠`,
+    subject: `21 days. What's changed?`,
     html: emailTemplate(`
-      <h2>21 Days — The Tipping Point</h2>
-      <p>Research shows it takes 21-66 days for a behavior to become automatic. You're in the zone.</p>
-      <p>Now is the perfect time to:</p>
-      <ul style="padding-left:20px;">
-        <li><strong style="color:#F97316;">Level up a habit</strong> — Increase difficulty or duration slightly</li>
-        <li><strong style="color:#F97316;">Add a new habit</strong> — Your foundation is solid enough to expand</li>
-        <li><strong style="color:#F97316;">Set a 90-day goal</strong> — Think bigger. Your discipline can handle it.</li>
-      </ul>
-      <a href="${SITE_URL}/dashboard/goals" class="btn">SET A NEW GOAL →</a>
-      <p style="margin-top:16px; font-size:12px; color:#71717A;">You're building something most people only talk about. Keep going.</p>
+      <h2>21 days — The Tipping Point</h2>
+      <p>${firstName},</p>
+      <p>21 days is significant.</p>
+      <p>Research shows: average habit formation = 66 days, but first 21 creates the neural groove. You've cleared the hardest part.</p>
+      <p>What's your biggest win so far?</p>
+      <p>Reply to this email. I read every one.</p>
+      <p style="margin-top:16px;">And if you want to connect with others: <a href="${SITE_URL}/community" style="color:#F97316;">Join our Discord</a></p>
+      <p>[Founder name]</p>
     `),
-    text: `21 days — your habits are becoming automatic! Level up a habit, add a new one, or set a 90-day goal. ${SITE_URL}/dashboard/goals`,
+    text: `${firstName},\n\n21 days is significant.\n\nResearch shows: average habit formation = 66 days, but first 21 creates the neural groove. You've cleared the hardest part.\n\nWhat's your biggest win so far?\n\nReply to this email. I read every one.\n\n[Founder name]`,
   };
 }
 
 function day30ReviewEmail(name: string, stats: { streak: number; habits: number; goals: number; level: number }): EmailContent {
   const firstName = name.split(' ')[0] || 'there';
   return {
-    subject: `🏆 ${firstName}, your 30-day transformation report`,
+    subject: `30 days. Your data speaks.`,
     html: emailTemplate(`
-      <h2>30-Day Milestone Achieved!</h2>
-      <p>One month ago, you made a decision. Today, you have <em>proof</em> it was the right one.</p>
+      <h2>30 days. Your data speaks.</h2>
+      <p>${firstName},</p>
+      <p>One month in. Check your dashboard:</p>
       <div style="text-align:center; margin:20px 0;">
-        <div class="stat"><span class="stat-value">${stats.streak}</span><span class="stat-label">Best Streak</span></div>
-        <div class="stat"><span class="stat-value">${stats.habits}</span><span class="stat-label">Habits Done</span></div>
-        <div class="stat"><span class="stat-value">${stats.goals}</span><span class="stat-label">Goals Set</span></div>
-        <div class="stat"><span class="stat-value">LVL ${stats.level}</span><span class="stat-label">Level</span></div>
+        <div class="stat"><span class="stat-value">${stats.habits}</span><span class="stat-label">Total habits tracked</span></div>
+        <div class="stat"><span class="stat-value">${stats.streak}</span><span class="stat-label">Longest streak</span></div>
+        <div class="stat"><span class="stat-value">${stats.goals}</span><span class="stat-label">Goals completed</span></div>
       </div>
-      <p><strong style="color:#FAFAFA;">What's next?</strong></p>
-      <p>Consider upgrading to <strong style="color:#F97316;">Resurgo Pro</strong> to unlock unlimited AI coaching, advanced analytics, and priority features.</p>
-      <a href="${SITE_URL}/pricing" class="btn">EXPLORE PRO →</a>
-      <p style="margin-top:8px;"><a href="${SITE_URL}/dashboard" style="color:#F97316; font-size:13px;">Or continue crushing it on Free →</a></p>
+      <p>That's REAL. That's YOURS.</p>
+      <p>Here's what Pro unlocks:</p>
+      <ul style="padding-left:20px; margin:16px 0;">
+        <li><strong style="color:#F97316;">Full coach session memory</strong></li>
+        <li><strong style="color:#F97316;">Unlimited goals + habits</strong></li>
+        <li><strong style="color:#F97316;">Weekly AI review (pattern + optimization)</strong></li>
+        <li><strong style="color:#F97316;">All 5 coaches (Aurora, Phoenix, Nexus)</strong></li>
+        <li><strong style="color:#F97316;">Vision Board Studio</strong></li>
+      </ul>
+      <a href="${SITE_URL}/pricing?promo=MONTH1" class="btn">UNLOCK_PRO_30%_OFF</a>
+      <p style="margin-top:8px; font-size:13px; color:#A1A1AA;">For 72 hours only: 30% off first Pro month. Code: MONTH1</p>
+      <p style="font-size:12px; color:#71717A;">Free plan doesn't expire. The discount does.</p>
+      <p>[Founder name]</p>
     `),
-    text: `30-day milestone! Streak: ${stats.streak}, Habits: ${stats.habits}, Goals: ${stats.goals}, Level: ${stats.level}. Explore Pro: ${SITE_URL}/pricing`,
+    text: `${firstName},\n\nOne month in. Check your dashboard:\n\n→ Total habits tracked: ${stats.habits}\n→ Longest streak: ${stats.streak}\n→ Goals completed: ${stats.goals}\n\nThat's REAL. That's YOURS.\n\nWhat Pro unlocks:\n→ Full coach session memory\n→ Unlimited goals + habits\n→ Weekly AI review (pattern + optimization)\n→ All 5 coaches (Aurora, Phoenix, Nexus)\n→ Vision Board Studio\n\n[UNLOCK_PRO_30%_OFF → ${SITE_URL}/pricing?promo=MONTH1]\n\nCode: MONTH1\nFree plan doesn't expire. The discount does.\n\n[Founder name]`,
   };
 }
 
@@ -486,28 +511,49 @@ export const processLifecycleEmails = internalAction({
         ? Math.floor((now - user.lastActiveAt) / DAY_MS)
         : daysSinceSignup;
 
-      // ── Day 3: Quick tips email ──
-      if (daysSinceSignup >= 3 && daysSinceSignup < 5) {
+      // ── Day 2: Education email ──
+      if (daysSinceSignup >= 2 && daysSinceSignup < 4) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
-          emailType: 'day3_tips',
+          emailType: 'day2_tips',
         });
         if (!alreadySent) {
-          const email = day3TipsEmail(user.name);
+          const email = day2TipsEmail(user.name);
           const result = await sendResendEmail({ to: user.email, ...email });
           await ctx.runMutation(internalEmailAutomation.logEmail, {
             userId: user._id,
-            emailType: 'day3_tips',
+            emailType: 'day2_tips',
             success: result.ok,
             resendId: result.id,
             error: result.error,
           });
           if (result.ok) sent++;
-          continue; // max 1 email per user per run
+          continue;
         }
       }
 
-      // ── Day 7: Streak celebration ──
+      // ── Day 5: Goal planning email ──
+      if (daysSinceSignup >= 5 && daysSinceSignup < 7) {
+        const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
+          userId: user._id,
+          emailType: 'day5_goal',
+        });
+        if (!alreadySent) {
+          const email = day5GoalEmail(user.name);
+          const result = await sendResendEmail({ to: user.email, ...email });
+          await ctx.runMutation(internalEmailAutomation.logEmail, {
+            userId: user._id,
+            emailType: 'day5_goal',
+            success: result.ok,
+            resendId: result.id,
+            error: result.error,
+          });
+          if (result.ok) sent++;
+          continue;
+        }
+      }
+
+      // ── Day 7: Social proof email ──
       if (daysSinceSignup >= 7 && daysSinceSignup < 9) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
@@ -531,7 +577,7 @@ export const processLifecycleEmails = internalAction({
         }
       }
 
-      // ── Day 14: Feature discovery ──
+      // ── Day 14: Premium reveal ──
       if (daysSinceSignup >= 14 && daysSinceSignup < 16) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
@@ -555,7 +601,7 @@ export const processLifecycleEmails = internalAction({
         }
       }
 
-      // ── Day 21: Habit consolidation ──
+      // ── Day 21: Community check-in ──
       if (daysSinceSignup >= 21 && daysSinceSignup < 23) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
@@ -576,7 +622,7 @@ export const processLifecycleEmails = internalAction({
         }
       }
 
-      // ── Day 30: Milestone + upsell ──
+      // ── Day 30: Data-driven conversion ──
       if (daysSinceSignup >= 30 && daysSinceSignup < 33) {
         const alreadySent = await ctx.runQuery(internalEmailAutomation.hasEmailBeenSent, {
           userId: user._id,
@@ -600,10 +646,10 @@ export const processLifecycleEmails = internalAction({
             resendId: result.id,
             error: result.error,
           });
-          if (result.ok) sent++;
-          continue;
-        }
-      }
+           if (result.ok) sent++;
+           continue; // max 1 email per user per run
+         }
+       }
 
       // ── Win-back day 3: Absent 3 days (early gentle nudge) ──
       if (daysSinceActive >= 3 && daysSinceActive < 5) {
@@ -748,6 +794,194 @@ export const processLifecycleEmails = internalAction({
     }
 
     console.log(`[EmailAutomation] Processed ${users.length} users — sent: ${sent}, skipped: ${skipped}`);
+    return null;
+  },
+});
+
+function leadDay0Email(email: string): EmailContent {
+  const name = email.split('@')[0] || 'there';
+  return {
+    subject: `Welcome to Resurgo — here's your founder execution starter`,
+    html: emailTemplate(`
+      <h2>Founder System Activated</h2>
+      <p>Hey ${name},</p>
+      <p>You’re in. Here’s the fastest path to value:</p>
+      <ol style="padding-left:20px;">
+        <li>Set one weekly founder goal</li>
+        <li>Add one daily execution habit</li>
+        <li>Run one 25-minute focus sprint</li>
+      </ol>
+      <a href="${SITE_URL}/sign-up" class="btn">START IN UNDER 10 MINUTES →</a>
+      <p>Reply with your biggest execution bottleneck — we read every response.</p>
+    `),
+    text: `Welcome to Resurgo.\n\nStart in under 10 minutes:\n1) Set one weekly founder goal\n2) Add one daily habit\n3) Run one 25-minute focus sprint\n\nStart: ${SITE_URL}/sign-up`,
+  };
+}
+
+function leadDay3Email(email: string): EmailContent {
+  const name = email.split('@')[0] || 'there';
+  return {
+    subject: `${name}, still planning too much?`,
+    html: emailTemplate(`
+      <h2>Planning Is Not Shipping</h2>
+      <p>Most founders lose momentum in planning loops.</p>
+      <p>Resurgo’s quick loop:</p>
+      <ul style="padding-left:20px;">
+        <li>Brain dump → AI prioritization</li>
+        <li>One daily must-ship task</li>
+        <li>Weekly review that adjusts next week</li>
+      </ul>
+      <a href="${SITE_URL}/indie-hackers" class="btn">SEE THE FOUNDER WORKFLOW →</a>
+    `),
+    text: `Planning is not shipping.\nUse this loop: brain dump -> prioritize -> one daily must-ship task -> weekly review.\n${SITE_URL}/indie-hackers`,
+  };
+}
+
+function leadDay7Email(): EmailContent {
+  return {
+    subject: `Case-study: how founders use Resurgo to ship weekly`,
+    html: emailTemplate(`
+      <h2>One Weekly Shipping System</h2>
+      <p>Founders who win with Resurgo follow one rule: one clear weekly outcome, then daily execution constraints.</p>
+      <p>If you want to run this setup, start free and copy the workflow directly.</p>
+      <a href="${SITE_URL}/compare" class="btn">COMPARE + START FREE →</a>
+    `),
+    text: `Founders who win with Resurgo use one weekly outcome + daily execution constraints.\nCompare and start free: ${SITE_URL}/compare`,
+  };
+}
+
+export const hasLeadEmailBeenSent = internalQuery({
+  args: { leadId: v.id('leads'), emailType: v.string() },
+  returns: v.boolean(),
+  handler: async (ctx, args) => {
+    const existing = await ctx.db
+      .query('leadEmailLogs')
+      .withIndex('by_leadId_emailType', (q: any) =>
+        q.eq('leadId', args.leadId).eq('emailType', args.emailType)
+      )
+      .first();
+    return existing !== null;
+  },
+});
+
+export const logLeadEmail = internalMutation({
+  args: {
+    leadId: v.id('leads'),
+    email: v.string(),
+    emailType: v.string(),
+    success: v.boolean(),
+    resendId: v.optional(v.string()),
+    error: v.optional(v.string()),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await ctx.db.insert('leadEmailLogs', {
+      leadId: args.leadId,
+      email: args.email,
+      emailType: args.emailType,
+      sentAt: Date.now(),
+      success: args.success,
+      resendId: args.resendId,
+      error: args.error,
+    });
+    return null;
+  },
+});
+
+export const getUnconvertedLeadsForOutreach = internalQuery({
+  args: {},
+  returns: v.array(
+    v.object({
+      _id: v.id('leads'),
+      email: v.string(),
+      capturedAt: v.number(),
+      convertedToUser: v.boolean(),
+    }),
+  ),
+  handler: async (ctx) => {
+    const leads = await ctx.db.query('leads').collect();
+    return leads
+      .filter((lead) => !lead.convertedToUser)
+      .map((lead) => ({
+        _id: lead._id,
+        email: lead.email,
+        capturedAt: lead.capturedAt,
+        convertedToUser: lead.convertedToUser,
+      }));
+  },
+});
+
+export const getUserIdByEmail = internalQuery({
+  args: { email: v.string() },
+  returns: v.union(v.id('users'), v.null()),
+  handler: async (ctx, args) => {
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_email', (q: any) => q.eq('email', args.email))
+      .first();
+    return user?._id ?? null;
+  },
+});
+
+export const markLeadConverted = internalMutation({
+  args: { leadId: v.id('leads') },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    await ctx.db.patch(args.leadId, {
+      convertedToUser: true,
+      convertedAt: Date.now(),
+    });
+    return null;
+  },
+});
+
+export const processLeadOutreach = internalAction({
+  args: {},
+  returns: v.null(),
+  handler: async (ctx) => {
+    const leads = await ctx.runQuery(internalEmailAutomation.getUnconvertedLeadsForOutreach, {});
+    const now = Date.now();
+
+    for (const lead of leads) {
+      const existingUserId = await ctx.runQuery(internalEmailAutomation.getUserIdByEmail, {
+        email: lead.email,
+      });
+      if (existingUserId) {
+        await ctx.runMutation(internalEmailAutomation.markLeadConverted, { leadId: lead._id });
+        continue;
+      }
+
+      const daysSinceCapture = Math.floor((now - lead.capturedAt) / DAY_MS);
+      const type =
+        daysSinceCapture < 2 ? 'lead_day0' :
+        daysSinceCapture >= 3 && daysSinceCapture < 5 ? 'lead_day3' :
+        daysSinceCapture >= 7 && daysSinceCapture < 10 ? 'lead_day7' :
+        null;
+
+      if (!type) continue;
+
+      const alreadySent = await ctx.runQuery(internalEmailAutomation.hasLeadEmailBeenSent, {
+        leadId: lead._id,
+        emailType: type,
+      });
+      if (alreadySent) continue;
+
+      const content =
+        type === 'lead_day0' ? leadDay0Email(lead.email) :
+        type === 'lead_day3' ? leadDay3Email(lead.email) :
+        leadDay7Email();
+
+      const result = await sendResendEmail({ to: lead.email, ...content });
+      await ctx.runMutation(internalEmailAutomation.logLeadEmail, {
+        leadId: lead._id,
+        email: lead.email,
+        emailType: type,
+        success: result.ok,
+        resendId: result.id,
+        error: result.error,
+      });
+    }
+
     return null;
   },
 });

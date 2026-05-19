@@ -21,6 +21,7 @@ import {
   CheckCircle2,
   Lightbulb
 } from 'lucide-react';
+import { PrimaryAction, SecondaryAction } from '@/components/layout/ResurgoLayout';
 
 interface AddHabitModalProps {
   isOpen: boolean;
@@ -464,27 +465,24 @@ export function AddHabitModal({ isOpen, onClose, linkedGoalId }: AddHabitModalPr
         )}
 
         {/* Footer */}
-        <div className="sticky bottom-0 p-4 border-t border-white/10 bg-[var(--background-secondary)]/90 backdrop-blur-xl">
-          <div className="flex gap-3">
-            <button
-              onClick={onClose}
-              className="btn-ghost flex-1"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={!name.trim()}
-              className={cn(
-                "btn-primary flex-1 flex items-center justify-center gap-2",
-                !name.trim() && "opacity-50 cursor-not-allowed"
-              )}
-            >
-              <Plus className="w-4 h-4" />
-              Add Habit
-            </button>
-          </div>
-        </div>
+            <div className="sticky bottom-0 p-4 border-t border-white/10 bg-[var(--background-secondary)]/90 backdrop-blur-xl">
+               <div className="flex gap-3">
+                 <SecondaryAction onClick={onClose} className="flex-1">
+                   Cancel
+                 </SecondaryAction>
+                 <PrimaryAction
+                   onClick={handleSubmit}
+                   disabled={!name.trim()}
+                   className={cn(
+                     "flex-1 flex items-center justify-center gap-2",
+                     !name.trim() && "opacity-50 cursor-not-allowed"
+                   )}
+                 >
+                   <Plus className="w-4 h-4" />
+                   Add Habit
+                 </PrimaryAction>
+               </div>
+             </div>
       </div>
     </div>
   );

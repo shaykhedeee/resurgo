@@ -12,9 +12,11 @@ import { metaPixelEvents, fbqTrack, fbqPageView } from '@/components/MetaPixel';
 // Google Analytics Measurement ID - Replace with your actual ID
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX';
 const CLARITY_PROJECT_ID = process.env.NEXT_PUBLIC_CLARITY_ID || '';
+const POSTHOG_API_KEY = process.env.NEXT_PUBLIC_POSTHOG_KEY || '';
+const POSTHOG_HOST = process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://us.i.posthog.com';
 
 // Whether analytics is enabled
-const ANALYTICS_ENABLED = false; // Temporarily disabled due to Script rendering issue
+const ANALYTICS_ENABLED = true;
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // TYPE DEFINITIONS

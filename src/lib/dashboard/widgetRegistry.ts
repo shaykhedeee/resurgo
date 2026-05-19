@@ -1,81 +1,192 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-// Widget Registry — single source of truth for all dashboard widgets
-// ═══════════════════════════════════════════════════════════════════════════════
+// WidgetRegistry — central registry for all dashboard widgets
+// Allows widgets to register themselves and consumers to query by id/category
 
-export interface WidgetDef {
-  /** Unique stable key — must not change after release */
+import type { ComponentType } from 'react';
+import XPLeaderboardWidget from '@/components/widgets/XPLeaderboardWidget';
+import StreakHeatmapWidget from '@/components/widgets/StreakHeatmapWidget';
+import QuickTaskWidget from '@/components/widgets/QuickTaskWidget';
+import GoalProgressWidget from '@/components/widgets/GoalProgressWidget';
+import HabitStreakWidget from '@/components/widgets/HabitStreakWidget';
+import SynergyScoreWidget from '@/components/widgets/SynergyScoreWidget';
+
+// ── Backward-compatible types from existing implementation ──
+export interface LayoutEntry {
   id: string;
-  /** Human-readable label shown in the customise panel */
-  label: string;
-  /** Lucide icon name (imported on-demand in UI) */
-  icon: string;
-  /** Default column span (1 = 1/3 on desktop) */
-  colSpan?: 1 | 2 | 3;
-  /** Section heading this widget belongs to */
-  section: 'core' | 'capture' | 'utility' | 'context';
-  /** Default visibility & order (lower = higher on page) */
-  defaultOrder: number;
-  defaultVisible: boolean;
+  visible: boolean;
+  order: number;
 }
 
-/**
- * Authoritative list of every widget available on the dashboard.
- * Order here determines the default order when the user has never customised.
- */
-export const WIDGET_REGISTRY: WidgetDef[] = [
-  // ── Core (Execution Core) ──
-  { id: 'focus-timer',    label: 'Focus Timer',       icon: 'Timer',        section: 'core',    defaultOrder: 0,  defaultVisible: true },
-  { id: 'habit-streak',   label: 'Habit Streaks',     icon: 'Flame',        section: 'core',    defaultOrder: 1,  defaultVisible: true },
-  { id: 'ai-coach',       label: 'AI Coach',          icon: 'MessageSquare',section: 'core',    defaultOrder: 2,  defaultVisible: true },
+export interface DashboardWidgetDefinition {
+  id: string;
+  label: string;
+  section: 'home' | 'body' | 'mind' | 'progress' | 'utility';
+  defaultVisible: boolean;
+  defaultOrder: number;
+}
 
-  // ── Capture & Reflection ──
-  { id: 'quick-journal',  label: 'Quick Journal',     icon: 'BookOpen',     section: 'capture', defaultOrder: 3,  defaultVisible: true },
-  { id: 'goal-progress',  label: 'Goal Progress',     icon: 'Target',       section: 'capture', defaultOrder: 4,  defaultVisible: true },
-  { id: 'calorie-tracker',label: 'Calorie Tracker',   icon: 'Apple',        section: 'capture', defaultOrder: 5,  defaultVisible: true },
+// ── Widget Registration interface ──
+export interface WidgetRegistration<Props = Record<string, unknown>> {
+  id: string;
+  title: string;
+  description: string;
+  component: ComponentType<Props>;
+  category: 'productivity' | 'analytics' | 'gamification' | 'insights' | 'system';
+  tag?: string;
+  defaultOrder: number;
+  defaultRow: number;
+  minPlan: 'free' | 'pro' | 'lifetime';
+  isBeta?: boolean;
+  props?: Props;
+}
 
-  // ── Utility ──
-  { id: 'digital-clock',  label: 'Digital Clock',     icon: 'Clock',        section: 'utility', defaultOrder: 6,  defaultVisible: true },
-  { id: 'quick-task',     label: 'Quick Task',        icon: 'CheckSquare',  section: 'utility', defaultOrder: 7,  defaultVisible: true },
-  { id: 'quick-note',     label: 'Quick Note',        icon: 'StickyNote',   section: 'utility', defaultOrder: 8,  defaultVisible: true },
+export class WidgetRegistry {
+  private widgets: Map<string, WidgetRegistration> = new Map();
 
-  // ── Status & Tracking ──
-  { id: 'water-tracker',  label: 'Hydration',         icon: 'Droplets',     section: 'core',    defaultOrder: 6,  defaultVisible: true },
-  { id: 'xp-status',      label: 'XP & Level',        icon: 'Trophy',       section: 'core',    defaultOrder: 7,  defaultVisible: true },
-  { id: 'activity-feed',  label: 'Activity Feed',     icon: 'TrendingUp',   section: 'core',    defaultOrder: 8,  defaultVisible: true },
-  { id: 'streak-heatmap', label: 'Streak Heatmap',    icon: 'CalendarDays', section: 'core',    defaultOrder: 9,  defaultVisible: true },
+  register<Props extends Record<string, unknown>>(reg: WidgetRegistration<Props>): void {
+    if (reg.id === '') throw new Error('Widget id must not be empty string');
+    this.widgets.set(reg.id, reg as WidgetRegistration);
+  }
 
-  // ── Context & Support ──
-  { id: 'sleep',          label: 'Sleep Tracker',     icon: 'Moon',         section: 'context', defaultOrder: 10, defaultVisible: true },
-  { id: 'quick-actions',  label: 'Quick Actions',     icon: 'Zap',          section: 'context', defaultOrder: 11, defaultVisible: true },
-  { id: 'vision-board',   label: 'Vision Board',      icon: 'Image',        section: 'context', defaultOrder: 12, defaultVisible: true },
-  { id: 'xp-leaderboard', label: 'XP Leaderboard',    icon: 'Trophy',       section: 'core',    defaultOrder: 13, defaultVisible: false },
+  unregister(id: string): void {
+    this.widgets.delete(id);
+  }
+
+  get(id: string): WidgetRegistration | undefined {
+    return this.widgets.get(id);
+  }
+
+  getAll(): WidgetRegistration[] {
+    return [...this.widgets.values()].sort((a, b) => a.defaultOrder - b.defaultOrder);
+  }
+
+  getAllByPlan(plan: string): WidgetRegistration[] {
+    const order: Record<string, number> = { free: 0, pro: 1, lifetime: 2 };
+    const level = order[plan] ?? 0;
+    return this.getAll().filter(w => order[w.minPlan] <= level);
+  }
+
+  getAllByCategory(category: WidgetRegistration['category']): WidgetRegistration[] {
+    return this.getAll().filter(w => w.category === category);
+  }
+}
+
+// ── Singleton instance ──
+export const widgetRegistry = new WidgetRegistry();
+
+// ── Backward-compatible WIDGET_REGISTRY ──
+export const WIDGET_REGISTRY: DashboardWidgetDefinition[] = [
+  { id: 'synergy-score', label: 'Life OS Pulse', section: 'home', defaultVisible: true, defaultOrder: 0 },
+  { id: 'quick-actions', label: 'Quick Actions', section: 'home', defaultVisible: true, defaultOrder: 1 },
+  { id: 'quick-task', label: 'Quick Task', section: 'home', defaultVisible: true, defaultOrder: 2 },
+  { id: 'focus-timer', label: 'Focus Timer', section: 'home', defaultVisible: true, defaultOrder: 3 },
+  { id: 'habit-streak', label: 'Habit Streak', section: 'home', defaultVisible: true, defaultOrder: 4 },
+  { id: 'goal-progress', label: 'Goal Progress', section: 'home', defaultVisible: true, defaultOrder: 5 },
+  { id: 'ai-coach', label: 'AI Coach', section: 'home', defaultVisible: true, defaultOrder: 6 },
+  { id: 'water-tracker', label: 'Water Tracker', section: 'body', defaultVisible: true, defaultOrder: 6 },
+  { id: 'calorie-tracker', label: 'Calorie Tracker', section: 'body', defaultVisible: true, defaultOrder: 7 },
+  { id: 'sleep', label: 'Sleep Tracker', section: 'body', defaultVisible: true, defaultOrder: 8 },
+  { id: 'quick-journal', label: 'Quick Journal', section: 'mind', defaultVisible: true, defaultOrder: 9 },
+  { id: 'quick-note', label: 'Quick Note', section: 'utility', defaultVisible: true, defaultOrder: 10 },
+  { id: 'digital-clock', label: 'Digital Clock', section: 'utility', defaultVisible: false, defaultOrder: 11 },
+  { id: 'activity-feed', label: 'Activity Feed', section: 'progress', defaultVisible: false, defaultOrder: 12 },
+  { id: 'streak-heatmap', label: 'Streak Heatmap', section: 'progress', defaultVisible: false, defaultOrder: 13 },
+  { id: 'vision-board', label: 'Vision Board', section: 'progress', defaultVisible: false, defaultOrder: 14 },
+  { id: 'xp-status', label: 'XP Status', section: 'progress', defaultVisible: false, defaultOrder: 15 },
+  { id: 'xp-leaderboard', label: 'XP Leaderboard', section: 'progress', defaultVisible: false, defaultOrder: 16 },
+  { id: 'product-hunt', label: 'Product Hunt', section: 'utility', defaultVisible: false, defaultOrder: 17 },
 ];
 
-/** Map of widget id → WidgetDef for O(1) lookups */
-export const WIDGET_MAP = new Map(WIDGET_REGISTRY.map((w) => [w.id, w]));
+export const WIDGET_MAP = new Map(WIDGET_REGISTRY.map((widget) => [widget.id, widget]));
 
-export type LayoutEntry = { id: string; visible: boolean; order: number };
+// ── Backward-compatible functions ──
+export function resolveLayout(savedLayout: LayoutEntry[] | null): LayoutEntry[] {
+  const savedById = new Map((savedLayout ?? []).map((entry) => [entry.id, entry]));
 
-/**
- * Merge persisted layout with the registry so new widgets are always included
- * and removed widgets are dropped.
- */
-export function resolveLayout(persisted: LayoutEntry[] | null | undefined): LayoutEntry[] {
-  if (!persisted || persisted.length === 0) {
-    return WIDGET_REGISTRY.map((w) => ({
-      id: w.id,
-      visible: w.defaultVisible,
-      order: w.defaultOrder,
-    }));
-  }
-
-  const persistedMap = new Map(persisted.map((e) => [e.id, e]));
-  const merged: LayoutEntry[] = [];
-
-  for (const def of WIDGET_REGISTRY) {
-    const saved = persistedMap.get(def.id);
-    merged.push(saved ?? { id: def.id, visible: def.defaultVisible, order: def.defaultOrder });
-  }
-
-  return merged.sort((a, b) => a.order - b.order);
+  return WIDGET_REGISTRY
+    .map((widget) => {
+      const saved = savedById.get(widget.id);
+      return {
+        id: widget.id,
+        visible: saved?.visible ?? widget.defaultVisible,
+        order: saved?.order ?? widget.defaultOrder,
+      };
+    })
+    .sort((a, b) => a.order - b.order);
 }
+
+export function getWidgetDefinition(id: string): DashboardWidgetDefinition | undefined {
+  return WIDGET_MAP.get(id);
+}
+
+// ── Register real widgets ──
+widgetRegistry.register({
+  id: 'xp-leaderboard',
+  title: 'XP Leaderboard',
+  description: 'View rankings and compete with others',
+  component: XPLeaderboardWidget,
+  category: 'gamification',
+  defaultOrder: 1,
+  defaultRow: 1,
+  minPlan: 'free',
+  isBeta: false,
+});
+
+widgetRegistry.register({
+  id: 'streak-heatmap',
+  title: 'Streak Heatmap',
+  description: 'Visualize your consistency over time',
+  component: StreakHeatmapWidget,
+  category: 'analytics',
+  defaultOrder: 2,
+  defaultRow: 1,
+  minPlan: 'free',
+  isBeta: false,
+});
+
+widgetRegistry.register({
+  id: 'quick-task',
+  title: 'Quick Task',
+  description: 'Rapid task entry for daily productivity',
+  component: QuickTaskWidget,
+  category: 'productivity',
+  defaultOrder: 3,
+  defaultRow: 1,
+  minPlan: 'free',
+  isBeta: false,
+});
+
+widgetRegistry.register({
+  id: 'goal-progress',
+  title: 'Goal Progress',
+  description: 'Track your objectives and milestones',
+  component: GoalProgressWidget,
+  category: 'productivity',
+  defaultOrder: 4,
+  defaultRow: 1,
+  minPlan: 'free',
+  isBeta: false,
+});
+
+widgetRegistry.register({
+  id: 'habit-streak',
+  title: 'Habit Streak',
+  description: 'Maintain your daily habit chains',
+  component: HabitStreakWidget,
+  category: 'gamification',
+  defaultOrder: 1,
+  defaultRow: 2,
+  minPlan: 'free',
+  isBeta: false,
+});
+
+widgetRegistry.register({
+  id: 'synergy-score',
+  title: 'Life OS Pulse',
+  description: 'A unified score aggregating wellness, tasks, habits, and budgets.',
+  component: SynergyScoreWidget,
+  category: 'insights',
+  defaultOrder: 0,
+  defaultRow: 1,
+  minPlan: 'free',
+  isBeta: false,
+});

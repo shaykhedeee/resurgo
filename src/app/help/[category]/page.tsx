@@ -337,9 +337,9 @@ Master showing up before you optimize performance. Consistency beats intensity.
 1. Go to **Settings** > **Subscription**
 2. Tap **"Upgrade to Pro"**
 3. Choose your plan:
-   - Monthly: $4.99/month
-   - Yearly: $29.99/year (save 50%!)
-   - Lifetime: $49.99 one-time
+    - Monthly: $9.99/month
+    - Yearly: $95.88/year (effective $7.99/mo, save 20%)
+    - Lifetime: $89 one-time (founding price until July 5, 2026)
 4. Complete payment via Dodo Payments
 5. Enjoy instant access!
 

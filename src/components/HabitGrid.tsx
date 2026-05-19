@@ -10,6 +10,7 @@ import { cn, isTodayDate } from '@/lib/utils';
 import { Check, Plus, Target, TrendingUp, TrendingDown, Minus, RefreshCw, Zap } from 'lucide-react';
 import { format, subDays } from 'date-fns';
 import { playSound } from '@/lib/sounds';
+import { PrimaryAction, SecondaryAction } from '@/components/layout/ResurgoLayout';
 
 export function HabitGrid() {
   const { 
@@ -94,13 +95,13 @@ export function HabitGrid() {
             Track your daily habits • {activeHabits.length} habits
           </p>
         </div>
-        <button 
+        <PrimaryAction 
           onClick={() => setModal({ isOpen: true, type: 'habit' })}
-          className="btn-primary flex items-center gap-2"
+          className="flex items-center gap-2"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden sm:inline">Add Habit</span>
-        </button>
+        </PrimaryAction>
       </div>
 
       {/* Never Miss Twice - Encouragement Banner */}
@@ -319,13 +320,13 @@ export function HabitGrid() {
               <p className="text-white/60 mb-4">
                 Start building better habits by adding your first one.
               </p>
-              <button 
+              <PrimaryAction 
                 onClick={() => setModal({ isOpen: true, type: 'habit' })}
-                className="btn-primary inline-flex items-center"
+                className="inline-flex items-center"
               >
                 <Plus className="w-4 h-4 mr-2" aria-hidden="true" />
                 Add Your First Habit
-              </button>
+              </PrimaryAction>
             </div>
           )}
         </div>

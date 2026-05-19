@@ -13,7 +13,7 @@ Use this sentence verbatim wherever a one-line description is needed.
 
 ## 2. PLAN NAMES & LIMITS (CANONICAL)
 
-| Feature | Free | Pro ($4.99/mo) | Lifetime ($49.99) |
+| Feature | Free | Pro ($9.99/mo) | Lifetime ($89) |
 |---|---|---|---|
 | Goals | 3 | Unlimited | Unlimited |
 | Tasks | Unlimited | Unlimited | Unlimited |
@@ -46,9 +46,9 @@ Use this sentence verbatim wherever a one-line description is needed.
 ## 4. PRICING (CANONICAL)
 
 - **Free:** Forever. No credit card. 3 goals, 5 habits/day, 10 AI messages/day.
-- **Pro Monthly:** $4.99/month. Everything unlimited.  
-- **Pro Yearly:** $29.99/year ($2.50/mo). Everything unlimited.
-- **Founding Lifetime:** $49.99 one-time. Everything unlimited. 1,000 spots total.
+- **Pro Monthly:** $9.99/month. Everything unlimited.
+- **Pro Yearly:** $95.88/year ($7.99/mo). Everything unlimited.
+- **Founding Lifetime:** $89 one-time for the first 100 relaunch signups (founding price until July 5, 2026; after: $199). Everything unlimited.
 
 **Rule:** Pricing page, landing page, FAQ, and onboarding must always use these exact numbers.
 
@@ -116,8 +116,8 @@ These facts must never be violated anywhere in the product or marketing:
 
 1. There are exactly **5 coaches**, not 4, not 6, not 8.
 2. Free plan allows **3 goals** and **5 habits/day**.
-3. Pro is **$4.99/month** — not $9, not $14.
-4. Lifetime is **$49.99** — not $99.
+3. Pro is **$9.99/month** — not $9, not $14.
+4. Lifetime is **$89** for the **first 100 relaunch signups** (founding price until July 5, 2026) — not $99 and not 1,000 spots.
 5. The app works as a **PWA on all platforms** — no native iOS/Android app yet.
 6. Vision board uses **HuggingFace FLUX.1-schnell** as the primary model.
 7. The product is for **solo operators / individuals** — not teams.

@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { X, Sparkles, Crown, Zap, Lock } from 'lucide-react';
 import { analytics } from '@/lib/analytics';
+import { FOUNDING_LIFETIME_PRICE_USD } from '@/lib/product-config';
 
 export type UpsellTrigger =
   | 'goal_limit'
@@ -39,7 +40,7 @@ const TRIGGER_CONFIG: Record<UpsellTrigger, { icon: typeof Sparkles; headline: s
     icon: Zap,
     headline: 'You have outgrown the free goal limit',
     description: 'You already filled all 3 free goals. Pro removes the ceiling and unlocks all 5 AI coaches so your system can keep expanding.',
-    cta: 'Upgrade to Pro — $4.99/mo',
+    cta: 'Upgrade to Pro — $9.99/mo',
   },
   ai_message_limit: {
     icon: Sparkles,
@@ -57,7 +58,7 @@ const TRIGGER_CONFIG: Record<UpsellTrigger, { icon: typeof Sparkles; headline: s
     icon: Crown,
     headline: 'You\'re serious about this',
     description: 'You built a 7-day streak. Pro helps protect that momentum with deeper coaching, more flexibility, and zero daily message limits.',
-    cta: 'Claim Lifetime — $49.99',
+    cta: `Claim Lifetime - $${FOUNDING_LIFETIME_PRICE_USD}`,
   },
   feature_locked: {
     icon: Lock,

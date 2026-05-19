@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App Sandbox - iOS apps run sandboxed by default -->
+    <key>com.apple.security.app-sandbox</key>
+    <true/>
+
+    <!-- Push Notifications -->
+    <key>aps-environment</key>
+    <string>development</string>
+
+    <!-- Keychain Sharing (if using secure storage) -->
+    <!--
+    <key>keychain-access-groups</key>
+    <array>
+        <string>$(AppIdentifierPrefix)life.resurgo.app</string>
+    </array>
+    -->
+
+    <!-- iCloud (if using cloud sync) -->
+    <!--
+    <key>com.apple.developer.icloud-services</key>
+    <array>
+        <string>CloudDocuments</string>
+    </array>
+    <key>com.apple.developer.ubiquity-container-identifiers</key>
+    <array>
+        <string>iCloud.life.resurgo.app</string>
+    </array>
+    -->
+
+    <!-- Associated Domains for Universal Links -->
+    <key>com.apple.developer.associated-domains</key>
+    <array>
+        <string>applinks:resurgo.life</string>
+    </array>
+</dict>
+</plist>

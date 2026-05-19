@@ -43,6 +43,13 @@ crons.cron(
   internal.emailAutomation.processLifecycleEmails
 );
 
+// ── Lead outreach drip (unconverted leads): daily at 10:00 UTC ────────────────
+crons.cron(
+  'lead-outreach-email-automation',
+  '0 10 * * *',
+  internal.emailAutomation.processLeadOutreach
+);
+
 // ── Local-time nudges (hourly fan-out; action checks user local time) ─────────
 crons.cron(
   'push-morning-nudge-local-time',

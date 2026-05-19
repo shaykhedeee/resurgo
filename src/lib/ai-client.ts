@@ -26,7 +26,7 @@ interface ChatResponse {
   error?: string;
 }
 
-interface CoachingContext {
+export interface CoachingContext {
   userName: string;
   currentStreak: number;
   todayCompleted: number;

@@ -19,10 +19,16 @@ import {
   Timer,
   TrendingUp,
   Heart,
+  Home,
+  Dumbbell,
+  Utensils,
+  Moon,
+  MessageSquare,
   Plus,
   ArrowRight,
   Keyboard,
 } from 'lucide-react';
+import { RESURGO_ALL_NAV_ITEMS } from '@/lib/navigation/resurgo-navigation';
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // TYPES
@@ -62,6 +68,24 @@ const fuseOptions: IFuseOptions<SearchResult> = {
   ignoreLocation: true,
   findAllMatches: true,
 };
+
+function pageIcon(label: string) {
+  switch (label) {
+    case 'Home': return <Home className="w-4 h-4 text-orange-400" />;
+    case 'Goals': return <Sparkles className="w-4 h-4 text-gold-400" />;
+    case 'Calendar': return <Calendar className="w-4 h-4 text-pink-400" />;
+    case 'AI Coach': return <MessageSquare className="w-4 h-4 text-amber-400" />;
+    case 'Fitness': return <Dumbbell className="w-4 h-4 text-red-400" />;
+    case 'Food': return <Utensils className="w-4 h-4 text-emerald-400" />;
+    case 'Health': return <Moon className="w-4 h-4 text-blue-400" />;
+    case 'Wellness': return <Heart className="w-4 h-4 text-rose-400" />;
+    case 'Analytics': return <TrendingUp className="w-4 h-4 text-green-400" />;
+    case 'Focus': return <Timer className="w-4 h-4 text-orange-400" />;
+    case 'Tasks': return <CheckCircle2 className="w-4 h-4 text-blue-400" />;
+    case 'Habits': return <Target className="w-4 h-4 text-purple-400" />;
+    default: return <ArrowRight className="w-4 h-4 text-ascend-500" />;
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────────
 // COMPONENT
@@ -138,107 +162,57 @@ export function GlobalSearch({ isOpen, onClose, onNavigate }: GlobalSearchProps)
         },
         keywords: ['add', 'new', 'task', 'create', 'todo'],
       },
+      {
+        id: 'cmd-log-food',
+        type: 'command',
+        title: 'Log Food or Water',
+        subtitle: 'Open food tracker',
+        icon: <Utensils className="w-4 h-4 text-emerald-400" />,
+        action: () => {
+          onNavigate?.('/food');
+          onClose();
+        },
+        keywords: ['meal', 'food', 'water', 'macros'],
+      },
+      {
+        id: 'cmd-log-workout',
+        type: 'command',
+        title: 'Log Workout',
+        subtitle: 'Open workout log',
+        icon: <Dumbbell className="w-4 h-4 text-red-400" />,
+        action: () => {
+          onNavigate?.('/fitness');
+          onClose();
+        },
+        keywords: ['fitness', 'workout', 'strength', 'cardio'],
+      },
+      {
+        id: 'cmd-log-mood',
+        type: 'command',
+        title: 'Log Mood or Journal',
+        subtitle: 'Open wellness tracker',
+        icon: <Heart className="w-4 h-4 text-rose-400" />,
+        action: () => {
+          onNavigate?.('/wellness');
+          onClose();
+        },
+        keywords: ['mood', 'journal', 'gratitude', 'meditation'],
+      },
     ];
 
     // Pages/Navigation
-    const pages: SearchResult[] = [
-      {
-        id: 'page-today',
-        type: 'page',
-        title: 'Today',
-        subtitle: "Your daily overview",
-        icon: <Calendar className="w-4 h-4 text-ascend-500" />,
-        action: () => {
-          onNavigate?.('today');
-          onClose();
-        },
-        keywords: ['home', 'dashboard', 'today'],
+    const pages: SearchResult[] = RESURGO_ALL_NAV_ITEMS.map((item) => ({
+      id: `page-${item.href}`,
+      type: 'page' as const,
+      title: item.label,
+      subtitle: item.keywords.slice(0, 3).join(' / '),
+      icon: pageIcon(item.label),
+      action: () => {
+        onNavigate?.(item.href);
+        onClose();
       },
-      {
-        id: 'page-habits',
-        type: 'page',
-        title: 'Habits',
-        subtitle: 'Manage your habits',
-        icon: <Target className="w-4 h-4 text-purple-400" />,
-        action: () => {
-          onNavigate?.('habits');
-          onClose();
-        },
-        keywords: ['habits', 'tracking', 'routine'],
-      },
-      {
-        id: 'page-goals',
-        type: 'page',
-        title: 'Goals',
-        subtitle: 'Your ultimate goals',
-        icon: <Sparkles className="w-4 h-4 text-gold-400" />,
-        action: () => {
-          onNavigate?.('goals');
-          onClose();
-        },
-        keywords: ['goals', 'dreams', 'objectives'],
-      },
-      {
-        id: 'page-tasks',
-        type: 'page',
-        title: 'Tasks',
-        subtitle: 'All your tasks',
-        icon: <CheckCircle2 className="w-4 h-4 text-blue-400" />,
-        action: () => {
-          onNavigate?.('tasks');
-          onClose();
-        },
-        keywords: ['tasks', 'todos', 'checklist'],
-      },
-      {
-        id: 'page-focus',
-        type: 'page',
-        title: 'Focus Mode',
-        subtitle: 'Pomodoro timer & deep work',
-        icon: <Timer className="w-4 h-4 text-orange-400" />,
-        action: () => {
-          onNavigate?.('focus');
-          onClose();
-        },
-        keywords: ['focus', 'pomodoro', 'timer', 'work'],
-      },
-      {
-        id: 'page-calendar',
-        type: 'page',
-        title: 'Calendar',
-        subtitle: 'Monthly view of your progress',
-        icon: <Calendar className="w-4 h-4 text-pink-400" />,
-        action: () => {
-          onNavigate?.('calendar');
-          onClose();
-        },
-        keywords: ['calendar', 'month', 'schedule'],
-      },
-      {
-        id: 'page-analytics',
-        type: 'page',
-        title: 'Analytics',
-        subtitle: 'Your progress stats',
-        icon: <TrendingUp className="w-4 h-4 text-green-400" />,
-        action: () => {
-          onNavigate?.('progress');
-          onClose();
-        },
-        keywords: ['analytics', 'stats', 'progress', 'charts'],
-      },
-      {
-        id: 'page-wellness',
-        type: 'page',
-        title: 'Wellness',
-        subtitle: 'Mental health & mood tracking',
-        icon: <Heart className="w-4 h-4 text-rose-400" />,
-        action: () => {
-          onNavigate?.('wellness');
-          onClose();
-        },
-        keywords: ['wellness', 'mood', 'mental', 'health', 'breathing'],
-      },
-    ];
+      keywords: item.keywords,
+    }));
 
     // Habits
     const habitResults: SearchResult[] = habits.map(habit => ({

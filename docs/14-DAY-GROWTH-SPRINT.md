@@ -2,7 +2,7 @@
 
 > **Start Date:** 2026-04-13 (Day 0 = Launch Day)  
 > **End Date:** 2026-04-26 (Day 14)  
-> **Operator:** [Your name]  
+> **Operator:** Shayan 
 > **Metrics to track:** Signup volume, activation rate, first-week retention, upgrade rate, CAC proxy
 > **Completion tracking:** Check off each item as it's done.
 
@@ -471,8 +471,8 @@ Lock in day-7 activeusers with retention hooks + convert more to paid. Launch re
   - Current CTA: "Upgrade to Pro for unlimited"
   
 - [ ] **10:00 AM** — Create 2 variations (A=control, B=test)
-  - Variation A (control): "Upgrade to Pro for unlimited goals ($4.99/mo)"
-  - Variation B (test): "Unlock all 5 coaches and unlimited goals. $4.99 protects your streak."
+   - Variation A (control): "Upgrade to Pro for unlimited goals ($9.99/mo)"
+   - Variation B (test): "Unlock all 5 coaches and unlimited goals. $9.99 protects your streak."
   - Variation B adds: Emotion (streak protection) + what you get (coaches + goals) + urgency (streak at risk)
   
 - [ ] **11:00 AM** — Wire A/B test in codebase (if not automated)
@@ -569,8 +569,8 @@ Lock in day-7 activeusers with retention hooks + convert more to paid. Launch re
   
 - [ ] **10:00 AM** — Calculate LTV rough estimate
   - Avg customer lifetime (assumption): 12 months (365 days)
-  - Avg plan: 60% Free → $0, 35% Pro monthly → $59.88/year, 5% Lifetime → $49.99 one-time
-  - Blended LTV: (0.6×$0 + 0.35×$59.88 + 0.05×$49.99) / 365 × 12 = rough $6.50 per user per month
+   - Avg plan: 60% Free → $0, 35% Pro monthly → $119.88/year, 5% Lifetime → $89 one-time
+   - Blended LTV: (0.6×$0 + 0.35×$119.88 + 0.05×$89) / 365 × 12 = rough $1.53 per user per month
   - LTV:CAC ratio: $6.50 / $[CAC] = must be >3:1
   
 - [ ] **11:00 AM** — Analyze which channels won

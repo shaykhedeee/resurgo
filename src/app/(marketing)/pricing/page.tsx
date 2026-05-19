@@ -4,11 +4,17 @@ import MarketingPageBeacon from '@/components/marketing/MarketingPageBeacon';
 import EmailCapture from '@/components/marketing/EmailCapture';
 import { BILLING_PLANS } from '@/lib/billing/plans';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_END_DATE,
+  FOUNDING_LIFETIME_PRICE_USD,
+  FOUNDING_LIFETIME_REGULAR_PRICE_USD,
+} from '@/lib/product-config';
 
 export const metadata: Metadata = {
-  title: 'Pricing - Resurgo AI Productivity Assistant Plans',
+  title: 'Pricing - Resurgo for Indie Founders',
   description:
-    'Compare Resurgo pricing plans for your AI command center. Start free, upgrade for unlimited AI coaching and execution tools, or lock in the founder lifetime deal.',
+    'Choose the Resurgo plan that helps you ship weekly with less chaos. Start free, upgrade when your founder workflow is proven.',
   keywords: [
     'Resurgo pricing', 'AI productivity assistant pricing', 'Resurgo Pro', 'Resurgo free plan',
     'goal planner pricing', 'lifetime productivity app deal', 'AI planner subscription',
@@ -44,7 +50,7 @@ const FAQ_PRICING = [
   },
   {
     q: 'Is the Lifetime deal a limited offer?',
-    a: 'Yes. Lifetime pricing will increase as the platform grows. The current $49.99 is the early-adopter rate and includes all future features forever.',
+    a: `Yes. ${FOUNDING_LIFETIME_COPY}. Founding lifetime access is $${FOUNDING_LIFETIME_PRICE_USD}. After ${FOUNDING_LIFETIME_END_DATE}, or once the founding allocation is gone, the price increases to $${FOUNDING_LIFETIME_REGULAR_PRICE_USD}. One payment gives you permanent access to every Pro feature including all future updates.`,
   },
   {
     q: 'What payment methods do you accept?',
@@ -145,10 +151,10 @@ export default function PricingPage() {
           </div>
           <div className="p-10 text-center">
             <h1 className="font-mono text-4xl font-bold tracking-tight text-zinc-100">
-              Simple pricing for your AI execution system.
+              Pricing for founders who need consistent shipping.
             </h1>
             <p className="mt-3 font-mono text-base text-zinc-400">
-              Start free, prove the workflow, then upgrade only when you want unlimited AI coaching, premium dashboards, and full automation.
+              Start free, get your first meaningful plan in under 10 minutes, then upgrade when you want unlimited coaching and deeper execution intelligence.
             </p>
             <p className="mt-4 font-mono text-xs tracking-widest text-zinc-500">
               FREE FOREVER · NO CREDIT CARD · FOUNDER PRICING LIVE NOW

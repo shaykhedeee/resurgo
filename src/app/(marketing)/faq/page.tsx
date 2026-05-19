@@ -35,7 +35,7 @@ const FAQs = [
   },
   {
     q: 'How much does Resurgo Pro cost?',
-    a: 'Pro is $4.99/month, Pro Yearly is $29.99/year (save 50%), and Lifetime access is $49.99 one-time. All paid plans include the same features.',
+    a: 'Pro is $9.99/month, Pro Yearly is $95.88/year (effective $7.99/mo, save 20%), and Lifetime access is $89 one-time (founding price until July 5, 2026; after: $199). All paid plans include the same features.',
   },
   {
     q: 'How does AI goal decomposition work?',

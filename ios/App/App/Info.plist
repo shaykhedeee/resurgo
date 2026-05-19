@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- Basic app metadata -->
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleDisplayName</key>
+    <string>Resurgo</string>
+    <key>CFBundleExecutable</key>
+    <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>2.0.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSRequiresIPhoneOS</key>
+    <true/>
+    <key>UILaunchStoryboardName</key>
+    <string>LaunchScreen</string>
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>armv7</string>
+    </array>
+    <key>UISupportedInterfaceOrientations</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+    <key>UISupportedInterfaceOrientations~ipad</key>
+    <array>
+        <string>UIInterfaceOrientationPortrait</string>
+        <string>UIInterfaceOrientationPortraitUpsideDown</string>
+        <string>UIInterfaceOrientationLandscapeLeft</string>
+        <string>UIInterfaceOrientationLandscapeRight</string>
+    </array>
+
+    <!-- App Transport Security: Allow loading from HTTPS only -->
+    <key>NSAppTransportSecurity</key>
+    <dict>
+        <key>NSAllowsArbitraryLoads</key>
+        <false/>
+        <key>NSExceptionDomains</key>
+        <dict>
+            <!-- Allow navigation to the main domain -->
+            <key>resurgo.life</key>
+            <dict>
+                <key>NSIncludesSubdomains</key>
+                <true/>
+                <key>NSExceptionAllowsInsecureHTTPLoads</key>
+                <false/>
+                <key>NSExceptionRequiresForwardSecrecy</key>
+                <true/>
+                <key>NSThirdPartyExceptionAllowsInsecureHTTPLoads</key>
+                <false/>
+            </dict>
+        </dict>
+    </dict>
+
+    <!-- Push Notifications -->
+    <key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
+
+    <!-- Deep Linking / Universal Links -->
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>resurgo</string>
+            </array>
+        </dict>
+    </array>
+
+    <!-- Privacy Usage Descriptions -->
+    <key>NSCameraUsageDescription</key>
+    <string>Resurgo needs camera access for scanning QR codes and taking profile pictures.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Resurgo needs photo library access to save and share your progress visuals.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Resurgo uses location to provide contextual reminders nearby.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Resurgo uses location to provide contextual reminders nearby.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Resurgo needs microphone access for voice notes and audio reflections.</string>
+    <key>NSFaceIDUsageDescription</key>
+    <string>Resurgo uses Face ID to secure your personal data and enable quick authentication.</string>
+
+    <!-- HealthKit (if used for fitness tracking) -->
+    <!--
+    <key>NSHealthShareUsageDescription</key>
+    <string>Resurgo syncs workout data to help you track your fitness journey.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>Resurgo writes workout data from your sessions to the Health app.</string>
+    -->
+
+    <!-- Capacitor-specific -->
+    <key>CapacitorConfig</key>
+    <dict>
+        <key>SERVER_URL</key>
+        <string>https://resurgo.life</string>
+        <key>ALLOW_NAVIGATION</key>
+        <array>
+            <string>resurgo.life</string>
+            <string>*.resurgo.life</string>
+            <string>*.clerk.accounts.dev</string>
+            <string>accounts.clerk.dev</string>
+            <string>clerk.resurgo.life</string>
+            <string>*.dodopayments.com</string>
+        </array>
+    </dict>
+</dict>
+</plist>

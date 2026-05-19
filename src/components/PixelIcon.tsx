@@ -16,7 +16,8 @@ export type PixelIconName =
   | 'check' | 'x' | 'star' | 'heart' | 'fire'
   | 'trophy' | 'zap' | 'menu' | 'chevron-left' | 'chevron-right'
   | 'message' | 'bell' | 'home' | 'timer' | 'sparkles'
-  | 'terminal' | 'robot' | 'grid' | 'loop' | 'sun' | 'moon';
+  | 'terminal' | 'robot' | 'grid' | 'loop' | 'sun' | 'moon'
+  | 'download';
 
 interface PixelIconProps {
   name: PixelIconName;
@@ -226,6 +227,10 @@ const ICON_PATHS: Record<PixelIconName, number[][]> = {
   ],
   moon: [
     [8,2,3,2], [6,4,4,2], [5,6,4,2], [5,8,4,2], [6,10,4,2], [8,12,3,2], [10,4,2,8],
+  ],
+  // Download — arrow into box
+  download: [
+    [5,2,6,2], [3,4,10,2], [2,6,12,6], [5,13,6,2], [7,10,2,3],
   ],
 };
 

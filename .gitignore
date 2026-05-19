@@ -44,3 +44,9 @@ android/
 # convex/_generated/ — committed so CI/Vercel/Android builds work without credentials
 public/uploads/
 
+.vercel
+.continue/
+.kilo/
+file-tree.txt
+tsc-output*.txt
+test_small.txt

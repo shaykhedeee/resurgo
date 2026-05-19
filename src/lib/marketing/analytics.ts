@@ -34,6 +34,16 @@ export function captureUtmParams(): { first: Record<string, string> | null; last
     if (value) picked[key] = value;
   }
 
+  // Special handling for Product Hunt referrals
+  if (picked.utm_source === 'producthunt') {
+    // Track Product Hunt specific analytics
+    trackMarketingEvent('ph_visit', {
+      utm_medium: picked.utm_medium,
+      utm_campaign: picked.utm_campaign,
+      utm_content: picked.utm_content,
+    });
+  }
+
   if (Object.keys(picked).length === 0) {
     return {
       first: safeParse(window.localStorage.getItem(UTM_FIRST_KEY)),

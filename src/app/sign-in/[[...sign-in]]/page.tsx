@@ -52,10 +52,10 @@ export default function Page() {
         </div>
 
         {/* Instruction panel */}
-        <div className="mb-5 border border-zinc-800/80 bg-zinc-900/50 backdrop-blur-sm rounded-xl p-4">
+        <div className="mb-5 border border-zinc-800/80 bg-gradient-to-r from-orange-900/20 to-zinc-900/50 backdrop-blur-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <div className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-pulse" />
-            <p className="font-mono text-[10px] tracking-[0.15em] text-orange-500/90 uppercase">Sign-in Protocol</p>
+            <p className="font-mono text-[10px] tracking-[0.15em] text-orange-500/90 uppercase">Back to Execution</p>
           </div>
           <ol className="space-y-1.5 font-mono text-xs text-zinc-400">
             <li className="flex gap-2"><span className="text-zinc-600 select-none">01</span> Enter your account email below</li>

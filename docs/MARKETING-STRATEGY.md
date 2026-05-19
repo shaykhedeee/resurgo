@@ -553,16 +553,16 @@ Unlike any other habit tracker, Resurgo uses AI to break down ambitious goals in
 | Tier | Price | Psychology |
 |------|-------|------------|
 | **Free** | $0 forever | Low-risk entry, hooks with 3 habits |
-| **Pro** | $4.99/month ($29.99/year) | Sweet spot for productivity tools |
-| **Lifetime** | $49.99 one-time | Anchor price, appeals to power users |
+| **Pro** | $9.99/month ($95.88/year) | Sweet spot for productivity tools |
+| **Lifetime** | $89 one-time | Anchor price, appeals to power users |
 
 ### Psychology Principles Applied
 
-1. **Decoy Effect:** Lifetime at $49.99 makes Pro Annual ($29.99) feel like a no-brainer
+1. **Decoy Effect:** Lifetime at $89 makes Pro Annual ($95.88/year) feel like a no-brainer
 2. **Anchoring:** Show Lifetime first in some contexts to anchor high
 3. **Loss Aversion:** "Your progress is waiting" for free users at limit
-4. **Charm Pricing:** $4.99 feels significantly cheaper than $5
-5. **Whole Number for Lifetime:** $49.99 feels premium and trustworthy
+4. **Charm Pricing:** $9.99 feels significantly cheaper than $10
+5. **Whole Number for Lifetime:** $89 feels premium and trustworthy
 
 ## Freemium Conversion Strategy
 
@@ -570,7 +570,7 @@ Unlike any other habit tracker, Resurgo uses AI to break down ambitious goals in
 
 | Trigger | Conversion Tactic |
 |---------|-------------------|
-| **Hits 3 habit limit** | "Unlock unlimited habits for $4.99/mo" |
+| **Hits 3 habit limit** | "Unlock unlimited habits for $9.99/mo" |
 | **Adds 2nd goal** | "AI goal decomposition is a Pro feature" |
 | **Day 7 streak** | "Protect your streak with Pro features" |
 | **Tries to export** | "Export your data anytime with Pro" |
@@ -588,10 +588,10 @@ Unlike any other habit tracker, Resurgo uses AI to break down ambitious goals in
 ## Annual vs. Monthly Pricing
 
 ```
-Monthly: $4.99/month = $59.88/year
-Annual:  $29.99/year = $2.50/month (50% savings)
+Monthly: $9.99/month = $119.88/year
+Annual:  $95.88/year = $7.99/month (20% savings)
 
-Display as: "$29.99/year (Save $29.89)" or "$2.50/mo billed annually"
+Display as: "$95.88/year (Save $24.00)" or "$7.99/mo billed annually"
 ```
 
 ### Discount Strategies
@@ -1245,13 +1245,13 @@ Free Tier:
 
 Pro Tier (MOST POPULAR):
 - Title: Pro
-- Price: $4.99/month
+- Price: $9.99/month
 - Description: For serious goal achievers
 - CTA: Start Pro Trial
 
 Lifetime Tier:
 - Title: Lifetime
-- Price: $49.99 one-time
+- Price: $89 one-time
 - Description: Best value, forever access
 - CTA: Get Lifetime Access
 ```
@@ -1308,7 +1308,7 @@ Subtitle: Every plan includes our core features. Upgrade for unlimited power.
 | **Achievements** | Basic | All | All + Exclusive |
 | **Support** | Community | Priority | Direct Channel |
 | **Future Updates** | ✅ | ✅ | ✅ + Early Access |
-| **Price** | $0 | $4.99/mo | $49.99 once |
+| **Price** | $0 | $9.99/mo | $89 once |
 
 ### FAQ Section
 
@@ -1325,7 +1325,7 @@ A: You'll automatically switch to the Free plan. No charges unless you explicitl
 A: Yes! Students get 50% off Pro. Just verify your .edu email address to unlock the discount.
 
 **Q: Why should I choose Lifetime over monthly?**
-A: Lifetime is a one-time payment of $49.99. If you plan to use Resurgo for more than 10 months, Lifetime saves you money—plus you get exclusive badges and early access to new features.
+A: Lifetime is a one-time payment of $89 (founding price until July 5, 2026; after: $199). If you plan to use Resurgo for more than 10 months, Lifetime saves you money—plus you get exclusive badges and early access to new features.
 
 ---
 
@@ -11648,8 +11648,8 @@ Resurgo is positioned as an **AI-powered Life OS / “life command center”** t
 
 ### Pricing + urgency mechanics already on the page
 - Free tier (no card)  
-- Pro is **$4.99/mo** (and you also show annual savings)  
-- Lifetime “founding price” **$49.99** for first 1,000 spots, then $89.99 (claimed “save 44%”). 
+- Pro is **$9.99/mo** (and you also show annual savings)  
+- Lifetime “founding price” **$89** for first 1,000 spots, then $199 (claimed “save 55%”). 
 
 ### Big inconsistency you should fix ASAP (it will hurt conversion)
 Keep **resurgo.life** as the canonical customer-facing product/pricing surface for launch. If `resurgo.app` remains live, present it as a complementary module and avoid conflicting plan/pricing messaging.
@@ -11814,8 +11814,8 @@ You asked for *current tools*, not outdated lists. Here’s a stack optimized fo
 ## 6) The “first few sales” playbook (what I would do if I were you)
 ### The offer (simple + compelling)
 Because you already have:
-- Pro subscription ($4.99/mo) and
-- Lifetime founder pricing ($49.99) 
+- Pro subscription ($9.99/mo) and
+- Lifetime founder pricing ($89)
 
 Do this:
 1) **Push Lifetime to first revenue** (cashflow + urgency)
@@ -11833,7 +11833,7 @@ This is a lead magnet that doesn’t require you to write blogs.
 2) You reply with:
    - a *personalized plan screenshot*,
    - a template link that loads in Resurgo,
-   - and one-line CTA: “Want weekly AI reviews + all coaches? Founding lifetime is $49.99 for early members.”
+    - and one-line CTA: "Want weekly AI reviews + all coaches? Founding lifetime is $89 for early members."
 3) You follow up via email with:
    - Day 1 checklist
    - “Install PWA” nudge

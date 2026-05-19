@@ -106,7 +106,7 @@ const PROMPT_CONTENT: Record<PromptTrigger, {
     icon: Sparkles,
     title: "Enjoying RESURGO?",
     message: "Upgrade to Pro for the full transformation experience. Support the app and unlock everything.",
-    highlight: 'Pro starts at $4.99/month',
+    highlight: 'Pro starts at $9.99/month',
     cta: "See Pro Features",
     gradient: "from-ascend-500 to-gold-400"
   }

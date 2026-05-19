@@ -146,7 +146,7 @@ export const ACHIEVEMENTS: Record<AchievementBadge, Omit<Achievement, 'unlockedA
   'early-adopter': {
     id: 'early-adopter',
     name: 'Early Adopter',
-    description: 'Sign up in the first 1000 users',
+    description: 'Sign up in the first 100 founding users',
     icon: '🎖️',
     pointsReward: 10,
     rarity: 'uncommon',

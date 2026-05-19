@@ -19,7 +19,7 @@ import { UpsellPrompt } from '@/components/UpsellPrompt';
 
 const VisionBoard = dynamic(() => import('@/components/VisionBoard'), { ssr: false });
 
-type CoachId = 'MARCUS' | 'AURORA' | 'TITAN' | 'PHOENIX' | 'NEXUS';
+type CoachId = 'NOVA' | 'NEXUS' | 'AURORA' | 'TITAN' | 'PHOENIX';
 type CoachTab = 'chat' | 'vision' | 'analytics';
 
 interface CoachDef {
@@ -34,20 +34,20 @@ interface CoachDef {
 }
 
 const COACHES: CoachDef[] = [
-  { id: 'MARCUS',  name: 'MARCUS',  title: 'Stoic Strategist',     avatar: '🏛', color: '#ca8a04', domain: 'discipline · goals · execution',              shortBio: 'Brutal clarity. Zero BS. The obstacle IS the way.',              Icon: Brain },
-  { id: 'TITAN',   name: 'TITAN',   title: 'Physical Performance', avatar: '💪', color: '#ef4444', domain: 'fitness · nutrition · optimization',              shortBio: 'Your body is the engine. Fix physical → fix mental.',            Icon: Dumbbell },
-  { id: 'AURORA',  name: 'AURORA',  title: 'Mindful Catalyst',     avatar: '🔮', color: '#a855f7', domain: 'wellness · mindfulness · creativity · neuroscience', shortBio: 'Optimize your nervous system. Science-backed, heart-led.',       Icon: Sparkles },
-  { id: 'PHOENIX', name: 'PHOENIX', title: 'Comeback Specialist',  avatar: '🔥', color: '#f97316', domain: 'resilience · recovery · setbacks · finance',       shortBio: 'Built for rock bottom. The ashes are the fuel.',                Icon: Flame },
-  { id: 'NEXUS',   name: 'NEXUS',   title: 'Systems Builder',      avatar: '∞',  color: '#e879f9', domain: 'habits · routines · automation · efficiency',       shortBio: 'Merges mind, body & systems into one adaptive engine. No limits.', Icon: Zap },
+  { id: 'NOVA',    name: 'ARCHITECT', title: 'Life Plan Architect',   avatar: 'A', color: '#38bdf8', domain: 'goals / milestones / habits / daily tasks',      shortBio: 'Turns one messy ambition into a measurable plan with the first week scheduled.', Icon: Brain },
+  { id: 'NEXUS',   name: 'FOCUS',     title: 'Deep Work Guard',       avatar: 'F', color: '#e879f9', domain: 'pomodoro / focus sessions / attention',          shortBio: 'Starts focused work, protects the session, and turns distractions into rules.', Icon: Zap },
+  { id: 'AURORA',  name: 'NUTRITION', title: 'Nutrition Planner',     avatar: 'N', color: '#22c55e', domain: 'meal plans / macros / hydration / quick logs',    shortBio: 'Builds simple meal plans, logs food and water, and adjusts macros gradually.', Icon: Sparkles },
+  { id: 'TITAN',   name: 'FITNESS',   title: 'Training Progression',  avatar: 'T', color: '#ef4444', domain: 'workouts / strength / cardio / measurements',    shortBio: 'Designs workouts, logs sessions, and progresses load when performance is strong.', Icon: Dumbbell },
+  { id: 'PHOENIX', name: 'REVIEW',    title: 'Weekly Review Analyst', avatar: 'R', color: '#f97316', domain: 'weekly reviews / patterns / adaptive fixes',      shortBio: 'Finds what slipped, protects what worked, and chooses the next adjustment.', Icon: Flame },
 ];
 
 // Static fallback prompts (used only while smart prompts load)
 const FALLBACK_PROMPTS: Record<CoachId, string[]> = {
-  MARCUS:  ['Plan my top 3 priorities for today', 'I feel stuck and overwhelmed', 'How do I build iron discipline?'],
-  TITAN:   ['Design me a weekly workout plan', 'What should I eat for peak energy?', 'My energy crashes at 3pm — fix it'],
-  AURORA:  ['I\'m feeling anxious and burned out', 'Help me build a mindfulness routine', 'How do I sleep better?'],
-  PHOENIX: ['I failed at my goals again', 'I\'m in a deep slump — help me restart', 'How do I build resilience?'],
-  NEXUS:   ['Build me a custom systems stack', 'Integrate my fitness, work, and mental health into one system', 'How do I automate my routines?'],
+  NOVA:    ['Turn this goal into milestones, habits, and a 7-day plan', 'Plan my top 4 tasks for today', 'Build an ADHD-safe execution system'],
+  NEXUS:   ['Start a 25-minute focus session', 'Help me choose one task to do now', 'Build a distraction protocol for this project'],
+  AURORA:  ['Create a simple 7-day meal plan', 'Log this food and estimate macros', 'Fix my afternoon energy crash'],
+  TITAN:   ['Design this week of workouts', 'Progress my strength plan safely', 'Log today\'s training session'],
+  PHOENIX: ['Run my weekly review', 'Find the pattern behind my misses', 'Reset my plan after a bad week'],
 };
 
 // ── Render action badges from action summary blocks ──
@@ -92,7 +92,7 @@ function MessageContent({ content, coachColor: _coachColor }: { content: string;
 }
 
 export default function CoachPage() {
-  const [selectedCoach, setSelectedCoach] = useState<CoachId>('MARCUS');
+  const [selectedCoach, setSelectedCoach] = useState<CoachId>('NOVA');
   const [activeTab, setActiveTab] = useState<CoachTab>('chat');
   const [message, setMessage] = useState('');
   const [isSending, setIsSending] = useState(false);
@@ -105,7 +105,7 @@ export default function CoachPage() {
 
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
-  const FREE_COACHES: CoachId[] = ['MARCUS', 'TITAN'];
+  const FREE_COACHES: CoachId[] = ['NOVA', 'NEXUS', 'AURORA', 'TITAN', 'PHOENIX'];
 
   const history = useQuery(api.coachMessages.getHistory, { limit: 100 });
   const smartPrompts = useQuery(api.coachAI.getSmartPrompts, { coachId: selectedCoach });

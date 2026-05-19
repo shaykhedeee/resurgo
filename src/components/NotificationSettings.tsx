@@ -25,6 +25,7 @@ import {
   registerServiceWorker,
   startNotificationChecker,
 } from '@/lib/notifications';
+import { PrimaryAction } from '@/components/layout/ResurgoLayout';
 
 interface NotificationSettingsProps {
   morningTime: string;
@@ -169,13 +170,13 @@ export function NotificationSettings({
               <p className="font-medium text-themed">Enable Notifications</p>
               <p className="text-sm text-themed-muted">Get daily reminders & streak alerts.</p>
             </div>
-            <button
+            <PrimaryAction
               onClick={handleEnableNotifications}
+              loading={isRequesting}
               disabled={isRequesting}
-              className="btn-primary text-sm px-4 py-2"
             >
               {isRequesting ? 'Enabling...' : 'Enable'}
-            </button>
+            </PrimaryAction>
           </>
         )}
       </div>

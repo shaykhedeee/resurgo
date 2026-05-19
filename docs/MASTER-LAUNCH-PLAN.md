@@ -116,13 +116,13 @@
 
 | Where | Monthly | Yearly | Lifetime |
 |---|---|---|---|
-| PRODUCT_TRUTH.md ✅ | $4.99 | $29.99 | $49.99 |
-| billing/plans.ts ✅ | $4.99 | $29.99 | $49.99 |
+| PRODUCT_TRUTH.md ✅ | $9.99 | $95.88 | $89 |
+| billing/plans.ts ✅ | $9.99 | $95.88 | $89 |
 | astepforword.md ❌ | $9 | — | $199 |
 | MARKETING-STRATEGY.md ❌ | — | — | $149 |
 
 ### Tasks:
-- [x] Update astepforword.md pricing references to $4.99/$29.99/$49.99
+- [x] Update astepforword.md pricing references to $9.99/$95.88/$89
 - [x] Update MARKETING-STRATEGY.md pricing references
 - [x] Search all .md files for "$9", "$149", "$199" and correct (README, llms.txt, knowledge bases, tests, webhook all fixed)
 
@@ -367,7 +367,7 @@ SECTION 4: How It Works (3 steps)
 > 3. Track, coach, iterate, win
 
 SECTION 5: Pricing (simple table)
-> Free | Pro $4.99/mo | Lifetime $49.99
+> Free | Pro $9.99/mo | Lifetime $89
 > Clear feature comparison
 > Lifetime urgency: "847 of 1,000 spots remaining"
 
@@ -451,16 +451,16 @@ Reference: Duolingo's push notifications are the gold standard for retention.
 
 | Trigger | Show what | Where |
 |---|---|---|
-| Free user hits 3rd goal limit | "Unlock unlimited goals — Pro $4.99/mo" | Goal creation modal |
+| Free user hits 3rd goal limit | "Unlock unlimited goals — Pro $9.99/mo" | Goal creation modal |
 | Free user sends 10th AI message | "You've used all 10 messages today. Get unlimited." | Coach chat |
 | Free user tries Aurora/Phoenix/Nexus | "This coach is Pro-only. Upgrade to access all 5." | Coach selection |
 | User has 7-day streak | "You're serious about this. Lock in the Lifetime deal." | Dashboard banner |
 | User browses Pro features repeatedly | Soft upsell card in sidebar | Dashboard |
-| Day 30 of free usage | "You've been here a month. Pro is $4.99. Worth it?" | One-time modal |
+| Day 30 of free usage | "You've been here a month. Pro is $9.99. Worth it?" | One-time modal |
 
 ### 9.3 Checkout Optimization
 - [x] Default to annual billing at checkout (show monthly savings) — BILLING_PLANS reordered: yearly first
-- [x] Price anchor: Show Lifetime ($49.99) next to Monthly ($4.99 × 12 = $59.88) — billing page shows comparison
+- [x] Price anchor: Show Lifetime ($89) next to Monthly ($9.99 × 12 = $119.88) — billing page shows comparison
 - [ ] Add testimonial on checkout page
 - [ ] Payment failure retry (Dodo webhook → retry email)
 - [ ] Cancellation survey (why are you leaving? → offer annual discount)
@@ -904,7 +904,7 @@ See `docs/14-DAY-GROWTH-SPRINT.md` for detailed daily action items, success metr
   - **Closed**: Fixed critical billing bug in `src/app/api/webhooks/dodo/route.ts` — pro_yearly payments ($79) were misclassified as "lifetime" due to amount threshold ordering (product_id check now runs first). Convex webhook (`convex/http.ts`) handles 10 event types with HMAC-SHA256 signature verification (timing-safe), idempotency via `billingWebhookEvents` table + stale-event guard, 3-tier customer resolution (metadata → dodoCustomerId → email), and automatic downgrade with data preservation on cancellation. All 3 plan types (monthly/yearly/lifetime) properly wired via env vars.
   - **Known edge cases documented**: (1) Early webhook before user signup → logged as 'ignored', (2) Lost webhook → manual reconciliation via billingEvents audit trail, (3) payment.failed keeps Pro until subscription.cancelled fires.
 - [x] Test signal hygiene: align editor diagnostics for Jest test globals (`describe/it/expect`) to prevent false negative engineering signals
-  - **Closed**: 134/134 tests pass (17 suites). Fixed 28 failures: added Clerk auth mocks to 3 API route tests, corrected stale pricing expectations in `ascend-knowledge-base.test.ts` ($4.99/$29.99/5 habits), fixed billing bug in `webhooks/dodo/route.ts` (product_id check before amount threshold). tsconfig `types: ["node", "jest"]` verified.
+   - **Closed**: 134/134 tests pass (17 suites). Fixed 28 failures: added Clerk auth mocks to 3 API route tests, corrected stale pricing expectations in `ascend-knowledge-base.test.ts` ($9.99/$95.88/5 habits), fixed billing bug in `webhooks/dodo/route.ts` (product_id check before amount threshold). tsconfig `types: ["node", "jest"]` verified.
 - [x] Mobile release gate: complete Android device matrix and push notification validation in real device conditions
   - **Closed (code-side)**: Capacitor 8 config valid (`life.resurgo.app`), hosted WebView model pointing to `resurgo.life`, offline fallback at `public/offline.html`. Android SDK 36 / minSdk 24 / Java 17. Push notification full stack wired: frontend token registration (`src/lib/native-push.ts`) → Convex backend FCM v1 API (`convex/pushNotifications.ts`) → scheduled morning/evening nudges + reminders. PWA manifest + service worker production-ready. CI/CD workflows (`build-android-apk.yml`) ready for signed release builds.
   - **Manual steps remaining**: (1) Generate `google-services.json` from Firebase Console → place at `android/app/`, (2) Create release keystore via `keytool` + add `ANDROID_KEYSTORE_BASE64` etc to GitHub Secrets, (3) Set `FIREBASE_SERVICE_ACCOUNT_JSON` in Convex deployment env vars, (4) Test push notifications on real Android device.
@@ -1316,14 +1316,14 @@ BRAND_VOICE.md states: "Emoji: Never in formal copy." Category icons were all em
 **Problem:** No welcome/signup email existed. New users received zero contact until Day 3.
 
 **Files changed:**
-- `convex/emailAutomation.ts` — Added `welcomeEmail(name)` email template (in brand voice, no emoji, plans info, 3-step onboarding, $49.99 lifetime CTA), added `sendWelcomeEmail` internalAction with deduplication via `day0_welcome` log key
+- `convex/emailAutomation.ts` — Added `welcomeEmail(name)` email template (in brand voice, no emoji, plans info, 3-step onboarding, $89 lifetime CTA), added `sendWelcomeEmail` internalAction with deduplication via `day0_welcome` log key
 - `convex/users.ts` — In `store` mutation, after new user creation, added `ctx.scheduler.runAfter(5000, internal.emailAutomation.sendWelcomeEmail, {...})` to trigger welcome email 5 seconds after user record is created
 
 **Welcome email content:**
 1. Confirms account is live
 2. Explains 3 first actions (set goal, add 2 habits, talk to coach)
 3. States free plan limits clearly (3 goals, 5 habits/day, 10 AI msg/day, Marcus + Titan)
-4. Soft Pro CTA ($4.99/mo or $49.99 lifetime)
+4. Soft Pro CTA ($9.99/mo or $89 lifetime)
 5. Support email
 
 ### 29.4 Resend Convex env vars — ACTION REQUIRED ⚠️
@@ -1661,7 +1661,7 @@ Read every line of MASTER-LAUNCH-PLAN (1600+ lines). Cataloged every `[ ]` unche
 - `submit()` now returns `{ showRetentionOffer, offerType, offerMessage }` instead of `null`
 - Price-related reasons (`too_expensive`, `price`, `cost`, `not_worth_it`, `budget`) trigger annual discount offer
 - Only shown to monthly Pro subscribers (not yearly/lifetime — already on best value)
-- Offer: "Switch to annual billing and save 50% — $29.99/year instead of $4.99/month ($59.88/year)"
+- Offer: "Switch to annual billing and save 20% — $95.88/year instead of $9.99/month ($119.88/year)"
 - Added `getRecentSurveys` query for churn analytics dashboard
 
 ### 36.4 Items Confirmed as Founder Manual Steps (cannot be automated)

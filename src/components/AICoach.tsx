@@ -5,19 +5,23 @@
 
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useAscendStore } from '@/lib/store';
 import { aiClient } from '@/lib/ai-client';
 import { cn } from '@/lib/utils';
 import { 
-  Brain, 
-  Sparkles, 
-  Lightbulb, 
-  AlertTriangle,
-  PartyPopper,
-  RefreshCw,
-  X,
-} from 'lucide-react';
+   Brain, 
+   Sparkles, 
+   Lightbulb, 
+   AlertTriangle,
+   PartyPopper,
+   RefreshCw,
+   X,
+ } from 'lucide-react';
+import { type CoachingContext } from '@/lib/ai-client';
+import { useQuery } from 'convex/react';
+import { api } from '../../convex/_generated/api';
+import { useStoreUser } from '@/hooks/useStoreUser';
 
 interface AICoachProps {
   className?: string;
@@ -34,95 +38,163 @@ interface CoachMessage {
 }
 
 export function AICoach({ className, variant = 'card', showRefresh = true }: AICoachProps) {
-  const { user, habits, habitEntries } = useAscendStore();
-  const [coachMessage, setCoachMessage] = useState<CoachMessage | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+   const { user, habits, habitEntries } = useAscendStore();
+   const { user: convexUser } = useStoreUser();
+   const activeConvexHabits = useQuery(
+     api.habits.listActive,
+     convexUser && !('_placeholder' in convexUser) ? {} : 'skip'
+   );
+   const gamificationProfile = useQuery(
+     api.gamification.getProfile,
+      convexUser && !('_placeholder' in convexUser) ? {} : 'skip'
+   );
 
-  // Calculate user context
-  const getContext = useCallback(() => {
-    const today = new Date().toISOString().split('T')[0];
-    const hour = new Date().getHours();
-    
-    // Time of day
-    let timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
-    if (hour >= 5 && hour < 12) timeOfDay = 'morning';
-    else if (hour >= 12 && hour < 17) timeOfDay = 'afternoon';
-    else if (hour >= 17 && hour < 21) timeOfDay = 'evening';
-    else timeOfDay = 'night';
+   // State variables
+   const [coachMessage, setCoachMessage] = useState<CoachMessage | null>(null);
+   const [isLoading, setIsLoading] = useState(false);
+   const [isVisible, setIsVisible] = useState(true);
+   const [error, setError] = useState<string | null>(null);
 
-    // Today's habit progress
-    const todayEntries = habitEntries.filter(e => e.date === today && e.completed);
-    const activeHabits = habits.filter(h => h.isActive);
-    const todayCompleted = todayEntries.length;
-    const todayTotal = activeHabits.length;
-
-    // Recent trend (last 7 days)
-    const last7Days = Array.from({ length: 7 }, (_, i) => {
-      const date = new Date();
-      date.setDate(date.getDate() - i);
-      return date.toISOString().split('T')[0];
-    });
-
-    const recentCompletions = last7Days.map(date => {
-      const dayEntries = habitEntries.filter(e => e.date === date && e.completed);
-      return dayEntries.length / Math.max(activeHabits.length, 1);
-    });
-
-    const recentAvg = recentCompletions.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
-    const olderAvg = recentCompletions.slice(4, 7).reduce((a, b) => a + b, 0) / 3;
-
-    let recentTrend: 'improving' | 'stable' | 'declining';
-    if (recentAvg > olderAvg + 0.1) recentTrend = 'improving';
-    else if (recentAvg < olderAvg - 0.1) recentTrend = 'declining';
-    else recentTrend = 'stable';
-
-    // Find last missed habit
-    const lastMissedHabit = activeHabits.find(h => {
-      const entry = habitEntries.find(e => e.habitId === h.id && e.date === today);
-      return !entry?.completed;
-    })?.name;
-
-    return {
-      userName: user.name || 'there',
-      currentStreak: user.stats.currentStreak,
-      todayCompleted,
-      todayTotal,
-      recentTrend,
-      lastMissedHabit,
-      timeOfDay,
-    };
-  }, [user, habits, habitEntries]);
-
-  // Generate coaching message
-  const generateMessage = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const context = getContext();
-      const result = await aiClient.generateCoachingMessage(context);
+    // Calculate user context
+    const getContext = useCallback(() => {
+      const today = new Date().toISOString().split('T')[0];
+      const hour = new Date().getHours();
       
-      setCoachMessage({
-        message: result.message,
-        type: result.type,
-        timestamp: new Date(),
+      // Time of day
+      let timeOfDay: 'morning' | 'afternoon' | 'evening' | 'night';
+      if (hour >= 5 && hour < 12) timeOfDay = 'morning';
+      else if (hour >= 12 && hour < 17) timeOfDay = 'afternoon';
+      else if (hour >= 17 && hour < 21) timeOfDay = 'evening';
+      else timeOfDay = 'night';
+
+      // Today's habit progress
+      const todayEntries = habitEntries.filter(e => e.date === today && e.completed);
+      const activeHabits = habits.filter(h => h.isActive);
+      const todayCompleted = todayEntries.length;
+      const todayTotal = activeHabits.length;
+
+      // Recent trend (last 7 days)
+      const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const date = new Date();
+        date.setDate(date.getDate() - i);
+        return date.toISOString().split('T')[0];
       });
-    } catch (err) {
-      console.error('AI Coach error:', err);
-      // Fallback to local message
-      const context = getContext();
-      const fallbackMessages = getFallbackMessage(context);
-      setCoachMessage({
-        message: fallbackMessages.message,
-        type: fallbackMessages.type,
-        timestamp: new Date(),
+
+      const recentCompletions = last7Days.map(date => {
+        const dayEntries = habitEntries.filter(e => e.date === date && e.completed);
+        return dayEntries.length / Math.max(activeHabits.length, 1);
       });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [getContext]);
+
+      const recentAvg = recentCompletions.slice(0, 3).reduce((a, b) => a + b, 0) / 3;
+      const olderAvg = recentCompletions.slice(4, 7).reduce((a, b) => a + b, 0) / 3;
+
+      let recentTrend: 'improving' | 'stable' | 'declining';
+      if (recentAvg > olderAvg + 0.1) recentTrend = 'improving';
+      else if (recentAvg < olderAvg - 0.1) recentTrend = 'declining';
+      else recentTrend = 'stable';
+
+      // Find last missed habit
+      const lastMissedHabit = activeHabits.find(h => {
+        const entry = habitEntries.find(e => e.habitId === h.id && e.date === today);
+        return !entry?.completed;
+      })?.name;
+
+      return {
+        userName: user.name || 'there',
+        currentStreak: 0, // Will be overridden by realContext if available
+        todayCompleted,
+        todayTotal,
+        recentTrend,
+        lastMissedHabit,
+        timeOfDay,
+      };
+    }, [user, habits, habitEntries]);
+
+    // Real context from Convex + Zustand
+    const realContext = useMemo(() => {
+      if (!convexUser || '_placeholder' in convexUser) return null;
+
+      const gamification = gamificationProfile;
+
+      const today = new Date().toISOString().split('T')[0];
+      const activeHabits = activeConvexHabits ?? [];
+      // We don't have stats, so we rely on gamification for streak, etc.
+      const streak = gamification?.currentStreak ?? 0;
+
+      // Today's progress from Zustand (local, already tracked)
+      const todayEntries = habitEntries.filter(e => e.date === today && e.completed);
+      const completedToday = todayEntries.length;
+      const todayTotal = activeHabits.length;
+
+      // 7-day completion from Zustand
+      const last7Days = Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() - i);
+        return d.toISOString().split('T')[0];
+      }).reverse();
+
+      const completed7d = habitEntries.filter(e => e.completed && last7Days.includes(e.date)).length;
+      const totalPossible7d = todayTotal * 7;
+      const completionRatio7d = totalPossible7d > 0 ? Math.round((completed7d / totalPossible7d) * 100) : 0;
+
+      const missed7d = last7Days.filter(d =>
+        habitEntries.some(e => e.date === d && !e.completed) &&
+        !habitEntries.some(e => e.date === d && e.completed)
+      ).length;
+
+      return {
+        plan: convexUser.plan ?? null,
+        userName: convexUser.name || 'there',
+        currentStreak: streak,
+        longestStreak: gamification?.longestStreak ?? 0,
+        xpTotal: gamification?.totalXP ?? 0,
+        level: gamification?.level ?? 1,
+        habitsCount: todayTotal,
+        todayCompleted: completedToday,
+        todayTotal,
+        completionRatio7d,
+        recentMisses7d: missed7d,
+        isConvex: true,
+      };
+    }, [convexUser, activeConvexHabits, gamificationProfile, user, habits, habitEntries]);
+
+    // Generate coaching message
+    const generateMessage = useCallback(async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const context = getContext();
+        // Boost with Convex data for the API call
+        const enhancedContext: any = { ...context };
+        if (realContext) {
+          enhancedContext.streak = realContext.currentStreak;
+          enhancedContext.habitsCount = realContext.habitsCount;
+          enhancedContext.completionRatio7d = realContext.completionRatio7d;
+          enhancedContext.plan = realContext.plan;
+          enhancedContext.level = realContext.level;
+        }
+        const result = await aiClient.generateCoachingMessage(enhancedContext);
+        
+        setCoachMessage({
+          message: result.message,
+          type: result.type,
+          timestamp: new Date(),
+        });
+      } catch (err) {
+        console.error('AI Coach error:', err);
+        // Fallback to local message
+        const context = getContext();
+        const fallbackMessages = getFallbackMessage(context);
+        setCoachMessage({
+          message: fallbackMessages.message,
+          type: fallbackMessages.type,
+          timestamp: new Date(),
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }, [getContext, realContext]);
 
   // Generate message on mount and periodically
   useEffect(() => {
@@ -190,120 +262,139 @@ export function AICoach({ className, variant = 'card', showRefresh = true }: AIC
   const Icon = coachMessage ? getIcon(coachMessage.type) : Brain;
   const colors = coachMessage ? getColors(coachMessage.type) : getColors('motivation');
 
-  // Minimal variant (just text)
-  if (variant === 'minimal') {
-    return (
-      <div className={cn('flex items-center gap-2 text-sm', className)}>
-        <Brain className="h-4 w-4 text-purple-400" />
-        {isLoading ? (
-          <span className="text-slate-400 animate-pulse">Thinking...</span>
-        ) : (
-          <span className="text-slate-300">{coachMessage?.message || 'Loading coach...'}</span>
-        )}
-      </div>
-    );
-  }
+// Minimal variant (just text)
+   if (variant === 'minimal') {
+     return (
+       <div className={cn('flex items-center gap-2 text-sm', className)}>
+         <Brain className="h-4 w-4 text-purple-400" />
+         {isLoading ? (
+           <span className="text-slate-400 animate-pulse">Thinking...</span>
+         ) : (
+           <span className="text-slate-300">{coachMessage?.message || 'Loading coach...'}</span>
+         )}
+       </div>
+     );
+   }
 
-  // Inline variant
-  if (variant === 'inline') {
-    return (
-      <div className={cn(
-        'flex items-center gap-3 px-4 py-3 rounded-lg border',
-        colors.bg,
-        colors.border,
-        className
-      )}>
-        <Icon className={cn('h-5 w-5 flex-shrink-0', colors.icon)} />
-        {isLoading ? (
-          <span className="text-slate-400 animate-pulse">AI Coach is thinking...</span>
-        ) : (
-          <span className={cn('text-sm', colors.text)}>{coachMessage?.message}</span>
-        )}
-        {showRefresh && !isLoading && (
-          <button
-            onClick={generateMessage}
-            aria-label="Refresh coaching message"
-            className="ml-auto p-1 rounded hover:bg-white/10 transition-colors"
-          >
-            <RefreshCw className="h-4 w-4 text-slate-400" />
-          </button>
-        )}
-      </div>
-    );
-  }
+   // Inline variant
+   if (variant === 'inline') {
+     return (
+       <div className={cn(
+         'flex items-center gap-3 px-4 py-3 rounded-lg border',
+         colors.bg,
+         colors.border,
+         className
+       )}>
+         <Icon className={cn('h-5 w-5 flex-shrink-0', colors.icon)} />
+         {isLoading ? (
+           <span className="text-slate-400 animate-pulse">AI Coach is thinking...</span>
+         ) : (
+           <span className={cn('text-sm flex-1', colors.text)}>{coachMessage?.message}</span>
+         )}
+         {showRefresh && !isLoading && (
+           <button
+             onClick={generateMessage}
+             aria-label="Refresh coaching message"
+             className="ml-auto p-1 rounded hover:bg-white/10 transition-colors flex-shrink-0"
+           >
+             <RefreshCw className="h-4 w-4 text-slate-400" />
+           </button>
+         )}
+       </div>
+     );
+   }
 
-  // Card variant (default)
-  return (
-    <div className={cn(
-      'relative rounded-xl border p-4',
-      colors.bg,
-      colors.border,
-      className
-    )}>
-      {/* Close button */}
-      <button
-        onClick={() => setIsVisible(false)}
-        aria-label="Dismiss AI Coach"
-        className="absolute top-2 right-2 p-1 rounded hover:bg-white/10 transition-colors"
-      >
-        <X className="h-4 w-4 text-slate-500" />
-      </button>
+   // Card variant (default) - exactly ONE primary CTA: "New insight"
+   return (
+     <div className={cn(
+       'relative rounded-xl border p-4',
+       colors.bg,
+       colors.border,
+       className
+     )}>
+       {/* Close button — ghost/tertiary, never competes with primary CTA */}
+       <button
+         onClick={() => setIsVisible(false)}
+         aria-label="Dismiss AI Coach"
+         className="absolute top-2 right-2 p-1 rounded hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/20"
+       >
+         <X className="h-4 w-4 text-slate-500" />
+       </button>
 
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-3">
-        <div className={cn(
-          'p-2 rounded-lg',
-          colors.bg.replace('from-', 'bg-').replace('to-', '').split(' ')[0]
-        )}>
-          <Brain className={cn('h-5 w-5', colors.icon)} />
-        </div>
-        <div>
-          <h3 className="font-semibold text-white">AI Coach</h3>
-          <p className="text-xs text-slate-400">Powered by Groq</p>
-        </div>
-      </div>
-
-      {/* Message */}
-      <div className="flex items-start gap-3">
-        <Icon className={cn('h-5 w-5 mt-0.5 flex-shrink-0', colors.icon)} />
-        <div className="flex-1">
-          {isLoading ? (
-            <div className="space-y-2">
-              <div className="h-4 bg-slate-700/50 rounded animate-pulse w-3/4" />
-              <div className="h-4 bg-slate-700/50 rounded animate-pulse w-1/2" />
-            </div>
-          ) : error ? (
-            <p className="text-sm text-red-400">{error}</p>
-          ) : (
-            <p className={cn('text-sm leading-relaxed', colors.text)}>
-              {coachMessage?.message}
+        {/* Header */}
+        <div className="flex items-center gap-2 mb-3 pr-6">
+          <div className={cn(
+            'p-2 rounded-lg',
+            colors.bg.replace('from-', 'bg-').replace('to-', '').split(' ')[0]
+          )}>
+            <Brain className={cn('h-5 w-5', colors.icon)} />
+          </div>
+          <div>
+            <h3 className="font-semibold text-white">AI Coach</h3>
+            <p className="text-xs text-slate-400">
+              Powered by Resurgo AI
+              {!realContext && (
+                <span className="ml-1 text-xs bg-slate-800/50 px-1.5 rounded">
+                  Offline mode
+                </span>
+              )}
             </p>
-          )}
+          </div>
         </div>
-      </div>
 
-      {/* Actions */}
-      <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10">
-        <span className="text-xs text-slate-500">
-          {coachMessage?.timestamp && `Updated ${formatTime(coachMessage.timestamp)}`}
-        </span>
-        {showRefresh && (
-          <button
-            onClick={generateMessage}
-            disabled={isLoading}
-            className={cn(
-              'flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg',
-              'bg-white/5 hover:bg-white/10 transition-colors',
-              isLoading && 'opacity-50 cursor-not-allowed'
-            )}
-          >
-            <RefreshCw className={cn('h-3 w-3', isLoading && 'animate-spin')} />
-            New insight
-          </button>
+        {/* Convex stats when available */}
+        {realContext && (
+          <div className="flex gap-3 mt-2 text-xs text-slate-500">
+            <span>Streak: {realContext.currentStreak}d</span>
+            <span>Week: {realContext.completionRatio7d}%</span>
+            <span>Level {realContext.level}</span>
+          </div>
         )}
-      </div>
-    </div>
-  );
+
+       {/* Message */}
+       <div className="flex items-start gap-3">
+         <Icon className={cn('h-5 w-5 mt-0.5 flex-shrink-0', colors.icon)} />
+         <div className="flex-1 min-w-0">
+           {isLoading ? (
+             <div className="space-y-2">
+               <div className="h-4 bg-slate-700/50 rounded animate-pulse w-3/4" />
+               <div className="h-4 bg-slate-700/50 rounded animate-pulse w-1/2" />
+             </div>
+           ) : error ? (
+             <p className="text-sm text-red-400">{error}</p>
+           ) : (
+             <p className={cn('text-sm leading-relaxed', colors.text)}>
+               {coachMessage?.message}
+             </p>
+           )}
+         </div>
+       </div>
+
+       {/* Actions — single primary CTA with secondary timestamp */}
+       <div className="flex items-center justify-between mt-4 pt-3 border-t border-white/10 gap-2 flex-wrap sm:flex-nowrap">
+         <span className="text-xs text-slate-500 flex-shrink-0">
+           {coachMessage?.timestamp && `Updated ${formatTime(coachMessage.timestamp)}`}
+         </span>
+         {showRefresh && (
+           <button
+             onClick={generateMessage}
+             disabled={isLoading}
+             className={cn(
+               'flex items-center justify-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg',
+               'bg-white/10 hover:bg-white/20 active:bg-white/30',
+               'text-white transition-colors duration-150',
+               'border border-white/10 hover:border-white/20',
+               isLoading && 'opacity-50 cursor-not-allowed animate-pulse',
+               'w-full sm:w-auto'
+             )}
+           >
+             <RefreshCw className={cn('h-3 w-3', isLoading && 'animate-spin')} />
+             New insight
+           </button>
+         )}
+       </div>
+     </div>
+   );
 }
 
 // Fallback messages when AI is unavailable

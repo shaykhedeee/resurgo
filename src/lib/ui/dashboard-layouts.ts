@@ -7,11 +7,15 @@
 // WIDGET TYPES
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type DashboardWidgetType = 
+export type DashboardWidgetType =
   | 'today-focus' | 'quick-add' | 'task-list' | 'habit-tracker' | 'goal-progress'
   | 'calendar' | 'achievements' | 'motivation-quote' | 'productivity-chart'
   | 'weather' | 'energy-level' | 'notes' | 'partner-sync' | 'brain-dump'
-  | 'focus-timer' | 'welcome' | 'next-milestone' | 'streak-display' | 'custom-stats';
+  | 'focus-timer' | 'habit-streak' | 'ai-coach' | 'quick-journal' | 'calorie-tracker'
+  | 'digital-clock' | 'quick-task' | 'quick-note' | 'water-tracker' | 'xp-status'
+  | 'activity-feed' | 'streak-heatmap' | 'product-hunt' | 'sleep' | 'quick-actions'
+  | 'vision-board' | 'xp-leaderboard'
+  | 'welcome' | 'next-milestone' | 'streak-display' | 'custom-stats';
 
 export interface DashboardWidget {
   id: string;
@@ -344,9 +348,27 @@ export interface WidgetDefinition {
     default: unknown;
     options?: Array<{ label: string; value: unknown }>;
   }>;
+  section: string;
+  defaultOrder: number;
+  defaultVisible: boolean;
 }
 
 export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
+  // ── Helper ──────────────────────────────────────────────────────────────
+  welcome: {
+    type: 'welcome',
+    name: 'Welcome',
+    description: 'Welcome banner',
+    icon: '👋',
+    minWidth: 'full',
+    minHeight: 1,
+    category: 'custom',
+    section: 'utility',
+    defaultOrder: 0,
+    defaultVisible: true,
+  },
+
+  // ── Productivity ────────────────────────────────────────────────────────
   'today-focus': {
     type: 'today-focus',
     name: 'Today\'s Focus',
@@ -355,6 +377,9 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
     minWidth: 'md',
     minHeight: 2,
     category: 'productivity',
+    section: 'capture',
+    defaultOrder: 3,
+    defaultVisible: true,
     settings: [
       { key: 'limit', label: 'Max tasks shown', type: 'number', default: 5 },
       { key: 'sortBy', label: 'Sort by', type: 'select', default: 'priority', options: [
@@ -365,7 +390,30 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
       { key: 'showEstimates', label: 'Show time estimates', type: 'boolean', default: true },
     ],
   },
-
+  'quick-task': {
+    type: 'quick-task',
+    name: 'Quick Task',
+    description: 'Quickly add or complete a task',
+    icon: '✓',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'productivity',
+    section: 'utility',
+    defaultOrder: 7,
+    defaultVisible: true,
+  },
+  'quick-note': {
+    type: 'quick-note',
+    name: 'Quick Note',
+    description: 'Jot down a quick note',
+    icon: '📝',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'productivity',
+    section: 'utility',
+    defaultOrder: 8,
+    defaultVisible: true,
+  },
   'quick-add': {
     type: 'quick-add',
     name: 'Quick Add',
@@ -374,147 +422,14 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
     minWidth: 'md',
     minHeight: 1,
     category: 'productivity',
+    section: 'capture',
+    defaultOrder: 2,
+    defaultVisible: true,
     settings: [
       { key: 'focus', label: 'Focus mode', type: 'boolean', default: false },
       { key: 'defaultCategory', label: 'Default category', type: 'select', default: 'PERSONAL' },
     ],
   },
-
-  'task-list': {
-    type: 'task-list',
-    name: 'Task List',
-    description: 'Full task list with filters',
-    icon: '✓',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'tracking',
-    settings: [
-      { key: 'filter', label: 'Filter', type: 'select', default: 'active' },
-      { key: 'limit', label: 'Tasks per page', type: 'number', default: 20 },
-    ],
-  },
-
-  'habit-tracker': {
-    type: 'habit-tracker',
-    name: 'Habit Tracker',
-    description: 'Track daily habits and streaks',
-    icon: '💪',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'tracking',
-    settings: [
-      { key: 'showStreak', label: 'Show streaks', type: 'boolean', default: true },
-      { key: 'limit', label: 'Habits shown', type: 'number', default: 6 },
-    ],
-  },
-
-  'goal-progress': {
-    type: 'goal-progress',
-    name: 'Goal Progress',
-    description: 'View all goals with progress bars',
-    icon: '🏆',
-    minWidth: 'lg',
-    minHeight: 2,
-    category: 'tracking',
-    settings: [
-      { key: 'showMilestones', label: 'Show milestones', type: 'boolean', default: true },
-      { key: 'showProgress', label: 'Show progress bar', type: 'boolean', default: true },
-    ],
-  },
-
-  'calendar': {
-    type: 'calendar',
-    name: 'Calendar',
-    description: 'Monthly calendar view',
-    icon: '📅',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'planning',
-  },
-
-  'achievements': {
-    type: 'achievements',
-    name: 'Achievements',
-    description: 'Recent unlocked badges',
-    icon: '🏅',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'motivation',
-    settings: [
-      { key: 'showRecent', label: 'Show recent only', type: 'boolean', default: true },
-      { key: 'limit', label: 'Achievements shown', type: 'number', default: 3 },
-    ],
-  },
-
-  'motivation-quote': {
-    type: 'motivation-quote',
-    name: 'Daily Motivation',
-    description: 'Inspiring quote of the day',
-    icon: '✨',
-    minWidth: 'sm',
-    minHeight: 1,
-    category: 'motivation',
-  },
-
-  'productivity-chart': {
-    type: 'productivity-chart',
-    name: 'Productivity Chart',
-    description: 'Weekly/monthly productivity trends',
-    icon: '📊',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'analysis',
-    settings: [
-      { key: 'timeframe', label: 'Timeframe', type: 'select', default: 'week', options: [
-        { label: 'Week', value: 'week' },
-        { label: 'Month', value: 'month' },
-      ]},
-    ],
-  },
-
-  'weather': {
-    type: 'weather',
-    name: 'Weather',
-    description: 'Current weather and forecast',
-    icon: '⛅',
-    minWidth: 'sm',
-    minHeight: 1,
-    category: 'custom',
-  },
-
-  'energy-level': {
-    type: 'energy-level',
-    name: 'Energy Level',
-    description: 'Track and display your energy level',
-    icon: '⚡',
-    minWidth: 'sm',
-    minHeight: 1,
-    category: 'tracking',
-    settings: [
-      { key: 'interactive', label: 'Interactive', type: 'boolean', default: true },
-    ],
-  },
-
-  'notes': {
-    type: 'notes',
-    name: 'Quick Notes',
-    description: 'Take and display quick notes',
-    icon: '📝',
-    minWidth: 'md',
-    minHeight: 2,
-    category: 'productivity',
-  },
-
-  'partner-sync': {
-    type: 'partner-sync',
-    name: 'Partner Sync',
-    description: 'Check in with accountability partner',
-    icon: '🤝',
-    minWidth: 'md',
-    minHeight: 1,
-    category: 'custom',
-  },
-
   'brain-dump': {
     type: 'brain-dump',
     name: 'Brain Dump',
@@ -523,38 +438,123 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
     minWidth: 'md',
     minHeight: 1,
     category: 'productivity',
+    section: 'capture',
+    defaultOrder: 5,
+    defaultVisible: true,
+  },
+  'task-list': {
+    type: 'task-list',
+    name: 'Task List',
+    description: 'Full task list with filters',
+    icon: '✓',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'tracking',
+    section: 'capture',
+    defaultOrder: 6,
+    defaultVisible: true,
+    settings: [
+      { key: 'filter', label: 'Filter', type: 'select', default: 'active' },
+      { key: 'limit', label: 'Tasks per page', type: 'number', default: 20 },
+    ],
   },
 
-  'focus-timer': {
-    type: 'focus-timer',
-    name: 'Focus Timer',
-    description: 'Pomodoro-style timer',
-    icon: '⏱️',
+  // ── Tracking ─────────────────────────────────────────────────────────────
+  'habit-tracker': {
+    type: 'habit-tracker',
+    name: 'Habit Tracker',
+    description: 'Track daily habits and streaks',
+    icon: '💪',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 1,
+    defaultVisible: true,
+    settings: [
+      { key: 'showStreak', label: 'Show streaks', type: 'boolean', default: true },
+      { key: 'limit', label: 'Habits shown', type: 'number', default: 6 },
+    ],
+  },
+  'habit-streak': {
+    type: 'habit-streak',
+    name: 'Habit Streaks',
+    description: 'Display your current habit streaks',
+    icon: 'Flame',
     minWidth: 'sm',
     minHeight: 1,
-    category: 'productivity',
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 1,
+    defaultVisible: true,
   },
-
-  'welcome': {
-    type: 'welcome',
-    name: 'Welcome',
-    description: 'Welcome banner',
-    icon: '👋',
-    minWidth: 'full',
+  'goal-progress': {
+    type: 'goal-progress',
+    name: 'Goal Progress',
+    description: 'View all goals with progress bars',
+    icon: '🏆',
+    minWidth: 'lg',
+    minHeight: 2,
+    category: 'tracking',
+    section: 'capture',
+    defaultOrder: 4,
+    defaultVisible: true,
+    settings: [
+      { key: 'showMilestones', label: 'Show milestones', type: 'boolean', default: true },
+      { key: 'showProgress', label: 'Show progress bar', type: 'boolean', default: true },
+    ],
+  },
+  'calorie-tracker': {
+    type: 'calorie-tracker',
+    name: 'Calorie Tracker',
+    description: 'Track daily calorie intake',
+    icon: 'Apple',
+    minWidth: 'sm',
     minHeight: 1,
-    category: 'custom',
+    category: 'tracking',
+    section: 'capture',
+    defaultOrder: 5,
+    defaultVisible: true,
   },
-
-  'next-milestone': {
-    type: 'next-milestone',
-    name: 'Next Milestone',
-    description: 'Your next big milestone',
-    icon: '🎯',
+  'water-tracker': {
+    type: 'water-tracker',
+    name: 'Hydration',
+    description: 'Track daily water intake',
+    icon: 'Droplets',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 9,
+    defaultVisible: true,
+  },
+  'activity-feed': {
+    type: 'activity-feed',
+    name: 'Activity Feed',
+    description: 'Recent activity across your account',
+    icon: 'TrendingUp',
     minWidth: 'md',
-    minHeight: 1,
-    category: 'motivation',
+    minHeight: 2,
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 11,
+    defaultVisible: true,
   },
-
+  'energy-level': {
+    type: 'energy-level',
+    name: 'Energy Level',
+    description: 'Track and display your energy level',
+    icon: '⚡',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 2,
+    defaultVisible: true,
+    settings: [
+      { key: 'interactive', label: 'Interactive', type: 'boolean', default: true },
+    ],
+  },
   'streak-display': {
     type: 'streak-display',
     name: 'Streak Display',
@@ -563,8 +563,162 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
     minWidth: 'sm',
     minHeight: 1,
     category: 'tracking',
+    section: 'core',
+    defaultOrder: 12,
+    defaultVisible: true,
+  },
+  'sleep': {
+    type: 'sleep',
+    name: 'Sleep Tracker',
+    description: 'Track sleep duration and quality',
+    icon: '🌙',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'tracking',
+    section: 'context',
+    defaultOrder: 14,
+    defaultVisible: true,
+  },
+  'streak-heatmap': {
+    type: 'streak-heatmap',
+    name: 'Streak Heatmap',
+    description: 'Visual calendar showing completion heat',
+    icon: 'CalendarDays',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'tracking',
+    section: 'core',
+    defaultOrder: 13,
+    defaultVisible: true,
   },
 
+  // ── AI & Coach ──────────────────────────────────────────────────────────
+  'ai-coach': {
+    type: 'ai-coach',
+    name: 'AI Coach',
+    description: 'Personalised one-on-one coaching',
+    icon: 'MessageSquare',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'productivity',
+    section: 'core',
+    defaultOrder: 2,
+    defaultVisible: true,
+  },
+
+  // ── Capture & Reflection ─────────────────────────────────────────────────
+  'quick-journal': {
+    type: 'quick-journal',
+    name: 'Quick Journal',
+    description: 'Quick journal entry capture',
+    icon: 'BookOpen',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'productivity',
+    section: 'capture',
+    defaultOrder: 3,
+    defaultVisible: true,
+  },
+
+  // ── Planning ─────────────────────────────────────────────────────────────
+  'calendar': {
+    type: 'calendar',
+    name: 'Calendar',
+    description: 'Monthly calendar view',
+    icon: '📅',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'planning',
+    section: 'capture',
+    defaultOrder: 10,
+    defaultVisible: false,
+  },
+
+  // ── Motivation ───────────────────────────────────────────────────────────
+  'achievements': {
+    type: 'achievements',
+    name: 'Achievements',
+    description: 'Recent unlocked badges',
+    icon: '🏅',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'motivation',
+    section: 'context',
+    defaultOrder: 12,
+    defaultVisible: true,
+    settings: [
+      { key: 'showRecent', label: 'Show recent only', type: 'boolean', default: true },
+      { key: 'limit', label: 'Achievements shown', type: 'number', default: 3 },
+    ],
+  },
+  'motivation-quote': {
+    type: 'motivation-quote',
+    name: 'Daily Motivation',
+    description: 'Inspiring quote of the day',
+    icon: '✨',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'motivation',
+    section: 'context',
+    defaultOrder: 13,
+    defaultVisible: true,
+  },
+  'xp-status': {
+    type: 'xp-status',
+    name: 'XP & Level',
+    description: 'Current XP and level status',
+    icon: 'Trophy',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'motivation',
+    section: 'core',
+    defaultOrder: 10,
+    defaultVisible: true,
+  },
+  'xp-leaderboard': {
+    type: 'xp-leaderboard',
+    name: 'XP Leaderboard',
+    description: 'Ranked leaderboard by XP',
+    icon: 'Trophy',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'motivation',
+    section: 'core',
+    defaultOrder: 17,
+    defaultVisible: false,
+  },
+  'next-milestone': {
+    type: 'next-milestone',
+    name: 'Next Milestone',
+    description: 'Your next big milestone',
+    icon: '🎯',
+    minWidth: 'md',
+    minHeight: 1,
+    category: 'motivation',
+    section: 'context',
+    defaultOrder: 15,
+    defaultVisible: true,
+  },
+
+  // ── Analysis ─────────────────────────────────────────────────────────────
+  'productivity-chart': {
+    type: 'productivity-chart',
+    name: 'Productivity Chart',
+    description: 'Weekly/monthly productivity trends',
+    icon: '📊',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'analysis',
+    section: 'context',
+    defaultOrder: 16,
+    defaultVisible: true,
+    settings: [
+      { key: 'timeframe', label: 'Timeframe', type: 'select', default: 'week', options: [
+        { label: 'Week', value: 'week' },
+        { label: 'Month', value: 'month' },
+      ]},
+    ],
+  },
   'custom-stats': {
     type: 'custom-stats',
     name: 'Custom Stats',
@@ -573,7 +727,108 @@ export const WIDGET_REGISTRY: Record<DashboardWidgetType, WidgetDefinition> = {
     minWidth: 'md',
     minHeight: 1,
     category: 'analysis',
+    section: 'context',
+    defaultOrder: 18,
+    defaultVisible: false,
     isBeta: true,
+  },
+
+  // ── Utility & Context ────────────────────────────────────────────────────
+  'weather': {
+    type: 'weather',
+    name: 'Weather',
+    description: 'Current weather and forecast',
+    icon: '⛅',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'custom',
+    section: 'utility',
+    defaultOrder: 9,
+    defaultVisible: false,
+  },
+  'notes': {
+    type: 'notes',
+    name: 'Quick Notes',
+    description: 'Take and display quick notes',
+    icon: '📝',
+    minWidth: 'md',
+    minHeight: 2,
+    category: 'productivity',
+    section: 'utility',
+    defaultOrder: 4,
+    defaultVisible: true,
+  },
+  'partner-sync': {
+    type: 'partner-sync',
+    name: 'Partner Sync',
+    description: 'Check in with accountability partner',
+    icon: '🤝',
+    minWidth: 'md',
+    minHeight: 1,
+    category: 'custom',
+    section: 'context',
+    defaultOrder: 15,
+    defaultVisible: false,
+  },
+  'digital-clock': {
+    type: 'digital-clock',
+    name: 'Digital Clock',
+    description: 'Large digital clock display',
+    icon: 'Clock',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'custom',
+    section: 'utility',
+    defaultOrder: 6,
+    defaultVisible: true,
+  },
+  'quick-actions': {
+    type: 'quick-actions',
+    name: 'Quick Actions',
+    description: 'Shortcut buttons for frequent actions',
+    icon: 'Zap',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'productivity',
+    section: 'context',
+    defaultOrder: 15,
+    defaultVisible: true,
+  },
+  'vision-board': {
+    type: 'vision-board',
+    name: 'Vision Board',
+    description: 'Visual inspiration board',
+    icon: 'Image',
+    minWidth: 'lg',
+    minHeight: 2,
+    category: 'custom',
+    section: 'context',
+    defaultOrder: 16,
+    defaultVisible: true,
+  },
+  'product-hunt': {
+    type: 'product-hunt',
+    name: 'Product Hunt',
+    description: 'Top products from Product Hunt',
+    icon: 'GitBranch',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'custom',
+    section: 'context',
+    defaultOrder: 13,
+    defaultVisible: true,
+  },
+  'focus-timer': {
+    type: 'focus-timer',
+    name: 'Focus Timer',
+    description: 'Pomodoro-style timer',
+    icon: '⏱️',
+    minWidth: 'sm',
+    minHeight: 1,
+    category: 'productivity',
+    section: 'core',
+    defaultOrder: 0,
+    defaultVisible: true,
   },
 };
 

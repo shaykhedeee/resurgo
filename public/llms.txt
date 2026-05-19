@@ -97,9 +97,9 @@ The AI doesn't just chat — it executes structured actions. Each AI response in
 
 ## Pricing (as of March 2026)
 - **Free**: 2 AI coaches (Marcus + Titan), goal decomposition, habit tracking, focus sessions, basic analytics, and real-time AI actions. No credit card required.
-- **Pro** ($4.99/month): Unlimited habits/goals, advanced models, priority support, API access.
-- **Pro Yearly** ($29.99/year): 50% savings.
-- **Lifetime** ($49.99 one-time): Permanent access to everything.
+- **Pro** ($9.99/month): Unlimited habits/goals, advanced models, priority support, API access.
+- **Pro Yearly** ($95.88/year): 20% savings.
+- **Lifetime** ($89 one-time, founding price until July 5, 2026; after: $199): Permanent access to everything.
 
 ## Who Resurgo Is For
 - Developers, indie hackers, and founders managing complex, multi-domain lives

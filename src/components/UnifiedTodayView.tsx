@@ -9,6 +9,7 @@ import { useState, useMemo } from 'react';
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
 import { UnifiedTask } from '@/types';
+import { PrimaryAction } from '@/components/layout/ResurgoLayout';
 import { format } from 'date-fns';
 import { playSound } from '@/lib/sounds';
 
@@ -115,13 +116,12 @@ export function UnifiedTodayView({ onOpenGoalWizard, onAddTask }: UnifiedTodayVi
           <p className="text-themed-secondary text-sm mb-6 max-w-xs mx-auto">
             Tell us who you want to become, and AI will create your personalized daily action plan
           </p>
-          <button
+          <PrimaryAction
             onClick={onOpenGoalWizard}
-            className="btn-primary inline-flex items-center gap-2"
           >
             <Brain className="w-4 h-4" />
             Create My Journey
-          </button>
+          </PrimaryAction>
         </div>
       </div>
     );

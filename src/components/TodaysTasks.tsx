@@ -20,6 +20,7 @@ import {
   Trophy,
   Brain
 } from 'lucide-react';
+import { PrimaryAction } from '@/components/layout/ResurgoLayout';
 
 const PRIORITY_STYLES: Record<DailyTask['priority'], { bg: string; border: string; text: string; label: string }> = {
   critical: { bg: 'bg-red-500/20', border: 'border-red-500/50', text: 'text-red-400', label: 'Critical' },
@@ -82,13 +83,13 @@ export function TodaysTasks({ onOpenGoalWizard }: TodaysTasksProps) {
           <p className="text-themed-secondary text-sm mb-6 max-w-xs mx-auto">
             Tell us your ultimate goal and AI will create personalized daily tasks just for you
           </p>
-          <button
-            onClick={onOpenGoalWizard}
-            className="btn-primary inline-flex items-center gap-2"
-          >
-            <Sparkles className="w-4 h-4" aria-hidden="true" />
-            Create My Goal
-          </button>
+           <PrimaryAction
+             onClick={onOpenGoalWizard}
+             className="gap-2"
+           >
+             <Sparkles className="w-4 h-4" aria-hidden="true" />
+             Create My Goal
+           </PrimaryAction>
         </div>
       </div>
     );

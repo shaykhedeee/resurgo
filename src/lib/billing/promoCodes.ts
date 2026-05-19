@@ -2,6 +2,8 @@
 // RESURGO — Promo Code Validation
 // ═══════════════════════════════════════════════════════════════════════════════
 
+import { FOUNDING_LIFETIME_ENDS_AT_ISO, FOUNDING_LIFETIME_PRICE_USD } from '@/lib/product-config';
+
 export interface PromoCode {
   code: string;
   planKey: 'lifetime' | 'pro_monthly' | 'pro_yearly';
@@ -13,12 +15,12 @@ export interface PromoCode {
 
 const PROMO_CODES: PromoCode[] = [
   {
-    code: 'LTP50',
+    code: 'FOUNDER100',
     planKey: 'lifetime',
-    label: 'Product Hunt Launch Deal',
-    description: 'Lifetime access at the exclusive founder price. One payment, forever.',
-    discountedPrice: 49.99,
-    expiresAt: new Date('2026-06-30T23:59:59Z'),
+    label: 'Relaunch Founder Deal',
+    description: 'Lifetime access for the first 100 relaunch signups. One payment, forever.',
+    discountedPrice: FOUNDING_LIFETIME_PRICE_USD,
+    expiresAt: new Date(FOUNDING_LIFETIME_ENDS_AT_ISO),
   },
 ];
 

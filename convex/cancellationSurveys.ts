@@ -55,7 +55,7 @@ export const submit = mutation({
       return {
         showRetentionOffer: true,
         offerType: 'annual_discount',
-        offerMessage: 'Switch to annual billing and save 50%. That is $29.99/year instead of $4.99/month ($59.88/year).',
+        offerMessage: 'Switch to annual billing and save 20%. That is $95.88/year instead of $9.99/month ($119.88/year).',
       };
     }
 

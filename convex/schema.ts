@@ -44,6 +44,22 @@ export default defineSchema({
     timezone: v.optional(v.string()),
     theme: v.optional(v.union(v.literal('light'), v.literal('dark'), v.literal('system'))),
     onboardingComplete: v.boolean(),
+    // Fitness & Health Details
+    phoneNumber: v.optional(v.string()),
+    dob: v.optional(v.string()),
+    height: v.optional(v.number()),
+    weight: v.optional(v.number()),
+    // ── Quick-Start Onboarding (Phase 1) ──
+    onboardingPath: v.optional(v.union(v.literal('quick-start'), v.literal('legacy'), v.literal('other'))),
+    archetypeDetected: v.optional(v.union(
+      v.literal('adhd'),
+      v.literal('ambitious'),
+      v.literal('student'),
+      v.literal('athlete'),
+      v.literal('other')
+    )),
+    layerLevel: v.optional(v.number()), // 1 (basic), 2 (unlocked), 3 (advanced)
+    dayOneCompleted: v.optional(v.number()), // Timestamp when user completed first task + PWA install
     streakFreezeCount: v.number(),
     // ── Onboarding preferences ──
     focusAreas: v.optional(v.array(v.string())),
@@ -1325,6 +1341,47 @@ export default defineSchema({
     .index('by_createdAt', ['createdAt']),
 
   // ─────────────────────────────────────────────────────────────────────────────
+  // GENERATED BLOG POSTS — Automated research-backed content engine
+  // ─────────────────────────────────────────────────────────────────────────────
+  generatedBlogPosts: defineTable({
+    slug: v.string(),
+    title: v.string(),
+    desc: v.string(),
+    content: v.string(),
+    status: v.union(
+      v.literal('draft'),
+      v.literal('published'),
+      v.literal('rejected')
+    ),
+    tags: v.array(v.string()),
+    seoKeywords: v.array(v.string()),
+    heroImage: v.string(),
+    readTime: v.string(),
+    research: v.object({
+      googleTrends: v.array(v.object({
+        title: v.string(),
+        url: v.optional(v.string()),
+        traffic: v.optional(v.string()),
+      })),
+      redditSignals: v.array(v.object({
+        title: v.string(),
+        subreddit: v.string(),
+        url: v.string(),
+        score: v.number(),
+        comments: v.number(),
+      })),
+      selectedTopic: v.string(),
+      score: v.number(),
+    }),
+    generatedAt: v.number(),
+    publishedAt: v.optional(v.number()),
+    updatedAt: v.number(),
+  })
+    .index('by_slug', ['slug'])
+    .index('by_status', ['status'])
+    .index('by_status_publishedAt', ['status', 'publishedAt']),
+
+  // ─────────────────────────────────────────────────────────────────────────────
   // META CAMPAIGNS — Cached Meta Marketing API campaign data
   // Synced periodically from Meta API to avoid hitting rate limits
   // ─────────────────────────────────────────────────────────────────────────────
@@ -1570,96 +1627,220 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_bought', ['userId', 'bought']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SCRATCH NOTES — Quick capture from dashboard "Quick Note" widget
-  // ─────────────────────────────────────────────────────────────────────────────
-  scratchNotes: defineTable({
-    userId: v.id('users'),
-    text: v.string(),
-    source: v.optional(v.string()),
-    createdAt: v.number(),
-  })
-    .index('by_userId', ['userId'])
-    .index('by_userId_createdAt', ['userId', 'createdAt']),
+// ─────────────────────────────────────────────────────────────────────────────
+// SCRATCH NOTES — Quick capture from dashboard "Quick Note" widget
+// ─────────────────────────────────────────────────────────────────────────────
+scratchNotes: defineTable({
+  userId: v.id('users'),
+  text: v.string(),
+  source: v.optional(v.string()),
+  createdAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_createdAt', ['userId', 'createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // WORKOUT LOGS — Physical fitness activity tracking (Fitness section)
-  // ─────────────────────────────────────────────────────────────────────────────
-  workoutLogs: defineTable({
-    userId: v.id('users'),
-    date: v.string(),
-    type: v.union(
-      v.literal('cardio'),
-      v.literal('strength'),
-      v.literal('flexibility'),
-      v.literal('sport'),
-      v.literal('other'),
-    ),
-    name: v.optional(v.string()),
-    durationMinutes: v.number(),
+// ─────────────────────────────────────────────────────────────────────────────
+// TESTIMONIALS — User testimonials for social proof
+// ─────────────────────────────────────────────────────────────────────────────
+testimonials: defineTable({
+  userId: v.optional(v.id('users')), // Optional: linked to user account
+  name: v.string(),                  // Name for display
+  roleOrICP: v.string(),             // Role or Ideal Customer Profile
+  outcomeHeadline: v.string(),       // 5-7 words, specific metric/result
+  quote: v.string(),                 // 1-2 sentences, specific, no hype
+  metricBadge: v.optional(v.string()), // Optional metric badge (e.g., "94-day streak")
+  featured: v.boolean(),             // Whether to feature prominently
+  createdAt: v.number(),
+  updatedAt: v.number(),
+})
+.index('by_featured', ['featured'])
+.index('by_createdAt', ['createdAt'])
+.index('by_userId', ['userId']),
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WORKOUT LOGS — Physical fitness activity tracking (Fitness section)
+// ─────────────────────────────────────────────────────────────────────────────
+workoutLogs: defineTable({
+  userId: v.id('users'),
+  date: v.string(),
+  type: v.union(
+    v.literal('cardio'),
+    v.literal('strength'),
+    v.literal('flexibility'),
+    v.literal('sport'),
+    v.literal('other'),
+  ),
+  name: v.optional(v.string()),
+  durationMinutes: v.number(),
+  notes: v.optional(v.string()),
+  caloriesBurned: v.optional(v.number()),
+  exercises: v.optional(v.array(v.object({
+    name: v.string(),
+    sets: v.optional(v.number()),
+    reps: v.optional(v.number()),
+    weight: v.optional(v.number()),
+    weightUnit: v.optional(v.union(v.literal('kg'), v.literal('lb'))),
+    durationSeconds: v.optional(v.number()),
+    distance: v.optional(v.number()),
+    distanceUnit: v.optional(v.union(v.literal('km'), v.literal('mi'))),
     notes: v.optional(v.string()),
-    caloriesBurned: v.optional(v.number()),
-    exercises: v.optional(v.array(v.object({
-      name: v.string(),
-      sets: v.optional(v.number()),
-      reps: v.optional(v.number()),
-      weight: v.optional(v.number()),
-      weightUnit: v.optional(v.union(v.literal('kg'), v.literal('lb'))),
-      durationSeconds: v.optional(v.number()),
-      distance: v.optional(v.number()),
-      distanceUnit: v.optional(v.union(v.literal('km'), v.literal('mi'))),
-      notes: v.optional(v.string()),
-    }))),
-    createdAt: v.number(),
-  })
-    .index('by_userId', ['userId'])
-    .index('by_userId_date', ['userId', 'date']),
+  }))),
+  createdAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // COACH NOTIFICATIONS — Proactive AI coach nudges
-  // ─────────────────────────────────────────────────────────────────────────────
-  coachNotifications: defineTable({
-    userId: v.id('users'),
-    coachId: v.string(),
-    type: v.string(),
-    message: v.string(),
-    actions: v.array(v.object({
-      label: v.string(),
-      action: v.string(),
-    })),
-    read: v.boolean(),
-    createdAt: v.number(),
-    expiresAt: v.number(),
-  })
-    .index('by_userId', ['userId'])
-    .index('by_userId_read', ['userId', 'read'])
-    .index('by_userId_createdAt', ['userId', 'createdAt']),
+// ─────────────────────────────────────────────────────────────────────────────
+// COACH NOTIFICATIONS — Proactive AI coach nudges
+// ─────────────────────────────────────────────────────────────────────────────
+coachNotifications: defineTable({
+  userId: v.id('users'),
+  coachId: v.string(),
+  type: v.string(),
+  message: v.string(),
+  actions: v.array(v.object({
+    label: v.string(),
+    action: v.string(),
+  })),
+  read: v.boolean(),
+  createdAt: v.number(),
+  expiresAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_read', ['userId', 'read'])
+.index('by_userId_createdAt', ['userId', 'createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // EMAIL LOGS — Track lifecycle emails sent to prevent duplicates
-  // ─────────────────────────────────────────────────────────────────────────────
-  emailLogs: defineTable({
-    userId: v.id('users'),
-    emailType: v.string(),        // e.g. 'welcome', 'day3_tips', 'day7_streak', 'day14_checkin', 'day21_habit', 'day30_review', 'streak_at_risk', 'win_back'
-    sentAt: v.number(),
-    success: v.boolean(),
-    resendId: v.optional(v.string()),
-    error: v.optional(v.string()),
-  })
-    .index('by_userId', ['userId'])
-    .index('by_userId_emailType', ['userId', 'emailType']),
+// ─────────────────────────────────────────────────────────────────────────────
+// USER INTELLIGENCE MODEL — Central behavioral context for AI
+// ─────────────────────────────────────────────────────────────────────────────
+userIntelligenceModel: defineTable({
+  userId: v.id('users'),
+  energyLevel: v.optional(v.number()),         // 1-10
+  stressScore: v.optional(v.number()),         // 1-10
+  sleepHoursLastNight: v.optional(v.number()),
+  consistencyScore: v.optional(v.number()),    // 0-100
+  focusScore: v.optional(v.number()),          // 0-100
+  chronotype: v.optional(v.union(
+    v.literal('morning'),
+    v.literal('afternoon'),
+    v.literal('evening'),
+    v.literal('irregular'),
+  )),
+  adhdFlag: v.optional(v.boolean()),
+  preferredWorkBlocks: v.optional(v.array(v.object({
+    startHour: v.number(),
+    endHour: v.number(),
+    intensity: v.union(v.literal('low'), v.literal('medium'), v.literal('high')),
+  }))),
+  lastAnalyzedAt: v.optional(v.number()),
+  createdAt: v.number(),
+  updatedAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_updatedAt', ['userId', 'updatedAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // CANCELLATION SURVEYS — Churn insights from departing users
-  // ─────────────────────────────────────────────────────────────────────────────
-  cancellationSurveys: defineTable({
-    userId: v.id('users'),
-    reason: v.string(),
-    otherReason: v.optional(v.string()),
-    feedback: v.optional(v.string()),
-    wouldReturn: v.optional(v.boolean()),
-    createdAt: v.number(),
-  })
-    .index('by_userId', ['userId'])
-    .index('by_reason', ['reason']),
+// ─────────────────────────────────────────────────────────────────────────────
+// BRAIN DUMP — Raw and AI-structured onboarding intelligence
+// ─────────────────────────────────────────────────────────────────────────────
+brainDump: defineTable({
+  userId: v.id('users'),
+  rawText: v.string(),
+  structured: v.optional(v.object({
+    goals: v.array(v.string()),
+    fears: v.array(v.string()),
+    constraints: v.array(v.string()),
+    energyProfile: v.optional(v.string()),
+    suggestedHabits: v.optional(v.array(v.string())),
+  })),
+  analysisStatus: v.union(
+    v.literal('pending'),
+    v.literal('completed'),
+    v.literal('needs_clarification'),
+    v.literal('failed'),
+  ),
+  analysisVersion: v.optional(v.string()),
+  createdAt: v.number(),
+  updatedAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_createdAt', ['userId', 'createdAt'])
+.index('by_userId_status', ['userId', 'analysisStatus']),
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EXECUTION STREAM — Unified "Today" feed (tasks + habits + focus sessions)
+// ─────────────────────────────────────────────────────────────────────────────
+executionStream: defineTable({
+  userId: v.id('users'),
+  dateKey: v.string(), // YYYY-MM-DD in user-local date
+  sourceType: v.union(
+    v.literal('task'),
+    v.literal('habit'),
+    v.literal('focus_session'),
+  ),
+  sourceId: v.string(),
+  title: v.string(),
+  detail: v.optional(v.string()),
+  priority: v.optional(v.union(
+    v.literal('low'),
+    v.literal('medium'),
+    v.literal('high'),
+    v.literal('critical'),
+  )),
+  status: v.union(
+    v.literal('pending'),
+    v.literal('in_progress'),
+    v.literal('completed'),
+    v.literal('skipped'),
+  ),
+  sortOrder: v.number(),
+  estimateMinutes: v.optional(v.number()),
+  completedAt: v.optional(v.number()),
+  metadata: v.optional(v.any()),
+  createdAt: v.number(),
+  updatedAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_dateKey', ['userId', 'dateKey'])
+.index('by_userId_dateKey_status', ['userId', 'dateKey', 'status'])
+.index('by_userId_dateKey_sortOrder', ['userId', 'dateKey', 'sortOrder']),
+
+// ─────────────────────────────────────────────────────────────────────────────
+// EMAIL LOGS — Track lifecycle emails sent to prevent duplicates
+// ─────────────────────────────────────────────────────────────────────────────
+emailLogs: defineTable({
+  userId: v.id('users'),
+  emailType: v.string(),        // e.g. 'welcome', 'day3_tips', 'day7_streak', 'day14_checkin', 'day21_habit', 'day30_review', 'streak_at_risk', 'win_back'
+  sentAt: v.number(),
+  success: v.boolean(),
+  resendId: v.optional(v.string()),
+  error: v.optional(v.string()),
+})
+.index('by_userId', ['userId'])
+.index('by_userId_emailType', ['userId', 'emailType']),
+
+leadEmailLogs: defineTable({
+  leadId: v.id('leads'),
+  email: v.string(),
+  emailType: v.string(), // e.g. 'lead_day0', 'lead_day3', 'lead_day7'
+  sentAt: v.number(),
+  success: v.boolean(),
+  resendId: v.optional(v.string()),
+  error: v.optional(v.string()),
+})
+.index('by_leadId', ['leadId'])
+.index('by_leadId_emailType', ['leadId', 'emailType']),
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CANCELLATION SURVEYS — Churn insights from departing users
+// ─────────────────────────────────────────────────────────────────────────────
+cancellationSurveys: defineTable({
+  userId: v.id('users'),
+  reason: v.string(),
+  otherReason: v.optional(v.string()),
+  feedback: v.optional(v.string()),
+  wouldReturn: v.optional(v.boolean()),
+  createdAt: v.number(),
+})
+.index('by_userId', ['userId'])
+.index('by_reason', ['reason']),
 });

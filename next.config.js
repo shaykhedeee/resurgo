@@ -1,19 +1,21 @@
-/** @type {import('next').NextConfig} */
+const { defineConfig } = require('next');
+const withBundleAnalyzer = require('@next/bundle-analyzer');
+
 const isDev = process.env.NODE_ENV !== 'production';
 
-const withBundleAnalyzer = require('@next/bundle-analyzer')({
+const withBundleAnalyzerPlugin = withBundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 });
 
-const nextConfig = {
-  reactStrictMode: true,
+const baseConfig = {
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'img.clerk.com' },
+      { protocol: 'https', hostname: 'resurgo.life' },
+      { protocol: 'https', hostname: '*.resurgo.life' },
       { protocol: 'https', hostname: 'www.themealdb.com' },
       { protocol: 'https', hostname: 'images.openfoodfacts.org' },
       { protocol: 'https', hostname: 'static.openfoodfacts.org' },
-      // Vision Board image providers
       { protocol: 'https', hostname: 'image.pollinations.ai' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
       { protocol: 'https', hostname: 'api.unsplash.com' },
@@ -21,17 +23,13 @@ const nextConfig = {
       { protocol: 'https', hostname: 'media.gettyimages.com' },
     ],
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 86400, // 24h CDN cache for optimized images
+    minimumCacheTTL: 86400,
     dangerouslyAllowSVG: true,
     contentDispositionType: 'attachment',
-    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
-  
-  // Production-grade security headers
   async headers() {
     const allowedOrigin = isDev ? '*' : 'https://resurgo.life';
     return [
-      // CORS for API routes — restricts to resurgo.life in production (§17.1)
       {
         source: '/api/:path*',
         headers: [
@@ -44,39 +42,14 @@ const nextConfig = {
       {
         source: '/(.*)',
         headers: [
-          {
-            key: 'X-DNS-Prefetch-Control',
-            value: 'on',
-          },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
-          },
-          {
-            key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(self), geolocation=(self), interest-cohort=()',
-          },
-          {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
-          },
-          // CSP only in production — dev mode needs 'unsafe-eval' for webpack HMR
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=63072000; includeSubDomains; preload' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+          { key: 'X-Content-Type-Options', value: 'nosniff' },
+          { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(self), geolocation=(self), interest-cohort=()' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin-allow-popups' },
           ...(isDev ? [] : [{
             key: 'Content-Security-Policy',
             value: [
@@ -96,31 +69,20 @@ const nextConfig = {
       },
     ];
   },
-
-  // Skip type checking in build (handled by IDE/CI separately)
   typescript: {
     ignoreBuildErrors: true,
   },
-
-  // SEO-friendly redirects
   async redirects() {
     return [
-      // /pricing is the canonical SEO path in sitemap; /billing is the actual route
       {
         source: '/pricing',
         destination: '/billing',
-        permanent: true, // 301 — passes PageRank to /billing
+        permanent: true,
       },
     ];
   },
-
-  // Compression and performance
   compress: true,
-  
-  // PWA configuration
   poweredByHeader: false,
-  
-  // Bundle optimization
   experimental: {
     optimizePackageImports: [
       'lucide-react',
@@ -130,12 +92,11 @@ const nextConfig = {
       '@/components',
       '@/lib',
     ],
-    // Client-side router cache TTL (Next.js 15+)
     staleTimes: {
-      dynamic: 30,   // Cache dynamic pages 30s on back navigation
-      static: 300,   // Cache static pages 5 minutes
+      dynamic: 30,
+      static: 300,
     },
   },
-}
+};
 
-module.exports = withBundleAnalyzer(nextConfig)
+module.exports = withBundleAnalyzerPlugin(baseConfig);

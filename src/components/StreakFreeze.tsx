@@ -8,6 +8,7 @@
 import { useState } from 'react';
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { PrimaryAction, SecondaryAction } from '@/components/layout/ResurgoLayout';
 import { 
   Shield, 
   Snowflake, 
@@ -163,19 +164,19 @@ export function StreakFreeze({ className, variant = 'card', onUse }: StreakFreez
               This will protect your {currentStreak} day streak. You&apos;ll have {freezesAvailable - 1} freeze{freezesAvailable - 1 !== 1 ? 's' : ''} remaining.
             </p>
             <div className="flex gap-2">
-              <button
-                onClick={() => setShowConfirm(false)}
-                className="flex-1 btn-secondary text-sm"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUseFreeze}
-                className="flex-1 btn-primary text-sm bg-orange-500 hover:bg-orange-600"
-              >
-                <Shield className="w-4 h-4 mr-2" />
-                Use Freeze
-              </button>
+<SecondaryAction
+                 onClick={() => setShowConfirm(false)}
+                 className="flex-1 text-sm"
+               >
+                 Cancel
+               </SecondaryAction>
+               <PrimaryAction
+                 onClick={handleUseFreeze}
+                 className="flex-1 text-sm"
+               >
+                 <Shield className="w-4 h-4 mr-2" />
+                 Use Freeze
+               </PrimaryAction>
             </div>
           </div>
         )}

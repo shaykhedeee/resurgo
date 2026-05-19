@@ -20,8 +20,8 @@ Resurgo is positioned as an **AI-powered Life OS / “life command center”** t
 
 ### Pricing + urgency mechanics already on the page
 - Free tier (no card)  
-- Pro is **$4.99/mo** (and you also show annual savings)  
-- Lifetime “founding price” **$49.99** for first 1,000 spots, then $89.99 (claimed “save 44%”). 
+- Pro is **$9.99/mo** (and you also show annual savings)  
+- Lifetime “founding price” **$89** for first 1,000 spots, then $199 (claimed “save 55%”). 
 
 ### Big inconsistency you should fix ASAP (it will hurt conversion)
 Your public-facing messaging must stay unified under **resurgo.life** as the primary launch domain and pricing source of truth. Any secondary product/domain narrative should be clearly framed as complementary, not conflicting.
@@ -186,8 +186,8 @@ You asked for *current tools*, not outdated lists. Here’s a stack optimized fo
 ## 6) The “first few sales” playbook (what I would do if I were you)
 ### The offer (simple + compelling)
 Because you already have:
-- Pro subscription ($4.99/mo) and
-- Lifetime founder pricing ($49.99) 
+- Pro subscription ($9.99/mo) and
+- Lifetime founder pricing ($89) 
 
 Do this:
 1) **Push Lifetime to first revenue** (cashflow + urgency)
@@ -205,7 +205,7 @@ This is a lead magnet that doesn’t require you to write blogs.
 2) You reply with:
    - a *personalized plan screenshot*,
    - a template link that loads in Resurgo,
-   - and one-line CTA: “Want weekly AI reviews + all coaches? Founding lifetime is $49.99 for early members.”
+   - and one-line CTA: “Want weekly AI reviews + all coaches? Founding lifetime is $89 for early members.”
 3) You follow up via email with:
    - Day 1 checklist
    - “Install PWA” nudge
@@ -3884,7 +3884,7 @@ Before you drive one more user to the site, you must stop the "leaks" caused by 
 [TASK] The "Product Truth" Audit: Standardize across every page (Home, Features, FAQ, Billing, Compare):
 Coach Count: 5 Core (Marcus, Titan, Aurora, Phoenix, Nexus).
 Free Plan: 3 goals, 5 habits/day, 10 AI messages/day.
-Lifetime Seats: 1,000 spots at $49.99 (Urgency: "First 100 sold").
+Lifetime Seats: 1,000 spots at $89 (Urgency: "First 100 sold").
 Emergency Mode: Define exactly what stays free forever.
 [TASK] Typography Refresh:
 Switch Headings/Body to Geist Sans or IBM Plex Sans (Readability).
@@ -10967,7 +10967,7 @@ Your main public pages are live and indexable, and a lot of the growth surface a
 The bigger problem is consistency, not missing pages
 Right now, your site tells different product stories depending on the page:
 
-Homepage says 8 AI coaches and shows Free with unlimited habits & goals plus Pro at $4.99/mo and Lifetime for first 1,000 users. 
+Homepage says 8 AI coaches and shows Free with unlimited habits & goals plus Pro at $9.99/mo and Lifetime for first 1,000 users. 
 1
 Features page says 8 action-capable AI coaches, but its FAQ says the free plan allows 5 habit check-ins/day and 3 active goals. 
 2
@@ -17170,8 +17170,8 @@ A path to meaningful revenue at your scale (you don’t need millions of users).
 Resurgo today:
 
 Free tier: exists and seems genuinely useful (if you keep it that way).
-Pro tier: $4.99/mo right now (I’d consider nudging higher later).
-Lifetime: $49.99 founding price with a cap.
+Pro tier: $9.99/mo right now (I’d consider nudging higher later).
+Lifetime: $89 founding price with a cap.
 This is a sane starting monetization model for a solo SaaS, especially if you push Lifetime early.
 
 The bigger risks:
@@ -17439,7 +17439,7 @@ For each page:
 
 Update the coach count everywhere to match Product Truth.
 Update lifetime offer language so it’s very explicit:
-“Founding Lifetime – $49.99 for the first 250 users” (or whatever number you pick).
+“Founding Lifetime – $89 for the first 250 users” (or whatever number you pick).
 Make sure Free vs Pro vs Lifetime is described identically:
 Same feature list, same limits, order of bullets similar.
 1.4 Quick trust “polish” (15 min)
@@ -17625,12 +17625,12 @@ It creates a clear urgency story (“founding cohort,” capped seats).
 Pricing page layout:
 Show Lifetime in the center, visually highlighted.
 Example label:
-“Founding Lifetime – $49.99”
+“Founding Lifetime – $89”
 Subtext: “One payment. All current and future Pro features. Limited to 250 users.”
 Homepage CTA tweak:
 Primary button: “Try free with brain dump”
 Secondary, right below hero:
-Small banner: “Early supporter? Lock Lifetime Pro for $49.99 ?”
+Small banner: “Early supporter? Lock Lifetime Pro for $89 ?”
 Copy to justify it:
 Short section: “Why a Lifetime offer?”
 “I’m a solo founder. Instead of raising money, I’d rather be funded by the people who actually use Resurgo. Lifetime is my way of saying thanks for betting on this early.”
@@ -17746,7 +17746,7 @@ Create a one-page Google Doc titled “Resurgo Product Truth 2026” with:
 Exact pricing tiers, limits (Free vs Pro vs Lifetime), what each includes.
 Coach count: Decide on 5–8 total (3 core always visible + library). Document exact names/personalities.
 “Emergency Mode” / Starter Mode definition.
-Founding Lifetime offer: “First X users at $49.99 (then $89.99)”.
+Founding Lifetime offer: “First X users at $89 (then $199)”.
 Update every page to match this doc (use the same phrasing).
 Add a small “Founder’s Note” footer on pricing: “Built by a solo founder who needed this tool to get his own life on track.”
 Verify mobile rendering after changes.
@@ -17829,7 +17829,7 @@ Why: Early revenue from Lifetime deals gives you cash flow and validation. Data 
 Sub-steps:
 
 On pricing page and homepage: Make the Lifetime tier the largest/visual hero box.
-Headline: “Founding Lifetime — $49.99 (first 500 users — then $89.99)”
+Headline: “Founding Lifetime — $89 (first 500 users — then $199)”
 Benefits list: “Everything forever. Shape the roadmap. All coaches, unlimited everything, future integrations (MCP, VS Code, etc.).”
 Add urgency: “Help us build the ecosystem that actually changes lives — lock in the lowest price.”
 Primary CTA button: “Claim Founding Lifetime” (secondary: “Or start with Free”).
@@ -18162,7 +18162,7 @@ Realistic expectations: $1K MRR by months 2-4, $3K MRR by months 4-8, $5K MRR by
 Almost universally, the products that reached $1K MRR fastest had prices that felt slightly too high to their founders at launch. The ones stuck below $500 MRR were almost all priced at $9-$19/month.
 12
 
-Your $4.99/mo Pro tier is in the danger zone. Consider raising it — or pushing Lifetime ($49.99) hard as your primary revenue driver early on.
+Your $9.99/mo Pro tier is in the danger zone. Consider raising it — or pushing Lifetime ($89) hard as your primary revenue driver early on.
 
 What the fastest-growing SaaS companies have in common
 The top 18% did not experiment with SEO, cold email, Reddit, and Product Hunt simultaneously. They picked one channel, posted consistently for 90 days, and only expanded once that channel was producing predictable results.
@@ -18196,8 +18196,8 @@ Make coach count consistent everywhere
 Add founder story/photo to "About" page
 Pricing fix:
 
-Push Lifetime ($49.99) as the hero offer. At your stage, you need cash flow, not MRR vanity metrics
-Consider raising Pro to $7.99/mo (the $4.99 price signals "toy" not "tool")
+Push Lifetime ($89) as the hero offer. At your stage, you need cash flow, not MRR vanity metrics
+Consider raising Pro to $7.99/mo (the $9.99 price signals "toy" not "tool")
 Your math: 200 lifetime sales = $10,000 revenue. That's your first milestone
 Wedge fix:
 
@@ -18286,12 +18286,12 @@ List on: AlternativeTo, G2, Capterra, SaaSHub, There's A Bot For That
 Respond to HARO/Connectively queries about productivity/ADHD tools
 Guest post on ADHD/productivity blogs
 SECTION 4: THE REVENUE MATH (be honest with yourself)
-At $49.99 Lifetime:
+At $89 Lifetime:
 
 20 sales = $1,000 (validation)
 100 sales = $5,000 (meaningful)
 200 sales = $10,000 (your first real milestone)
-At $4.99/mo Pro (or better, $7.99/mo):
+At $9.99/mo Pro (or better, $7.99/mo):
 
 100 subscribers = $499-$799/mo MRR
 200 subscribers = $998-$1,598/mo MRR
@@ -20440,8 +20440,8 @@ Your free tier should be genuinely useful — enough that users build habits wit
 
 Monetization ladder:
 Free: Brain dump onboarding + 1 coach + 3 habits + daily tasks + PWA
-Pro ($4.99/mo): All coaches + weekly AI review + wellness + food tracker + advanced analytics
-Lifetime ($49.99 founding): Everything + MCP server access + API + future VS Code extension + priority coach updates
+Pro ($9.99/mo): All coaches + weekly AI review + wellness + food tracker + advanced analytics
+Lifetime ($89 founding): Everything + MCP server access + API + future VS Code extension + priority coach updates
 Future: Enterprise/Team tier (founders building with accountability partners)
 PART 12: 90-DAY BUILD + MARKET EXECUTION PLAN
 Month 1: Foundation (Nail the Core Loop)
@@ -22135,8 +22135,8 @@ Resurgo is positioned as an AI-powered Life OS / “life command center” that 
 
 Pricing + urgency mechanics already on the page
 Free tier (no card)
-Pro is $4.99/mo (and you also show annual savings)
-Lifetime “founding price” $49.99 for first 1,000 spots, then $89.99 (claimed “save 44%”). 
+Pro is $9.99/mo (and you also show annual savings)
+Lifetime “founding price” $89 for first 1,000 spots, then $199 (claimed “save 55%”). 
 1
 Big inconsistency you should fix ASAP (it will hurt conversion)
 Keep resurgo.life as the canonical customer-facing launch surface. If resurgo.app remains live, position it as a complementary module and avoid conflicting pricing or value-prop messaging.
@@ -22293,8 +22293,8 @@ Use consistent UTM links for every post/campaign so you can attribute signups an
 The offer (simple + compelling)
 Because you already have:
 
-Pro subscription ($4.99/mo) and
-Lifetime founder pricing ($49.99) 
+Pro subscription ($9.99/mo) and
+Lifetime founder pricing ($89) 
 1
 Do this:
 
@@ -22312,7 +22312,7 @@ They comment “PLAN” (or fill Tally form)
 You reply with:
 a personalized plan screenshot,
 a template link that loads in Resurgo,
-and one-line CTA: “Want weekly AI reviews + all coaches? Founding lifetime is $49.99 for early members.”
+and one-line CTA: “Want weekly AI reviews + all coaches? Founding lifetime is $89 for early members.”
 You follow up via email with:
 Day 1 checklist
 “Install PWA” nudge
@@ -22954,8 +22954,8 @@ Day 21: If still free → Re-engagement email from PHOENIX ("comeback")
 ### Pricing Clarity (Add to UI)
 ```
 Free:     2 coaches (MARCUS + TITAN), 3 goals, 5 habits/day, 10 AI messages/day
-Pro:      All 5 coaches, unlimited everything = $4.99/month or $29.99/year
-Lifetime: All 5 coaches, unlimited everything = $49.99 one-time
+Pro:      All 5 coaches, unlimited everything = $9.99/month or $95.88/year
+Lifetime: All 5 coaches, unlimited everything = $89 one-time
 ```
 
 **The first paying customer pitch to FOCUS on:** The user who has been active 10+ days as free and has clear engagement signals (habit streaks, goal completions). Message them directly if possible.

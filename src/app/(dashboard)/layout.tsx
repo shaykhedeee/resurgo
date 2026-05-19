@@ -21,6 +21,11 @@ import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { UserButton } from '@clerk/nextjs';
 import { Search, Brain, Settings as SettingsIcon } from 'lucide-react';
+import {
+  RESURGO_AI_MENU_ITEMS,
+  RESURGO_NAV_SECTIONS,
+  RESURGO_PRIMARY_MOBILE_NAV,
+} from '@/lib/navigation/resurgo-navigation';
 
 const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
 const hasValidClerkKey =
@@ -33,81 +38,20 @@ const BrainDump = dynamic(() => import('@/components/BrainDump'), { ssr: false }
 const LevelUpDetector = dynamic(() => import('@/components/LevelUpDetector'), { ssr: false });
 const TerminalFAB = dynamic(() => import('@/components/TerminalFAB'), { ssr: false });
 
-// ── Navigation Sections (ASCII-grouped, collapsible) ──
-const NAV_SECTIONS = [
-  {
-    label: 'HOME',
-    collapsible: true,
-    defaultOpen: true,
-    items: [
-      { href: '/dashboard', label: 'Dashboard' },
-      { href: '/goals', label: 'Goals' },
-      { href: '/tasks', label: 'Tasks' },
-      { href: '/habits', label: 'Habits' },
-      { href: '/calendar', label: 'Calendar' },
-      { href: '/analytics', label: 'Analytics' },
-    ],
-  },
-  {
-    label: '★ AI ZONE',
-    collapsible: false,
-    defaultOpen: true,
-    items: [
-      { href: '/coach', label: 'AI Coach' },
-      { href: '/plan-builder', label: 'Plan Builder' },
-      { href: '/vision-board', label: 'Vision Board' },
-      { href: '/ai-brain', label: 'AI Brain' },
-    ],
-  },
-  {
-    label: 'HEALTH',
-    collapsible: true,
-    defaultOpen: true,
-    items: [
-      { href: '/fitness', label: 'Fitness' },
-      { href: '/food', label: 'Food & Nutrition' },
-      { href: '/wellness', label: 'Wellness' },
-    ],
-  },
-  {
-    label: 'FOCUS',
-    collapsible: true,
-    defaultOpen: false,
-    items: [
-      { href: '/focus', label: 'Focus Timer' },
-    ],
-  },
-  {
-    label: 'WEALTH',
-    collapsible: true,
-    defaultOpen: false,
-    items: [
-      { href: '/budget', label: 'Budget' },
-      { href: '/business', label: 'Business' },
-      { href: '/wishlist', label: 'Wishlist' },
-    ],
-  },
-  {
-    label: 'SYSTEM',
-    collapsible: true,
-    defaultOpen: false,
-    items: [
-      { href: '/integrations', label: 'Integrations' },
-      { href: '/referrals', label: 'Refer & Earn' },
-    ],
-  },
-];
+// Navigation Sections (ASCII-grouped, collapsible)
+const NAV_SECTIONS = RESURGO_NAV_SECTIONS;
 
 function AiCentreButton({ pathname }: { pathname: string }) {
   const [aiMenuOpen, setAiMenuOpen] = useState(false);
   const isAiActive = ['/coach', '/plan-builder', '/vision-board'].some(
     (p) => pathname === p || pathname.startsWith(p + '/'),
   );
-  const AI_MENU_ITEMS: { href: string; label: string; iconName: PixelIconName }[] = [
-    { href: '/coach',        label: 'CHAT',   iconName: 'coach' as PixelIconName },
-    { href: '/plan-builder', label: 'PLAN',   iconName: 'plan'  as PixelIconName },
-    { href: '/vision-board', label: 'VISION', iconName: 'goals' as PixelIconName },
-  ];
+  const AI_MENU_ITEMS: { href: string; label: string; iconName: PixelIconName }[] =
+    RESURGO_AI_MENU_ITEMS.map((item) => ({
+      href: item.href,
+      label: item.label.toUpperCase(),
+      iconName: item.iconName,
+    }));
   return (
     <div className="relative -top-3 flex flex-col items-center">
       {/* Backdrop */}
@@ -291,7 +235,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                 >
                   <span className={cn(
                     'font-pixel text-[0.42rem] tracking-[0.22em]',
-                    section.label === '★ AI COACH' ? 'text-orange-600' : 'text-zinc-600'
+                    section.label === 'Plan' ? 'text-orange-600' : 'text-zinc-600'
                   )}>
                     ── {section.label} ──
                   </span>
@@ -308,7 +252,7 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
               <ul className="space-y-1 px-1.5">
                 {section.items.map((item) => {
                   const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-                  const iconName = NAV_ICON_MAP[item.label] || ('dashboard' as PixelIconName);
+                  const iconName = item.iconName || NAV_ICON_MAP[item.label] || ('dashboard' as PixelIconName);
                   return (
                     <li key={item.href}>
                       <Link
@@ -513,10 +457,11 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         )}
         style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 4px)' }}
       >
-        {([
-          { href: '/dashboard', label: 'HOME',   iconName: 'home'   as PixelIconName },
-          { href: '/goals',     label: 'GOALS',  iconName: 'goals'  as PixelIconName },
-        ] as { href: string; label: string; iconName: PixelIconName }[]).map((item) => {
+        {(RESURGO_PRIMARY_MOBILE_NAV.slice(0, 2).map((item) => ({
+          href: item.href,
+          label: item.label.toUpperCase(),
+          iconName: item.iconName,
+        })) as { href: string; label: string; iconName: PixelIconName }[]).map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link key={item.href} href={item.href}
@@ -534,10 +479,11 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
         {/* ── Raised AI Coach centre button ── */}
         <AiCentreButton pathname={pathname} />
 
-        {([
-          { href: '/habits', label: 'HABITS', iconName: 'habits' as PixelIconName },
-          { href: '/focus',  label: 'FOCUS',  iconName: 'focus'  as PixelIconName },
-        ] as { href: string; label: string; iconName: PixelIconName }[]).map((item) => {
+        {(RESURGO_PRIMARY_MOBILE_NAV.slice(2).map((item) => ({
+          href: item.href,
+          label: item.label.toUpperCase(),
+          iconName: item.iconName,
+        })) as { href: string; label: string; iconName: PixelIconName }[]).map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
           return (
             <Link key={item.href} href={item.href}
@@ -563,7 +509,10 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
       <GlobalSearch
         isOpen={searchOpen}
         onClose={() => setSearchOpen(false)}
-        onNavigate={(tab) => { router.push(`/${tab}`); setSearchOpen(false); }}
+        onNavigate={(tab) => {
+          router.push(tab.startsWith('/') ? tab : `/${tab}`);
+          setSearchOpen(false);
+        }}
       />
 
       {/* ── Brain Dump Modal ── */}

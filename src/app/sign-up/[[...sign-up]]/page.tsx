@@ -52,16 +52,14 @@ export default function Page() {
         </div>
 
         {/* Instruction panel */}
-        <div className="mb-5 border border-zinc-800/80 bg-zinc-900/50 backdrop-blur-sm rounded-xl p-4">
+        <div className="mb-5 border border-zinc-800/80 bg-gradient-to-r from-green-900/20 to-zinc-900/50 backdrop-blur-sm rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <div className="h-1.5 w-1.5 rounded-full bg-green-500 animate-pulse" />
-            <p className="font-mono text-[10px] tracking-[0.15em] text-green-500/90 uppercase">New Operator Setup</p>
+            <p className="font-mono text-[10px] tracking-[0.15em] text-green-500/90 uppercase">Free Forever · No Card Required</p>
           </div>
-          <ol className="space-y-1.5 font-mono text-xs text-zinc-400">
-            <li className="flex gap-2"><span className="text-zinc-600 select-none">01</span> Create your account with email</li>
-            <li className="flex gap-2"><span className="text-zinc-600 select-none">02</span> Complete verification if prompted</li>
-            <li className="flex gap-2"><span className="text-zinc-600 select-none">03</span> Set your first goal in <span className="text-green-400">under 5 minutes</span></li>
-          </ol>
+          <p className="font-mono text-xs text-zinc-300 leading-relaxed">
+            Create your free account. Add one goal in plain English. Get a full execution plan in 90 seconds. That's it.
+          </p>
         </div>
 
         {/* Main card */}

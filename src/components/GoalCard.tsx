@@ -7,6 +7,7 @@
 import { useState } from 'react';
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { PrimaryAction, SecondaryAction } from '@/components/layout/ResurgoLayout';
 import { UltimateGoal } from '@/types';
 import { 
   MoreHorizontal, 
@@ -285,19 +286,20 @@ export function GoalCard({ goal, onEditGoal }: GoalCardProps) {
               </div>
             </div>
             <div className="flex items-center gap-3 p-4 border-t border-[var(--border)] bg-[var(--background)]">
-              <button
-                onClick={() => setShowDeleteConfirm(false)}
-                className="flex-1 btn-secondary"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleDelete}
-                className="flex-1 btn-danger flex items-center justify-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                Delete Goal
-              </button>
+<SecondaryAction
+                 onClick={() => setShowDeleteConfirm(false)}
+                 className="w-full"
+               >
+                 Cancel
+               </SecondaryAction>
+<PrimaryAction
+                 variant="destructive"
+                 onClick={handleDelete}
+                 className="w-full flex items-center justify-center gap-2"
+               >
+                 <Trash2 className="w-4 h-4" />
+                 Delete Goal
+               </PrimaryAction>
             </div>
           </div>
         </div>

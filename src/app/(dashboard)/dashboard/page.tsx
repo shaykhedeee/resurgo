@@ -18,6 +18,7 @@ import { PixelIcon } from '@/components/PixelIcon';
 import { PixelArt } from '@/components/PixelArt';
 import { UpsellPrompt } from '@/components/UpsellPrompt';
 import { analytics } from '@/lib/analytics';
+import { DailyBriefing } from '@/components/DailyBriefing';
 
 // Dynamic imports for heavy / conditional components
 const MorningCheckIn = dynamic(() => import('@/components/MorningCheckIn').then(m => ({ default: m.MorningCheckIn })), { ssr: false });
@@ -504,10 +505,15 @@ export default function DashboardPage() {
         </div>
 
 
-      </div>
+        </div>
 
-      {/* -- EMERGENCY MODE BANNER -- */}
-      {emergencyMode && (
+        {/* -- DAILY BRIEFING HERO -- */}
+        <div className="mb-6">
+          <DailyBriefing />
+        </div>
+
+        {/* -- EMERGENCY MODE BANNER -- */}
+        {emergencyMode && (
         <div className="mb-6 border border-red-900 bg-red-950/30 p-4">
           <div className="flex items-start justify-between gap-4">
             <div>

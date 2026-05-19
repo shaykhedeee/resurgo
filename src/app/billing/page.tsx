@@ -10,6 +10,12 @@ import { BillingWaitlistCapture } from '@/components/BillingWaitlistCapture';
 import SubscriptionManagementCard from '@/components/SubscriptionManagementCard';
 import PromoCodeBanner from '@/components/PromoCodeBanner';
 import { BILLING_PLANS } from '@/lib/billing/plans';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_END_DATE,
+  FOUNDING_LIFETIME_PRICE_USD,
+  FOUNDING_LIFETIME_REGULAR_PRICE_USD,
+} from '@/lib/product-config';
 import { TermLinkButton } from '@/components/ui/TermButton';
 import {
   Check,
@@ -37,7 +43,7 @@ import {
 export const metadata: Metadata = {
   title: 'Pricing & Billing — Plans That Grow With You',
   description:
-    'Choose the perfect Resurgo plan. Start free, upgrade to Pro for $4.99/mo with a 14-day money-back guarantee.',
+    'Choose the perfect Resurgo plan. Start free, upgrade to Pro for $9.99/mo or $7.99/mo (annual), with a 30-day money-back guarantee.',
   robots: { index: false, follow: false },
 };
 
@@ -116,10 +122,10 @@ const FAQS = [
     q: 'What happens when I cancel?',
     a: "You keep Pro access until the end of your paid period. After that, you're moved to the Free plan with all your data intact — nothing is deleted. You can re-subscribe anytime.",
   },
-  {
-    q: 'Is the lifetime plan really forever?',
-    a: "Yes. One payment, permanent access to every Pro feature including all future updates. This is limited-time founder pricing that will increase as we grow.",
-  },
+   {
+     q: 'Is the lifetime plan really forever?',
+     a: `Yes. One payment of $${FOUNDING_LIFETIME_PRICE_USD} gives you permanent access to every Pro feature including all future updates. ${FOUNDING_LIFETIME_COPY}. After ${FOUNDING_LIFETIME_END_DATE}, or once the founding allocation is gone, the price increases to $${FOUNDING_LIFETIME_REGULAR_PRICE_USD}.`,
+   },
   {
     q: 'Do you offer a money-back guarantee?',
     a: "Yes! All paid plans come with a 30-day money-back guarantee. If Resurgo isn't right for you, contact support for a full refund — no questions asked.",
@@ -308,7 +314,7 @@ export default async function BillingPage() {
                     </div>
                     {plan.key === 'pro_yearly' && (
                       <p className="text-xs text-emerald-400 mt-1 font-medium">
-                        = $2.50/mo · Save 50% vs monthly
+                        = $7.99/mo · Save 20% vs monthly
                       </p>
                     )}
                     {isFree && (
@@ -318,7 +324,7 @@ export default async function BillingPage() {
                     )}
                     {isLifetime && (
                       <p className="text-xs text-gold-400 mt-1 font-medium">
-                        One-time payment · Monthly would cost $59.88/yr
+                        One-time payment · Founding price $89 (ends July 5)
                       </p>
                     )}
                   </div>
@@ -400,7 +406,7 @@ export default async function BillingPage() {
                     <th className="text-center py-4 px-5 font-semibold w-[23%]">
                       <span className="text-ascend-400">Pro</span>
                       <p className="text-xs text-[var(--text-muted)] font-normal mt-0.5">
-                        from $4.99/mo
+                        $9.99/mo or $7.99/mo (yearly)
                       </p>
                     </th>
                   </tr>

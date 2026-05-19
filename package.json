@@ -21,7 +21,12 @@
     "android:sync": "npx cap sync android",
     "android:open": "npx cap open android",
     "android:build": "node scripts/build-android.js",
-    "android:build:release": "node scripts/build-android.js release"
+    "android:build:release": "node scripts/build-android.js release",
+    "ios:sync": "npx cap sync ios",
+    "ios:open": "npx cap open ios",
+    "ios:build": "node scripts/build-ios.js appstore",
+    "ios:build:adhoc": "node scripts/build-ios.js adhoc",
+    "ios:build:enterprise": "node scripts/build-ios.js enterprise"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
@@ -61,6 +66,7 @@
     "framer-motion": "^12.35.0",
     "fuse.js": "^7.1.0",
     "grammy": "^1.40.1",
+    "gray-matter": "^4.0.3",
     "jspdf": "^4.2.0",
     "jspdf-autotable": "^5.0.7",
     "lucide-react": "^0.294.0",
@@ -70,6 +76,7 @@
     "openai": "^4.20.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-markdown": "^10.1.0",
     "recharts": "^2.10.0",
     "sonner": "^2.0.7",
     "svix": "^1.84.1",

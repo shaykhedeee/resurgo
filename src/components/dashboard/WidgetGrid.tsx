@@ -41,8 +41,11 @@ import XPStatusWidget from '@/components/widgets/XPStatusWidget';
 import ActivityFeedWidget from '@/components/widgets/ActivityFeedWidget';
 import StreakHeatmapWidget from '@/components/widgets/StreakHeatmapWidget';
 import XPLeaderboardWidget from '@/components/widgets/XPLeaderboardWidget';
+import ProductHuntWidget from '@/lib/marketing/producthunt-widget';
+import SynergyScoreWidget from '@/components/widgets/SynergyScoreWidget';
 
 const WIDGET_COMPONENTS: Record<string, () => ReactElement> = {
+  'synergy-score':   () => <SynergyScoreWidget />,
   'focus-timer':     () => <FocusTimerWidget />,
   'habit-streak':    () => <HabitStreakWidget />,
   'ai-coach':        () => <AICoachWidget />,
@@ -60,6 +63,7 @@ const WIDGET_COMPONENTS: Record<string, () => ReactElement> = {
   'activity-feed':   () => <ActivityFeedWidget />,
   'streak-heatmap':  () => <StreakHeatmapWidget />,
   'xp-leaderboard':  () => <XPLeaderboardWidget />,
+  'product-hunt':    () => <ProductHuntWidget showOnDashboard={true} />,
 };
 
 interface WidgetGridProps {

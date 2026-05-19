@@ -6,20 +6,27 @@
 import type { Metadata } from 'next';
 import LandingPageV2 from '@/components/LandingPageV2';
 import { MARKETING_SOCIAL_URLS } from '@/lib/marketing/social-links';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_END_DATE,
+  FOUNDING_LIFETIME_PRICE_USD,
+  FOUNDING_LIFETIME_REGULAR_PRICE_USD,
+} from '@/lib/product-config';
 
 const APP_URL = 'https://resurgo.life';
 
 // ─── METADATA ────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
-  title: 'Resurgo — AI Productivity Assistant & Life Command Center',
+  title: 'Resurgo for Indie Founders — Ship Weekly with AI Execution',
   description:
-    'Resurgo is the AI productivity assistant for turning chaos into execution. Capture tasks, plan days, run focus sessions, track habits, and review progress from one life command center.',
+    'Resurgo helps indie founders and solo builders ship meaningful work every week. Turn a messy brain dump into a focused execution plan in under 10 minutes. Free plan available. Pro from $9.99/mo.',
   keywords: [
     'AI productivity assistant',
-    'life command center',
+    'indie hacker productivity app',
+    'founder productivity system',
     'AI habit tracker',
     'best habit tracker 2026',
-    'ADHD productivity app',
+    'ship weekly app',
     'AI goal planner',
     'AI daily planner',
     'task planning assistant',
@@ -34,7 +41,7 @@ export const metadata: Metadata = {
     'habit streak tracker',
     'goal setting app',
     'focus planner',
-    'personal operating system',
+    'solo founder execution system',
   ],
   alternates: {
     canonical: APP_URL,
@@ -51,9 +58,9 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Resurgo — AI Productivity Assistant & Life Command Center',
+    title: 'Resurgo for Indie Founders — Ship Weekly with AI',
     description:
-      'Capture, plan, focus, and follow through with one AI-powered operating system for your work and life.',
+      'From idea chaos to shipped work in under 10 minutes. Built for indie founders and solo builders.',
     type: 'website',
     url: APP_URL,
     siteName: 'Resurgo',
@@ -70,9 +77,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Resurgo — AI Productivity Assistant',
+    title: 'Resurgo for Indie Founders',
     description:
-      'Turn mental clutter into a clear plan. Tasks, focus, habits, AI guidance, and reviews in one system.',
+      'Brain dump to execution plan in under 10 minutes. Built to help founders ship weekly.',
     images: [`${APP_URL}/og-image.svg`],
     creator: '@resurgolife',
     site: '@resurgolife',
@@ -94,7 +101,7 @@ const websiteSchema = {
   name: 'Resurgo',
   url: APP_URL,
   description:
-    'AI productivity assistant for turning goals, tasks, habits, and reviews into one execution system.',
+    'AI execution system for indie founders and solo builders who need to ship weekly.',
   potentialAction: {
     '@type': 'SearchAction',
     target: {
@@ -118,7 +125,7 @@ const softwareSchema = {
   operatingSystem: 'Web, Android, Windows-ready PWA',
   browserRequirements: 'Requires JavaScript',
   description:
-    'Resurgo is an AI productivity assistant and life command center. Capture tasks, organize goals, plan your day, run focus sessions, track habits, and review progress from one offline-friendly workspace.',
+    'Resurgo is an AI execution system for indie founders. Capture ideas, prioritize what moves revenue, and ship consistently from one workspace.',
   featureList: [
     'AI task and goal breakdown into daily execution plans',
     'Offline-first task capture and queued brain dumps',
@@ -139,39 +146,39 @@ const softwareSchema = {
     bestRating: '5',
     worstRating: '1',
   },
-  offers: [
-    {
-      '@type': 'Offer',
-      name: 'Free Plan',
-      price: '0',
-      priceCurrency: 'USD',
-      description:
-        'Unlimited habits and goals, all focus timer modes, 2 AI coaches (Marcus and Titan), daily planning — free forever with no credit card.',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Pro Monthly',
-      price: '4.99',
-      priceCurrency: 'USD',
-      billingIncrement: 'Month',
-      description: 'All 5 AI coaches, advanced analytics, weekly AI reviews, priority support, and Telegram bot.',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Pro Yearly',
-      price: '29.99',
-      priceCurrency: 'USD',
-      billingIncrement: 'Year',
-      description: 'Everything in Pro — save 50% vs monthly billing. Early access to new features.',
-    },
-    {
-      '@type': 'Offer',
-      name: 'Lifetime Access',
-      price: '49.99',
-      priceCurrency: 'USD',
-      description: 'Pay once, use forever. All future updates included. Founding member badge.',
-    },
-  ],
+   offers: [
+     {
+       '@type': 'Offer',
+       name: 'Free Plan',
+       price: '0',
+       priceCurrency: 'USD',
+       description:
+         '3 active goals, 5 habit check-ins per day, 10 AI coach messages per day, all focus timer modes, and 2 AI coaches (Marcus and Titan) - free forever with no credit card.',
+     },
+     {
+       '@type': 'Offer',
+       name: 'Pro Monthly',
+       price: '9.99',
+       priceCurrency: 'USD',
+       billingIncrement: 'Month',
+       description: 'All 5 AI coaches, advanced analytics, weekly AI reviews, priority support, and Telegram bot.',
+     },
+     {
+       '@type': 'Offer',
+       name: 'Pro Yearly',
+       price: '95.88',
+       priceCurrency: 'USD',
+       billingIncrement: 'Year',
+       description: 'Everything in Pro — save 20% vs monthly billing ($7.99/mo effective). Early access to new features.',
+     },
+     {
+       '@type': 'Offer',
+       name: 'Lifetime Access',
+       price: String(FOUNDING_LIFETIME_PRICE_USD),
+       priceCurrency: 'USD',
+       description: `Pay once, use forever. All future updates included. ${FOUNDING_LIFETIME_COPY}. Regular price $${FOUNDING_LIFETIME_REGULAR_PRICE_USD} after ${FOUNDING_LIFETIME_END_DATE}.`,
+     },
+   ],
   screenshot: `${APP_URL}/og-image.svg`,
   softwareVersion: '1.4',
   releaseNotes: `${APP_URL}/changelog`,
@@ -277,7 +284,7 @@ const faqSchema = {
       name: 'Is Resurgo free to use?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Yes. The Resurgo free plan includes unlimited habits and goals, all three focus timer modes (Pomodoro, Deep Work, Flowtime), 2 AI coaches (Marcus and Titan), daily planning, and basic analytics — with no time limit and no credit card required. Pro plans start at $4.99/month.',
+        text: 'Yes. The Resurgo free plan includes 3 active goals, 5 habit check-ins per day, 10 AI coach messages per day, all three focus timer modes (Pomodoro, Deep Work, Flowtime), Marcus and Titan, daily planning, and basic analytics - with no time limit and no credit card required. Pro plans start at $9.99/month or $7.99/month (annual billing).',
       },
     },
     {
@@ -317,7 +324,7 @@ const faqSchema = {
       name: 'How does AI coaching work in Resurgo?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Resurgo has specialized AI coaches for systems, performance, wealth, resilience, strategy, and creativity. They respond using your tasks, habits, goals, and recent progress so guidance stays grounded in your actual state.',
+        text: 'Resurgo has 5 specialized AI coaches for strategy, performance, wellness, resilience, and systems. They respond using your tasks, habits, goals, and recent progress so guidance stays grounded in your actual state.',
       },
     },
     {

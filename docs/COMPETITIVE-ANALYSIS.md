@@ -512,7 +512,7 @@ COST ESTIMATE (10,000 users):
 | **Social Share Cards (OG)** | âœ… Live | Dynamic streak/achievement/weekly/coach cards |
 | **Blog + SEO System** | âœ… Live | 28 posts, 6 topic clusters, structured data |
 | **Admin Command Center** | âœ… Live | Terminal UI, integration checklist, system status |
-| **Billing (Dodo Payments)** | âœ… Live | Free / Pro $4.99/mo / Yearly $29.99 / Lifetime $49.99 |
+| **Billing (Dodo Payments)** | ✅ Live | Free / Pro $9.99/mo / Yearly $95.88 / Lifetime $89 (founding price until July 5, 2026; after: $199) |
 | **AI Greetings (All 8)** | âœ… Live | Context-aware, coach-specific greetings |
 | **Smart Prompts (All 8)** | âœ… Live | One-tap prompts per coach persona |
 | **Brain Dump â†’ Plan** | âœ… Live | AI converts brain dumps into weekly execution plans |
@@ -532,7 +532,7 @@ COST ESTIMATE (10,000 users):
 
 | App | Free Tier | Cheapest Paid | AI Coaching | Coaches |
 |-----|-----------|---------------|-------------|---------|
-| **Resurgo** | âœ… 3 goals, 10 habits, AI | $4.99/mo | âœ… 5 coaches | 5 |
+| **Resurgo** | ✅ 3 goals, 10 habits, AI | $9.99/mo | ✅ 5 coaches | 5 |
 | Habitica | âœ… Full game | $5/mo | âŒ | 0 |
 | Habitify | âœ… 3 habits | $4.99/mo | âŒ | 0 |
 | Streaks | âŒ Paid only | $4.99 once | âŒ | 0 |

@@ -12,11 +12,11 @@ import { analytics } from '@/lib/analytics';
 import { cn, getRandomQuote, CATEGORY_ICONS, CATEGORY_LABELS } from '@/lib/utils';
 import { GoalCategory, UltimateGoal, AIGoalDecompositionRequest } from '@/types';
 import { addMonths } from 'date-fns';
-import { 
-  Target, 
-  Brain, 
-  Trophy, 
-  ArrowRight, 
+import {
+  Target,
+  Brain,
+  Trophy,
+  ArrowRight,
   ArrowLeft,
   Sparkles,
   CheckCircle2,
@@ -29,6 +29,7 @@ import {
   Clock,
   Check,
 } from 'lucide-react';
+import { AppContainer, PrimaryAction, SecondaryAction, Grid, Stack } from '@/components/layout/ResurgoLayout';
 
 type OnboardingStep = 'welcome' | 'name' | 'about' | 'goal' | 'category' | 'processing' | 'ready' | 'offer';
 
@@ -235,14 +236,14 @@ export function Onboarding() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-3 sm:p-4 bg-[var(--background)]">
+    <AppContainer maxWidth="sm" noPadding className="min-h-screen flex items-center justify-center">
       {/* Background Effects */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-ascend-500/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-48 h-48 sm:w-72 sm:h-72 lg:w-96 lg:h-96 bg-gold-400/10 rounded-full blur-3xl" />
       </div>
 
-      <div className="relative w-full max-w-lg">
+        <div className="relative w-full">
         {/* Logo */}
         <div className="flex items-center justify-center gap-3 mb-6 sm:mb-8">
           <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-ascend-500 to-ascend-600 
@@ -250,10 +251,10 @@ export function Onboarding() {
             <Mountain className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-xl sm:text-2xl font-bold text-themed">RESURGO</h1>
-            <p className="text-xs sm:text-xs text-themed-muted">Rise to your potential</p>
+              <h1 className="text-xl sm:text-2xl font-bold text-themed">RESURGO</h1>
+              <p className="text-xs sm:text-xs text-themed-muted">Rise to your potential</p>
+            </div>
           </div>
-        </div>
 
         {/* Progress Bar */}
         <div className="flex items-center gap-1.5 sm:gap-2 mb-6 sm:mb-8">
@@ -266,9 +267,9 @@ export function Onboarding() {
                   ? "bg-ascend-500"
                   : "bg-[var(--border)]"
               )}
-            />
-          ))}
-        </div>
+             />
+           ))}
+         </div>
 
         {/* Content Card */}
         <div className="glass-card p-5 sm:p-8 max-h-[70vh] overflow-y-auto">
@@ -287,7 +288,7 @@ export function Onboarding() {
                 daily action plan. One task list, infinite potential.
               </p>
               
-              <div className="grid grid-cols-3 gap-3 mb-8">
+               <Grid cols={3} gap="sm" className="mb-8">
                 <div className="p-3 rounded-xl bg-[var(--surface)]">
                   <Brain className="w-6 h-6 text-purple-400 mx-auto mb-2" />
                   <p className="text-xs text-themed-secondary">AI Plans Everything</p>
@@ -296,16 +297,16 @@ export function Onboarding() {
                   <Target className="w-6 h-6 text-ascend-500 mx-auto mb-2" />
                   <p className="text-xs text-themed-secondary">One Task List</p>
                 </div>
-                <div className="p-3 rounded-xl bg-[var(--surface)]">
-                  <Trophy className="w-6 h-6 text-gold-400 mx-auto mb-2" />
-                  <p className="text-xs text-themed-secondary">Become Your Best</p>
-                </div>
-              </div>
-              
-              <button onClick={handleNext} className="btn-primary w-full flex items-center justify-center gap-2">
+                 <div className="p-3 rounded-xl bg-[var(--surface)]">
+                   <Trophy className="w-6 h-6 text-gold-400 mx-auto mb-2" />
+                   <p className="text-xs text-themed-secondary">Become Your Best</p>
+                 </div>
+               </Grid>
+               
+               <PrimaryAction onClick={handleNext} className="w-full">
                 Get Started
                 <ArrowRight className="w-5 h-5" />
-              </button>
+              </PrimaryAction>
             </div>
           )}
 
@@ -327,23 +328,19 @@ export function Onboarding() {
                 onKeyDown={(e) => e.key === 'Enter' && name.trim() && handleNext()}
               />
               
-              <div className="flex gap-3">
-                <button onClick={handleBack} className="btn-secondary flex-1 flex items-center justify-center gap-2">
+              <Stack gap="sm" className="sm:flex-row sm:items-center">
+                <SecondaryAction onClick={handleBack}>
                   <ArrowLeft className="w-4 h-4" />
                   Back
-                </button>
-                <button 
-                  onClick={handleNext} 
+                </SecondaryAction>
+                <PrimaryAction
+                  onClick={handleNext}
                   disabled={!name.trim()}
-                  className={cn(
-                    "btn-primary flex-1 flex items-center justify-center gap-2",
-                    !name.trim() && "opacity-50 cursor-not-allowed"
-                  )}
                 >
                   Continue
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </PrimaryAction>
+              </Stack>
             </div>
           )}
 
@@ -380,9 +377,9 @@ export function Onboarding() {
                 <label className="block text-sm font-medium text-themed-secondary mb-2">
                   How busy is your typical day?
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {BUSYNESS_OPTIONS.map((option) => (
-                    <button
+                 <Grid cols={2} gap="xs">
+                   {BUSYNESS_OPTIONS.map((option) => (
+                     <button
                       key={option.value}
                       onClick={() => setBusynessLevel(option.value)}
                       className={cn(
@@ -393,20 +390,20 @@ export function Onboarding() {
                       )}
                     >
                       <span className="text-xl">{option.emoji}</span>
-                      <span className="text-sm font-medium text-themed">{option.label}</span>
-                      <span className="text-xs text-themed-muted">{option.desc}</span>
-                    </button>
-                  ))}
+                       <span className="text-sm font-medium text-themed">{option.label}</span>
+                       <span className="text-xs text-themed-muted">{option.desc}</span>
+                       </button>
+                     ))}
+                    </Grid>
                 </div>
-              </div>
-              
-              {/* Preferred Work Times */}
+
+                {/* Preferred Work Times */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-themed-secondary mb-2">
-                  When do you prefer to work on goals?
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {WORK_TIME_OPTIONS.map((option) => (
+                 <label className="block text-sm font-medium text-themed-secondary mb-2">
+                   When do you prefer to work on goals?
+                 </label>
+                 <Grid cols={2} gap="xs">
+                   {WORK_TIME_OPTIONS.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => {
@@ -426,20 +423,20 @@ export function Onboarding() {
                       <span className="text-lg">{option.emoji}</span>
                       <div className="text-left">
                         <span className="text-sm font-medium text-themed block">{option.label}</span>
-                        <span className="text-xs text-themed-muted">{option.time}</span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+                         <span className="text-xs text-themed-muted">{option.time}</span>
+                       </div>
+                       </button>
+                     ))}
+                   </Grid>
+               </div>
 
               {/* Motivation */}
               <div className="mb-6">
-                <label className="block text-sm font-medium text-themed-secondary mb-2">
-                  What motivates you to use this app?
-                </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {MOTIVATION_OPTIONS.map((option) => (
+                 <label className="block text-sm font-medium text-themed-secondary mb-2">
+                   What motivates you to use this app?
+                 </label>
+                 <Grid cols={2} gap="xs">
+                   {MOTIVATION_OPTIONS.map((option) => (
                     <button
                       key={option.value}
                       onClick={() => setMotivation(option.value)}
@@ -453,21 +450,21 @@ export function Onboarding() {
                       <span className="text-xl">{option.emoji}</span>
                       <span className="text-sm font-medium text-themed">{option.label}</span>
                       <span className="text-xs text-themed-muted">{option.desc}</span>
-                    </button>
-                  ))}
-                </div>
+                     </button>
+                   ))}
+                 </Grid>
               </div>
               
-              <div className="flex gap-3">
-                <button onClick={handleBack} className="btn-secondary flex-1 flex items-center justify-center gap-2">
+              <Stack gap="sm" className="sm:flex-row sm:items-center">
+                <SecondaryAction onClick={handleBack}>
                   <ArrowLeft className="w-4 h-4" />
                   Back
-                </button>
-                <button onClick={handleNext} className="btn-primary flex-1 flex items-center justify-center gap-2">
+                </SecondaryAction>
+                <PrimaryAction onClick={handleNext}>
                   Continue
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </PrimaryAction>
+              </Stack>
             </div>
           )}
 
@@ -496,23 +493,23 @@ export function Onboarding() {
                 <label className="block text-sm font-medium text-themed-secondary mb-2">
                   What&apos;s your experience with this goal area?
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {EXPERIENCE_OPTIONS.map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={() => setExperienceLevel(option.value)}
-                      className={cn(
-                        "flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl border transition-all",
-                        experienceLevel === option.value
-                          ? "bg-ascend-500/20 border-ascend-500"
-                          : "bg-[var(--surface)] border-[var(--border)] hover:bg-[var(--surface-hover)]"
-                      )}
-                    >
-                      <span className="text-lg">{option.emoji}</span>
-                      <span className="text-xs font-medium text-themed">{option.label}</span>
-                    </button>
-                  ))}
-                </div>
+                 <Grid cols={3} gap="xs">
+                   {EXPERIENCE_OPTIONS.map((option) => (
+                     <button
+                       key={option.value}
+                       onClick={() => setExperienceLevel(option.value)}
+                       className={cn(
+                         "flex flex-col items-center gap-1 px-2 py-2.5 rounded-xl border transition-all",
+                         experienceLevel === option.value
+                           ? "bg-ascend-500/20 border-ascend-500"
+                           : "bg-[var(--surface)] border-[var(--border)] hover:bg-[var(--surface-hover)]"
+                       )}
+                     >
+                       <span className="text-lg">{option.emoji}</span>
+                       <span className="text-xs font-medium text-themed">{option.label}</span>
+                     </button>
+                   ))}
+                 </Grid>
               </div>
               
               <div className="p-3 rounded-lg bg-ascend-500/10 border border-ascend-500/20 mb-6">
@@ -521,23 +518,19 @@ export function Onboarding() {
                 </p>
               </div>
               
-              <div className="flex gap-3">
-                <button onClick={handleBack} className="btn-secondary flex-1 flex items-center justify-center gap-2">
+              <Stack gap="sm" className="sm:flex-row sm:items-center">
+                <SecondaryAction onClick={handleBack}>
                   <ArrowLeft className="w-4 h-4" />
                   Back
-                </button>
-                <button 
-                  onClick={handleNext} 
+                </SecondaryAction>
+                <PrimaryAction
+                  onClick={handleNext}
                   disabled={!goalText.trim()}
-                  className={cn(
-                    "btn-primary flex-1 flex items-center justify-center gap-2",
-                    !goalText.trim() && "opacity-50 cursor-not-allowed"
-                  )}
                 >
                   Continue
                   <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
+                </PrimaryAction>
+              </Stack>
             </div>
           )}
 
@@ -551,8 +544,8 @@ export function Onboarding() {
                 This helps AI create better strategies
               </p>
               
-              <div className="grid grid-cols-2 gap-2 mb-6">
-                {CATEGORIES.map((cat) => (
+               <Grid cols={2} gap="xs" className="mb-6">
+                 {CATEGORIES.map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setCategory(cat)}
@@ -565,9 +558,9 @@ export function Onboarding() {
                   >
                     <span className="text-lg">{CATEGORY_ICONS[cat]}</span>
                     <span className="text-sm font-medium">{CATEGORY_LABELS[cat]}</span>
-                  </button>
-                ))}
-              </div>
+                      </button>
+                    ))}
+                  </Grid>
               
               {error && (
                 <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 mb-4">
@@ -575,16 +568,16 @@ export function Onboarding() {
                 </div>
               )}
               
-              <div className="flex gap-3">
-                <button onClick={handleBack} className="btn-secondary flex-1 flex items-center justify-center gap-2">
+              <Stack gap="sm" className="sm:flex-row sm:items-center">
+                <SecondaryAction onClick={handleBack}>
                   <ArrowLeft className="w-4 h-4" />
                   Back
-                </button>
-                <button onClick={handleNext} className="btn-primary flex-1 flex items-center justify-center gap-2">
+                </SecondaryAction>
+                <PrimaryAction onClick={handleNext}>
                   <Sparkles className="w-4 h-4" />
                   Create My Plan
-                </button>
-              </div>
+                </PrimaryAction>
+              </Stack>
             </div>
           )}
 
@@ -611,11 +604,11 @@ export function Onboarding() {
                 </div>
                 <div className="flex items-center gap-3 justify-center text-sm text-themed-muted opacity-50">
                   <div className="w-4 h-4 rounded-full border border-current" />
-                  Generating daily tasks
+                   Generating daily tasks
+                  </div>
                 </div>
-              </div>
-            </div>
-          )}
+             </div>
+            )}
 
           {/* Ready Step */}
           {step === 'ready' && (
@@ -635,7 +628,7 @@ export function Onboarding() {
                 <p className="text-themed font-medium">{goalText}</p>
               </div>
               
-              <div className="grid grid-cols-3 gap-3 mb-6">
+               <Grid cols={3} gap="sm" className="mb-6">
                 <div className="p-3 rounded-xl bg-ascend-500/10">
                   <p className="text-2xl font-bold text-ascend-500">3-5</p>
                   <p className="text-xs text-themed-muted">Milestones</p>
@@ -644,24 +637,21 @@ export function Onboarding() {
                   <p className="text-2xl font-bold text-purple-400">12+</p>
                   <p className="text-xs text-themed-muted">Weekly Tasks</p>
                 </div>
-                <div className="p-3 rounded-xl bg-gold-400/10">
-                  <p className="text-2xl font-bold text-gold-400">100</p>
-                  <p className="text-xs text-themed-muted">Bonus XP</p>
-                </div>
-              </div>
+                 <div className="p-3 rounded-xl bg-gold-400/10">
+                   <p className="text-2xl font-bold text-gold-400">100</p>
+                   <p className="text-xs text-themed-muted">Bonus XP</p>
+                 </div>
+               </Grid>
               
-              <div className="space-y-3">
-                <button onClick={() => setStep('offer')} className="btn-primary w-full flex items-center justify-center gap-2">
-                  <Rocket className="w-5 h-5" />
-                  Continue
-                </button>
-                <button 
-                  onClick={handleFinish} 
-                  className="text-themed-muted text-sm hover:text-themed transition-colors"
-                >
-                  Skip to Dashboard
-                </button>
-              </div>
+              <Stack gap="sm" className="sm:flex-row sm:items-center">
+                 <PrimaryAction onClick={() => setStep('offer')}>
+                   <Rocket className="w-5 h-5" />
+                   Continue
+                 </PrimaryAction>
+                 <SecondaryAction onClick={handleFinish}>
+                   Skip to Dashboard
+                 </SecondaryAction>
+               </Stack>
             </div>
           )}
 
@@ -705,9 +695,9 @@ export function Onboarding() {
                     <span className="font-bold text-lg">Resurgo Pro</span>
                   </div>
                   <div className="flex items-center justify-center gap-2">
-                    <span className="text-2xl font-bold text-themed">$4.99</span>
+                    <span className="text-2xl font-bold text-themed">$9.99</span>
                     <span className="text-themed-muted">/month</span>
-                    <span className="text-xs text-themed-muted">or $29.99/year</span>
+                    <span className="text-xs text-themed-muted">or $95.88/year</span>
                   </div>
                 </div>
                 
@@ -721,24 +711,23 @@ export function Onboarding() {
                     'Identity System & Habit Stacking',
                     'Priority support',
                   ].map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
-                      <span className="text-themed-secondary">{feature}</span>
-                    </div>
+                     <div key={i} className="flex items-center gap-2 text-sm">
+                       <Check className="w-4 h-4 text-green-400 flex-shrink-0" />
+                       <span className="text-themed-secondary">{feature}</span>
+                     </div>
                   ))}
                 </div>
                 
-                <button 
-                  onClick={() => {
-                    handleFinish();
-                    router.push('/billing');
-                  }}
-                  className="w-full py-3 rounded-xl font-semibold bg-gradient-to-r from-ascend-500 to-gold-400
-                           hover:from-ascend-400 hover:to-gold-300 transition-all flex items-center justify-center gap-2"
-                >
-                  <Star className="w-5 h-5" />
-                  Claim 20% OFF Now
-                </button>
+                 <PrimaryAction
+                   onClick={() => {
+                     handleFinish();
+                     router.push('/billing');
+                   }}
+                   className="py-3 shadow-[3px_3px_0px_rgba(0,0,0,0.8)] bg-gradient-to-r from-ascend-500 to-gold-400 border-none"
+                 >
+                   <Star className="w-5 h-5" />
+                   Claim 20% OFF Now
+                 </PrimaryAction>
               </div>
               
               {/* Lifetime Option */}
@@ -749,25 +738,17 @@ export function Onboarding() {
                     <p className="text-xs text-themed-muted">Pay once, yours forever</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-themed">$49.99</p>
-                    <p className="text-xs text-green-400">Founding lifetime price</p>
+                   <p className="font-bold text-themed">$89</p>
+                   <p className="text-xs text-green-400">Founding price (ends July 5)</p>
                   </div>
                 </div>
               </div>
               
               {/* Free Continue */}
-              <div className="text-center">
-                <button 
-                  onClick={handleFinish}
-                  className="text-themed-muted text-sm hover:text-themed transition-colors inline-flex items-center gap-1"
-                >
-                  Continue with Free Plan
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-                <p className="text-xs text-themed-muted mt-2">
-                  5 habits/day • 3 goals • Basic features
-                </p>
-              </div>
+              <SecondaryAction onClick={handleFinish} className="inline-flex text-sm">
+                Continue with Free Plan
+                <ArrowRight className="w-4 h-4" />
+              </SecondaryAction>
             </div>
           )}
         </div>
@@ -776,8 +757,8 @@ export function Onboarding() {
         <div className="mt-8 text-center animate-fade-in">
           <p className="text-themed-muted text-sm italic leading-relaxed">&quot;{quote.quote}&quot;</p>
           <p className="text-xs mt-2 text-ascend-500/70">— {quote.author}</p>
-        </div>
-      </div>
-    </div>
-  );
+         </div>
+       </div>
+       </AppContainer>
+   );
 }

@@ -15,6 +15,12 @@ import { CookieConsent } from '@/components/CookieConsent';
 import OfflineSyncProvider from '@/components/OfflineSyncProvider';
 import { WebVitalsReporter } from '@/components/WebVitalsReporter';
 import { MARKETING_SOCIAL_URLS } from '@/lib/marketing/social-links';
+import {
+  FOUNDING_LIFETIME_COPY,
+  FOUNDING_LIFETIME_END_DATE,
+  FOUNDING_LIFETIME_PRICE_USD,
+  FOUNDING_LIFETIME_REGULAR_PRICE_USD,
+} from '@/lib/product-config';
 
 
 // Base URL for the application (update for production)
@@ -241,7 +247,7 @@ const jsonLd = {
         },
         {
           '@type': 'Offer',
-          'price': '4.99',
+          'price': '9.99',
           'priceCurrency': 'USD',
           'name': 'Pro Plan',
           'priceValidUntil': '2026-12-31',
@@ -249,18 +255,18 @@ const jsonLd = {
         },
         {
           '@type': 'Offer',
-          'price': '29.99',
+          'price': '95.88',
           'priceCurrency': 'USD',
           'name': 'Pro Yearly',
           'priceValidUntil': '2026-12-31',
-          'description': 'Full Pro access billed yearly with 50% savings vs monthly',
+          'description': 'Full Pro access billed yearly with 20% savings vs monthly',
         },
         {
           '@type': 'Offer',
-          'price': '49.99',
+          'price': String(FOUNDING_LIFETIME_PRICE_USD),
           'priceCurrency': 'USD',
           'name': 'Lifetime Access',
-          'description': 'One-time payment for lifetime access to all features',
+          'description': `One-time payment for lifetime access to all features. ${FOUNDING_LIFETIME_COPY}. Regular price $${FOUNDING_LIFETIME_REGULAR_PRICE_USD} after ${FOUNDING_LIFETIME_END_DATE}.`,
         },
       ],
       'description': 'AI-powered habit tracker with goal decomposition, gamified progress tracking, focus timers, wellness monitoring, and personalized AI coaching.',
@@ -354,7 +360,7 @@ const jsonLd = {
           'name': 'Is Resurgo free to use?',
           'acceptedAnswer': {
             '@type': 'Answer',
-            'text': 'Yes. Resurgo has a free plan that includes habit tracking, goal setting, focus timers, and AI coaching messages. Paid plans are Pro at $4.99/month, Pro Yearly at $29.99/year (save 50%), and Lifetime access at $49.99 one-time.',
+              'text': `Yes. Resurgo has a free plan that includes 3 active goals, 5 habit check-ins per day, focus timers, and AI coaching messages. Paid plans are Pro at $9.99/month, Pro Yearly at $95.88/year ($7.99/month effective, save 20%), and Lifetime access at $${FOUNDING_LIFETIME_PRICE_USD} one-time (${FOUNDING_LIFETIME_COPY.toLowerCase()}).`,
           },
         },
         {

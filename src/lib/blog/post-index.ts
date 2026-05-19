@@ -19,6 +19,26 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: '12-best-habit-tracker-apps-2026',
+    title: '12 Best Habit Tracker Apps 2026: Complete Comparison Guide',
+    desc: 'An honest, in-depth review of 12 habit trackers including Resurgo, Habitica, Streaks, and more. Comparison table, app breakdowns, and ICP matrix.',
+    date: 'May 6, 2026',
+    lastModified: '2026-05-06T15:30:00.000Z',
+    readTime: '18 min',
+    tags: ['habit trackers', 'productivity tools', 'app comparison', 'goal tracking'],
+    heroImage: '/blog/habit-tracker-apps-comparison.svg',
+  },
+  {
+    slug: 'adhd-productivity-apps-that-work',
+    title: 'ADHD Productivity Apps That Actually Work: A Neurodivergent\'s Guide',
+    desc: 'Seven ADHD-friendly productivity apps reviewed for neurodiversity support. Covers what ADHD brains need: structure, no shame, and real coaching.',
+    date: 'May 6, 2026',
+    lastModified: '2026-05-06T14:15:00.000Z',
+    readTime: '15 min',
+    tags: ['ADHD', 'productivity', 'neurodiversity', 'habit apps', 'executive function'],
+    heroImage: '/blog/adhd-productivity-apps.svg',
+  },
+  {
     slug: 'ai-growth-system-2026-ultimate-playbook',
     title: 'The AI Growth System for 2026: The Ultimate Playbook to Turn Attention into Revenue',
     desc: 'A research-backed operating system for founders and creators who want to convert AI-era discovery into pipeline, trust, and sales using one unified weekly execution loop.',
@@ -714,49 +734,63 @@ export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
 ];
 
 export const BLOG_TOPIC_CLUSTERS: Array<TopicCluster> = [
-  {
-    slug: 'habit-systems',
-    title: 'Habit Systems & Consistency',
-    description: 'Build resilient routines, recover quickly after misses, and design habits that survive real-world friction.',
-    tags: ['habits', 'habit reset', 'habit stacking', 'behavior design', 'atomic habits', 'consistency', 'weekly review', 'retention', 'self discipline'],
-    keywords: ['habit systems', 'consistency system', 'habit stacking', 'weekly habit review'],
-  },
-  {
-    slug: 'focus-procrastination',
-    title: 'Focus, Deep Work & Procrastination',
-    description: 'Improve attention quality, reduce avoidance loops, and implement practical interventions for sustained cognitive output.',
-    tags: ['focus', 'procrastination', 'deep work', 'mental performance', 'energy management', 'morning routine', 'psychology'],
-    keywords: ['deep work', 'stop procrastinating', 'focus training', 'attention management'],
-  },
-  {
-    slug: 'ai-coaching-execution',
-    title: 'AI Coaching & Execution Systems',
-    description: 'Use AI for practical accountability, planning, and daily execution workflows that translate intent into completed actions.',
-    tags: ['AI', 'AI coaching', 'AI productivity', 'accountability', 'coaching', 'goal execution'],
-    keywords: ['AI coaching', 'AI accountability', 'execution system', 'AI productivity'],
-  },
-  {
-    slug: 'goals-planning-strategy',
-    title: 'Goal Planning & Strategy',
-    description: 'Decompose large outcomes into milestones and next actions with frameworks that increase completion rates.',
-    tags: ['goal setting', 'goal decomposition', 'goals', 'systems', 'planning', 'weekly planning', 'project execution'],
-    keywords: ['goal planning', 'goal decomposition', 'planning framework', 'strategy execution'],
-  },
-  {
-    slug: 'founder-performance',
-    title: 'Founder Performance & Self-Marketing',
-    description: 'Execution frameworks for founders balancing product, growth, and personal consistency while shipping every week.',
-    tags: ['founder productivity', 'execution', 'planning', 'vision board', 'marketing strategy', 'AEO', 'conversion optimization'],
-    keywords: ['founder productivity', 'founder planning', 'self-marketing system', 'ship weekly'],
-  },
-  {
-    slug: 'app-comparisons',
-    title: 'App Comparisons & Alternatives',
-    description: 'Honest head-to-head comparisons of habit trackers, productivity apps, and AI coaching tools for informed decision-making.',
-    tags: ['comparison', 'habits', 'productivity', 'AI coaching', 'AI productivity'],
-    keywords: ['streaks vs habitify', 'habitica alternatives', 'best habit tracker', 'ticktick vs notion', 'resurgo vs'],
-  },
-];
+   {
+     slug: 'habit-systems',
+     title: 'Habit Systems & Consistency',
+     description: 'Build resilient routines, recover quickly after misses, and design habits that survive real-world friction.',
+     tags: ['habits', 'habit reset', 'habit stacking', 'behavior design', 'atomic habits', 'consistency', 'weekly review', 'retention', 'self discipline'],
+     keywords: ['habit systems', 'consistency system', 'habit stacking', 'weekly habit review'],
+   },
+   {
+     slug: 'focus-procrastination',
+     title: 'Focus, Deep Work & Procrastination',
+     description: 'Improve attention quality, reduce avoidance loops, and implement practical interventions for sustained cognitive output.',
+     tags: ['focus', 'procrastination', 'deep work', 'mental performance', 'energy management', 'morning routine', 'psychology'],
+     keywords: ['deep work', 'stop procrastinating', 'focus training', 'attention management'],
+   },
+   {
+     slug: 'ai-coaching-execution',
+     title: 'AI Coaching & Execution Systems',
+     description: 'Use AI for practical accountability, planning, and daily execution workflows that translate intent into completed actions.',
+     tags: ['AI', 'AI coaching', 'AI productivity', 'accountability', 'coaching', 'goal execution'],
+     keywords: ['AI coaching', 'AI accountability', 'execution system', 'AI productivity'],
+   },
+   {
+     slug: 'goals-planning-strategy',
+     title: 'Goal Planning & Strategy',
+     description: 'Decompose large outcomes into milestones and next actions with frameworks that increase completion rates.',
+     tags: ['goal setting', 'goal decomposition', 'goals', 'systems', 'planning', 'weekly planning', 'project execution'],
+     keywords: ['goal planning', 'goal decomposition', 'planning framework', 'strategy execution'],
+   },
+   {
+     slug: 'founder-performance',
+     title: 'Founder Performance & Self-Marketing',
+     description: 'Execution frameworks for founders balancing product, growth, and personal consistency while shipping every week.',
+     tags: ['founder productivity', 'execution', 'planning', 'vision board', 'marketing strategy', 'AEO', 'conversion optimization'],
+     keywords: ['founder productivity', 'founder planning', 'self-marketing system', 'ship weekly'],
+   },
+   {
+     slug: 'app-comparisons',
+     title: 'App Comparisons & Alternatives',
+     description: 'Honest head-to-head comparisons of habit trackers, productivity apps, and AI coaching tools for informed decision-making.',
+     tags: ['comparison', 'habits', 'productivity', 'AI coaching', 'AI productivity'],
+     keywords: ['streaks vs habitify', 'habitica alternatives', 'best habit tracker', 'ticktick vs notion', 'resurgo vs'],
+   },
+   {
+     slug: 'remote-work-productivity',
+     title: 'Remote Work & Developer Productivity',
+     description: 'Productivity systems specifically designed for remote workers and software developers facing context switching and async communication challenges.',
+     tags: ['remote work', 'developer productivity', 'AI productivity', 'goal decomposition', 'habit tracking'],
+     keywords: ['remote developer productivity', 'software developer productivity', 'async work productivity'],
+   },
+   {
+     slug: 'indie-hacker-maker-productivity',
+     title: 'Indie Hacker & Maker Productivity',
+     description: 'Productivity systems for solo builders, solopreneurs, and makers who wear multiple hats and need integrated workflows.',
+     tags: ['indie hackers', 'solopreneur', 'maker productivity', 'habit stacking', 'goal decomposition'],
+     keywords: ['indie hacker productivity', 'solopreneur productivity', 'maker focus system'],
+   },
+ ];
 
 function isValidDateInput(value: string): boolean {
   const parsed = new Date(value);

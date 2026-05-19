@@ -928,6 +928,10 @@ export const getUserContext = internalQuery({
     // ── Fitness context ──
     weekWorkouts: v.number(),
     weekWorkoutMinutes: v.number(),
+    // ── Synergy & warnings context ──
+    dailySynergyScore: v.number(),
+    sleepDebtWarning: v.boolean(),
+    budgetOverrunWarning: v.boolean(),
   }),
   handler: async (ctx) => {
     const empty = {
@@ -947,6 +951,9 @@ export const getUserContext = internalQuery({
       lastSleepQualityRating: undefined as number | undefined,
       lastMoodScore: undefined as number | undefined,
       weekWorkouts: 0, weekWorkoutMinutes: 0,
+      dailySynergyScore: 100,
+      sleepDebtWarning: false,
+      budgetOverrunWarning: false,
     };
 
     const identity = await ctx.auth.getUserIdentity();
@@ -1078,6 +1085,63 @@ export const getUserContext = internalQuery({
       .collect();
     const recentWorkouts = workoutLogs.filter((w) => w.date >= weekAgoDate);
 
+    // ── Synergy Engine calculations ──
+    const habitLogsToday = await ctx.db
+      .query('habitLogs')
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+      .collect();
+    const completedHabitsCount = habitLogsToday.filter((hl) => hl.status === 'completed').length;
+    const activeHabitsCount = activeHabits.length;
+    const habitSubscore = activeHabitsCount > 0
+      ? Math.min(100, Math.round((completedHabitsCount / activeHabitsCount) * 100))
+      : 100;
+
+    const sleepRating = lastSleep?.quality ?? checkIn?.sleepQuality ?? 3;
+    const normalizedSleep = sleepRating * 20;
+    const normalizedMood = checkIn?.morningMood ? checkIn.morningMood * 20 : (lastMood?.score ? lastMood.score * 10 : 60);
+    const waterScore = Math.min(100, Math.round(((nutritionToday?.waterMl ?? 0) / 2000) * 100));
+    const wellnessSubscore = Math.round((normalizedSleep * 0.4) + (normalizedMood * 0.4) + (waterScore * 0.2));
+
+    const completedTodayTasks = todayTasks.filter(t => t.status === 'done').length;
+    const taskSubscore = todayTasks.length > 0
+      ? Math.round((completedTodayTasks / todayTasks.length) * 100)
+      : 100;
+
+    const startOfMonth = today.substring(0, 7) + '-01';
+    const userTransactions = await ctx.db
+      .query('transactions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const thisMonthTransactions = userTransactions.filter((t) => t.date >= startOfMonth && t.date <= today);
+    const thisMonthExpenses = thisMonthTransactions
+      .filter((t) => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const categories = await ctx.db
+      .query('budgetCategories')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const totalMonthlyBudget = categories.reduce((sum, c) => sum + c.monthlyBudget, 0);
+
+    let budgetSubscore = 100;
+    if (totalMonthlyBudget > 0) {
+      const budgetExceededRatio = thisMonthExpenses / totalMonthlyBudget;
+      if (budgetExceededRatio > 1.0) {
+        budgetSubscore = Math.max(0, 100 - Math.round((budgetExceededRatio - 1.0) * 100));
+      }
+    }
+
+    const dailySynergyScore = Math.round(
+      (wellnessSubscore * 0.3) +
+      (taskSubscore * 0.3) +
+      (habitSubscore * 0.25) +
+      (budgetSubscore * 0.15)
+    );
+
+    const lastSleepDurationHours = lastSleep?.durationMinutes ? lastSleep.durationMinutes / 60 : undefined;
+    const sleepDebtWarning = lastSleepDurationHours !== undefined && lastSleepDurationHours < 6.0;
+    const budgetOverrunWarning = totalMonthlyBudget > 0 && thisMonthExpenses > totalMonthlyBudget;
+
     const userExtra = user as Record<string, unknown>;
     return {
       userName: user.name || identity.name || 'User',
@@ -1117,9 +1181,163 @@ export const getUserContext = internalQuery({
       // ── Fitness context ──
       weekWorkouts: recentWorkouts.length,
       weekWorkoutMinutes: recentWorkouts.reduce((sum, w) => sum + (w.durationMinutes || 0), 0),
+      // ── Synergy & warnings context ──
+      dailySynergyScore,
+      sleepDebtWarning,
+      budgetOverrunWarning,
     };
   },
 });
+
+export const getDailySynergyDetails = query({
+  args: {},
+  handler: async (ctx) => {
+    const empty = {
+      dailySynergyScore: 100,
+      wellnessSubscore: 100,
+      taskSubscore: 100,
+      habitSubscore: 100,
+      budgetSubscore: 100,
+      sleepDebtWarning: false,
+      budgetOverrunWarning: false,
+      completedTasks: 0,
+      totalTasks: 0,
+      completedHabits: 0,
+      totalHabits: 0,
+      thisMonthExpenses: 0,
+      totalMonthlyBudget: 0,
+      lastSleepHours: 0,
+      waterMl: 0,
+    };
+
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return empty;
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+      .unique();
+    if (!user) return empty;
+
+    // Active habits
+    const habits = await ctx.db
+      .query('habits')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const activeHabits = habits.filter((h) => h.isActive);
+
+    // Tasks (today)
+    const today = new Date().toISOString().split('T')[0];
+    const tasks = await ctx.db
+      .query('tasks')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const todayTasks = tasks.filter((t) => (t.status === 'todo' || t.status === 'done') && (t.scheduledDate === today || t.dueDate === today));
+
+    const checkIn = await ctx.db
+      .query('dailyCheckIns')
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+      .unique();
+
+    // Fetch today's nutrition
+    const nutritionToday = await ctx.db
+      .query('nutritionLogs')
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+      .unique();
+
+    // Fetch latest sleep log
+    const sleepLogs = await ctx.db
+      .query('sleepLogs')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .order('desc')
+      .take(1);
+    const lastSleep = sleepLogs[0];
+
+    // Fetch latest mood entry
+    const moodEntries = await ctx.db
+      .query('moodEntries')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .order('desc')
+      .take(1);
+    const lastMood = moodEntries[0];
+
+    // Synergy calculations
+    const habitLogsToday = await ctx.db
+      .query('habitLogs')
+      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+      .collect();
+    const completedHabitsCount = habitLogsToday.filter((hl) => hl.status === 'completed').length;
+    const activeHabitsCount = activeHabits.length;
+    const habitSubscore = activeHabitsCount > 0
+      ? Math.min(100, Math.round((completedHabitsCount / activeHabitsCount) * 100))
+      : 100;
+
+    const sleepRating = lastSleep?.quality ?? checkIn?.sleepQuality ?? 3;
+    const normalizedSleep = sleepRating * 20;
+    const normalizedMood = checkIn?.morningMood ? checkIn.morningMood * 20 : (lastMood?.score ? lastMood.score * 10 : 60);
+    const waterScore = Math.min(100, Math.round(((nutritionToday?.waterMl ?? 0) / 2000) * 100));
+    const wellnessSubscore = Math.round((normalizedSleep * 0.4) + (normalizedMood * 0.4) + (waterScore * 0.2));
+
+    const completedTodayTasks = todayTasks.filter(t => t.status === 'done').length;
+    const taskSubscore = todayTasks.length > 0
+      ? Math.round((completedTodayTasks / todayTasks.length) * 100)
+      : 100;
+
+    const startOfMonth = today.substring(0, 7) + '-01';
+    const userTransactions = await ctx.db
+      .query('transactions')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const thisMonthTransactions = userTransactions.filter((t) => t.date >= startOfMonth && t.date <= today);
+    const thisMonthExpenses = thisMonthTransactions
+      .filter((t) => t.type === 'expense')
+      .reduce((sum, t) => sum + t.amount, 0);
+
+    const categories = await ctx.db
+      .query('budgetCategories')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .collect();
+    const totalMonthlyBudget = categories.reduce((sum, c) => sum + c.monthlyBudget, 0);
+
+    let budgetSubscore = 100;
+    if (totalMonthlyBudget > 0) {
+      const budgetExceededRatio = thisMonthExpenses / totalMonthlyBudget;
+      if (budgetExceededRatio > 1.0) {
+        budgetSubscore = Math.max(0, 100 - Math.round((budgetExceededRatio - 1.0) * 100));
+      }
+    }
+
+    const dailySynergyScore = Math.round(
+      (wellnessSubscore * 0.3) +
+      (taskSubscore * 0.3) +
+      (habitSubscore * 0.25) +
+      (budgetSubscore * 0.15)
+    );
+
+    const lastSleepDurationHours = lastSleep?.durationMinutes ? lastSleep.durationMinutes / 60 : undefined;
+    const sleepDebtWarning = lastSleepDurationHours !== undefined && lastSleepDurationHours < 6.0;
+    const budgetOverrunWarning = totalMonthlyBudget > 0 && thisMonthExpenses > totalMonthlyBudget;
+
+    return {
+      dailySynergyScore,
+      wellnessSubscore,
+      taskSubscore,
+      habitSubscore,
+      budgetSubscore,
+      sleepDebtWarning,
+      budgetOverrunWarning,
+      completedTasks: completedTodayTasks,
+      totalTasks: todayTasks.length,
+      completedHabits: completedHabitsCount,
+      totalHabits: activeHabitsCount,
+      thisMonthExpenses,
+      totalMonthlyBudget,
+      lastSleepHours: lastSleepDurationHours ?? 0,
+      waterMl: nutritionToday?.waterMl ?? 0,
+    };
+  }
+});
+
 
 // ─── Internal: Execute parsed actions from AI response ───────────────────────
 
@@ -1705,11 +1923,20 @@ export const sendWithPersona = action({
 
     let contextBlock = '';
     if (userCtx) {
+      let synergyAlerts = '';
+      if (userCtx.sleepDebtWarning) {
+        synergyAlerts += `\n[CRITICAL WARNING: User is sleep deprived (under 6 hours sleep last night). Aurora and Marcus must prioritize cognitive recovery, advise light exercise, and recommend scaling back non-critical task load.]`;
+      }
+      if (userCtx.budgetOverrunWarning) {
+        synergyAlerts += `\n[CRITICAL WARNING: User has exceeded their daily discretionary budget. Nova must suggest low-cost habit substitutions and gentle financial restraint in a non-judgmental way.]`;
+      }
+
       contextBlock = `
 CURRENT USER CONTEXT (use this to personalize — reference specific data points!):
 - Name: ${userCtx.userName}
 - Plan: ${userCtx.userPlan}
 - Gamification: Level ${userCtx.level} "${userCtx.levelName}" | ${userCtx.totalXP} XP | ${userCtx.achievementCount} achievements unlocked
+- Daily Synergy Score (DSS): ${userCtx.dailySynergyScore}/100 📊 (A unified score integrating wellness, task completion, habits, and budgets)
 - Primary Goal: ${userCtx.primaryGoal}
 - Focus Areas: ${userCtx.focusAreas}
 - Active Goals (${userCtx.goalCount}): ${userCtx.goalsSummary}
@@ -1729,9 +1956,11 @@ CURRENT USER CONTEXT (use this to personalize — reference specific data points
 - Last Mood: ${userCtx.lastMoodScore ? `${userCtx.lastMoodScore}/10` : 'Not logged'}
 - Workouts This Week: ${userCtx.weekWorkouts} sessions (${userCtx.weekWorkoutMinutes} min total)
 - Time: ${timeContext} (${today})
+${synergyAlerts}
 
 PERSONALIZATION DIRECTIVES:
 - Reference their SPECIFIC goals, tasks, and habits by name — never be generic.
+- Incorporate their Daily Synergy Score (${userCtx.dailySynergyScore}/100) — congratulate them if it is above 80, or coach them on balance if it is low.
 - If they have overdue tasks, proactively mention it and offer to help reprioritize.
 - If weekly completion rate < 50%, address workload/prioritization before adding more.
 - If they have recent wins, celebrate them specifically before moving forward.

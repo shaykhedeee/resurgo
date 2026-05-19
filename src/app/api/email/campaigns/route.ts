@@ -182,10 +182,25 @@ const TEMPLATES: Record<string, {
         <li>Vision board with AI insights</li>
         <li>Priority AI response speed</li>
       </ul>
-      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $29.99/year = $2.50/month</p>
+      <p class="p" style="color:#FF6B35; font-size:15px;">Yearly plan: $95.88/year = $7.99/month</p>
       <a href="${SITE_URL}/pricing" class="cta">[UPGRADE_NOW]</a>
     `),
-    text: (_v) => `Upgrade to Resurgo Pro — unlock all 5 AI coaches: ${SITE_URL}/pricing`,
+    text: (_v) => `Upgrade to Resurgo Pro - unlock all 5 AI coaches: ${SITE_URL}/pricing`,
+  },
+
+  founder_bofu_guide: {
+    subject: 'Best app for indie founders? Here is the practical breakdown',
+    from: FROM_MARKETING,
+    badge: 'FOUNDER GUIDE',
+    html: (v) => wrapEmail('FOUNDER GUIDE', 'Best App for Indie Founders', `
+      <div class="h1">A practical founder comparison, no fluff</div>
+      <p class="p">${v.name ? `Hey ${v.name},` : 'Hey founder,'}</p>
+      <p class="p">We just published a high-intent decision guide comparing Resurgo, Motion, Notion, and Todoist for one outcome: shipping meaningful work every week.</p>
+      <p class="p">If your bottleneck is execution drift, planning loops, or low weekly output, this will help you choose quickly.</p>
+      <a href="${SITE_URL}/best-app-for-indie-founders?utm_source=email&utm_medium=lifecycle&utm_campaign=bofu_indie_founders_2026w20&utm_content=founder_guide" class="cta">[READ_FOUNDER_GUIDE]</a>
+      <p class="p">If you want, reply and tell us your current stack. We will suggest the leanest setup for your next 30 days.</p>
+    `),
+    text: (v) => `${v.name ? `Hey ${v.name},` : 'Hey founder,'}\n\nWe published a practical comparison of Resurgo, Motion, Notion, and Todoist focused on one thing: weekly shipped output.\n\nRead: ${SITE_URL}/best-app-for-indie-founders?utm_source=email&utm_medium=lifecycle&utm_campaign=bofu_indie_founders_2026w20&utm_content=founder_guide\n\nReply with your current stack and we will suggest a lean 30-day setup.`,
   },
 };
 

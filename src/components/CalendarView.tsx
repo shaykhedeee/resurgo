@@ -8,6 +8,7 @@
 import { useState, useMemo } from 'react';
 import { useAscendStore } from '@/lib/store';
 import { cn } from '@/lib/utils';
+import { SecondaryAction } from '@/components/layout/ResurgoLayout';
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -170,9 +171,9 @@ export function CalendarView() {
           <p className="text-themed-secondary mt-1">Track your progress over time</p>
         </div>
         
-        <button onClick={goToToday} className="btn-secondary text-sm">
+        <SecondaryAction onClick={goToToday}>
           Go to Today
-        </button>
+        </SecondaryAction>
       </div>
       
       {/* Stats Cards */}

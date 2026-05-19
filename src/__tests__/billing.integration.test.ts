@@ -165,19 +165,19 @@ describe('TC-020: Pricing Consistency', () => {
     expect(freeHabits).toBe(5);
   });
 
-  it('PASS: Pro - Monthly pricing is $4.99', async () => {
-    const price = 4.99;
-    expect(price).toBe(4.99);
+  it('PASS: Pro - Monthly pricing is $9.99', async () => {
+    const price = 9.99;
+    expect(price).toBe(9.99);
   });
 
-  it('PASS: Pro - Yearly pricing is $29.99 (= ~$2.50/month)', async () => {
-    const yearly = 29.99;
+  it('PASS: Pro - Yearly pricing is $95.88 (= ~$7.99/month)', async () => {
+    const yearly = 95.88;
     const monthly = yearly / 12;
-    expect(monthly).toBeCloseTo(2.50, 1);
+    expect(monthly).toBeCloseTo(7.99, 1);
   });
 
-  it('PASS: Lifetime pricing is $49.99', async () => {
-    const price = 49.99;
-    expect(price).toBe(49.99);
+  it('PASS: Lifetime pricing is $89 (founding price until July 5, 2026)', async () => {
+    const price = 89;
+    expect(price).toBe(89);
   });
 });

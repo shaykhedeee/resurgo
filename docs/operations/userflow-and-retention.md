@@ -168,7 +168,7 @@ Power Mode unlocks:
 - Nutrition + wellness tracking
 - API access
 
-[Upgrade to Pro $4.99/mo] [Founding Lifetime $49.99]
+[Upgrade to Pro $9.99/mo] [Founding Lifetime $89 (founding price until July 5, 2026)]
 [Maybe later]
 ```
 
@@ -319,8 +319,8 @@ Retention doesn't only break inside the product; it often breaks at billing. If 
 | Tier | What It Does | Psychology |
 |------|--------------|------------|
 | **Free** | 3 goals, 5 habits/day, 10 AI messages/day, 2 coaches (Marcus + Titan) | "Generous but capped" — users hit limits naturally as they get value |
-| **Pro ($4.99/mo or $29.99/yr)** | Unlimited usage + all 5 coaches + full integrations | "Natural upgrade when you're hooked" |
-| **Lifetime ($49.99)** | All Pro features forever | "Lock in loyal users early; they become evangelists" |
+| **Pro ($9.99/mo or $95.88/yr)** | Unlimited usage + all 5 coaches + full integrations | "Natural upgrade when you're hooked" |
+| **Lifetime ($89)** | All Pro features forever | "Lock in loyal users early; they become evangelists" |
 
 **Critical:** 44 percent of consumers who are likely to cancel would instead pause their subscriptions if the option was available.
 
@@ -344,8 +344,8 @@ Automate payment recovery: Tools like Baremetrics Recover reduce involuntary chu
 [User clicks "Upgrade to Pro"]
 
 SCREEN 1: Plan Selection (one screen)
-○ Pro Monthly $4.99/mo (or $29.99/year)
-○ Founding Lifetime $49.99 (limited spots) ← scarcity + commitment
+○ Pro Monthly $9.99/mo (or $95.88/year)
+○ Founding Lifetime $89 (founding price, limited spots) ← scarcity + commitment
 
 [Continue]
 
@@ -466,7 +466,7 @@ This guide is built from a deep scan of your current site (terminal-themed “Li
 Position Resurgo as **“The Execution OS for Solo Operators”** — not another planner, but the system that turns brain chaos into daily ships while adapting to real life.
 
 - **Free tier (generous & addictive):** Unlimited basic brain dumps, 1-2 core coaches, Today view with 3 tasks + 1 habit, basic XP/streaks, weekly AI review summary, Health Connect integration for sleep/energy. This creates dependency: users start their day in Resurgo like checking a command terminal.
-- **Pro tier ($4.99/mo, $29.99/yr, or $49.99 lifetime):** Unlimited usage, all 5 coaches, advanced analytics, Telegram bot, API/webhooks, priority AI, nutrition/budget modules, deeper integrations.
+- **Pro tier ($9.99/mo, $95.88/yr, or $89 founding lifetime):** Unlimited usage, all 5 coaches, advanced analytics, Telegram bot, API/webhooks, priority AI, nutrition/budget modules, deeper integrations.
 - **Growth engine:** Build-in-public on Indie Hackers/Twitter (weekly “Operator Patch Notes”), 30-day Ship Challenge, niche landing pages (/solopreneurs, /indie-hackers), micro-influencer operators, referral for XP boosts.
 - **Metrics dashboard for you:** Track activation (first task completed), Day-1/7/30 retention, churn predictors (no daily login, no task completion), upgrade triggers. Use free tools like Microsoft Clarity (session replays) + PostHog or Vercel Analytics.
 - **Tech for flow:** Next.js + Convex, in-app guidance via simple custom modals or lightweight Userpilot/Appcues-style prompts (contextual, not tour-heavy).

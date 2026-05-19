@@ -15,6 +15,8 @@ const LIFETIME_PREMIUM_EMAILS = [
   'methebeast666@gmail.com',
   'fact.monk8@gmail.com',
   'surajprakash24895@gmail.com',
+  'salinisadangi26@gmail.com',
+  'pareekmuskan01@gmail.com',
 ] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -844,6 +846,59 @@ export const setArchetype = mutation({
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
+// UPDATE ONBOARDING (Phase 1 — Quick-Start Flow)
+// Handles completion of quick-start 3-step onboarding
+// ─────────────────────────────────────────────────────────────────────────────
+export const updateOnboarding = mutation({
+  args: {
+    onboardingComplete: v.boolean(),
+    onboardingPath: v.optional(v.union(v.literal('quick-start'), v.literal('legacy'), v.literal('other'))),
+    archetypeDetected: v.optional(v.union(
+      v.literal('adhd'),
+      v.literal('ambitious'),
+      v.literal('student'),
+      v.literal('athlete'),
+      v.literal('other')
+    )),
+    layerLevel: v.optional(v.number()),
+    dayOneCompleted: v.optional(v.number()),
+    name: v.optional(v.string()),
+    phoneNumber: v.optional(v.string()),
+    dob: v.optional(v.string()),
+    height: v.optional(v.number()),
+    weight: v.optional(v.number()),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+      .unique();
+    if (!user) throw new Error('User not found');
+
+    const updates: Record<string, unknown> = {
+      onboardingComplete: args.onboardingComplete,
+      updatedAt: Date.now(),
+    };
+
+    if (args.onboardingPath) updates.onboardingPath = args.onboardingPath;
+    if (args.archetypeDetected) updates.archetypeDetected = args.archetypeDetected;
+    if (args.layerLevel !== undefined) updates.layerLevel = args.layerLevel;
+    if (args.dayOneCompleted !== undefined) updates.dayOneCompleted = args.dayOneCompleted;
+    if (args.name !== undefined) updates.name = args.name;
+    if (args.phoneNumber !== undefined) updates.phoneNumber = args.phoneNumber;
+    if (args.dob !== undefined) updates.dob = args.dob;
+    if (args.height !== undefined) updates.height = args.height;
+    if (args.weight !== undefined) updates.weight = args.weight;
+
+    await ctx.db.patch(user._id, updates);
+  },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Section 26 — Dodo Payments Internal Helpers
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -1668,6 +1723,103 @@ export const adminReconcileAccounts = internalMutation({
       upgradedEmails,
       deletedEmails,
     };
+  },
+});
+
+export const commitOnboardingPlanner = mutation({
+  args: {
+    name: v.optional(v.string()),
+    phoneNumber: v.optional(v.string()),
+    dob: v.optional(v.string()),
+    height: v.optional(v.number()),
+    weight: v.optional(v.number()),
+    archetypeDetected: v.optional(v.union(
+      v.literal('adhd'), v.literal('ambitious'), v.literal('student'), v.literal('athlete'), v.literal('other')
+    )),
+    goals: v.array(v.string()),
+    habits: v.array(v.object({
+      title: v.string(),
+      frequency: v.string(),
+      domain: v.string(),
+    })),
+    tasks: v.array(v.object({
+      title: v.string(),
+      priority: v.union(v.literal('high'), v.literal('medium'), v.literal('low')),
+      dueDate: v.string(),
+    })),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error('Not authenticated');
+
+    const user = await ctx.db
+      .query('users')
+      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+      .unique();
+    if (!user) throw new Error('User not found');
+
+    await ctx.db.patch(user._id, {
+      onboardingComplete: true,
+      onboardingPath: 'quick-start',
+      layerLevel: 1,
+      name: args.name || user.name,
+      phoneNumber: args.phoneNumber,
+      dob: args.dob,
+      height: args.height,
+      weight: args.weight,
+      archetypeDetected: args.archetypeDetected,
+      updatedAt: Date.now(),
+    });
+
+    const now = Date.now();
+
+    for (const gTitle of args.goals) {
+      await ctx.db.insert('goals', {
+        userId: user._id,
+        title: gTitle,
+        description: 'Onboarding goal',
+        category: args.archetypeDetected || 'personal_growth',
+        status: 'in_progress',
+        progress: 0,
+        startDate: new Date().toISOString().split('T')[0],
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    for (const h of args.habits) {
+      await ctx.db.insert('habits', {
+        userId: user._id,
+        title: h.title,
+        description: 'Supporting habit from onboarding',
+        category: h.domain,
+        frequency: h.frequency as any,
+        timeOfDay: 'anytime',
+        estimatedMinutes: 10,
+        streakCurrent: 0,
+        streakLongest: 0,
+        isActive: true,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+
+    for (const t of args.tasks) {
+      await ctx.db.insert('tasks', {
+        userId: user._id,
+        title: t.title,
+        description: 'Action task from onboarding',
+        priority: t.priority,
+        status: 'todo',
+        dueDate: t.dueDate,
+        scheduledDate: t.dueDate,
+        estimatedMinutes: 30,
+        xpValue: t.priority === 'high' ? 15 : (t.priority === 'medium' ? 10 : 5),
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
   },
 });
 

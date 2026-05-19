@@ -35,7 +35,7 @@ describe('ascend knowledge base', () => {
   it('keeps chatbot pricing metadata aligned to billing claims', () => {
     expect(PRICING.free.limits.habits).toBe(5);
     expect(PRICING.free.limits.goals).toBe(3);
-    expect(PRICING.pro.price).toBe(4.99);
-    expect(PRICING.pro.priceYearly).toBe(29.99);
+    expect(PRICING.pro.price).toBe(9.99);
+    expect(PRICING.pro.priceYearly).toBe(95.88);
   });
 });

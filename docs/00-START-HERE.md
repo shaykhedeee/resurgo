@@ -28,7 +28,7 @@
   
 ### Marketing Assets & Documentation
 - ✅ **BRAND_VOICE.md** — Tone guidelines complete
-- ✅ **PRODUCT_TRUTH.md** — Canonical source of truth (5 coaches, $4.99/$29.99/$49.99 pricing)
+- ✅ **PRODUCT_TRUTH.md** — Canonical source of truth (5 coaches, $9.99/$95.88/$89 pricing)
 - ✅ **MARKETING-STRATEGY.md** — Post-launch GTM (14-day sprint framework), import promise corrected
 - ✅ **SOCIAL-MEDIA-COPIES.md** — Ready-to-publish content
   - 12-post X/Twitter thread

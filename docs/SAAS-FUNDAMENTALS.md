@@ -22,7 +22,7 @@
 
 | Metric | Formula | Target | Resurgo today |
 |---|---|---|---|
-| **LTV** (Lifetime Value) | ARPU × Avg. lifespan (months) | — | $4.99 × ? months = ? |
+| **LTV** (Lifetime Value) | ARPU × Avg. lifespan (months) | — | $9.99 × ? months = ? |
 | **CAC** (Customer Acquisition Cost) | Total spend ÷ New customers | <$15 | Near $0 (organic) |
 | **LTV:CAC Ratio** | LTV ÷ CAC | ≥ 3:1 (best SaaS = 7–8:1) | High (organic acquisition) |
 | **Months to Recover CAC** | CAC ÷ ARPU | < 12 months | ~1 month if organic |
@@ -58,9 +58,9 @@
 **What is it:** When expansion revenue from existing users exceeds revenue lost from churn.
 
 **How Resurgo achieves it:**
-1. Free → Pro Monthly ($4.99) — primary conversion
-2. Pro Monthly → Pro Yearly ($29.99 = save $30/yr) — retention lock-in
-3. Pro → Lifetime ($49.99) — one-time windfall, zero future churn
+1. Free → Pro Monthly ($9.99) — primary conversion
+2. Pro Monthly → Pro Yearly ($95.88 = save $24/yr) — retention lock-in
+3. Pro → Lifetime ($89) — one-time windfall, zero future churn
 4. Future: Add-ons (API access, premium AI models, team features)
 
 **Implementation priority:**
@@ -137,20 +137,20 @@ Track users by signup week. For each cohort, measure:
 ## 8. PRICING PSYCHOLOGY — WHAT THE DATA SAYS
 
 ### Current pricing is AGGRESSIVE (good for launch):
-- **$4.99/mo** is below most competitors (Todoist Pro ~$4/mo, TickTick ~$2.79/mo, Habitify ~$5/mo)
-- **$49.99 lifetime** creates urgency + permanent revenue (must cap supply: "1,000 spots")
+- **$9.99/mo** is competitive with many competitors (Todoist Pro ~$4/mo, TickTick ~$2.79/mo, Habitify ~$5/mo)
+- **$89 lifetime** creates urgency + permanent revenue (must cap supply: "first 100 relaunch signups")
 
 ### Key principles:
 1. **Getting paid upfront lowers churn** (Skok) — push annual/lifetime
-2. **Price anchoring**: Show Lifetime ($49.99) next to Monthly ($4.99×12 = $59.88/yr) — Lifetime looks like a deal
-3. **Loss aversion**: "1,000 founding lifetime spots — 847 remaining" (visible counter)
+2. **Price anchoring**: Show Lifetime ($89) next to Monthly ($9.99×12 = $119.88/yr) — Lifetime looks like a deal
+3. **Loss aversion**: "100 founding lifetime spots - 47 remaining" (visible counter)
 4. **Segment pricing**: One plan is fine at launch. Segment later (Student, Creator, ADHD edition?)
 
-### Post-100-user pricing roadmap:
-1. Lifetime → $79.99 (at 100 users)
-2. Lifetime → $99.99 (at 500 users)
-3. Consider removing Lifetime entirely at 1,000+ users
-4. Consider adding Teams tier later
+### Post-100-founding-sale pricing roadmap:
+1. Lifetime stays $89 only for the first 100 relaunch signups
+2. Lifetime moves to $199 after the founding allocation or July 5, 2026
+3. Consider removing Lifetime entirely after proof of repeatable Pro conversion
+4. Consider adding Teams tier later only after the individual product has strong retention
 
 ---
 
@@ -249,7 +249,7 @@ Track users by signup week. For each cohort, measure:
 | Add cohort tracking? | Yes — tag users by signup week | Spot retention trends early |
 | Segment onboarding? | Yes — ADHD / Fitness / General / Founder tracks | Different users need different first experiences |
 | Annual billing push? | **YES** — default to annual at checkout | Reduces churn + cash flow |
-| Show Lifetime counter? | **YES** — "847 of 1000 remaining" | Scarcity + urgency |
+| Show Lifetime counter? | **YES** — "47 of 100 remaining" | Scarcity + urgency |
 
 ---
 
