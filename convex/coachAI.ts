@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { action, internalAction, internalMutation, internalQuery, mutation, query } from './_generated/server';
-import { internal } from './_generated/api';
+import { api, internal } from './_generated/api';
 import { v } from 'convex/values';
 import type { Id } from './_generated/dataModel';
 
@@ -2714,3 +2714,148 @@ function buildFallbackReply(coachId: string, content: string): string {
   if (isGoal || isAction) return pool[1];
   return pool[Math.floor(Math.random() * pool.length)];
 }
+
+// ─── Action: Generate Dynamic Daily Synergy Insights ────────────────────────
+export const getDailySynergyInsights = action({
+  args: {},
+  returns: v.object({
+    insights: v.array(v.object({
+      coachId: v.string(),
+      coachName: v.string(),
+      avatar: v.string(),
+      color: v.string(),
+      advice: v.string(),
+    })),
+  }),
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) {
+      return { insights: [] };
+    }
+
+    // Call getDailySynergyDetails query
+    const details = (await ctx.runQuery((api as any).coachAI.getDailySynergyDetails)) as {
+      dailySynergyScore: number;
+      wellnessSubscore: number;
+      taskSubscore: number;
+      habitSubscore: number;
+      budgetSubscore: number;
+      sleepDebtWarning: boolean;
+      budgetOverrunWarning: boolean;
+      completedTasks: number;
+      totalTasks: number;
+      completedHabits: number;
+      totalHabits: number;
+      thisMonthExpenses: number;
+      totalMonthlyBudget: number;
+      lastSleepHours: number;
+      waterMl: number;
+    };
+    
+    // Fetch user context for personalized suggestions
+    let userCtx;
+    try {
+      userCtx = await ctx.runQuery(internal.coachAI.getUserContext, {});
+    } catch {
+      userCtx = null;
+    }
+
+    // Build the prompt for the cascade
+    const prompt = `You are the three elite coaches on the RESURGO platform:
+1. MARCUS (Stoic Strategist, avatar: "🏛", color: "#ca8a04") — domain: discipline, goals, execution. Tone: direct, philosophical, uncompromising clarity.
+2. SAGE (Mindfulness & Recovery Coach, avatar: "🌿", color: "#10b981") — domain: energy, wellness, recovery. Tone: calm, empathetic, holistic.
+3. TITAN (Financial Discipline & Performance Coach, avatar: "⚡", color: "#3b82f6") — domain: productivity, budgets, resources. Tone: energetic, strategic, metric-driven.
+
+Here is the user's performance report for today:
+- Daily Synergy Score: ${details.dailySynergyScore}% (Wellness: ${details.wellnessSubscore}%, Tasks: ${details.taskSubscore}%, Habits: ${details.habitSubscore}%, Finances: ${details.budgetSubscore}%)
+- Tasks: ${details.completedTasks} completed out of ${details.totalTasks} total today.
+- Habits: ${details.completedHabits} completed out of ${details.totalHabits} active habits today.
+- Finance: $${details.thisMonthExpenses} spent this month out of monthly budget $${details.totalMonthlyBudget}.
+- Last night sleep: ${details.lastSleepHours} hours.
+- Water intake: ${details.waterMl} ml.
+- Warnings: Sleep Debt: ${details.sleepDebtWarning ? 'YES' : 'NO'}, Budget Overrun: ${details.budgetOverrunWarning ? 'YES' : 'NO'}.
+${userCtx ? `- User's Focus Areas: ${userCtx.focusAreas}\n- User's Primary Goal: ${userCtx.primaryGoal}` : ''}
+
+Your task is to generate EXACTLY three highly specific, short, actionable advice bullet points—one from each of the three coaches (Marcus, Sage, and Titan) tailored directly to the user's lowest-performing subscores and their daily performance.
+
+Provide the response in EXACTLY the following JSON format:
+\`\`\`json
+[
+  {
+    "coachId": "MARCUS",
+    "coachName": "Marcus",
+    "avatar": "🏛",
+    "color": "#ca8a04",
+    "advice": "..."
+  },
+  {
+    "coachId": "SAGE",
+    "coachName": "Sage",
+    "avatar": "🌿",
+    "color": "#10b981",
+    "advice": "..."
+  },
+  {
+    "coachId": "TITAN",
+    "coachName": "Titan",
+    "avatar": "⚡",
+    "color": "#3b82f6",
+    "advice": "..."
+  }
+]
+\`\`\`
+Guidelines:
+- Each coach's advice MUST be short (1-2 powerful sentences), highly actionable, and reflect their unique persona and tone.
+- Address the lowest subscores: e.g. if wellness/sleep is low, Sage must address cognitive recovery or sleep; if finances are low or budget overrun warning is active, Titan must address budget discipline; if tasks/habits are low, Marcus must address discipline and execution.
+- If everything is high, the coaches should praise the user but still give 1 micro-optimization to maintain velocity.
+- Return ONLY the raw valid JSON array, do not wrap it in markdown block except the json codeblock if needed. Ensure it is valid JSON.`;
+
+    const messages = [
+      { role: 'system' as const, content: 'You are a JSON generator that outputs a raw JSON array of 3 objects representing the three elite coaches advice.' },
+      { role: 'user' as const, content: prompt }
+    ];
+
+    let response = await callAICascade(messages, { max_tokens: 800, temperature: 0.7 });
+    
+    // Parse the JSON
+    let insights = [];
+    try {
+      // Clean markdown formatting if present
+      const cleanJson = response.replace(/```json/g, '').replace(/```/g, '').trim();
+      insights = JSON.parse(cleanJson);
+    } catch (e) {
+      // Fallback insights if JSON parsing fails
+      insights = [
+        {
+          coachId: 'MARCUS',
+          coachName: 'Marcus',
+          avatar: '🏛',
+          color: '#ca8a04',
+          advice: details.dailySynergyScore < 70 
+            ? 'The obstacle is the path. Do not complain about fatigue or high load; choose one high-impact task and finish it with Stoic focus.' 
+            : 'Steady progress. Keep your discipline strong and execute the plan without hesitation.'
+        },
+        {
+          coachId: 'SAGE',
+          coachName: 'Sage',
+          avatar: '🌿',
+          color: '#10b981',
+          advice: details.sleepDebtWarning
+            ? 'Your body is signaling sleep debt. Prioritize light exercise, hydrate, and clear your evening early for deep cognitive recovery.'
+            : 'Take a deep breath and connect with your purpose today. Ensure you are drinking enough water and resting well.'
+        },
+        {
+          coachId: 'TITAN',
+          coachName: 'Titan',
+          avatar: '⚡',
+          color: '#3b82f6',
+          advice: details.budgetOverrunWarning
+            ? 'Boundary breach detected in finances. Pause discretionary spending immediately and focus on high-leverage zero-cost habits.'
+            : 'Your resource allocation looks clean today. Maintain this margin and invest your energy into high-yield efforts.'
+        }
+      ];
+    }
+
+    return { insights };
+  }
+});

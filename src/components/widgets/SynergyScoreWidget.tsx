@@ -5,13 +5,35 @@
 // Displays a premium real-time Life OS Pulse score (0-100) and subscores
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { useQuery } from 'convex/react';
+import { useQuery, useAction } from 'convex/react';
 import { api } from '../../../convex/_generated/api';
 import { Shield, Sparkles, AlertTriangle, Battery, CheckSquare, Zap, Activity } from 'lucide-react';
 import Link from 'next/link';
+import { useState, useEffect } from 'react';
 
 export default function SynergyScoreWidget() {
   const synergyData = useQuery(api.coachAI.getDailySynergyDetails);
+  const getInsights = useAction(api.coachAI.getDailySynergyInsights);
+  const [insights, setInsights] = useState<any[]>([]);
+  const [loadingInsights, setLoadingInsights] = useState(false);
+
+  useEffect(() => {
+    if (synergyData && insights.length === 0 && !loadingInsights) {
+      setLoadingInsights(true);
+      getInsights()
+        .then((res) => {
+          if (res?.insights) {
+            setInsights(res.insights);
+          }
+        })
+        .catch((err) => {
+          console.error("Error loading daily synergy insights:", err);
+        })
+        .finally(() => {
+          setLoadingInsights(false);
+        });
+    }
+  }, [synergyData, insights.length, loadingInsights, getInsights]);
 
   if (!synergyData) {
     return (
@@ -192,6 +214,65 @@ export default function SynergyScoreWidget() {
               </span>
             </div>
           </div>
+        </div>
+
+        {/* Daily Synergy Advice Panel */}
+        <div className="border border-zinc-900 bg-zinc-900/10 p-3 space-y-3">
+          <div className="flex items-center gap-1.5 border-b border-zinc-900 pb-1.5">
+            <span className="h-1.5 w-1.5 rounded-full bg-orange-500 animate-ping" />
+            <span className="font-pixel text-[0.55rem] tracking-widest text-zinc-400">COACH SYNERGY DIRECTIVES</span>
+          </div>
+
+          {loadingInsights && (
+            <div className="py-4 text-center font-terminal text-[0.65rem] text-zinc-500 animate-pulse uppercase tracking-wider">
+              ◉ Deciphering Coach Signals...
+            </div>
+          )}
+
+          {!loadingInsights && insights.length === 0 && (
+            <div className="py-2 text-center font-terminal text-[0.65rem] text-zinc-600 uppercase">
+              No directives intercepted yet.
+            </div>
+          )}
+
+          {!loadingInsights && insights.length > 0 && (
+            <div className="space-y-3 font-terminal text-[0.65rem] leading-relaxed">
+              {insights.map((insight) => {
+                const getInteractiveCoachId = (coachId: string): string => {
+                  switch (coachId.toUpperCase()) {
+                    case 'MARCUS': return 'NOVA';
+                    case 'SAGE': return 'AURORA';
+                    case 'TITAN': return 'TITAN';
+                    default: return 'NOVA';
+                  }
+                };
+                const mappedCoachId = getInteractiveCoachId(insight.coachId);
+                const deepLinkUrl = `/coach?coach=${mappedCoachId}&initQuery=${encodeURIComponent(
+                  `Regarding today's directive: "${insight.advice}". How can I implement this effectively in my routine?`
+                )}`;
+
+                return (
+                  <Link
+                    key={insight.coachId}
+                    href={deepLinkUrl}
+                    className="block group hover:bg-zinc-950/80 p-1.5 border border-transparent hover:border-zinc-800 transition-all space-y-1 border-l-2 pl-2"
+                    style={{ borderLeftColor: insight.color }}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-1 font-bold" style={{ color: insight.color }}>
+                        <span>{insight.avatar}</span>
+                        <span className="uppercase tracking-widest">{insight.coachName}</span>
+                      </div>
+                      <span className="opacity-0 group-hover:opacity-100 text-[0.45rem] text-zinc-500 font-pixel tracking-tighter transition-opacity">
+                        [DISCUSS →]
+                      </span>
+                    </div>
+                    <p className="text-zinc-300 group-hover:text-white transition-colors">{insight.advice}</p>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </div>
 
         <Link

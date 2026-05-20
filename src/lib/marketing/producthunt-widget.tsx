@@ -6,7 +6,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getProductByName, formatPHDate, ProductHuntProduct } from '@/lib/api/producthunt';
+import { formatPHDate, ProductHuntProduct } from '@/lib/api/producthunt';
 import { trackMarketingEvent } from '@/lib/marketing/analytics';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -43,8 +43,16 @@ export default function ProductHuntWidget({ showOnDashboard = true }: ProductHun
             widget_location: 'dashboard',
           });
         }
-        
-        const productData = await getProductByName('resurgo');
+
+        const response = await fetch('/api/producthunt?slug=resurgo', {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Product Hunt API error: ${response.status}`);
+        }
+
+        const payload = await response.json() as { product: ProductHuntProduct | null };
+        const productData = payload.product ?? null;
         setProduct(productData);
       } catch (err) {
         console.error('[ProductHuntWidget] Failed to fetch product data:', err);
@@ -173,7 +181,15 @@ export function ProductHuntBadge() {
     const fetchProductData = async () => {
       try {
         setLoading(true);
-        const productData = await getProductByName('resurgo');
+        const response = await fetch('/api/producthunt?slug=resurgo', {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Product Hunt API error: ${response.status}`);
+        }
+
+        const payload = await response.json() as { product: ProductHuntProduct | null };
+        const productData = payload.product ?? null;
         setProduct(productData);
       } catch (err) {
         console.error('[ProductHuntBadge] Failed to fetch product data:', err);

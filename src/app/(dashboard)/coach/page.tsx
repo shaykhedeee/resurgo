@@ -7,7 +7,8 @@
 
 import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Send, Brain, Zap, Dumbbell, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
@@ -91,7 +92,8 @@ function MessageContent({ content, coachColor: _coachColor }: { content: string;
   );
 }
 
-export default function CoachPage() {
+function CoachTerminalInner() {
+  const searchParams = useSearchParams();
   const [selectedCoach, setSelectedCoach] = useState<CoachId>('NOVA');
   const [activeTab, setActiveTab] = useState<CoachTab>('chat');
   const [message, setMessage] = useState('');
@@ -106,6 +108,22 @@ export default function CoachPage() {
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
   const FREE_COACHES: CoachId[] = ['NOVA', 'NEXUS', 'AURORA', 'TITAN', 'PHOENIX'];
+
+  useEffect(() => {
+    const coachParam = searchParams.get('coach');
+    const initQueryParam = searchParams.get('initQuery');
+
+    if (coachParam) {
+      const upperCoach = coachParam.toUpperCase() as CoachId;
+      if (FREE_COACHES.includes(upperCoach) || isPro) {
+        setSelectedCoach(upperCoach);
+      }
+    }
+
+    if (initQueryParam) {
+      setMessage(decodeURIComponent(initQueryParam));
+    }
+  }, [searchParams, isPro]);
 
   const history = useQuery(api.coachMessages.getHistory, { limit: 100 });
   const smartPrompts = useQuery(api.coachAI.getSmartPrompts, { coachId: selectedCoach });
@@ -440,5 +458,18 @@ export default function CoachPage() {
       </div>
       )}
     </div>
+  );
+}
+
+export default function CoachPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen flex-col items-center justify-center bg-black font-mono text-[10px] text-zinc-500 uppercase tracking-widest gap-2">
+        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-orange-600" />
+        ◉ Intercepting Coach Node...
+      </div>
+    }>
+      <CoachTerminalInner />
+    </Suspense>
   );
 }

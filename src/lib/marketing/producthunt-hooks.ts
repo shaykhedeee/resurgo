@@ -6,7 +6,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getProductByName, getPostComments, ProductHuntProduct, ProductHuntComment, formatPHDate } from '@/lib/api/producthunt';
+import { ProductHuntProduct, ProductHuntComment, formatPHDate } from '@/lib/api/producthunt';
 import { trackMarketingEvent } from '@/lib/marketing/analytics';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -38,7 +38,15 @@ export function useProductHuntData(productName: string = 'resurgo') {
           });
         }
         
-        const data = await getProductByName(productName);
+        const response = await fetch(`/api/producthunt?slug=${encodeURIComponent(productName)}`, {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Product Hunt API error: ${response.status}`);
+        }
+
+        const payload = await response.json() as { product: ProductHuntProduct | null };
+        const data = payload.product ?? null;
         setProduct(data);
         
         if (data) {
@@ -100,7 +108,15 @@ export function useProductHuntComments(postId: number, limit: number = 10) {
           });
         }
         
-        const data = await getPostComments(postId, limit);
+        const response = await fetch(`/api/producthunt?mode=comments&postId=${postId}&limit=${limit}`, {
+          headers: { Accept: 'application/json' },
+        });
+        if (!response.ok) {
+          throw new Error(`Product Hunt API error: ${response.status}`);
+        }
+
+        const payload = await response.json() as { comments: ProductHuntComment[] };
+        const data = payload.comments ?? [];
         setComments(data);
         
         trackMarketingEvent('ph_comments_fetched', {
