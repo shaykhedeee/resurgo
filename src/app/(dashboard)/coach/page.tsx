@@ -105,6 +105,99 @@ function CoachTerminalInner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const greetedRef = useRef<Set<string>>(new Set());
 
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+  const [currentlySpeakingId, setCurrentlySpeakingId] = useState<string | null>(null);
+  const [asciiWave, setAsciiWave] = useState('');
+
+  // Hydrate isVoiceEnabled safely on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('resurgo_coach_voice_enabled');
+      if (stored === 'true') {
+        setIsVoiceEnabled(true);
+      }
+    }
+  }, []);
+
+  const handleToggleVoice = () => {
+    const newVal = !isVoiceEnabled;
+    setIsVoiceEnabled(newVal);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('resurgo_coach_voice_enabled', String(newVal));
+    }
+    if (!newVal && typeof window !== 'undefined') {
+      window.speechSynthesis?.cancel();
+      setCurrentlySpeakingId(null);
+    }
+  };
+
+  const speak = (text: string, coachId: CoachId, messageId: string) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+    window.speechSynthesis.cancel();
+
+    const cleanText = text.replace(/──── ACTIONS[\s\S]*$/, '').trim();
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    const voiceSettings = {
+      NOVA: { pitch: 0.85, rate: 0.90, gender: 'male', lang: 'en-US' },
+      NEXUS: { pitch: 1.00, rate: 1.05, gender: 'default', lang: 'en-US' },
+      AURORA: { pitch: 1.05, rate: 0.85, gender: 'female', lang: 'en-GB' },
+      TITAN: { pitch: 0.95, rate: 1.15, gender: 'male', lang: 'en-US' },
+      PHOENIX: { pitch: 1.00, rate: 0.95, gender: 'female', lang: 'en-US' },
+    };
+
+    const settings = voiceSettings[coachId] || { pitch: 1.00, rate: 1.00, gender: 'default', lang: 'en-US' };
+    utterance.pitch = settings.pitch;
+    utterance.rate = settings.rate;
+
+    const voices = window.speechSynthesis.getVoices();
+    let selectedVoice = null;
+
+    if (voices.length > 0) {
+      selectedVoice = voices.find(v => {
+        const nameLower = v.name.toLowerCase();
+        const matchesLang = v.lang.startsWith(settings.lang.split('-')[0]);
+        if (!matchesLang) return false;
+        
+        if (settings.gender === 'male') {
+          return nameLower.includes('male') || nameLower.includes('david') || nameLower.includes('microsoft david') || nameLower.includes('google us english') || nameLower.includes('google uk english male');
+        } else if (settings.gender === 'female') {
+          return nameLower.includes('female') || nameLower.includes('zira') || nameLower.includes('hazel') || nameLower.includes('google uk english female');
+        }
+        return false;
+      });
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.startsWith(settings.lang.split('-')[0]));
+      }
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.default) || voices[0];
+      }
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+
+    utterance.onstart = () => {
+      setCurrentlySpeakingId(messageId);
+    };
+
+    utterance.onend = () => {
+      setCurrentlySpeakingId(null);
+    };
+
+    utterance.onerror = () => {
+      setCurrentlySpeakingId(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  };
+
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
   const FREE_COACHES: CoachId[] = ['NOVA', 'NEXUS', 'AURORA', 'TITAN', 'PHOENIX'];
@@ -162,6 +255,39 @@ function CoachTerminalInner() {
   useEffect(() => {
     setTimeout(() => bottomRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
   }, [coachMessages]);
+
+  // Auto-speak newly arrived coach messages if voice is enabled
+  const lastMsgIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (!isVoiceEnabled || coachMessages.length === 0) return;
+    const lastMsg = coachMessages[coachMessages.length - 1];
+    if (lastMsg && lastMsg.role === 'coach' && lastMsg._id !== lastMsgIdRef.current) {
+      lastMsgIdRef.current = lastMsg._id;
+      speak(lastMsg.content, selectedCoach, lastMsg._id);
+    }
+  }, [coachMessages, isVoiceEnabled, selectedCoach]);
+
+  // ASCII visual speech wave oscillation effect
+  useEffect(() => {
+    if (!currentlySpeakingId) {
+      setAsciiWave('');
+      return;
+    }
+
+    const waves = [
+      '[ | ||| || |||| ]',
+      '[ || | ||| | || ]',
+      '[ |||| || ||| | ]',
+      '[ | ||| || |||| ]'
+    ];
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx = (idx + 1) % waves.length;
+      setAsciiWave(waves[idx]);
+    }, 150);
+
+    return () => clearInterval(interval);
+  }, [currentlySpeakingId]);
 
   const handleSend = async (text: string) => {
     const trimmed = text.trim();
@@ -304,6 +430,30 @@ function CoachTerminalInner() {
       <div className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-4 p-4 md:flex-row md:p-6">
         {/* -- AGENT SELECTOR -- */}
         <aside className="w-full md:w-64 shrink-0 space-y-3">
+          {/* -- SPEECH ENGINE TOGGLE -- */}
+          <div className="surface-panel overflow-hidden">
+            <div className="border-b border-zinc-900 px-3 py-2 flex items-center justify-between">
+              <p className="font-mono text-[9px] tracking-widest text-zinc-400">SPEECH ENGINE</p>
+              {isVoiceEnabled && <span className="h-1.5 w-1.5 animate-ping rounded-full bg-emerald-500" />}
+            </div>
+            <div className="p-2 bg-zinc-950/40">
+              <button
+                onClick={handleToggleVoice}
+                className={cn(
+                  "w-full border px-3 py-2 font-mono text-[9px] tracking-wider text-center transition-all cursor-pointer font-bold",
+                  isVoiceEnabled
+                    ? "border-emerald-700 bg-emerald-950/20 text-emerald-400 hover:bg-emerald-950/40"
+                    : "border-zinc-800 bg-zinc-900/50 text-zinc-500 hover:border-zinc-700 hover:text-zinc-300"
+                )}
+              >
+                {isVoiceEnabled ? "[🔊 SPEAK ON ARRIVAL]" : "[🔇 SPEAK MUTED]"}
+              </button>
+              <p className="mt-1 text-center font-mono text-[7px] tracking-widest text-zinc-600 uppercase">
+                Zero-cost client-side synthesis
+              </p>
+            </div>
+          </div>
+
           <div className="surface-panel overflow-hidden">
             <div className="border-b border-zinc-900 px-3 py-2">
               <p className="font-mono text-[9px] tracking-widest text-zinc-400">CHOOSE COACH</p>
@@ -378,9 +528,16 @@ function CoachTerminalInner() {
             <div className="flex items-start gap-3">
               <PixelArt variant="coach" className="h-16 w-16 shrink-0" title="Coach pixel art" />
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <PixelIcon name="robot" size={14} className="text-violet-300" />
-                  <p className="font-mono text-xs font-bold tracking-widest" style={{ color: coach.color }}>{coach.name} - {coach.title}</p>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    <PixelIcon name="robot" size={14} className="text-violet-300" />
+                    <p className="font-mono text-xs font-bold tracking-widest" style={{ color: coach.color }}>{coach.name} - {coach.title}</p>
+                  </div>
+                  {currentlySpeakingId && (
+                    <span className="font-mono text-[9px] tracking-widest text-emerald-500 animate-pulse bg-emerald-950/30 px-2 py-0.5 border border-emerald-800/40">
+                      SPEECH_ON: {asciiWave}
+                    </span>
+                  )}
                 </div>
                 <p className="mt-1 font-mono text-[9px] tracking-wider text-zinc-500">{coach.domain}</p>
                 <p className="mt-1 font-mono text-[10px] text-zinc-400">{coach.shortBio}</p>
@@ -410,9 +567,39 @@ function CoachTerminalInner() {
                   <div key={m._id}
                     className={cn('border px-4 py-3', isCoach ? 'mr-6 bg-black' : 'ml-6 border-zinc-800 bg-zinc-950')}
                     style={isCoach ? { borderColor: `${coach.color}30` } : {}}>
-                    <p className="mb-1 font-mono text-[8px] tracking-widest" style={isCoach ? { color: coach.color } : { color: '#52525b' }}>
-                      {isCoach ? coach.name : 'You'}
-                    </p>
+                    <div className="mb-1.5 flex items-center justify-between">
+                      <p className="font-mono text-[8px] tracking-widest" style={isCoach ? { color: coach.color } : { color: '#52525b' }}>
+                        {isCoach ? coach.name : 'You'}
+                      </p>
+                      {isCoach && (
+                        <div className="flex items-center gap-2">
+                          {currentlySpeakingId === m._id && (
+                            <span className="font-mono text-[7px] text-emerald-500 mr-1 animate-pulse">
+                              {asciiWave}
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (currentlySpeakingId === m._id) {
+                                window.speechSynthesis?.cancel();
+                                setCurrentlySpeakingId(null);
+                              } else {
+                                speak(m.content, selectedCoach, m._id);
+                              }
+                            }}
+                            className={cn(
+                              "font-mono text-[7px] tracking-widest uppercase border px-1.5 py-0.5 hover:bg-zinc-800 transition-colors cursor-pointer",
+                              currentlySpeakingId === m._id
+                                ? "border-red-800 bg-red-950/20 text-red-500 hover:bg-red-950/40"
+                                : "border-zinc-800 bg-zinc-900/50 text-zinc-400 hover:border-zinc-700 hover:text-zinc-300"
+                            )}
+                          >
+                            {currentlySpeakingId === m._id ? "[■ Stop]" : "[▶ Read]"}
+                          </button>
+                        </div>
+                      )}
+                    </div>
                     {isCoach ? (
                       <MessageContent content={m.content} coachColor={coach.color} />
                     ) : (

@@ -78,6 +78,18 @@ export interface ProductHuntPostsResponse {
   }
 }
 
+interface ProductHuntCommentsResponse {
+  data?: {
+    Post?: {
+      comments?: {
+        edges?: Array<{
+          node: ProductHuntComment
+        }>
+      }
+    } | null
+  } | null
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Constants
 // ─────────────────────────────────────────────────────────────────────────────
@@ -89,7 +101,7 @@ const PH_DEVELOPER_TOKEN = process.env.PRODUCT_HUNT_DEVELOPER_TOKEN
 // Helper Functions
 // ─────────────────────────────────────────────────────────────────────────────
 
-async function fetchPHGraphQL(query: string, variables = {}): Promise<any> {
+async function fetchPHGraphQL<T>(query: string, variables = {}): Promise<T | null> {
   if (!PH_DEVELOPER_TOKEN) {
     console.warn('[ProductHunt] PRODUCT_HUNT_DEVELOPER_TOKEN not configured')
     return null
@@ -116,7 +128,7 @@ async function fetchPHGraphQL(query: string, variables = {}): Promise<any> {
       throw new Error(`Product Hunt API error: ${res.status}`)
     }
 
-    return await res.json()
+    return await res.json() as T
   } catch (err) {
     console.error('[ProductHunt] API request failed:', err)
     throw err
@@ -200,7 +212,7 @@ export async function getProductByName(
     `
 
     const variables = { name: productName }
-    const data = await fetchPHGraphQL(query, variables)
+    const data = await fetchPHGraphQL<ProductHuntPostsResponse>(query, variables)
 
     if (!data || !data.data || !data.data.Post) {
       return null
@@ -286,7 +298,7 @@ export async function getProductById(
     `
 
     const variables = { id: postId }
-    const data = await fetchPHGraphQL(query, variables)
+    const data = await fetchPHGraphQL<ProductHuntPostsResponse>(query, variables)
 
     if (!data || !data.data || !data.data.Post) {
       return null
@@ -338,13 +350,13 @@ export async function getPostComments(
     `
 
     const variables = { id: postId, limit }
-    const data = await fetchPHGraphQL(query, variables)
+    const data = await fetchPHGraphQL<ProductHuntCommentsResponse>(query, variables)
 
     if (!data || !data.data || !data.data.Post?.comments?.edges) {
       return []
     }
 
-    return data.data.Post.comments.edges.map((edge: any) => edge.node)
+    return data.data.Post.comments.edges.map((edge) => edge.node)
   } catch (err) {
     console.error('[ProductHunt] Failed to get post comments:', err)
     return []

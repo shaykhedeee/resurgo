@@ -52,6 +52,107 @@ export function KaiChatbot({
   const [isLoading, setIsLoading] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [lastError, setLastError] = useState<Error | null>(null);
+  const [isVoiceEnabled, setIsVoiceEnabled] = useState(false);
+  const [currentlySpeakingId, setCurrentlySpeakingId] = useState<string | null>(null);
+  const [asciiWave, setAsciiWave] = useState('');
+
+  // Hydrate safely on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('resurgofy_kai_voice_enabled');
+      if (stored === 'true') {
+        setIsVoiceEnabled(true);
+      }
+    }
+  }, []);
+
+  const handleToggleVoice = () => {
+    const newVal = !isVoiceEnabled;
+    setIsVoiceEnabled(newVal);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('resurgofy_kai_voice_enabled', String(newVal));
+    }
+    if (!newVal && typeof window !== 'undefined') {
+      window.speechSynthesis?.cancel();
+      setCurrentlySpeakingId(null);
+    }
+  };
+
+  const speak = useCallback((text: string, messageId: string) => {
+    if (typeof window === 'undefined' || !window.speechSynthesis) return;
+
+    window.speechSynthesis.cancel();
+
+    // Clean markdown structure out of synthesized speech
+    let cleanText = text
+      .replace(/[#*`•\-\n]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.pitch = 1.0;
+    utterance.rate = 1.0;
+
+    const voices = window.speechSynthesis.getVoices();
+    let selectedVoice = null;
+
+    if (voices.length > 0) {
+      selectedVoice = voices.find(v => {
+        const nameLower = v.name.toLowerCase();
+        return nameLower.includes('google us english') || nameLower.includes('google uk english female') || nameLower.includes('david') || nameLower.includes('zira');
+      });
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.lang.startsWith('en'));
+      }
+
+      if (!selectedVoice) {
+        selectedVoice = voices.find(v => v.default) || voices[0];
+      }
+    }
+
+    if (selectedVoice) {
+      utterance.voice = selectedVoice;
+    }
+
+    utterance.onstart = () => {
+      setCurrentlySpeakingId(messageId);
+    };
+
+    utterance.onend = () => {
+      setCurrentlySpeakingId(null);
+    };
+
+    utterance.onerror = () => {
+      setCurrentlySpeakingId(null);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, []);
+
+  // ASCII wave animation for Kai
+  useEffect(() => {
+    if (!currentlySpeakingId) {
+      setAsciiWave('');
+      return;
+    }
+
+    const waves = [
+      '▖▘▝▗',
+      '▚▞▚▞',
+      '▙▛▜▟',
+      '▚▞▚▞'
+    ];
+    let idx = 0;
+    const interval = setInterval(() => {
+      idx = (idx + 1) % waves.length;
+      setAsciiWave(waves[idx]);
+    }, 150);
+
+    return () => clearInterval(interval);
+  }, [currentlySpeakingId]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const conversationIdRef = useRef(
@@ -301,10 +402,11 @@ export function KaiChatbot({
       const data = await response.json();
 
       if (data.success && data.message) {
+        const assistantMsgId = `assistant-${Date.now()}`;
         setMessages((prev) => [
           ...prev,
           {
-            id: `assistant-${Date.now()}`,
+            id: assistantMsgId,
             role: 'assistant',
             content: data.message,
             timestamp: new Date(),
@@ -316,6 +418,9 @@ export function KaiChatbot({
             cta: data.cta ?? null,
           },
         ]);
+        if (isVoiceEnabled) {
+          speak(data.message, assistantMsgId);
+        }
       } else {
         throw new Error(data.error || 'Failed to get response');
       }
@@ -396,11 +501,24 @@ export function KaiChatbot({
                   </p>
                 </div>
               </div>
-              <button
-                onClick={handleClose}
-                className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center transition-colors"
-                aria-label="Close chat"
-              >
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleToggleVoice}
+                  className={`h-7 px-2 rounded-md flex items-center justify-center gap-1.5 transition-all cursor-pointer border text-[10px] font-mono font-bold leading-none ${
+                    isVoiceEnabled
+                      ? "border-emerald-500/35 bg-emerald-500/15 text-emerald-400"
+                      : "border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10"
+                  }`}
+                  title={isVoiceEnabled ? "Mute Kai's voice" : "Enable Kai's voice"}
+                >
+                  {isVoiceEnabled ? `🔊 ${asciiWave || "ON"}` : "🔇 VOICE"}
+                </button>
+                <button
+                  onClick={handleClose}
+                  className="w-7 h-7 rounded-md hover:bg-white/10 flex items-center justify-center transition-colors"
+                  aria-label="Close chat"
+                >
                 <svg
                   className="w-5 h-5 text-[var(--text-secondary)]"
                   fill="none"
@@ -415,6 +533,7 @@ export function KaiChatbot({
                   />
                 </svg>
               </button>
+              </div>
             </div>
 
             {/* Messages */}
@@ -591,15 +710,31 @@ export function KaiChatbot({
   return (
     <div className="w-full h-[500px] glass-card rounded-2xl flex flex-col overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-white/10 bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-secondary)]/10">
-        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] flex items-center justify-center">
-          <span className="text-2xl">🤖</span>
+      <div className="flex items-center justify-between gap-3 p-4 border-b border-white/10 bg-gradient-to-r from-[var(--accent)]/10 to-[var(--accent-secondary)]/10">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[var(--accent)] to-[var(--accent-secondary)] flex items-center justify-center">
+            <span className="text-2xl">🤖</span>
+          </div>
+          <div>
+            <h3 className="font-semibold text-[var(--text-primary)]">Ask Kai</h3>
+            <p className="text-sm text-[var(--text-secondary)]" aria-label={`Chatting with Kai • ${realContext?.plan ?? 'Free'} plan • ${realContext?.currentStreak ?? 0} day streak`}>
+              Get instant answers from our AI assistant
+            </p>
+          </div>
         </div>
         <div>
-          <h3 className="font-semibold text-[var(--text-primary)]">Ask Kai</h3>
-          <p className="text-sm text-[var(--text-secondary)]" aria-label={`Chatting with Kai • ${realContext?.plan ?? 'Free'} plan • ${realContext?.currentStreak ?? 0} day streak`}>
-            Get instant answers from our AI assistant
-          </p>
+          <button
+            type="button"
+            onClick={handleToggleVoice}
+            className={`h-8 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-all cursor-pointer border text-xs font-mono font-bold ${
+              isVoiceEnabled
+                ? "border-emerald-500/35 bg-emerald-500/15 text-emerald-400"
+                : "border-white/10 bg-white/5 text-zinc-400 hover:bg-white/10"
+            }`}
+            title={isVoiceEnabled ? "Mute Kai's voice" : "Enable Kai's voice"}
+          >
+            {isVoiceEnabled ? `🔊 ${asciiWave || "ON"}` : "🔇 VOICE"}
+          </button>
         </div>
       </div>
 

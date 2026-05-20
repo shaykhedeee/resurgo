@@ -2,15 +2,18 @@
 
 export {};
 
+import { NextRequest } from 'next/server';
+import { getPostComments, getProductByName } from '@/lib/api/producthunt';
+
 jest.mock('@/lib/api/producthunt', () => ({
   getProductByName: jest.fn(),
   getPostComments: jest.fn(),
 }));
 
-import { getPostComments, getProductByName } from '@/lib/api/producthunt';
-
 const mockGetProductByName = getProductByName as jest.MockedFunction<typeof getProductByName>;
 const mockGetPostComments = getPostComments as jest.MockedFunction<typeof getPostComments>;
+
+const asNextRequest = (url: string) => new NextRequest(url);
 
 describe('/api/producthunt route', () => {
   beforeEach(() => {
@@ -45,7 +48,7 @@ describe('/api/producthunt route', () => {
     });
 
     const { GET } = await import('./route');
-    const response = await GET(new Request('http://localhost/api/producthunt') as any);
+    const response = await GET(asNextRequest('http://localhost/api/producthunt'));
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -74,7 +77,7 @@ describe('/api/producthunt route', () => {
     ]);
 
     const { GET } = await import('./route');
-    const response = await GET(new Request('http://localhost/api/producthunt?mode=comments&postId=123&limit=5') as any);
+    const response = await GET(asNextRequest('http://localhost/api/producthunt?mode=comments&postId=123&limit=5'));
     const body = await response.json();
 
     expect(response.status).toBe(200);
@@ -84,7 +87,7 @@ describe('/api/producthunt route', () => {
 
   it('rejects invalid comment requests', async () => {
     const { GET } = await import('./route');
-    const response = await GET(new Request('http://localhost/api/producthunt?mode=comments&postId=abc') as any);
+    const response = await GET(asNextRequest('http://localhost/api/producthunt?mode=comments&postId=abc'));
     const body = await response.json();
 
     expect(response.status).toBe(400);
