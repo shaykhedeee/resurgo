@@ -13,6 +13,7 @@ import {
 import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/blog/post-index';
 import { habitTrackerAppsPost } from '@/lib/blog/posts/habit-tracker-apps';
 import { adhdProductivityAppsPost } from '@/lib/blog/posts/adhd-productivity-apps';
+import { aiProductivityStackLifeOsPost } from '@/lib/blog/posts/ai-productivity-stack-life-os';
 import {
   FOUNDING_LIFETIME_COPY,
   FOUNDING_LIFETIME_PRICE_USD,
@@ -45,6 +46,16 @@ const POSTS: Record<string, {
   seoKeywords?: string[];
   chartComponent?: React.ComponentType;
 }> = {
+  'ai-productivity-stack-life-os-2026': {
+    title: aiProductivityStackLifeOsPost.title,
+    desc: aiProductivityStackLifeOsPost.desc,
+    date: aiProductivityStackLifeOsPost.date,
+    readTime: aiProductivityStackLifeOsPost.readTime,
+    tags: aiProductivityStackLifeOsPost.tags,
+    heroImage: aiProductivityStackLifeOsPost.heroImage,
+    seoKeywords: aiProductivityStackLifeOsPost.seoKeywords,
+    content: aiProductivityStackLifeOsPost.content,
+  },
   '12-best-habit-tracker-apps-2026': {
     title: habitTrackerAppsPost.title,
     desc: habitTrackerAppsPost.desc,

@@ -19,6 +19,16 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: 'ai-productivity-stack-life-os-2026',
+    title: 'The 2026 AI Productivity Stack Needs a Life OS, Not More Apps',
+    desc: 'Build an ADHD-friendly AI productivity system for 2026 with fewer tools, clearer focus blocks, and a calmer Life OS.',
+    date: 'May 20, 2026',
+    lastModified: '2026-05-20T06:35:00.000Z',
+    readTime: '5 min',
+    tags: ['AI productivity', 'Life OS', 'ADHD focus'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
     slug: '12-best-habit-tracker-apps-2026',
     title: '12 Best Habit Tracker Apps 2026: Complete Comparison Guide',
     desc: 'An honest, in-depth review of 12 habit trackers including Resurgo, Habitica, Streaks, and more. Comparison table, app breakdowns, and ICP matrix.',
