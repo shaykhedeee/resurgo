@@ -10,9 +10,9 @@ import { api } from '../../../../convex/_generated/api';
 import { useState, useEffect, useRef, type FormEvent } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { Droplets, BarChart3, Utensils, Plus, Leaf, Search, ChefHat, X, Loader2 } from 'lucide-react';
+import { Droplets, BarChart3, Utensils, Plus, Leaf, Search, ChefHat, X, Loader2, Calendar } from 'lucide-react';
 
-type Tab = 'meals' | 'water' | 'calories' | 'summary' | 'recipes';
+type Tab = 'meals' | 'water' | 'calories' | 'summary' | 'recipes' | 'meal-prep';
 
 interface FoodItem {
   id: string;
@@ -100,6 +100,42 @@ export default function FoodPage() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [recipeSearching, setRecipeSearching] = useState(false);
   const [expandedRecipe, setExpandedRecipe] = useState<string | null>(null);
+
+  // ── Meal Prep Planner state ──────────────────────────────────────────────────
+  type MealSlot = 'breakfast' | 'lunch' | 'dinner' | 'snack';
+  type WeekPlan = Record<string, Record<MealSlot, MealEntry | null>>;
+
+  // 7-day plan: { 'Mon': { breakfast: null, ... }, ... }
+  const WEEK_DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const MEAL_SLOTS: MealSlot[] = ['breakfast', 'lunch', 'dinner', 'snack'];
+  const buildEmptyPlan = (): WeekPlan =>
+    Object.fromEntries(WEEK_DAYS.map(d => [d, { breakfast: null, lunch: null, dinner: null, snack: null }]));
+
+  const [weekPlan, setWeekPlan] = useState<WeekPlan>(buildEmptyPlan);
+  const [prepPickerOpen, setPrepPickerOpen] = useState<{ day: string; slot: MealSlot } | null>(null);
+
+  const handlePrepAssign = (day: string, slot: MealSlot, preset: typeof MEAL_PRESETS[number]) => {
+    setWeekPlan(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [slot]: { name: preset.name, calories: preset.calories, protein: preset.protein, carbs: preset.carbs, fat: preset.fat } },
+    }));
+    setPrepPickerOpen(null);
+  };
+
+  const handlePrepClear = (day: string, slot: MealSlot) => {
+    setWeekPlan(prev => ({
+      ...prev,
+      [day]: { ...prev[day], [slot]: null },
+    }));
+  };
+
+  const dayTotals = (day: string) => {
+    const slots = weekPlan[day];
+    return MEAL_SLOTS.reduce((acc, s) => {
+      const m = slots[s];
+      return { calories: acc.calories + (m?.calories ?? 0), protein: acc.protein + (m?.protein ?? 0) };
+    }, { calories: 0, protein: 0 });
+  };
 
   // Debounced food search
   useEffect(() => {
@@ -217,11 +253,12 @@ export default function FoodPage() {
   };
 
   const TABS: { id: Tab; label: string; icon: React.ElementType }[] = [
-    { id: 'meals',    label: 'MEALS',   icon: Utensils   },
-    { id: 'water',    label: 'WATER',   icon: Droplets   },
-    { id: 'calories', label: 'MACROS',  icon: BarChart3  },
-    { id: 'summary',  label: 'SUMMARY', icon: Leaf       },
-    { id: 'recipes',  label: 'RECIPES', icon: ChefHat    },
+    { id: 'meals',     label: 'MEALS',    icon: Utensils   },
+    { id: 'water',     label: 'WATER',    icon: Droplets   },
+    { id: 'calories',  label: 'MACROS',   icon: BarChart3  },
+    { id: 'summary',   label: 'SUMMARY',  icon: Leaf       },
+    { id: 'recipes',   label: 'RECIPES',  icon: ChefHat    },
+    { id: 'meal-prep', label: 'MEAL PREP',icon: Calendar   },
   ];
 
   const MacroBar = ({ label, value, goal, pct, color }: { label: string; value: number; goal: number; pct: number; color: string }) => (
@@ -766,6 +803,143 @@ export default function FoodPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ── MEAL PREP TAB ── */}
+        {tab === 'meal-prep' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2.5 flex items-center justify-between">
+                <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">WEEKLY_MEAL_PREP_PLANNER</span>
+                <button
+                  onClick={() => setWeekPlan(buildEmptyPlan())}
+                  className="font-mono text-xs text-zinc-500 hover:text-red-400 transition"
+                >
+                  [RESET]
+                </button>
+              </div>
+              <div className="p-3">
+                <p className="font-mono text-xs text-zinc-500 mb-3">
+                  Tap any slot to assign a meal preset. Plan your week in advance.
+                </p>
+
+                {/* Day-by-day grid — scrollable on mobile */}
+                <div className="overflow-x-auto">
+                  <div className="min-w-[600px]">
+                    {/* Header row */}
+                    <div className="grid grid-cols-8 gap-1 mb-1">
+                      <div className="font-mono text-[9px] tracking-widest text-zinc-600 pt-1">SLOT</div>
+                      {WEEK_DAYS.map(d => (
+                        <div key={d} className="text-center">
+                          <p className="font-mono text-[9px] tracking-widest text-zinc-400">{d.toUpperCase()}</p>
+                          {(() => {
+                            const t = dayTotals(d);
+                            return t.calories > 0 ? (
+                              <p className="font-mono text-[8px] text-amber-600">{t.calories} kcal</p>
+                            ) : null;
+                          })()}
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Meal slot rows */}
+                    {MEAL_SLOTS.map(slot => (
+                      <div key={slot} className="grid grid-cols-8 gap-1 mb-1">
+                        <div className="font-mono text-[8px] tracking-widest text-zinc-600 uppercase pt-2">{slot}</div>
+                        {WEEK_DAYS.map(day => {
+                          const meal = weekPlan[day][slot];
+                          return (
+                            <div key={day} className="relative">
+                              {meal ? (
+                                <div className="border border-orange-900/50 bg-orange-950/10 p-1.5">
+                                  <p className="font-mono text-[8px] font-bold text-orange-400 leading-tight truncate">{meal.name}</p>
+                                  <p className="font-mono text-[7px] text-zinc-600">{meal.calories} kcal</p>
+                                  <button
+                                    onClick={() => handlePrepClear(day, slot)}
+                                    className="absolute top-0.5 right-0.5 text-zinc-600 hover:text-red-500"
+                                  >
+                                    <X className="h-2.5 w-2.5" />
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => setPrepPickerOpen({ day, slot })}
+                                  className="w-full h-10 border border-dashed border-zinc-800 hover:border-orange-800 hover:bg-orange-950/10 transition flex items-center justify-center"
+                                >
+                                  <Plus className="h-3 w-3 text-zinc-700" />
+                                </button>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Weekly totals summary */}
+            <div className="border border-zinc-900 bg-zinc-950">
+              <div className="border-b border-zinc-900 px-4 py-2">
+                <span className="font-mono text-xs tracking-widest text-zinc-400">WEEKLY_NUTRITION_ESTIMATE</span>
+              </div>
+              <div className="grid grid-cols-4 divide-x divide-zinc-900">
+                {(() => {
+                  const totals = WEEK_DAYS.reduce((acc, d) => {
+                    const t = dayTotals(d);
+                    return { calories: acc.calories + t.calories, protein: acc.protein + t.protein };
+                  }, { calories: 0, protein: 0 });
+                  const mealsPlanned = WEEK_DAYS.reduce((acc, d) =>
+                    acc + MEAL_SLOTS.filter(s => weekPlan[d][s] !== null).length, 0);
+                  return [
+                    { label: 'TOTAL_KCAL', value: totals.calories.toLocaleString(), color: 'text-amber-400' },
+                    { label: 'TOTAL_PROTEIN', value: `${totals.protein}g`, color: 'text-blue-400' },
+                    { label: 'AVG_KCAL/DAY', value: totals.calories > 0 ? Math.round(totals.calories / 7).toLocaleString() : '—', color: 'text-green-400' },
+                    { label: 'MEALS_PLANNED', value: `${mealsPlanned} / 28`, color: 'text-zinc-300' },
+                  ].map(({ label, value, color }) => (
+                    <div key={label} className="p-4 text-center">
+                      <p className="font-mono text-[8px] tracking-widest text-zinc-500">{label}</p>
+                      <p className={cn('font-mono text-lg font-bold mt-1', color)}>{value}</p>
+                    </div>
+                  ));
+                })()}
+              </div>
+            </div>
+
+            {/* Meal preset picker modal */}
+            {prepPickerOpen && (
+              <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 p-4" onClick={() => setPrepPickerOpen(null)}>
+                <div className="w-full max-w-sm border border-zinc-800 bg-zinc-950" onClick={e => e.stopPropagation()}>
+                  <div className="flex items-center justify-between border-b border-zinc-900 px-4 py-2.5">
+                    <span className="font-mono text-xs tracking-widest text-zinc-300">
+                      SELECT_MEAL — {prepPickerOpen.day} {prepPickerOpen.slot.toUpperCase()}
+                    </span>
+                    <button onClick={() => setPrepPickerOpen(null)} className="text-zinc-500 hover:text-zinc-300">
+                      <X className="h-4 w-4" />
+                    </button>
+                  </div>
+                  <div className="max-h-72 overflow-y-auto divide-y divide-zinc-900">
+                    {MEAL_PRESETS.map((preset) => (
+                      <button
+                        key={preset.name}
+                        onClick={() => handlePrepAssign(prepPickerOpen.day, prepPickerOpen.slot, preset)}
+                        className="w-full px-4 py-2.5 text-left hover:bg-zinc-900 transition"
+                      >
+                        <div className="flex items-center justify-between">
+                          <p className="font-mono text-xs font-bold text-zinc-200">{preset.name}</p>
+                          <p className="font-mono text-xs text-amber-400">{preset.calories} kcal</p>
+                        </div>
+                        <p className="font-mono text-xs text-zinc-600 mt-0.5">
+                          P:{preset.protein}g · C:{preset.carbs}g · F:{preset.fat}g
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
             )}
           </div>

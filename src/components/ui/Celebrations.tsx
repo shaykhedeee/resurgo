@@ -289,17 +289,19 @@ export function CelebrationBurst({ active, x = 50, y = 50, onComplete }: Celebra
 
 interface FloatingXPProps {
   amount: number;
-  x: number;
-  y: number;
+  /** @deprecated No longer used for positioning — XP popup now always appears at the bottom-right corner. */
+  x?: number;
+  /** @deprecated No longer used for positioning — XP popup now always appears at the bottom-right corner. */
+  y?: number;
   onComplete: () => void;
 }
 
-export function FloatingXP({ amount, x, y, onComplete }: FloatingXPProps) {
+export function FloatingXP({ amount, onComplete }: FloatingXPProps) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const timer = setTimeout(onComplete, 1500);
+    const timer = setTimeout(onComplete, 1200);
     return () => clearTimeout(timer);
   }, [onComplete]);
 
@@ -307,15 +309,9 @@ export function FloatingXP({ amount, x, y, onComplete }: FloatingXPProps) {
 
   return createPortal(
     <div
-      className="fixed pointer-events-none animate-xp-gain"
-      style={{
-        left: x,
-        top: y,
-        transform: 'translate(-50%, -50%)',
-        zIndex: 'var(--z-celebration)',
-      }}
+      className="xp-corner-popup animate-xp-gain"
     >
-      <div className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gold-400/90 text-black font-bold text-sm shadow-lg">
+      <div className="flex items-center gap-1 px-2.5 py-1 border border-orange-500/40 bg-zinc-950/90 font-pixel text-[0.65rem] tracking-widest text-orange-400 shadow-lg">
         +{amount} XP
       </div>
     </div>,

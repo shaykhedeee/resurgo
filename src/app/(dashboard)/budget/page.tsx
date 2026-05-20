@@ -8,7 +8,7 @@
 import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import type { Id } from '../../../../convex/_generated/dataModel';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useEffect } from 'react';
 import { Plus, Trash2, TrendingUp, TrendingDown, Target, DollarSign, PieChart, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -42,10 +42,41 @@ interface FinancialGoal {
 
 const EXPENSE_CATS = ['Housing', 'Food', 'Transport', 'Health', 'Entertainment', 'Education', 'Clothing', 'Utilities', 'Subscriptions', 'Other'];
 const INCOME_CATS  = ['Salary', 'Freelance', 'Investment', 'Business', 'Side Hustle', 'Gift', 'Other'];
-const CURRENCIES   = ['USD', 'EUR', 'GBP', 'INR', 'AED', 'CAD', 'AUD'];
+const CURRENCIES   = ['USD', 'EUR', 'GBP', 'INR', 'AED', 'CAD', 'AUD', 'SGD', 'JPY', 'CHF', 'NZD', 'ZAR', 'BRL', 'MXN'];
+
+/**
+ * Detect the most likely currency from the browser's locale.
+ * Falls back to USD if detection fails or the currency is unsupported.
+ */
+function detectLocaleCurrency(): string {
+  try {
+    // Use Intl to resolve a currency from the browser locale
+    const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+    const resolved = new Intl.NumberFormat(locale, { style: 'currency', currency: 'USD' }).resolvedOptions();
+    // Map locale to currency using Intl.supportedValuesOf or a locale → currency table
+    const localeCurrencyMap: Record<string, string> = {
+      'en-GB': 'GBP', 'en-AU': 'AUD', 'en-CA': 'CAD', 'en-IN': 'INR', 'en-SG': 'SGD',
+      'en-NZ': 'NZD', 'en-ZA': 'ZAR', 'en-AE': 'AED',
+      'de': 'EUR', 'fr': 'EUR', 'it': 'EUR', 'es': 'EUR', 'nl': 'EUR', 'pt-PT': 'EUR',
+      'ja': 'JPY', 'ja-JP': 'JPY',
+      'pt-BR': 'BRL', 'es-MX': 'MXN',
+      'zh-SG': 'SGD',
+    };
+    // Try exact match, then language prefix
+    const lang = resolved.locale ?? locale;
+    const currency = localeCurrencyMap[lang] ?? localeCurrencyMap[lang.split('-')[0]] ?? 'USD';
+    return CURRENCIES.includes(currency) ? currency : 'USD';
+  } catch {
+    return 'USD';
+  }
+}
 
 function fmt(n: number, currency = 'USD') {
-  return new Intl.NumberFormat('en-US', { style: 'currency', currency, maximumFractionDigits: 0 }).format(n);
+  try {
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency, maximumFractionDigits: 0 }).format(n);
+  } catch {
+    return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(n);
+  }
 }
 
 function thisMonth() {
@@ -58,6 +89,13 @@ export default function BudgetPage() {
   const [showAddTx, setShowAddTx] = useState(false);
   const [showAddGoal, setShowAddGoal] = useState(false);
   const [month, setMonth] = useState(thisMonth());
+  // Preferred currency — auto-detected from browser locale on mount
+  const [preferredCurrency, setPreferredCurrency] = useState('USD');
+
+  // Detect locale currency once on mount (client only)
+  useEffect(() => {
+    setPreferredCurrency(detectLocaleCurrency());
+  }, []);
 
   // Form state
   const [txType, setTxType] = useState<TxType>('expense');
@@ -72,6 +110,11 @@ export default function BudgetPage() {
   const [goalDeadline, setGoalDeadline] = useState('');
   const [addingGoal, setAddingGoal] = useState(false);
   const [addingTx, setAddingTx] = useState(false);
+
+  // Sync txCurrency to preferred currency when preference loads
+  useEffect(() => {
+    setTxCurrency(preferredCurrency);
+  }, [preferredCurrency]);
 
   const summary = useQuery(api.budget.getMonthSummary, { month });
   const transactions = useQuery(api.budget.listTransactions, { month });
@@ -142,6 +185,9 @@ export default function BudgetPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
+              <span className="border border-green-900/60 bg-green-950/20 px-2 py-1 font-mono text-xs tracking-widest text-green-600">
+                {preferredCurrency}
+              </span>
               <input
                 type="month"
                 value={month}
@@ -180,9 +226,9 @@ export default function BudgetPage() {
             {/* Stats row */}
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               {[
-                { label: 'INCOME', value: fmt(summary?.totalIncome ?? 0), icon: TrendingUp, color: 'text-green-500', border: 'border-green-900' },
-                { label: 'EXPENSES', value: fmt(summary?.totalExpenses ?? 0), icon: TrendingDown, color: 'text-red-500', border: 'border-red-900' },
-                { label: 'NET SAVINGS', value: fmt(summary?.net ?? 0), icon: DollarSign, color: (summary?.net ?? 0) >= 0 ? 'text-green-400' : 'text-red-400', border: 'border-zinc-800' },
+                { label: 'INCOME', value: fmt(summary?.totalIncome ?? 0, preferredCurrency), icon: TrendingUp, color: 'text-green-500', border: 'border-green-900' },
+                { label: 'EXPENSES', value: fmt(summary?.totalExpenses ?? 0, preferredCurrency), icon: TrendingDown, color: 'text-red-500', border: 'border-red-900' },
+                { label: 'NET SAVINGS', value: fmt(summary?.net ?? 0, preferredCurrency), icon: DollarSign, color: (summary?.net ?? 0) >= 0 ? 'text-green-400' : 'text-red-400', border: 'border-zinc-800' },
                 { label: 'SAVINGS RATE', value: `${savingsRate}%`, icon: PieChart, color: savingsRate >= 20 ? 'text-green-400' : 'text-amber-400', border: 'border-zinc-800' },
               ].map(({ label, value, icon: Icon, color, border }) => (
                 <div key={label} className={cn('border bg-zinc-950 p-4', border)}>
@@ -213,7 +259,7 @@ export default function BudgetPage() {
                             <div className="h-full bg-red-600" style={{ width: `${pct}%` }} />
                           </div>
                         </div>
-                        <p className="w-16 text-right font-mono text-xs text-zinc-400">{fmt(cat.amount)}</p>
+                        <p className="w-16 text-right font-mono text-xs text-zinc-400">{fmt(cat.amount, preferredCurrency)}</p>
                         <p className="w-10 text-right font-mono text-xs text-zinc-400">{pct}%</p>
                       </div>
                     );
@@ -253,7 +299,7 @@ export default function BudgetPage() {
                       'font-mono text-sm font-bold',
                       tx.type === 'income' ? 'text-green-400' : 'text-red-400'
                     )}>
-                      {tx.type === 'income' ? '+' : '-'}{fmt(tx.amount, tx.currency)}
+                      {tx.type === 'income' ? '+' : '-'}{fmt(tx.amount, tx.currency ?? preferredCurrency)}
                     </p>
                     <button
                       onClick={() => deleteTransaction({ transactionId: tx._id as Id<'transactions'> })}
@@ -294,7 +340,7 @@ export default function BudgetPage() {
                       <div>
                         <p className="font-mono text-sm font-bold text-zinc-200">{g.title}</p>
                         <p className="mt-0.5 font-mono text-xs text-zinc-400">
-                          {fmt(g.currentAmount)} / {fmt(g.targetAmount)} · {pct}% complete
+                      {fmt(g.currentAmount, g.currency ?? preferredCurrency)} / {fmt(g.targetAmount, g.currency ?? preferredCurrency)} · {pct}% complete
                           {g.deadline && ` · Due ${g.deadline}`}
                         </p>
                       </div>
