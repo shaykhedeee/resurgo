@@ -88,9 +88,7 @@ const baseConfig = {
       'lucide-react',
       'date-fns',
       'framer-motion',
-      'recharts',
-      '@/components',
-      '@/lib',
+      'recharts'
     ],
     staleTimes: {
       dynamic: 30,
