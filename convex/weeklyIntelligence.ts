@@ -13,7 +13,6 @@ import { v } from 'convex/values';
 export const getActiveUsersForWeeklyReport = internalQuery({
   args: {},
   handler: async (ctx) => {
-    const oneWeekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
     const users = await ctx.db.query('users').collect();
     // Only generate reports for users active in the last 14 days
     const twoWeeksAgo = Date.now() - 14 * 24 * 60 * 60 * 1000;
