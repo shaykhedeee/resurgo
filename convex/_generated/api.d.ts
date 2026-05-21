@@ -57,6 +57,7 @@ import type * as users from "../users.js";
 import type * as visionBoards from "../visionBoards.js";
 import type * as webhooks from "../webhooks.js";
 import type * as weeklyReviews from "../weeklyReviews.js";
+import type * as weeklyIntelligence from "../weeklyIntelligence.js";
 import type * as wellness from "../wellness.js";
 import type * as wishlist from "../wishlist.js";
 
@@ -116,6 +117,7 @@ declare const fullApi: ApiFromModules<{
   visionBoards: typeof visionBoards;
   webhooks: typeof webhooks;
   weeklyReviews: typeof weeklyReviews;
+  weeklyIntelligence: typeof weeklyIntelligence;
   wellness: typeof wellness;
   wishlist: typeof wishlist;
 }>;

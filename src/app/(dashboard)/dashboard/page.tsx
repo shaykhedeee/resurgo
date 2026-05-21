@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Dashboard Command Center (Today View)
@@ -33,6 +33,7 @@ const DiscoverMorePanel = dynamic(() => import('@/components/dashboard/DiscoverM
 const MobileDashboard = dynamic(() => import('@/components/MobileDashboard'), { ssr: false });
 const QuickAddPalette = dynamic(() => import('@/components/QuickAddPalette'), { ssr: false });
 const Tutorial = dynamic(() => import('@/components/Tutorial').then(m => ({ default: m.Tutorial })), { ssr: false });
+const DailySynergyWidget = dynamic(() => import('@/components/dashboard/DailySynergyWidget').then(m => ({ default: m.DailySynergyWidget })), { ssr: false });
 import {
   Target,
   CheckCircle2,
@@ -505,6 +506,13 @@ export default function DashboardPage() {
         </div>
 
 
+        </div>
+
+        {/* -- DAILY SYNERGY WIDGET (SYNAPSE CORE) -- */}
+        <div className="mb-6">
+          <SafeWidget name="Daily Synergy Widget">
+            <DailySynergyWidget />
+          </SafeWidget>
         </div>
 
         {/* -- DAILY BRIEFING HERO -- */}

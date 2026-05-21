@@ -158,6 +158,21 @@ export default async function ComparisonPage({ params }: ComparisonProps) {
           </section>
         )}
 
+        {/* Testimonials */}
+        {page.testimonials && page.testimonials.length > 0 && (
+          <section className="mt-6 border border-zinc-900 bg-zinc-950 p-5">
+            <h2 className="font-mono text-sm font-bold text-zinc-100">What Former {page.competitor} Users Say</h2>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {page.testimonials.map((t, i) => (
+                <div key={i} className="border border-zinc-800 bg-black p-4">
+                  <p className="font-mono text-sm italic text-zinc-300">"{t.quote}"</p>
+                  <p className="mt-3 font-mono text-xs text-orange-500">— {t.author}, <span className="text-zinc-500">{t.role}</span></p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* CTA */}
         <section className="mt-6 border border-zinc-800 bg-zinc-950 p-6 text-center">
           <p className="font-mono text-xs text-zinc-500 uppercase tracking-widest">Ready to switch?</p>

@@ -86,4 +86,60 @@ crons.cron(
   internal.weeklyIntelligence.runWeeklyIntelligenceForAllUsers
 );
 
+// ── Streak Recovery Advisor (daily 8AM UTC) ──────────────────────────────────
+crons.cron(
+  'streak-recovery-advisor',
+  '0 8 * * *',
+  (internal as any).scheduledTasks.runStreakRecoveryAdvisor
+);
+
+// ── Monthly Goal Progress Review (1st of month 6AM UTC) ──────────────────────
+crons.cron(
+  'monthly-goal-review',
+  '0 6 1 * *',
+  (internal as any).scheduledTasks.runMonthlyGoalProgressReview
+);
+
+// ── AI Memory Extraction (every 6 hours) ─────────────────────────────────────
+crons.cron(
+  'ai-memory-extraction',
+  '0 */6 * * *',
+  (internal as any).scheduledTasks.runAIMemoryExtraction
+);
+
+// ── Pro Trial Nudge (daily 11AM UTC) ─────────────────────────────────────────
+crons.cron(
+  'pro-trial-nudge',
+  '0 11 * * *',
+  (internal as any).scheduledTasks.runProTrialNudge
+);
+
+// ── Referral Campaign Trigger (weekly Wednesday 2PM UTC) ─────────────────────
+crons.cron(
+  'referral-campaign-trigger',
+  '0 14 * * 3',
+  (internal as any).scheduledTasks.runReferralCampaignTrigger
+);
+
+// ── Reactivation Smart Campaign (daily 1PM UTC) ──────────────────────────────
+crons.cron(
+  'reactivation-smart-campaign',
+  '0 13 * * *',
+  (internal as any).scheduledTasks.runReactivationCampaign
+);
+
+// ── System Health Check (every 30 minutes) ───────────────────────────────────
+crons.cron(
+  'system-health-check',
+  '*/30 * * * *',
+  (internal as any).scheduledTasks.runSystemHealthCheck
+);
+
+// ── SEO Sitemap Ping (daily midnight UTC) ────────────────────────────────────
+crons.cron(
+  'seo-sitemap-ping',
+  '0 0 * * *',
+  (internal as any).scheduledTasks.runSitemapPing
+);
+
 export default crons;

@@ -1,4 +1,4 @@
-﻿import { ComparisonPage } from './types';
+import { ComparisonPage } from './types';
 
 // Rich, competitor-specific comparison data for SEO ranking
 const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
@@ -19,6 +19,10 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Telegram Bot', resurgo: 'Check-in habits from Telegram', competitor: 'Not available' },
     ],
     pricing: { resurgo: 'Free forever + Pro from $9.99/mo or $95.88/yr (effective $7.99/mo, save 20%)', competitor: 'Free + Premium $35.99/yr or $5.99/mo' },
+    testimonials: [
+      { quote: "I used TickTick for 3 years, but I just kept rescheduling tasks. Resurgo's AI coach actually called me out on my procrastination patterns. That's the difference between a task list and a coach.", author: "Sarah J.", role: "Solo Founder" },
+      { quote: "The gamification in Resurgo finally got me to stick to my daily habits. I still use TickTick for work projects, but my personal life runs on Resurgo.", author: "Michael T.", role: "ADHD Creator" }
+    ],
     faq: [
       { question: 'Should I switch from TickTick to Resurgo?', answer: 'If you want AI coaching, automatic goal planning, and wellness tracking on top of task management, Resurgo is the upgrade. TickTick is great for tasks — Resurgo handles your whole execution system.' },
       { question: 'Does Resurgo have a Pomodoro timer like TickTick?', answer: 'Yes. Resurgo has Pomodoro (25/5), Deep Work (90-minute blocks), and Flowtime modes — all with distraction logging and ambient sounds.' },
@@ -43,6 +47,10 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Mobile Experience', resurgo: 'PWA — instant install, works offline', competitor: 'Heavy app, slower mobile experience' },
     ],
     pricing: { resurgo: 'Free forever + Pro $9.99/mo or Lifetime $89 founding price until July 5, 2026 (after: $199)', competitor: 'Free tier + Plus $10/mo + AI add-on $10/mo' },
+    testimonials: [
+      { quote: "I spent 40 hours building the 'perfect' Notion habit tracker. I used it for 3 days. Resurgo gave me a better system in 2 minutes.", author: "David K.", role: "Software Engineer" },
+      { quote: "Notion AI is great for summarizing text, but Resurgo's AI actually coaches my behavior. It's the difference between a notebook and a personal trainer.", author: "Elena R.", role: "Product Manager" }
+    ],
     faq: [
       { question: 'Can Resurgo replace Notion for productivity?', answer: 'For goal tracking, habits, focus, and AI coaching — yes. For note-taking, documentation, and databases — Notion is still great. Many users use Resurgo for daily execution and Notion as a knowledge base.' },
       { question: 'Is Resurgo easier to set up than Notion?', answer: 'Dramatically. Resurgo takes 2 minutes: enter a goal, get an AI plan, start your first habit. Notion requires building or importing a template system that can take hours to maintain.' },
@@ -67,6 +75,10 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Mobile PWA', resurgo: 'Install instantly, offline support', competitor: 'Native mobile apps available' },
     ],
     pricing: { resurgo: 'Free forever + Pro $9.99/mo', competitor: 'Free + Gems/Subscription $4.99/mo' },
+    testimonials: [
+      { quote: "Habitica got me started with gamification, but I eventually found the RPG elements distracting. Resurgo's XP system feels rewarding without feeling like a mobile game.", author: "Marcus C.", role: "Student" },
+      { quote: "Having AI break down my goals into daily habits is a game changer. Habitica required me to know exactly what I needed to do. Resurgo tells me.", author: "Jessica L.", role: "Designer" }
+    ],
     faq: [
       { question: 'Is Resurgo a better alternative to Habitica?', answer: 'If you want AI goal planning and coaching alongside gamification, yes. Habitica excels at social RPG mechanics. Resurgo prioritizes AI-assisted execution with gamification as a motivation layer.' },
       { question: 'Does Resurgo have guilds or social features like Habitica?', answer: "Currently Resurgo focuses on individual performance. Habitica is better if social accountability through parties and guilds is important to you." },

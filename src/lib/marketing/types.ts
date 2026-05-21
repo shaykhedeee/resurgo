@@ -29,6 +29,7 @@ export interface ComparisonPage {
     resurgo: string;
     competitor: string;
   };
+  testimonials?: Array<{ quote: string; author: string; role: string }>;
   faq: Array<{ question: string; answer: string }>;
 }
 

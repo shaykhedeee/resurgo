@@ -1,4 +1,4 @@
-﻿// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // RESURGO â€” Convex Database Schema
 // AI-Powered Life Transformation System â€” Real-time, Type-safe, Serverless
 // Complete schema per DETAILEDPLANASCEND.md Parts 3-9
@@ -1888,5 +1888,13 @@ cancellationSurveys: defineTable({
 })
 .index('by_userId', ['userId'])
 .index('by_reason', ['reason']),
+
+systemHealth: defineTable({
+  checkAt: v.number(),
+  status: v.string(),
+  details: v.any(),
+  createdAt: v.number(),
+})
+.index('by_createdAt', ['createdAt']),
 });
 

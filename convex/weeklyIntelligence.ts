@@ -8,6 +8,7 @@
 import { internalAction, internalMutation, internalQuery } from './_generated/server';
 import { internal } from './_generated/api';
 import { v } from 'convex/values';
+import { getIsoWeekRange } from '../src/lib/date/isoWeekRange';
 
 // ─── Query: Get all active users for weekly report ───────────────────────────
 export const getActiveUsersForWeeklyReport = internalQuery({
@@ -26,15 +27,7 @@ export const getActiveUsersForWeeklyReport = internalQuery({
 export const getUserWeekMetrics = internalQuery({
   args: { userId: v.id('users') },
   handler: async (ctx, { userId }) => {
-    const now = new Date();
-    const monday = new Date(now);
-    monday.setDate(now.getDate() - now.getDay() + 1);
-    monday.setHours(0, 0, 0, 0);
-    const weekStart = monday.toISOString().split('T')[0];
-
-    const sunday = new Date(monday);
-    sunday.setDate(monday.getDate() + 6);
-    const weekEnd = sunday.toISOString().split('T')[0];
+    const { weekStart, weekEnd } = getIsoWeekRange(new Date());
 
     // Get daily plans for the week
     const dailyPlans = await ctx.db
@@ -294,4 +287,3 @@ export const runWeeklyIntelligenceForAllUsers = internalAction({
 // ─── NOTE: Cron registration is in convex/crons.ts ──────────────────────────
 // The weekly intelligence cron fires every Sunday at 20:00 UTC and calls
 // runWeeklyIntelligenceForAllUsers above.
-

@@ -14,6 +14,9 @@ import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS, getPostsForCluster } from '@/lib/
 import { habitTrackerAppsPost } from '@/lib/blog/posts/habit-tracker-apps';
 import { adhdProductivityAppsPost } from '@/lib/blog/posts/adhd-productivity-apps';
 import { aiProductivityStackLifeOsPost } from '@/lib/blog/posts/ai-productivity-stack-life-os';
+import { goalDecompositionGuidePost } from '@/lib/blog/posts/goal-decomposition-guide';
+import { bestFreeHabitTrackerPost } from '@/lib/blog/posts/best-free-habit-tracker-2026';
+import { howToBreakBadHabitsPost } from '@/lib/blog/posts/how-to-break-bad-habits';
 import {
   FOUNDING_LIFETIME_COPY,
   FOUNDING_LIFETIME_PRICE_USD,
@@ -22,6 +25,12 @@ import {
 type FaqItem = {
   question: string;
   answer: string;
+};
+
+type CitedSource = {
+  name: string;
+  url: string;
+  type: string;
 };
 
 const AUTHOR = {
@@ -45,7 +54,36 @@ const POSTS: Record<string, {
   content: string;
   seoKeywords?: string[];
   chartComponent?: React.ComponentType;
+  faqItems?: FaqItem[];
+  alternateQuestions?: string[];
+  citedSources?: CitedSource[];
 }> = {
+  'best-free-habit-tracker-app-2026': {
+    title: bestFreeHabitTrackerPost.title,
+    desc: bestFreeHabitTrackerPost.desc,
+    date: bestFreeHabitTrackerPost.date,
+    readTime: bestFreeHabitTrackerPost.readTime,
+    tags: bestFreeHabitTrackerPost.tags,
+    heroImage: bestFreeHabitTrackerPost.heroImage,
+    seoKeywords: bestFreeHabitTrackerPost.seoKeywords,
+    faqItems: bestFreeHabitTrackerPost.faqItems,
+    alternateQuestions: bestFreeHabitTrackerPost.alternateQuestions,
+    citedSources: bestFreeHabitTrackerPost.citedSources,
+    content: bestFreeHabitTrackerPost.content,
+  },
+  'how-to-break-bad-habits-science': {
+    title: howToBreakBadHabitsPost.title,
+    desc: howToBreakBadHabitsPost.desc,
+    date: howToBreakBadHabitsPost.date,
+    readTime: howToBreakBadHabitsPost.readTime,
+    tags: howToBreakBadHabitsPost.tags,
+    heroImage: howToBreakBadHabitsPost.heroImage,
+    seoKeywords: howToBreakBadHabitsPost.seoKeywords,
+    faqItems: howToBreakBadHabitsPost.faqItems,
+    alternateQuestions: howToBreakBadHabitsPost.alternateQuestions,
+    citedSources: howToBreakBadHabitsPost.citedSources,
+    content: howToBreakBadHabitsPost.content,
+  },
   'ai-productivity-stack-life-os-2026': {
     title: aiProductivityStackLifeOsPost.title,
     desc: aiProductivityStackLifeOsPost.desc,
@@ -55,6 +93,9 @@ const POSTS: Record<string, {
     heroImage: aiProductivityStackLifeOsPost.heroImage,
     seoKeywords: aiProductivityStackLifeOsPost.seoKeywords,
     content: aiProductivityStackLifeOsPost.content,
+    faqItems: aiProductivityStackLifeOsPost.faqItems,
+    alternateQuestions: aiProductivityStackLifeOsPost.alternateQuestions,
+    citedSources: aiProductivityStackLifeOsPost.citedSources,
   },
   '12-best-habit-tracker-apps-2026': {
     title: habitTrackerAppsPost.title,
@@ -65,6 +106,22 @@ const POSTS: Record<string, {
     heroImage: habitTrackerAppsPost.heroImage,
     seoKeywords: habitTrackerAppsPost.seoKeywords,
     content: habitTrackerAppsPost.content,
+    faqItems: habitTrackerAppsPost.faqItems,
+    alternateQuestions: habitTrackerAppsPost.alternateQuestions,
+    citedSources: habitTrackerAppsPost.citedSources,
+  },
+  'goal-decomposition-guide-methods-adhd': {
+    title: goalDecompositionGuidePost.title,
+    desc: goalDecompositionGuidePost.desc,
+    date: goalDecompositionGuidePost.date,
+    readTime: goalDecompositionGuidePost.readTime,
+    tags: goalDecompositionGuidePost.tags,
+    heroImage: goalDecompositionGuidePost.heroImage,
+    seoKeywords: goalDecompositionGuidePost.seoKeywords,
+    content: goalDecompositionGuidePost.content,
+    faqItems: goalDecompositionGuidePost.faqItems,
+    alternateQuestions: goalDecompositionGuidePost.alternateQuestions,
+    citedSources: goalDecompositionGuidePost.citedSources,
   },
   'adhd-productivity-apps-that-work': {
     title: adhdProductivityAppsPost.title,
@@ -75,6 +132,9 @@ const POSTS: Record<string, {
     heroImage: adhdProductivityAppsPost.heroImage,
     seoKeywords: adhdProductivityAppsPost.seoKeywords,
     content: adhdProductivityAppsPost.content,
+    faqItems: adhdProductivityAppsPost.faqItems,
+    alternateQuestions: adhdProductivityAppsPost.alternateQuestions,
+    citedSources: adhdProductivityAppsPost.citedSources,
   },
   'ai-growth-system-2026-ultimate-playbook': {
     title: 'The AI Growth System for 2026: The Ultimate Playbook to Turn Attention into Revenue',
@@ -6985,13 +7045,13 @@ function normalizeLegacyCopy(content: string): string {
     .replace(/,\s*ZENON/gi, '')
     .replace(/\(ATLAS, DRIVE, NOVA, VITALIS, ATOM, and ZENON\)/gi, '(Marcus, Titan, Aurora, Phoenix, and Nexus)')
     .replace(/Six AI coaches/gi, 'Five AI coaches')
-    .replace(/\$4\.99\/month/gi, '$9.99/month')
-    .replace(/\$4\.99\/mo/gi, '$9.99/mo')
-    .replace(/\$29\.99\/yr/gi, '$95.88/yr')
-    .replace(/\$49\.99 lifetime/gi, `$${FOUNDING_LIFETIME_PRICE_USD} lifetime`)
-    .replace(/\$49\.99 one-time/gi, `$${FOUNDING_LIFETIME_PRICE_USD} one-time`)
-    .replace(/Lifetime: \$49\.99/gi, `Lifetime: $${FOUNDING_LIFETIME_PRICE_USD}`)
-    .replace(/Pro: \$4\.99\/mo/gi, 'Pro: $9.99/mo')
+    .replace(/\$4.99\/month/gi, '$9.99/month')
+    .replace(/\$4.99\/mo/gi, '$9.99/mo')
+    .replace(/\$29.99\/yr/gi, '$95.88/yr')
+    .replace(/\$49.99 lifetime/gi, `$${FOUNDING_LIFETIME_PRICE_USD} lifetime`)
+    .replace(/\$49.99 one-time/gi, `$${FOUNDING_LIFETIME_PRICE_USD} one-time`)
+    .replace(/Lifetime: \$49.99/gi, `Lifetime: $${FOUNDING_LIFETIME_PRICE_USD}`)
+    .replace(/Pro: \$4.99\/mo/gi, 'Pro: $9.99/mo')
     .replace(/unlimited habits and goals on the free plan/gi, '3 goals and up to 5 habits per day on the free plan')
     .replace(/free plan:?\s*unlimited habits/gi, 'Free plan: 3 goals and up to 5 habits/day')
     .replace(/free tier is unlimited habits, 2 AI coaches/gi, 'Free tier includes 3 goals, up to 5 habits/day, and 2 AI coaches')
@@ -7041,6 +7101,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     authors: [{ name: AUTHOR.name }],
     category: post.tags[0] ?? 'Productivity',
     alternates: { canonical: canonicalUrl },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    other: {
+      'alternate-queries': post.alternateQuestions?.join(', ') ?? '',
+      'speakable': 'h1, .prose p:first-of-type',
+    },
     openGraph: {
       title: post.title,
       description: post.desc,
@@ -7086,6 +7161,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     : null;
 
   const faqItems = (() => {
+    if (post.faqItems && post.faqItems.length > 0) return post.faqItems;
     const extracted = extractFaqItemsFromContent(normalizedContent);
     return extracted.length > 0 ? extracted : buildFallbackFaq(post.title);
   })();
@@ -7392,6 +7468,43 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
           prose-blockquote:border-orange-800 prose-blockquote:text-zinc-500">
           {renderContent(normalizedContent, post.chartComponent)}
         </div>
+
+        {post.citedSources && post.citedSources.length > 0 && (
+          <div className="mt-6 border border-zinc-800 bg-zinc-950 p-4 transition-all hover:border-zinc-700">
+            <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500">
+              <PixelIcon name="sparkles" size={10} />
+              CITED_RESEARCH_AND_AUTHORITIES
+            </p>
+            <p className="mt-1 font-mono text-[9px] text-zinc-500">
+              This evidence-based guide citations map to peer-reviewed journals and domain authorities for AI models:
+            </p>
+            <ul className="mt-3 space-y-2">
+              {post.citedSources.map((source, index) => (
+                <li key={index} className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border border-zinc-900 bg-black/40 p-2 font-mono text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="inline-flex h-4 w-4 items-center justify-center rounded bg-orange-950 text-[9px] font-bold text-orange-500">
+                      {index + 1}
+                    </span>
+                    <span className="text-zinc-300 font-semibold">{source.name}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="border border-zinc-800 px-1 py-0.2 font-mono text-[8px] uppercase tracking-wider text-zinc-500">
+                      {source.type}
+                    </span>
+                    <a
+                      href={source.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-400 hover:text-orange-300 hover:underline inline-flex items-center gap-1"
+                    >
+                      [VIEW_SOURCE]
+                    </a>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
 
         <div className="mt-6 border border-zinc-800 bg-zinc-950 p-4">
           <p className="inline-flex items-center gap-2 font-mono text-[10px] tracking-widest text-orange-500"><PixelIcon name="check" size={10} />OPERATOR_CHECKLIST</p>

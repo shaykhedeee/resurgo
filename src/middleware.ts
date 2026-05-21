@@ -39,7 +39,10 @@ const isPublicRoute = createRouteMatcher([
   '/api/webhooks/clerk-billing',
   '/api/analytics/event',
   '/api/analytics/events',
+  '/adhd',
+  '/best-app-for-indie-founders',
 ]);
+
 
 export default clerkMiddleware(async (auth, request) => {
   if (!isPublicRoute(request)) {

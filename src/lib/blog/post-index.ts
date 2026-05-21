@@ -19,6 +19,36 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: 'best-free-habit-tracker-app-2026',
+    title: 'Best Free Habit Tracker App 2026: The Ultimate Guide to Free Consistency',
+    desc: 'Looking for the best free habit tracker in 2026? We reviewed the top free options, comparison grids, and science-backed mechanisms to help you choose.',
+    date: 'May 21, 2026',
+    lastModified: '2026-05-21T14:30:00.000Z',
+    readTime: '20 min',
+    tags: ['habit trackers', 'free productivity apps', 'consistency', 'behavior design'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
+    slug: 'how-to-break-bad-habits-science',
+    title: 'How to Break Bad Habits: The Science of Neuroplasticity and Behavior Design',
+    desc: 'Struggling to break bad habits? Discover the neuroscience of behavioral conditioning, stimulus control, and how to rewrite your neural pathways.',
+    date: 'May 21, 2026',
+    lastModified: '2026-05-21T15:00:00.000Z',
+    readTime: '20 min',
+    tags: ['habit loop', 'behavior change', 'neuroscience', 'discipline'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
+    slug: 'goal-decomposition-guide-methods-adhd',
+    title: 'Goal Decomposition Methods: The Missing Link Between Planning and Execution',
+    desc: 'Most people set goals and fail because they lack a system to break them down. Learn the most effective goal decomposition methods and how AI makes it effortless.',
+    date: 'May 20, 2026',
+    lastModified: '2026-05-20T12:00:00.000Z',
+    readTime: '10 min',
+    tags: ['goal decomposition', 'planning', 'execution', 'AI productivity'],
+    heroImage: '/blog/goal-decomposition.svg',
+  },
+  {
     slug: 'ai-productivity-stack-life-os-2026',
     title: 'The 2026 AI Productivity Stack Needs a Life OS, Not More Apps',
     desc: 'Build an ADHD-friendly AI productivity system for 2026 with fewer tools, clearer focus blocks, and a calmer Life OS.',
