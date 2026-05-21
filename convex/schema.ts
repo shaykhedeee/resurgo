@@ -1,13 +1,13 @@
-// ═══════════════════════════════════════════════════════════════════════════════
-// RESURGO — Convex Database Schema
-// AI-Powered Life Transformation System — Real-time, Type-safe, Serverless
+﻿// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+// RESURGO â€” Convex Database Schema
+// AI-Powered Life Transformation System â€” Real-time, Type-safe, Serverless
 // Complete schema per DETAILEDPLANASCEND.md Parts 3-9
-// ═══════════════════════════════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 
 import { defineSchema, defineTable } from 'convex/server';
 import { v } from 'convex/values';
 
-// ─── Shared validators ──────────────────────────────────────────────────────
+// â”€â”€â”€ Shared validators â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 const lifeDomainValidator = v.union(
   v.literal('health'),
   v.literal('career'),
@@ -31,9 +31,9 @@ const goalTypeValidator = v.union(
 );
 
 export default defineSchema({
-  // ─────────────────────────────────────────────────────────────────────────────
-  // USERS — Synced with Clerk (enhanced with vision & life design)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // USERS â€” Synced with Clerk (enhanced with vision & life design)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   users: defineTable({
     clerkId: v.string(),
     email: v.string(),
@@ -49,7 +49,7 @@ export default defineSchema({
     dob: v.optional(v.string()),
     height: v.optional(v.number()),
     weight: v.optional(v.number()),
-    // ── Quick-Start Onboarding (Phase 1) ──
+    // â”€â”€ Quick-Start Onboarding (Phase 1) â”€â”€
     onboardingPath: v.optional(v.union(v.literal('quick-start'), v.literal('legacy'), v.literal('other'))),
     archetypeDetected: v.optional(v.union(
       v.literal('adhd'),
@@ -61,14 +61,14 @@ export default defineSchema({
     layerLevel: v.optional(v.number()), // 1 (basic), 2 (unlocked), 3 (advanced)
     dayOneCompleted: v.optional(v.number()), // Timestamp when user completed first task + PWA install
     streakFreezeCount: v.number(),
-    // ── Onboarding preferences ──
+    // â”€â”€ Onboarding preferences â”€â”€
     focusAreas: v.optional(v.array(v.string())),
     selectedHabitTemplates: v.optional(v.array(v.string())),
     preferredTime: v.optional(v.string()),
     primaryGoal: v.optional(v.string()),
     primaryGoalReason: v.optional(v.string()),
     primaryGoalDeadline: v.optional(v.string()),
-    // ── Vision & Life Design (Module 1) ──
+    // â”€â”€ Vision & Life Design (Module 1) â”€â”€
     lifeWheelScores: v.optional(v.object({
       health: v.number(),
       career: v.number(),
@@ -87,7 +87,7 @@ export default defineSchema({
       caption: v.optional(v.string()),
       domain: v.optional(v.string()),
     }))),
-    // ── Schedule preferences (Onboarding) ──
+    // â”€â”€ Schedule preferences (Onboarding) â”€â”€
     wakeTime: v.optional(v.string()),
     sleepTime: v.optional(v.string()),
     peakProductivityTime: v.optional(v.string()),
@@ -98,7 +98,7 @@ export default defineSchema({
       lunchEnd: v.optional(v.string()),
       workDays: v.array(v.number()),
     })),
-    // ── Notification preferences ──
+    // â”€â”€ Notification preferences â”€â”€
     notificationPrefs: v.optional(v.object({
       morningMotivation: v.boolean(),
       middayCheckin: v.boolean(),
@@ -124,14 +124,14 @@ export default defineSchema({
         v.literal('manual')
       ),
     })),
-    // ── Coach personality ──
+    // â”€â”€ Coach personality â”€â”€
     coachPersonality: v.optional(v.union(
       v.literal('supportive'),
       v.literal('challenging'),
       v.literal('analytical'),
       v.literal('humorous')
     )),
-    // ── Recovery state ──
+    // â”€â”€ Recovery state â”€â”€
     lastActiveAt: v.optional(v.number()),
     recoveryStatus: v.optional(v.union(
       v.literal('active'),
@@ -139,20 +139,20 @@ export default defineSchema({
       v.literal('inactive'),
       v.literal('recovering')
     )),
-    // ── Billing concurrency guard ──
+    // â”€â”€ Billing concurrency guard â”€â”€
     planVersion: v.optional(v.number()),     // monotonic counter, incremented on each plan change
     planUpdatedAt: v.optional(v.number()),   // ms timestamp of last plan update for stale-event guard
     lastBillingEventId: v.optional(v.string()), // last applied webhook event id
-    // ── Telegram integration ──
+    // â”€â”€ Telegram integration â”€â”€
     telegramChatId: v.optional(v.string()),  // Telegram chat ID after /start auth flow
     telegramLinked: v.optional(v.boolean()), // true after user has completed link flow
-    // ── Native push (FCM) ──
+    // â”€â”€ Native push (FCM) â”€â”€
     fcmToken: v.optional(v.string()),             // Firebase Cloud Messaging device token
     fcmTokenUpdatedAt: v.optional(v.number()),    // Timestamp of last token update
     pushEnabled: v.optional(v.boolean()),          // Whether native push is active
-    // ── Referral ──
+    // â”€â”€ Referral â”€â”€
     referralCode: v.optional(v.string()),    // unique code for referral tracking
-    // ── Coach selection ──
+    // â”€â”€ Coach selection â”€â”€
     selectedCoach: v.optional(v.union(
       v.literal('MARCUS'),
       v.literal('AURORA'),
@@ -164,24 +164,24 @@ export default defineSchema({
       v.literal('NEXUS'),
       v.literal('ZENON'),
     )),
-    // ── Emergency mode (AI-triggered) ──
+    // â”€â”€ Emergency mode (AI-triggered) â”€â”€
     emergencyMode: v.optional(v.boolean()),
     emergencyModeReason: v.optional(v.string()),
     emergencyModeActivatedAt: v.optional(v.number()),
-    // ── AI coach memory ──
+    // â”€â”€ AI coach memory â”€â”€
     summaryMemory: v.optional(v.string()), // Short rolling AI memory string
-    // ── User archetype (Section 25 — onboarding segmentation) ──
+    // â”€â”€ User archetype (Section 25 â€” onboarding segmentation) â”€â”€
     archetype: v.optional(v.string()),          // UserArchetype enum value
     archetypeConfidence: v.optional(v.number()),
     secondaryArchetype: v.optional(v.string()),
     onboardingData: v.optional(v.string()),     // JSON of onboarding answers
-    // ── Dashboard layout ──
+    // â”€â”€ Dashboard layout â”€â”€
     dashboardLayout: v.optional(v.array(v.object({
       id: v.string(),
       visible: v.boolean(),
       order: v.number(),
     }))),
-    // ── Dodo Payments ──
+    // â”€â”€ Dodo Payments â”€â”€
     dodoCustomerId: v.optional(v.string()), // Dodo Payments customer ID for checkout/portal
     dodoSubscriptionId: v.optional(v.string()), // Active Dodo subscription ID (for plan changes / cancellation)
     subscriptionStatus: v.optional(v.union(
@@ -194,7 +194,7 @@ export default defineSchema({
     )),
     nextBillingDate: v.optional(v.string()), // ISO date of next renewal
     cancelAtNextBillingDate: v.optional(v.boolean()),
-    // ── Customer Engagement Score (0-100, recomputed weekly) ──
+    // â”€â”€ Customer Engagement Score (0-100, recomputed weekly) â”€â”€
     engagementScore: v.optional(v.number()),
     engagementBand: v.optional(v.union(
       v.literal('power'),     // 80-100: upsell + referral
@@ -211,9 +211,9 @@ export default defineSchema({
     .index('by_telegramChatId', ['telegramChatId'])
     .index('by_dodoCustomerId', ['dodoCustomerId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GOALS — Enhanced with decomposition engine (Module 2)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // GOALS â€” Enhanced with decomposition engine (Module 2)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   goals: defineTable({
     userId: v.id('users'),
     title: v.string(),
@@ -231,7 +231,7 @@ export default defineSchema({
     startDate: v.optional(v.string()),
     identityLabel: v.optional(v.string()),
     aiPlan: v.optional(v.any()),
-    // ── Goal decomposition fields ──
+    // â”€â”€ Goal decomposition fields â”€â”€
     goalType: v.optional(goalTypeValidator),
     lifeDomain: v.optional(lifeDomainValidator),
     deadlineType: v.optional(v.union(
@@ -264,7 +264,7 @@ export default defineSchema({
     icon: v.optional(v.string()),
     visionConnection: v.optional(v.string()),
     completionDate: v.optional(v.number()),
-    // ── Downgrade preservation ──
+    // â”€â”€ Downgrade preservation â”€â”€
     archivedByDowngrade: v.optional(v.boolean()),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -274,9 +274,9 @@ export default defineSchema({
     .index('by_parentGoalId', ['parentGoalId'])
     .index('by_userId_archivedByDowngrade', ['userId', 'archivedByDowngrade']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // MILESTONES — Goal decomposition intermediate steps
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // MILESTONES â€” Goal decomposition intermediate steps
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   milestones: defineTable({
     userId: v.id('users'),
     goalId: v.id('goals'),
@@ -300,9 +300,9 @@ export default defineSchema({
     .index('by_goalId', ['goalId'])
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // HABITS — Enhanced with types, progression, and stacking (Module 4)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HABITS â€” Enhanced with types, progression, and stacking (Module 4)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   habits: defineTable({
     userId: v.id('users'),
     goalId: v.optional(v.id('goals')),
@@ -332,7 +332,7 @@ export default defineSchema({
     icon: v.optional(v.string()),
     estimatedMinutes: v.optional(v.number()),
     order: v.optional(v.number()),
-    // ── Enhanced habit type system ──
+    // â”€â”€ Enhanced habit type system â”€â”€
     habitType: v.optional(v.union(
       v.literal('yes_no'),
       v.literal('quantity'),
@@ -344,7 +344,7 @@ export default defineSchema({
     targetValue: v.optional(v.number()),
     targetUnit: v.optional(v.string()),
     checklistItems: v.optional(v.array(v.string())),
-    // ── Habit Stacking cue ──
+    // â”€â”€ Habit Stacking cue â”€â”€
     cueType: v.optional(v.union(
       v.literal('time'),
       v.literal('location'),
@@ -354,23 +354,23 @@ export default defineSchema({
     )),
     cueDescription: v.optional(v.string()),
     afterHabitId: v.optional(v.id('habits')),
-    // ── Progression system ──
+    // â”€â”€ Progression system â”€â”€
     difficultyLevel: v.optional(v.number()),
     autoProgressionEnabled: v.optional(v.boolean()),
     progressionIntervalDays: v.optional(v.number()),
     progressionIncreaseAmount: v.optional(v.number()),
-    // ── Stats ──
+    // â”€â”€ Stats â”€â”€
     totalCompletions: v.optional(v.number()),
     completionRate7Day: v.optional(v.number()),
     completionRate30Day: v.optional(v.number()),
     lastCompletedAt: v.optional(v.number()),
-    // ── Motivation ──
+    // â”€â”€ Motivation â”€â”€
     whyImportant: v.optional(v.string()),
     immediateReward: v.optional(v.string()),
-    // ── Specific time ──
+    // â”€â”€ Specific time â”€â”€
     specificTime: v.optional(v.string()),
     reminderEnabled: v.optional(v.boolean()),
-    // ── Downgrade preservation ──
+    // â”€â”€ Downgrade preservation â”€â”€
     archivedByDowngrade: v.optional(v.boolean()),
     createdAt: v.number(),
     updatedAt: v.number(),
@@ -380,9 +380,9 @@ export default defineSchema({
     .index('by_goalId', ['goalId'])
     .index('by_userId_archivedByDowngrade', ['userId', 'archivedByDowngrade']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // HABIT LOGS — Enhanced with energy/difficulty tracking
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HABIT LOGS â€” Enhanced with energy/difficulty tracking
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   habitLogs: defineTable({
     habitId: v.id('habits'),
     userId: v.id('users'),
@@ -395,7 +395,7 @@ export default defineSchema({
     mood: v.optional(v.number()),
     note: v.optional(v.string()),
     completedAt: v.optional(v.number()),
-    // ── Enhanced tracking ──
+    // â”€â”€ Enhanced tracking â”€â”€
     value: v.optional(v.number()),
     energyLevel: v.optional(v.union(
       v.literal('high'),
@@ -418,9 +418,9 @@ export default defineSchema({
     .index('by_userId_date', ['userId', 'date'])
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TASKS — Enhanced with goal/milestone linking, energy, Eisenhower (Module 3)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // TASKS â€” Enhanced with goal/milestone linking, energy, Eisenhower (Module 3)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   tasks: defineTable({
     userId: v.id('users'),
     listId: v.optional(v.id('taskLists')),
@@ -453,7 +453,7 @@ export default defineSchema({
       )
     ),
     completedAt: v.optional(v.number()),
-    // ── Enhanced task fields ──
+    // â”€â”€ Enhanced task fields â”€â”€
     eisenhowerQuadrant: v.optional(v.union(
       v.literal('urgent_important'),
       v.literal('important'),
@@ -495,9 +495,9 @@ export default defineSchema({
     .index('by_goalId', ['goalId'])
     .index('by_milestoneId', ['milestoneId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TASK LISTS — Group tasks (Personal, Work, etc.)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // TASK LISTS â€” Group tasks (Personal, Work, etc.)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   taskLists: defineTable({
     userId: v.id('users'),
     name: v.string(),
@@ -507,9 +507,9 @@ export default defineSchema({
     createdAt: v.number(),
   }).index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GAMIFICATION — Enhanced with coins, power-ups, XP history (Part 4)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // GAMIFICATION â€” Enhanced with coins, power-ups, XP history (Part 4)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   gamification: defineTable({
     userId: v.id('users'),
     totalXP: v.number(),
@@ -517,7 +517,7 @@ export default defineSchema({
     coins: v.optional(v.number()),
     currentLevelXP: v.optional(v.number()),
     xpToNextLevel: v.optional(v.number()),
-    // ── Level tier system ──
+    // â”€â”€ Level tier system â”€â”€
     tier: v.optional(v.union(
       v.literal('beginner'),
       v.literal('explorer'),
@@ -552,19 +552,19 @@ export default defineSchema({
         })
       )
     ),
-    // ── Power-ups owned ──
+    // â”€â”€ Power-ups owned â”€â”€
     powerUps: v.optional(v.array(v.object({
       id: v.string(),
       name: v.string(),
       type: v.string(),
       quantity: v.number(),
     }))),
-    // ── Streaks ──
+    // â”€â”€ Streaks â”€â”€
     currentStreak: v.optional(v.number()),
     longestStreak: v.optional(v.number()),
     streakShieldsUsed: v.optional(v.number()),
     lastStreakDate: v.optional(v.string()),
-    // ── Stats ──
+    // â”€â”€ Stats â”€â”€
     totalTasksCompleted: v.optional(v.number()),
     totalHabitsCompleted: v.optional(v.number()),
     totalGoalsCompleted: v.optional(v.number()),
@@ -572,9 +572,9 @@ export default defineSchema({
     updatedAt: v.number(),
   }).index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // XP HISTORY — Track XP earning events
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // XP HISTORY â€” Track XP earning events
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   xpHistory: defineTable({
     userId: v.id('users'),
     amount: v.number(),
@@ -598,9 +598,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_createdAt', ['userId', 'createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // MOOD / WELLNESS
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   moodEntries: defineTable({
     userId: v.id('users'),
     date: v.string(),
@@ -612,9 +612,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // JOURNAL — Reflection entries
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // JOURNAL â€” Reflection entries
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   journal: defineTable({
     userId: v.id('users'),
     habitLogId: v.optional(v.id('habitLogs')),
@@ -633,9 +633,9 @@ export default defineSchema({
     .index('by_userId_date', ['userId', 'date'])
     .index('by_goalId', ['goalId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // IDENTITIES — Atomic Habits identity tracking
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // IDENTITIES â€” Atomic Habits identity tracking
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   identities: defineTable({
     userId: v.id('users'),
     label: v.string(),
@@ -652,9 +652,9 @@ export default defineSchema({
     createdAt: v.number(),
   }).index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // AI INSIGHTS — Enhanced with more types (Module 7)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // AI INSIGHTS â€” Enhanced with more types (Module 7)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   insights: defineTable({
     userId: v.id('users'),
     type: v.union(
@@ -682,9 +682,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_type', ['userId', 'type']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // FOCUS SESSIONS — Enhanced with methods & distraction tracking (Module 6)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // FOCUS SESSIONS â€” Enhanced with methods & distraction tracking (Module 6)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   focusSessions: defineTable({
     userId: v.id('users'),
     taskId: v.optional(v.id('tasks')),
@@ -699,7 +699,7 @@ export default defineSchema({
       v.literal('time_box'),
       v.literal('custom')
     ),
-    // ── Enhanced focus tracking ──
+    // â”€â”€ Enhanced focus tracking â”€â”€
     focusScore: v.optional(v.number()), // 0-100
     productivityRating: v.optional(v.number()), // 1-5
     completionStatus: v.optional(v.union(
@@ -715,14 +715,14 @@ export default defineSchema({
     }))),
     breaksTaken: v.optional(v.number()),
     notes: v.optional(v.string()),
-    // ── Ambient/environment ──
+    // â”€â”€ Ambient/environment â”€â”€
     ambientSound: v.optional(v.string()),
   })
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // HABIT STACKS — Chain habits together
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // HABIT STACKS â€” Chain habits together
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   habitStacks: defineTable({
     userId: v.id('users'),
     name: v.string(),
@@ -730,16 +730,16 @@ export default defineSchema({
     createdAt: v.number(),
   }).index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // DAILY PLANS — Morning intentions & evening reflections (Module 5)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // DAILY PLANS â€” Morning intentions & evening reflections (Module 5)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   dailyPlans: defineTable({
     userId: v.id('users'),
     date: v.string(), // YYYY-MM-DD
-    // ── Morning intention ──
+    // â”€â”€ Morning intention â”€â”€
     intention: v.optional(v.string()),
     topPriorities: v.optional(v.array(v.string())),
-    // ── Time blocks ──
+    // â”€â”€ Time blocks â”€â”€
     timeBlocks: v.optional(v.array(v.object({
       id: v.string(),
       startTime: v.string(),
@@ -757,19 +757,19 @@ export default defineSchema({
       taskId: v.optional(v.id('tasks')),
       completed: v.optional(v.boolean()),
     }))),
-    // ── Daily score ──
+    // â”€â”€ Daily score â”€â”€
     dailyScore: v.optional(v.number()), // 0-100
     tasksCompletedCount: v.optional(v.number()),
     tasksTotalCount: v.optional(v.number()),
     habitsCompletedCount: v.optional(v.number()),
     habitsTotalCount: v.optional(v.number()),
     focusMinutes: v.optional(v.number()),
-    // ── Evening reflection ──
+    // â”€â”€ Evening reflection â”€â”€
     reflection: v.optional(v.string()),
     gratitude: v.optional(v.array(v.string())),
     tomorrowPlan: v.optional(v.string()),
     dayRating: v.optional(v.number()), // 1-5
-    // ── Meta ──
+    // â”€â”€ Meta â”€â”€
     morningCompletedAt: v.optional(v.number()),
     eveningCompletedAt: v.optional(v.number()),
     createdAt: v.number(),
@@ -778,14 +778,14 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // WEEKLY REVIEWS — Auto-generated summaries (Module 7)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // WEEKLY REVIEWS â€” Auto-generated summaries (Module 7)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   weeklyReviews: defineTable({
     userId: v.id('users'),
     weekStartDate: v.string(), // ISO Monday date
     weekEndDate: v.string(),
-    // ── Stats ──
+    // â”€â”€ Stats â”€â”€
     tasksCompleted: v.number(),
     tasksTotal: v.number(),
     habitsCompletionRate: v.number(), // 0-100
@@ -797,12 +797,12 @@ export default defineSchema({
       title: v.string(),
       progressChange: v.number(),
     }))),
-    // ── Insights ──
+    // â”€â”€ Insights â”€â”€
     highlights: v.optional(v.array(v.string())),
     areasToImprove: v.optional(v.array(v.string())),
     aiSummary: v.optional(v.string()),
     nextWeekFocus: v.optional(v.string()),
-    // ── User input ──
+    // â”€â”€ User input â”€â”€
     userReflection: v.optional(v.string()),
     nextWeekGoals: v.optional(v.array(v.string())),
     overallRating: v.optional(v.number()), // 1-5
@@ -812,9 +812,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_week', ['userId', 'weekStartDate']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // RECOVERY LOGS — Comeback/recovery tracking (Module 8)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // RECOVERY LOGS â€” Comeback/recovery tracking (Module 8)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   recoveryLogs: defineTable({
     userId: v.id('users'),
     startedAt: v.number(),
@@ -824,7 +824,7 @@ export default defineSchema({
       v.literal('completed'),
       v.literal('abandoned')
     ),
-    // ── Detection ──
+    // â”€â”€ Detection â”€â”€
     triggerReason: v.union(
       v.literal('streak_break'),
       v.literal('long_absence'),
@@ -832,7 +832,7 @@ export default defineSchema({
       v.literal('user_initiated')
     ),
     daysInactive: v.number(),
-    // ── Comeback protocol phase ──
+    // â”€â”€ Comeback protocol phase â”€â”€
     phase: v.union(
       v.literal('acknowledgement'),
       v.literal('assessment'),
@@ -840,10 +840,10 @@ export default defineSchema({
       v.literal('gradual_rebuild'),
       v.literal('full_momentum')
     ),
-    // ── Recovery plan ──
+    // â”€â”€ Recovery plan â”€â”€
     minimalRoutine: v.optional(v.array(v.string())),
     adjustedGoals: v.optional(v.array(v.string())),
-    // ── Progress ──
+    // â”€â”€ Progress â”€â”€
     recoveryStreak: v.optional(v.number()),
     notes: v.optional(v.string()),
     createdAt: v.number(),
@@ -851,9 +851,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_status', ['userId', 'status']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // COACHING MESSAGES — AI coach interactions (Module 9)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // COACHING MESSAGES â€” AI coach interactions (Module 9)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   coachMessages: defineTable({
     userId: v.id('users'),
     role: v.union(v.literal('coach'), v.literal('user')),
@@ -871,9 +871,9 @@ export default defineSchema({
   })
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GOAL TEMPLATES — Reusable templates library
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // GOAL TEMPLATES â€” Reusable templates library
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   goalTemplates: defineTable({
     title: v.string(),
     description: v.string(),
@@ -902,9 +902,9 @@ export default defineSchema({
     .index('by_category', ['category'])
     .index('by_lifeDomain', ['lifeDomain']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // BILLING WEBHOOK EVENTS — Durable idempotency & audit trail
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // BILLING WEBHOOK EVENTS â€” Durable idempotency & audit trail
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   billingWebhookEvents: defineTable({
     eventId: v.string(),
     eventType: v.string(),
@@ -918,9 +918,9 @@ export default defineSchema({
     .index('by_clerkId', ['clerkId'])
     .index('by_processedAt', ['processedAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // BILLING EVENTS — Expanded support/security audit trail
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // BILLING EVENTS â€” Expanded support/security audit trail
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   billingEvents: defineTable({
     userId: v.optional(v.id('users')),
     clerkId: v.string(),
@@ -943,9 +943,9 @@ export default defineSchema({
     .index('by_userId_and_createdAt', ['userId', 'createdAt'])
     .index('by_status_and_createdAt', ['status', 'createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // CHATBOT EVENTS — Intent/conversion instrumentation
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // CHATBOT EVENTS â€” Intent/conversion instrumentation
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   chatbotEvents: defineTable({
     clerkId: v.string(),
     eventName: v.union(
@@ -980,9 +980,9 @@ export default defineSchema({
     .index('by_eventName_and_createdAt', ['eventName', 'createdAt'])
     .index('by_createdAt', ['createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GROWTH EVENTS — Product-led growth instrumentation (vision board funnel)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // GROWTH EVENTS â€” Product-led growth instrumentation (vision board funnel)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   growthEvents: defineTable({
     clerkId: v.string(),
     eventName: v.union(
@@ -1003,9 +1003,9 @@ export default defineSchema({
     .index('by_eventName_and_createdAt', ['eventName', 'createdAt'])
     .index('by_createdAt', ['createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // CHATBOT FOLLOW-UPS — Scheduled 24h/72h checkbacks
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // CHATBOT FOLLOW-UPS â€” Scheduled 24h/72h checkbacks
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   chatbotFollowUps: defineTable({
     clerkId: v.string(),
     intent: v.union(
@@ -1022,9 +1022,9 @@ export default defineSchema({
     .index('by_clerkId_and_dueAt', ['clerkId', 'dueAt'])
     .index('by_status_and_dueAt', ['status', 'dueAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // REMINDERS — Scheduled reminders (from Telegram /remind command or app)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // REMINDERS â€” Scheduled reminders (from Telegram /remind command or app)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   reminders: defineTable({
     userId: v.id('users'),
     text: v.string(),
@@ -1045,9 +1045,9 @@ export default defineSchema({
     .index('by_userId_status', ['userId', 'status'])
     .index('by_status_remindAt', ['status', 'remindAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TELEGRAM CONTEXT — Last 10 messages per user for coherent multi-turn AI
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // TELEGRAM CONTEXT â€” Last 10 messages per user for coherent multi-turn AI
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   telegramContext: defineTable({
     userId: v.id('users'),
     telegramChatId: v.string(),
@@ -1061,9 +1061,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_telegramChatId', ['telegramChatId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // TELEGRAM OTPS — Short-lived tokens for the /start account-link auth flow
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // TELEGRAM OTPS â€” Short-lived tokens for the /start account-link auth flow
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   telegramOtps: defineTable({
     clerkId: v.string(),
     token: v.string(),              // 6-char alphanumeric OTP
@@ -1076,9 +1076,9 @@ export default defineSchema({
     .index('by_token', ['token'])
     .index('by_clerkId', ['clerkId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // COACH MEMORY — AI persona long-term memory per user per coach
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // COACH MEMORY â€” AI persona long-term memory per user per coach
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   coachMemory: defineTable({
     userId: v.id('users'),
     coachId: v.union(
@@ -1113,9 +1113,54 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_coachId', ['userId', 'coachId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // BUDGET TRANSACTIONS — Personal finance tracker
-  // ─────────────────────────────────────────────────────────────────────────────
+
+  // MEMORIES - Vector-indexed persistent AI memory
+  memories: defineTable({
+    userId: v.id('users'),
+    coachId: v.optional(v.string()),
+    content: v.string(),
+    embedding: v.array(v.number()),
+    type: v.union(v.literal('behavioral'), v.literal('achievement'), v.literal('failure'), v.literal('preference'), v.literal('insight'), v.literal('weekly_summary')),
+    relevanceScore: v.optional(v.number()),
+    sourceType: v.optional(v.union(v.literal('coaching_session'), v.literal('habit_completion'), v.literal('goal_event'), v.literal('weekly_review'), v.literal('mood_entry'))),
+    sourceId: v.optional(v.string()),
+    appliedAt: v.optional(v.number()),
+    applyCount: v.optional(v.number()),
+    createdAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_type', ['userId', 'type'])
+    .index('by_userId_createdAt', ['userId', 'createdAt'])
+    .vectorIndex('by_embedding', { vectorField: 'embedding', dimensions: 1536, filterFields: ['userId'] }),
+
+  // WEEKLY INTELLIGENCE - AI weekly performance reports
+  weeklyIntelligence: defineTable({
+    userId: v.id('users'),
+    weekStartDate: v.string(),
+    weekEndDate: v.string(),
+    habitCompletionRate: v.number(),
+    taskCompletionRate: v.number(),
+    focusMinutes: v.number(),
+    moodAverage: v.optional(v.number()),
+    streakStatus: v.string(),
+    topInsight: v.string(),
+    winOfTheWeek: v.string(),
+    areaToImprove: v.string(),
+    nextWeekFocus: v.string(),
+    personalizedMessage: v.string(),
+    patternFlags: v.optional(v.array(v.string())),
+    deliveredAt: v.optional(v.number()),
+    viewedAt: v.optional(v.number()),
+    telegramSent: v.optional(v.boolean()),
+    emailSent: v.optional(v.boolean()),
+    createdAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_weekStart', ['userId', 'weekStartDate']),
+
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // BUDGET TRANSACTIONS â€” Personal finance tracker
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   transactions: defineTable({
     userId: v.id('users'),
     type: v.union(v.literal('income'), v.literal('expense')),
@@ -1139,9 +1184,9 @@ export default defineSchema({
     .index('by_userId_date', ['userId', 'date'])
     .index('by_userId_category', ['userId', 'category']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // BUDGET CATEGORIES — Spend envelopes / budgets per category
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // BUDGET CATEGORIES â€” Spend envelopes / budgets per category
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   budgetCategories: defineTable({
     userId: v.id('users'),
     name: v.string(),
@@ -1153,9 +1198,9 @@ export default defineSchema({
   })
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // FINANCIAL GOALS — Saving targets
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // FINANCIAL GOALS â€” Saving targets
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   financialGoals: defineTable({
     userId: v.id('users'),
     title: v.string(),
@@ -1175,9 +1220,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_status', ['userId', 'status']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // NUTRITION LOGS — Daily calorie + macro tracking
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // NUTRITION LOGS â€” Daily calorie + macro tracking
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   nutritionLogs: defineTable({
     userId: v.id('users'),
     date: v.string(),                    // YYYY-MM-DD
@@ -1202,9 +1247,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // SLEEP LOGS — Sleep quality & duration tracking
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // SLEEP LOGS â€” Sleep quality & duration tracking
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   sleepLogs: defineTable({
     userId: v.id('users'),
     date: v.string(),                    // YYYY-MM-DD (date of the night)
@@ -1218,9 +1263,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // BUSINESS GOALS — Business Command Center
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // BUSINESS GOALS â€” Business Command Center
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   businessGoals: defineTable({
     userId: v.id('users'),
     businessName: v.optional(v.string()),
@@ -1257,9 +1302,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_status', ['userId', 'status']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // WEBHOOKS — Zapier/Make outbound event subscriptions
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // WEBHOOKS â€” Zapier/Make outbound event subscriptions
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   webhooks: defineTable({
     userId: v.id('users'),
     url: v.string(),
@@ -1272,9 +1317,9 @@ export default defineSchema({
   })
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // API KEYS — Public developer API authentication
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // API KEYS â€” Public developer API authentication
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   apiKeys: defineTable({
     userId: v.id('users'),
     name: v.string(),
@@ -1288,9 +1333,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_keyHash', ['keyHash']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // REFERRALS — "Help shape your homeboy's life too"
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // REFERRALS â€” "Help shape your homeboy's life too"
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   referrals: defineTable({
     referrerId: v.id('users'),
     refereeId: v.optional(v.id('users')),
@@ -1305,9 +1350,9 @@ export default defineSchema({
     .index('by_referrerId', ['referrerId'])
     .index('by_code', ['code']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // LEADS — Marketing lead capture
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // LEADS â€” Marketing lead capture
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   leads: defineTable({
     email: v.string(),
     source: v.string(),
@@ -1327,9 +1372,9 @@ export default defineSchema({
     .index('by_email', ['email'])
     .index('by_source', ['source']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // MARKETING EVENTS — Marketing instrumentation events
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // MARKETING EVENTS â€” Marketing instrumentation events
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   marketingEvents: defineTable({
     event: v.string(),
     path: v.union(v.string(), v.null()),
@@ -1340,9 +1385,9 @@ export default defineSchema({
     .index('by_event', ['event'])
     .index('by_createdAt', ['createdAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // GENERATED BLOG POSTS — Automated research-backed content engine
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // GENERATED BLOG POSTS â€” Automated research-backed content engine
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   generatedBlogPosts: defineTable({
     slug: v.string(),
     title: v.string(),
@@ -1381,10 +1426,10 @@ export default defineSchema({
     .index('by_status', ['status'])
     .index('by_status_publishedAt', ['status', 'publishedAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // META CAMPAIGNS — Cached Meta Marketing API campaign data
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // META CAMPAIGNS â€” Cached Meta Marketing API campaign data
   // Synced periodically from Meta API to avoid hitting rate limits
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   metaCampaigns: defineTable({
     metaCampaignId: v.string(),         // Meta campaign ID (e.g. "23856...")
     name: v.string(),
@@ -1411,9 +1456,9 @@ export default defineSchema({
     .index('by_status', ['status'])
     .index('by_lastSyncedAt', ['lastSyncedAt']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // META CONVERSION EVENTS — Server-side conversion event log
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // META CONVERSION EVENTS â€” Server-side conversion event log
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   metaConversionEvents: defineTable({
     eventName: v.string(),              // e.g. CompleteRegistration, Purchase, Lead
     eventId: v.string(),                // Dedup ID shared with pixel
@@ -1428,11 +1473,11 @@ export default defineSchema({
     .index('by_createdAt', ['createdAt'])
     .index('by_eventId', ['eventId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // PARTNER ACTION LEDGER — Idempotency tracker for Partner Engine clientRefs
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // PARTNER ACTION LEDGER â€” Idempotency tracker for Partner Engine clientRefs
   // Each action the AI proposes carries a clientRef. We record it here so that
   // retries / duplicate submissions never create duplicate records.
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   partnerActionLedger: defineTable({
     userId: v.id('users'),
     clientRef: v.string(),       // unique per action, format: "date:TYPE:N"
@@ -1444,11 +1489,11 @@ export default defineSchema({
     .index('by_userId_clientRef', ['userId', 'clientRef'])
     .index('by_userId_appliedAt', ['userId', 'appliedAt']),
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // PSYCH PROFILES — Psychology Engine (OCEAN + CBT + SDT)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // PSYCH PROFILES â€” Psychology Engine (OCEAN + CBT + SDT)
   // Stores AI-inferred coaching style per user. NEVER shown to user.
   // Built gradually over 30+ interactions. Private, deletable (GDPR).
-  // ───────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   psychProfiles: defineTable({
     userId: v.id('users'),
     profileData: v.string(),    // JSON-serialised PsychProfile
@@ -1457,17 +1502,17 @@ export default defineSchema({
   })
     .index('by_user', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // DEEP SCAN — Enhanced onboarding data (5-stage Deep Scan Protocol)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // DEEP SCAN â€” Enhanced onboarding data (5-stage Deep Scan Protocol)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   deepScans: defineTable({
     userId: v.id('users'),
-    // ── Stage 1: Identity Scan ──
+    // â”€â”€ Stage 1: Identity Scan â”€â”€
     nickname: v.optional(v.string()),
     age: v.optional(v.number()),
     occupation: v.optional(v.string()),
     lifeStage: v.optional(v.string()),          // e.g. student, early_career, mid_career, transition, retirement
-    // ── Stage 2: Life Pillar Assessment ──
+    // â”€â”€ Stage 2: Life Pillar Assessment â”€â”€
     pillarScores: v.optional(v.object({
       health: v.number(),       // 1-10
       career: v.number(),
@@ -1479,30 +1524,30 @@ export default defineSchema({
       environment: v.number(),
     })),
     pillarPriorities: v.optional(v.array(v.string())),  // top 3 pillars to focus
-    // ── Stage 3: Root Cause Analysis ──
+    // â”€â”€ Stage 3: Root Cause Analysis â”€â”€
     biggestChallenge: v.optional(v.string()),
     failedBefore: v.optional(v.string()),       // what they've tried before
     whatStopped: v.optional(v.string()),         // what stopped them
     sabotagePatterns: v.optional(v.array(v.string())), // self-sabotage patterns
-    // ── Stage 4: Behavioral Fingerprint ──
+    // â”€â”€ Stage 4: Behavioral Fingerprint â”€â”€
     chronotype: v.optional(v.string()),         // early_bird, night_owl, variable
     energyPattern: v.optional(v.string()),      // steady, burst, slow_start
     motivationStyle: v.optional(v.string()),    // intrinsic, extrinsic, social, competitive
     accountabilityStyle: v.optional(v.string()),// self, partner, public, consequences
     stressResponse: v.optional(v.string()),     // fight, flight, freeze, fawn
     decisionStyle: v.optional(v.string()),      // analytical, intuitive, collaborative, decisive
-    // ── Stage 5: Commitment Calibration ──
+    // â”€â”€ Stage 5: Commitment Calibration â”€â”€
     commitmentLevel: v.optional(v.number()),    // 1-10
     dailyTimeAvailable: v.optional(v.number()), // minutes per day
     biggestFear: v.optional(v.string()),
     ninetyDayVision: v.optional(v.string()),
     startingDifficulty: v.optional(v.string()), // gentle, moderate, intense
-    // ── AI-Generated Results ──
+    // â”€â”€ AI-Generated Results â”€â”€
     aiDiagnosis: v.optional(v.string()),        // AI summary of findings
     aiRecommendations: v.optional(v.string()),  // JSON of recommended approach
     archetype: v.optional(v.string()),
     archetypeConfidence: v.optional(v.number()),
-    // ── Meta ──
+    // â”€â”€ Meta â”€â”€
     completedStages: v.array(v.number()),       // [1,2,3,4,5]
     currentStage: v.number(),
     completedAt: v.optional(v.number()),
@@ -1511,13 +1556,13 @@ export default defineSchema({
   })
     .index('by_userId', ['userId']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // DAILY CHECK-INS — Morning briefing + Evening debrief
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // DAILY CHECK-INS â€” Morning briefing + Evening debrief
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   dailyCheckIns: defineTable({
     userId: v.id('users'),
     date: v.string(),             // YYYY-MM-DD
-    // ── Morning Check-in ──
+    // â”€â”€ Morning Check-in â”€â”€
     morningMood: v.optional(v.number()),        // 1-5
     morningEnergy: v.optional(v.number()),      // 1-5
     sleepQuality: v.optional(v.number()),       // 1-5
@@ -1525,7 +1570,7 @@ export default defineSchema({
     topThreePriorities: v.optional(v.array(v.string())),
     morningAiBriefing: v.optional(v.string()),  // AI-generated morning briefing
     morningCompletedAt: v.optional(v.number()),
-    // ── Evening Check-in ──
+    // â”€â”€ Evening Check-in â”€â”€
     eveningMood: v.optional(v.number()),
     eveningEnergy: v.optional(v.number()),
     dayRating: v.optional(v.number()),          // 1-5
@@ -1535,7 +1580,7 @@ export default defineSchema({
     tomorrowFocus: v.optional(v.string()),
     eveningAiReflection: v.optional(v.string()), // AI-generated evening reflection
     eveningCompletedAt: v.optional(v.number()),
-    // ── Stats (auto-populated) ──
+    // â”€â”€ Stats (auto-populated) â”€â”€
     tasksCompleted: v.optional(v.number()),
     habitsCompleted: v.optional(v.number()),
     focusMinutes: v.optional(v.number()),
@@ -1546,9 +1591,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_date', ['userId', 'date']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // AI GREETINGS — First Contact briefing after onboarding
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // AI GREETINGS â€” First Contact briefing after onboarding
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   aiGreetings: defineTable({
     userId: v.id('users'),
     greeting: v.string(),           // Full AI-generated personalized greeting
@@ -1565,9 +1610,9 @@ export default defineSchema({
   })
     .index('by_userId', ['userId']),
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // VISION BOARDS — AI-generated personalized vision boards (Section 24)
-  // ───────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // VISION BOARDS â€” AI-generated personalized vision boards (Section 24)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   visionBoards: defineTable({
     userId: v.id('users'),
     config: v.string(),   // JSON-serialised VisionBoardConfig (includes images)
@@ -1609,9 +1654,9 @@ export default defineSchema({
     .index('by_user', ['userId'])
     .index('by_user_domain', ['userId', 'domain']),
 
-  // ─────────────────────────────────────────────────────────────────────────────
-  // WISHLIST ITEMS — Goal-oriented saving & purchase tracking (Wealth section)
-  // ─────────────────────────────────────────────────────────────────────────────
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  // WISHLIST ITEMS â€” Goal-oriented saving & purchase tracking (Wealth section)
+  // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   wishlistItems: defineTable({
     userId: v.id('users'),
     name: v.string(),
@@ -1627,9 +1672,9 @@ export default defineSchema({
     .index('by_userId', ['userId'])
     .index('by_userId_bought', ['userId', 'bought']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// SCRATCH NOTES — Quick capture from dashboard "Quick Note" widget
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// SCRATCH NOTES â€” Quick capture from dashboard "Quick Note" widget
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 scratchNotes: defineTable({
   userId: v.id('users'),
   text: v.string(),
@@ -1639,9 +1684,9 @@ scratchNotes: defineTable({
 .index('by_userId', ['userId'])
 .index('by_userId_createdAt', ['userId', 'createdAt']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// TESTIMONIALS — User testimonials for social proof
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// TESTIMONIALS â€” User testimonials for social proof
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 testimonials: defineTable({
   userId: v.optional(v.id('users')), // Optional: linked to user account
   name: v.string(),                  // Name for display
@@ -1657,9 +1702,9 @@ testimonials: defineTable({
 .index('by_createdAt', ['createdAt'])
 .index('by_userId', ['userId']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// WORKOUT LOGS — Physical fitness activity tracking (Fitness section)
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// WORKOUT LOGS â€” Physical fitness activity tracking (Fitness section)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 workoutLogs: defineTable({
   userId: v.id('users'),
   date: v.string(),
@@ -1690,9 +1735,9 @@ workoutLogs: defineTable({
 .index('by_userId', ['userId'])
 .index('by_userId_date', ['userId', 'date']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// COACH NOTIFICATIONS — Proactive AI coach nudges
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// COACH NOTIFICATIONS â€” Proactive AI coach nudges
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 coachNotifications: defineTable({
   userId: v.id('users'),
   coachId: v.string(),
@@ -1710,9 +1755,9 @@ coachNotifications: defineTable({
 .index('by_userId_read', ['userId', 'read'])
 .index('by_userId_createdAt', ['userId', 'createdAt']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// USER INTELLIGENCE MODEL — Central behavioral context for AI
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// USER INTELLIGENCE MODEL â€” Central behavioral context for AI
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 userIntelligenceModel: defineTable({
   userId: v.id('users'),
   energyLevel: v.optional(v.number()),         // 1-10
@@ -1739,9 +1784,9 @@ userIntelligenceModel: defineTable({
 .index('by_userId', ['userId'])
 .index('by_userId_updatedAt', ['userId', 'updatedAt']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// BRAIN DUMP — Raw and AI-structured onboarding intelligence
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// BRAIN DUMP â€” Raw and AI-structured onboarding intelligence
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 brainDump: defineTable({
   userId: v.id('users'),
   rawText: v.string(),
@@ -1766,9 +1811,9 @@ brainDump: defineTable({
 .index('by_userId_createdAt', ['userId', 'createdAt'])
 .index('by_userId_status', ['userId', 'analysisStatus']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EXECUTION STREAM — Unified "Today" feed (tasks + habits + focus sessions)
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// EXECUTION STREAM â€” Unified "Today" feed (tasks + habits + focus sessions)
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 executionStream: defineTable({
   userId: v.id('users'),
   dateKey: v.string(), // YYYY-MM-DD in user-local date
@@ -1804,9 +1849,9 @@ executionStream: defineTable({
 .index('by_userId_dateKey_status', ['userId', 'dateKey', 'status'])
 .index('by_userId_dateKey_sortOrder', ['userId', 'dateKey', 'sortOrder']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// EMAIL LOGS — Track lifecycle emails sent to prevent duplicates
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// EMAIL LOGS â€” Track lifecycle emails sent to prevent duplicates
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 emailLogs: defineTable({
   userId: v.id('users'),
   emailType: v.string(),        // e.g. 'welcome', 'day3_tips', 'day7_streak', 'day14_checkin', 'day21_habit', 'day30_review', 'streak_at_risk', 'win_back'
@@ -1830,9 +1875,9 @@ leadEmailLogs: defineTable({
 .index('by_leadId', ['leadId'])
 .index('by_leadId_emailType', ['leadId', 'emailType']),
 
-// ─────────────────────────────────────────────────────────────────────────────
-// CANCELLATION SURVEYS — Churn insights from departing users
-// ─────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// CANCELLATION SURVEYS â€” Churn insights from departing users
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 cancellationSurveys: defineTable({
   userId: v.id('users'),
   reason: v.string(),
@@ -1844,3 +1889,4 @@ cancellationSurveys: defineTable({
 .index('by_userId', ['userId'])
 .index('by_reason', ['reason']),
 });
+

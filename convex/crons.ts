@@ -1,6 +1,6 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Convex Cron Jobs
-// Morning digest & reminder delivery via Telegram + FCM push
+// Morning digest, reminder delivery, weekly reports via Telegram + FCM push
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { cronJobs } from 'convex/server';
@@ -75,6 +75,15 @@ crons.cron(
   'weekly-engagement-score-recompute',
   '0 19 * * 0',
   internal.users.recomputeAllEngagementScores
+);
+
+// ── Weekly Intelligence Reports (Sunday 20:00 UTC) ───────────────────────────
+// Generates personalized AI performance reports for all active users
+// Delivered in-app and via Telegram if linked
+crons.cron(
+  'weekly-intelligence-reports',
+  '0 20 * * 0',
+  internal.weeklyIntelligence.runWeeklyIntelligenceForAllUsers
 );
 
 export default crons;

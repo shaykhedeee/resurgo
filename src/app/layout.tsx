@@ -184,8 +184,10 @@ export const metadata: Metadata = {
     },
   },
   
-  // Verification codes — add when available
-  // verification: { google: '...', yandex: '...' },
+  // Search engine verification — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in Vercel env vars
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+    : {}),
   
   // ═══════════════════════════════════════════════════════════════════════════
   // OTHER METADATA
