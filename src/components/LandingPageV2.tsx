@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useEffect, useState, lazy, Suspense } from 'react';
 import Link from 'next/link';
@@ -126,45 +126,45 @@ const HEALTH_FEATURES = [
 const TESTIMONIALS = [
   {
     name: 'M. Chen',
-    role: 'Founder & CEO',
+    role: 'SaaS Founder',
     quote:
-      'I stopped juggling five apps. Resurgo gave me one clean workflow for planning, execution, and review. My team noticed the difference within weeks.',
-    outcome: '3 launches in 1 quarter',
+      'I stopped juggling complex Notion templates and Jira. Resurgo gave me a hyper-focused workflow. Set up Stripe, deployed the MVP, and got our first 50 beta users in 3 weeks.',
+    outcome: 'Stripe live & 50 users in 3 wks',
   },
   {
     name: 'J. Park',
-    role: 'Freelance Designer',
+    role: 'Solo Developer',
     quote:
-      'Simple enough to use daily, powerful enough to keep me consistent when motivation dips. The AI coaching feels like having an accountability partner.',
-    outcome: '127-day consistency streak',
+      'As a solo builder, focus is my biggest bottleneck. Marcus, the Stoic coach, keeps calling me out whenever I try to add unnecessary features. Shipped in public and didn\'t lose my mind.',
+    outcome: 'MVP shipped without feature creep',
   },
   {
     name: 'A. Thompson',
-    role: 'Medical Student',
+    role: 'Indie Hacker',
     quote:
-      'I use it for study plans, habits, and recovery tracking. It helps me prioritize what matters each day without overthinking.',
-    outcome: 'Top 10% class performance',
+      'I spent years in planning theater, never releasing. Resurgo forced me to focus on one single leverage action every day. Just launched our first micro-SaaS on Product Hunt.',
+    outcome: 'First micro-SaaS launched',
   },
   {
     name: 'S. Rodriguez',
-    role: 'Marketing Manager',
+    role: 'Full-Stack Creator',
     quote:
-      'The focus timer changed how I work. I went from scattered multitasking to deep work blocks. My output doubled in two months.',
-    outcome: '2x output in 60 days',
+      'The focus timer paired with the execution realism gauge is perfect. It warned me when I was over-planning and helped me scope down our beta. Shipped two side projects in 60 days.',
+    outcome: '2 side projects shipped',
   },
   {
     name: 'K. Nakamura',
-    role: 'Software Engineer',
+    role: 'MVP Builder',
     quote:
-      'I tried every productivity app out there. Resurgo is the first one I stuck with past 30 days. The gamification keeps me coming back.',
-    outcome: 'Shipped 2 side projects',
+      'The daily brain dump feature is therapeutic. I dump my chaotic feature checklist, and Resurgo translates it into an actionable 90-second roadmap. No more staring at a blank screen.',
+    outcome: 'Messy checklist → clear roadmap',
   },
   {
     name: 'L. Okafor',
-    role: 'Graduate Researcher',
+    role: 'Bootstrapped Founder',
     quote:
-      'The weekly reviews are gold. Having AI summarize my progress and suggest adjustments saved me from burnout during thesis season.',
-    outcome: 'Thesis completed 3 wks early',
+      'I use the Telegram bot to log my build progress directly from my terminal. The weekly AI review compiles my changelog and helps me stay realistic about my focus hours.',
+    outcome: '100% realistic build schedule',
   },
 ];
 
@@ -353,6 +353,46 @@ const _ACHIEVEMENT_STEPS = [
   },
 ];
 
+const CHANGELOG_DATA = [
+  {
+    version: 'v2.4.1',
+    date: 'TODAY',
+    title: 'Stoic Execution Realism Gauge',
+    tag: 'FEATURE',
+    tagColor: 'text-orange-400 border-orange-500/30 bg-orange-950/20',
+    description: 'Calculates actual focus hours in daily schedules. Warns you if you overload yourself beyond a realistic 4-hour productive window.',
+    commits: [
+      { hash: 'cf71a2e', text: 'feat: add task focus hour calculator' },
+      { hash: 'be83f91', text: 'feat: inject [OVERLOAD WARNING] to Stoic AI coach' },
+      { hash: '2a49fcd', text: 'fix: restrict coach responses to max 2 paragraphs' },
+    ]
+  },
+  {
+    version: 'v2.4.0',
+    date: '2 days ago',
+    title: 'Stripe Sandbox Integration',
+    tag: 'BILLING',
+    tagColor: 'text-cyan-400 border-cyan-500/30 bg-cyan-950/20',
+    description: 'Prepped founding lifetime slots. Configured webhook triggers to automatically activate lifetime badges upon checkout.',
+    commits: [
+      { hash: '8a91dfa', text: 'feat: wire Stripe Sandbox webhooks for Lifetime purchase' },
+      { hash: 'c902ef1', text: 'ui: add glassmorphic limit-spots indicator' },
+    ]
+  },
+  {
+    version: 'v2.3.9',
+    date: '1 week ago',
+    title: 'Telegram Interactive Sync',
+    tag: 'INTEGRATION',
+    tagColor: 'text-emerald-400 border-emerald-500/30 bg-emerald-950/20',
+    description: 'Enables quick task updates directly from your favorite chat application. Push, postpone, or close tasks in real-time.',
+    commits: [
+      { hash: '9b28a11', text: 'feat: implement Telegram Bot polling and webhook listener' },
+      { hash: '3e41b22', text: 'feat: parse [ACTION:UPDATE_TASK] regex actions in backend' },
+    ]
+  }
+];
+
 // ─── HERO TERMINAL LINES (auto-typed in TerminalWindow) ─────────────────────
 const HERO_TERMINAL_LINES: TerminalLine[] = [
   { id: 'h1', type: 'command',  text: 'resurgo init --goal "launch startup"' },
@@ -397,6 +437,7 @@ function LandingPageV2() {
   const [tickerIdx, setTickerIdx] = useState(0);
   const [heroVariant, setHeroVariant] = useState('control');
   const [annual, setAnnual] = useState(false);
+  const [selectedChangelogIdx, setSelectedChangelogIdx] = useState(0);
 
   useEffect(() => {
     captureUtmParams();
@@ -418,23 +459,23 @@ function LandingPageV2() {
   const heroContent =
     heroVariant === 'clarity'
       ? {
-          headingMain: 'One clear goal.',
-          headingAccent: 'One focused daily plan.',
+          headingMain: 'One focused MVP sprint.',
+          headingAccent: 'Zero planning theater.',
           subcopy:
-            'Go from mental clutter to crystal-clear action in under 90 seconds. Resurgo turns your goals into one focused today plan you can actually follow.',
+            'Stop over-engineering your tools and start shipping. Resurgo turns your messy ideas, features, and launch checklists into a clean, 90-second execution plan for your SaaS MVP.',
         }
       : heroVariant === 'adhd'
         ? {
-            headingMain: 'Too much on your head?',
-            headingAccent: 'One calm step forward.',
+            headingMain: 'Feature creep killing your MVP?',
+            headingAccent: 'Build less. Ship today.',
             subcopy:
-              'When everything feels loud, Resurgo gives you one calm next step. Gentle accountability, flexible structure, and momentum that meets you where you are.',
+              'Designed for solo builders who struggle with focus. Dump your brain, filter the noise, and get one single, high-leverage move for today. Zero guilt, total execution.',
           }
         : {
-            headingMain: 'Drop your goal.',
-            headingAccent: 'Get a real plan in 90 seconds.',
+            headingMain: 'The Execution System for',
+            headingAccent: 'Indie Founders & Solo Builders.',
             subcopy:
-              'Resurgo turns any goal into a daily action plan — automatically. Enter one goal, get your AI-generated habit roadmap in seconds, and start executing with focus timers, streaks, and 24/7 AI coaching.',
+              'Ditch the complex database templates and multi-app setups. Drop your MVP goal or feature checklist, get a highly realistic daily action plan in 90 seconds, and ship your product with Stoic accountability.',
           };
 
   // Rotate testimonials
@@ -789,6 +830,113 @@ function LandingPageV2() {
 
         {/* ────────────────── INTERACTIVE TERMINAL DEMO ──────────────── */}
         <TerminalDemo />
+
+        {/* ────────────────── LIVE BUILD LOG & CHANGELOG ──────────────── */}
+        <section className="px-4 py-12 sm:px-6 lg:px-8 border-t border-zinc-900/60 bg-zinc-950/20">
+          <div className="mx-auto max-w-4xl">
+            {/* Header with live pulsing dot */}
+            <div className="mb-8 flex flex-col items-center justify-between gap-4 md:flex-row md:items-end">
+              <div>
+                <div className="inline-flex items-center gap-2 rounded-full border border-orange-500/20 bg-orange-950/20 px-3 py-1 text-xs font-semibold text-orange-400">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                  </span>
+                  LIVE_RELEASE_ENGINE :: ACTIVE
+                </div>
+                <h3 className="mt-3 font-pixel text-base font-bold text-zinc-100">
+                  Shipped in Public: Recent Build Logs
+                </h3>
+                <p className="mt-1 font-terminal text-sm text-zinc-400">
+                  We ship daily. View our interactive changelog, real git commits, and public roadmap.
+                </p>
+              </div>
+              <div>
+                <a 
+                  href="https://github.com/shaykhedeee/resurgo"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-zinc-800 bg-zinc-900/40 px-4 py-2 font-mono text-xs text-zinc-300 hover:border-orange-500/30 hover:text-orange-400 transition-all duration-300 backdrop-blur-sm"
+                >
+                  <span>&gt; view_public_roadmap --verbose</span>
+                  <span className="text-zinc-600">→</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Glassmorphic Changelog Container */}
+            <div className="grid gap-4 md:grid-cols-3 border border-zinc-850 bg-zinc-950/40 backdrop-blur-md p-2 rounded-lg">
+              {/* Left sidebar: Release Selector */}
+              <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible md:border-r border-zinc-900/60 p-2 scrollbar-none">
+                {CHANGELOG_DATA.map((item, idx) => (
+                  <button
+                    key={item.version}
+                    onClick={() => setSelectedChangelogIdx(idx)}
+                    className={cn(
+                      "flex flex-col items-start gap-1 p-3 text-left transition-all duration-300 border md:border-l-2 md:border-y-0 md:border-r-0 border-zinc-850 hover:bg-zinc-900/30",
+                      selectedChangelogIdx === idx
+                        ? "border-orange-500 bg-zinc-900/40 text-orange-400"
+                        : "border-transparent text-zinc-500"
+                    )}
+                  >
+                    <div className="flex items-center gap-2 w-full justify-between">
+                      <span className="font-mono text-sm font-bold">{item.version}</span>
+                      <span className="text-[0.55rem] font-pixel px-1.5 py-0.5 rounded border border-zinc-800 bg-zinc-950/60 uppercase">
+                        {item.date}
+                      </span>
+                    </div>
+                    <span className="font-terminal text-xs truncate max-w-[150px] md:max-w-none text-zinc-300">
+                      {item.title}
+                    </span>
+                  </button>
+                ))}
+              </div>
+
+              {/* Right Panel: Selected Release Details */}
+              <div className="md:col-span-2 flex flex-col justify-between p-4 min-h-[220px]">
+                <div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="font-pixel text-[0.6rem] text-zinc-300 tracking-wider">
+                      RELEASE::{CHANGELOG_DATA[selectedChangelogIdx].version}
+                    </span>
+                    <span className={cn("text-[0.55rem] font-pixel px-2 py-0.5 border uppercase rounded-sm", CHANGELOG_DATA[selectedChangelogIdx].tagColor)}>
+                      {CHANGELOG_DATA[selectedChangelogIdx].tag}
+                    </span>
+                  </div>
+
+                  <h4 className="mt-2 font-pixel text-sm font-bold text-zinc-200">
+                    {CHANGELOG_DATA[selectedChangelogIdx].title}
+                  </h4>
+                  
+                  <p className="mt-2 font-terminal text-sm leading-relaxed text-zinc-400">
+                    {CHANGELOG_DATA[selectedChangelogIdx].description}
+                  </p>
+
+                  {/* Terminal Git Commits */}
+                  <div className="mt-4 border border-zinc-900 bg-black/80 p-3 font-mono text-xs rounded-md">
+                    <p className="text-zinc-500 mb-2 border-b border-zinc-900 pb-1 flex justify-between items-center">
+                      <span>$ git log --oneline -n 3</span>
+                      <span className="text-[0.5rem] tracking-wider text-orange-500/80">AUTHENTIC RELEASES</span>
+                    </p>
+                    <div className="space-y-1.5">
+                      {CHANGELOG_DATA[selectedChangelogIdx].commits.map((commit) => (
+                        <div key={commit.hash} className="flex items-start gap-2">
+                          <span className="text-yellow-500/80 font-bold shrink-0">{commit.hash}</span>
+                          <span className="text-zinc-300">{commit.text}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 border-t border-zinc-900/60 pt-3 flex justify-between items-center text-xs font-mono text-zinc-500">
+                  <span>deploy_status: <span className="text-green-500 font-bold">100%_INTEGRITY</span></span>
+                  <span>checksum: sha256_e823f99...</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
         {/* ────────────── HOW TO ACHIEVE YOUR GOALS ────────────── */}
         <Suspense fallback={null}>

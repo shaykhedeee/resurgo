@@ -99,6 +99,23 @@ export async function POST(req: NextRequest) {
   // ── Enhance analysis with patterns, emotions, cognitive load ──
   const enhanced = result.data ? enhanceBrainDumpAnalysis(result.data, body.text) : null;
 
+  // ── Auto-seed the database & planner cascade ──
+  let seedResult = null;
+  if (result.data) {
+    try {
+      const token = await getToken({ template: 'convex' });
+      if (token) {
+        convex.setAuth(token);
+        seedResult = await convex.mutation(api.aiAnalysis.autoSeedPlannerFromBrainDump, {
+          rawText: body.text,
+          analysisResult: result.data,
+        });
+      }
+    } catch (seedErr) {
+      console.error('[BrainDump API] Failed to auto-seed database and planner:', seedErr);
+    }
+  }
+
   return NextResponse.json({
     success: true,
     data: result.data,
@@ -110,6 +127,7 @@ export async function POST(req: NextRequest) {
       recommendedApproach: enhanced.recommendedApproach,
       warningFlags: enhanced.warningFlags,
     } : null,
+    seeded: seedResult,
     provider: result.provider,
     attempts: result.attempts,
     latencyMs: result.totalLatencyMs,

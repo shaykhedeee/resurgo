@@ -92,6 +92,18 @@ The neural_map helps visualize the user's mental state as a flowchart:
 - Map connections between tasks: "blocks" (must do first), "enables" (helps the other), "relates_to" (same topic)
 - root_priority: The single most important thing to do FIRST — the task that unblocks the most other tasks
 
+## Psychometric & Behavioral Analysis (CRITICAL)
+Perform a high-fidelity psychometric evaluation of their subconscious mind based on their raw text:
+- limiting_beliefs: Extract 1-3 specific self-limiting beliefs or negative self-scripts visible in their text (e.g., "I have to do everything myself," "I am not disciplined," "It's too late to change").
+- cognitive_biases: Identify 1-3 cognitive distortions they are exhibiting (e.g., "all-or-nothing thinking", "catastrophizing", "emotional reasoning", "should statements", "mind reading").
+- executive_functioning_load: Assign a realistic score from 1 (clear, high energy, calm) to 10 (critical burnout, extreme executive dysfunction, task paralysis).
+- chronobiology_markers: Look for sleeping/waking patterns. Classify their chronotype into 'morning', 'afternoon', 'evening', or 'irregular'. Provide recommended wake and sleep times (in "HH:MM" 24h format, e.g., "06:30", "22:30", or null if not enough context), and a peak focus window (e.g., "09:00-11:00", "20:00-22:00", or null).
+- adhd_markers: Detect clear behavioral signs of ADHD/Executive Dysfunction (e.g., heavy context-switching, task avoidance/inertia, hyperfocus fatigue, feeling scattered, losing focus easily).
+- coaching_persona: Match them with their optimal coach:
+  - name: Suggest a name ("NOVA", "NEXUS", "AURORA", "ZENON", "MARCUS").
+  - style: Pick one from: 'supportive' (for heavy anxiety/guilt), 'challenging' (for low motivation/slacking), 'analytical' (for chaos/disorganization), 'humorous' (for heavy dread).
+  - initial_action_note: A warm, deeply insightful 1-sentence prompt of direct, hyper-tailored advice spoken in that coach's specific style.
+
 # OUTPUT FORMAT
 Respond with ONLY valid JSON. No markdown. No explanation. No text before or after the JSON.
 
@@ -124,7 +136,25 @@ Respond with ONLY valid JSON. No markdown. No explanation. No text before or aft
       {"from": "task title A", "to": "task title B", "relationship": "blocks|enables|relates_to"}
     ],
     "root_priority": "The single task to start with — the keystone that unblocks everything else"
+  },
+  "psychometric_analysis": {
+    "limiting_beliefs": ["string"],
+    "cognitive_biases": ["string"],
+    "executive_functioning_load": number,
+    "chronobiology_markers": {
+      "recommended_wake_time": "HH:MM"|null,
+      "recommended_sleep_time": "HH:MM"|null,
+      "peak_focus_window": "HH:MM-HH:MM"|null,
+      "chronotype": "morning|afternoon|evening|irregular"
+    },
+    "adhd_markers": ["string"],
+    "coaching_persona": {
+      "name": "string",
+      "style": "supportive|challenging|analytical|humorous",
+      "initial_action_note": "string"
+    }
   }
 }
+
 `.trim();
 }

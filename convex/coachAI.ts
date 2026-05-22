@@ -205,6 +205,13 @@ Each action block must be on its own line, formatted EXACTLY like this:
 ── FINANCE ──
 [ACTION:LOG_TRANSACTION] {"amount":50,"type":"expense","category":"food","description":"Groceries","date":"2026-03-05"}
 
+── AGENTIC & INTEGRATIONS ──
+[ACTION:CREATE_REMINDER] {"text":"Reminder description","minutesDelay":60}
+[ACTION:UPDATE_BIOMETRICS] {"height":180,"weight":75,"dob":"1995-04-12","phoneNumber":"+123456789"}
+[ACTION:CREATE_FINANCIAL_GOAL] {"title":"Emergency Fund","targetAmount":5000,"currentAmount":1000,"currency":"USD","deadline":"2026-12-31"}
+[ACTION:CREATE_BUDGET_CATEGORY] {"name":"Groceries","monthlyBudget":400,"type":"essential"}
+[ACTION:SYNC_INTEGRATION] {"provider":"google"}
+
 ── RESEARCH & INTERNET ──
 [ACTION:WEB_SEARCH] {"query":"latest ADHD productivity research 2025"}
 
@@ -889,7 +896,9 @@ function deriveEmotionalState(mood?: number, energy?: number, sleep?: number): s
 // ─── Internal: Fetch user context for AI ──────────────────────────────────────
 
 export const getUserContext = internalQuery({
-  args: {},
+  args: {
+    userId: v.optional(v.id('users')),
+  },
   returns: v.object({
     userName: v.string(),
     userPlan: v.string(),
@@ -899,6 +908,9 @@ export const getUserContext = internalQuery({
     goalsSummary: v.string(),
     taskCount: v.number(),
     tasksSummary: v.string(),
+    highTasksCount: v.number(),
+    mediumTasksCount: v.number(),
+    lowTasksCount: v.number(),
     habitCount: v.number(),
     habitsSummary: v.string(),
     streak: v.number(),
@@ -932,11 +944,13 @@ export const getUserContext = internalQuery({
     dailySynergyScore: v.number(),
     sleepDebtWarning: v.boolean(),
     budgetOverrunWarning: v.boolean(),
+    persistentMemories: v.string(),
   }),
-  handler: async (ctx) => {
+  handler: async (ctx, args) => {
     const empty = {
       userName: 'User', userPlan: 'free', primaryGoal: 'Not set', focusAreas: 'Not set',
       goalCount: 0, goalsSummary: 'None', taskCount: 0, tasksSummary: 'None',
+      highTasksCount: 0, mediumTasksCount: 0, lowTasksCount: 0,
       habitCount: 0, habitsSummary: 'None', streak: 0,
       emotionalState: 'unknown',
       level: 1, levelName: 'Seedling', totalXP: 0, achievementCount: 0,
@@ -954,16 +968,21 @@ export const getUserContext = internalQuery({
       dailySynergyScore: 100,
       sleepDebtWarning: false,
       budgetOverrunWarning: false,
+      persistentMemories: 'None recorded',
     };
 
+    let user;
     const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return empty;
-
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
-    if (!user) return { ...empty, userName: identity.name || 'User' };
+    if (args.userId) {
+      user = await ctx.db.get(args.userId);
+    } else {
+      if (!identity) return empty;
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
+    if (!user) return empty;
 
     // Goals
     const goals = await ctx.db
@@ -1142,9 +1161,18 @@ export const getUserContext = internalQuery({
     const sleepDebtWarning = lastSleepDurationHours !== undefined && lastSleepDurationHours < 6.0;
     const budgetOverrunWarning = totalMonthlyBudget > 0 && thisMonthExpenses > totalMonthlyBudget;
 
+    const memoriesList = await ctx.db
+      .query('memories')
+      .withIndex('by_userId', (q) => q.eq('userId', user._id))
+      .order('desc')
+      .collect();
+    const persistentMemories = memoriesList.length > 0
+      ? memoriesList.slice(0, 10).map((m) => `- [${m.type}]: ${m.content}`).join('\n')
+      : 'None recorded';
+
     const userExtra = user as Record<string, unknown>;
     return {
-      userName: user.name || identity.name || 'User',
+      userName: user.name || identity?.name || 'User',
       userPlan: user.plan || 'free',
       primaryGoal: (userExtra.primaryGoal as string | undefined) || activeGoals[0]?.title || 'Not set',
       focusAreas: (userExtra.focusAreas as string[] | undefined)?.join(', ') || 'Not set',
@@ -1152,6 +1180,9 @@ export const getUserContext = internalQuery({
       goalsSummary,
       taskCount: todayTasks.length > 0 ? todayTasks.length : pendingTasks.length,
       tasksSummary,
+      highTasksCount: todayTasks.filter(t => t.priority === 'high' || t.priority === 'urgent').length,
+      mediumTasksCount: todayTasks.filter(t => t.priority === 'medium').length,
+      lowTasksCount: todayTasks.filter(t => t.priority === 'low' || !t.priority).length,
       habitCount: activeHabits.length,
       habitsSummary,
       streak: maxStreak,
@@ -1185,6 +1216,7 @@ export const getUserContext = internalQuery({
       dailySynergyScore,
       sleepDebtWarning,
       budgetOverrunWarning,
+      persistentMemories,
     };
   },
 });
@@ -1347,19 +1379,25 @@ export const executeCoachActions = internalMutation({
       type: v.string(),
       payload: v.string(),
     })),
+    userId: v.optional(v.id('users')),
   },
   returns: v.array(v.object({
     type: v.string(),
     success: v.boolean(),
     message: v.string(),
   })),
-  handler: async (ctx, { actions }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return [];
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+  handler: async (ctx, { actions, userId }) => {
+    let user;
+    if (userId) {
+      user = await ctx.db.get(userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return [];
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) return [];
 
     const results: Array<{ type: string; success: boolean; message: string }> = [];
@@ -1786,6 +1824,85 @@ export const executeCoachActions = internalMutation({
             break;
           }
 
+          // ── AGENTIC & INTEGRATION ACTIONS ─────────────────────────────────
+
+          case 'CREATE_REMINDER': {
+            const delay = Number(data.minutesDelay || 60);
+            const remindAt = now + delay * 60000;
+            await ctx.db.insert('reminders', {
+              userId: user._id,
+              text: data.text || 'Coach AI Reminder',
+              remindAt,
+              status: 'pending',
+              source: user.telegramLinked ? 'telegram' : 'app',
+              telegramChatId: user.telegramChatId || undefined,
+              createdAt: now,
+            });
+            results.push({ type: 'CREATE_REMINDER', success: true, message: `Reminder created: "${data.text}" in ${delay} minutes.` });
+            break;
+          }
+
+          case 'UPDATE_BIOMETRICS': {
+            const patch: Record<string, any> = { updatedAt: now };
+            if (data.height !== undefined) patch.height = Number(data.height);
+            if (data.weight !== undefined) patch.weight = Number(data.weight);
+            if (data.dob !== undefined) patch.dob = String(data.dob);
+            if (data.phoneNumber !== undefined) patch.phoneNumber = String(data.phoneNumber);
+            await ctx.db.patch(user._id, patch);
+            results.push({ type: 'UPDATE_BIOMETRICS', success: true, message: `Biometrics successfully updated.` });
+            break;
+          }
+
+          case 'CREATE_FINANCIAL_GOAL': {
+            await ctx.db.insert('financialGoals', {
+              userId: user._id,
+              title: data.title,
+              targetAmount: Number(data.targetAmount || 1000),
+              currentAmount: Number(data.currentAmount || 0),
+              currency: data.currency || 'USD',
+              deadline: data.deadline || undefined,
+              status: 'active',
+              icon: data.icon || '🎯',
+              createdAt: now,
+              updatedAt: now,
+            });
+            results.push({ type: 'CREATE_FINANCIAL_GOAL', success: true, message: `Financial goal created: "${data.title}"` });
+            break;
+          }
+
+          case 'CREATE_BUDGET_CATEGORY': {
+            const budgetType = data.type || 'essential';
+            await ctx.db.insert('budgetCategories', {
+              userId: user._id,
+              name: data.name,
+              monthlyBudget: Number(data.monthlyBudget || 500),
+              type: budgetType,
+              icon: data.icon || '🛍️',
+              color: data.color || '#10b981',
+              createdAt: now,
+            });
+            results.push({ type: 'CREATE_BUDGET_CATEGORY', success: true, message: `Budget category created: "${data.name}"` });
+            break;
+          }
+
+          case 'SYNC_INTEGRATION': {
+            const provider = data.provider;
+            if (provider !== 'google' && provider !== 'notion') {
+              results.push({ type: 'SYNC_INTEGRATION', success: false, message: `Invalid provider: ${provider}` });
+              break;
+            }
+            const integration = await ctx.db
+              .query('userIntegrations')
+              .withIndex('by_userId_provider', (q) => q.eq('userId', user._id).eq('provider', provider))
+              .unique();
+            if (integration) {
+              results.push({ type: 'SYNC_INTEGRATION', success: true, message: `Successfully synchronized with ${provider}.` });
+            } else {
+              results.push({ type: 'SYNC_INTEGRATION', success: false, message: `Integration ${provider} is not connected. Please connect it first in Settings.` });
+            }
+            break;
+          }
+
           default:
             results.push({ type: action.type, success: false, message: `Unknown action: ${action.type}` });
         }
@@ -1922,13 +2039,23 @@ export const sendWithPersona = action({
     const timeContext = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
 
     let contextBlock = '';
+    let estimatedHours = 0;
     if (userCtx) {
+      const highTasks = userCtx.highTasksCount ?? 0;
+      const mediumTasks = userCtx.mediumTasksCount ?? 0;
+      const lowTasks = userCtx.lowTasksCount ?? 0;
+      const habits = userCtx.habitCount ?? 0;
+      estimatedHours = (highTasks * 2) + (mediumTasks * 1) + (lowTasks * 0.5) + (habits * 0.5);
+
       let synergyAlerts = '';
       if (userCtx.sleepDebtWarning) {
         synergyAlerts += `\n[CRITICAL WARNING: User is sleep deprived (under 6 hours sleep last night). Aurora and Marcus must prioritize cognitive recovery, advise light exercise, and recommend scaling back non-critical task load.]`;
       }
       if (userCtx.budgetOverrunWarning) {
         synergyAlerts += `\n[CRITICAL WARNING: User has exceeded their daily discretionary budget. Nova must suggest low-cost habit substitutions and gentle financial restraint in a non-judgmental way.]`;
+      }
+      if (estimatedHours > 4) {
+        synergyAlerts += `\n[OVERLOAD WARNING: User has planned an unrealistic day with ${estimatedHours} hours of focus workload (budget: 4 hours). You must warn them immediately in your first paragraph with: "you planned ${estimatedHours} hours of work into a 4-hour day" or a direct variation. Tell them that this is overloaded and unrealistic for deep work, and recommend they simplify or defer.]`;
       }
 
       contextBlock = `
@@ -2034,9 +2161,20 @@ PERSONALIZATION DIRECTIVES:
       contextBlock += '\n\nTRIAGE: User appears overwhelmed or distressed. ALWAYS lead with empathy and acknowledgment before any advice. Reduce scope to 1–3 actions maximum. Never skip emotional validation. Be the calm in the storm.';
     }
 
+    const strictOperationalDirectives = `
+
+━━ STRICT OPERATIONAL DIRECTIVES (CRITICAL & MANDATORY) ━━
+1. CONCISENESS & OPERATIONAL FOCUS: You are a high-performance operational coach, not a conversational chatbot. Limit your output to **maximum 2 short paragraphs** (totaling no more than 6-8 sentences) unless the user explicitly asks you to go deep or write a comprehensive plan/schedule. Do not write generic introductory/concluding pleasantries or excessive motivational fluff.
+2. EXECUTION REALISM ASSESSMENT: Check the user's estimated daily workload. Today's tasks + habits sum to ${estimatedHours} hours. If this exceeds 4 hours, you MUST alert the user in your first paragraph/sentence with: "you planned ${estimatedHours} hours of work into a 4-hour day" (or a direct variation of this phrase). Tell them that this is overloaded and unrealistic for deep work, and recommend they simplify or defer.
+3. ACTION-BASED RESOLUTION: Proactively recommend moving non-urgent or lower priority tasks to future days to resolve overload. Utilize the action block:
+   [ACTION:UPDATE_TASK] {"titleMatch":"partial task name","dueDate":"YYYY-MM-DD"}
+   to automatically schedule a task to a future date. Be precise, short, and operational.
+`;
+
     const fullSystemPrompt = persona.systemPrompt
       .replace('{{TODAY}}', today)
-      + contextBlock;
+      + contextBlock
+      + strictOperationalDirectives;
 
     // Build messages array
     const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
@@ -2149,12 +2287,326 @@ PERSONALIZATION DIRECTIVES:
   },
 });
 
+export const getUserDetails = internalQuery({
+  args: { userId: v.id('users') },
+  handler: async (ctx, args) => {
+    return await ctx.db.get(args.userId);
+  },
+});
+
+export const sendWithPersonaTelegram = action({
+  args: {
+    content: v.string(),
+    userId: v.id('users'),
+    telegramWebhookSecret: v.string(),
+  },
+  returns: v.object({
+    userMessageId: v.id('coachMessages'),
+    coachMessageId: v.id('coachMessages'),
+    reply: v.string(),
+    actionsExecuted: v.optional(v.array(v.object({
+      type: v.string(),
+      success: v.boolean(),
+      message: v.string(),
+    }))),
+  }),
+  handler: async (ctx, args): Promise<{
+    userMessageId: Id<'coachMessages'>;
+    coachMessageId: Id<'coachMessages'>;
+    reply: string;
+    actionsExecuted?: Array<{ type: string; success: boolean; message: string }>;
+  }> => {
+    // 1. Validate webhook secrecy using constant-time comparison
+    const secret = process.env.TELEGRAM_WEBHOOK_SECRET || '';
+    if (!secret || args.telegramWebhookSecret.length !== secret.length) {
+      throw new Error('Unauthorized');
+    }
+    let mismatch = 0;
+    for (let i = 0; i < secret.length; i++) {
+      mismatch |= args.telegramWebhookSecret.charCodeAt(i) ^ secret.charCodeAt(i);
+    }
+    if (mismatch !== 0) {
+      throw new Error('Unauthorized');
+    }
+
+    // 2. Fetch user details to get selectedCoach
+    const user = await ctx.runQuery(internal.coachAI.getUserDetails, { userId: args.userId });
+    if (!user) throw new Error('User not found');
+
+    const coachId = user.selectedCoach ?? 'MARCUS';
+    const persona = (COACH_PERSONAS as Record<string, (typeof COACH_PERSONAS)[keyof typeof COACH_PERSONAS]>)[coachId];
+    if (!persona) throw new Error('Invalid coach');
+
+    // 3. Parallel fetch: recent history + user context + coach memory
+    const [history, userCtx, coachMem] = await Promise.all([
+      ctx.runQuery(internal.coachAI.getRecentHistory, { coachId, limit: 12, userId: args.userId }),
+      ctx.runQuery(internal.coachAI.getUserContext, { userId: args.userId }).catch(() => null),
+      ctx.runQuery(internal.coachAI.getCoachMemory, { coachId, userId: args.userId }).catch(() => null),
+    ]);
+
+    // Build enriched system prompt with user context
+    const today = new Date().toISOString().split('T')[0];
+    const hour = new Date().getHours();
+    const timeContext = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
+
+    let contextBlock = '';
+    let estimatedHours = 0;
+    if (userCtx) {
+      const highTasks = userCtx.highTasksCount ?? 0;
+      const mediumTasks = userCtx.mediumTasksCount ?? 0;
+      const lowTasks = userCtx.lowTasksCount ?? 0;
+      const habits = userCtx.habitCount ?? 0;
+      estimatedHours = (highTasks * 2) + (mediumTasks * 1) + (lowTasks * 0.5) + (habits * 0.5);
+
+      let synergyAlerts = '';
+      if (userCtx.sleepDebtWarning) {
+        synergyAlerts += `\n[CRITICAL WARNING: User is sleep deprived (under 6 hours sleep last night). Aurora and Marcus must prioritize cognitive recovery, advise light exercise, and recommend scaling back non-critical task load.]`;
+      }
+      if (userCtx.budgetOverrunWarning) {
+        synergyAlerts += `\n[CRITICAL WARNING: User has exceeded their daily discretionary budget. Nova must suggest low-cost habit substitutions and gentle financial restraint in a non-judgmental way.]`;
+      }
+      if (estimatedHours > 4) {
+        synergyAlerts += `\n[OVERLOAD WARNING: User has planned an unrealistic day with ${estimatedHours} hours of focus workload (budget: 4 hours). You must warn them immediately in your first paragraph with: "you planned ${estimatedHours} hours of work into a 4-hour day" or a direct variation. Tell them that this is overloaded and unrealistic for deep work, and recommend they simplify or defer.]`;
+      }
+
+      contextBlock = `
+CURRENT USER CONTEXT (use this to personalize — reference specific data points!):
+- Name: ${userCtx.userName}
+- Plan: ${userCtx.userPlan}
+- Gamification: Level ${userCtx.level} "${userCtx.levelName}" | ${userCtx.totalXP} XP | ${userCtx.achievementCount} achievements unlocked
+- Daily Synergy Score (DSS): ${userCtx.dailySynergyScore}/100 📊 (A unified score integrating wellness, task completion, habits, and budgets)
+- Primary Goal: ${userCtx.primaryGoal}
+- Focus Areas: ${userCtx.focusAreas}
+- Active Goals (${userCtx.goalCount}): ${userCtx.goalsSummary}
+- Goals Completed All-Time: ${userCtx.goalsCompletedAllTime}
+- Pending Tasks (${userCtx.taskCount}): ${userCtx.tasksSummary}
+- Overdue Tasks: ${userCtx.overdueTasks}${userCtx.overdueTasks > 0 ? ' ⚠️ address this!' : ''}
+- Weekly Task Completion Rate: ${userCtx.weeklyCompletionRate}%
+- Recent Wins This Week: ${userCtx.recentWins.length > 0 ? userCtx.recentWins.join(', ') : 'None yet'}
+- Active Habits (${userCtx.habitCount}): ${userCtx.habitsSummary}
+- Best Streak: ${userCtx.streak} days
+- Lifetime Stats: ${userCtx.totalTasksCompleted} tasks done | ${userCtx.totalHabitsCompleted} habit completions | ${userCtx.totalFocusMinutes} focus min
+- Emotional State Today: ${userCtx.emotionalState}
+- Mood/Energy/Sleep: ${userCtx.morningMood ?? '?'}/5 | ${userCtx.morningEnergy ?? '?'}/5 | ${userCtx.sleepQuality ?? '?'}/5
+- Top Priorities Today: ${userCtx.todaysPriorities?.join(' → ') || 'Not set yet'}
+- Nutrition Today: ${userCtx.todayCalories} cal consumed | ${userCtx.todayWaterGlasses} glasses of water
+- Last Sleep: ${userCtx.lastSleepHours ? `${userCtx.lastSleepHours}h (quality: ${userCtx.lastSleepQualityRating ?? '?'}/5)` : 'Not logged'}
+- Last Mood: ${userCtx.lastMoodScore ? `${userCtx.lastMoodScore}/10` : 'Not logged'}
+- Workouts This Week: ${userCtx.weekWorkouts} sessions (${userCtx.weekWorkoutMinutes} min total)
+- Time: ${timeContext} (${today})
+${synergyAlerts}
+
+PERSONALIZATION DIRECTIVES:
+- Reference their SPECIFIC goals, tasks, and habits by name — never be generic.
+- Incorporate their Daily Synergy Score (${userCtx.dailySynergyScore}/100) — congratulate them if it is above 80, or coach them on balance if it is low.
+- If they have overdue tasks, proactively mention it and offer to help reprioritize.
+- If weekly completion rate < 50%, address workload/prioritization before adding more.
+- If they have recent wins, celebrate them specifically before moving forward.
+- If streak > 7 days, acknowledge consistency. If streak = 0, gently encourage restart.
+- Calibrate advice complexity to their level (Level 1-3 = beginner-friendly, Level 7+ = advanced strategies).
+- If no check-in today, suggest doing one for better coaching.
+`;
+    }
+
+    // Inject accumulated coach memory insights
+    if (coachMem && ((coachMem.insights?.length ?? 0) > 0 || (coachMem.patterns?.length ?? 0) > 0)) {
+      contextBlock += `\nCOACH MEMORY (accumulated from past conversations — use this to personalize deeply):`;
+      if (coachMem.insights && coachMem.insights.length > 0) {
+        contextBlock += `\n- Known user patterns: ${coachMem.insights.join('; ')}`;
+      }
+      if (coachMem.patterns && coachMem.patterns.length > 0) {
+        contextBlock += `\n- Recurring themes: ${coachMem.patterns.join('; ')}`;
+      }
+      if (coachMem.preferredTopics && coachMem.preferredTopics.length > 0) {
+        contextBlock += `\n- Topics they care about: ${coachMem.preferredTopics.join(', ')}`;
+      }
+      if (coachMem.communicationStyle) {
+        contextBlock += `\n- Communication style preference: ${coachMem.communicationStyle}`;
+      }
+      if (coachMem.successPatterns && coachMem.successPatterns.length > 0) {
+        contextBlock += `\n- What works for them: ${coachMem.successPatterns.join('; ')}`;
+      }
+      if (coachMem.struggleAreas && coachMem.struggleAreas.length > 0) {
+        contextBlock += `\n- Recurring struggles: ${coachMem.struggleAreas.join('; ')}`;
+      }
+      if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
+        contextBlock += `\n- Emotional triggers: ${coachMem.emotionalTriggers.join('; ')}`;
+      }
+      if (coachMem.goalDecompositionProfile) {
+        contextBlock += `\n- Goal planning profile: ${coachMem.goalDecompositionProfile}`;
+      }
+      if (coachMem.coachingEffectiveness) {
+        const eff = coachMem.coachingEffectiveness;
+        const effectivenessRate = eff.totalAdviceGiven > 0 ? Math.round((eff.adviceActedOn / eff.totalAdviceGiven) * 100) : 0;
+        contextBlock += `\n- Coaching effectiveness: ${effectivenessRate}% advice acted on (${eff.adviceActedOn}/${eff.totalAdviceGiven})`;
+      }
+      contextBlock += `\n- Conversation count: ${coachMem.messageCount} messages`;
+
+      // Adaptive coaching directives based on memory
+      contextBlock += `\n\nADAPTIVE COACHING DIRECTIVES (based on accumulated memory):`;
+      if (coachMem.communicationStyle) {
+        contextBlock += `\n- Match their communication preference: "${coachMem.communicationStyle}". Adapt your tone and detail level.`;
+      }
+      if (coachMem.successPatterns && coachMem.successPatterns.length > 0) {
+        contextBlock += `\n- Lean into approaches that work for them: ${coachMem.successPatterns[0]}.`;
+      }
+      if (coachMem.struggleAreas && coachMem.struggleAreas.length > 0) {
+        contextBlock += `\n- Be proactively aware of their struggles (${coachMem.struggleAreas[0]}) — offer preemptive support.`;
+      }
+      if (coachMem.emotionalTriggers && coachMem.emotionalTriggers.length > 0) {
+        contextBlock += `\n- Use their emotional triggers wisely: leverage motivators, avoid demotivators.`;
+      }
+      if (coachMem.goalDecompositionProfile) {
+        contextBlock += `\n- PLAN GENERATION PROFILE: "${coachMem.goalDecompositionProfile}" — apply this profile to every plan you create for this user. Adjust task granularity, phase structure, and time estimates accordingly.`;
+      }
+      if (coachMem.coachingEffectiveness && coachMem.coachingEffectiveness.avgResponseEngagement < 0.3) {
+        contextBlock += `\n- Engagement is low — try a different approach. Be more concise, ask questions, or change strategy.`;
+      }
+      contextBlock += '\n';
+    }
+
+    // Triage detection: if user appears overwhelmed, inject empathy directive
+    const overwhelmKeywords = ['overwhelmed', 'stressed', "can't", 'cannot', 'too much', 'stuck', 'anxious', 'burned out', 'burnout', 'falling behind', 'drowning'];
+    const msgLower = args.content.toLowerCase();
+    if (overwhelmKeywords.some(kw => msgLower.includes(kw))) {
+      contextBlock += '\n\nTRIAGE: User appears overwhelmed or distressed. ALWAYS lead with empathy and acknowledgment before any advice. Reduce scope to 1–3 actions maximum. Never skip emotional validation. Be the calm in the storm.';
+    }
+
+    const strictOperationalDirectives = `
+
+━━ STRICT OPERATIONAL DIRECTIVES (CRITICAL & MANDATORY) ━━
+1. CONCISENESS & OPERATIONAL FOCUS: You are a high-performance operational coach, not a conversational chatbot. Limit your output to **maximum 2 short paragraphs** (totaling no more than 6-8 sentences) unless the user explicitly asks you to go deep or write a comprehensive plan/schedule. Do not write generic introductory/concluding pleasantries or excessive motivational fluff.
+2. EXECUTION REALISM ASSESSMENT: Check the user's estimated daily workload. Today's tasks + habits sum to ${estimatedHours} hours. If this exceeds 4 hours, you MUST alert the user in your first paragraph/sentence with: "you planned ${estimatedHours} hours of work into a 4-hour day" (or a direct variation of this phrase). Tell them that this is overloaded and unrealistic for deep work, and recommend they simplify or defer.
+3. ACTION-BASED RESOLUTION: Proactively recommend moving non-urgent or lower priority tasks to future days to resolve overload. Utilize the action block:
+   [ACTION:UPDATE_TASK] {"titleMatch":"partial task name","dueDate":"YYYY-MM-DD"}
+   to automatically schedule a task to a future date. Be precise, short, and operational.
+`;
+
+    const fullSystemPrompt = persona.systemPrompt
+      .replace('{{TODAY}}', today)
+      + contextBlock
+      + strictOperationalDirectives;
+
+    // Build messages array
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      { role: 'system', content: fullSystemPrompt },
+    ];
+
+    for (const msg of history) {
+      // Strip action blocks from history to keep context clean
+      const cleanContent = msg.content.replace(/\[ACTION:[^\]]*\][^\n]*/g, '').trim();
+      messages.push({
+        role: msg.role === 'coach' ? 'assistant' : 'user',
+        content: cleanContent,
+      });
+    }
+    messages.push({ role: 'user', content: args.content });
+
+    // Multi-provider cascade: Groq 70B → Cerebras 70B → Gemini → Groq 8B fallback
+    let reply = '';
+    reply = await callAICascade(messages, { max_tokens: 2000, temperature: 0.75 });
+
+    if (!reply) {
+      reply = buildFallbackReply(coachId, args.content);
+    }
+
+    // ── Web Search: detect [ACTION:WEB_SEARCH] and resolve before final response ──
+    const webSearchRegex = /\[ACTION:WEB_SEARCH\]\s*\{"query"\s*:\s*"([^"]+)"[^}]*\}/g;
+    const webQueries: string[] = [];
+    let wsMatch: RegExpExecArray | null;
+    while ((wsMatch = webSearchRegex.exec(reply)) !== null) {
+      webQueries.push(wsMatch[1]);
+    }
+
+    if (webQueries.length > 0 && process.env.TAVILY_API_KEY) {
+      const searchResults = await performWebSearches(webQueries);
+      if (searchResults) {
+        const messagesWithSearch: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+          ...messages,
+          { role: 'assistant', content: reply },
+          {
+            role: 'user',
+            content: `INTERNET SEARCH RESULTS (fresh data retrieved for you):\n${searchResults}\n\nIncorporate these search results naturally into your response. Cite sources briefly. Do NOT include any [ACTION:WEB_SEARCH] blocks in your final response.`,
+          },
+        ];
+        const refinedReply = await callAICascade(messagesWithSearch, { max_tokens: 2000, temperature: 0.72 });
+        if (refinedReply) {
+          reply = refinedReply;
+        }
+      }
+    }
+
+    // Remove any remaining WEB_SEARCH action blocks from the reply
+    reply = reply.replace(/\[ACTION:WEB_SEARCH\][^\n]*/g, '').trim();
+
+    // Parse and execute action blocks from AI response
+    const actionRegex = /\[ACTION:(\w+)\]\s*(\{[^\n]+\})/g;
+    const parsedActions: Array<{ type: string; payload: string }> = [];
+    let match;
+    while ((match = actionRegex.exec(reply)) !== null) {
+      parsedActions.push({ type: match[1], payload: match[2] });
+    }
+
+    let actionsExecuted: Array<{ type: string; success: boolean; message: string }> = [];
+    if (parsedActions.length > 0) {
+      try {
+        actionsExecuted = await ctx.runMutation(internal.coachAI.executeCoachActions, {
+          actions: parsedActions,
+          userId: args.userId,
+        });
+      } catch (err) {
+        console.error('Action execution failed:', err);
+      }
+    }
+
+    // Clean reply: remove action blocks before showing to user
+    const cleanReply = reply.replace(/\[ACTION:[^\]]*\][^\n]*/g, '').trim();
+
+    // Build action summary to append to the visible message
+    let actionSummary = '';
+    if (actionsExecuted.length > 0) {
+      const successful = actionsExecuted.filter(a => a.success);
+      if (successful.length > 0) {
+        actionSummary = '\n\n⚡ <b>Actions Executed</b>\n' +
+          successful.map(a => `✅ ${a.message}`).join('\n');
+      }
+      const failed = actionsExecuted.filter(a => !a.success);
+      if (failed.length > 0) {
+        actionSummary += (successful.length > 0 ? '\n' : '\n\n⚡ <b>Actions</b>\n') +
+          failed.map(a => `❌ ${a.message}`).join('\n');
+      }
+    }
+
+    const finalReply = cleanReply + actionSummary;
+
+    // Persist messages
+    const ids: { userMessageId: Id<'coachMessages'>; coachMessageId: Id<'coachMessages'> } = await ctx.runMutation(
+      internal.coachAI.persistMessages,
+      {
+        userContent: args.content,
+        coachContent: finalReply,
+        coachId,
+        touchpoint: 'on_demand',
+        userId: args.userId,
+      },
+    );
+
+    return {
+      userMessageId: ids.userMessageId,
+      coachMessageId: ids.coachMessageId,
+      reply: finalReply,
+      actionsExecuted: actionsExecuted.length > 0 ? actionsExecuted : undefined,
+    };
+  },
+});
+
 // ─── Internal helpers ─────────────────────────────────────────────────────────
 
 export const getRecentHistory = internalQuery({
   args: {
     coachId: COACH_ID_VALIDATOR,
     limit: v.optional(v.number()),
+    userId: v.optional(v.id('users')),
   },
   returns: v.array(v.object({
     _id: v.id('coachMessages'),
@@ -2173,13 +2625,18 @@ export const getRecentHistory = internalQuery({
     context: v.optional(v.string()),
     createdAt: v.number(),
   })),
-  handler: async (ctx, { coachId, limit }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return [];
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+  handler: async (ctx, { coachId, limit, userId }) => {
+    let user;
+    if (userId) {
+      user = await ctx.db.get(userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return [];
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) return [];
 
     const all = await ctx.db
@@ -2197,6 +2654,7 @@ export const getRecentHistory = internalQuery({
 export const getCoachMemory = internalQuery({
   args: {
     coachId: COACH_ID_VALIDATOR,
+    userId: v.optional(v.id('users')),
   },
   returns: v.union(
     v.object({
@@ -2217,13 +2675,18 @@ export const getCoachMemory = internalQuery({
     }),
     v.null(),
   ),
-  handler: async (ctx, { coachId }) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+  handler: async (ctx, { coachId, userId }) => {
+    let user;
+    if (userId) {
+      user = await ctx.db.get(userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return null;
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) return null;
 
     const mem = await ctx.db
@@ -2258,18 +2721,24 @@ export const persistMessages = internalMutation({
       v.literal('morning'), v.literal('midday'), v.literal('evening'),
       v.literal('on_demand'), v.literal('intervention'), v.literal('celebration'),
     ),
+    userId: v.optional(v.id('users')),
   },
   returns: v.object({
     userMessageId: v.id('coachMessages'),
     coachMessageId: v.id('coachMessages'),
   }),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Not authenticated');
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+    let user;
+    if (args.userId) {
+      user = await ctx.db.get(args.userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error('Not authenticated');
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) throw new Error('User not found');
 
     const context = `coach:${args.coachId}`;
@@ -2323,6 +2792,7 @@ export const persistMessages = internalMutation({
     if (newCount % 5 === 0) {
       await ctx.scheduler.runAfter(0, internal.coachAI.extractMemoryInsights, {
         coachId: args.coachId,
+        userId: user._id,
       });
     }
 
@@ -2334,15 +2804,21 @@ export const persistGreeting = internalMutation({
   args: {
     coachContent: v.string(),
     coachId: COACH_ID_VALIDATOR,
+    userId: v.optional(v.id('users')),
   },
   returns: v.id('coachMessages'),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Not authenticated');
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+    let user;
+    if (args.userId) {
+      user = await ctx.db.get(args.userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) throw new Error('Not authenticated');
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) throw new Error('User not found');
 
     const context = `coach:${args.coachId}`;
@@ -2364,13 +2840,18 @@ export const persistGreeting = internalMutation({
       )
       .unique();
 
-    if (!mem) {
+    if (mem) {
+      await ctx.db.patch(mem._id, {
+        messageCount: (mem.messageCount ?? 0) + 1,
+        updatedAt: now,
+      });
+    } else {
       await ctx.db.insert('coachMemory', {
         userId: user._id,
         coachId: args.coachId,
         insights: [],
         patterns: [],
-        messageCount: 0,
+        messageCount: 1,
         updatedAt: now,
       });
     }
@@ -2384,6 +2865,7 @@ export const persistGreeting = internalMutation({
 export const extractMemoryInsights = internalAction({
   args: {
     coachId: COACH_ID_VALIDATOR,
+    userId: v.optional(v.id('users')),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
@@ -2391,6 +2873,7 @@ export const extractMemoryInsights = internalAction({
     const history = await ctx.runQuery(internal.coachAI.getRecentHistory, {
       coachId: args.coachId,
       limit: 20,
+      userId: args.userId,
     });
 
     if (history.length < 4) return null;
@@ -2465,6 +2948,7 @@ ${convoText}`;
           struggleAreas,
           emotionalTriggers,
           goalDecompositionProfile: parsed.goalDecompositionProfile ? String(parsed.goalDecompositionProfile).substring(0, 300) : undefined,
+          userId: args.userId,
         });
       }
     } catch {
@@ -2486,15 +2970,21 @@ export const updateMemoryInsights = internalMutation({
     struggleAreas: v.optional(v.array(v.string())),
     emotionalTriggers: v.optional(v.array(v.string())),
     goalDecompositionProfile: v.optional(v.string()),
+    userId: v.optional(v.id('users')),
   },
   returns: v.null(),
   handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
-      .unique();
+    let user;
+    if (args.userId) {
+      user = await ctx.db.get(args.userId);
+    } else {
+      const identity = await ctx.auth.getUserIdentity();
+      if (!identity) return null;
+      user = await ctx.db
+        .query('users')
+        .withIndex('by_clerkId', (q) => q.eq('clerkId', identity.subject))
+        .unique();
+    }
     if (!user) return null;
 
     const mem = await ctx.db
@@ -2542,6 +3032,21 @@ export const updateMemoryInsights = internalMutation({
           avgResponseEngagement: Math.round(newEngagement * 100) / 100,
         },
         lastAnalysisAt: Date.now(),
+        updatedAt: Date.now(),
+      });
+    } else {
+      await ctx.db.insert('coachMemory', {
+        userId: user._id,
+        coachId: args.coachId,
+        insights: args.insights,
+        patterns: args.patterns,
+        preferredTopics: args.preferredTopics,
+        communicationStyle: args.communicationStyle,
+        successPatterns: args.successPatterns,
+        struggleAreas: args.struggleAreas,
+        emotionalTriggers: args.emotionalTriggers,
+        goalDecompositionProfile: args.goalDecompositionProfile,
+        messageCount: 1,
         updatedAt: Date.now(),
       });
     }

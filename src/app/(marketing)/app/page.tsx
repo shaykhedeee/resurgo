@@ -45,6 +45,13 @@ const IOS_STEPS = [
   { step: 4, text: 'Open from home screen. Enable push notifications when prompted for full experience.', icon: '🔔' },
 ];
 
+const ANDROID_PWA_STEPS = [
+  { step: 1, text: 'Open resurgo.life in Google Chrome on your Android device.', icon: '🔗' },
+  { step: 2, text: 'Tap the three dots (⋮) in the top-right corner.', icon: '⋮' },
+  { step: 3, text: 'Select "Add to Home Screen" or "Install App".', icon: '⊕' },
+  { step: 4, text: 'Confirm the prompt. Resurgo is now fully installed on your device.', icon: '📱' },
+];
+
 const NATIVE_FEATURES = [
   {
     icon: '⚡',
@@ -159,20 +166,19 @@ export default function AppDownloadPage() {
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="border-b border-zinc-900 px-6 pb-16 pt-20 text-center">
         <div className="mx-auto max-w-3xl">
-          <Kicker text="RESURGO_APP :: INSTALL_ON_YOUR_DEVICE" />
+          <Kicker text="RESURGO_APP :: INSTANT_WEB_PWA_SETUP" />
           <h1 className="font-pixel text-4xl font-bold tracking-tight text-zinc-100 sm:text-5xl">
             Get Resurgo on Your Device
           </h1>
           <p className="mx-auto mt-4 max-w-2xl font-terminal text-base leading-relaxed text-zinc-400">
-            The full power of Resurgo — native on Android (APK) and iOS (Safari PWA).
-            Direct download, push notifications, offline mode, and seamless sync.
-            Install in under 60 seconds.
+            Resurgo runs as an optimized, web-native Progressive Web App (PWA). Launch it instantly on iOS Safari, Android Chrome, or your Desktop without App Store downloads, manual APK overrides, or security exceptions.
           </p>
 
           {/* Platform badges */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
-            <span className="border border-green-800 px-3 py-1 font-pixel text-[0.45rem] tracking-wider text-green-400 bg-green-950/20">⬇ Android APK</span>
-            <span className="border border-blue-800 px-3 py-1 font-pixel text-[0.45rem] tracking-wider text-blue-400 bg-blue-950/20">◎ iOS Safari PWA</span>
+            <span className="border border-blue-800 px-3 py-1 font-pixel text-[0.45rem] tracking-wider text-blue-400 bg-blue-950/20">◎ iOS Safari PWA (Recommended)</span>
+            <span className="border border-green-800 px-3 py-1 font-pixel text-[0.45rem] tracking-wider text-green-400 bg-green-950/20">◎ Android Chrome PWA (Recommended)</span>
+            <span className="border border-purple-800 px-3 py-1 font-pixel text-[0.45rem] tracking-wider text-purple-400 bg-purple-950/20">◎ Desktop PWA</span>
           </div>
         </div>
       </section>
@@ -180,37 +186,36 @@ export default function AppDownloadPage() {
       {/* ═══ DOWNLOAD CARD ════════════════════════════════════════════════ */}
       <section className="border-t border-zinc-900 px-4 py-12">
         <div className="mx-auto max-w-md">
-          <div className="border-2 border-green-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.8)]">
+          <div className="border-2 border-blue-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.8)]">
             <div className="mb-4 flex items-center justify-between">
               <div className="text-left">
-                <p className="font-pixel text-[0.4rem] tracking-widest text-green-400">CURRENT_VERSION</p>
-                <p className="font-pixel text-xl font-bold text-zinc-100">{APK_VERSION}</p>
-                <p className="font-terminal text-xs text-zinc-500">Size: {APK_SIZE}</p>
+                <p className="font-pixel text-[0.4rem] tracking-widest text-blue-400">APP_EXPERIENCE</p>
+                <p className="font-pixel text-xl font-bold text-zinc-100">Web PWA</p>
+                <p className="font-terminal text-xs text-zinc-500">Fast install · Auto-updates</p>
               </div>
               <div className="text-right">
-                <p className="font-pixel text-[0.4rem] tracking-widest text-green-400">REQUIRES</p>
-                <p className="font-terminal text-xs text-zinc-400">{ANDROID_MIN_VERSION}</p>
-                <p className="font-terminal text-xs text-zinc-500">APK Signature Verified</p>
+                <p className="font-pixel text-[0.4rem] tracking-widest text-blue-400">STATUS</p>
+                <p className="font-terminal text-xs text-green-400 font-semibold">● Live & Production Ready</p>
+                <p className="font-terminal text-xs text-zinc-500">Offline & Notifications ready</p>
               </div>
             </div>
 
             <a
-              href={APK_URL}
-              download="resurgo-latest.apk"
-              className="flex w-full items-center justify-center gap-2 border-2 border-green-700 bg-green-700 px-6 py-4 font-terminal text-base font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-green-600 active:translate-x-px active:translate-y-px"
+              href="/quick-start"
+              className="flex w-full items-center justify-center gap-2 border-2 border-blue-700 bg-blue-700 px-6 py-4 font-terminal text-base font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-blue-600 active:translate-x-px active:translate-y-px"
             >
-              ⬇ DOWNLOAD APK FOR ANDROID
+              🚀 INSTANT WEB SETUP & LAUNCH
             </a>
 
             <div className="mt-3 flex items-center justify-center gap-4 text-xs font-terminal text-zinc-600">
-              <span className="flex items-center gap-1">✓ SHA-256 verified</span>
-              <span className="flex items-center gap-1">✓ Code-signed</span>
-              <span className="flex items-center gap-1">✓ No malware</span>
+              <span className="flex items-center gap-1">✓ Instant launch</span>
+              <span className="flex items-center gap-1">✓ iOS & Android</span>
+              <span className="flex items-center gap-1">✓ 100% Secure PWA</span>
             </div>
           </div>
 
           <p className="mt-4 text-center font-terminal text-xs text-zinc-500">
-            <strong className="text-zinc-400">iOS users:</strong> Open resurgo.life in Safari and tap "Add to Home Screen". No App Store download needed — the PWA installs like a native app.
+            <strong className="text-zinc-400">Alternative:</strong> For closed environments, you can manually download the <a href={APK_URL} className="text-orange-400 underline font-semibold">Android manual APK wrapper</a>, which serves as a Developer Sandbox Beta.
           </p>
         </div>
       </section>
@@ -222,7 +227,7 @@ export default function AppDownloadPage() {
           <h2 className="mb-6 font-pixel text-xl text-zinc-200">Resurgo on your device</h2>
           <ScreenshotCarousel />
           <p className="mt-3 text-center font-terminal text-xs text-zinc-600">
-            Full-resolution screenshots from the Android app. iOS version provides identical experience via Safari PWA.
+            Full-resolution screenshots from the Resurgo production client. The web-native PWA provides a pristine, standalone, fullscreen immersive experience.
           </p>
         </div>
       </section>
@@ -247,28 +252,39 @@ export default function AppDownloadPage() {
           <h2 className="mb-6 font-pixel text-xl text-zinc-200">Install Resurgo on your device</h2>
 
           <div className="grid gap-6">
-            {/* ── ANDROID ───────────────────────────────────────────────────── */}
-            <div className="border-2 border-green-900 bg-zinc-950 p-5">
-              <h3 className="mb-3 flex items-center gap-2 font-pixel text-base text-green-400">
-                <span>⬇</span> ANDROID: DIRECT APK INSTALL
-              </h3>
-              <StepList steps={ANDROID_APK_STEPS} color="orange" />
-              <p className="mt-3 font-terminal text-xs text-zinc-500">
-                Requires Android 8.0+. APK is code-signed, SHA-256 verified.
-              </p>
-            </div>
-
             {/* ── iOS ───────────────────────────────────────────────────────── */}
             <div className="border-2 border-blue-900 bg-zinc-950 p-5">
               <h3 className="mb-3 flex items-center gap-2 font-pixel text-base text-blue-400">
-                <span>◎</span> iOS: INSTALL VIA SAFARI (PWA)
+                <span>◎</span> iOS: INSTALL VIA SAFARI (PWA - RECOMMENDED)
               </h3>
               <p className="mb-3 font-terminal text-xs text-zinc-500">
                 Resurgo on iOS uses Safari's "Add to Home Screen" PWA. Works like a native app with offline mode and push notifications (iOS 16.4+). No App Store download needed.
               </p>
-              <StepList steps={IOS_APK_STEPS} color="blue" />
+              <StepList steps={IOS_STEPS} color="blue" />
               <p className="mt-3 font-terminal text-xs text-zinc-500">
                 Requires iOS 16.4+. Safari only (Chrome/Firefox iOS don't support PWA install).
+              </p>
+            </div>
+
+            {/* ── ANDROID PWA ────────────────────────────────────────────────── */}
+            <div className="border-2 border-green-900 bg-zinc-950 p-5">
+              <h3 className="mb-3 flex items-center gap-2 font-pixel text-base text-green-400">
+                <span>◎</span> ANDROID: INSTANT CHROME INSTALL (PWA - RECOMMENDED)
+              </h3>
+              <p className="mb-3 font-terminal text-xs text-zinc-500">
+                Install Resurgo directly through your Chrome browser on Android. It acts exactly like a native app, syncs in the background, and updates seamlessly in real time.
+              </p>
+              <StepList steps={ANDROID_PWA_STEPS} color="blue" />
+            </div>
+
+            {/* ── ANDROID MANUAL APK ─────────────────────────────────────────── */}
+            <div className="border border-zinc-800 bg-zinc-950 p-5 opacity-90">
+              <h3 className="mb-3 flex items-center gap-2 font-pixel text-base text-zinc-400">
+                <span>⬇</span> ANDROID: MANUAL APK (DEVELOPER SANDBOX BETA ONLY)
+              </h3>
+              <StepList steps={ANDROID_APK_STEPS} color="orange" />
+              <p className="mt-3 font-terminal text-xs text-zinc-500">
+                Requires Android 8.0+. Warning: manual updates are required for new releases. Recommended only if browser installation is restricted on your device.
               </p>
             </div>
           </div>

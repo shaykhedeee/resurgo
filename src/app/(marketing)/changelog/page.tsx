@@ -18,6 +18,23 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: '2.0.1',
+    date: 'May 20, 2026',
+    type: 'PATCH',
+    pullRequests: [
+      {
+        number: 8,
+        title: 'fix: resolve compile-time type errors in niche landing pages and Prod…',
+        href: 'https://github.com/shaykhedeee/resurgo/pull/8',
+      },
+    ],
+    changes: [
+      { type: 'NEW', text: 'Added the /indie-hackers landing page for indie hackers and solopreneurs.' },
+      { type: 'NEW', text: 'Added the /remote-developers landing page for remote software developers.' },
+      { type: 'NEW', text: 'Added a Product Hunt widget component that fetches product metrics and social proof.' },
+    ],
+  },
+  {
     version: '1.4.0',
     date: 'Feb 2026',
     type: 'MAJOR',
@@ -117,6 +134,21 @@ export default function ChangelogPage() {
                 </div>
                 <span className="font-mono text-xs text-zinc-400">{release.date}</span>
               </div>
+              {release.pullRequests?.length ? (
+                <div className="border-b border-zinc-900 px-5 py-3">
+                  {release.pullRequests.map((pullRequest) => (
+                    <a
+                      key={pullRequest.number}
+                      href={pullRequest.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-xs text-orange-400 underline underline-offset-2"
+                    >
+                      PR #{pullRequest.number}: {pullRequest.title}
+                    </a>
+                  ))}
+                </div>
+              ) : null}
               <ul className="divide-y divide-zinc-900/50">
                 {release.changes.map((change, i) => (
                   <li key={i} className="flex items-center gap-3 px-5 py-3">

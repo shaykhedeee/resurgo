@@ -21,6 +21,14 @@ import {
   FOUNDING_LIFETIME_COPY,
   FOUNDING_LIFETIME_PRICE_USD,
 } from '@/lib/product-config';
+import {
+  generateFAQSchema,
+  generateBreadcrumbSchema,
+  generateSpeakableSchema,
+  generateHowToSchema,
+  generateBlogPostingSchema,
+} from '@/lib/blog/seo-utils';
+
 
 type FaqItem = {
   question: string;
@@ -1952,7 +1960,7 @@ Research on behavioral coaching consistently shows external feedback loops incre
 Reminder apps tell you to do the habit. AI habit trackers help you design the right habits for your goals, coach you through difficult phases, and adapt your plan when life changes. Fundamentally different value propositions.
 
 ### Is AI habit tracking free?
-Resurgo has a full-featured free plan. Most AI-heavy features require a paid tier on most platforms. Resurgo Pro is $4.99/month, giving you all 4 coaches, advanced analytics, and the full goal decomposition system.
+Resurgo has a full-featured free plan. Most AI-heavy features require a paid tier on most platforms. Resurgo Pro is $9.99/month, giving you all 5 coaches, advanced analytics, and the full goal decomposition system.
     `,
   },
   'habitica-alternatives-2026': {
@@ -1996,7 +2004,7 @@ If you loved Habitica's gamification but want more in 2026, here are the 7 best 
 - Weekly AI review summarizing patterns and suggested changes
 - Wellness integration (sleep, mood, energy) connected to habit performance
 
-**Price:** Free forever (unlimited habits, 2 coaches, XP) + Pro $4.99/mo
+**Price:** Free forever (unlimited habits, 2 coaches, XP) + Pro $9.99/mo
 
 ### 2. Streaks (iOS) — Best Minimal Alternative
 
@@ -2221,9 +2229,9 @@ We put three of the top contenders head-to-head: **Streaks**, **Habitify**, and 
 | Feature | Streaks | Habitify | Resurgo |
 |---------|---------|----------|---------|
 | Free tier | No (one-time $4.99) | Yes (3 habits) | Yes (unlimited habits, 2 AI coaches) |
-| Pro monthly | N/A | $4.99/mo | $4.99/mo |
-| Annual | N/A | $29.99/yr | $29.99/yr |
-| Lifetime | $4.99 (one-time) | $64.99 | $49.99 |
+| Pro monthly | N/A | $4.99/mo | $9.99/mo |
+| Annual | N/A | $29.99/yr | $95.88/yr |
+| Lifetime | $4.99 (one-time) | $64.99 | $89.00 |
 
 Resurgo's free tier is the most generous — unlimited habits, full gamification, 2 AI coaches, and all focus timer modes with no credit card required.
 
@@ -2249,7 +2257,7 @@ Yes. You can set up your habits in Resurgo in under 5 minutes. While there's no 
 Resurgo. The gamification (XP, levels, daily challenges) provides the dopamine feedback that ADHD brains need. The 5 AI coaches reduce decision fatigue by telling you what to focus on. And streak freezes prevent the "I broke my streak so I quit" spiral that plagues ADHD users.
 
 ### Is the free plan of Resurgo really unlimited?
-Yes — unlimited habits, full gamification engine, 2 AI coaches (MARCUS and TITAN), all focus timer modes (Pomodoro, deep work, custom), and basic goal tracking. No credit card required. The Pro plan ($4.99/mo) unlocks all 5 AI coaches, advanced analytics, and priority features.
+Yes — unlimited habits, full gamification engine, 2 AI coaches (MARCUS and TITAN), all focus timer modes (Pomodoro, deep work, custom), and basic goal tracking. No credit card required. The Pro plan ($9.99/mo) unlocks all 5 AI coaches, advanced analytics, and priority features.
     `,
   },
 
@@ -2284,7 +2292,7 @@ Resurgo was built for ambitious individuals managing goals across multiple life 
 
 **Why it works for founders:** AI coaching that covers business goals alongside health and personal growth. Weekly reviews synthesize progress across all domains. Focus session timers for deep work. The system scales from solopreneur to someone managing a growing team's personal productivity.
 
-**Pricing:** Free plan (unlimited habits, 2 AI coaches, gamification). Pro: $4.99/mo, $29.99/yr, or $49.99 lifetime. Billing via Dodo Payments.
+**Pricing:** Free plan (unlimited habits, 2 AI coaches, gamification). Pro: $9.99/mo, $95.88/yr ($7.99/mo effective), or $89 lifetime. Billing via Dodo Payments.
 
 ### 2. Notion — Best for Custom Systems Builders
 
@@ -2403,7 +2411,7 @@ Resurgo takes a unique approach: instead of managing your tasks, it coaches your
 
 **Best for:** Anyone who struggles with consistency, motivation, or following through on goals across multiple life domains.
 
-**Pricing:** Free (2 AI coaches, unlimited habits). Pro: $4.99/mo, $29.99/yr, $49.99 lifetime via Dodo Payments. Available at resurgo.life.
+**Pricing:** Free (2 AI coaches, unlimited habits). Pro: $9.99/mo, $95.88/yr ($7.99/mo effective), $89 lifetime via Dodo Payments. Available at resurgo.life.
 
 ### 2. ChatGPT (with custom GPTs) — Best for General AI Assistance
 
@@ -2472,10 +2480,10 @@ Resurgo is currently the only consumer app that combines all four factors throug
 It depends on your need. For behavioral coaching and habit consistency, Resurgo leads with 5 AI coaches. For task auto-scheduling, Motion excels. For general AI assistance, ChatGPT remains unmatched. For team knowledge management, Notion AI is best.
 
 ### Is AI coaching better than a human productivity coach?
-AI coaching and human coaching serve different roles. AI coaching (like Resurgo's 5 AI coaches) provides 24/7 availability, real-time behavioral data analysis, and consistent daily interaction at a fraction of the cost ($4.99/mo vs $200+/mo for human coaches). Human coaches offer deeper emotional support and complex life strategy. Many users combine both.
+AI coaching and human coaching serve different roles. AI coaching (like Resurgo's 5 AI coaches) provides 24/7 availability, real-time behavioral data analysis, and consistent daily interaction at a fraction of the cost ($9.99/mo vs $200+/mo for human coaches). Human coaches offer deeper emotional support and complex life strategy. Many users combine both.
 
 ### Are AI productivity apps worth paying for?
-Yes — if you choose the right one for your needs. A Harvard Business Review analysis (2025) found that professionals using AI productivity tools saved an average of 5.2 hours per week. At $4.99/mo, Resurgo's Pro plan costs less than a single coffee per week.
+Yes — if you choose the right one for your needs. A Harvard Business Review analysis (2025) found that professionals using AI productivity tools saved an average of 5.2 hours per week. At $9.99/mo, Resurgo's Pro plan costs less than a single coffee per week.
 
 ### Can AI really help me build better habits?
 Absolutely. The key is AI that analyzes your *behavioral data* (not just your task list). Resurgo's AI coaches track your habit completions, streak patterns, focus session durations, and daily check-in responses to provide coaching that adapts to your actual behavior — not generic advice.
@@ -2532,7 +2540,7 @@ Resurgo was designed with ADHD-specific challenges in mind. Daily planning takes
 - Streak freeze system — miss a day without losing progress
 - Low-friction check-ins (tap, don't type)
 
-**Pricing:** Free (unlimited habits, 2 AI coaches, full gamification). Pro: $4.99/mo, $29.99/yr, $49.99 lifetime.
+**Pricing:** Free (unlimited habits, 2 AI coaches, full gamification). Pro: $9.99/mo, $95.88/yr ($7.99/mo effective), $89 lifetime.
 
 ### 2. Structured — Best for Visual Time Blocking
 
@@ -2936,7 +2944,7 @@ The AI review at the end catches overcommitment and imbalance before the week st
 A brain dump is *unfiltered* — everything in your head, regardless of priority, category, or feasibility. A to-do list is *curated* — only actionable items, organized by priority. The brain dump is the raw material; the weekly plan is the refined product. Most people skip the dump and go straight to the list, which means unprioritized items keep circling in their heads.
 
 ### Can I do this method with Resurgo's free plan?
-Yes. The free plan includes scratch notes, daily planning, unlimited habits, 2 AI coaches (MARCUS and TITAN), and all planning features. The Pro plan ($4.99/mo) adds all 5 AI coaches and advanced analytics, but the brain dump method works fully on the free tier.
+Yes. The free plan includes scratch notes, daily planning, unlimited habits, 2 AI coaches (MARCUS and TITAN), and all planning features. The Pro plan ($9.99/mo) adds all 5 AI coaches and advanced analytics, but the brain dump method works fully on the free tier.
 
 ### What if my brain dump has over 50 items?
 That's normal — and actually a sign the method is working. The AI sort in Step 2 is specifically designed to handle large dumps. Most people find that 30-40% of items are either someday/maybe or delegate/delete, which immediately reduces the actionable list to a manageable size.
@@ -3049,10 +3057,10 @@ If you're evaluating AI accountability tools, use these 7 criteria as your check
 Reminders tell you *what* to do. AI accountability analyzes *why you're not doing it* and adapts its approach. A reminder says "Time to exercise." An AI accountability coach says "You've skipped exercise the last 2 Wednesdays — let's move it to Thursday when your completion rate is 90%." The difference is behavioral intelligence.
 
 ### Do I need to pay for an AI accountability system?
-Resurgo's free plan includes 2 AI coaches (MARCUS and TITAN), full gamification, unlimited habits, and weekly reviews — which covers most of the 7 criteria. The Pro plan ($4.99/mo, $29.99/yr, or $49.99 lifetime) unlocks all 5 AI coaches and advanced analytics. Even the free tier provides more accountability than most paid alternatives.
+Resurgo's free plan includes 2 AI coaches (MARCUS and TITAN), full gamification, unlimited habits, and weekly reviews — which covers most of the 7 criteria. The Pro plan ($9.99/mo, $95.88/yr, or $89 lifetime) unlocks all 5 AI coaches and advanced analytics. Even the free tier provides more accountability than most paid alternatives.
 
 ### Can AI accountability replace a human coach?
-For daily behavioral accountability, AI is actually *better* than most human coaches — it's available 24/7, has perfect memory of your data, never cancels, and costs a fraction of human coaching ($4.99/mo vs $200+/mo). For deep emotional support, complex life strategy, or navigating major life transitions, human coaches remain superior. The ideal setup: AI accountability for daily habits (Resurgo) + a human coach for monthly life strategy.
+For daily behavioral accountability, AI is actually *better* than most human coaches — it's available 24/7, has perfect memory of your data, never cancels, and costs a fraction of human coaching ($9.99/mo vs $200+/mo). For deep emotional support, complex life strategy, or navigating major life transitions, human coaches remain superior. The ideal setup: AI accountability for daily habits (Resurgo) + a human coach for monthly life strategy.
 
 ### How long until I see results from an AI accountability system?
 Most users report noticeable behavior changes within 7-14 days — primarily because the AI reduces decision fatigue and the gamification creates immediate engagement. Deeper habit automaticity takes 30-90 days based on the behavior's complexity. The key is staying consistent through the first 2 weeks (which is exactly what the accountability system is designed to help with).
@@ -3643,9 +3651,9 @@ If you cannot see these in realtime, your launch is blind.
 ## 4) Offer and Pricing Consistency
 
 Every high-intent page must match canonical pricing:
-- Pro: $4.99/mo
-- Pro Yearly: $29.99/yr
-- Lifetime: $49.99
+- Pro: $9.99/mo
+- Pro Yearly: $95.88/yr
+- Lifetime: $89.00
 
 No old numbers. No contradictory feature lists.
 
@@ -7135,6 +7143,33 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
+function getPostCtaUrl(slug: string, tags: string[]): string {
+  const normalizedTags = tags.map((t) => t.toLowerCase());
+  const normalizedSlug = slug.toLowerCase();
+  
+  if (normalizedTags.includes('adhd') || normalizedTags.includes('neurodiversity') || normalizedSlug.includes('adhd')) {
+    return '/onboarding?ref=blog-adhd&archetype=adhd';
+  }
+  if (
+    normalizedTags.includes('founder') ||
+    normalizedTags.includes('solopreneur') ||
+    normalizedTags.includes('indie hackers') ||
+    normalizedTags.includes('indie hacker') ||
+    normalizedSlug.includes('indie-hackers')
+  ) {
+    return '/indie-hackers?ref=blog-founder';
+  }
+  if (
+    normalizedTags.includes('developer') ||
+    normalizedTags.includes('remote') ||
+    normalizedTags.includes('tech') ||
+    normalizedSlug.includes('remote-developers')
+  ) {
+    return '/remote-developers?ref=blog-dev';
+  }
+  return '/onboarding?ref=blog-general';
+}
+
 export async function generateStaticParams() {
   return Object.keys(POSTS).map((slug) => ({ slug }));
 }
@@ -7175,6 +7210,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         title: candidate.title,
         desc: candidate.desc,
         date: candidate.date,
+        tags: candidate.tags,
         sharedTagCount,
       };
     })
@@ -7205,105 +7241,40 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const isoModified = getIsoDate(modifiedSource);
   const wordCount = getWordCount(normalizedContent);
 
-  const blogPostingJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.title,
-    description: post.desc,
-    image: [`https://resurgo.life${post.heroImage}`],
-    inLanguage: 'en-US',
+  const blogPostingJsonLd = generateBlogPostingSchema({
+    slug: params.slug,
+    title: post.title,
+    desc: post.desc,
+    heroImage: post.heroImage,
+    date: isoPublished,
+    modifiedDate: isoModified,
+    authorName: AUTHOR.name,
     wordCount,
-    timeRequired: `PT${Math.max(parseInt(post.readTime, 10) || 1, 1)}M`,
+    readTime: post.readTime,
     articleSection: primaryCluster?.title ?? post.tags[0] ?? 'Productivity',
-    about: post.tags.map((tag) => ({ '@type': 'Thing', name: tag })),
-    isAccessibleForFree: true,
-    author: {
-      '@type': 'Person',
-      name: AUTHOR.name,
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Resurgo',
-      url: 'https://resurgo.life',
-    },
-    datePublished: isoPublished,
-    dateModified: isoModified,
-    mainEntityOfPage: `https://resurgo.life/blog/${params.slug}`,
-    keywords: (post.seoKeywords ?? post.tags).join(', '),
-  };
+    tags: post.tags,
+    seoKeywords: post.seoKeywords,
+  });
 
-  const faqJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faqItems.map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
-      },
-    })),
-  };
+  const faqJsonLd = generateFAQSchema(faqItems);
 
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: 'Home',
-        item: 'https://resurgo.life/',
-      },
-      {
-        '@type': 'ListItem',
-        position: 2,
-        name: 'Blog',
-        item: 'https://resurgo.life/blog',
-      },
-      ...(primaryCluster
-        ? [{
-            '@type': 'ListItem',
-            position: 3,
-            name: primaryCluster.title,
-            item: `https://resurgo.life/blog/topics/${primaryCluster.slug}`,
-          }]
-        : []),
-      {
-        '@type': 'ListItem',
-        position: primaryCluster ? 4 : 3,
-        name: post.title,
-        item: `https://resurgo.life/blog/${params.slug}`,
-      },
-    ],
-  };
+  const breadcrumbJsonLd = generateBreadcrumbSchema(
+    params.slug,
+    post.title,
+    primaryCluster ? { title: primaryCluster.title, slug: primaryCluster.slug } : undefined
+  );
 
   const howToJsonLd = howToSteps.length >= 2
-    ? {
-        '@context': 'https://schema.org',
-        '@type': 'HowTo',
-        name: post.title,
-        description: post.desc,
-        totalTime: `PT${Math.max(parseInt(post.readTime, 10) || 1, 1)}M`,
-        step: howToSteps.map((step, index) => ({
-          '@type': 'HowToStep',
-          position: index + 1,
-          name: step,
-          text: step,
-        })),
-      }
+    ? generateHowToSchema(
+        post.title,
+        post.desc,
+        `PT${Math.max(parseInt(post.readTime, 10) || 1, 1)}M`,
+        howToSteps
+      )
     : null;
 
-  const speakableJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'WebPage',
-    name: post.title,
-    url: `https://resurgo.life/blog/${params.slug}`,
-    speakable: {
-      '@type': 'SpeakableSpecification',
-      cssSelector: ['h1', '.prose p:first-of-type'],
-    },
-  };
+  const speakableJsonLd = generateSpeakableSchema(post.title, params.slug);
+
 
   // Render chart if placeholder is in content
   const renderContent = (content: string, ChartComponent?: React.ComponentType) => {
@@ -7599,7 +7570,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
                 {ctaConfig.button}
               </Link>
               <Link
-                href="/sign-up?ref=blog-next-best-read"
+                href={getPostCtaUrl(nextBestRead.slug, nextBestRead.tags)}
                 className="inline-block border border-zinc-700 bg-black/50 px-5 py-2 font-mono text-xs font-bold tracking-widest text-zinc-300 hover:border-zinc-600"
               >
                 [START_FREE]
@@ -7612,7 +7583,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="mt-12 border border-orange-900/40 bg-orange-950/10 p-6 text-center">
           <p className="inline-flex items-center gap-2 font-mono text-sm font-bold text-zinc-200"><PixelIcon name="terminal" size={12} className="text-orange-500" />Ready to apply this?</p>
           <p className="mt-1 font-mono text-xs text-zinc-500">Resurgo makes it systematic.</p>
-          <a href="/sign-up"
+          <a href={getPostCtaUrl(params.slug, post.tags)}
             className="mt-4 inline-block border border-orange-900 bg-orange-950/30 px-6 py-2 font-mono text-xs font-bold tracking-widest text-orange-500 transition hover:bg-orange-950/60">
             [START_FREE]
           </a>

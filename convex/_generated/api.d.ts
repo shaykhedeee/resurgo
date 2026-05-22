@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as aiAnalysis from "../aiAnalysis.js";
 import type * as aiGreetings from "../aiGreetings.js";
+import type * as aiOrchestrator from "../aiOrchestrator.js";
 import type * as apiKeys from "../apiKeys.js";
 import type * as billingNotifications from "../billingNotifications.js";
 import type * as budget from "../budget.js";
@@ -27,6 +29,7 @@ import type * as emailAutomation from "../emailAutomation.js";
 import type * as fitness from "../fitness.js";
 import type * as focusSessions from "../focusSessions.js";
 import type * as gamification from "../gamification.js";
+import type * as generatedBlogPosts from "../generatedBlogPosts.js";
 import type * as goalTemplates from "../goalTemplates.js";
 import type * as goals from "../goals.js";
 import type * as growthAnalytics from "../growthAnalytics.js";
@@ -37,6 +40,7 @@ import type * as insights from "../insights.js";
 import type * as leads from "../leads.js";
 import type * as lib_transactions from "../lib/transactions.js";
 import type * as marketing from "../marketing.js";
+import type * as memories from "../memories.js";
 import type * as metaMarketing from "../metaMarketing.js";
 import type * as milestones from "../milestones.js";
 import type * as nutrition from "../nutrition.js";
@@ -48,16 +52,20 @@ import type * as recovery from "../recovery.js";
 import type * as referrals from "../referrals.js";
 import type * as reminders from "../reminders.js";
 import type * as restApi from "../restApi.js";
+import type * as scheduledTasks from "../scheduledTasks.js";
 import type * as scratchNotes from "../scratchNotes.js";
 import type * as sleep from "../sleep.js";
 import type * as tasks from "../tasks.js";
 import type * as telegram from "../telegram.js";
 import type * as telegramActions from "../telegramActions.js";
+import type * as testimonials from "../testimonials.js";
+import type * as userIntegrations from "../userIntegrations.js";
+import type * as userIntelligence from "../userIntelligence.js";
 import type * as users from "../users.js";
 import type * as visionBoards from "../visionBoards.js";
 import type * as webhooks from "../webhooks.js";
-import type * as weeklyReviews from "../weeklyReviews.js";
 import type * as weeklyIntelligence from "../weeklyIntelligence.js";
+import type * as weeklyReviews from "../weeklyReviews.js";
 import type * as wellness from "../wellness.js";
 import type * as wishlist from "../wishlist.js";
 
@@ -68,7 +76,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  aiAnalysis: typeof aiAnalysis;
   aiGreetings: typeof aiGreetings;
+  aiOrchestrator: typeof aiOrchestrator;
   apiKeys: typeof apiKeys;
   billingNotifications: typeof billingNotifications;
   budget: typeof budget;
@@ -87,6 +97,7 @@ declare const fullApi: ApiFromModules<{
   fitness: typeof fitness;
   focusSessions: typeof focusSessions;
   gamification: typeof gamification;
+  generatedBlogPosts: typeof generatedBlogPosts;
   goalTemplates: typeof goalTemplates;
   goals: typeof goals;
   growthAnalytics: typeof growthAnalytics;
@@ -97,6 +108,7 @@ declare const fullApi: ApiFromModules<{
   leads: typeof leads;
   "lib/transactions": typeof lib_transactions;
   marketing: typeof marketing;
+  memories: typeof memories;
   metaMarketing: typeof metaMarketing;
   milestones: typeof milestones;
   nutrition: typeof nutrition;
@@ -108,16 +120,20 @@ declare const fullApi: ApiFromModules<{
   referrals: typeof referrals;
   reminders: typeof reminders;
   restApi: typeof restApi;
+  scheduledTasks: typeof scheduledTasks;
   scratchNotes: typeof scratchNotes;
   sleep: typeof sleep;
   tasks: typeof tasks;
   telegram: typeof telegram;
   telegramActions: typeof telegramActions;
+  testimonials: typeof testimonials;
+  userIntegrations: typeof userIntegrations;
+  userIntelligence: typeof userIntelligence;
   users: typeof users;
   visionBoards: typeof visionBoards;
   webhooks: typeof webhooks;
-  weeklyReviews: typeof weeklyReviews;
   weeklyIntelligence: typeof weeklyIntelligence;
+  weeklyReviews: typeof weeklyReviews;
   wellness: typeof wellness;
   wishlist: typeof wishlist;
 }>;

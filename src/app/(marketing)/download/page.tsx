@@ -1,10 +1,10 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import { TermLinkButton } from '@/components/ui/TermButton';
 
 export const metadata: Metadata = {
-  title: 'Download Resurgo App — Android APK & iOS Install | AI Productivity',
+  title: 'Install Resurgo Web App — iOS Safari & Android Chrome PWA | AI Productivity',
   description:
-    'Download Resurgo for Android (APK) or install on iOS via Safari. Native app experience with push notifications, offline mode, AI coaching. Direct install.',
+    'Install Resurgo instantly as a web app. Native standalone experience with push notifications, offline local caching, and 5 AI coaches. Safe, direct, and zero app store friction.',
   keywords: [
     'Resurgo download', 'Resurgo APK', 'Resurgo Android download',
     'install Resurgo iPhone', 'iOS PWA install', 'Resurgo iOS',
@@ -92,20 +92,20 @@ export default function DownloadPage() {
       {/* ═══ HERO ═══════════════════════════════════════════════════════════ */}
       <section className="border-b border-zinc-900 px-6 pb-16 pt-20 text-center">
         <div className="mx-auto max-w-2xl">
-          <Kicker text="GET_RESURGO :: INSTALL_ON_YOUR_DEVICE" />
+          <Kicker text="GET_RESURGO :: INSTANT_WEB_PWA_SETUP" />
           <h1 className="font-pixel text-3xl font-bold tracking-tight text-zinc-100 sm:text-4xl">
-            Download Resurgo
+            Install Resurgo
           </h1>
           <p className="mx-auto mt-4 max-w-xl font-terminal text-sm leading-relaxed text-zinc-400">
-            Install Resurgo natively on Android (APK) or iOS (Safari PWA). Windows & macOS coming soon via web install.
+            Resurgo is a web-native Progressive Web App (PWA). Install it instantly from your browser in under 3 seconds with native splash screens, offline local caching, and push notifications.
           </p>
           {/* Platform pill badges */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {[
-              { label: '⬇ Android APK', color: 'border-green-800 text-green-400 bg-green-950/20' },
-              { label: '◎ iOS Safari', color: 'border-blue-800 text-blue-400 bg-blue-950/20' },
-              { label: '◌ Windows', color: 'border-zinc-700 text-zinc-500 bg-zinc-900/40' },
-              { label: '◌ macOS', color: 'border-zinc-700 text-zinc-500 bg-zinc-900/40' },
+              { label: '◎ iOS Safari PWA', color: 'border-blue-800 text-blue-400 bg-blue-950/20' },
+              { label: '◎ Android Chrome PWA', color: 'border-green-800 text-green-400 bg-green-950/20' },
+              { label: '◎ Windows & Mac PWA', color: 'border-purple-800 text-purple-400 bg-purple-950/20' },
+              { label: '⬇ Android APK (Dev Beta)', color: 'border-zinc-700 text-zinc-500 bg-zinc-900/40' },
             ].map((p) => (
               <span key={p.label} className={`border px-3 py-1 font-pixel text-[0.45rem] tracking-wider ${p.color}`}>
                 {p.label}
@@ -118,22 +118,62 @@ export default function DownloadPage() {
       {/* ═══ 4-CARD PLATFORM GRID ══════════════════════════════════════════ */}
       <section className="mx-auto max-w-5xl px-4 py-16 sm:px-6">
         <Kicker text="CHOOSE_YOUR_PLATFORM" />
-        <h2 className="mb-10 font-pixel text-xl text-zinc-200">Pick your device</h2>
+        <h2 className="mb-10 font-pixel text-xl text-zinc-200">Select your installation route</h2>
 
         <div className="grid gap-5 sm:grid-cols-2">
 
-          {/* ── ANDROID ───────────────────────────────────────────────────── */}
-          <div className="border-2 border-green-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
+          {/* ── RECOMMENDED PWA experience ────────────────────────────────── */}
+          <div className="border-2 border-blue-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
+            <div className="mb-4 flex items-start justify-between">
+              <div>
+                <Kicker text="RECOMMENDED_EXPERIENCE" color="text-blue-400" />
+                <h3 className="font-pixel text-base text-zinc-100">Web PWA Instant Setup</h3>
+                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Perfect for iOS, Android, and Desktop</p>
+              </div>
+              <span className="border border-blue-800 bg-blue-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-blue-400">
+                STABLE_V2
+              </span>
+            </div>
+
+            <div className="mb-5 border border-blue-900/50 bg-blue-950/20 px-4 py-3">
+              <p className="font-terminal text-xs leading-relaxed text-blue-300 font-semibold">
+                ★ Primary Production Build: 100% stable, updates automatically, launches instantly in standalone borderless screen, uses offline client-side caching.
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <p className="mb-2 font-pixel text-[0.45rem] tracking-widest text-blue-400">IPHONE_&_IPAD_INSTALL</p>
+                <StepList steps={IOS_STEPS} color="blue" />
+              </div>
+              
+              <div className="h-px bg-zinc-900" />
+              
+              <div>
+                <p className="mb-2 font-pixel text-[0.45rem] tracking-widest text-green-400">ANDROID_&_CHROME_INSTALL</p>
+                <StepList steps={ANDROID_PWA_STEPS} color="blue" />
+              </div>
+            </div>
+          </div>
+
+          {/* ── ANDROID DEVELOPER BETA ────────────────────────────────────── */}
+          <div className="border-2 border-zinc-800 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
             {/* Header */}
             <div className="mb-4 flex items-start justify-between">
               <div>
-                <Kicker text="ANDROID" color="text-green-400" />
-                <h3 className="font-pixel text-base text-zinc-100">Android</h3>
-                <p className="mt-0.5 font-terminal text-xs text-zinc-500">APK direct download · or install via Chrome</p>
+                <Kicker text="DEVELOPER_SANDBOX_BUILD" color="text-zinc-500" />
+                <h3 className="font-pixel text-base text-zinc-300">Android Manual APK</h3>
+                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Developer Beta Wrapper (Manual Update Required)</p>
               </div>
-              <span className="border border-green-800 bg-green-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-green-400">
-                {APK_VERSION}
+              <span className="border border-zinc-700 bg-zinc-900 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-zinc-500">
+                BETA_{APK_VERSION}
               </span>
+            </div>
+
+            <div className="mb-4 border border-orange-950/60 bg-orange-950/20 px-4 py-3">
+              <p className="font-terminal text-xs leading-relaxed text-orange-400">
+                ⚠️ Requires manual download of all updates. Only recommended for sandbox test environments where browser capabilities are restricted.
+              </p>
             </div>
 
             {/* APK download button */}
@@ -141,64 +181,21 @@ export default function DownloadPage() {
               href={APK_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-orange-600 bg-orange-600 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-orange-500 active:translate-x-px active:translate-y-px"
+              className="mb-2 flex w-full items-center justify-center gap-2 border-2 border-zinc-700 bg-zinc-800 px-4 py-3 font-terminal text-sm font-bold text-white shadow-[3px_3px_0px_rgba(0,0,0,0.6)] transition hover:bg-zinc-700 active:translate-x-px active:translate-y-px"
             >
-              ⬇&nbsp;&nbsp;Download APK ({APK_VERSION})
+              ⬇&nbsp;&nbsp;Download Manual APK ({APK_VERSION})
             </a>
             <p className="mb-5 font-terminal text-[0.6rem] text-zinc-600">
-              SHA-256 checksum listed on the GitHub release page · Android 8.0+ required
+              Android 8.0+ required. Must allow untrusted installs in browser settings.
             </p>
 
             {/* APK install steps */}
             <details className="group mb-4">
-              <summary className="mb-3 cursor-pointer font-pixel text-[0.45rem] tracking-widest text-green-500 group-open:text-green-300">
-                HOW_TO_INSTALL_APK ▾
+              <summary className="mb-3 cursor-pointer font-pixel text-[0.45rem] tracking-widest text-orange-500 group-open:text-orange-300">
+                MANUAL_APK_INSTALL_STEPS ▾
               </summary>
               <StepList steps={ANDROID_APK_STEPS} color="orange" />
             </details>
-
-            {/* Divider */}
-            <div className="my-4 flex items-center gap-3">
-              <div className="h-px flex-1 bg-zinc-800" />
-              <span className="font-pixel text-[0.38rem] tracking-widest text-zinc-700">OR_USE_BROWSER</span>
-              <div className="h-px flex-1 bg-zinc-800" />
-            </div>
-
-            {/* PWA fallback */}
-            <details className="group">
-              <summary className="mb-3 cursor-pointer font-pixel text-[0.45rem] tracking-widest text-zinc-500 group-open:text-zinc-300">
-                INSTALL_VIA_CHROME_INSTEAD ▾
-              </summary>
-              <StepList steps={ANDROID_PWA_STEPS} color="orange" />
-            </details>
-          </div>
-
-          {/* ── iOS ───────────────────────────────────────────────────────── */}
-          <div className="border-2 border-blue-900 bg-zinc-950 p-6 shadow-[4px_4px_0px_rgba(0,0,0,0.6)]">
-            <div className="mb-4 flex items-start justify-between">
-              <div>
-                <Kicker text="IPHONE_/_IPAD" color="text-blue-400" />
-                <h3 className="font-pixel text-base text-zinc-100">iOS</h3>
-                <p className="mt-0.5 font-terminal text-xs text-zinc-500">Safari PWA — Add to Home Screen</p>
-              </div>
-              <span className="border border-blue-800 bg-blue-950/30 px-2 py-1 font-pixel text-[0.4rem] tracking-widest text-blue-400">
-                AVAILABLE_NOW
-              </span>
-            </div>
-
-            {/* PWA install note */}
-            <div className="mb-6 border border-blue-900/50 bg-blue-950/20 px-4 py-3">
-              <p className="font-terminal text-xs leading-relaxed text-blue-300">
-                Install Resurgo on iPhone/iPad via Safari "Add to Home Screen". Launches full-screen with push notifications (iOS 16.4+). No App Store required.
-              </p>
-            </div>
-
-            {/* iOS PWA steps */}
-            <StepList steps={IOS_STEPS} color="blue" />
-
-            <p className="mt-4 font-terminal text-[0.6rem] text-zinc-600">
-              iOS 16.4+ required for push notifications. Older versions get limited functionality.
-            </p>
           </div>
 
           {/* ── WINDOWS ───────────────────────────────────────────────────── */}

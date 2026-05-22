@@ -184,9 +184,9 @@ export const metadata: Metadata = {
     },
   },
   
-  // Search engine verification — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION in Vercel env vars
-  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+  // Search engine verification — set NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION or GOOGLE_SITE_VERIFICATION in env vars
+  ...((process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.GOOGLE_SITE_VERIFICATION)
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.GOOGLE_SITE_VERIFICATION } }
     : {}),
   
   // ═══════════════════════════════════════════════════════════════════════════

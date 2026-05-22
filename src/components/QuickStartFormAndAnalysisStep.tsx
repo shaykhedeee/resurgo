@@ -65,6 +65,7 @@ export function QuickStartFormAndAnalysisStep({
   // 'launching' -> show finalized state with celebration and take them to dashboard
   const [phase, setPhase] = useState<'form' | 'diagnostics' | 'launching'>('form');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [scanComplete, setScanComplete] = useState(false);
   const [diagnosticLogs, setDiagnosticLogs] = useState<string[]>([]);
   const [typingIndex, setTypingIndex] = useState(0);
 
@@ -118,12 +119,54 @@ export function QuickStartFormAndAnalysisStep({
     return Math.round(10 * Number(weight) + 6.25 * Number(height) - 5 * age + 5);
   };
 
+  const handleSkipBiometrics = async () => {
+    const finalName = name.trim() || 'Solo Builder';
+    setName(finalName);
+    const finalHeight = 175;
+    const finalWeight = 75;
+    const finalDob = '1995-01-01';
+    setHeight(finalHeight);
+    setWeight(finalWeight);
+    setDob(finalDob);
+    setPhone('');
+    
+    setIsSubmitting(true);
+    setPhase('diagnostics');
+    setScanComplete(false);
+
+    // Simulate diagnostic loading logs
+    const logs = [
+      '⚡ [SYSTEM] Initiating Bio-Metrics Diagnostic Scan (BYPASSED)...',
+      `👤 [BIOLOGY] Applying Default Builder Profile: "${finalName}"`,
+      '📏 [PHYSICAL] Applying Standard Presets: Height 175cm, Weight 75kg',
+      '🧮 [ENGINE] Synthesizing brain dump semantic map...',
+      `🧠 [NEURAL] Detected Cognitive Archetype: "${detectedArchetypeRaw}"`,
+      `🧬 [HEALTH] Est. Daily Baseline Hydration: 2.6L`,
+      `🔥 [METABOLIC] Est. Basal Metabolic Rate (BMR): 1700 kcal/day`,
+      `📊 [INDEX] Est. Body Mass Index (BMI): 24.5 (Healthy Baseline)`,
+      '📦 [SYSTEM] Compiling selected goals, habits, and tasks into atomic commits...',
+      '🚀 [LAUNCH] Optimization Blueprint Generated. Awaiting Launch Sequence.'
+    ];
+
+    setDiagnosticLogs([]);
+    setTypingIndex(0);
+
+    for (let i = 0; i < logs.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 150));
+      setDiagnosticLogs((prev) => [...prev, logs[i]]);
+    }
+
+    setScanComplete(true);
+    setIsSubmitting(false);
+  };
+
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return;
 
     setIsSubmitting(true);
     setPhase('diagnostics');
+    setScanComplete(false);
 
     // Simulate diagnostic loading logs for premium hacker/brutalist style
     const logs = [
@@ -149,6 +192,7 @@ export function QuickStartFormAndAnalysisStep({
       setDiagnosticLogs((prev) => [...prev, logs[i]]);
     }
 
+    setScanComplete(true);
     setIsSubmitting(false);
   };
 
@@ -315,28 +359,38 @@ export function QuickStartFormAndAnalysisStep({
 
               </div>
 
-              <div className="pt-4 border-t border-zinc-800 flex justify-between items-center gap-4">
+              <div className="pt-4 border-t border-zinc-800 flex flex-col sm:flex-row justify-between items-center gap-4">
                 <div className="flex items-center gap-2 text-zinc-500 text-xs">
                   <Shield className="w-4 h-4 text-emerald-600" />
                   Your profile and biological data is encrypted and saved locally.
                 </div>
-                <button
-                  type="submit"
-                  disabled={!name.trim() || isSubmitting}
-                  className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded flex items-center gap-2 transition-all font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Analyzing...
-                    </>
-                  ) : (
-                    <>
-                      Generate Neural Diagnostic
-                      <ArrowRight className="w-4 h-4" />
-                    </>
-                  )}
-                </button>
+                <div className="flex items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleSkipBiometrics}
+                    disabled={isSubmitting}
+                    className="px-4 py-3 border border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-white hover:border-zinc-700 font-semibold rounded flex items-center gap-2 transition-all font-mono text-xs disabled:opacity-50"
+                  >
+                    Skip Bio-Metrics & Launch
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={!name.trim() || isSubmitting}
+                    className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded flex items-center gap-2 transition-all font-mono text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        Generate Neural Diagnostic
+                        <ArrowRight className="w-4 h-4" />
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
             </form>
           </motion.div>
@@ -384,7 +438,7 @@ export function QuickStartFormAndAnalysisStep({
                   </motion.div>
                 );
               })}
-              {diagnosticLogs.length < 12 && (
+              {!scanComplete && (
                 <div className="flex items-center gap-2 text-zinc-600 mt-2">
                   <Loader2 className="w-4 h-4 animate-spin text-orange-500" />
                   <span>Synthesizing neural pathways...</span>
@@ -393,7 +447,7 @@ export function QuickStartFormAndAnalysisStep({
             </div>
 
             {/* Action panel showing summary of diagnostics details once loaded */}
-            {diagnosticLogs.length >= 12 && (
+            {scanComplete && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

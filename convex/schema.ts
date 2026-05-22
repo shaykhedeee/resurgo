@@ -1890,11 +1890,25 @@ cancellationSurveys: defineTable({
 .index('by_reason', ['reason']),
 
 systemHealth: defineTable({
-  checkAt: v.number(),
-  status: v.string(),
-  details: v.any(),
-  createdAt: v.number(),
-})
-.index('by_createdAt', ['createdAt']),
+    checkAt: v.number(),
+    status: v.string(),
+    details: v.any(),
+    createdAt: v.number(),
+  })
+    .index('by_createdAt', ['createdAt']),
+
+  userIntegrations: defineTable({
+    userId: v.id('users'),
+    provider: v.union(v.literal('google'), v.literal('notion')),
+    accessToken: v.string(),
+    refreshToken: v.optional(v.string()),
+    expiresAt: v.optional(v.number()),
+    scopes: v.array(v.string()),
+    settings: v.optional(v.any()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_userId', ['userId'])
+    .index('by_userId_provider', ['userId', 'provider']),
 });
 

@@ -1,8 +1,11 @@
 'use client';
 
 import BrainDump from '@/components/BrainDump';
+import { useRouter } from 'next/navigation';
 
 export default function BrainDumpPage() {
+  const router = useRouter();
+
   return (
     <div className="min-h-screen bg-black p-4 md:p-6">
       <div className="mx-auto max-w-4xl">
@@ -20,8 +23,9 @@ export default function BrainDumpPage() {
         </div>
 
         {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-        <BrainDump isOpen={true} onClose={() => {}} />
+        <BrainDump isOpen={true} onClose={() => router.push('/dashboard')} />
       </div>
     </div>
   );
 }
+

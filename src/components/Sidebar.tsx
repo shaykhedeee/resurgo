@@ -31,7 +31,10 @@ import {
   HelpCircle,
   Shield,
   Heart,
-  BookOpen
+  BookOpen,
+  Apple,
+  DollarSign,
+  Star
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -59,6 +62,13 @@ export function Sidebar({
   const profile = useQuery(api.gamification.getProfile);
   const { theme, toggleTheme, mounted } = useTheme();
   const [internalCollapsed, setInternalCollapsed] = useState(false);
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    'Life Domains': false,
+  });
+
+  const toggleSection = (title: string) => {
+    setOpenSections(prev => ({ ...prev, [title]: !prev[title] }));
+  };
   
   // Support both controlled and uncontrolled modes
   const collapsed = controlledCollapsed !== undefined ? controlledCollapsed : internalCollapsed;
@@ -80,6 +90,7 @@ export function Sidebar({
   const navSections = [
     {
       title: 'Main',
+      collapsible: false,
       items: [
         { id: 'today', label: 'Today', icon: CalendarCheck, color: 'text-ascend-500' },
         { id: 'habits', label: 'Habits', icon: Target, color: 'text-ascend-500' },
@@ -89,15 +100,27 @@ export function Sidebar({
     },
     {
       title: 'Tools',
+      collapsible: false,
       items: [
         { id: 'focus', label: 'Focus Mode', icon: Timer, color: 'text-ascend-500' },
         { id: 'calendar', label: 'Calendar', icon: Calendar, color: 'text-ascend-500' },
         { id: 'progress', label: 'Analytics', icon: TrendingUp, color: 'text-ascend-500' },
+      ]
+    },
+    {
+      title: 'Life Domains',
+      collapsible: true,
+      items: [
         { id: 'wellness', label: 'Wellness', icon: Heart, color: 'text-ascend-500' },
+        { id: 'sleep', label: 'Sleep', icon: Moon, color: 'text-ascend-500' },
+        { id: 'nutrition', label: 'Nutrition', icon: Apple, color: 'text-ascend-500' },
+        { id: 'budget', label: 'Budget', icon: DollarSign, color: 'text-ascend-500' },
+        { id: 'wishlist', label: 'Wishlist', icon: Star, color: 'text-ascend-500' },
       ]
     },
     {
       title: 'Review',
+      collapsible: false,
       items: [
         { id: 'weekly-review', label: 'Weekly Review', icon: BookOpen, color: 'text-ascend-500' },
       ]
@@ -223,54 +246,70 @@ export function Sidebar({
 
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6" aria-label="Main navigation">
-        {navSections.map((section) => (
-          <div key={section.title}>
-            {!collapsed && (
-              <p className="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-themed-muted">
-                {section.title}
-              </p>
-            )}
-            <div className="space-y-1">
-              {section.items.map((item) => {
-                const isActive = activeTab === item.id;
-                const Icon = item.icon;
-                
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      if (item.id === 'weekly-review' && onOpenWeeklyReview) {
-                        onOpenWeeklyReview();
-                      } else {
-                        onTabChange(item.id);
-                      }
-                    }}
-                    className={cn(
-                      "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl",
-                      "transition-all duration-200 group",
-                      collapsed && "justify-center",
-                      isActive 
-                        ? "bg-ascend-500/10 text-ascend-500" 
-                        : "text-themed-secondary hover:bg-[var(--surface-hover)] hover:text-themed"
-                    )}
-                    title={collapsed ? item.label : undefined}
-                  >
-                    <Icon className={cn(
-                      "w-5 h-5 shrink-0 transition-colors",
-                      isActive ? item.color : "group-hover:text-ascend-400"
-                    )} />
-                    {!collapsed && (
-                      <span className="text-sm font-medium truncate">{item.label}</span>
-                    )}
-                    {isActive && !collapsed && (
-                      <div className="ml-auto w-1.5 h-1.5 rounded-full bg-ascend-500" />
-                    )}
-                  </button>
-                );
-              })}
+        {navSections.map((section) => {
+          const isOpen = !section.collapsible || openSections[section.title] || collapsed;
+          return (
+            <div key={section.title} className="mb-2">
+              {!collapsed && (
+                <div 
+                  onClick={() => section.collapsible && toggleSection(section.title)}
+                  className={cn(
+                    "flex items-center justify-between px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-themed-muted",
+                    section.collapsible && "cursor-pointer hover:text-themed select-none"
+                  )}
+                >
+                  <span>{section.title}</span>
+                  {section.collapsible && (
+                    <span className="text-[10px] text-themed-muted font-normal">
+                      {isOpen ? '▲' : '▼'}
+                    </span>
+                  )}
+                </div>
+              )}
+              {isOpen && (
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const isActive = activeTab === item.id;
+                    const Icon = item.icon;
+                    
+                    return (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          if (item.id === 'weekly-review' && onOpenWeeklyReview) {
+                            onOpenWeeklyReview();
+                          } else {
+                            onTabChange(item.id);
+                          }
+                        }}
+                        className={cn(
+                          "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl",
+                          "transition-all duration-200 group",
+                          collapsed && "justify-center",
+                          isActive 
+                            ? "bg-ascend-500/10 text-ascend-500" 
+                            : "text-themed-secondary hover:bg-[var(--surface-hover)] hover:text-themed"
+                        )}
+                        title={collapsed ? item.label : undefined}
+                      >
+                        <Icon className={cn(
+                          "w-5 h-5 shrink-0 transition-colors",
+                          isActive ? item.color : "group-hover:text-ascend-400"
+                        )} />
+                        {!collapsed && (
+                          <span className="text-sm font-medium truncate">{item.label}</span>
+                        )}
+                        {isActive && !collapsed && (
+                          <div className="ml-auto w-1.5 h-1.5 rounded-full bg-ascend-500" />
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          </div>
-        ))}
+          );
+        })}
       </nav>
 
       {/* Footer Actions - Compact Row */}

@@ -9,7 +9,7 @@ import { useAction, useMutation, useQuery } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { FormEvent, useEffect, useMemo, useRef, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Send, Brain, Zap, Dumbbell, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare } from 'lucide-react';
+import { Send, Brain, Zap, Dumbbell, Flame, Sparkles, Lock, CheckCircle2, XCircle, BarChart3, MessageSquare, Shield, Coins, Eye, Network, GitMerge } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useStoreUser } from '@/hooks/useStoreUser';
 import { analytics } from '@/lib/analytics';
@@ -20,7 +20,7 @@ import { UpsellPrompt } from '@/components/UpsellPrompt';
 
 const VisionBoard = dynamic(() => import('@/components/VisionBoard'), { ssr: false });
 
-type CoachId = 'NOVA' | 'NEXUS' | 'AURORA' | 'TITAN' | 'PHOENIX';
+type CoachId = 'MARCUS' | 'AURORA' | 'NOVA' | 'TITAN' | 'SAGE' | 'PHOENIX' | 'ORACLE' | 'NEXUS' | 'ZENON';
 type CoachTab = 'chat' | 'vision' | 'analytics';
 
 interface CoachDef {
@@ -35,20 +35,28 @@ interface CoachDef {
 }
 
 const COACHES: CoachDef[] = [
-  { id: 'NOVA',    name: 'ARCHITECT', title: 'Life Plan Architect',   avatar: 'A', color: '#38bdf8', domain: 'goals / milestones / habits / daily tasks',      shortBio: 'Turns one messy ambition into a measurable plan with the first week scheduled.', Icon: Brain },
-  { id: 'NEXUS',   name: 'FOCUS',     title: 'Deep Work Guard',       avatar: 'F', color: '#e879f9', domain: 'pomodoro / focus sessions / attention',          shortBio: 'Starts focused work, protects the session, and turns distractions into rules.', Icon: Zap },
-  { id: 'AURORA',  name: 'NUTRITION', title: 'Nutrition Planner',     avatar: 'N', color: '#22c55e', domain: 'meal plans / macros / hydration / quick logs',    shortBio: 'Builds simple meal plans, logs food and water, and adjusts macros gradually.', Icon: Sparkles },
-  { id: 'TITAN',   name: 'FITNESS',   title: 'Training Progression',  avatar: 'T', color: '#ef4444', domain: 'workouts / strength / cardio / measurements',    shortBio: 'Designs workouts, logs sessions, and progresses load when performance is strong.', Icon: Dumbbell },
-  { id: 'PHOENIX', name: 'REVIEW',    title: 'Weekly Review Analyst', avatar: 'R', color: '#f97316', domain: 'weekly reviews / patterns / adaptive fixes',      shortBio: 'Finds what slipped, protects what worked, and chooses the next adjustment.', Icon: Flame },
+  { id: 'MARCUS',  name: 'MARCUS',  title: 'Stoic Strategist',          avatar: '🏛', color: '#ca8a04', domain: 'discipline · goals · execution · stoic philosophy', shortBio: 'Brutal clarity. Zero BS. The obstacle IS the way.', Icon: Shield },
+  { id: 'AURORA',  name: 'AURORA',  title: 'Mindful Catalyst',          avatar: '🔮', color: '#a855f7', domain: 'wellness · mindfulness · neuroscience · nervous system', shortBio: 'Optimize your nervous system. Science-backed, heart-led.', Icon: Sparkles },
+  { id: 'NOVA',    name: 'NOVA',    title: 'Apex Intelligence',         avatar: '⚡', color: '#06b6d4', domain: 'strategy · systems · productivity · life design', shortBio: 'Polymath strategist. Thinks in systems, speaks in clarity, builds in action.', Icon: Brain },
+  { id: 'TITAN',   name: 'TITAN',   title: 'Discipline Engine',         avatar: '💪', color: '#ef4444', domain: 'fitness · health · energy · peak performance', shortBio: 'Elite performance architect. Your body is your empire — build it like one.', Icon: Dumbbell },
+  { id: 'SAGE',    name: 'SAGE',    title: 'Wealth Architect',          avatar: '💰', color: '#22c55e', domain: 'finance · wealth · career · business · strategy', shortBio: 'Financial strategist and wealth architect. Every decision compounds.', Icon: Coins },
+  { id: 'PHOENIX', name: 'PHOENIX', title: 'Resilience Forge',          avatar: '🔥', color: '#f97316', domain: 'resilience · mindset · recovery · transformation', shortBio: 'Forged in fire. Specializes in comebacks and inner transformation.', Icon: Flame },
+  { id: 'ORACLE',  name: 'ORACLE',  title: 'Omniscient Life Architect', avatar: '👁', color: '#FF6B35', domain: 'strategy · psychology · full-spectrum life OS', shortBio: 'Synthesises all coach wisdom. Sees your entire system, rewrites what isn\'t working.', Icon: Eye },
+  { id: 'NEXUS',   name: 'NEXUS',   title: 'Neural Integration Engine', avatar: '∞', color: '#e879f9', domain: 'neural hacking · deep learning · mastery · flow', shortBio: 'Merges mind, body, finance & creativity into one adaptive engine. No limits.', Icon: Network },
+  { id: 'ZENON',   name: 'ZENON',   title: 'Neural Architect',          avatar: '⬡', color: '#22d3ee', domain: 'pattern recognition · loops · self-optimization', shortBio: 'Trained on behavioral loops and radical self-optimization. Quietly intense.', Icon: GitMerge },
 ];
 
 // Static fallback prompts (used only while smart prompts load)
 const FALLBACK_PROMPTS: Record<CoachId, string[]> = {
-  NOVA:    ['Turn this goal into milestones, habits, and a 7-day plan', 'Plan my top 4 tasks for today', 'Build an ADHD-safe execution system'],
-  NEXUS:   ['Start a 25-minute focus session', 'Help me choose one task to do now', 'Build a distraction protocol for this project'],
-  AURORA:  ['Create a simple 7-day meal plan', 'Log this food and estimate macros', 'Fix my afternoon energy crash'],
-  TITAN:   ['Design this week of workouts', 'Progress my strength plan safely', 'Log today\'s training session'],
-  PHOENIX: ['Run my weekly review', 'Find the pattern behind my misses', 'Reset my plan after a bad week'],
+  MARCUS:  ['What is actually within my control here?', 'Give me a Stoic perspective on this setback', 'Write a Stoic morning routine'],
+  AURORA:  ['Help me optimize my sleep schedule', 'Guide me through a 2-minute breathing pattern', 'Explain the neuroscience of focus'],
+  NOVA:    ['Turn this goal into milestones and habits', 'Find the bottleneck in my daily workflow', 'Build an ADHD-safe strategy'],
+  TITAN:   ['Design a strength training protocol for this week', 'How do I calculate my protein macro targets?', 'Create a physical recovery routine'],
+  SAGE:    ['Design a recurring cash-flow budget system', 'How do I build career leverage and compounding skills?', 'Help me structure my financial buckets'],
+  PHOENIX: ['Help me recover from a major setback', 'Reset my mindset after a highly unproductive week', 'Explain how to break out of burnout'],
+  ORACLE:  ['Analyze the synergies between my life domains', 'Identify the root cause of my productivity bottlenecks', 'Design a full-spectrum Life OS architecture'],
+  NEXUS:   ['Design a flow-state protocol for deep work', 'How do I build skills at 10x speed using spaced practice?', 'Create an attention-harnessing focus routine'],
+  ZENON:   ['Map the habit loop and triggers of my procrastination', 'How do I bridge my daily habits to my self-concept?', 'Help me redesign my environment from first principles'],
 };
 
 // ── Render action badges from action summary blocks ──
@@ -142,11 +150,15 @@ function CoachTerminalInner() {
     const utterance = new SpeechSynthesisUtterance(cleanText);
 
     const voiceSettings = {
-      NOVA: { pitch: 0.85, rate: 0.90, gender: 'male', lang: 'en-US' },
-      NEXUS: { pitch: 1.00, rate: 1.05, gender: 'default', lang: 'en-US' },
+      MARCUS: { pitch: 0.85, rate: 0.90, gender: 'male', lang: 'en-US' },
       AURORA: { pitch: 1.05, rate: 0.85, gender: 'female', lang: 'en-GB' },
+      NOVA: { pitch: 1.00, rate: 1.00, gender: 'female', lang: 'en-US' },
       TITAN: { pitch: 0.95, rate: 1.15, gender: 'male', lang: 'en-US' },
+      SAGE: { pitch: 0.90, rate: 0.95, gender: 'male', lang: 'en-GB' },
       PHOENIX: { pitch: 1.00, rate: 0.95, gender: 'female', lang: 'en-US' },
+      ORACLE: { pitch: 0.80, rate: 0.85, gender: 'male', lang: 'en-US' },
+      NEXUS: { pitch: 1.00, rate: 1.05, gender: 'default', lang: 'en-US' },
+      ZENON: { pitch: 0.90, rate: 1.00, gender: 'default', lang: 'en-US' },
     };
 
     const settings = voiceSettings[coachId] || { pitch: 1.00, rate: 1.00, gender: 'default', lang: 'en-US' };
@@ -200,7 +212,7 @@ function CoachTerminalInner() {
 
   const { user } = useStoreUser();
   const isPro = user?.plan === 'pro' || user?.plan === 'lifetime';
-  const FREE_COACHES: CoachId[] = ['NOVA', 'NEXUS', 'AURORA', 'TITAN', 'PHOENIX'];
+  const FREE_COACHES: CoachId[] = ['MARCUS', 'AURORA', 'NOVA', 'TITAN', 'SAGE', 'PHOENIX'];
 
   useEffect(() => {
     const coachParam = searchParams.get('coach');
@@ -381,7 +393,7 @@ function CoachTerminalInner() {
               <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">COACH_USAGE_BREAKDOWN</span>
             </div>
             <div className="p-4 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {COACHES.slice(0, 6).map((c) => {
+              {COACHES.map((c) => {
                 const count = history?.filter((m) => m.context?.startsWith(`coach:${c.id}`) && m.role === 'user').length ?? 0;
                 const total = history?.filter((m) => m.role === 'user').length ?? 1;
                 const pct = total > 0 ? Math.round((count / total) * 100) : 0;

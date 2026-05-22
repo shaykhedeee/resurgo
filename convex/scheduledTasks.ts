@@ -565,8 +565,32 @@ export const getPowerUsersForReferrals = internalQuery({
         userId: u._id,
         name: u.name,
         email: u.email,
-        referralCode: u.referralCode ?? u._id.toString().substring(0, 8),
+        referralCode: u.referralCode ?? null,
       }));
+  },
+});
+
+export const ensureReferralCodeForUser = internalMutation({
+  args: {
+    userId: v.id('users'),
+  },
+  handler: async (ctx, { userId }) => {
+    const user = await ctx.db.get(userId);
+    if (!user) throw new Error('User not found');
+    if (user.referralCode) return user.referralCode;
+
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let code = 'RSG';
+    for (let i = 0; i < 5; i++) {
+      code += chars[Math.floor(Math.random() * chars.length)];
+    }
+
+    await ctx.db.patch(userId, {
+      referralCode: code,
+      updatedAt: Date.now(),
+    });
+
+    return code;
   },
 });
 
@@ -576,7 +600,10 @@ export const runReferralCampaignTrigger = internalAction({
     const users = await ctx.runQuery((internal as any).scheduledTasks.getPowerUsersForReferrals);
 
     for (const user of users) {
-      const referralLink = `${SITE_URL}/signup?ref=${user.referralCode}`;
+      const referralCode = user.referralCode ?? await ctx.runMutation((internal as any).scheduledTasks.ensureReferralCodeForUser, {
+        userId: user.userId,
+      });
+      const referralLink = `${SITE_URL}/?ref=${referralCode}`;
       const html = emailLayout(`
         <h2>Help a friend build an indestructible system</h2>
         <p>Hey ${user.name.split(' ')[0]},</p>

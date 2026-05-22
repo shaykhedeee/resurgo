@@ -343,6 +343,27 @@ export function enhanceBrainDumpAnalysis(
   // Generate deep insights
   const deepInsights: string[] = [];
 
+  const psych = response.psychometric_analysis;
+  if (psych) {
+    if (psych.executive_functioning_load >= 7) {
+      deepInsights.push(`Critical executive functioning load (${psych.executive_functioning_load}/10) — task paralysis risk is extremely high.`);
+    } else if (psych.executive_functioning_load >= 4) {
+      deepInsights.push(`Moderate executive load (${psych.executive_functioning_load}/10) — batch similar tasks to avoid context-switching fatigue.`);
+    }
+    if (psych.limiting_beliefs.length > 0) {
+      deepInsights.push(`Self-limiting script: "${psych.limiting_beliefs[0]}" — requires intentional mindset reframing.`);
+    }
+    if (psych.cognitive_biases.length > 0) {
+      deepInsights.push(`Cognitive bias noticed: ${psych.cognitive_biases.join(', ')}.`);
+    }
+    if (psych.adhd_markers.length > 0) {
+      deepInsights.push(`ADHD triggers: ${psych.adhd_markers.join(', ')}.`);
+    }
+    if (psych.chronobiology_markers.chronotype) {
+      deepInsights.push(`Optimal chronotype: ${psych.chronobiology_markers.chronotype} (Peak focus window: ${psych.chronobiology_markers.peak_focus_window || 'Not specified'}).`);
+    }
+  }
+
   if (patterns.length > 0) {
     deepInsights.push(`Pattern analysis reveals: ${patterns.map(p => p.type).join(', ')}`);
   }
@@ -358,6 +379,7 @@ export function enhanceBrainDumpAnalysis(
   if (response.neural_map?.root_priority) {
     deepInsights.push(`Root priority identified: "${response.neural_map.root_priority}" — everything else depends on this`);
   }
+
 
   // Recommended approach
   let recommendedApproach = '';
@@ -378,6 +400,14 @@ export function enhanceBrainDumpAnalysis(
 
   // Warning flags
   const warningFlags: string[] = [];
+  if (psych) {
+    if (psych.executive_functioning_load >= 7) {
+      warningFlags.push(`⚠️ High Executive Load (${psych.executive_functioning_load}/10) — extreme task paralysis risk`);
+    }
+    if (psych.cognitive_biases.length > 0) {
+      warningFlags.push(`⚠️ Cognitive Distortion: ${psych.cognitive_biases[0]}`);
+    }
+  }
   if (emotionalTrajectory.urgencySignal >= 8) warningFlags.push('⚠️ High emotional urgency detected — pace yourself');
   if (cognitiveLoad.estimatedMentalLoad > 80) warningFlags.push('⚠️ Critical cognitive overload — delegate or defer');
   if (response.overcommitment_warning) warningFlags.push('⚠️ Overcommitment risk — say "no" to new asks this week');
@@ -393,3 +423,4 @@ export function enhanceBrainDumpAnalysis(
     warningFlags,
   };
 }
+

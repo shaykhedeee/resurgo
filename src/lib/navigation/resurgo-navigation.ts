@@ -34,22 +34,24 @@ export const RESURGO_NAV_SECTIONS: ResurgoNavSection[] = [
     ],
   },
   {
-    label: 'Body',
+    label: 'Body & Mind',
     collapsible: true,
     defaultOpen: true,
     items: [
       { href: '/fitness', label: 'Fitness', iconName: 'fire', keywords: ['workouts', 'strength', 'cardio', 'steps'] },
-      { href: '/food', label: 'Food', iconName: 'heart', keywords: ['meals', 'macros', 'calories', 'water'] },
-      { href: '/health', label: 'Health', iconName: 'wellness', keywords: ['sleep', 'energy', 'supplements', 'recovery'] },
+      { href: '/analytics', label: 'Analytics', iconName: 'analytics', keywords: ['weekly review', 'streaks', 'insights', 'charts'] },
     ],
   },
   {
-    label: 'Mind',
+    label: 'Life Domains',
     collapsible: true,
-    defaultOpen: true,
+    defaultOpen: false,
     items: [
       { href: '/wellness', label: 'Wellness', iconName: 'wellness', keywords: ['mood', 'journal', 'gratitude', 'meditation'] },
-      { href: '/analytics', label: 'Analytics', iconName: 'analytics', keywords: ['weekly review', 'streaks', 'insights', 'charts'] },
+      { href: '/health', label: 'Sleep', iconName: 'wellness', keywords: ['sleep', 'energy', 'supplements', 'recovery', 'health'] },
+      { href: '/food', label: 'Nutrition', iconName: 'heart', keywords: ['meals', 'macros', 'calories', 'water', 'food'] },
+      { href: '/budget', label: 'Budget', iconName: 'budget', keywords: ['finance', 'expenses', 'income', 'money'] },
+      { href: '/wishlist', label: 'Wishlist', iconName: 'star', keywords: ['shopping', 'gifts', 'wants'] },
     ],
   },
   {

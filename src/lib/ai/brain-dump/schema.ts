@@ -62,6 +62,23 @@ export const BrainDumpResponseSchema = z.object({
     })),
     root_priority: z.string().max(200),
   }).optional(),
+  psychometric_analysis: z.object({
+    limiting_beliefs: z.array(z.string()),
+    cognitive_biases: z.array(z.string()),
+    executive_functioning_load: z.number().int().min(1).max(10),
+    chronobiology_markers: z.object({
+      recommended_wake_time: z.string().nullable(),
+      recommended_sleep_time: z.string().nullable(),
+      peak_focus_window: z.string().nullable(),
+      chronotype: z.enum(['morning', 'afternoon', 'evening', 'irregular']),
+    }),
+    adhd_markers: z.array(z.string()),
+    coaching_persona: z.object({
+      name: z.string(),
+      style: z.enum(['supportive', 'challenging', 'analytical', 'humorous']),
+      initial_action_note: z.string(),
+    }),
+  }).optional(),
 });
 
 export type ParsedTask = z.infer<typeof ParsedTaskSchema>;
@@ -69,3 +86,5 @@ export type BrainDumpResponse = z.infer<typeof BrainDumpResponseSchema>;
 export type TaskCategoryType = z.infer<typeof TaskCategory>;
 export type TaskPriorityType = z.infer<typeof TaskPriority>;
 export type EmotionTagType = z.infer<typeof EmotionTag>;
+export type PsychometricAnalysis = z.infer<typeof BrainDumpResponseSchema>['psychometric_analysis'];
+

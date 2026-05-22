@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Target, Zap, Activity, ArrowRight, Settings } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Check, Target, Zap, Activity, ArrowRight, Settings, AlertTriangle } from 'lucide-react';
 
 interface QuickStartPlannerStepProps {
   parsedData: {
@@ -48,12 +48,77 @@ export function QuickStartPlannerStep({ parsedData, onComplete }: QuickStartPlan
     );
   };
 
+  const calculateRealismScore = () => {
+    // 1. Calculate focus hours
+    const highTasks = selectedTasks.filter(t => t.priority === 'high').length;
+    const medTasks = selectedTasks.filter(t => t.priority === 'medium').length;
+    const lowTasks = selectedTasks.filter(t => t.priority === 'low').length;
+    const habitCount = selectedHabits.length;
+
+    const estimatedHours = (highTasks * 2) + (medTasks * 1) + (lowTasks * 0.5) + (habitCount * 0.5);
+
+    let score = 100;
+    const alerts: string[] = [];
+
+    // Specificity Check
+    const activeVerbs = ['build', 'code', 'ship', 'write', 'configure', 'launch', 'test', 'deploy', 'debug', 'install'];
+    const totalTasks = selectedTasks.length;
+    if (totalTasks > 0) {
+      const activeTasksCount = selectedTasks.filter(t => 
+        activeVerbs.some(verb => t.title.toLowerCase().includes(verb))
+      ).length;
+      const pct = (activeTasksCount / totalTasks) * 100;
+      if (pct < 50) {
+        score -= 20;
+        alerts.push("Vague task goals. Use precise action verbs like 'build' or 'code' to ensure success.");
+      }
+    }
+
+    // Recovery Check
+    const wellnessAnchors = ['sleep', 'rest', 'breathe', 'walk', 'gym', 'hydrate', 'meditate'];
+    const hasWellness = selectedHabits.some(h => 
+      wellnessAnchors.some(anchor => h.title.toLowerCase().includes(anchor))
+    );
+    if (selectedHabits.length > 0 && !hasWellness) {
+      score -= 15;
+      alerts.push("Recovery buffer missing. Add a rest or wellness habit to prevent burnout.");
+    }
+
+    // Capacity Penalty
+    if (estimatedHours > 4) {
+      const excess = estimatedHours - 4;
+      score -= Math.round(excess * 15);
+      alerts.push(`You planned ${estimatedHours} hours of work into a 4-hour day. Choose high-leverage tasks or simplify.`);
+    }
+
+    const finalScore = Math.max(0, Math.min(100, score));
+    return {
+      score: finalScore,
+      hours: estimatedHours,
+      alerts: alerts
+    };
+  };
+
   const handleNext = () => {
     onComplete({
       goals: selectedGoals,
       habits: selectedHabits,
       tasks: selectedTasks,
     });
+  };
+
+  const realism = calculateRealismScore();
+
+  const getScoreColorClass = (score: number) => {
+    if (score >= 80) return 'text-emerald-400 border-emerald-950 bg-emerald-950/10 shadow-[0_0_15px_rgba(16,185,129,0.05)]';
+    if (score >= 60) return 'text-amber-400 border-amber-950 bg-amber-950/10 shadow-[0_0_15px_rgba(245,158,11,0.05)]';
+    return 'text-rose-400 border-rose-950 bg-rose-950/15 shadow-[0_0_15px_rgba(244,63,94,0.1)]';
+  };
+
+  const getProgressColor = (score: number) => {
+    if (score >= 80) return 'bg-emerald-500 shadow-[0_0_8px_#10b981]';
+    if (score >= 60) return 'bg-amber-500 shadow-[0_0_8px_#f59e0b]';
+    return 'bg-rose-500 shadow-[0_0_8px_#f43f5e]';
   };
 
   return (
@@ -196,6 +261,50 @@ export function QuickStartPlannerStep({ parsedData, onComplete }: QuickStartPlan
             </div>
           </div>
         )}
+      </div>
+
+      {/* Execution Realism Panel */}
+      <div className={`p-5 rounded-xl border backdrop-blur-md transition-all ${getScoreColorClass(realism.score)}`}>
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <Activity className="w-5 h-5" />
+            <h4 className="font-mono text-xs uppercase tracking-widest font-bold">Execution Realism Score</h4>
+          </div>
+          <span className="font-mono text-lg font-black">{realism.score}%</span>
+        </div>
+
+        {/* Progress bar */}
+        <div className="w-full h-2 rounded-full bg-zinc-900/60 overflow-hidden mb-4 border border-zinc-800">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${realism.score}%` }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className={`h-full ${getProgressColor(realism.score)}`}
+          />
+        </div>
+
+        {/* Diagnostic logs */}
+        <div className="space-y-2 font-mono text-[0.7rem]">
+          {realism.alerts.length > 0 ? (
+            realism.alerts.map((alert, idx) => (
+              <div key={idx} className="flex items-start gap-2 text-zinc-300">
+                <AlertTriangle className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
+                <p className="leading-normal">{alert}</p>
+              </div>
+            ))
+          ) : (
+            <div className="flex items-center gap-2 text-emerald-400">
+              <span className="shrink-0 font-bold">✓</span>
+              <p>Optimum capacity & balanced specificity detected. Execution greenlit.</p>
+            </div>
+          )}
+        </div>
+
+        {/* Focus Hours Summary */}
+        <div className="mt-4 pt-3 border-t border-zinc-800/40 flex items-center justify-between text-[0.7rem] text-zinc-500 font-mono">
+          <span>Planned focus load:</span>
+          <span className="font-semibold text-zinc-300">{realism.hours} Hours</span>
+        </div>
       </div>
 
       {/* Action Button */}

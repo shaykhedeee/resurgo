@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { QuickStartStep2 } from './QuickStartStep2';
 import { QuickStartPlannerStep } from './QuickStartPlannerStep';
 import { QuickStartFormAndAnalysisStep } from './QuickStartFormAndAnalysisStep';
@@ -28,6 +29,32 @@ export interface QuickStartFlowState {
 }
 
 export function QuickStartFlow() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center p-8">
+        <div className="text-zinc-500 font-mono text-xs tracking-widest animate-pulse">LOADING_SYSTEM_RESOURCES...</div>
+      </div>
+    }>
+      <QuickStartFlowInner />
+    </Suspense>
+  );
+}
+
+function QuickStartFlowInner() {
+  const searchParams = useSearchParams();
+  const archetypeParam = searchParams.get('archetype');
+
+  let initialArchetype: Archetype | undefined = undefined;
+  if (
+    archetypeParam === 'adhd' ||
+    archetypeParam === 'ambitious' ||
+    archetypeParam === 'student' ||
+    archetypeParam === 'athlete' ||
+    archetypeParam === 'other'
+  ) {
+    initialArchetype = archetypeParam;
+  }
+
   const [state, setState] = useState<QuickStartFlowState>({
     step: 1,
     brainDump: '',
@@ -64,6 +91,7 @@ export function QuickStartFlow() {
       <div className="w-full max-w-3xl">
         {state.step === 1 && (
           <QuickStartStep2
+            archetype={initialArchetype}
             onComplete={handleStep1Complete}
           />
         )}
@@ -85,3 +113,4 @@ export function QuickStartFlow() {
     </div>
   );
 }
+

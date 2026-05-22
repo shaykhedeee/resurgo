@@ -97,6 +97,28 @@ export function QuickStartStep2({ archetype, onComplete }: QuickStartStep2Props)
 
   const isReady = brainDump.trim().length > 0 && !isProcessing;
 
+  let headerTitle = "What are you trying to ship or change in the next 30 days?";
+  let headerDesc = "Tell me about your product, project, or personal sprint. Messy is fine—just dump what needs to get done.";
+  let textareaPlaceholder = "e.g., I'm shipping my landing page and setting up my product analytics while tracking daily fitness and sleep...";
+
+  if (archetype === 'adhd') {
+    headerTitle = "What are you trying to ship or change in the next 30 days?";
+    headerDesc = "Got ADHD? Let's bypass the layout freeze. Dump your thoughts, shipping targets, frustrations, or half-finished ideas below—no order or organization needed.";
+    textareaPlaceholder = "e.g., I want to ship my coding project and hit 3 hours of focused build time, but executive dysfunction/inertia keeps kicking in and I lose track after a couple of days...";
+  } else if (archetype === 'ambitious') {
+    headerTitle = "What are you trying to ship or change in the next 30 days?";
+    headerDesc = "Let's align your execution sprint. Tell me about your MVP targets, database setups, Stripe integrations, or user acquisition goals to build a high-velocity 30-day roadmap.";
+    textareaPlaceholder = "e.g., I need to launch my SaaS MVP, integrate Stripe checkout, configure the database schemas, and acquire my first 10 beta users...";
+  } else if (archetype === 'student') {
+    headerTitle = "What are you trying to ship or change in the next 30 days?";
+    headerDesc = "Balancing classes, exams, habits, and life? Dump your study goals, assignment deadlines, and personal habits below to build a balanced daily schedule.";
+    textareaPlaceholder = "e.g., Preparing for midterms next week, need to study 3 hours a day, want to go to the gym 3x/week, and stop procrastinating on my history essay...";
+  } else if (archetype === 'athlete') {
+    headerTitle = "What are you trying to ship or change in the next 30 days?";
+    headerDesc = "Aiming for peak physical and mental consistency? Dump your training objectives, recovery goals, habits, and struggles below to construct your protocol.";
+    textareaPlaceholder = "e.g., Training for a half marathon, need to run 4x/week, track protein intake, hit 8 hours of sleep, but struggling to balance early morning runs with work...";
+  }
+
   return (
     <div className="w-full max-w-2xl mx-auto">
       <AnimatePresence mode="wait">
@@ -110,9 +132,9 @@ export function QuickStartStep2({ archetype, onComplete }: QuickStartStep2Props)
         >
           {/* Header */}
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-white">Brain Dump</h2>
+            <h2 className="text-2xl font-bold text-white">{headerTitle}</h2>
             <p className="text-sm text-zinc-400">
-              What's on your mind? Messy is fine. I'll sort it.
+              {headerDesc}
             </p>
           </div>
 
@@ -122,7 +144,7 @@ export function QuickStartStep2({ archetype, onComplete }: QuickStartStep2Props)
               value={brainDump}
               onChange={(e) => setBrainDump(e.target.value)}
               disabled={isProcessing}
-              placeholder="Ideas, blockers, goals, anything... just dump it all here and I'll help you organize it"
+              placeholder={textareaPlaceholder}
               className="w-full h-48 p-4 rounded-lg bg-zinc-900 border border-zinc-700 text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 resize-none disabled:opacity-50 transition-all"
             />
             <div className="mt-2 text-xs text-zinc-500">
