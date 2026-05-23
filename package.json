@@ -26,7 +26,9 @@
     "ios:open": "npx cap open ios",
     "ios:build": "node scripts/build-ios.js appstore",
     "ios:build:adhoc": "node scripts/build-ios.js adhoc",
-    "ios:build:enterprise": "node scripts/build-ios.js enterprise"
+    "ios:build:enterprise": "node scripts/build-ios.js enterprise",
+    "desktop:dev": "npx @tauri-apps/cli dev",
+    "desktop:build": "npx @tauri-apps/cli build"
   },
   "dependencies": {
     "@capacitor/android": "^8.1.0",
