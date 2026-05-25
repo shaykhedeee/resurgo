@@ -34,6 +34,7 @@ const MobileDashboard = dynamic(() => import('@/components/MobileDashboard'), { 
 const QuickAddPalette = dynamic(() => import('@/components/QuickAddPalette'), { ssr: false });
 const Tutorial = dynamic(() => import('@/components/Tutorial').then(m => ({ default: m.Tutorial })), { ssr: false });
 const DailySynergyWidget = dynamic(() => import('@/components/dashboard/DailySynergyWidget').then(m => ({ default: m.DailySynergyWidget })), { ssr: false });
+import { TerminalCockpit } from '@/components/dashboard/TerminalCockpit';
 import {
   Target,
   CheckCircle2,
@@ -119,6 +120,37 @@ class WidgetErrorBoundary extends Component<
 
 function SafeWidget({ name, children }: { name: string; children: ReactNode }) {
   return <WidgetErrorBoundary name={name}>{children}</WidgetErrorBoundary>;
+}
+
+function TelemetryTickerHUD({ lines }: { lines: string[] }) {
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    if (lines.length === 0) return;
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % lines.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [lines]);
+
+  if (lines.length === 0) return null;
+
+  return (
+    <div className="border-2 border-zinc-800 bg-zinc-950 p-2.5 rounded-[2px] font-mono shadow-[2px_2px_0px_rgba(0,0,0,0.85)] flex items-center justify-between gap-3 overflow-hidden text-[10px] tracking-wider text-emerald-400 bg-black/40">
+      <div className="flex items-center gap-2 flex-1 min-w-0">
+        <span className="h-1.5 w-1.5 bg-emerald-500 rounded-full animate-ping shrink-0" />
+        <span className="font-pixel text-[8px] tracking-widest text-emerald-500 shrink-0 uppercase">[TELEMETRY]</span>
+        <span className="text-zinc-500 shrink-0">::</span>
+        <p className="truncate text-zinc-100 uppercase animate-in fade-in slide-in-from-top-1 duration-500 font-bold tracking-widest">
+          {lines[index]}
+        </p>
+      </div>
+      <div className="flex items-center gap-1.5 shrink-0 text-zinc-500 font-pixel text-[7px] select-none">
+        <span>SYS_OK</span>
+        <span className="h-1 w-1 bg-emerald-500 rounded-full" />
+      </div>
+    </div>
+  );
 }
 
 export default function DashboardPage() {
@@ -219,6 +251,49 @@ export default function DashboardPage() {
   const isMorning = hour < 12;
   const isAfternoonNudge = hour >= 17 && hour < 20; // 5-8pm "don't break the chain"
 
+  // Real-time scrolling telemetry ticker HUD dataset
+  const tickerLines = useMemo(() => {
+    const lines: string[] = [
+      `SYNAPSE CORE COHESION: ONLINE // PORT 4040 SECURE`,
+    ];
+
+    if (user) {
+      const uLvl = gamificationProfile?.level ?? 1;
+      const uLvlName = gamificationProfile?.levelName ?? 'Seedling';
+      const uXp = gamificationProfile?.totalXP ?? 0;
+      const uStreak = gamificationProfile?.currentStreak ?? 0;
+      lines.push(`USER IDENT_TAG: ${(user.name || 'USER').toUpperCase()} // LEVEL ${uLvl} [${uLvlName.toUpperCase()}]`);
+      lines.push(`CURRENT XP COMPOUNDED: ${uXp} XP // ACTIVE STREAK: ${uStreak} DAYS`);
+    }
+
+    if (todayCheckIn) {
+      if (todayCheckIn.morningMood !== undefined) {
+        lines.push(`MORNING EMOTIONAL TELEMETRY LOGGED: MOOD ${todayCheckIn.morningMood}/5 // ENERGY ${todayCheckIn.morningEnergy || 0}/5`);
+      }
+      if (todayCheckIn.sleepQuality !== undefined) {
+        lines.push(`SOMATIC REST ANALYSIS: SLEEP QUALITY ${todayCheckIn.sleepQuality}/5 // DURATION ${todayCheckIn.sleepQuality || 0} HOURS`);
+      }
+    } else {
+      lines.push(`▲ SYSTEM WARNING: MORNING CHECK-IN INCOMPLETE // DEVIATION RISK LEVEL: MEDIUM`);
+    }
+
+    if (tasks) {
+      lines.push(`ACTIVE TASK QUEUE STATUS: ${tasks.length} OPERATIONS PENDING IN BACKLOG`);
+    }
+
+    if (habits && habits.length > 0) {
+      const activeStreakHabit = habits.reduce((best: any, h: any) => ((h.streakCurrent || 0) > ((best as any)?.streakCurrent || 0) ? h : best), habits[0]);
+      if (activeStreakHabit && (activeStreakHabit.streakCurrent || 0) > 0) {
+        lines.push(`COMPOSITE MOMENTUM STABILITY: "${activeStreakHabit.title.toUpperCase()}" SUSTAINED FOR ${activeStreakHabit.streakCurrent} DAYS`);
+      }
+    }
+
+    lines.push(`SYSTEM KERNEL v3.4 // EMPATHY PROTOCOLS ENGAGED`);
+    lines.push(`COGNITIVE DECOMPOSITION ENGINE: STANDBY`);
+
+    return lines;
+  }, [user, gamificationProfile, todayCheckIn, tasks, habits]);
+
   // Check-in status
   const morningDone = !!todayCheckIn?.morningCompletedAt || checkInJustCompleted;
   const eveningDone = !!todayCheckIn?.eveningCompletedAt || debriefJustCompleted;
@@ -253,6 +328,14 @@ export default function DashboardPage() {
       console.warn('[Dashboard] Tutorial storage unavailable:', error);
       setShowTutorial(true);
     }
+  }, []);
+
+  useEffect(() => {
+    const handleToggleSimplify = () => {
+      setEmergencyMode(prev => !prev);
+    };
+    window.addEventListener('resurgo-toggle-simplify', handleToggleSimplify);
+    return () => window.removeEventListener('resurgo-toggle-simplify', handleToggleSimplify);
   }, []);
 
   // Fire streak milestone analytics once per session per milestone threshold
@@ -506,6 +589,20 @@ export default function DashboardPage() {
         </div>
 
 
+        </div>
+
+        {/* -- DYNAMIC TELEMETRY HUD -- */}
+        <div className="mb-4">
+          <SafeWidget name="Telemetry Ticker HUD">
+            <TelemetryTickerHUD lines={tickerLines} />
+          </SafeWidget>
+        </div>
+
+        {/* -- TERMINAL COMMAND COCKPIT -- */}
+        <div className="mb-6">
+          <SafeWidget name="Terminal Command Cockpit">
+            <TerminalCockpit />
+          </SafeWidget>
         </div>
 
         {/* -- DAILY SYNERGY WIDGET (SYNAPSE CORE) -- */}

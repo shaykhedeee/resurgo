@@ -945,6 +945,7 @@ export const getUserContext = internalQuery({
     sleepDebtWarning: v.boolean(),
     budgetOverrunWarning: v.boolean(),
     persistentMemories: v.string(),
+    dailyTaskCap: v.optional(v.number()),
   }),
   handler: async (ctx, args) => {
     const empty = {
@@ -969,6 +970,7 @@ export const getUserContext = internalQuery({
       sleepDebtWarning: false,
       budgetOverrunWarning: false,
       persistentMemories: 'None recorded',
+      dailyTaskCap: 5,
     };
 
     let user;
@@ -1217,6 +1219,7 @@ export const getUserContext = internalQuery({
       sleepDebtWarning,
       budgetOverrunWarning,
       persistentMemories,
+      dailyTaskCap: user.dailyTaskCap,
     };
   },
 });
@@ -1251,122 +1254,127 @@ export const getDailySynergyDetails = query({
       .unique();
     if (!user) return empty;
 
-    // Active habits
-    const habits = await ctx.db
-      .query('habits')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .collect();
-    const activeHabits = habits.filter((h) => h.isActive);
+    try {
+      // Active habits
+      const habits = await ctx.db
+        .query('habits')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const activeHabits = habits.filter((h) => h.isActive);
 
-    // Tasks (today)
-    const today = new Date().toISOString().split('T')[0];
-    const tasks = await ctx.db
-      .query('tasks')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .collect();
-    const todayTasks = tasks.filter((t) => (t.status === 'todo' || t.status === 'done') && (t.scheduledDate === today || t.dueDate === today));
+      // Tasks (today)
+      const today = new Date().toISOString().split('T')[0];
+      const tasks = await ctx.db
+        .query('tasks')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const todayTasks = tasks.filter((t) => (t.status === 'todo' || t.status === 'done') && (t.scheduledDate === today || t.dueDate === today));
 
-    const checkIn = await ctx.db
-      .query('dailyCheckIns')
-      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
-      .unique();
+      const checkIn = await ctx.db
+        .query('dailyCheckIns')
+        .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+        .unique();
 
-    // Fetch today's nutrition
-    const nutritionToday = await ctx.db
-      .query('nutritionLogs')
-      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
-      .unique();
+      // Fetch today's nutrition
+      const nutritionToday = await ctx.db
+        .query('nutritionLogs')
+        .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+        .unique();
 
-    // Fetch latest sleep log
-    const sleepLogs = await ctx.db
-      .query('sleepLogs')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .order('desc')
-      .take(1);
-    const lastSleep = sleepLogs[0];
+      // Fetch latest sleep log
+      const sleepLogs = await ctx.db
+        .query('sleepLogs')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .order('desc')
+        .take(1);
+      const lastSleep = sleepLogs[0];
 
-    // Fetch latest mood entry
-    const moodEntries = await ctx.db
-      .query('moodEntries')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .order('desc')
-      .take(1);
-    const lastMood = moodEntries[0];
+      // Fetch latest mood entry
+      const moodEntries = await ctx.db
+        .query('moodEntries')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .order('desc')
+        .take(1);
+      const lastMood = moodEntries[0];
 
-    // Synergy calculations
-    const habitLogsToday = await ctx.db
-      .query('habitLogs')
-      .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
-      .collect();
-    const completedHabitsCount = habitLogsToday.filter((hl) => hl.status === 'completed').length;
-    const activeHabitsCount = activeHabits.length;
-    const habitSubscore = activeHabitsCount > 0
-      ? Math.min(100, Math.round((completedHabitsCount / activeHabitsCount) * 100))
-      : 100;
+      // Synergy calculations
+      const habitLogsToday = await ctx.db
+        .query('habitLogs')
+        .withIndex('by_userId_date', (q) => q.eq('userId', user._id).eq('date', today))
+        .collect();
+      const completedHabitsCount = habitLogsToday.filter((hl) => hl.status === 'completed').length;
+      const activeHabitsCount = activeHabits.length;
+      const habitSubscore = activeHabitsCount > 0
+        ? Math.min(100, Math.round((completedHabitsCount / activeHabitsCount) * 100))
+        : 100;
 
-    const sleepRating = lastSleep?.quality ?? checkIn?.sleepQuality ?? 3;
-    const normalizedSleep = sleepRating * 20;
-    const normalizedMood = checkIn?.morningMood ? checkIn.morningMood * 20 : (lastMood?.score ? lastMood.score * 10 : 60);
-    const waterScore = Math.min(100, Math.round(((nutritionToday?.waterMl ?? 0) / 2000) * 100));
-    const wellnessSubscore = Math.round((normalizedSleep * 0.4) + (normalizedMood * 0.4) + (waterScore * 0.2));
+      const sleepRating = lastSleep?.quality ?? checkIn?.sleepQuality ?? 3;
+      const normalizedSleep = sleepRating * 20;
+      const normalizedMood = checkIn?.morningMood ? checkIn.morningMood * 20 : (lastMood?.score ? lastMood.score * 10 : 60);
+      const waterScore = Math.min(100, Math.round(((nutritionToday?.waterMl ?? 0) / 2000) * 100));
+      const wellnessSubscore = Math.round((normalizedSleep * 0.4) + (normalizedMood * 0.4) + (waterScore * 0.2));
 
-    const completedTodayTasks = todayTasks.filter(t => t.status === 'done').length;
-    const taskSubscore = todayTasks.length > 0
-      ? Math.round((completedTodayTasks / todayTasks.length) * 100)
-      : 100;
+      const completedTodayTasks = todayTasks.filter(t => t.status === 'done').length;
+      const taskSubscore = todayTasks.length > 0
+        ? Math.round((completedTodayTasks / todayTasks.length) * 100)
+        : 100;
 
-    const startOfMonth = today.substring(0, 7) + '-01';
-    const userTransactions = await ctx.db
-      .query('transactions')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .collect();
-    const thisMonthTransactions = userTransactions.filter((t) => t.date >= startOfMonth && t.date <= today);
-    const thisMonthExpenses = thisMonthTransactions
-      .filter((t) => t.type === 'expense')
-      .reduce((sum, t) => sum + t.amount, 0);
+      const startOfMonth = today.substring(0, 7) + '-01';
+      const userTransactions = await ctx.db
+        .query('transactions')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const thisMonthTransactions = userTransactions.filter((t) => t.date >= startOfMonth && t.date <= today);
+      const thisMonthExpenses = thisMonthTransactions
+        .filter((t) => t.type === 'expense')
+        .reduce((sum, t) => sum + t.amount, 0);
 
-    const categories = await ctx.db
-      .query('budgetCategories')
-      .withIndex('by_userId', (q) => q.eq('userId', user._id))
-      .collect();
-    const totalMonthlyBudget = categories.reduce((sum, c) => sum + c.monthlyBudget, 0);
+      const categories = await ctx.db
+        .query('budgetCategories')
+        .withIndex('by_userId', (q) => q.eq('userId', user._id))
+        .collect();
+      const totalMonthlyBudget = categories.reduce((sum, c) => sum + c.monthlyBudget, 0);
 
-    let budgetSubscore = 100;
-    if (totalMonthlyBudget > 0) {
-      const budgetExceededRatio = thisMonthExpenses / totalMonthlyBudget;
-      if (budgetExceededRatio > 1.0) {
-        budgetSubscore = Math.max(0, 100 - Math.round((budgetExceededRatio - 1.0) * 100));
+      let budgetSubscore = 100;
+      if (totalMonthlyBudget > 0) {
+        const budgetExceededRatio = thisMonthExpenses / totalMonthlyBudget;
+        if (budgetExceededRatio > 1.0) {
+          budgetSubscore = Math.max(0, 100 - Math.round((budgetExceededRatio - 1.0) * 100));
+        }
       }
+
+      const dailySynergyScore = Math.round(
+        (wellnessSubscore * 0.3) +
+        (taskSubscore * 0.3) +
+        (habitSubscore * 0.25) +
+        (budgetSubscore * 0.15)
+      );
+
+      const lastSleepDurationHours = lastSleep?.durationMinutes ? lastSleep.durationMinutes / 60 : undefined;
+      const sleepDebtWarning = lastSleepDurationHours !== undefined && lastSleepDurationHours < 6.0;
+      const budgetOverrunWarning = totalMonthlyBudget > 0 && thisMonthExpenses > totalMonthlyBudget;
+
+      return {
+        dailySynergyScore,
+        wellnessSubscore,
+        taskSubscore,
+        habitSubscore,
+        budgetSubscore,
+        sleepDebtWarning,
+        budgetOverrunWarning,
+        completedTasks: completedTodayTasks,
+        totalTasks: todayTasks.length,
+        completedHabits: completedHabitsCount,
+        totalHabits: activeHabitsCount,
+        thisMonthExpenses,
+        totalMonthlyBudget,
+        lastSleepHours: lastSleepDurationHours ?? 0,
+        waterMl: nutritionToday?.waterMl ?? 0,
+      };
+    } catch (error) {
+      console.error('Error in getDailySynergyDetails:', error);
+      return empty;
     }
-
-    const dailySynergyScore = Math.round(
-      (wellnessSubscore * 0.3) +
-      (taskSubscore * 0.3) +
-      (habitSubscore * 0.25) +
-      (budgetSubscore * 0.15)
-    );
-
-    const lastSleepDurationHours = lastSleep?.durationMinutes ? lastSleep.durationMinutes / 60 : undefined;
-    const sleepDebtWarning = lastSleepDurationHours !== undefined && lastSleepDurationHours < 6.0;
-    const budgetOverrunWarning = totalMonthlyBudget > 0 && thisMonthExpenses > totalMonthlyBudget;
-
-    return {
-      dailySynergyScore,
-      wellnessSubscore,
-      taskSubscore,
-      habitSubscore,
-      budgetSubscore,
-      sleepDebtWarning,
-      budgetOverrunWarning,
-      completedTasks: completedTodayTasks,
-      totalTasks: todayTasks.length,
-      completedHabits: completedHabitsCount,
-      totalHabits: activeHabitsCount,
-      thisMonthExpenses,
-      totalMonthlyBudget,
-      lastSleepHours: lastSleepDurationHours ?? 0,
-      waterMl: nutritionToday?.waterMl ?? 0,
-    };
   }
 });
 
@@ -1444,13 +1452,41 @@ export const executeCoachActions = internalMutation({
               break;
             }
 
+            // Sanitize frequency and time of day to match strict database schema validators
+            const allowedFrequencies = ['daily', 'weekdays', 'weekends', '3x_week', 'weekly', 'custom'];
+            let habitFrequency = data.frequency || 'daily';
+            if (!allowedFrequencies.includes(habitFrequency)) {
+              const lowerFreq = habitFrequency.toLowerCase();
+              if (lowerFreq.includes('month') || lowerFreq.includes('biweekly')) {
+                habitFrequency = 'weekly';
+              } else if (lowerFreq.includes('day') || lowerFreq.includes('daily')) {
+                habitFrequency = 'daily';
+              } else if (lowerFreq.includes('weekend')) {
+                habitFrequency = 'weekends';
+              } else if (lowerFreq.includes('weekday')) {
+                habitFrequency = 'weekdays';
+              } else {
+                habitFrequency = 'daily';
+              }
+            }
+
+            const allowedTimes = ['morning', 'afternoon', 'evening', 'anytime'];
+            let habitTime = data.timeOfDay || 'anytime';
+            if (!allowedTimes.includes(habitTime)) {
+              const lowerTime = habitTime.toLowerCase();
+              if (lowerTime.includes('morn')) habitTime = 'morning';
+              else if (lowerTime.includes('after') || lowerTime.includes('noon')) habitTime = 'afternoon';
+              else if (lowerTime.includes('eve') || lowerTime.includes('night')) habitTime = 'evening';
+              else habitTime = 'anytime';
+            }
+
             await ctx.db.insert('habits', {
               userId: user._id,
               title: data.title,
               description: data.description || undefined,
               category: data.category || 'productivity',
-              frequency: data.frequency || 'daily',
-              timeOfDay: data.timeOfDay || 'morning',
+              frequency: habitFrequency,
+              timeOfDay: habitTime,
               estimatedMinutes: data.estimatedMinutes || 15,
               habitType: 'yes_no',
               isActive: true,
@@ -2057,6 +2093,11 @@ export const sendWithPersona = action({
       if (estimatedHours > 4) {
         synergyAlerts += `\n[OVERLOAD WARNING: User has planned an unrealistic day with ${estimatedHours} hours of focus workload (budget: 4 hours). You must warn them immediately in your first paragraph with: "you planned ${estimatedHours} hours of work into a 4-hour day" or a direct variation. Tell them that this is overloaded and unrealistic for deep work, and recommend they simplify or defer.]`;
       }
+      const totalTasksToday = highTasks + mediumTasks + lowTasks;
+      const dailyCap = userCtx.dailyTaskCap ?? 5;
+      if (totalTasksToday > dailyCap) {
+        synergyAlerts += `\n[TASK OVERLOAD WARNING: User has planned ${totalTasksToday} tasks today, which exceeds their configured daily task capacity cap of ${dailyCap}. You must warn them in your response: "you planned ${totalTasksToday} tasks today, which exceeds your configured daily cap of ${dailyCap}" or a direct variation. Coach them on reducing task dilution and focus drift, and recommend selecting the top 3 high-impact tasks and rescheduling the rest to keep focus razor-sharp.]`;
+      }
 
       contextBlock = `
 CURRENT USER CONTEXT (use this to personalize — reference specific data points!):
@@ -2169,6 +2210,7 @@ PERSONALIZATION DIRECTIVES:
 3. ACTION-BASED RESOLUTION: Proactively recommend moving non-urgent or lower priority tasks to future days to resolve overload. Utilize the action block:
    [ACTION:UPDATE_TASK] {"titleMatch":"partial task name","dueDate":"YYYY-MM-DD"}
    to automatically schedule a task to a future date. Be precise, short, and operational.
+4. NO ACTION BLOCKS FOR GREETINGS/SMALL TALK: If the user is just saying hello, greeting you, or engaging in simple friendly small talk/pleasantries (e.g., "hi", "hello", "hey there", "good morning", "how are you?", etc.), you MUST NOT output any action blocks (such as [ACTION:CREATE_TASK], [ACTION:CREATE_HABIT], or [ACTION:CREATE_GOAL]). Simply respond in character with genuine warmth, friendliness, and deep compassion, and ask how you can support their focus or energy today.
 `;
 
     const fullSystemPrompt = persona.systemPrompt
@@ -2480,6 +2522,7 @@ PERSONALIZATION DIRECTIVES:
 3. ACTION-BASED RESOLUTION: Proactively recommend moving non-urgent or lower priority tasks to future days to resolve overload. Utilize the action block:
    [ACTION:UPDATE_TASK] {"titleMatch":"partial task name","dueDate":"YYYY-MM-DD"}
    to automatically schedule a task to a future date. Be precise, short, and operational.
+4. NO ACTION BLOCKS FOR GREETINGS/SMALL TALK: If the user is just saying hello, greeting you, or engaging in simple friendly small talk/pleasantries (e.g., "hi", "hello", "hey there", "good morning", "how are you?", etc.), you MUST NOT output any action blocks (such as [ACTION:CREATE_TASK], [ACTION:CREATE_HABIT], or [ACTION:CREATE_GOAL]). Simply respond in character with genuine warmth, friendliness, and deep compassion, and ask how you can support their focus or energy today.
 `;
 
     const fullSystemPrompt = persona.systemPrompt

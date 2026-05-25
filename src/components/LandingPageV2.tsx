@@ -61,10 +61,10 @@ const CORE_BENEFITS = [
   },
   {
     id: 'ONE_SYSTEM',
-    title: 'One system to ship weekly',
+    title: 'One system for daily clarity',
     description:
-      'Goals, execution tasks, focus sessions, and weekly reviews stay connected. Stop splitting your founder system across five apps and losing momentum in tool-switching.',
-    outcome: 'More shipped output with less planning overhead',
+      'Goals, execution tasks, focus sessions, and weekly reviews stay connected. Stop splitting your personal command system across five apps and losing momentum in tool-switching.',
+    outcome: 'More high-leverage execution with less mental overhead',
     icon: 'dashboard' as PixelIconName,
     terminalCmd: '> dash --overview --habits --goals --wellness',
   },
@@ -73,7 +73,7 @@ const CORE_BENEFITS = [
 // ─── METRICS ────────────────────────────────────────────────────────────────
 const METRICS = [
   { value: '<10 min', label: 'to first meaningful plan' },
-  { value: '1', label: 'weekly founder focus system' },
+  { value: '1', label: 'unified life command cockpit' },
   { value: '100%', label: 'free to start' },
   { value: '5', label: 'AI coaches available' },
 ];
@@ -126,45 +126,45 @@ const HEALTH_FEATURES = [
 const TESTIMONIALS = [
   {
     name: 'M. Chen',
-    role: 'SaaS Founder',
+    role: 'Life Optimizer',
     quote:
-      'I stopped juggling complex Notion templates and Jira. Resurgo gave me a hyper-focused workflow. Set up Stripe, deployed the MVP, and got our first 50 beta users in 3 weeks.',
-    outcome: 'Stripe live & 50 users in 3 wks',
+      'I stopped juggling five different wellness and task apps. Resurgo gave me a single, hyper-focused cockpit. Cleared my brain fog, optimized my sleep, and finally hit my goals consistently.',
+    outcome: 'Goal aligned & consistent habits',
   },
   {
     name: 'J. Park',
-    role: 'Solo Developer',
+    role: 'High Performer',
     quote:
-      'As a solo builder, focus is my biggest bottleneck. Marcus, the Stoic coach, keeps calling me out whenever I try to add unnecessary features. Shipped in public and didn\'t lose my mind.',
-    outcome: 'MVP shipped without feature creep',
+      'As a creator, focus is my bottleneck. Marcus, the Stoic coach, keeps calling me out whenever I try to over-schedule my day. I have stayed consistent with my habits and sleep without losing my mind.',
+    outcome: 'Balanced habits without burnout',
   },
   {
     name: 'A. Thompson',
-    role: 'Indie Hacker',
+    role: 'Stoic Practitioner',
     quote:
-      'I spent years in planning theater, never releasing. Resurgo forced me to focus on one single leverage action every day. Just launched our first micro-SaaS on Product Hunt.',
-    outcome: 'First micro-SaaS launched',
+      'I spent years in planning paralysis, downloading templates and never executing. Resurgo forced me to focus on one single leverage action every day. Transformed my mornings and my work.',
+    outcome: '95% habit execution rate',
   },
   {
     name: 'S. Rodriguez',
     role: 'Full-Stack Creator',
     quote:
-      'The focus timer paired with the execution realism gauge is perfect. It warned me when I was over-planning and helped me scope down our beta. Shipped two side projects in 60 days.',
-    outcome: '2 side projects shipped',
+      'The focus timer paired with the execution realism gauge is perfect. It warns me when I am planning 9 hours of work in a 4-hour day and helps me stay realistic. Shipped three projects and slept 8 hours.',
+    outcome: 'Optimized energy & work logs',
   },
   {
     name: 'K. Nakamura',
-    role: 'MVP Builder',
+    role: 'Productivity Architect',
     quote:
-      'The daily brain dump feature is therapeutic. I dump my chaotic feature checklist, and Resurgo translates it into an actionable 90-second roadmap. No more staring at a blank screen.',
-    outcome: 'Messy checklist → clear roadmap',
+      'The daily brain dump feature is therapeutic. I dump my chaotic thoughts and chores, and Resurgo translates it into an actionable 90-second roadmap. No more executive dysfunction.',
+    outcome: 'Chaotic thoughts → clear roadmap',
   },
   {
     name: 'L. Okafor',
-    role: 'Bootstrapped Founder',
+    role: 'Creative Professional',
     quote:
-      'I use the Telegram bot to log my build progress directly from my terminal. The weekly AI review compiles my changelog and helps me stay realistic about my focus hours.',
-    outcome: '100% realistic build schedule',
+      'I use the Telegram integration to log my daily hydration and progress on the fly. The weekly AI review compiles my analytics and helps me stay realistic about my recovery buffers.',
+    outcome: '100% realistic recovery schedule',
   },
 ];
 
@@ -459,23 +459,23 @@ function LandingPageV2() {
   const heroContent =
     heroVariant === 'clarity'
       ? {
-          headingMain: 'One focused MVP sprint.',
-          headingAccent: 'Zero planning theater.',
+          headingMain: 'One focused, quiet day.',
+          headingAccent: 'Zero distraction theater.',
           subcopy:
-            'Stop over-engineering your tools and start shipping. Resurgo turns your messy ideas, features, and launch checklists into a clean, 90-second execution plan for your SaaS MVP.',
+            'Stop over-complicating your life with complex tools and databases. Resurgo turns your messy thoughts, habits, and daily goals into a clean, 90-second execution plan for your mind, body, and work.',
         }
       : heroVariant === 'adhd'
         ? {
-            headingMain: 'Feature creep killing your MVP?',
-            headingAccent: 'Build less. Ship today.',
+            headingMain: 'Daily overwhelm killing your focus?',
+            headingAccent: 'Do less. Execute today.',
             subcopy:
-              'Designed for solo builders who struggle with focus. Dump your brain, filter the noise, and get one single, high-leverage move for today. Zero guilt, total execution.',
+              'Designed for high-performers who struggle with mental clutter and inertia. Dump your chaotic thoughts, filter the noise, and unlock one single, high-leverage action block for today. Zero guilt, total clarity.',
           }
         : {
-            headingMain: 'The Execution System for',
-            headingAccent: 'Indie Founders & Solo Builders.',
+            headingMain: 'The Command Center for',
+            headingAccent: 'Holistic High-Performance Life.',
             subcopy:
-              'Ditch the complex database templates and multi-app setups. Drop your MVP goal or feature checklist, get a highly realistic daily action plan in 90 seconds, and ship your product with Stoic accountability.',
+              'Ditch the disconnected tracking templates and multi-app chaos. Align your goals, habits, daily tasks, fitness logs, and recovery routines in 90 seconds, and run your life with Stoic clarity and deep consistency.',
           };
 
   // Rotate testimonials
@@ -491,7 +491,15 @@ function LandingPageV2() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-black text-zinc-100 selection:bg-orange-600/40 selection:text-white">
+    <div className="relative min-h-screen bg-black text-zinc-100 selection:bg-orange-600/40 selection:text-white">
+      {/* Holographic background grid */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(rgba(234,88,12,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(234,88,12,0.5) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+      }} />
+      {/* Radial glow */}
+      <div className="pointer-events-none fixed left-1/2 top-0 z-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-orange-500/5 blur-3xl" />
+
       {/* JSON-LD Structured Data for SEO */}
       <script
         type="application/ld+json"

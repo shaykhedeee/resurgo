@@ -18,7 +18,39 @@ import {
   sortableKeyboardCoordinates,
   rectSortingStrategy,
 } from '@dnd-kit/sortable';
-import { useCallback } from 'react';
+import React, { useCallback, Component, type ReactNode } from 'react';
+
+class WidgetErrorBoundary extends Component<
+  { name: string; children: ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { name: string; children: ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: Error) {
+    console.error(`[DashboardWidget:${this.props.name}]`, error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="border border-red-950 bg-red-950/20 p-4 rounded font-mono">
+          <p className="text-[0.45rem] font-pixel tracking-widest text-red-400">WIDGET_CRASH</p>
+          <p className="mt-1.5 text-xs text-zinc-300">
+            {this.props.name} failed to load.
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 import DraggableWidget from './DraggableWidget';
 import type { LayoutEntry } from '@/lib/dashboard/widgetRegistry';
 import type { ReactElement } from 'react';
@@ -116,7 +148,9 @@ export default function WidgetGrid({ layout, editMode, onReorder, onHide }: Widg
             if (!render) return null;
             return (
               <DraggableWidget key={entry.id} id={entry.id} editMode={editMode} onHide={onHide}>
-                {render()}
+                <WidgetErrorBoundary name={entry.id}>
+                  {render()}
+                </WidgetErrorBoundary>
               </DraggableWidget>
             );
           })}

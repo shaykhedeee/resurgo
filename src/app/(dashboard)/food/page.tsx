@@ -10,9 +10,9 @@ import { api } from '../../../../convex/_generated/api';
 import { useState, useEffect, useRef, type FormEvent } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { Droplets, BarChart3, Utensils, Plus, Leaf, Search, ChefHat, X, Loader2 } from 'lucide-react';
+import { Droplets, BarChart3, Utensils, Plus, Leaf, Search, ChefHat, X, Loader2, Sparkles, Calendar, PlusCircle } from 'lucide-react';
 
-type Tab = 'meals' | 'water' | 'calories' | 'summary' | 'recipes';
+type Tab = 'meals' | 'water' | 'calories' | 'summary' | 'recipes' | 'meal-planner';
 
 interface FoodItem {
   id: string;
@@ -71,11 +71,70 @@ const GOAL_PROFILES = {
 } as const;
 type GoalProfile = keyof typeof GOAL_PROFILES;
 const DEFAULT_PROFILE: GoalProfile = 'maintain';
-const DAILY_GOALS = GOAL_PROFILES[DEFAULT_PROFILE];
 const WATER_AMOUNTS = [250, 330, 500, 750];
 
 export default function FoodPage() {
   const [tab, setTab] = useState<Tab>('meals');
+
+  // Load current user profile from Convex
+  const user = useQuery(api.users.current);
+
+  // Compute age from dob
+  const getAge = (dobString?: string) => {
+    if (!dobString) return 28; // default age
+    const birthYear = new Date(dobString).getFullYear();
+    return new Date().getFullYear() - birthYear;
+  };
+
+  const age = getAge(user?.dob);
+  const weight = user?.weight ?? 75; // default 75kg
+  const height = user?.height ?? 175; // default 175cm
+
+  // Calculate Harris-Benedict BMR estimation
+  const calculatedBMR = Math.round(10 * weight + 6.25 * height - 5 * age + 5);
+  // Calculate dynamic hydration baseline: 35ml per kg of bodyweight
+  const calculatedWater = Math.round(weight * 35);
+
+  const dynamicDailyGoals = {
+    calories: calculatedBMR,
+    protein: user?.archetypeDetected === 'athlete' ? 180 : 150,
+    carbs: user?.archetypeDetected === 'athlete' ? 250 : 220,
+    fat: user?.archetypeDetected === 'athlete' ? 80 : 70,
+    water: calculatedWater,
+  };
+
+  // Meal Planner setup form state
+  const [plannerGoal, setPlannerGoal] = useState<'maintain' | 'lose_weight' | 'build_muscle' | 'performance'>('maintain');
+  const [plannerDiet, setPlannerDiet] = useState<'balanced' | 'vegetarian' | 'vegan' | 'keto' | 'high_protein'>('balanced');
+  const [plannerRestrictions, setPlannerRestrictions] = useState<string[]>([]);
+  const [plannerActivity, setPlannerActivity] = useState<'sedentary' | 'light' | 'moderate' | 'active' | 'very_active'>('moderate');
+  const [mealPlan, setMealPlan] = useState<any>(null);
+  const [planLoading, setPlanLoading] = useState(false);
+
+  const generateMealPlan = async () => {
+    setPlanLoading(true);
+    try {
+      const res = await fetch('/api/food/meal-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          goal: plannerGoal,
+          diet: plannerDiet,
+          restrictions: plannerRestrictions,
+          activityLevel: plannerActivity,
+          days: 7,
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMealPlan(data);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setPlanLoading(false);
+    }
+  };
 
   // Meal form state
   const [mealName, setMealName] = useState('');
@@ -147,11 +206,11 @@ export default function FoodPage() {
   const totalFat = todayNutrition?.totalFat ?? 0;
   const waterMlLogged = todayNutrition?.waterMl ?? 0;
 
-  const calPct = Math.min(100, Math.round((totalCalories / DAILY_GOALS.calories) * 100));
-  const proteinPct = Math.min(100, Math.round((totalProtein / DAILY_GOALS.protein) * 100));
-  const carbsPct = Math.min(100, Math.round((totalCarbs / DAILY_GOALS.carbs) * 100));
-  const fatPct = Math.min(100, Math.round((totalFat / DAILY_GOALS.fat) * 100));
-  const waterPct = Math.min(100, Math.round((waterMlLogged / DAILY_GOALS.water) * 100));
+  const calPct = Math.min(100, Math.round((totalCalories / dynamicDailyGoals.calories) * 100));
+  const proteinPct = Math.min(100, Math.round((totalProtein / dynamicDailyGoals.protein) * 100));
+  const carbsPct = Math.min(100, Math.round((totalCarbs / dynamicDailyGoals.carbs) * 100));
+  const fatPct = Math.min(100, Math.round((totalFat / dynamicDailyGoals.fat) * 100));
+  const waterPct = Math.min(100, Math.round((waterMlLogged / dynamicDailyGoals.water) * 100));
 
   const handleMealSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -222,6 +281,7 @@ export default function FoodPage() {
     { id: 'calories', label: 'MACROS',  icon: BarChart3  },
     { id: 'summary',  label: 'SUMMARY', icon: Leaf       },
     { id: 'recipes',  label: 'RECIPES', icon: ChefHat    },
+    { id: 'meal-planner', label: 'AI PLANNER', icon: Sparkles },
   ];
 
   const MacroBar = ({ label, value, goal, pct, color }: { label: string; value: number; goal: number; pct: number; color: string }) => (
@@ -436,9 +496,9 @@ export default function FoodPage() {
                     <p className="mt-1 font-mono text-lg font-bold text-cyan-400">{waterPct}%</p>
                   </div>
                 </div>
-                <p className="font-mono text-sm text-zinc-300">{waterMlLogged} ml / {DAILY_GOALS.water} ml</p>
+                <p className="font-mono text-sm text-zinc-300">{waterMlLogged} ml / {dynamicDailyGoals.water} ml</p>
                 <p className="font-mono text-xs text-zinc-500">
-                  {waterMlLogged >= DAILY_GOALS.water ? 'GOAL_ACHIEVED ✓' : `${DAILY_GOALS.water - waterMlLogged} ml remaining`}
+                  {waterMlLogged >= dynamicDailyGoals.water ? 'GOAL_ACHIEVED ✓' : `${dynamicDailyGoals.water - waterMlLogged} ml remaining`}
                 </p>
               </div>
             </div>
@@ -503,7 +563,7 @@ export default function FoodPage() {
                     <p className="font-mono text-xs text-zinc-500">kcal consumed</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-mono text-xl font-bold text-zinc-300">{Math.max(0, DAILY_GOALS.calories - totalCalories)}</p>
+                    <p className="font-mono text-xl font-bold text-zinc-300">{Math.max(0, dynamicDailyGoals.calories - totalCalories)}</p>
                     <p className="font-mono text-xs text-zinc-500">kcal remaining</p>
                   </div>
                 </div>
@@ -511,7 +571,7 @@ export default function FoodPage() {
                   <div className={cn('h-full transition-all', calPct >= 100 ? 'bg-red-500' : calPct >= 80 ? 'bg-orange-500' : 'bg-amber-400')}
                     style={{ width: `${Math.min(100, calPct)}%` }} />
                 </div>
-                <p className="mt-1 font-mono text-xs text-zinc-500">Goal: {DAILY_GOALS.calories} kcal/day</p>
+                <p className="mt-1 font-mono text-xs text-zinc-500">Goal: {dynamicDailyGoals.calories} kcal/day</p>
               </div>
             </div>
 
@@ -522,9 +582,9 @@ export default function FoodPage() {
               </div>
               <div className="grid grid-cols-3 gap-4 p-4">
                 {[
-                  { label: 'PROTEIN', value: totalProtein, goal: DAILY_GOALS.protein, pct: proteinPct, color: '#3b82f6', unit: 'g' },
-                  { label: 'CARBS',   value: totalCarbs,   goal: DAILY_GOALS.carbs,   pct: carbsPct,   color: '#22c55e', unit: 'g' },
-                  { label: 'FAT',     value: totalFat,     goal: DAILY_GOALS.fat,     pct: fatPct,     color: '#eab308', unit: 'g' },
+                  { label: 'PROTEIN', value: totalProtein, goal: dynamicDailyGoals.protein, pct: proteinPct, color: '#3b82f6', unit: 'g' },
+                  { label: 'CARBS',   value: totalCarbs,   goal: dynamicDailyGoals.carbs,   pct: carbsPct,   color: '#22c55e', unit: 'g' },
+                  { label: 'FAT',     value: totalFat,     goal: dynamicDailyGoals.fat,     pct: fatPct,     color: '#eab308', unit: 'g' },
                 ].map(({ label, value, goal, pct, color, unit }) => {
                   const r = 32;
                   const circ = 2 * Math.PI * r;
@@ -558,9 +618,9 @@ export default function FoodPage() {
                 <span className="font-mono text-xs font-bold tracking-widest text-zinc-300">MACRO_BREAKDOWN</span>
               </div>
               <div className="p-4">
-                <MacroBar label="PROTEIN" value={totalProtein} goal={DAILY_GOALS.protein} pct={proteinPct} color="text-blue-400" />
-                <MacroBar label="CARBS"   value={totalCarbs}   goal={DAILY_GOALS.carbs}   pct={carbsPct}   color="text-green-400" />
-                <MacroBar label="FAT"     value={totalFat}     goal={DAILY_GOALS.fat}      pct={fatPct}     color="text-yellow-400" />
+                <MacroBar label="PROTEIN" value={totalProtein} goal={dynamicDailyGoals.protein} pct={proteinPct} color="text-blue-400" />
+                <MacroBar label="CARBS"   value={totalCarbs}   goal={dynamicDailyGoals.carbs}   pct={carbsPct}   color="text-green-400" />
+                <MacroBar label="FAT"     value={totalFat}     goal={dynamicDailyGoals.fat}      pct={fatPct}     color="text-yellow-400" />
               </div>
             </div>
 
@@ -610,11 +670,11 @@ export default function FoodPage() {
               <div className="p-4">
                 <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-3">
                   {[
-                    { label: 'CALORIES',  value: `${totalCalories} / ${DAILY_GOALS.calories}`, color: 'text-amber-400', note: calPct >= 100 ? '✓ GOAL MET' : `${DAILY_GOALS.calories - totalCalories} remaining` },
-                    { label: 'PROTEIN',   value: `${totalProtein}g / ${DAILY_GOALS.protein}g`, color: 'text-blue-400',  note: proteinPct >= 100 ? '✓ GOAL MET' : `${DAILY_GOALS.protein - totalProtein}g remaining` },
-                    { label: 'WATER',     value: `${waterMlLogged} / ${DAILY_GOALS.water} ml`, color: 'text-cyan-400', note: waterPct >= 100 ? '✓ GOAL MET' : `${DAILY_GOALS.water - waterMlLogged}ml remaining` },
-                    { label: 'CARBS',     value: `${totalCarbs}g / ${DAILY_GOALS.carbs}g`,     color: 'text-green-400', note: carbsPct >= 100 ? '✓ GOAL MET' : `${DAILY_GOALS.carbs - totalCarbs}g remaining` },
-                    { label: 'FAT',       value: `${totalFat}g / ${DAILY_GOALS.fat}g`,          color: 'text-yellow-400',note: fatPct >= 100 ? '✓ GOAL MET' : `${DAILY_GOALS.fat - totalFat}g remaining` },
+                    { label: 'CALORIES',  value: `${totalCalories} / ${dynamicDailyGoals.calories}`, color: 'text-amber-400', note: calPct >= 100 ? '✓ GOAL MET' : `${dynamicDailyGoals.calories - totalCalories} remaining` },
+                    { label: 'PROTEIN',   value: `${totalProtein}g / ${dynamicDailyGoals.protein}g`, color: 'text-blue-400',  note: proteinPct >= 100 ? '✓ GOAL MET' : `${dynamicDailyGoals.protein - totalProtein}g remaining` },
+                    { label: 'WATER',     value: `${waterMlLogged} / ${dynamicDailyGoals.water} ml`, color: 'text-cyan-400', note: waterPct >= 100 ? '✓ GOAL MET' : `${dynamicDailyGoals.water - waterMlLogged}ml remaining` },
+                    { label: 'CARBS',     value: `${totalCarbs}g / ${dynamicDailyGoals.carbs}g`,     color: 'text-green-400', note: carbsPct >= 100 ? '✓ GOAL MET' : `${dynamicDailyGoals.carbs - totalCarbs}g remaining` },
+                    { label: 'FAT',       value: `${totalFat}g / ${dynamicDailyGoals.fat}g`,          color: 'text-yellow-400',note: fatPct >= 100 ? '✓ GOAL MET' : `${dynamicDailyGoals.fat - totalFat}g remaining` },
                     { label: 'MEALS',     value: `${todayNutrition?.meals?.length ?? 0} meals`,  color: 'text-zinc-300',  note: '' },
                   ].map(({ label, value, color, note }) => (
                     <div key={label} className="border border-zinc-900 bg-black p-3">
@@ -770,7 +830,208 @@ export default function FoodPage() {
             )}
           </div>
         )}
+
+        {/* MEAL PLANNER TAB */}
+        {tab === 'meal-planner' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950 p-4">
+              <div className="flex items-center gap-2 border-b border-zinc-900 pb-3 mb-4">
+                <Sparkles className="h-5 w-5 text-orange-500" />
+                <div>
+                  <h3 className="font-mono text-sm font-bold text-zinc-200">AI Meal Plan Generator</h3>
+                  <p className="font-mono text-[10px] text-zinc-500">Customized macronutrient planning drawing from your biological baselines.</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Goal Selection */}
+                <div>
+                  <label className="block font-mono text-[10px] tracking-widest text-zinc-500 mb-1.5 uppercase">Primary Goal</label>
+                  <select
+                    value={plannerGoal}
+                    onChange={(e) => setPlannerGoal(e.target.value as any)}
+                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                  >
+                    <option value="maintain">Maintain Current Weight</option>
+                    <option value="lose_weight">Fat Loss / Caloric Deficit</option>
+                    <option value="build_muscle">Lean Bulk / Muscle Gain</option>
+                    <option value="performance">Athletic Performance Focus</option>
+                  </select>
+                </div>
+
+                {/* Diet Category */}
+                <div>
+                  <label className="block font-mono text-[10px] tracking-widest text-zinc-500 mb-1.5 uppercase">Dietary Strategy</label>
+                  <select
+                    value={plannerDiet}
+                    onChange={(e) => setPlannerDiet(e.target.value as any)}
+                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                  >
+                    <option value="balanced">Balanced / Whole Foods</option>
+                    <option value="vegetarian">Vegetarian</option>
+                    <option value="vegan">Vegan / Plant-Based</option>
+                    <option value="keto">Keto / High-Fat Low-Carb</option>
+                    <option value="high_protein">High-Protein Focused</option>
+                  </select>
+                </div>
+
+                {/* Activity Level */}
+                <div>
+                  <label className="block font-mono text-[10px] tracking-widest text-zinc-500 mb-1.5 uppercase">Activity Multiplier</label>
+                  <select
+                    value={plannerActivity}
+                    onChange={(e) => setPlannerActivity(e.target.value as any)}
+                    className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                  >
+                    <option value="sedentary">Sedentary (desk work)</option>
+                    <option value="light">Light Activity (1-2 workouts/wk)</option>
+                    <option value="moderate">Moderate Activity (3-4 workouts/wk)</option>
+                    <option value="active">Active (5+ workouts/wk)</option>
+                    <option value="very_active">Very Active (daily double logs)</option>
+                  </select>
+                </div>
+
+                {/* Restrictions */}
+                <div>
+                  <label className="block font-mono text-[10px] tracking-widest text-zinc-500 mb-1.5 uppercase">Allergens / Exclusions</label>
+                  <div className="flex flex-wrap gap-2 pt-1">
+                    {['gluten-free', 'dairy-free', 'nuts-free'].map((r) => {
+                      const active = plannerRestrictions.includes(r);
+                      return (
+                        <button
+                          key={r}
+                          type="button"
+                          onClick={() => {
+                            setPlannerRestrictions(
+                              active ? plannerRestrictions.filter((x) => x !== r) : [...plannerRestrictions, r]
+                            );
+                          }}
+                          className={cn(
+                            'border px-2 py-1 font-mono text-[10px] transition',
+                            active ? 'border-orange-800 bg-orange-950/20 text-orange-400' : 'border-zinc-800 text-zinc-500'
+                          )}
+                        >
+                          {r}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-zinc-900 flex justify-between items-center">
+                <p className="font-mono text-[10px] text-zinc-600">
+                  Target BMR: {calculatedBMR} kcal/day based on onboarding biometrics.
+                </p>
+                <button
+                  type="button"
+                  onClick={generateMealPlan}
+                  disabled={planLoading}
+                  className="flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-5 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40"
+                >
+                  {planLoading ? (
+                    <>
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                      SYNTHESIZING...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="h-3 w-3" />
+                      [GENERATE_MEAL_PLAN]
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Meal Plan Display */}
+            {mealPlan && (
+              <div className="space-y-4">
+                {/* Summary Advice */}
+                <div className="border border-orange-900 bg-orange-950/5 p-4 rounded-md">
+                  <p className="font-mono text-xs font-bold text-orange-500 uppercase tracking-widest mb-1.5 flex items-center gap-1.5">
+                    <Sparkles className="h-3.5 w-3.5" /> AI Coach Advice ({mealPlan.summary.dailyCalorieTarget} kcal/day)
+                  </p>
+                  <p className="font-mono text-xs leading-relaxed text-zinc-300 italic">
+                    &ldquo;{mealPlan.summary.aiAdvice}&rdquo;
+                  </p>
+                  <div className="mt-3 flex gap-4 border-t border-zinc-900 pt-2.5">
+                    <span className="font-mono text-[10px] text-zinc-500">Goal: <strong className="text-zinc-300">{mealPlan.summary.goal.replace('_', ' ')}</strong></span>
+                    <span className="font-mono text-[10px] text-zinc-500">Strategy: <strong className="text-zinc-300">{mealPlan.summary.diet.replace('_', ' ')}</strong></span>
+                    <span className="font-mono text-[10px] text-zinc-500">Macros: <strong className="text-zinc-300">P:{mealPlan.summary.macroSplit.protein}% / C:{mealPlan.summary.macroSplit.carbs}% / F:{mealPlan.summary.macroSplit.fat}%</strong></span>
+                  </div>
+                </div>
+
+                {/* 7 Day Slots */}
+                <div className="space-y-3">
+                  {mealPlan.plan.map((daySlots: any[], dayIdx: number) => (
+                    <div key={dayIdx} className="border border-zinc-900 bg-zinc-950">
+                      <div className="border-b border-zinc-900 px-4 py-2 flex items-center justify-between">
+                        <span className="font-mono text-xs font-bold text-zinc-300 flex items-center gap-1.5">
+                          <Calendar className="h-3.5 w-3.5 text-orange-500" /> DAY 0{dayIdx + 1}
+                        </span>
+                        <span className="font-mono text-[10px] text-zinc-500">Estimated Total: {mealPlan.summary.dailyCalorieTarget} kcal</span>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-0.5 bg-zinc-900 divide-y md:divide-y-0 md:divide-x divide-zinc-900">
+                        {daySlots.map((slot: any, i: number) => {
+                          const calories = Math.round(slot.targetCalories);
+                          const protein = Math.round((calories * (mealPlan.summary.macroSplit.protein / 100)) / 4);
+                          const carbs = Math.round((calories * (mealPlan.summary.macroSplit.carbs / 100)) / 4);
+                          const fat = Math.round((calories * (mealPlan.summary.macroSplit.fat / 100)) / 9);
+
+                          return (
+                            <div key={i} className="bg-zinc-950 p-3 flex flex-col justify-between">
+                              <div>
+                                <p className="font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{slot.slot}</p>
+                                <p className="mt-1 font-mono text-xs font-bold text-zinc-200 line-clamp-2 h-8 leading-snug">
+                                  {slot.meal?.name || 'Meal preset selection...'}
+                                </p>
+                                <div className="mt-2 space-y-1">
+                                  <p className="font-mono text-[10px] text-amber-500">{calories} kcal</p>
+                                  <p className="font-mono text-[9px] text-zinc-500">P:{protein}g / C:{carbs}g / F:{fat}g</p>
+                                </div>
+                              </div>
+                              
+                              <button
+                                type="button"
+                                onClick={async () => {
+                                  if (mealSaving) return;
+                                  setMealSaving(true);
+                                  try {
+                                    await logMeal({
+                                      date: today,
+                                      meal: {
+                                        name: `[AI Plan] ${slot.meal?.name || slot.slot}`,
+                                        calories,
+                                        protein,
+                                        carbs,
+                                        fat,
+                                        time: new Date().toTimeString().slice(0, 5),
+                                      },
+                                    });
+                                  } finally {
+                                    setMealSaving(false);
+                                  }
+                                }}
+                                disabled={mealSaving || !slot.meal}
+                                className="mt-3 flex items-center justify-center gap-1.5 border border-zinc-800 bg-black hover:border-orange-800 py-1.5 font-mono text-[9px] tracking-wider text-zinc-400 hover:text-orange-500 transition disabled:opacity-40"
+                              >
+                                <PlusCircle className="h-3 w-3" />
+                                LOG_PRESET
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 }
+

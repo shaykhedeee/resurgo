@@ -17,7 +17,7 @@ export type PixelIconName =
   | 'trophy' | 'zap' | 'menu' | 'chevron-left' | 'chevron-right'
   | 'message' | 'bell' | 'home' | 'timer' | 'sparkles'
   | 'terminal' | 'robot' | 'grid' | 'loop' | 'sun' | 'moon'
-  | 'download';
+  | 'download' | 'meal-planner' | 'kettlebell' | 'running';
 
 interface PixelIconProps {
   name: PixelIconName;
@@ -232,6 +232,27 @@ const ICON_PATHS: Record<PixelIconName, number[][]> = {
   download: [
     [5,2,6,2], [3,4,10,2], [2,6,12,6], [5,13,6,2], [7,10,2,3],
   ],
+  // Meal-Planner - clipboard grid
+  'meal-planner': [
+    [4,1,8,1], [3,2,10,1], [2,3,12,11], [2,14,12,1],
+    [7,0,2,2],
+    [4,4,2,2], [8,4,4,1],
+    [4,7,2,2], [8,7,4,1],
+    [4,10,2,2], [8,10,4,1],
+  ],
+  // Kettlebell - strength weight
+  kettlebell: [
+    [6,1,4,1], [5,2,2,1], [9,2,2,1], [4,3,2,1], [10,3,2,1],
+    [2,5,12,8], [3,13,10,1], [4,14,8,1],
+    [6,8,4,3],
+  ],
+  // Running - retro runner
+  running: [
+    [8,1,3,3],
+    [7,4,2,4], [4,5,3,1], [9,5,4,1],
+    [5,8,3,2], [8,8,2,2],
+    [4,10,2,3], [8,10,3,2], [10,12,2,2],
+  ],
 };
 
 export function PixelIcon({ name, size = 16, className }: PixelIconProps) {
@@ -265,8 +286,8 @@ export const NAV_ICON_MAP: Record<string, PixelIconName> = {
   'Analytics': 'analytics',
   'Calendar': 'calendar',
   'Wellness': 'wellness',
-  'Fitness': 'fire',
-  'Food': 'heart',
+  'Fitness': 'kettlebell',
+  'Food': 'meal-planner',
   'Health': 'wellness',
   'Budget': 'budget',
   'Business': 'business',
@@ -274,6 +295,8 @@ export const NAV_ICON_MAP: Record<string, PixelIconName> = {
   'Vision Board': 'vision',
   'AI Coach': 'coach',
   'Orchestrator': 'coach',
+  'Mind Graph': 'goals',
+  'Sprint Board': 'tasks',
   'Integrations': 'integrations',
   'Refer & Earn': 'refer',
   'Settings': 'settings',

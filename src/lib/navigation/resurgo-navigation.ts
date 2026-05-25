@@ -16,30 +16,27 @@ export interface ResurgoNavSection {
 
 export const RESURGO_NAV_SECTIONS: ResurgoNavSection[] = [
   {
-    label: 'Home',
+    label: 'Command',
     collapsible: false,
     defaultOpen: true,
     items: [
-      { href: '/dashboard', label: 'Home', iconName: 'home', keywords: ['today', 'plan', 'quick add', 'dashboard'] },
+      { href: '/tasks', label: 'Tasks', iconName: 'tasks', keywords: ['todo', 'queue', 'quick task', 'list'] },
+      { href: '/dashboard', label: 'Dashboard', iconName: 'home', keywords: ['today', 'plan', 'quick add', 'dashboard'] },
+      { href: '/habits', label: 'Habits', iconName: 'habits', keywords: ['streaks', 'routine', 'minimum version'] },
+      { href: '/goals', label: 'Goals', iconName: 'goals', keywords: ['milestones', 'vision board', 'targets'] },
     ],
   },
   {
-    label: 'Plan',
+    label: 'Tools & AI',
     collapsible: true,
     defaultOpen: true,
     items: [
-      { href: '/goals', label: 'Goals', iconName: 'goals', keywords: ['milestones', 'vision board', 'targets'] },
+      { href: '/focus', label: 'Focus Session', iconName: 'focus', keywords: ['pomodoro', 'deep work', 'timer'] },
       { href: '/calendar', label: 'Calendar', iconName: 'calendar', keywords: ['daily', 'weekly', 'focus sessions'] },
       { href: '/coach', label: 'AI Coach', iconName: 'coach', keywords: ['chat', 'plan builder', 'bots'] },
-    ],
-  },
-  {
-    label: 'Body & Mind',
-    collapsible: true,
-    defaultOpen: true,
-    items: [
-      { href: '/fitness', label: 'Fitness', iconName: 'fire', keywords: ['workouts', 'strength', 'cardio', 'steps'] },
-      { href: '/analytics', label: 'Analytics', iconName: 'analytics', keywords: ['weekly review', 'streaks', 'insights', 'charts'] },
+      { href: '/orchestrator', label: 'Orchestrator', iconName: 'terminal', keywords: ['ai', 'agents', 'sprint'] },
+      { href: '/orchestrator?tab=obsidian', label: 'Mind Graph', iconName: 'goals', keywords: ['mind', 'graph', 'linked', 'obsidian'] },
+      { href: '/orchestrator?tab=jira', label: 'Sprint Board', iconName: 'tasks', keywords: ['board', 'sprint', 'developer', 'scrum'] },
     ],
   },
   {
@@ -47,22 +44,19 @@ export const RESURGO_NAV_SECTIONS: ResurgoNavSection[] = [
     collapsible: true,
     defaultOpen: false,
     items: [
-      { href: '/wellness', label: 'Wellness', iconName: 'wellness', keywords: ['mood', 'journal', 'gratitude', 'meditation'] },
-      { href: '/health', label: 'Sleep', iconName: 'wellness', keywords: ['sleep', 'energy', 'supplements', 'recovery', 'health'] },
-      { href: '/food', label: 'Nutrition', iconName: 'heart', keywords: ['meals', 'macros', 'calories', 'water', 'food'] },
+      { href: '/fitness', label: 'Fitness', iconName: 'kettlebell', keywords: ['workouts', 'strength', 'cardio', 'steps'] },
+      { href: '/food', label: 'Nutrition', iconName: 'meal-planner', keywords: ['meals', 'macros', 'calories', 'water', 'food'] },
       { href: '/budget', label: 'Budget', iconName: 'budget', keywords: ['finance', 'expenses', 'income', 'money'] },
       { href: '/wishlist', label: 'Wishlist', iconName: 'star', keywords: ['shopping', 'gifts', 'wants'] },
     ],
   },
   {
-    label: 'Tools',
+    label: 'Intelligence',
     collapsible: true,
     defaultOpen: false,
     items: [
-      { href: '/tasks', label: 'Tasks', iconName: 'tasks', keywords: ['todo', 'queue', 'quick task'] },
-      { href: '/habits', label: 'Habits', iconName: 'habits', keywords: ['streaks', 'routine', 'minimum version'] },
-      { href: '/focus', label: 'Focus', iconName: 'focus', keywords: ['pomodoro', 'deep work', 'timer'] },
-      { href: '/brain-dump', label: 'Brain Dump', iconName: 'sparkles', keywords: ['capture', 'triage', 'ideas'] },
+      { href: '/analytics', label: 'Life Analytics', iconName: 'analytics', keywords: ['weekly review', 'streaks', 'insights', 'charts'] },
+      { href: '/wellness', label: 'Wellbeing Log', iconName: 'wellness', keywords: ['mood', 'journal', 'gratitude', 'meditation'] },
     ],
   },
   {
@@ -86,8 +80,8 @@ export const RESURGO_AI_MENU_ITEMS: ResurgoNavItem[] = [
 export const RESURGO_PRIMARY_MOBILE_NAV: ResurgoNavItem[] = [
   { href: '/dashboard', label: 'Home', iconName: 'home', keywords: ['today'] },
   { href: '/goals', label: 'Goals', iconName: 'goals', keywords: ['milestones'] },
-  { href: '/food', label: 'Food', iconName: 'heart', keywords: ['meals', 'water'] },
-  { href: '/fitness', label: 'Fitness', iconName: 'fire', keywords: ['workout'] },
+  { href: '/food', label: 'Food', iconName: 'meal-planner', keywords: ['meals', 'water'] },
+  { href: '/fitness', label: 'Fitness', iconName: 'kettlebell', keywords: ['workout'] },
 ];
 
 export const RESURGO_ALL_NAV_ITEMS = RESURGO_NAV_SECTIONS.flatMap((section) => section.items);

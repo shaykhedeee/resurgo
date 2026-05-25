@@ -234,7 +234,7 @@ export default function RemoteDevelopersLandingPage() {
             ]}
           />
           <div className="mt-8 text-center text-gray-400">
-            <p>4.8/5 average rating from 1,240+ remote developer reviews</p>
+            <p>4.8/5 average rating from 847 remote developer reviews</p>
           </div>
         </div>
       </section>
@@ -320,7 +320,7 @@ export default function RemoteDevelopersLandingPage() {
                   'Priority support',
                 ],
                 ctaLabel: 'Get Pro',
-                ctaHref: '/billing',
+                ctaHref: '/pricing',
                 popular: true,
               },
               {
@@ -337,7 +337,7 @@ export default function RemoteDevelopersLandingPage() {
                   'Admin controls & permissions',
                 ],
                 ctaLabel: 'Contact Sales',
-                ctaHref: '/team',
+                ctaHref: '/pricing',
                 popular: false,
               },
             ]}

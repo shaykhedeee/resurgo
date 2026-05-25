@@ -66,6 +66,7 @@ export function QuickStartFormAndAnalysisStep({
   const [phase, setPhase] = useState<'form' | 'diagnostics' | 'launching'>('form');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [scanComplete, setScanComplete] = useState(false);
+  const [launchError, setLaunchError] = useState<string | null>(null);
   const [diagnosticLogs, setDiagnosticLogs] = useState<string[]>([]);
   const [typingIndex, setTypingIndex] = useState(0);
 
@@ -133,6 +134,7 @@ export function QuickStartFormAndAnalysisStep({
     setIsSubmitting(true);
     setPhase('diagnostics');
     setScanComplete(false);
+    setLaunchError(null);
 
     // Simulate diagnostic loading logs
     const logs = [
@@ -167,6 +169,7 @@ export function QuickStartFormAndAnalysisStep({
     setIsSubmitting(true);
     setPhase('diagnostics');
     setScanComplete(false);
+    setLaunchError(null);
 
     // Simulate diagnostic loading logs for premium hacker/brutalist style
     const logs = [
@@ -198,6 +201,7 @@ export function QuickStartFormAndAnalysisStep({
 
   const handleLaunchSequence = async () => {
     setIsSubmitting(true);
+    setLaunchError(null);
     try {
       // Execute atomic Convex mutation
       await commitPlanner({
@@ -225,8 +229,7 @@ export function QuickStartFormAndAnalysisStep({
       }, 3800);
     } catch (err) {
       console.error('Launch execution failed:', err);
-      // Fallback
-      router.replace('/dashboard');
+      setLaunchError('Failed to save your onboarding blueprint. Retry launch in a moment.');
     } finally {
       setIsSubmitting(false);
     }
@@ -454,6 +457,11 @@ export function QuickStartFormAndAnalysisStep({
                 transition={{ duration: 0.5 }}
                 className="space-y-4"
               >
+                {launchError && (
+                  <div className="rounded border border-red-900/60 bg-red-950/30 px-4 py-3 text-sm text-red-300">
+                    {launchError}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   <div className="p-4 bg-zinc-900 border border-zinc-800 rounded">
                     <p className="text-xs text-zinc-500 uppercase font-mono">Cognitive Archetype</p>

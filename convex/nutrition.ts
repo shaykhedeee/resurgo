@@ -184,3 +184,46 @@ export const deleteMeal = mutation({
     return null;
   },
 });
+
+export const updateWaterAndStepsServer = mutation({
+  args: {
+    userId: v.id('users'),
+    date: v.string(),
+    waterMl: v.optional(v.number()),
+    steps: v.optional(v.number()),
+    secret: v.string(),
+  },
+  returns: v.null(),
+  handler: async (ctx, args) => {
+    if (args.secret !== "resurgo_fitness_sync_secret_2026") {
+      throw new Error('Unauthorized server mutation');
+    }
+    const now = Date.now();
+    const existing = await ctx.db
+      .query('nutritionLogs')
+      .withIndex('by_userId_date', (q: any) =>
+        q.eq('userId', args.userId).eq('date', args.date)
+      )
+      .unique();
+
+    if (existing) {
+      await ctx.db.patch(existing._id, {
+        ...(args.waterMl !== undefined && { waterMl: args.waterMl }),
+        ...(args.steps !== undefined && { steps: args.steps }),
+        updatedAt: now,
+      });
+    } else {
+      await ctx.db.insert('nutritionLogs', {
+        userId: args.userId,
+        date: args.date,
+        meals: [],
+        totalCalories: 0,
+        waterMl: args.waterMl,
+        steps: args.steps,
+        createdAt: now,
+        updatedAt: now,
+      });
+    }
+    return null;
+  },
+});

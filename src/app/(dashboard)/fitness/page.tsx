@@ -5,11 +5,11 @@
 // Workout Planner · Exercise Log · Body Stats · Activity Tracker
 // ═══════════════════════════════════════════════════════════════════════════════
 
-import { useQuery, useMutation } from 'convex/react';
+import { useQuery, useMutation, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState, type FormEvent } from 'react';
 import { cn } from '@/lib/utils';
-import { Dumbbell, Flame, Timer, Activity, TrendingUp, Calendar } from 'lucide-react';
+import { Dumbbell, Flame, Timer, Activity, TrendingUp, Calendar, Sparkles } from 'lucide-react';
 
 type Tab = 'log' | 'planner' | 'stats' | 'activity';
 type WorkoutType = 'cardio' | 'strength' | 'flexibility' | 'sport' | 'other';
@@ -115,6 +115,182 @@ const WORKOUT_PLANS = [
 export default function FitnessPage() {
   const [tab, setTab] = useState<Tab>('log');
 
+  // Load current user profile from Convex
+  const user = useQuery(api.users.current);
+
+  // Titan AI Workout Generator state & actions
+  const sendWithPersona = useAction(api.coachAI.sendWithPersona);
+  const bulkCreateTasks = useMutation(api.tasks.bulkCreate);
+
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [aiGenerating, setAiGenerating] = useState(false);
+  const [aiResult, setAiResult] = useState<any>(null);
+  const [aiLogs, setAiLogs] = useState<string[]>([]);
+  const [aiStatus, setAiStatus] = useState<'idle' | 'simulating' | 'completed' | 'error'>('idle');
+  const [deploySummary, setDeploySummary] = useState<string | null>(null);
+
+  const handleAiWorkoutSubmit = async (promptText: string) => {
+    const text = promptText.trim();
+    if (!text || aiGenerating) return;
+    setAiGenerating(true);
+    setAiStatus('simulating');
+    setDeploySummary(null);
+    setAiResult(null);
+
+    // Cyberpunk simulated logs
+    const logQueue = [
+      'resurgo:titan_ai$ init_neural_router --channel_fitness...',
+      'resurgo:titan_ai$ fetching_muscular_telemetry_hud...',
+      'resurgo:titan_ai$ parsing_progressive_overload_matrix...',
+      'resurgo:titan_ai$ generating_stimulus_blueprint...',
+    ];
+
+    setAiLogs([]);
+    for (let i = 0; i < logQueue.length; i++) {
+      await new Promise((resolve) => setTimeout(resolve, 200));
+      setAiLogs((prev) => [...prev, logQueue[i]]);
+    }
+
+    try {
+      const titanPrompt = `You are TITAN, the Elite High-Performance Coach. Today is ${today}.
+Build a highly structured, intense training protocol based on: "${text}".
+You must output a single valid JSON object containing:
+{
+  "name": "Intense Workout Name",
+  "type": "strength",
+  "durationMinutes": 35,
+  "calories": 320,
+  "exercises": [
+    { "name": "Exercise Name", "sets": 4, "reps": 10, "weight": 20, "weightUnit": "kg", "notes": "Strict form" },
+    { "name": "Another Exercise", "sets": 3, "reps": 12 }
+  ]
+}
+Do not include any text before or after the JSON. Only return the JSON.`;
+
+      const response = await sendWithPersona({
+        content: titanPrompt,
+        coachId: 'TITAN',
+      });
+
+      // Extract JSON from response
+      const jsonMatch = response.reply.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        throw new Error('Failed to parse AI workout protocol JSON');
+      }
+      const workoutPlan = JSON.parse(jsonMatch[0]);
+      setAiResult(workoutPlan);
+      setAiStatus('completed');
+    } catch (err) {
+      console.error(err);
+      setAiLogs((prev) => [...prev, 'resurgo:titan_ai$ [ERROR] Neural path collapsed. Re-routing failed.']);
+      setAiStatus('error');
+    } finally {
+      setAiGenerating(false);
+    }
+  };
+
+  const logAiWorkout = async () => {
+    if (!aiResult) return;
+    setSaving(true);
+    try {
+      await logWorkout({
+        date: today,
+        type: aiResult.type || 'strength',
+        name: aiResult.name,
+        durationMinutes: aiResult.durationMinutes || 30,
+        caloriesBurned: aiResult.calories || 250,
+        notes: `AI Generated via Titan Coach: ${aiPrompt}`,
+        exercises: aiResult.exercises || [],
+      });
+      setDeploySummary('[WORKOUT_LOGGED_SUCCESSFULLY] -- added to telemetry matrix.');
+    } catch (err) {
+      console.error(err);
+      setDeploySummary('[ERROR] Could not commit workout log.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const deployAiWorkoutToTasks = async () => {
+    if (!aiResult) return;
+    setSaving(true);
+    try {
+      const tasksToCreate = (aiResult.exercises || []).map((ex: any) => {
+        let desc = '';
+        if (ex.sets && ex.reps) desc = `${ex.sets} sets × ${ex.reps} reps`;
+        if (ex.weight) desc += ` @ ${ex.weight}${ex.weightUnit || 'kg'}`;
+        if (ex.notes) desc += ` (${ex.notes})`;
+        
+        return {
+          title: `[Titan Exercise] ${ex.name}`,
+          description: desc || 'Titan AI recommended movement',
+          priority: 'medium' as const,
+          dueDate: today,
+          scheduledDate: today,
+          tags: ['fitness', 'titan-ai', aiResult.name],
+          xpValue: 10,
+        };
+      });
+
+      // Add parent task too
+      tasksToCreate.unshift({
+        title: `🏋️ Titan Workout: ${aiResult.name}`,
+        description: `Complete the ${aiResult.durationMinutes}m Titan training blueprint.`,
+        priority: 'high' as const,
+        dueDate: today,
+        scheduledDate: today,
+        tags: ['fitness', 'titan-ai'],
+        xpValue: 20,
+      });
+
+      await bulkCreateTasks({ tasks: tasksToCreate });
+      setDeploySummary(`[TASKS_DEPLOYED_SUCCESSFULLY] -- created parent + ${tasksToCreate.length - 1} exercises in daily backlog.`);
+    } catch (err) {
+      console.error(err);
+      setDeploySummary('[ERROR] Backlog injection failed.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // Custom log detailed exercises list builder
+  const [exercises, setExercises] = useState<any[]>([]);
+  const [exName, setExName] = useState('');
+  const [exSets, setExSets] = useState('');
+  const [exReps, setExReps] = useState('');
+  const [exWeight, setExWeight] = useState('');
+  const [exWeightUnit, setExWeightUnit] = useState<'kg' | 'lb'>('kg');
+  const [exDist, setExDist] = useState('');
+  const [exDistUnit, setExDistUnit] = useState<'km' | 'mi'>('km');
+  const [exDur, setExDur] = useState('');
+
+  const addExerciseToList = () => {
+    if (!exName.trim()) return;
+    setExercises((prev) => [
+      ...prev,
+      {
+        name: exName.trim(),
+        sets: exSets ? parseInt(exSets) : undefined,
+        reps: exReps ? parseInt(exReps) : undefined,
+        weight: exWeight ? parseFloat(exWeight) : undefined,
+        weightUnit: exWeight ? exWeightUnit : undefined,
+        distance: exDist ? parseFloat(exDist) : undefined,
+        distanceUnit: exDist ? exDistUnit : undefined,
+        durationSeconds: exDur ? parseInt(exDur) * 60 : undefined,
+      },
+    ]);
+    setExName('');
+    setExSets('');
+    setExReps('');
+    setExWeight('');
+    setExDist('');
+    setExDur('');
+  };
+
+  const removeExerciseFromList = (idx: number) => {
+    setExercises((prev) => prev.filter((_, i) => i !== idx));
+  };
+
   // Form state
   const [wType, setWType] = useState<WorkoutType>('strength');
   const [wDuration, setWDuration] = useState('');
@@ -142,10 +318,12 @@ export default function FitnessPage() {
         durationMinutes: parseInt(wDuration),
         caloriesBurned: wCalories ? parseInt(wCalories) : undefined,
         notes: wNotes || undefined,
+        exercises: exercises.length > 0 ? exercises : undefined,
       });
       setWDuration('');
       setWCalories('');
       setWNotes('');
+      setExercises([]);
     } finally {
       setSaving(false);
     }
@@ -275,8 +453,148 @@ export default function FitnessPage() {
                       className="h-9 w-full border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none" />
                   </div>
                 </div>
+
+                {/* Sub-form: Add structured exercises */}
+                {(wType === 'strength' || wType === 'cardio') && (
+                  <div className="border border-zinc-900 bg-black/40 p-3 space-y-3">
+                    <p className="font-mono text-xs tracking-widest text-zinc-500 uppercase">
+                      {wType === 'strength' ? 'ADD_STRENGTH_SETS_HUD' : 'ADD_CARDIO_INTERVALS_HUD'}
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <div className="md:col-span-2">
+                        <p className="mb-1 font-mono text-[9px] text-zinc-600">EXERCISE_OR_INTERVAL_NAME</p>
+                        <input
+                          value={exName}
+                          onChange={(e) => setExName(e.target.value)}
+                          placeholder={wType === 'strength' ? "e.g., Bench Press, Deadlift..." : "e.g., Steady Run, Sprint intervals..."}
+                          className="h-8 w-full border border-zinc-800 bg-black px-2.5 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                        />
+                      </div>
+
+                      {wType === 'strength' ? (
+                        <div>
+                          <p className="mb-1 font-mono text-[9px] text-zinc-600">WEIGHT_LIFTED</p>
+                          <div className="flex">
+                            <input
+                              type="number"
+                              min="0"
+                              value={exWeight}
+                              onChange={(e) => setExWeight(e.target.value)}
+                              placeholder="60"
+                              className="h-8 flex-1 border border-zinc-800 bg-black px-2 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none rounded-l"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setExWeightUnit(exWeightUnit === 'kg' ? 'lb' : 'kg')}
+                              className="h-8 px-2 border border-l-0 border-zinc-800 bg-zinc-900 font-mono text-[10px] text-orange-500 rounded-r"
+                            >
+                              {exWeightUnit}
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div>
+                          <p className="mb-1 font-mono text-[9px] text-zinc-600">DISTANCE</p>
+                          <div className="flex">
+                            <input
+                              type="number"
+                              step="0.1"
+                              min="0"
+                              value={exDist}
+                              onChange={(e) => setExDist(e.target.value)}
+                              placeholder="5.0"
+                              className="h-8 flex-1 border border-zinc-800 bg-black px-2 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none rounded-l"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => setExDistUnit(exDistUnit === 'km' ? 'mi' : 'km')}
+                              className="h-8 px-2 border border-l-0 border-zinc-800 bg-zinc-900 font-mono text-[10px] text-cyan-400 rounded-r"
+                            >
+                              {exDistUnit}
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {wType === 'strength' ? (
+                      <div className="grid grid-cols-2 gap-2">
+                        <div>
+                          <p className="mb-1 font-mono text-[9px] text-zinc-600">SETS</p>
+                          <input
+                            type="number"
+                            min="1"
+                            value={exSets}
+                            onChange={(e) => setExSets(e.target.value)}
+                            placeholder="4"
+                            className="h-8 w-full border border-zinc-800 bg-black px-2 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <p className="mb-1 font-mono text-[9px] text-zinc-600">REPS</p>
+                          <input
+                            type="number"
+                            min="1"
+                            value={exReps}
+                            onChange={(e) => setExReps(e.target.value)}
+                            placeholder="8"
+                            className="h-8 w-full border border-zinc-800 bg-black px-2 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                          />
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <p className="mb-1 font-mono text-[9px] text-zinc-600">DURATION_(MINUTES)</p>
+                        <input
+                          type="number"
+                          min="1"
+                          value={exDur}
+                          onChange={(e) => setExDur(e.target.value)}
+                          placeholder="25"
+                          className="h-8 w-full border border-zinc-800 bg-black px-2.5 font-mono text-xs text-zinc-300 focus:border-orange-800 focus:outline-none"
+                        />
+                      </div>
+                    )}
+
+                    <button
+                      type="button"
+                      onClick={addExerciseToList}
+                      disabled={!exName.trim()}
+                      className="w-full h-8 border border-zinc-800 bg-zinc-900 font-mono text-[10px] tracking-widest text-zinc-300 hover:border-orange-800 hover:text-orange-500 transition disabled:opacity-40"
+                    >
+                      [+ ADD_TO_WORKOUT_LIST]
+                    </button>
+
+                    {/* Currently added items list */}
+                    {exercises.length > 0 && (
+                      <div className="border border-zinc-900 bg-black p-2 space-y-1.5 max-h-40 overflow-y-auto">
+                        <p className="font-mono text-[9px] text-zinc-500 uppercase">ADDED_EXERCISES_QUEUE:</p>
+                        {exercises.map((ex, idx) => (
+                          <div key={idx} className="flex justify-between items-center bg-zinc-950 px-2 py-1 border border-zinc-900">
+                            <span className="font-mono text-xs text-zinc-300">
+                              {ex.name} 
+                              {ex.sets && ` — ${ex.sets}s × ${ex.reps}r`} 
+                              {ex.weight && ` @ ${ex.weight}${ex.weightUnit}`}
+                              {ex.distance && ` — ${ex.distance}${ex.distanceUnit}`}
+                              {ex.durationSeconds && ` (${Math.round(ex.durationSeconds / 60)}m)`}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => removeExerciseFromList(idx)}
+                              className="font-mono text-[10px] text-red-500 hover:text-red-400"
+                            >
+                              [X]
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <textarea value={wNotes} onChange={(e) => setWNotes(e.target.value)}
-                  placeholder="Notes (exercises, sets, reps, PRs...)..." rows={2}
+                  placeholder="General notes or workout summary..." rows={2}
                   className="w-full resize-none border border-zinc-800 bg-black px-3 py-2 font-mono text-sm text-zinc-200 placeholder:text-zinc-400 focus:border-orange-800 focus:outline-none" />
                 <button type="submit" disabled={saving || !wDuration}
                   className="flex items-center gap-2 border border-orange-800 bg-orange-950/30 px-6 py-2 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/60 disabled:opacity-40">
@@ -355,11 +673,127 @@ export default function FitnessPage() {
                 </div>
               </div>
             ))}
-            <div className="border border-dashed border-zinc-800 bg-zinc-950 p-6 text-center">
-              <p className="font-mono text-xs tracking-widest text-zinc-500">USE_AI_COACH_→_TITAN_FOR_CUSTOM_PROTOCOLS</p>
-              <a href="/coach" className="mt-2 inline-block border border-orange-800 px-4 py-1.5 font-mono text-xs tracking-widest text-orange-500 transition hover:bg-orange-950/40">
-                [OPEN_AI_COACH]
-              </a>
+            {/* Titan AI Workout Generator */}
+            <div className="border border-orange-950/60 bg-zinc-950 p-5 rounded-[2px] space-y-4">
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-orange-500" />
+                <span className="font-mono text-xs tracking-widest text-orange-500 uppercase">// RESURGO_FITNESS_AI_COACH_::__TITAN_MODULE</span>
+              </div>
+              <p className="font-mono text-[11px] text-zinc-400 leading-relaxed">
+                Establish direct telemetry link with Coach TITAN. Input your conditioning target, equipment details, or physical capacity to generate an optimized progressive overload protocol.
+              </p>
+
+              {/* Quickchips prompt templates */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {[
+                  '35m Kettlebell Conditioning',
+                  '45m HIIT Cardio Bodyweight',
+                  '40m Core & Mobility Flow',
+                ].map((chip) => (
+                  <button
+                    key={chip}
+                    type="button"
+                    onClick={() => { setAiPrompt(chip); handleAiWorkoutSubmit(chip); }}
+                    disabled={aiGenerating}
+                    className="border border-zinc-900 bg-black hover:border-orange-900 hover:text-orange-500 px-2 py-1 font-mono text-[9px] tracking-widest text-zinc-500 transition"
+                  >
+                    [{chip.toUpperCase().replace(/ /g, '_')}]
+                  </button>
+                ))}
+              </div>
+
+              {/* Terminal-style interactive prompt form */}
+              <form
+                onSubmit={(e) => { e.preventDefault(); handleAiWorkoutSubmit(aiPrompt); }}
+                className="flex items-center gap-2 border border-zinc-800 bg-black px-3 py-2 rounded-[2px]"
+              >
+                <span className="font-mono text-xs text-orange-500 shrink-0">resurgo:fitness_ai$</span>
+                <input
+                  type="text"
+                  value={aiPrompt}
+                  onChange={(e) => setAiPrompt(e.target.value)}
+                  placeholder="EX: I WANT HEAVY SQUATS AND DEADLIFTS IN 45 MINUTES..."
+                  className="flex-1 bg-transparent font-mono text-xs text-zinc-200 focus:outline-none placeholder-zinc-700"
+                  disabled={aiGenerating}
+                />
+                <button
+                  type="submit"
+                  disabled={aiGenerating || !aiPrompt.trim()}
+                  className="font-mono text-xs font-bold text-orange-500 tracking-wider hover:text-orange-400 disabled:opacity-30 shrink-0"
+                >
+                  [EXECUTE]
+                </button>
+              </form>
+
+              {/* simulated cyberpunk logs marquee */}
+              {aiStatus === 'simulating' && (
+                <div className="bg-black border border-orange-950/50 p-4 font-mono text-[10px] text-orange-500 text-left space-y-1 rounded-[2px]">
+                  {aiLogs.map((log, i) => (
+                    <div key={i}>{log}</div>
+                  ))}
+                  <div className="animate-pulse">resurgo:titan_ai$ routing_target_stimulus_protocols...</div>
+                </div>
+              )}
+
+              {/* AI generated structured blueprint result card */}
+              {aiStatus === 'completed' && aiResult && (
+                <div className="border border-orange-900 bg-zinc-950 font-mono text-left rounded-[2px]">
+                  <div className="border-b border-orange-950/40 px-4 py-2.5 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-orange-500 tracking-widest uppercase">
+                      // TITAN_TRAINING_BLUEPRINT_v1.0
+                    </span>
+                    <span className="text-[10px] text-zinc-500">
+                      {aiResult.durationMinutes}M · {aiResult.calories} KCAL
+                    </span>
+                  </div>
+                  <div className="p-4 space-y-4">
+                    <div>
+                      <p className="text-zinc-500 text-[9px] font-bold uppercase tracking-wider">Workout Protocol</p>
+                      <p className="text-zinc-200 text-xs font-bold mt-0.5">{aiResult.name.toUpperCase()}</p>
+                    </div>
+
+                    <div className="space-y-2 border-t border-zinc-900 pt-3">
+                      {aiResult.exercises?.map((ex: any, i: number) => (
+                        <div key={i} className="flex items-start justify-between text-[11px] border-b border-zinc-900/40 pb-2">
+                          <span className="text-zinc-300">
+                            <span className="text-orange-500">›</span> {ex.name}
+                          </span>
+                          <span className="text-zinc-400 text-right">
+                            {ex.sets && ex.reps && `${ex.sets} sets × ${ex.reps} reps`}
+                            {ex.weight && ` @ ${ex.weight}${ex.weightUnit || 'kg'}`}
+                            {ex.durationSeconds && ` [${Math.floor(ex.durationSeconds / 60)}m]`}
+                            {ex.notes && <span className="block text-[9px] text-zinc-600 mt-0.5">{ex.notes}</span>}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Commit & deploy mutations buttons */}
+                    <div className="flex flex-col sm:flex-row gap-2 border-t border-zinc-900 pt-3">
+                      <button
+                        onClick={logAiWorkout}
+                        type="button"
+                        className="flex-1 rounded-[2px] border border-green-950 bg-green-950/20 px-3 py-2 font-mono text-[10px] tracking-widest text-green-500 transition hover:bg-green-950/40 uppercase font-bold"
+                      >
+                        [LOG_COMPLETED_TODAY]
+                      </button>
+                      <button
+                        onClick={deployAiWorkoutToTasks}
+                        type="button"
+                        className="flex-1 rounded-[2px] border border-orange-900 bg-orange-950/20 px-3 py-2 font-mono text-[10px] tracking-widest text-orange-500 transition hover:bg-orange-950/40 uppercase font-bold"
+                      >
+                        [DEPLOY_TO_DAILY_TASKS]
+                      </button>
+                    </div>
+
+                    {deploySummary && (
+                      <div className="border border-emerald-950 bg-emerald-950/15 p-2.5 text-center text-[10px] text-emerald-400 border-t border-dashed mt-3">
+                        {deploySummary}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -367,6 +801,119 @@ export default function FitnessPage() {
         {/* STATS TAB */}
         {tab === 'stats' && (
           <div className="space-y-4">
+            {/* Dynamic Progressive Overload HUD */}
+            {(() => {
+              if (!workouts || workouts.length === 0) return null;
+              
+              const liftMaxes: Record<string, { weight: number, reps: number, oneRepMax: number, date: string, unit: string }> = {
+                'bench press': { weight: 0, reps: 0, oneRepMax: 0, date: '', unit: 'kg' },
+                'squat': { weight: 0, reps: 0, oneRepMax: 0, date: '', unit: 'kg' },
+                'deadlift': { weight: 0, reps: 0, oneRepMax: 0, date: '', unit: 'kg' },
+                'overhead press': { weight: 0, reps: 0, oneRepMax: 0, date: '', unit: 'kg' },
+              };
+
+              let totalVolumeThisWeek = 0;
+              let totalCardioDistanceThisWeek = 0;
+              const sevenDaysAgo = new Date();
+              sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+              const sevenDaysAgoStr = sevenDaysAgo.toISOString().split('T')[0];
+
+              workouts.forEach((w: any) => {
+                if (w.exercises && Array.isArray(w.exercises)) {
+                  w.exercises.forEach((ex: any) => {
+                    const nameLower = ex.name.toLowerCase();
+                    
+                    if (ex.sets && ex.reps && ex.weight) {
+                      const vol = ex.sets * ex.reps * ex.weight;
+                      if (w.date >= sevenDaysAgoStr) {
+                        totalVolumeThisWeek += vol;
+                      }
+
+                      const oneRepMax = Math.round(ex.weight * (1 + ex.reps / 30));
+                      let coreKey = '';
+                      if (nameLower.includes('bench') || nameLower.includes('chest press')) coreKey = 'bench press';
+                      else if (nameLower.includes('squat')) coreKey = 'squat';
+                      else if (nameLower.includes('deadlift')) coreKey = 'deadlift';
+                      else if (nameLower.includes('overhead') || nameLower.includes('ohp') || nameLower.includes('shoulder press')) coreKey = 'overhead press';
+
+                      if (coreKey && oneRepMax > liftMaxes[coreKey].oneRepMax) {
+                        liftMaxes[coreKey] = {
+                          weight: ex.weight,
+                          reps: ex.reps,
+                          oneRepMax,
+                          date: w.date,
+                          unit: ex.weightUnit || 'kg',
+                        };
+                      }
+                    }
+
+                    if (ex.distance && w.date >= sevenDaysAgoStr) {
+                      totalCardioDistanceThisWeek += ex.distance;
+                    }
+                  });
+                }
+              });
+
+              const hasLifts = Object.values(liftMaxes).some(x => x.oneRepMax > 0);
+
+              return (
+                <div className="space-y-4">
+                  {/* Overload Metrics Card */}
+                  {hasLifts && (
+                    <div className="border border-orange-900 bg-zinc-950">
+                      <div className="flex items-center justify-between border-b border-orange-950/40 px-4 py-2 flex items-center gap-1.5">
+                        <span className="font-mono text-xs font-bold text-orange-500 uppercase tracking-widest flex items-center gap-1.5">
+                          <TrendingUp className="h-4 w-4" /> Progressive Overload Telemetry HUD
+                        </span>
+                        <span className="font-mono text-[9px] text-zinc-500">Calculated via Epley 1RM formula</span>
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-0.5 bg-zinc-900">
+                        {Object.entries(liftMaxes).map(([lift, data]) => {
+                          if (data.oneRepMax === 0) return null;
+                          return (
+                            <div key={lift} className="bg-zinc-950 p-3.5">
+                              <p className="font-mono text-[9px] font-bold text-zinc-500 uppercase tracking-wider">{lift}</p>
+                              <p className="mt-1.5 font-mono text-xl font-bold text-orange-400">
+                                {data.oneRepMax} <span className="text-xs text-zinc-500">{data.unit}</span>
+                              </p>
+                              <p className="mt-0.5 font-mono text-[10px] text-zinc-400">
+                                Best: {data.weight}{data.unit} × {data.reps} rep{data.reps > 1 ? 's' : ''}
+                              </p>
+                              <p className="mt-1.5 font-mono text-[9px] text-zinc-600">Logged: {data.date}</p>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Volume hud */}
+                  {(totalVolumeThisWeek > 0 || totalCardioDistanceThisWeek > 0) && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {totalVolumeThisWeek > 0 && (
+                        <div className="border border-zinc-900 bg-zinc-950 p-3.5 flex justify-between items-center">
+                          <div>
+                            <p className="font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Training Volume (7d)</p>
+                            <p className="mt-1 font-mono text-lg font-bold text-blue-400">{totalVolumeThisWeek.toLocaleString()} kg</p>
+                          </div>
+                          <span className="border border-blue-900/40 bg-blue-950/10 px-2 py-1 font-mono text-[9px] text-blue-400">VOLUMETRY</span>
+                        </div>
+                      )}
+                      {totalCardioDistanceThisWeek > 0 && (
+                        <div className="border border-zinc-900 bg-zinc-950 p-3.5 flex justify-between items-center">
+                          <div>
+                            <p className="font-mono text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Cardiovascular Distance (7d)</p>
+                            <p className="mt-1 font-mono text-lg font-bold text-cyan-400">{totalCardioDistanceThisWeek.toFixed(1)} km</p>
+                          </div>
+                          <span className="border border-cyan-900/40 bg-cyan-950/10 px-2 py-1 font-mono text-[9px] text-cyan-400">AEROBIC_BASE</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })()}
+
             {/* Breakdown by type */}
             {workouts && workouts.length > 0 ? (
               <>

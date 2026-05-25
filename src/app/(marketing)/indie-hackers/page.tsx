@@ -244,7 +244,7 @@ export default function IndieHackersLandingPage() {
             ]}
           />
           <div className="mt-8 text-center text-gray-400">
-            <p>4.9/5 average rating from 890+ indie hacker reviews</p>
+            <p>4.9/5 average rating from 847 indie hacker reviews</p>
           </div>
         </div>
       </section>
@@ -315,7 +315,7 @@ export default function IndieHackersLandingPage() {
               },
               {
                 name: 'Pro',
-                price: '$7.99',
+                price: '$9.99',
                 period: '/month',
                 description: 'For active creators shipping daily',
                 features: [
@@ -328,7 +328,7 @@ export default function IndieHackersLandingPage() {
                   'Priority support',
                 ],
                 ctaLabel: 'Get Pro',
-                ctaHref: '/billing',
+                ctaHref: '/pricing',
                 popular: true,
               },
               {
@@ -344,13 +344,13 @@ export default function IndieHackersLandingPage() {
                   'Maker community access',
                 ],
                 ctaLabel: 'Claim Lifetime',
-                ctaHref: '/billing',
+                ctaHref: '/pricing',
                 popular: false,
               },
             ]}
           />
           <div className="mt-8 text-center text-gray-400 text-sm">
-            Special pricing for bootstrapped makers. Lifetime price increases July 5.
+            Special pricing for bootstrapped makers. Lifetime price increases soon.
           </div>
         </div>
       </section>

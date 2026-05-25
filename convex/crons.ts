@@ -142,4 +142,26 @@ crons.cron(
   (internal as any).scheduledTasks.runSitemapPing
 );
 
+// ── Daily Blog Generation (daily 2AM UTC) ─────────────────────────────────────
+crons.cron(
+  'daily-blog-generation',
+  '0 2 * * *',
+  (internal as any).scheduledTasks.runDailyBlogGeneration
+);
+
+// ── Social Media Post Scheduler (daily 12PM UTC) ──────────────────────────────
+crons.cron(
+  'social-media-post-scheduler',
+  '0 12 * * *',
+  (internal as any).scheduledTasks.runSocialPostingSchedule
+);
+
+// ── Weekly Analytics Telemetry Audit (weekly Sunday 11:55 PM UTC) ─────────────
+crons.cron(
+  'weekly-analytics-telemetry-audit',
+  '55 23 * * 0',
+  (internal as any).scheduledTasks.runWeeklyAnalyticsReview
+);
+
 export default crons;
+

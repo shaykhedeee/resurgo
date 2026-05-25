@@ -4,7 +4,7 @@ import { v } from 'convex/values';
 export const saveIntegration = mutation({
   args: {
     userId: v.id('users'),
-    provider: v.union(v.literal('google'), v.literal('notion')),
+    provider: v.union(v.literal('google'), v.literal('notion'), v.literal('fitbit')),
     accessToken: v.string(),
     refreshToken: v.optional(v.string()),
     expiresAt: v.optional(v.number()),
@@ -51,7 +51,7 @@ export const saveIntegration = mutation({
 export const getIntegration = query({
   args: {
     userId: v.id('users'),
-    provider: v.union(v.literal('google'), v.literal('notion')),
+    provider: v.union(v.literal('google'), v.literal('notion'), v.literal('fitbit')),
   },
   handler: async (ctx, args) => {
     return await ctx.db

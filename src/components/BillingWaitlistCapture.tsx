@@ -1,15 +1,16 @@
 'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// RESURGO — Billing Waitlist Capture
+// RESURGO — Billing Waitlist Capture & Pre-Order Checkout
 // Shown on the billing page when NEXT_PUBLIC_BILLING_LIVE !== 'true'.
-// Captures early-access emails in Convex leads table.
+// Captures early-access emails in Convex leads table & allows pre-orders.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, FormEvent } from 'react';
 import { useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
-import { Sparkles, CheckCircle } from 'lucide-react';
+import { Sparkles, CheckCircle, Flame } from 'lucide-react';
+import DodoCheckoutButton from '@/components/DodoCheckoutButton';
 
 export function BillingWaitlistCapture() {
   const [email, setEmail] = useState('');
@@ -53,46 +54,71 @@ export function BillingWaitlistCapture() {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-6 text-center">
-        <CheckCircle className="mx-auto mb-3 h-8 w-8 text-emerald-400" />
-        <p className="font-semibold text-[var(--text-primary)]">You&apos;re on the list!</p>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
-          We&apos;ll email you the moment Pro plans go live — with early-access pricing.
+      <div className="mx-auto max-w-xl rounded-[2px] border border-emerald-800 bg-emerald-950/10 p-6 text-center font-mono">
+        <CheckCircle className="mx-auto mb-3 h-8 w-8 text-emerald-500" />
+        <p className="font-semibold text-emerald-400">// COHORT_REGISTRATION_SUCCESSFUL</p>
+        <p className="mt-2 text-xs text-zinc-400 leading-relaxed">
+          You have been allocated an early-access token. We will notify you the instant active seats open up.
         </p>
       </div>
     );
   }
 
   return (
-    <div className="mx-auto max-w-xl rounded-2xl border border-ascend-500/30 bg-ascend-500/5 p-8 text-center">
-      <Sparkles className="mx-auto mb-4 h-8 w-8 text-ascend-400" />
-      <h2 className="mb-2 text-2xl font-bold text-[var(--text-primary)]">
-        Pro plans launching soon
+    <div className="mx-auto max-w-xl rounded-[2px] border border-zinc-800 bg-zinc-950 p-6 text-center">
+      <div className="flex items-center justify-center gap-2 mb-3">
+        <Sparkles className="h-4 w-4 text-orange-500" />
+        <span className="font-mono text-xs tracking-widest text-orange-500 uppercase">
+          // PRO_COHORT_LAUNCHING_SOON
+        </span>
+      </div>
+      <h2 className="mb-2 font-mono text-lg font-bold text-zinc-100 uppercase tracking-wider">
+        Join the waitlist
       </h2>
-      <p className="mb-6 text-[var(--text-secondary)]">
-        Drop your email to get early-access pricing and be the first to know when paid plans go live.
+      <p className="mb-6 font-mono text-xs text-zinc-400 leading-relaxed">
+        Drop your credentials below to request early-access routing and locked pricing tokens before the system goes fully live.
       </p>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+
+      <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:flex-row">
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="your@email.com"
+          placeholder="OPERATOR_EMAIL@DOMAIN.COM"
           required
-          className="flex-1 rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3 text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] focus:border-ascend-500 focus:outline-none"
+          className="flex-1 rounded-[2px] border border-zinc-800 bg-black px-4 py-3 font-mono text-xs text-zinc-200 placeholder-zinc-600 focus:border-orange-800 focus:outline-none"
         />
         <button
           type="submit"
           disabled={loading}
-          className="rounded-xl bg-gradient-to-r from-ascend-500 to-ascend-600 px-6 py-3 text-sm font-semibold text-white transition hover:opacity-90 disabled:opacity-60"
+          className="rounded-[2px] border border-orange-800 bg-orange-950/20 px-6 py-3 font-mono text-xs font-bold tracking-widest text-orange-500 uppercase transition hover:bg-orange-950/40 disabled:opacity-40"
         >
-          {loading ? 'Saving…' : 'Notify me'}
+          {loading ? 'SAVING...' : '[NOTIFY_ME]'}
         </button>
       </form>
-      {error && <p className="mt-3 text-sm text-red-400">{error}</p>}
-      <p className="mt-4 text-xs text-[var(--text-muted)]">
-        No spam. Unsubscribe anytime. Free plan remains available now — no credit card required.
+      {error && <p className="mt-3 font-mono text-xs text-red-500">{error}</p>}
+      <p className="mt-3 font-mono text-[10px] text-zinc-600">
+        Free plan access is operational. No credit card required to log in.
       </p>
+
+      {/* Exclusive Founding Pre-Order Block */}
+      <div className="mt-6 border-t border-zinc-900 pt-6 text-left">
+        <div className="flex items-center gap-1.5 mb-1.5">
+          <Flame className="h-3.5 w-3.5 text-amber-500" />
+          <p className="font-mono text-[10px] font-bold tracking-widest text-amber-500 uppercase">
+            // EXCLUSIVE_PRE_ORDER_::__FOUNDING_LIFETIME
+          </p>
+        </div>
+        <p className="font-mono text-xs text-zinc-400 mb-4 leading-relaxed">
+          Skip the queue. Lock in permanent founding lifetime access to all Pro features for a single payment of $89 before the price increases to $199. Limited to the first 100 relaunch signups.
+        </p>
+        <DodoCheckoutButton
+          productId={process.env.NEXT_PUBLIC_DODO_PRODUCT_LIFETIME ?? ''}
+          label="LOCK IN FOUNDING LIFETIME ACCESS — $89"
+          className="w-full text-center rounded-[2px] border border-orange-600 bg-orange-600 hover:bg-orange-500 text-black font-mono font-bold text-xs tracking-widest uppercase py-3 transition shadow-[2px_2px_0px_rgba(0,0,0,1)] hover:translate-y-[1px] active:translate-y-[2px]"
+          returnUrl={`${typeof window !== 'undefined' ? window.location.origin : ''}/billing?success=true`}
+        />
+      </div>
     </div>
   );
 }

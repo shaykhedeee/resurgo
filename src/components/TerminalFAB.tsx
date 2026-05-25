@@ -17,13 +17,13 @@ import {
   CheckCircle2,
   Target,
   Flame,
-  Dumbbell,
-  Utensils,
-  Heart,
   Brain,
   MessageSquare,
   Mic,
   ChevronRight,
+  Timer,
+  Activity,
+  Sliders,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -34,7 +34,7 @@ interface TerminalFABProps {
 }
 
 // ── Command items ────────────────────────────────────────────────────────────
-const COMMANDS = [
+const QUICK_CAPTURE = [
   {
     id: 'task',
     key: 'T',
@@ -48,22 +48,10 @@ const COMMANDS = [
     href: '/tasks',
   },
   {
-    id: 'goal',
-    key: 'G',
-    label: 'NEW_GOAL',
-    sublabel: 'Set a target',
-    icon: Target,
-    color: 'text-cyan-400',
-    hoverBg: 'hover:bg-cyan-950/40',
-    borderAccent: 'border-l-cyan-500',
-    type: 'link' as const,
-    href: '/goals',
-  },
-  {
     id: 'habit',
     key: 'H',
     label: 'NEW_HABIT',
-    sublabel: 'Start a loop',
+    sublabel: 'Start a routine',
     icon: Flame,
     color: 'text-emerald-400',
     hoverBg: 'hover:bg-emerald-950/40',
@@ -72,40 +60,16 @@ const COMMANDS = [
     href: '/habits',
   },
   {
-    id: 'food',
-    key: 'F',
-    label: 'FOOD_WATER',
-    sublabel: 'Log meal or water',
-    icon: Utensils,
+    id: 'goal',
+    key: 'G',
+    label: 'NEW_GOAL',
+    sublabel: 'Set target outcome',
+    icon: Target,
     color: 'text-cyan-400',
     hoverBg: 'hover:bg-cyan-950/40',
     borderAccent: 'border-l-cyan-500',
     type: 'link' as const,
-    href: '/food',
-  },
-  {
-    id: 'workout',
-    key: 'W',
-    label: 'WORKOUT',
-    sublabel: 'Log training',
-    icon: Dumbbell,
-    color: 'text-red-400',
-    hoverBg: 'hover:bg-red-950/40',
-    borderAccent: 'border-l-red-500',
-    type: 'link' as const,
-    href: '/fitness',
-  },
-  {
-    id: 'mood',
-    key: 'M',
-    label: 'MOOD_JOURNAL',
-    sublabel: 'Log state',
-    icon: Heart,
-    color: 'text-rose-400',
-    hoverBg: 'hover:bg-rose-950/40',
-    borderAccent: 'border-l-rose-500',
-    type: 'link' as const,
-    href: '/wellness',
+    href: '/goals',
   },
   {
     id: 'brain-dump',
@@ -118,11 +82,14 @@ const COMMANDS = [
     borderAccent: 'border-l-purple-500',
     type: 'callback' as const,
   },
+] as const;
+
+const AI_CONTROLS = [
   {
     id: 'coach',
     key: 'C',
     label: 'AI_COACH',
-    sublabel: 'Talk to your coach',
+    sublabel: 'Interactive coach',
     icon: MessageSquare,
     color: 'text-amber-400',
     hoverBg: 'hover:bg-amber-950/40',
@@ -131,15 +98,40 @@ const COMMANDS = [
     href: '/coach',
   },
   {
-    id: 'voice',
-    key: 'V',
-    label: 'VOICE_INPUT',
-    sublabel: 'Speak to add',
-    icon: Mic,
-    color: 'text-pink-400',
-    hoverBg: 'hover:bg-pink-950/40',
-    borderAccent: 'border-l-pink-500',
-    type: 'callback' as const,
+    id: 'focus',
+    key: 'F',
+    label: 'FOCUS_SESSION',
+    sublabel: 'Enter hyperfocus',
+    icon: Timer,
+    color: 'text-rose-400',
+    hoverBg: 'hover:bg-rose-950/40',
+    borderAccent: 'border-l-rose-500',
+    type: 'link' as const,
+    href: '/focus',
+  },
+  {
+    id: 'deep-scan',
+    key: 'S',
+    label: 'DEEP_SCAN',
+    sublabel: 'Diagnostic audit',
+    icon: Activity,
+    color: 'text-indigo-400',
+    hoverBg: 'hover:bg-indigo-950/40',
+    borderAccent: 'border-l-indigo-500',
+    type: 'link' as const,
+    href: '/deep-scan',
+  },
+  {
+    id: 'orchestrator',
+    key: 'O',
+    label: 'ORCHESTRATOR',
+    sublabel: 'Generate plan',
+    icon: Sliders,
+    color: 'text-fuchsia-400',
+    hoverBg: 'hover:bg-fuchsia-950/40',
+    borderAccent: 'border-l-fuchsia-500',
+    type: 'link' as const,
+    href: '/orchestrator',
   },
 ] as const;
 
@@ -193,12 +185,12 @@ export default function TerminalFAB({ onBrainDump }: TerminalFABProps) {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
       const key = e.key.toUpperCase();
-      const cmd = COMMANDS.find((c) => c.key === key);
+      const allCommands = [...QUICK_CAPTURE, ...AI_CONTROLS];
+      const cmd = allCommands.find((c) => c.key === key);
       if (!cmd) return;
       if (cmd.type === 'callback') {
         close();
         if (cmd.id === 'brain-dump') onBrainDump?.();
-        if (cmd.id === 'voice') setVoiceOpen(true);
       }
       // Links handled by the DOM anchor click
     };
@@ -216,7 +208,7 @@ export default function TerminalFAB({ onBrainDump }: TerminalFABProps) {
             animate={{ opacity: 1, y: 0, scaleY: 1 }}
             exit={{ opacity: 0, y: 16, scaleY: 0.92 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute bottom-16 right-0 mb-2 w-56 origin-bottom-right overflow-hidden border border-zinc-800 bg-zinc-950/95 shadow-[0_12px_40px_rgba(0,0,0,0.55)] backdrop-blur-lg"
+            className="absolute bottom-16 right-0 mb-2 w-64 origin-bottom-right overflow-hidden border border-zinc-800 bg-zinc-950/95 shadow-[0_12px_40px_rgba(0,0,0,0.55)] backdrop-blur-lg"
           >
             <Scanlines />
 
@@ -230,8 +222,11 @@ export default function TerminalFAB({ onBrainDump }: TerminalFABProps) {
             </div>
 
             {/* Command list */}
-            <div className="relative z-20 py-1">
-              {COMMANDS.map((cmd, i) => {
+            <div className="relative z-20 py-1 max-h-[70vh] overflow-y-auto">
+              <div className="px-3 py-1 font-pixel text-[0.38rem] text-zinc-600 tracking-wider">
+                // QUICK_CAPTURE
+              </div>
+              {QUICK_CAPTURE.map((cmd, i) => {
                 const Icon = cmd.icon;
 
                 const inner = (
@@ -280,7 +275,6 @@ export default function TerminalFAB({ onBrainDump }: TerminalFABProps) {
                       onClick={() => {
                         close();
                         if (cmd.id === 'brain-dump') onBrainDump?.();
-                        if (cmd.id === 'voice') setVoiceOpen(true);
                       }}
                       className="w-full text-left"
                       aria-label={cmd.label}
@@ -289,6 +283,63 @@ export default function TerminalFAB({ onBrainDump }: TerminalFABProps) {
                     </button>
                   );
                 }
+
+                return (
+                  <Link
+                    key={cmd.id}
+                    href={(cmd as { href: string }).href}
+                    onClick={close}
+                    aria-label={cmd.label}
+                  >
+                    {inner}
+                  </Link>
+                );
+              })}
+
+              <div className="px-3 py-1.5 border-t border-zinc-900 font-pixel text-[0.38rem] text-zinc-600 tracking-wider mt-1.5">
+                // AI_SYSTEM_CONTROLS
+              </div>
+              {AI_CONTROLS.map((cmd, i) => {
+                const Icon = cmd.icon;
+
+                const inner = (
+                  <motion.div
+                    initial={{ opacity: 0, x: 8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: (QUICK_CAPTURE.length + i) * 0.035, duration: 0.15 }}
+                    className={cn(
+                      'flex items-center gap-3 border-l-2 px-3 py-2.5 transition-colors cursor-pointer',
+                      cmd.borderAccent,
+                      cmd.hoverBg,
+                    )}
+                  >
+                    <Icon
+                      className={cn('h-4 w-4 shrink-0', cmd.color)}
+                      strokeWidth={1.8}
+                    />
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className={cn(
+                          'font-pixel text-[0.35rem] tracking-[0.15em]',
+                          cmd.color,
+                        )}
+                      >
+                        {cmd.label}
+                      </p>
+                      <p className="font-terminal text-[0.55rem] text-zinc-500">
+                        {cmd.sublabel}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <kbd
+                        className="flex h-4 w-4 items-center justify-center border border-zinc-700 text-[0.45rem] font-terminal text-zinc-500"
+                      >
+                        {cmd.key}
+                      </kbd>
+                      <ChevronRight className="h-3 w-3 text-zinc-700" />
+                    </div>
+                  </motion.div>
+                );
 
                 return (
                   <Link

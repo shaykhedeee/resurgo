@@ -122,6 +122,7 @@ export const updateProfile = mutation({
     name: v.optional(v.string()),
     timezone: v.optional(v.string()),
     theme: v.optional(v.union(v.literal('light'), v.literal('dark'), v.literal('system'))),
+    dailyTaskCap: v.optional(v.number()),
   },
   returns: v.null(),
   handler: async (ctx, args) => {

@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO — Dashboard Layout (Protected) — PIXEL TERMINAL EDITION
@@ -176,6 +176,13 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
 
   return (
     <div className="relative flex min-h-screen bg-black text-zinc-100">
+      {/* Holographic background grid */}
+      <div className="pointer-events-none fixed inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: 'linear-gradient(rgba(234,88,12,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(234,88,12,0.5) 1px, transparent 1px)',
+        backgroundSize: '40px 40px',
+      }} />
+      {/* Radial glow */}
+      <div className="pointer-events-none fixed left-1/2 top-0 z-0 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-orange-500/5 blur-3xl" />
       {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/85 md:hidden" onClick={() => setMobileOpen(false)} />
@@ -235,9 +242,9 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
                 >
                   <span className={cn(
                     'font-pixel text-[0.42rem] tracking-[0.22em]',
-                    section.label === 'Plan' ? 'text-orange-600' : 'text-zinc-600'
+                    section.label === 'Command' || section.label === 'Tools & AI' ? 'text-orange-500 font-bold' : 'text-zinc-600'
                   )}>
-                    ── {section.label} ──
+                    :: {section.label.toUpperCase()} ::
                   </span>
                   {section.collapsible && (
                     <span className="font-pixel text-[0.5rem] text-zinc-700 transition-transform duration-150">
@@ -407,9 +414,16 @@ function DashboardLayoutContent({ children }: { children: ReactNode }) {
 
         {/* Command palette hint (desktop) */}
         <div className="sticky top-0 z-30 hidden h-14 items-center justify-between gap-4 border-b border-zinc-900 bg-zinc-950/80 px-6 backdrop-blur-sm md:flex">
-          <div>
-            <p className="surface-kicker">Workspace</p>
-            <p className="font-terminal text-sm text-zinc-400">Focused execution with less clutter.</p>
+          <div className="flex items-center gap-3">
+            <div>
+              <p className="surface-kicker">COCKPIT OPERATIONS</p>
+              <p className="font-terminal text-sm text-zinc-400">Focused execution cockpit. System online.</p>
+            </div>
+            <div className="h-5 w-px bg-zinc-900" />
+            <div className="flex items-center gap-1.5 rounded border border-emerald-950 bg-emerald-950/20 px-2 py-0.5 font-pixel text-[0.4rem] tracking-wider text-emerald-400">
+              <span className="h-1 w-1 rounded-full bg-emerald-400 animate-ping" />
+              ONLINE
+            </div>
           </div>
           <div className="flex items-center gap-2">
           <button

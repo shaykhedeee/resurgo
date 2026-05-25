@@ -44,6 +44,7 @@ export default defineSchema({
     timezone: v.optional(v.string()),
     theme: v.optional(v.union(v.literal('light'), v.literal('dark'), v.literal('system'))),
     onboardingComplete: v.boolean(),
+    dailyTaskCap: v.optional(v.number()),
     // Fitness & Health Details
     phoneNumber: v.optional(v.string()),
     dob: v.optional(v.string()),
@@ -1899,7 +1900,7 @@ systemHealth: defineTable({
 
   userIntegrations: defineTable({
     userId: v.id('users'),
-    provider: v.union(v.literal('google'), v.literal('notion')),
+    provider: v.union(v.literal('google'), v.literal('notion'), v.literal('fitbit')),
     accessToken: v.string(),
     refreshToken: v.optional(v.string()),
     expiresAt: v.optional(v.number()),

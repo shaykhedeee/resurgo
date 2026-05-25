@@ -46,6 +46,7 @@ android/
 # ─── GENERATED ──────────────────────────────────────────────────────
 # convex/_generated/ — committed so CI/Vercel/Android builds work without credentials
 public/uploads/
+.scan-copy/
 
 .vercel
 .continue/

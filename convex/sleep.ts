@@ -157,3 +157,62 @@ export const getSleepStats = query({
     };
   },
 });
+
+export const logSleepServer = mutation({
+  args: {
+    userId: v.id('users'),
+    date: v.string(),
+    bedtime: v.optional(v.string()),
+    wakeTime: v.optional(v.string()),
+    durationMinutes: v.optional(v.number()),
+    quality: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    secret: v.string(),
+  },
+  returns: v.id('sleepLogs'),
+  handler: async (ctx, args) => {
+    if (args.secret !== "resurgo_fitness_sync_secret_2026") {
+      throw new Error('Unauthorized server mutation');
+    }
+    const now = Date.now();
+
+    const existing = await ctx.db
+      .query('sleepLogs')
+      .withIndex('by_userId_date', (q: any) =>
+        q.eq('userId', args.userId).eq('date', args.date)
+      )
+      .unique();
+
+    let duration = args.durationMinutes;
+    if (!duration && args.bedtime && args.wakeTime) {
+      const [bh, bm] = args.bedtime.split(':').map(Number);
+      const [wh, wm] = args.wakeTime.split(':').map(Number);
+      let bedMinutes = bh * 60 + bm;
+      const wakeMinutes = wh * 60 + wm;
+      if (wakeMinutes < bedMinutes) { bedMinutes -= 24 * 60; }
+      duration = wakeMinutes - bedMinutes;
+    }
+
+    if (existing) {
+      await ctx.db.patch(existing._id, {
+        bedtime: args.bedtime ?? existing.bedtime,
+        wakeTime: args.wakeTime ?? existing.wakeTime,
+        durationMinutes: duration ?? existing.durationMinutes,
+        quality: args.quality ?? existing.quality,
+        notes: args.notes ?? existing.notes,
+      });
+      return existing._id;
+    }
+
+    return await ctx.db.insert('sleepLogs', {
+      userId: args.userId,
+      date: args.date,
+      bedtime: args.bedtime,
+      wakeTime: args.wakeTime,
+      durationMinutes: duration,
+      quality: args.quality,
+      notes: args.notes,
+      createdAt: now,
+    });
+  },
+});

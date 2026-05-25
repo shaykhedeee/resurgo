@@ -1,13 +1,15 @@
-﻿'use client';
+'use client';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// RESURGO — AI Orchestrator Panel
-// Multi-provider prompt decomposition UI
-// Shows real-time sub-task progress, provider assignments, and merged result
+// RESURGO — AI Orchestrator Panel (Full Cockpit Edition)
+// Multi-provider prompt decomposition UI + Obsidian Mind Graph + Jira Sprints
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { cn } from '@/lib/utils';
+import { Cpu, Network, Terminal as ConsoleIcon } from 'lucide-react';
+import MindGraph from './MindGraph';
+import SprintBoard from './SprintBoard';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -36,6 +38,7 @@ interface OrchestrateResponse {
 }
 
 type Phase = 'idle' | 'decomposing' | 'executing' | 'synthesizing' | 'complete' | 'error';
+type OrchestratorTab = 'orchestrator' | 'obsidian' | 'jira';
 
 const PROVIDER_COLORS: Record<string, string> = {
   ollama: 'text-violet-400',
@@ -104,11 +107,22 @@ const SYNTH_LINES = [
   '> Polishing output...',
 ];
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// Component
-// ═══════════════════════════════════════════════════════════════════════════════
-
 export function AIOrchestrator() {
+  const [activeTab, setActiveTab] = useState<OrchestratorTab>('orchestrator');
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'obsidian' || tab === 'jira' || tab === 'orchestrator') {
+        setActiveTab(tab as OrchestratorTab);
+      }
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    handleUrlChange();
+    return () => window.removeEventListener('popstate', handleUrlChange);
+  }, []);
+
   const [prompt, setPrompt] = useState('');
   const [phase, setPhase] = useState<Phase>('idle');
   const [terminalLines, setTerminalLines] = useState<string[]>([]);
@@ -167,7 +181,6 @@ export function AIOrchestrator() {
     addLine('── PHASE 3: SYNTHESIS ──');
     await simulateLines(SYNTH_LINES, 400);
 
-    // Make the actual API call
     try {
       addLine('');
       addLine('> Calling orchestration engine...');
@@ -222,210 +235,261 @@ export function AIOrchestrator() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      {/* ── Header ── */}
-      <div className="border-2 border-zinc-800 bg-black p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="h-3 w-3 bg-orange-600 animate-pulse" />
-          <h1 className="font-pixel text-sm tracking-widest text-orange-600">AI ORCHESTRATOR</h1>
-          <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-600">MULTI-PROVIDER ENGINE</span>
-        </div>
-        <p className="font-terminal text-sm text-zinc-400 leading-relaxed">
-          Submit a complex prompt → it gets decomposed into specialized sub-tasks → each sub-task is routed to the
-          best AI provider → results are synthesized into one coherent response. Think of it as a team of specialized
-          AIs working together on your request.
-        </p>
+      {/* ── TAB BAR ── */}
+      <div className="flex border-b border-zinc-800 bg-zinc-950/80">
+        <button
+          onClick={() => setActiveTab('orchestrator')}
+          className={cn(
+            'flex items-center gap-2 border-b-2 px-6 py-3 font-mono text-[10px] tracking-widest transition cursor-pointer',
+            activeTab === 'orchestrator'
+              ? 'border-orange-500 bg-orange-950/10 text-orange-500'
+              : 'border-transparent text-zinc-500 hover:text-zinc-300'
+          )}
+        >
+          <Cpu className="h-3.5 w-3.5" />
+          AI_ORCHESTRATOR
+        </button>
+        <button
+          onClick={() => setActiveTab('obsidian')}
+          className={cn(
+            'flex items-center gap-2 border-b-2 px-6 py-3 font-mono text-[10px] tracking-widest transition cursor-pointer',
+            activeTab === 'obsidian'
+              ? 'border-orange-500 bg-orange-950/10 text-orange-500'
+              : 'border-transparent text-zinc-500 hover:text-zinc-300'
+          )}
+        >
+          <Network className="h-3.5 w-3.5" />
+          OBSIDIAN_MIND_GRAPH
+        </button>
+        <button
+          onClick={() => setActiveTab('jira')}
+          className={cn(
+            'flex items-center gap-2 border-b-2 px-6 py-3 font-mono text-[10px] tracking-widest transition cursor-pointer',
+            activeTab === 'jira'
+              ? 'border-orange-500 bg-orange-950/10 text-orange-500'
+              : 'border-transparent text-zinc-500 hover:text-zinc-300'
+          )}
+        >
+          <ConsoleIcon className="h-3.5 w-3.5" />
+          JIRA_SPRINTS
+        </button>
       </div>
 
-      {/* ── Input ── */}
-      <div className="border-2 border-zinc-800 bg-black">
-        <div className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2">
-          <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">PROMPT INPUT</span>
-          <span className="ml-auto font-terminal text-xs text-zinc-600">{prompt.length}/2000</span>
-        </div>
-        <div className="p-4">
-          <textarea
-            ref={textareaRef}
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value.slice(0, 2000))}
-            placeholder="Enter a complex request that benefits from multi-AI processing..."
-            rows={4}
-            disabled={isProcessing}
-            className="w-full resize-none border-2 border-zinc-800 bg-zinc-950 px-4 py-3 font-terminal text-base text-zinc-100 outline-none transition focus:border-orange-600 placeholder:text-zinc-600 disabled:opacity-50"
-          />
+      {/* ── OBSIDIAN GRAPH TAB ── */}
+      {activeTab === 'obsidian' && <MindGraph />}
 
-          {/* Quick prompts */}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {EXAMPLE_PROMPTS.map((ex) => (
-              <button
-                key={ex.label}
-                onClick={() => setPrompt(ex.prompt)}
-                disabled={isProcessing}
-                className="border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:border-orange-600 hover:text-orange-500 disabled:opacity-30"
-              >
-                {ex.label}
-              </button>
-            ))}
+      {/* ── JIRA SPRINT TAB ── */}
+      {activeTab === 'jira' && <SprintBoard />}
+
+      {/* ── ORCHESTRATOR TAB ── */}
+      {activeTab === 'orchestrator' && (
+        <div className="space-y-6">
+          {/* Header */}
+          <div className="border-2 border-zinc-800 bg-black p-6">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-3 w-3 bg-orange-600 animate-pulse" />
+              <h1 className="font-pixel text-sm tracking-widest text-orange-600">AI ORCHESTRATOR</h1>
+              <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-600">MULTI-PROVIDER ENGINE</span>
+            </div>
+            <p className="font-terminal text-sm text-zinc-400 leading-relaxed">
+              Submit a complex prompt → it gets decomposed into specialized sub-tasks → each sub-task is routed to the
+              best AI provider → results are synthesized into one coherent response. Think of it as a team of specialized
+              AIs working together on your request.
+            </p>
           </div>
 
-          <div className="mt-4 flex gap-3">
-            <button
-              onClick={handleSubmit}
-              disabled={!prompt.trim() || isProcessing}
-              className="flex-1 border-2 border-orange-600 bg-orange-600 py-3 font-pixel text-[0.6rem] tracking-widest text-black transition hover:bg-orange-500 active:translate-y-[1px] disabled:opacity-30 disabled:cursor-not-allowed shadow-[3px_3px_0px_rgba(0,0,0,0.8)]"
-            >
-              {isProcessing ? `${phase.toUpperCase()}...` : 'ORCHESTRATE →'}
-            </button>
-            {(result || phase === 'error') && (
-              <button
-                onClick={handleReset}
-                className="border-2 border-zinc-700 bg-zinc-900 px-6 py-3 font-pixel text-[0.6rem] tracking-widest text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
-              >
-                RESET
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Terminal Output ── */}
-      {terminalLines.length > 0 && (
-        <div className="border-2 border-zinc-800 bg-black">
-          <div className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2">
-            <div className={cn(
-              'h-2 w-2 rounded-full',
-              isProcessing ? 'bg-orange-500 animate-pulse' : phase === 'complete' ? 'bg-green-500' : phase === 'error' ? 'bg-red-500' : 'bg-zinc-600'
-            )} />
-            <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">ORCHESTRATION LOG</span>
-            <span className="ml-auto font-terminal text-xs text-zinc-600">
-              {phase === 'decomposing' ? 'PHASE 1/3'
-                : phase === 'executing' ? 'PHASE 2/3'
-                : phase === 'synthesizing' ? 'PHASE 3/3'
-                : phase === 'complete' ? 'DONE'
-                : phase === 'error' ? 'FAILED'
-                : ''}
-            </span>
-          </div>
-          <div
-            ref={terminalRef}
-            className="max-h-64 overflow-y-auto p-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-zinc-700"
-          >
-            {terminalLines.map((line, i) => (
-              <p
-                key={i}
-                className={cn(
-                  'font-terminal text-sm leading-relaxed',
-                  line.startsWith('═') ? 'text-orange-500 font-bold' :
-                  line.startsWith('──') ? 'text-zinc-500 font-bold' :
-                  line.includes('ERROR') ? 'text-red-400' :
-                  line.includes('✓') ? 'text-green-400' :
-                  line.includes('Complete') ? 'text-green-400' :
-                  'text-zinc-400'
-                )}
-              >
-                {line || '\u00A0'}
-              </p>
-            ))}
-            {isProcessing && (
-              <span className="inline-block w-2 h-4 bg-orange-500 animate-pulse ml-1" />
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ── Result ── */}
-      {result && (
-        <div className="space-y-4">
-          {/* Stats bar */}
-          <div className="flex flex-wrap gap-3">
-            <StatBadge label="Duration" value={`${(result.stats.totalDurationMs / 1000).toFixed(1)}s`} />
-            <StatBadge label="Providers" value={String(result.stats.providersUsed.length)} />
-            <StatBadge label="Sub-tasks" value={String(result.stats.subTaskCount)} />
-            <StatBadge label="Tokens" value={String(result.stats.totalTokens)} />
-            <StatBadge label="Method" value={result.stats.decompositionMethod} />
-            {result.stats.providersUsed.map((p) => (
-              <span
-                key={p}
-                className={cn('font-pixel text-[0.35rem] tracking-widest px-2 py-1 border border-zinc-800', PROVIDER_COLORS[p] ?? 'text-zinc-400')}
-              >
-                {p.toUpperCase()}
-              </span>
-            ))}
-          </div>
-
-          {/* Main response */}
+          {/* Input */}
           <div className="border-2 border-zinc-800 bg-black">
             <div className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2">
-              <span className="h-2 w-2 bg-green-500 rounded-full" />
-              <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">SYNTHESIZED RESPONSE</span>
+              <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">PROMPT INPUT</span>
+              <span className="ml-auto font-terminal text-xs text-zinc-600">{prompt.length}/2000</span>
             </div>
-            <div className="p-6">
-              <div className="font-terminal text-base text-zinc-200 leading-relaxed whitespace-pre-wrap">
-                {result.response}
+            <div className="p-4">
+              <textarea
+                ref={textareaRef}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value.slice(0, 2000))}
+                placeholder="Enter a complex request that benefits from multi-AI processing..."
+                rows={4}
+                disabled={isProcessing}
+                className="w-full resize-none border-2 border-zinc-800 bg-zinc-950 px-4 py-3 font-terminal text-base text-zinc-100 outline-none transition focus:border-orange-600 placeholder:text-zinc-600 disabled:opacity-50"
+              />
+
+              {/* Quick prompts */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {EXAMPLE_PROMPTS.map((ex) => (
+                  <button
+                    key={ex.label}
+                    onClick={() => setPrompt(ex.prompt)}
+                    disabled={isProcessing}
+                    className="border border-zinc-800 bg-zinc-950 px-3 py-1.5 font-pixel text-[0.35rem] tracking-widest text-zinc-400 transition hover:border-orange-600 hover:text-orange-500 disabled:opacity-30"
+                  >
+                    {ex.label}
+                  </button>
+                ))}
+              </div>
+
+              <div className="mt-4 flex gap-3">
+                <button
+                  onClick={handleSubmit}
+                  disabled={!prompt.trim() || isProcessing}
+                  className="flex-1 border-2 border-orange-600 bg-orange-600 py-3 font-pixel text-[0.6rem] tracking-widest text-black transition hover:bg-orange-500 active:translate-y-[1px] disabled:opacity-30 disabled:cursor-not-allowed shadow-[3px_3px_0px_rgba(0,0,0,0.8)]"
+                >
+                  {isProcessing ? `${phase.toUpperCase()}...` : 'ORCHESTRATE →'}
+                </button>
+                {(result || phase === 'error') && (
+                  <button
+                    onClick={handleReset}
+                    className="border-2 border-zinc-700 bg-zinc-900 px-6 py-3 font-pixel text-[0.6rem] tracking-widest text-zinc-400 transition hover:border-zinc-500 hover:text-zinc-200"
+                  >
+                    RESET
+                  </button>
+                )}
               </div>
             </div>
           </div>
 
-          {/* Sub-task details toggle */}
-          {result.subTasks && result.subTasks.length > 0 && (
+          {/* Terminal Output */}
+          {terminalLines.length > 0 && (
             <div className="border-2 border-zinc-800 bg-black">
-              <button
-                onClick={() => setShowSubTasks(!showSubTasks)}
-                className="w-full border-b border-zinc-800 px-4 py-3 flex items-center gap-2 hover:bg-zinc-950 transition"
-              >
-                <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">
-                  {showSubTasks ? '▼' : '▶'} SUB-TASK DETAILS ({result.subTasks.length})
-                </span>
+              <div className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2">
+                <div className={cn(
+                  'h-2 w-2 rounded-full',
+                  isProcessing ? 'bg-orange-500 animate-pulse' : phase === 'complete' ? 'bg-green-500' : phase === 'error' ? 'bg-red-500' : 'bg-zinc-600'
+                )} />
+                <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">ORCHESTRATION LOG</span>
                 <span className="ml-auto font-terminal text-xs text-zinc-600">
-                  Click to {showSubTasks ? 'collapse' : 'expand'}
+                  {phase === 'decomposing' ? 'PHASE 1/3'
+                    : phase === 'executing' ? 'PHASE 2/3'
+                    : phase === 'synthesizing' ? 'PHASE 3/3'
+                    : phase === 'complete' ? 'DONE'
+                    : phase === 'error' ? 'FAILED'
+                    : ''}
                 </span>
-              </button>
-              {showSubTasks && (
-                <div className="divide-y divide-zinc-900">
-                  {result.subTasks.map((st) => (
-                    <div key={st.id} className="p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-base">{TASK_TYPE_ICONS[st.type] ?? '📎'}</span>
-                        <span className="font-pixel text-[0.6rem] tracking-widest text-zinc-200">
-                          {st.title}
-                        </span>
-                        <span className="font-terminal text-xs text-zinc-600">({st.type})</span>
-                        <span className={cn('font-pixel text-[0.55rem] tracking-widest ml-auto', PROVIDER_COLORS[st.provider] ?? 'text-zinc-400')}>
-                          {st.provider.toUpperCase()} / {st.model}
-                        </span>
-                        <span className="font-terminal text-xs text-zinc-600">{st.durationMs}ms</span>
-                        {st.tokensUsed && (
-                          <span className="font-terminal text-xs text-zinc-600">{st.tokensUsed} tok</span>
-                        )}
-                      </div>
-                      {st.error ? (
-                        <p className="font-terminal text-sm text-red-400">{st.error}</p>
-                      ) : (
-                        <div className="border border-zinc-900 bg-zinc-950 p-3 max-h-48 overflow-y-auto">
-                          <p className="font-terminal text-sm text-zinc-400 whitespace-pre-wrap leading-relaxed">
-                            {st.content}
-                          </p>
+              </div>
+              <div
+                ref={terminalRef}
+                className="max-h-64 overflow-y-auto p-4 scrollbar-thin scrollbar-track-black scrollbar-thumb-zinc-700"
+              >
+                {terminalLines.map((line, i) => (
+                  <p
+                    key={i}
+                    className={cn(
+                      'font-terminal text-sm leading-relaxed',
+                      line.startsWith('═') ? 'text-orange-500 font-bold' :
+                      line.startsWith('──') ? 'text-zinc-500 font-bold' :
+                      line.includes('ERROR') ? 'text-red-400' :
+                      line.includes('✓') ? 'text-green-400' :
+                      line.includes('Complete') ? 'text-green-400' :
+                      'text-zinc-400'
+                    )}
+                  >
+                    {line || '\u00A0'}
+                  </p>
+                ))}
+                {isProcessing && (
+                  <span className="inline-block w-2 h-4 bg-orange-500 animate-pulse ml-1" />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Result */}
+          {result && (
+            <div className="space-y-4">
+              {/* Stats bar */}
+              <div className="flex flex-wrap gap-3">
+                <StatBadge label="Duration" value={`${(result.stats.totalDurationMs / 1000).toFixed(1)}s`} />
+                <StatBadge label="Providers" value={String(result.stats.providersUsed.length)} />
+                <StatBadge label="Sub-tasks" value={String(result.stats.subTaskCount)} />
+                <StatBadge label="Tokens" value={String(result.stats.totalTokens)} />
+                <StatBadge label="Method" value={result.stats.decompositionMethod} />
+                {result.stats.providersUsed.map((p) => (
+                  <span
+                    key={p}
+                    className={cn('font-pixel text-[0.35rem] tracking-widest px-2 py-1 border border-zinc-800', PROVIDER_COLORS[p] ?? 'text-zinc-400')}
+                  >
+                    {p.toUpperCase()}
+                  </span>
+                ))}
+              </div>
+
+              {/* Main response */}
+              <div className="border-2 border-zinc-800 bg-black">
+                <div className="border-b border-zinc-800 px-4 py-2 flex items-center gap-2">
+                  <span className="h-2 w-2 bg-green-500 rounded-full" />
+                  <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">SYNTHESIZED RESPONSE</span>
+                </div>
+                <div className="p-6">
+                  <div className="font-terminal text-base text-zinc-200 leading-relaxed whitespace-pre-wrap">
+                    {result.response}
+                  </div>
+                </div>
+              </div>
+
+              {/* Sub-task details toggle */}
+              {result.subTasks && result.subTasks.length > 0 && (
+                <div className="border-2 border-zinc-800 bg-black">
+                  <button
+                    onClick={() => setShowSubTasks(!showSubTasks)}
+                    className="w-full border-b border-zinc-800 px-4 py-3 flex items-center gap-2 hover:bg-zinc-950 transition"
+                  >
+                    <span className="font-pixel text-[0.35rem] tracking-widest text-zinc-500">
+                      {showSubTasks ? '▼' : '▶'} SUB-TASK DETAILS ({result.subTasks.length})
+                    </span>
+                    <span className="ml-auto font-terminal text-xs text-zinc-600">
+                      Click to {showSubTasks ? 'collapse' : 'expand'}
+                    </span>
+                  </button>
+                  {showSubTasks && (
+                    <div className="divide-y divide-zinc-900">
+                      {result.subTasks.map((st) => (
+                        <div key={st.id} className="p-4">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-base">{TASK_TYPE_ICONS[st.type] ?? '📎'}</span>
+                            <span className="font-pixel text-[0.6rem] tracking-widest text-zinc-200">
+                              {st.title}
+                            </span>
+                            <span className="font-terminal text-xs text-zinc-600">({st.type})</span>
+                            <span className={cn('font-pixel text-[0.55rem] tracking-widest ml-auto', PROVIDER_COLORS[st.provider] ?? 'text-zinc-400')}>
+                              {st.provider.toUpperCase()} / {st.model}
+                            </span>
+                            <span className="font-terminal text-xs text-zinc-600">{st.durationMs}ms</span>
+                            {st.tokensUsed && (
+                              <span className="font-terminal text-xs text-zinc-600">{st.tokensUsed} tok</span>
+                            )}
+                          </div>
+                          {st.error ? (
+                            <p className="font-terminal text-sm text-red-400">{st.error}</p>
+                          ) : (
+                            <div className="border border-zinc-900 bg-zinc-950 p-3 max-h-48 overflow-y-auto">
+                              <p className="font-terminal text-sm text-zinc-400 whitespace-pre-wrap leading-relaxed">
+                                {st.content}
+                              </p>
+                            </div>
+                          )}
                         </div>
-                      )}
+                      ))}
                     </div>
-                  ))}
+                  )}
                 </div>
               )}
             </div>
           )}
-        </div>
-      )}
 
-      {/* ── Error State ── */}
-      {phase === 'error' && !result && (
-        <div className="border-2 border-red-900 bg-red-950/20 p-6">
-          <p className="font-pixel text-[0.6rem] tracking-widest text-red-500 mb-2">ORCHESTRATION FAILED</p>
-          <p className="font-terminal text-sm text-red-400">{errorMsg}</p>
-          <button
-            onClick={handleReset}
-            className="mt-4 border-2 border-red-800 px-4 py-2 font-pixel text-[0.35rem] tracking-widest text-red-400 hover:bg-red-950/50 transition"
-          >
-            TRY AGAIN
-          </button>
+          {/* Error State */}
+          {phase === 'error' && !result && (
+            <div className="border-2 border-red-900 bg-red-950/20 p-6">
+              <p className="font-pixel text-[0.6rem] tracking-widest text-red-500 mb-2">ORCHESTRATION FAILED</p>
+              <p className="font-terminal text-sm text-red-400">{errorMsg}</p>
+              <button
+                onClick={handleReset}
+                className="mt-4 border-2 border-red-800 px-4 py-2 font-pixel text-[0.35rem] tracking-widest text-red-400 hover:bg-red-950/50 transition"
+              >
+                TRY AGAIN
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

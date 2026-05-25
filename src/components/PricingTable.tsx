@@ -1,6 +1,6 @@
 'use client';
 
-import { Check, Zap } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface PricingTier {
   name: string;
@@ -20,10 +20,10 @@ interface PricingTableProps {
 
 const DEFAULT_TIERS: PricingTier[] = [
   {
-    name: 'Free',
+    name: 'Free Forever',
     price: '$0',
-    period: '/month',
-    description: 'Perfect for getting started with habit tracking',
+    period: '',
+    description: 'Perfect for solo founders starting out',
     features: [
       'Up to 5 daily habits',
       'Up to 3 active goals',
@@ -33,7 +33,7 @@ const DEFAULT_TIERS: PricingTier[] = [
       '3 vision board panels',
     ],
     ctaLabel: 'Start Free',
-    ctaHref: '/quick-start',
+    ctaHref: '/sign-up',
   },
   {
     name: 'Pro',
@@ -42,7 +42,7 @@ const DEFAULT_TIERS: PricingTier[] = [
     description: 'Unlock the full power of AI-driven habit building',
     features: [
       'Unlimited habits & goals',
-      'All 5 AI Coaches',
+      'All 5 AI Coaches (incl. Founder & Growth Specialist)',
       'Unlimited AI messages',
       'Advanced analytics & insights',
       'Unlimited vision boards',
@@ -57,7 +57,7 @@ const DEFAULT_TIERS: PricingTier[] = [
   {
     name: 'Lifetime',
     price: '$89',
-    period: '/once',
+    period: 'one-time',
     description: 'Founding member pricing — unlimited lifetime access',
     features: [
       'Everything in Pro, forever',
@@ -77,54 +77,59 @@ export function PricingTable({
   heading = 'Choose Your Plan',
 }: PricingTableProps) {
   return (
-    <section className="w-full py-20">
-      <div className="max-w-5xl mx-auto px-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-white text-center mb-4">{heading}</h2>
-        <p className="text-lg text-zinc-400 text-center mb-12 max-w-xl mx-auto">
-          Start free and upgrade when you are ready. No credit card required.
+    <section className="w-full py-16">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-2 text-center">
+          <p className="font-pixel text-[0.55rem] tracking-widest text-orange-500">ACCESS_TIERS</p>
+        </div>
+        <h2 className="text-center font-pixel text-lg text-zinc-100 sm:text-xl mb-4">{heading}</h2>
+        <p className="mx-auto mt-2 max-w-xl text-center font-terminal text-sm text-zinc-400 mb-10">
+          Start free forever. Upgrade only when you&apos;re ready. No credit card required.
         </p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
           {tiers.map((tier, i) => (
-            <div
+            <article
               key={i}
-              className={`rounded-2xl border p-8 ${
+              className={cn(
+                'flex flex-col p-5 sm:p-6 shadow-[2px_2px_0px_rgba(0,0,0,0.5)] border-2 transition-all duration-200',
                 tier.popular
-                  ? 'border-orange-500 bg-gradient-to-b from-orange-600/10 to-transparent relative'
-                  : 'border-zinc-800 bg-zinc-900/50'
-              }`}
+                  ? 'border-orange-900 bg-orange-950/20 relative shadow-[4px_4px_0px_rgba(234,88,12,0.15)]'
+                  : 'border-zinc-800 bg-black hover:border-zinc-700'
+              )}
             >
               {tier.popular && (
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                  <div className="flex items-center gap-1 rounded-full bg-orange-600 px-3 py-1 text-xs text-white font-medium">
-                    <Zap className="w-3 h-3" /> Most Popular
-                  </div>
-                </div>
+                <p className="absolute top-0 left-4 -translate-y-1/2 border border-orange-500 bg-black px-2 py-0.5 font-pixel text-[0.55rem] tracking-widest text-orange-500 uppercase">
+                  ★ MOST POPULAR
+                </p>
               )}
-              <h3 className="text-xl font-bold text-white mb-1">{tier.name}</h3>
-              <div className="mb-2">
-                <span className="text-3xl font-bold text-white">{tier.price}</span>
-                {tier.period && <span className="text-zinc-500">{tier.period}</span>}
+              <h3 className="font-pixel text-[0.6rem] tracking-widest text-zinc-300 uppercase mb-2">{tier.name}</h3>
+              <div className="mt-2 mb-2 flex items-baseline">
+                <span className="font-pixel text-base text-zinc-100">{tier.price}</span>
+                {tier.period && (
+                  <span className="font-terminal text-sm text-zinc-500 ml-1 uppercase">{tier.period}</span>
+                )}
               </div>
-              <p className="text-sm text-zinc-400 mb-6">{tier.description}</p>
-              <ul className="space-y-3 mb-8">
+              <p className="font-terminal text-xs text-zinc-500 mb-6 leading-relaxed">{tier.description}</p>
+              <ul className="mt-4 flex-1 space-y-2.5 mb-8">
                 {tier.features.map((feature, j) => (
-                  <li key={j} className="flex items-start gap-3 text-sm text-zinc-300">
-                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <li key={j} className="flex items-start gap-2 font-terminal text-xs sm:text-sm leading-snug text-zinc-300">
+                    <span className="mt-0.5 shrink-0 text-green-500 font-mono">&#10003;</span>
                     {feature}
                   </li>
                 ))}
               </ul>
               <a
                 href={tier.ctaHref}
-                className={`block w-full text-center py-3 rounded-xl font-semibold transition-colors ${
+                className={cn(
+                  'block w-full text-center py-2.5 font-pixel text-[0.6rem] tracking-widest uppercase border-2 transition-all duration-150',
                   tier.popular
-                    ? 'bg-orange-600 text-white hover:bg-orange-700'
-                    : 'border border-zinc-700 text-white hover:bg-white/5'
-                }`}
+                    ? 'border-orange-600 bg-orange-600 text-black font-bold hover:bg-orange-500 hover:border-orange-500'
+                    : 'border-zinc-800 bg-black text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
+                )}
               >
                 {tier.ctaLabel}
               </a>
-            </div>
+            </article>
           ))}
         </div>
       </div>

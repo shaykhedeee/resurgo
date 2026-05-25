@@ -55,6 +55,7 @@ function SettingsPageWithAuth() {
   const [name, setName] = useState('');
   const [timezone, setTimezone] = useState('');
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('dark');
+  const [dailyTaskCap, setDailyTaskCap] = useState<number>(5);
   const [profileSaved, setProfileSaved] = useState(false);
 
   // Schedule fields
@@ -86,6 +87,7 @@ function SettingsPageWithAuth() {
       setName(currentUser.name ?? clerkUser?.fullName ?? '');
       setTimezone(currentUser.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone);
       setTheme((u.theme as 'light' | 'dark' | 'system') ?? 'dark');
+      setDailyTaskCap((u.dailyTaskCap as number) ?? 5);
       setWakeTime((u.wakeTime as string) ?? '07:00');
       setSleepTime((u.sleepTime as string) ?? '23:00');
       setPeakTime((u.peakProductivityTime as string) ?? 'morning');
@@ -118,7 +120,7 @@ function SettingsPageWithAuth() {
 
   const handleSaveProfile = async () => {
     try {
-      await updateProfile({ name, timezone, theme });
+      await updateProfile({ name, timezone, theme, dailyTaskCap });
       setProfileSaved(true);
       setTimeout(() => setProfileSaved(false), 2000);
     } catch (e) {
@@ -224,6 +226,27 @@ function SettingsPageWithAuth() {
                   <option key={tz} value={tz}>{tz}</option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="mb-1 block font-mono text-[9px] tracking-widest text-zinc-400">DAILY_TASK_CAPACITY</label>
+              <div className="flex items-center gap-3">
+                <select
+                  value={dailyTaskCap}
+                  onChange={(e) => setDailyTaskCap(Number(e.target.value))}
+                  className="border border-zinc-800 bg-black px-3 py-2 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none flex-1 font-bold"
+                >
+                  <option value={3}>3 TASKS (ADHD focus / ultra-light)</option>
+                  <option value={5}>5 TASKS (Balanced / high focus - Recommended)</option>
+                  <option value={7}>7 TASKS (High Output sprint)</option>
+                  <option value={10}>10 TASKS (Extreme operational volume)</option>
+                </select>
+                <div className="border border-dashed border-zinc-800 px-3 py-2 font-mono text-[10px] text-zinc-500 shrink-0">
+                  CAP: {dailyTaskCap}
+                </div>
+              </div>
+              <p className="mt-1 font-mono text-[8px] text-zinc-500 leading-normal">
+                Limits planned daily workloads to prevent overload and maintain Stoic execution realism.
+              </p>
             </div>
             <div>
               <label className="mb-1 block font-mono text-[9px] tracking-widest text-zinc-400">ACCESS_TIER</label>

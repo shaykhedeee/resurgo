@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { useState, FormEvent } from 'react';
-import { Plus, Trash2, Copy, Check, Zap, Key, Webhook } from 'lucide-react';
+import { Plus, Trash2, Copy, Check, Zap, Key, Webhook, Activity, Trophy, Brain, Globe, TrendingUp, Share2, Sparkles, Loader2, Calendar } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const SUPPORTED_EVENTS = [
@@ -20,7 +20,7 @@ export default function IntegrationsPage() {
   const generateKey = useAction(api.apiKeys.generateKey);
   const revokeKey = useMutation(api.apiKeys.revokeKey);
 
-  const [tab, setTab] = useState<'webhooks' | 'api'>('webhooks');
+  const [tab, setTab] = useState<'webhooks' | 'api' | 'automation'>('webhooks');
   const [showWebhookForm, setShowWebhookForm] = useState(false);
   const [webhookUrl, setWebhookUrl] = useState('');
   const [webhookName, setWebhookName] = useState('');
@@ -31,6 +31,12 @@ export default function IntegrationsPage() {
   const [generatingKey, setGeneratingKey] = useState(false);
   const [newKey, setNewKey] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+
+  // Manual cron triggers
+  const triggerJob = useAction(api.scheduledTasks.triggerJobManual);
+  const [triggeringJob, setTriggeringJob] = useState<string | null>(null);
+  const [triggerStatus, setTriggerStatus] = useState<Record<string, 'idle' | 'running' | 'success' | 'failed'>>({});
+  const [triggerError, setTriggerError] = useState<Record<string, string>>({});
 
   const handleCreateWebhook = async (e: FormEvent) => {
     e.preventDefault();
@@ -99,6 +105,7 @@ export default function IntegrationsPage() {
             {[
               { id: 'webhooks' as const, label: 'WEBHOOKS', icon: Webhook },
               { id: 'api' as const, label: 'API_KEYS', icon: Key },
+              { id: 'automation' as const, label: 'AUTOMATION', icon: Zap },
             ].map(({ id, label, icon: Icon }) => (
               <button key={id} onClick={() => setTab(id)}
                 className={cn('flex flex-1 items-center justify-center gap-1.5 border-b-2 py-2.5 font-mono text-xs tracking-widest transition',
@@ -283,6 +290,184 @@ export default function IntegrationsPage() {
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+        )}
+
+        {tab === 'automation' && (
+          <div className="space-y-4">
+            <div className="border border-zinc-900 bg-zinc-950 p-4">
+              <p className="font-mono text-xs leading-relaxed text-zinc-500">
+                Scheduled Tasks Command Center. Review the active cron jobs executing in the background of Resurgo Life OS. Use the manual triggers to test workflows.
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              {[
+                {
+                  id: 'daily-blog-generation',
+                  name: 'SEO Blog Post Generator',
+                  schedule: 'Daily @ 2:00 AM UTC',
+                  cron: '0 2 * * *',
+                  desc: 'Uses Groq llama-3.3-70b-versatile to research trending topics, write a 600+ word structured markdown blog, and save it in generatedBlogPosts.',
+                  icon: Sparkles,
+                  color: 'text-orange-400',
+                  border: 'border-orange-900/40 bg-orange-950/5',
+                },
+                {
+                  id: 'social-media-post-scheduler',
+                  name: 'Social Media Post Scheduler',
+                  schedule: 'Daily @ 12:00 PM UTC',
+                  cron: '0 12 * * *',
+                  desc: 'Synthesizes value-packed, high-hook solopreneur content, schedules LinkedIn/Twitter drafts, and logs events in marketingEvents.',
+                  icon: Share2,
+                  color: 'text-rose-400',
+                  border: 'border-rose-900/40 bg-rose-950/5',
+                },
+                {
+                  id: 'weekly-analytics-telemetry-audit',
+                  name: 'Weekly System Telemetry Audit',
+                  schedule: 'Sunday @ 11:55 PM UTC',
+                  cron: '55 23 * * 0',
+                  desc: 'Aggregates active user metrics, habit completions, focus minutes, and emails a detailed snoop report to administrators.',
+                  icon: TrendingUp,
+                  color: 'text-cyan-400',
+                  border: 'border-cyan-900/40 bg-cyan-950/5',
+                },
+                {
+                  id: 'streak-recovery-advisor',
+                  name: 'Streak Recovery Advisor',
+                  schedule: 'Daily @ 8:00 AM UTC',
+                  cron: '0 8 * * *',
+                  desc: 'Triggers Groq to generate high-empathy personalized streak recovery guides when active users break streak milestones.',
+                  icon: Zap,
+                  color: 'text-amber-400',
+                  border: 'border-amber-900/40 bg-amber-950/5',
+                },
+                {
+                  id: 'monthly-goal-review',
+                  name: 'Monthly Goal & Momentum Review',
+                  schedule: '1st of Month @ 6:00 AM UTC',
+                  cron: '0 6 1 * *',
+                  desc: 'Compiles and dispatches monthly comparative reviews of completed vs active milestones to keep developers focused.',
+                  icon: Trophy,
+                  color: 'text-yellow-400',
+                  border: 'border-yellow-900/40 bg-yellow-950/5',
+                },
+                {
+                  id: 'ai-memory-extraction',
+                  name: 'AI Context Memory Extractor',
+                  schedule: 'Every 6 Hours',
+                  cron: '0 */6 * * *',
+                  desc: 'Crawls active coach session chat message histories, extracts behavioral patterns, and saves them in the memories table.',
+                  icon: Brain,
+                  color: 'text-purple-400',
+                  border: 'border-purple-900/40 bg-purple-950/5',
+                },
+                {
+                  id: 'system-health-check',
+                  name: 'System Health & Latency Monitor',
+                  schedule: 'Every 30 Minutes',
+                  cron: '*/30 * * * *',
+                  desc: 'Performs micro latency read/write queries to the Convex database cluster and records health status telemetry metrics.',
+                  icon: Activity,
+                  color: 'text-emerald-400',
+                  border: 'border-emerald-900/40 bg-emerald-950/5',
+                },
+                {
+                  id: 'seo-sitemap-ping',
+                  name: 'SEO Search Engine Pinger',
+                  schedule: 'Daily @ 12:00 AM UTC',
+                  cron: '0 0 * * *',
+                  desc: 'Transmits sitemap.xml index pings directly to Google and Bing engines to keep newly drafted AI pages indexed.',
+                  icon: Globe,
+                  color: 'text-blue-400',
+                  border: 'border-blue-900/40 bg-blue-950/5',
+                },
+              ].map((task) => {
+                const Icon = task.icon;
+                const status = triggerStatus[task.id] || 'idle';
+                const error = triggerError[task.id] || '';
+                return (
+                  <div key={task.id} className={cn('border p-4 flex flex-col md:flex-row justify-between items-start md:items-center gap-4', task.border)}>
+                    <div className="flex-1 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Icon className={cn('h-4 w-4', task.color)} />
+                        <h4 className="font-mono text-xs font-bold text-zinc-200 uppercase">{task.name}</h4>
+                        <span className="flex items-center gap-1 rounded bg-zinc-900 border border-zinc-800 px-1.5 py-0.5 font-pixel text-[0.45rem] tracking-wider text-zinc-500">
+                          {task.cron}
+                        </span>
+                        {status === 'running' && (
+                          <span className="flex items-center gap-1 rounded bg-orange-950 border border-orange-900/50 px-1.5 py-0.5 font-pixel text-[0.45rem] tracking-wider text-orange-400 animate-pulse">
+                            EXECUTING
+                          </span>
+                        )}
+                        {status === 'success' && (
+                          <span className="flex items-center gap-1 rounded bg-emerald-950 border border-emerald-900/50 px-1.5 py-0.5 font-pixel text-[0.45rem] tracking-wider text-emerald-400">
+                            COMPLETED_OK
+                          </span>
+                        )}
+                        {status === 'failed' && (
+                          <span className="flex items-center gap-1 rounded bg-red-950 border border-red-900/50 px-1.5 py-0.5 font-pixel text-[0.45rem] tracking-wider text-red-400">
+                            ERROR
+                          </span>
+                        )}
+                      </div>
+                      <p className="font-mono text-xs text-zinc-400 leading-relaxed">{task.desc}</p>
+                      <div className="flex gap-4 pt-1">
+                        <span className="font-mono text-[10px] text-zinc-600">Schedule: <strong className="text-zinc-500">{task.schedule}</strong></span>
+                      </div>
+                      {error && (
+                        <p className="font-mono text-[10px] text-red-500 bg-red-950/20 border border-red-950/50 p-1.5 break-all">
+                          Error: {error}
+                        </p>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      disabled={triggeringJob !== null}
+                      onClick={async () => {
+                        setTriggeringJob(task.id);
+                        setTriggerStatus(prev => ({ ...prev, [task.id]: 'running' }));
+                        setTriggerError(prev => ({ ...prev, [task.id]: '' }));
+                        try {
+                          const res = await triggerJob({ jobName: task.id });
+                          if (res.success) {
+                            setTriggerStatus(prev => ({ ...prev, [task.id]: 'success' }));
+                          } else {
+                            setTriggerStatus(prev => ({ ...prev, [task.id]: 'failed' }));
+                            setTriggerError(prev => ({ ...prev, [task.id]: res.error || 'Unknown trigger exception' }));
+                          }
+                        } catch (err) {
+                          setTriggerStatus(prev => ({ ...prev, [task.id]: 'failed' }));
+                          setTriggerError(prev => ({ ...prev, [task.id]: String(err) }));
+                        } finally {
+                          setTriggeringJob(null);
+                        }
+                      }}
+                      className={cn(
+                        'w-full md:w-auto h-8 px-4 border font-mono text-[10px] tracking-widest transition flex items-center justify-center gap-1.5 shrink-0',
+                        status === 'running'
+                          ? 'border-orange-800 bg-orange-950/30 text-orange-500 cursor-not-allowed'
+                          : 'border-zinc-800 bg-black text-zinc-400 hover:border-orange-800 hover:text-orange-500 disabled:opacity-40'
+                      )}
+                    >
+                      {status === 'running' ? (
+                        <>
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                          RUNNING_
+                        </>
+                      ) : (
+                        <>
+                          <Zap className="h-3 w-3" />
+                          [TRIGGER_RUN]
+                        </>
+                      )}
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
