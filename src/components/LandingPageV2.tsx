@@ -81,6 +81,7 @@ const METRICS = [
 // ─── LIFE OS MODULES ────────────────────────────────────────────────────────
 const LIFE_OS_MODULES = [
   { id: 'goals', label: 'AI Goal Planning', icon: 'goals' as PixelIconName, color: 'text-orange-400', desc: 'Decompose any goal into milestones, weekly targets, and daily tasks automatically.' },
+  { id: 'business', label: 'Multi-Business Hub', icon: 'goals' as PixelIconName, color: 'text-orange-500', desc: 'Manage multiple ventures in a relational dual-pane command cockpit. Add by name and website link.' },
   { id: 'habits', label: 'Habit Tracking', icon: 'check' as PixelIconName, color: 'text-green-400', desc: 'Build streaks, stack habits, and track consistency with AI-optimized scheduling.' },
   { id: 'focus', label: 'Focus Timer', icon: 'clock' as PixelIconName, color: 'text-cyan-400', desc: 'Pomodoro, deep work, and flow modes with distraction blocking and session logs.' },
   { id: 'nutrition', label: 'Nutrition & Meals', icon: 'heart' as PixelIconName, color: 'text-red-400', desc: 'Track meals, search 2M+ foods, get AI meal plans, and monitor macros and micros.' },
@@ -92,6 +93,7 @@ const LIFE_OS_MODULES = [
   { id: 'reviews', label: 'Weekly AI Reviews', icon: 'plan' as PixelIconName, color: 'text-blue-400', desc: 'Automated progress reviews with pattern detection, course corrections, and celebration.' },
   { id: 'adhd', label: 'ADHD-Friendly Mode', icon: 'sparkles' as PixelIconName, color: 'text-teal-400', desc: 'Gentle nudges, flexible scheduling, micro-task breakdowns, and calm accountability.' },
   { id: 'coaching', label: '5 AI Coaches', icon: 'robot' as PixelIconName, color: 'text-indigo-400', desc: 'Strategy, performance, wellness, resilience, and systems coaching - each with a distinct personality.' },
+  { id: 'triage', label: 'Agentic AI Triage', icon: 'robot' as PixelIconName, color: 'text-orange-400', desc: 'Parallel multi-model triage cascade (Gemini + Groq + Cerebras) to process complex mental brain dumps.' },
 ];
 
 // ─── PROBLEM-AGITATION-SOLUTION ─────────────────────────────────────────────
@@ -256,6 +258,8 @@ const ACCESS_TIERS = [
     savings: 'SAVE $24/yr',
     specs: [
       'Unlimited goals, habits, and messages',
+      'Relational Multi-Business Workspace',
+      'Agentic Multi-Model Triage Cascade',
       'All 5 AI coaches (Marcus, Titan, Aurora, Phoenix, Nexus)',
       'Advanced analytics & insights',
       'Weekly AI reviews',
@@ -276,6 +280,8 @@ const ACCESS_TIERS = [
     spotsLeft: FOUNDING_LIFETIME_LIMIT,
     specs: [
       'Everything in Pro — forever',
+      'Relational Multi-Business Workspace',
+      'Agentic Multi-Model Triage Cascade',
       'Pay once, use forever',
       'All future updates included',
       'Founding member badge',

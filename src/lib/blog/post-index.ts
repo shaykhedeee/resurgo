@@ -19,6 +19,26 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: 'indie-hackers-productivity-ai-habit-stacking',
+    title: 'How Indie Hackers Ship Products 3x Faster with AI-Powered Habit Stacking',
+    desc: 'Indie hackers and solopreneurs struggle with decision fatigue and context switching. Learn how AI-powered habit stacking and goal decomposition can help you ship products faster.',
+    date: 'May 15, 2026',
+    lastModified: '2026-05-15T10:00:00.000Z',
+    readTime: '14 min',
+    tags: ['indie hackers', 'solopreneur', 'maker productivity', 'habit stacking', 'goal decomposition'],
+    heroImage: '/blog/indie-hackers-productivity.svg',
+  },
+  {
+    slug: 'remote-developers-productivity-ai-goal-decomposition',
+    title: 'How Remote Developers Can Ship 2x More Features with AI-Powered Goal Decomposition',
+    desc: 'Remote developers face unique productivity challenges: context switching, isolation, and async communication. Learn how AI-powered goal decomposition and focus systems can double your feature output.',
+    date: 'May 15, 2026',
+    lastModified: '2026-05-15T11:00:00.000Z',
+    readTime: '12 min',
+    tags: ['remote work', 'developer productivity', 'AI productivity', 'goal decomposition', 'habit tracking'],
+    heroImage: '/blog/remote-developers-productivity.svg',
+  },
+  {
     slug: 'best-free-habit-tracker-app-2026',
     title: 'Best Free Habit Tracker App 2026: The Ultimate Guide to Free Consistency',
     desc: 'Looking for the best free habit tracker in 2026? We reviewed the top free options, comparison grids, and science-backed mechanisms to help you choose.',

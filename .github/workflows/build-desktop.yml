@@ -1,0 +1,61 @@
+name: Build Desktop Windows App
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'src-tauri/**'
+      - 'package.json'
+      - '.github/workflows/build-desktop.yml'
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    name: Build Windows MSI/EXE
+    runs-on: windows-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          target: x86_64-pc-windows-msvc
+
+      - name: Cache Rust dependencies
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: './src-tauri -> target'
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build Next.js app
+        run: npm run build
+        env:
+          NEXT_PUBLIC_CONVEX_URL: ${{ secrets.NEXT_PUBLIC_CONVEX_URL || 'https://ci-placeholder.convex.cloud' }}
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || 'pk_test_ci_placeholder_key_xxxxxxxxxxxxx' }}
+          CLERK_JWT_ISSUER_DOMAIN: ${{ secrets.CLERK_JWT_ISSUER_DOMAIN || 'https://clerk.resurgo.life' }}
+          CLERK_WEBHOOK_SECRET: ${{ secrets.CLERK_WEBHOOK_SECRET || 'whsec_ci_placeholder_secret_xxxxxxxxxx' }}
+          NEXT_TELEMETRY_DISABLED: '1'
+
+      - name: Build Tauri Desktop app
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: resurgo-v__VERSION__
+          releaseName: 'Resurgo Desktop v__VERSION__'
+          releaseBody: 'Resurgo Retro-Brutalist SaaS Life OS Desktop Windows Release'
+          releaseDraft: true
+          prerelease: false

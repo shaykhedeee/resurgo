@@ -635,7 +635,52 @@ export const ORCHESTRATION_PATTERNS = {
       dependsOn: ['psych_analysis', 'strengths'],
     },
   ],
-} as const;
+
+  /**
+   * Brain dump triage — decompose into extraction + analysis + planning
+   */
+  brainDumpTriage: (rawText: string, userContext: string): SubTask[] => [
+      {
+        id: 'task_extraction',
+        title: 'Actionable Task Extraction',
+        type: 'extraction',
+        prompt: `Analyze this raw brain dump text and extract up to 4 immediate actionable tasks.
+For each task, provide:
+- A clear, action-verb title
+- A priority rating ('high', 'medium', or 'low')
+- A realistic dueDate formatted as YYYY-MM-DD (Today's date context: ${userContext})
+
+Raw brain dump text:
+"${rawText}"`,
+      },
+      {
+        id: 'habit_extraction',
+        title: 'Strategic Habit Recommendations',
+        type: 'planning',
+        prompt: `Analyze this raw brain dump text and recommend up to 3 daily habits to build consistency related to their struggles.
+For each habit, provide:
+- A clear title (under 5 words)
+- The frequency (always 'daily')
+- The life domain (one of: health, career, finance, relationships, learning, creativity, mindfulness, personal_growth)
+
+Raw brain dump text:
+"${rawText}"`,
+      },
+      {
+        id: 'psychological_scan',
+        title: 'Behavioral & Psychological Scan',
+        type: 'analysis',
+        prompt: `Analyze this raw brain dump text to identify:
+- Top 3 focus areas needing attention (life domains)
+- Emotional state indicators (mood words)
+- Archetype (One of: The Achiever, The Rebuilder, The Explorer, The Optimizer, The Warrior, The Transformer)
+- Current cognitive load score (0-100)
+
+Raw brain dump text:
+"${rawText}"`,
+      },
+    ],
+  } as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Convenience: orchestrateWithPattern()

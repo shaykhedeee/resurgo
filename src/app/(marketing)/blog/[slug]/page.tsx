@@ -17,6 +17,8 @@ import { aiProductivityStackLifeOsPost } from '@/lib/blog/posts/ai-productivity-
 import { goalDecompositionGuidePost } from '@/lib/blog/posts/goal-decomposition-guide';
 import { bestFreeHabitTrackerPost } from '@/lib/blog/posts/best-free-habit-tracker-2026';
 import { howToBreakBadHabitsPost } from '@/lib/blog/posts/how-to-break-bad-habits';
+import { indieHackersProductivityPost } from '@/lib/blog/posts/indie-hackers-productivity';
+import { remoteDevelopersProductivityPost } from '@/lib/blog/posts/remote-developers-productivity';
 import {
   FOUNDING_LIFETIME_COPY,
   FOUNDING_LIFETIME_PRICE_USD,
@@ -78,6 +80,26 @@ const POSTS: Record<string, {
     alternateQuestions: bestFreeHabitTrackerPost.alternateQuestions,
     citedSources: bestFreeHabitTrackerPost.citedSources,
     content: bestFreeHabitTrackerPost.content,
+  },
+  'indie-hackers-productivity-ai-habit-stacking': {
+    title: indieHackersProductivityPost.title,
+    desc: indieHackersProductivityPost.desc,
+    date: indieHackersProductivityPost.date,
+    readTime: indieHackersProductivityPost.readTime,
+    tags: indieHackersProductivityPost.tags,
+    heroImage: indieHackersProductivityPost.heroImage,
+    seoKeywords: indieHackersProductivityPost.seoKeywords,
+    content: indieHackersProductivityPost.content,
+  },
+  'remote-developers-productivity-ai-goal-decomposition': {
+    title: remoteDevelopersProductivityPost.title,
+    desc: remoteDevelopersProductivityPost.desc,
+    date: remoteDevelopersProductivityPost.date,
+    readTime: remoteDevelopersProductivityPost.readTime,
+    tags: remoteDevelopersProductivityPost.tags,
+    heroImage: remoteDevelopersProductivityPost.heroImage,
+    seoKeywords: remoteDevelopersProductivityPost.seoKeywords,
+    content: remoteDevelopersProductivityPost.content,
   },
   'how-to-break-bad-habits-science': {
     title: howToBreakBadHabitsPost.title,

@@ -1267,8 +1267,19 @@ export default defineSchema({
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // BUSINESS GOALS â€” Business Command Center
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+  businesses: defineTable({
+    userId: v.id('users'),
+    name: v.string(),
+    website: v.optional(v.string()),
+    description: v.optional(v.string()),
+    createdAt: v.number(),
+    updatedAt: v.number(),
+  })
+    .index('by_userId', ['userId']),
+
   businessGoals: defineTable({
     userId: v.id('users'),
+    businessId: v.optional(v.id('businesses')),
     businessName: v.optional(v.string()),
     type: v.union(
       v.literal('revenue'),
@@ -1301,7 +1312,8 @@ export default defineSchema({
     updatedAt: v.number(),
   })
     .index('by_userId', ['userId'])
-    .index('by_userId_status', ['userId', 'status']),
+    .index('by_userId_status', ['userId', 'status'])
+    .index('by_businessId', ['businessId']),
 
   // â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   // WEBHOOKS â€” Zapier/Make outbound event subscriptions

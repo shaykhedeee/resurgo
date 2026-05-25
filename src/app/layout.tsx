@@ -274,6 +274,8 @@ const jsonLd = {
       'description': 'AI-powered habit tracker with goal decomposition, gamified progress tracking, focus timers, wellness monitoring, and personalized AI coaching.',
       'featureList': [
         'AI Goal Decomposition',
+        'Relational Multi-Business Workspace Hub',
+        'Agentic Multi-Model Triage Cascade',
         'Habit Streak Tracking',
         'Gamified Progress with XP and Levels',
         'Advanced Analytics Dashboard',
@@ -292,7 +294,7 @@ const jsonLd = {
         'Dark/Light Theme',
       ],
       'screenshot': `${siteUrl}/screenshots/dashboard.png`,
-      'softwareVersion': '1.4.0',
+      'softwareVersion': '2.0.0',
     },
     // Organization Schema
     {

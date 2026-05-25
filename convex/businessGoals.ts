@@ -15,12 +15,96 @@ async function requireUser(ctx: any) {
 }
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
-export const listBusinessGoals = query({
-  args: { status: v.optional(v.string()) },
-  handler: async (ctx, { status }) => {
+// ─── Businesses Queries & Mutations ──────────────────────────────────────────
+export const listBusinesses = query({
+  handler: async (ctx) => {
     const user = await requireUser(ctx);
-    let q = ctx.db.query('businessGoals').withIndex('by_userId', (q: any) => q.eq('userId', user._id));
-    const all = await q.collect();
+    return ctx.db
+      .query('businesses')
+      .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+      .collect()
+      .then((items) => items.sort((a, b) => b.createdAt - a.createdAt));
+  },
+});
+
+export const createBusiness = mutation({
+  args: {
+    name: v.string(),
+    website: v.optional(v.string()),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const user = await requireUser(ctx);
+    const now = Date.now();
+    return ctx.db.insert('businesses', {
+      userId: user._id,
+      name: args.name,
+      website: args.website,
+      description: args.description,
+      createdAt: now,
+      updatedAt: now,
+    });
+  },
+});
+
+export const updateBusiness = mutation({
+  args: {
+    id: v.id('businesses'),
+    name: v.optional(v.string()),
+    website: v.optional(v.string()),
+    description: v.optional(v.string()),
+  },
+  handler: async (ctx, { id, ...updates }) => {
+    const user = await requireUser(ctx);
+    const biz = await ctx.db.get(id);
+    if (!biz || biz.userId !== user._id) throw new Error('Access denied');
+    await ctx.db.patch(id, { ...updates, updatedAt: Date.now() });
+  },
+});
+
+export const deleteBusiness = mutation({
+  args: { id: v.id('businesses') },
+  handler: async (ctx, { id }) => {
+    const user = await requireUser(ctx);
+    const biz = await ctx.db.get(id);
+    if (!biz || biz.userId !== user._id) throw new Error('Access denied');
+    
+    // Cascading delete: delete goals associated with this business
+    const goals = await ctx.db
+      .query('businessGoals')
+      .withIndex('by_businessId', (q: any) => q.eq('businessId', id))
+      .collect();
+    
+    for (const goal of goals) {
+      await ctx.db.delete(goal._id);
+    }
+
+    await ctx.db.delete(id);
+  },
+});
+
+// ─── Queries ─────────────────────────────────────────────────────────────────
+export const listBusinessGoals = query({
+  args: {
+    status: v.optional(v.string()),
+    businessId: v.optional(v.id('businesses')),
+  },
+  handler: async (ctx, { status, businessId }) => {
+    const user = await requireUser(ctx);
+    let all: any[];
+    if (businessId) {
+      all = await ctx.db
+        .query('businessGoals')
+        .withIndex('by_businessId', (q: any) => q.eq('businessId', businessId))
+        .collect();
+      // Ensure users only see their own goals
+      all = all.filter((g) => g.userId === user._id);
+    } else {
+      all = await ctx.db
+        .query('businessGoals')
+        .withIndex('by_userId', (q: any) => q.eq('userId', user._id))
+        .collect();
+    }
     if (status) return all.filter((g: any) => g.status === status);
     return all.sort((a: any, b: any) => b.createdAt - a.createdAt);
   },
@@ -45,6 +129,7 @@ export const createBusinessGoal = mutation({
       v.literal('growth'), v.literal('product'), v.literal('marketing'), v.literal('operations'),
     ),
     description: v.optional(v.string()),
+    businessId: v.optional(v.id('businesses')),
     businessName: v.optional(v.string()),
     target: v.optional(v.number()),
     current: v.optional(v.number()),
