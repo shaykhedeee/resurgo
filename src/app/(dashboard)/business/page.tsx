@@ -3,7 +3,7 @@
 import { useMutation, useQuery, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Id } from '../../../../convex/_generated/dataModel';
-import { useState, FormEvent } from 'react';
+import { useEffect, useState, FormEvent } from 'react';
 import { Briefcase, TrendingUp, Plus, Trash2, CheckCircle, Zap, ChevronDown, ChevronUp, ExternalLink, Globe, Edit2, X, PlusCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -126,6 +126,23 @@ export default function BusinessPage() {
     });
     setShowBizForm(true);
   };
+
+  useEffect(() => {
+    if (!businesses || businesses.length === 0) {
+      if (selectedBizId !== null) {
+        setSelectedBizId(null);
+      }
+      return;
+    }
+
+    const selectedStillExists = selectedBizId
+      ? businesses.some((biz) => biz._id === selectedBizId)
+      : false;
+
+    if (!selectedStillExists) {
+      setSelectedBizId(businesses[0]._id);
+    }
+  }, [businesses, selectedBizId]);
 
   // computed data
   const selectedBiz = businesses?.find((b) => b._id === selectedBizId);
