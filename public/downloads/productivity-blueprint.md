@@ -72,6 +72,13 @@ To build an unbreakable system, apply these two practical tactics:
     *   *Start with*: "Open IDE and type one line of syntax."
     *   By lowering the ability threshold to near-zero, you ensure consistency even on low-energy days.
 
+### 🛠️ Chapter 1 Action Checklist & Worksheet
+*   [ ] **Identify Your Anchor**: Write down three automatic, atomic things you do every single day without fail (e.g., brewing morning coffee, shutting down your laptop, brushing teeth).
+*   [ ] **Design Your Stacks**: Create two habit stacks using the formula: *After I [Anchor], I will [2-Minute Habit]*.
+    *   *Stack 1 (Energy)*: After I `________________`, I will `Drink 8oz of cold water`.
+    *   *Stack 2 (Discipline)*: After I `________________`, I will `Write down my single focus task`.
+*   [ ] **Audit Your Friction**: Identify one positive habit you keep abandoning. List 3 ways to reduce its friction (e.g., laying out gym clothes, keeping a notebook open on your desk).
+
 ---
 
 ## CHAPTER 2: The Illusion of Isolated Metrics (The Connected System)
@@ -80,7 +87,7 @@ If you track your steps in Apple Health, your tasks in Todoist, your habits in S
 
 In engineering, we would never build an infrastructure where the databases don't sync. Yet we run our lives this way.
 
-### The Danger of Streak reset Penalty (The Abandonment Spiral)
+### The Danger of Streak Reset Penalty (The Abandonment Spiral)
 Traditional habit trackers are punitive. They treat consistency as a binary streak. 
 *   Day 1-28: Perfect execution.
 *   Day 29: You get food poisoning, your flight is delayed, or you experience an ADHD executive function crash. You miss a day.
@@ -93,7 +100,7 @@ Traditional habit trackers are punitive. They treat consistency as a binary stre
 
 This reset triggers a psychological phenomenon known as **The "What-the-Hell" Effect**. Once a streak is broken, the brain feels a loss of control, causing it to abandon the entire behavior in favor of immediate gratification. 
 
-To prevent this, we must build an **Adaptive Streak System**. If you miss a day, it should be logged as a "Rest and Recovery" day. Your streak should degrade gracefully (e.g., losing 1 day of streak value rather than dropping to zero). 
+To prevent this, we must build an **Adaptive Streak System**. If you miss a day, it should be logged as a "Rest and Recovery" day. Your streak should degrade gracefully (e.g., losing 1 day of streak value rather than dropping to zero).
 
 ### The Daily Synergy Score (DSS) Formula
 
@@ -102,16 +109,20 @@ Instead of evaluating your day based solely on tasks completed, we must calculat
 $$DSS = (\text{Wellness} \times 0.30) + (\text{Tasks} \times 0.30) + (\text{Habits} \times 0.25) + (\text{Budget} \times 0.15)$$
 
 Where:
-*   **Wellness (30%)**: Calculated based on sleep hours, stress check-in, and physical activity.
-*   **Tasks (30%)**: Percentage of prioritized focus tasks completed today.
-*   **Habits (25%)**: Habit consistency score across active tracks.
-*   **Budget (15%)**: Adherence to your daily financial constraints.
+1.  **Wellness (30%)**:
+    $$\text{Wellness Score} = (\text{Sleep Duration Factor} \times 0.40) + (\text{Energy Level Rating} \times 0.30) + (\text{Movement Target} \times 0.30)$$
+2.  **Tasks (30%)**:
+    $$\text{Task Completion Rate} = \frac{\text{Completed Priorities}}{\text{Total Scheduled Priorities}}$$
+3.  **Habits (25%)**:
+    $$\text{Habit Streak Index} = \frac{\text{Successful Habits}}{\text{Total Daily Habits}}$$
+4.  **Budget (15%)**:
+    $$\text{Budget Score} = 1.0 - \max\left(0, \frac{\text{Daily Actual Spending} - \text{Daily Budget Limit}}{\text{Daily Budget Limit}}\right)$$
 
 By viewing your day through a singular, connected score, you decouple your self-worth from a raw task list. A day with low task completion but high rest and recovery remains a highly successful day in the synergy index.
 
 ---
 
-## CHAPTER 3: Low-Friction Execution & ADHD Executive Function
+## CHAPTER 3: Low-Friction Ingestion & ADHD Executive Function
 
 For neurodivergent builders—especially those with ADHD—rigid, complex organization tools are productivity traps. They demand a high level of **executive function load** just to manage the tool itself.
 
@@ -140,9 +151,18 @@ A smart, agentic triage system should automatically:
 2.  **Suggest Wellness Routines**: Inject physical markers (e.g., "Drink a glass of water", "Perform 2-minute posture stretch").
 3.  **Calibrate Energy Scopes**: Recognize the "zero energy" marker and scale down your task list for the afternoon, avoiding cognitive overload.
 
+### 🛠️ The 3-Step Brain Dump Ingestion Template
+Use this worksheet when experiencing a cognitive overload block:
+1.  **The Dump**: Open a blank document and write continuously for 3 minutes without editing, correcting spelling, or structuring. Let the chaos out.
+2.  **The Triage Categorization**: Group the chaos into exactly three categories:
+    *   **Urgent & Critical (Limit: 2 items)**: What *must* resolve today to prevent system failure?
+    *   **Delegated / Deferred**: What can wait until a high-energy window tomorrow?
+    *   **Wellness Reset**: What does your physical body need *right now* (e.g., protein, hydration, stretching)?
+3.  **The Energy Calibrator**: If your stress rating is above 7/10, cross off 50% of your deferred tasks immediately.
+
 ---
 
-## CHAPTER 4: The Multi-Business Scoping Strategy (For Creators & Solopreneurs)
+## CHAPTER 4: The Multi-Business Scoping Strategy (For Solopreneurs & Creators)
 
 As a solopreneur, your biggest threat is **context-switching fatigue**. 
 
@@ -162,8 +182,17 @@ Research shows it takes an average of 23 minutes to refocus after a distraction 
 ### Deep Work Scoping
 Cal Newport, author of *Deep Work*, emphasizes the necessity of protecting the cognitive environment. To implement this in a multi-business cockpit:
 *   **Scoped Dashboards**: When you select "Business A," your task grid, goal milestones, and AI coaching assistants must instantly scope down to show *only* Business A.
-*   **Milestone Decomposition**: Every high-level goal must be decomposed into micro-milestones. If a goal feels too large, the brain perceives it as a threat, triggering procrastination. 
+*   **Milestone Decomposition**: Every high-level goal must be decomposed into micro-milestones. If a goal feels too large, the brain perceives it as a threat, triggering procrastination.
 *   **The 12-Week Year Execution**: Instead of setting vague annual targets, execute in compressed 12-week cycles. This keeps urgency high and prevents the "procrastination window" that occurs when deadlines are months away.
+
+### 🛠️ The 12-Week Solopreneur Strategic Dashboard Template
+Copy this matrix for your primary active venture:
+
+| Goal Phase | 12-Week Objective | Weekly Lead Metric | Daily Execution Tasks (Micro) |
+|---|---|---|---|
+| **Weeks 1-4 (Build)** | Deploy MVP Core Router | Ship 5 clean endpoint schemas | Write 2 specific database tables daily |
+| **Weeks 5-8 (Launch)** | Capture 100 Lead Signups | Publish 3 value-first Reddit posts | Write 1 helpful blog outline |
+| **Weeks 9-12 (Scale)**| Lock 10 Lifetime Founding Members | Sync Buttondown auto-drip campaign | Validate Stripe/Dodo payment webhook |
 
 ---
 
@@ -176,7 +205,7 @@ A perfectly time-blocked calendar is useless if you are operating on three hours
 ### Chronobiology: Syncing with Your Peak Focus Window
 Grounded in the research of Matthew Walker (*Why We Sleep*), our cognitive performance is tightly governed by our circadian rhythm.
 *   **Morning Larks**: Peak focus window occurs between 8:00 AM and 12:00 PM.
-*   **Night Owls**: Peak focus window shift to 6:00 PM to 10:00 PM.
+*   **Night Owls**: Peak focus window shifts to 6:00 PM to 10:00 PM.
 *   **The Energy Crash (Post-Prandial Dip)**: A natural metabolic dip occurs 7-9 hours after waking. This window should be reserved for low-cognitive work (admin, email, stretching).
 
 ```
@@ -190,6 +219,13 @@ Grounded in the research of Matthew Walker (*Why We Sleep*), our cognitive perfo
 In a premium life OS, your coaching systems must adjust based on biometric markers. 
 *   **High Biometric Load (Stress/Lack of Sleep)**: Your AI coach shifts from *Discipline Mode* to *Mindfulness/Recovery Mode*. The daily goal targets automatically scale down.
 *   **Low Biometric Load (High Sleep Quality/Low Stress)**: Your coach pushes you into *Peak Performance Mode*, encouraging you to tackle high-priority, intensive deep work.
+
+### 🛠️ Chronobiology Energy Mapping Worksheet
+*   **Waking Time**: `_______:_______`
+*   **Calculate Your Peak Deep Work Windows**:
+    *   *Deep Focus Block (Waking Hour + 2 to +6)*: `_______:_______` to `_______:_______`
+    *   *Post-Prandial Dip Block (Waking Hour + 7 to +9)*: `_______:_______` to `_______:_______` (Reserve for admin/replying)
+    *   *Secondary Wind Block (Waking Hour + 10 to +12)*: `_______:_______` to `_______:_______` (Creative reflection/planning)
 
 ---
 

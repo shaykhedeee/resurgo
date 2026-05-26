@@ -69,27 +69,15 @@ export default function EbookLandingPage() {
               </div>
             </div>
 
-            {/* Simulated terminal book cover */}
-            <div className="border border-dashed border-zinc-800 bg-zinc-950/20 p-6 font-mono text-center">
-              <pre className="text-[7px] text-zinc-700 leading-none select-none overflow-x-auto whitespace-pre">
-{`+-----------------------------------------------------------+
-|  _______________________________________________          |
-|  [ UNSHACKLED :: THE_CONNECTED_PRODUCTIVITY_OS ]          |
-|  :::::::::::::::::::::::::::::::::::::::::::::::          |
-|                                                           |
-|       "Willpower is a finite metabolic resource.          |
-|        Consistent execution is a system design."          |
-|                                                           |
-|                                                           |
-|  * Atomic Habits Integration                              |
-|  * Streak Reset Penalty Mechanics                         |
-|  * Daily Synergy Score (DSS) Formula                      |
-|  * ADHD Executive Load Optimization                       |
-|  * Cal Newport Deep Work Scoping                          |
-|                                                           |
-|  [ RESURGO_PUBLICATIONS_::__2026 ]                        |
-+-----------------------------------------------------------+`}
-              </pre>
+            {/* HD Ebook Cover Mockup */}
+            <div className="border border-zinc-900 bg-zinc-950 p-2">
+              <div className="relative aspect-[16/9] w-full overflow-hidden border border-zinc-900 bg-zinc-900">
+                <img
+                  src="/unshackled_ebook_cover.png"
+                  alt="UNSHACKLED - The Connected Productivity Cockpit Cover"
+                  className="h-full w-full object-cover object-center"
+                />
+              </div>
             </div>
 
             {/* Quick check points */}
