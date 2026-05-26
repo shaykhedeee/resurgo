@@ -254,6 +254,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${siteUrl}/ebook`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.88,
+    },
+    {
       url: `${siteUrl}/templates`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
