@@ -157,8 +157,8 @@ export default function IndieHackersLandingPage() {
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold text-green-400">Accountability Without a Boss</h3>
               <p className="text-gray-300">
-                5 AI coaches including a Founder Strategist and Growth Hacker
-                provide daily check-ins, obstacle removal, and celebration of wins.
+                5 AI coaches provide daily check-ins, obstacle removal,
+                and celebration of wins across the founder workflow.
               </p>
             </div>
             <div className="space-y-6">
@@ -320,7 +320,7 @@ export default function IndieHackersLandingPage() {
                 description: 'For active creators shipping daily',
                 features: [
                   'Everything in Free',
-                  'All 5 AI coaches (incl. Founder & Growth Specialist)',
+                  'All 5 AI coaches',
                   'Advanced analytics & velocity tracking',
                   'Weekly AI reviews',
                   'GitHub/GitLab integration',
@@ -380,3 +380,4 @@ export default function IndieHackersLandingPage() {
     </>
   );
 }
+

@@ -34,7 +34,7 @@ const FAQ: NicheFaq[] = [
   },
   {
     question: 'Is there a free plan for solopreneurs?',
-    answer: 'RESURGO offers a free plan with 3 goals, 5 habits, full AI coaching access, and a complete dashboard. No credit card required. Upgrade when your business grows and you need unlimited goals, advanced analytics, and priority AI responses.',
+    answer: 'RESURGO offers a free plan with 3 active goals, up to 5 habits per day, 10 AI messages per day, and 2 AI coaches. No credit card required. Upgrade when your business grows and you need unlimited usage, advanced analytics, and all 5 AI coaches.',
   },
   {
     question: 'How long does it take to set up RESURGO as a solopreneur?',
@@ -71,3 +71,4 @@ export default async function SolopreneursPage() {
     />
   );
 }
+

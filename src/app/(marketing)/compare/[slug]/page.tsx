@@ -177,7 +177,7 @@ export default async function ComparisonPage({ params }: ComparisonProps) {
         <section className="mt-6 border border-zinc-800 bg-zinc-950 p-6 text-center">
           <p className="font-mono text-xs text-zinc-500 uppercase tracking-widest">Ready to switch?</p>
           <h2 className="mt-2 font-mono text-lg font-bold text-zinc-100">Start with Resurgo — free, no credit card needed</h2>
-          <p className="mt-1 font-mono text-xs text-zinc-400">Unlimited habits · AI goal planning · 2 coaches on the free plan</p>
+          <p className="mt-1 font-mono text-xs text-zinc-400">3 goals · up to 5 habits/day · 2 coaches on the free plan</p>
           <div className="mt-4 flex justify-center gap-3">
             <Link
               href="/sign-up"
@@ -211,3 +211,4 @@ export default async function ComparisonPage({ params }: ComparisonProps) {
     </main>
   );
 }
+

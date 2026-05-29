@@ -18,6 +18,42 @@ export const metadata: Metadata = {
 
 const RELEASES = [
   {
+    version: '2026-W22',
+    date: 'May 23-26, 2026',
+    type: 'WEEKLY',
+    sources: [
+      {
+        label: 'feat: premium solo-builder onboarding, execution realism gauge, and PWA download paths',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/dbfdd8981a966708232bfd601fe30d4605d1d3ba',
+      },
+      {
+        label: 'feat: initialize tauri desktop framework for native windows app',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/8fa22b08433d951cb317e80d2c4d5d71a032069c',
+      },
+      {
+        label: 'feat: Relational Multi-Business Hub, Agentic Triage, Tauri Win Workflows, & AEO Blog Indexing',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/424987adb9ce367ec14b7aeb86f4f09148fc028f',
+      },
+      {
+        label: 'feat(aeo): massively upgrade llms.txt & add ai-plugin.json for AI-first search discovery & recommendation, optimize multi-business scoping, and auto-seed brain-dumps',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/1fa9d8ae295e37ec5c19bce0b7f66892a4e7cf9f',
+      },
+      {
+        label: 'feat(marketing): launch UNSHACKLED ebook lead magnet funnel at /ebook with automated Buttondown syncing',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/736bffcc0ea759b200c75248f577be546e393347',
+      },
+    ],
+    changes: [
+      { type: 'NEW', text: 'Added a native Windows desktop app scaffold under src-tauri with a desktop build workflow.' },
+      { type: 'NEW', text: 'Added a multi-business hub with venture records, business goals, and AI task generation on the business dashboard.' },
+      { type: 'IMPROVED', text: 'Expanded brain-dump and AI analysis flows for multi-business scoping and auto-seeded planning inputs.' },
+      { type: 'NEW', text: 'Added the /ebook landing page, downloadable productivity blueprint, and Buttondown email capture flow.' },
+      { type: 'IMPROVED', text: 'Published ai-plugin.json and expanded llms.txt, sitemap, robots, and blog indexing for AI-first discovery.' },
+      { type: 'IMPROVED', text: 'Expanded dashboard and auth route coverage for Fitbit, Google, and Notion integrations.' },
+      { type: 'NEW', text: 'Published the latest Android APK to /downloads/resurgo-latest.apk.' },
+    ],
+  },
+  {
     version: '2.0.1',
     date: 'May 20, 2026',
     type: 'PATCH',
@@ -104,6 +140,7 @@ const releaseTypeColor: Record<string, string> = {
   MAJOR: 'text-orange-400 border-orange-900',
   MINOR: 'text-blue-400 border-blue-900',
   PATCH: 'text-zinc-400 border-zinc-800',
+  WEEKLY: 'text-purple-400 border-purple-900',
   LAUNCH: 'text-green-400 border-green-900',
 };
 
@@ -147,6 +184,24 @@ export default function ChangelogPage() {
                       PR #{pullRequest.number}: {pullRequest.title}
                     </a>
                   ))}
+                </div>
+              ) : null}
+              {release.sources?.length ? (
+                <div className="border-b border-zinc-900 px-5 py-3">
+                  <div className="mb-2 font-mono text-[10px] tracking-widest text-zinc-500">SOURCE COMMITS</div>
+                  <div className="space-y-1.5">
+                    {release.sources.map((source) => (
+                      <a
+                        key={source.href}
+                        href={source.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="block font-mono text-xs text-orange-400 underline underline-offset-2"
+                      >
+                        {source.label}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               ) : null}
               <ul className="divide-y divide-zinc-900/50">

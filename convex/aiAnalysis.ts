@@ -1,6 +1,29 @@
 import { v } from 'convex/values';
 import { mutation } from './_generated/server';
 
+function getDateKeyForTimezone(timestamp: number, timezone?: string): string {
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone: timezone && timezone.trim() ? timezone : 'UTC',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date(timestamp));
+
+    const year = parts.find((part) => part.type === 'year')?.value;
+    const month = parts.find((part) => part.type === 'month')?.value;
+    const day = parts.find((part) => part.type === 'day')?.value;
+
+    if (year && month && day) {
+      return `${year}-${month}-${day}`;
+    }
+  } catch {
+    // Fall back to the existing UTC behavior if the timezone is malformed.
+  }
+
+  return new Date(timestamp).toISOString().split('T')[0];
+}
+
 export const autoSeedPlannerFromBrainDump = mutation({
   args: {
     rawText: v.string(),
@@ -101,7 +124,7 @@ export const autoSeedPlannerFromBrainDump = mutation({
       });
     }
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const todayStr = getDateKeyForTimezone(now, user.timezone);
     const habits = rawResult.habits_suggested || [];
     for (let i = 0; i < habits.length; i++) {
       const habit = habits[i];

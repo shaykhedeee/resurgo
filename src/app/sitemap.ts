@@ -137,6 +137,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     // ─────────────────────────────────────────────────────────────────────────
+    {
+      url: `${siteUrl}/ai-brain-dump-planner`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.82,
+    },
+    {
+      url: `${siteUrl}/goal-tracker-app`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.82,
+    },
+    {
+      url: `${siteUrl}/habit-tracker-goals`,
+      lastModified: currentDate,
+      changeFrequency: 'weekly',
+      priority: 0.82,
+    },
     // HELP CENTER
     // ─────────────────────────────────────────────────────────────────────────
     {

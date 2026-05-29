@@ -26,7 +26,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
     faq: [
       { question: 'Should I switch from TickTick to Resurgo?', answer: 'If you want AI coaching, automatic goal planning, and wellness tracking on top of task management, Resurgo is the upgrade. TickTick is great for tasks — Resurgo handles your whole execution system.' },
       { question: 'Does Resurgo have a Pomodoro timer like TickTick?', answer: 'Yes. Resurgo has Pomodoro (25/5), Deep Work (90-minute blocks), and Flowtime modes — all with distraction logging and ambient sounds.' },
-      { question: 'Can I use Resurgo for free like TickTick?', answer: "Yes. Resurgo's free plan includes unlimited habits, goals, all focus timer modes, and 2 AI coaches with no time limit. No credit card required." },
+      { question: 'Can I use Resurgo for free like TickTick?', answer: "Yes. Resurgo has a free plan with 3 active goals, up to 5 habits per day, 10 AI messages per day, and 2 AI coaches. No credit card required." },
       { question: 'Is Resurgo better than TickTick for habit tracking?', answer: "For habits, Resurgo adds AI suggestions, streak protection (freeze tokens), habit stacking, XP rewards, and coaching — much deeper than TickTick's habit module." },
     ],
   },
@@ -98,13 +98,13 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Focus Timer', resurgo: 'Pomodoro, Deep Work, Flowtime', competitor: 'Not included' },
       { name: 'Gamification', resurgo: 'XP, levels, streak badges', competitor: 'Karma points (basic)' },
       { name: 'Wellness Integration', resurgo: 'Sleep, mood, nutrition, energy', competitor: 'Not included' },
-      { name: 'Free Plan', resurgo: 'Full habits + goals + 2 coaches, unlimited', competitor: 'Limited to 5 active projects' },
+      { name: 'Free Plan', resurgo: '3 active goals, 5 habits/day, 10 AI messages/day, 2 coaches', competitor: 'Limited to 5 active projects' },
     ],
     pricing: { resurgo: 'Free forever + Pro $9.99/mo', competitor: 'Free (limited) + Pro $4/mo + Business $6/mo' },
     faq: [
       { question: 'Is Todoist good for habit tracking?', answer: "Todoist doesn't have a true habit tracking system. Resurgo was built specifically for habits — streaks, scheduling, stacking, and reminders are first-class features, not workarounds." },
       { question: 'Can Resurgo replace Todoist as a task manager?', answer: "Resurgo includes full task management. If you need deep project collaboration, Todoist is more powerful. For personal tasks connected to goals and habits, Resurgo is better." },
-      { question: 'Which is cheaper — Todoist or Resurgo?', answer: "Very similar at $4-5/month. Resurgo's free plan is significantly more generous — unlimited habits and goals vs Todoist's 5 project limit." },
+      { question: 'Which is cheaper ? Todoist or Resurgo?', answer: "Todoist Pro is cheaper monthly, but Resurgo includes AI coaching, habits, focus modes, and goal planning. Resurgo's free plan includes 3 active goals, up to 5 habits per day, and 2 AI coaches." },
     ],
   },
   streaks: {
@@ -124,7 +124,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
     pricing: { resurgo: 'Free forever + Pro $9.99/mo', competitor: 'One-time $4.99 purchase (iOS only)' },
     faq: [
       { question: 'Is there an alternative to Streaks for Android?', answer: "Resurgo is one of the best Streaks alternatives for Android. It has no habit limit, adds AI coaching and goal planning, and installs as a PWA on any device instantly." },
-      { question: 'Why does Streaks limit you to 12 habits?', answer: "Streaks is designed around focusing on fewer, high-impact habits. Resurgo takes a different approach — unlimited habits with AI prioritization to help you focus on what matters most." },
+      { question: 'Why does Streaks limit you to 12 habits?', answer: "Streaks is designed around focusing on fewer, high-impact habits. Resurgo takes a different approach: the free plan supports up to 5 habits per day, and paid plans unlock unlimited habits with AI prioritization." },
       { question: 'Can Resurgo sync with Apple Watch like Streaks?', answer: "Resurgo uses a PWA approach that works on all platforms via browser. Native Apple Watch integration is on the roadmap. For deep watchOS integration today, Streaks still leads." },
     ],
   },
@@ -140,7 +140,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Wellness Tracking', resurgo: 'Sleep, mood, energy, nutrition', competitor: 'Basic mood logging only' },
       { name: 'Focus Timers', resurgo: 'Pomodoro, Deep Work, Flowtime', competitor: 'Not included' },
       { name: 'Gamification', resurgo: 'XP, levels, streak badges', competitor: 'Not included' },
-      { name: 'Free Plan', resurgo: 'Unlimited habits, goals, 2 coaches', competitor: 'Very limited free tier (3 habits)' },
+      { name: 'Free Plan', resurgo: '3 active goals, 5 habits/day, 10 AI messages/day, 2 coaches', competitor: 'Very limited free tier (3 habits)' },
     ],
     pricing: { resurgo: 'Free forever + Pro $9.99/mo', competitor: 'Free (3 habits) + Premium $4.99/mo or $39.99/yr' },
     faq: [
@@ -180,7 +180,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'Platform Support', resurgo: 'Any device via PWA', competitor: 'iOS / macOS / watchOS only' },
       { name: 'Habit Tracking', resurgo: 'Streaks, stacking, analytics', competitor: 'No habit tracking' },
       { name: 'AI Goal Planning', resurgo: 'Automatic milestones and daily tasks', competitor: 'No AI' },
-      { name: 'AI Coaching', resurgo: '4 specialized coaches', competitor: 'No coaching' },
+      { name: 'AI Coaching', resurgo: '5 AI coaches with distinct coaching styles', competitor: 'No coaching' },
       { name: 'Wellness Tracking', resurgo: 'Sleep, mood, energy, nutrition', competitor: 'Not included' },
       { name: 'Price', resurgo: 'Free tier available, Pro $9.99/mo', competitor: '$49.99 (Mac) + $9.99 (iPhone) + $19.99 (iPad)' },
     ],
@@ -208,7 +208,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
     pricing: { resurgo: 'Free forever + Pro $9.99/mo', competitor: 'Free + Premium $5.99/mo or $2.99/mo annually' },
     faq: [
       { question: 'Can Resurgo replace Any.do?', answer: "For individual productivity including habits and goals, yes. Resurgo includes full task management and adds habit tracking, AI coaching, and wellness monitoring that Any.do doesn't have." },
-      { question: 'Is Resurgo free like Any.do?', answer: "Both have free tiers. Resurgo's free tier is more generous — unlimited habits, goals, focus timers, and 2 AI coaches with no time limit." },
+      { question: 'Is Resurgo free like Any.do?', answer: "Both have free tiers. Resurgo's free tier includes 3 active goals, up to 5 habits per day, all focus timer modes, and 2 AI coaches with no credit card required." },
       { question: 'Does Resurgo have voice input like Any.do?', answer: "Resurgo focuses on structured goal and habit input. Any.do has a smoother natural language and voice input experience. For voice-first task capture, Any.do is still ahead." },
     ],
   },
@@ -291,7 +291,7 @@ const COMPETITOR_DATA: Record<string, Omit<ComparisonPage, 'slug'>> = {
       { name: 'ADHD Support', resurgo: 'AI-adaptive nudges, micro-task breakdown, streak protection', competitor: 'Step-by-step visual timers (excellent for ADHD)' },
       { name: 'Gamification', resurgo: 'XP, levels, streak badges', competitor: 'Not included' },
       { name: 'Wellness Tracking', resurgo: 'Sleep, mood, nutrition, energy', competitor: 'Not included' },
-      { name: 'Free Plan', resurgo: 'Full habits, goals, focus, 2 coaches', competitor: 'Limited to 2 routines on free tier' },
+      { name: 'Free Plan', resurgo: '3 active goals, 5 habits/day, 10 AI messages/day, 2 coaches', competitor: 'Limited to 2 routines on free tier' },
     ],
     pricing: { resurgo: 'Free forever + Pro $9.99/mo or Lifetime $89 founding price until July 5, 2026 (after: $199)', competitor: 'Free (2 routines) + Premium $7.99/mo or $49.99/yr' },
     faq: [

@@ -147,8 +147,8 @@ export default function RemoteDevelopersLandingPage() {
             <div className="space-y-6">
               <h3 className="text-2xl font-semibold text-green-400">Accountability Coaching</h3>
               <p className="text-gray-300">
-                5 AI coaches (including a Remote Work Specialist) provide daily
-                check-ins, progress reviews, and obstacle removal.
+                5 AI coaches provide daily check-ins, progress reviews,
+                and obstacle removal across your remote workflow.
               </p>
             </div>
             <div className="space-y-6">
@@ -312,7 +312,7 @@ export default function RemoteDevelopersLandingPage() {
                 description: 'For active creators building features',
                 features: [
                   'Everything in Free',
-                  'All 5 AI coaches (incl. Remote Work Specialist)',
+                  'All 5 AI coaches',
                   'Advanced analytics & velocity tracking',
                   'Weekly AI reviews',
                   'GitHub/GitLab integration',
@@ -373,3 +373,4 @@ export default function RemoteDevelopersLandingPage() {
     </>
   );
 }
+
