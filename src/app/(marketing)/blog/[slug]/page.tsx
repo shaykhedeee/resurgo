@@ -15,6 +15,7 @@ import { habitTrackerAppsPost } from '@/lib/blog/posts/habit-tracker-apps';
 import { adhdProductivityAppsPost } from '@/lib/blog/posts/adhd-productivity-apps';
 import { aiProductivityStackLifeOsPost } from '@/lib/blog/posts/ai-productivity-stack-life-os';
 import { aiProductivityLifeOsFocusPost } from '@/lib/blog/posts/ai-productivity-life-os-focus-system';
+import { adhdFocusHacksLifeOsPost } from '@/lib/blog/posts/adhd-focus-hacks-life-os-2026';
 import { goalDecompositionGuidePost } from '@/lib/blog/posts/goal-decomposition-guide';
 import { bestFreeHabitTrackerPost } from '@/lib/blog/posts/best-free-habit-tracker-2026';
 import { howToBreakBadHabitsPost } from '@/lib/blog/posts/how-to-break-bad-habits';
@@ -69,6 +70,19 @@ const POSTS: Record<string, {
   alternateQuestions?: string[];
   citedSources?: CitedSource[];
 }> = {
+  'adhd-focus-hacks-life-os-2026': {
+    title: adhdFocusHacksLifeOsPost.title,
+    desc: adhdFocusHacksLifeOsPost.desc,
+    date: adhdFocusHacksLifeOsPost.date,
+    readTime: adhdFocusHacksLifeOsPost.readTime,
+    tags: adhdFocusHacksLifeOsPost.tags,
+    heroImage: adhdFocusHacksLifeOsPost.heroImage,
+    seoKeywords: adhdFocusHacksLifeOsPost.seoKeywords,
+    content: adhdFocusHacksLifeOsPost.content,
+    faqItems: adhdFocusHacksLifeOsPost.faqItems,
+    alternateQuestions: adhdFocusHacksLifeOsPost.alternateQuestions,
+    citedSources: adhdFocusHacksLifeOsPost.citedSources,
+  },
   'ai-productivity-tools-2026-life-os-focus-system': {
     title: aiProductivityLifeOsFocusPost.title,
     desc: aiProductivityLifeOsFocusPost.desc,

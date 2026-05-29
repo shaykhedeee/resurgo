@@ -54,3 +54,4 @@ public/uploads/
 file-tree.txt
 tsc-output*.txt
 test_small.txt
+.env*.local

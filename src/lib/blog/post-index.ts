@@ -19,6 +19,16 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: 'adhd-focus-hacks-life-os-2026',
+    title: 'ADHD Focus Hacks for 2026: A Calm Life OS for Getting Started',
+    desc: 'ADHD focus hacks that reduce friction: one visible task, one 25-minute block, and a calm Life OS to turn intent into action.',
+    date: 'May 29, 2026',
+    lastModified: '2026-05-29T06:20:00.000Z',
+    readTime: '5 min',
+    tags: ['ADHD productivity', 'Life OS', 'focus systems'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
     slug: 'ai-productivity-tools-2026-life-os-focus-system',
     title: 'AI Productivity Tools in 2026 Need a Life OS, Not Another Dashboard',
     desc: 'Turn AI productivity tools into calm focus blocks, next actions, and ADHD-friendly review loops with a Life OS built for execution.',
