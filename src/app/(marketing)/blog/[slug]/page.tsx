@@ -7129,14 +7129,15 @@ function buildOperationalChecklist(tags: Array<string>): Array<string> {
   return checklist.slice(0, 5);
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const post = POSTS[params.slug];
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const post = POSTS[slug];
   if (!post) return { title: 'Not Found' };
-  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(params.slug) ?? post.date;
+  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(slug) ?? post.date;
   const isoModified = getIsoDate(modifiedSource);
   const isoPublished = getIsoDate(post.date);
 
-  const canonicalUrl = `https://resurgo.life/blog/${params.slug}`;
+  const canonicalUrl = `https://resurgo.life/blog/${slug}`;
 
   return {
     title: `${post.title} — Resurgo Blog`,
@@ -7210,11 +7211,12 @@ export async function generateStaticParams() {
   return Object.keys(POSTS).map((slug) => ({ slug }));
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = POSTS[params.slug];
+export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const post = POSTS[slug];
   if (!post) notFound();
   const normalizedContent = normalizeLegacyCopy(post.content);
-  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(params.slug) ?? post.date;
+  const modifiedSource = LAST_MODIFIED_BY_SLUG.get(slug) ?? post.date;
 
   const primaryCluster = BLOG_TOPIC_CLUSTERS
     .map((cluster) => ({
@@ -7225,7 +7227,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
     .find((item) => item.score > 0)?.cluster;
 
   const seriesPosts = primaryCluster ? getPostsForCluster(primaryCluster.slug) : [];
-  const currentSeriesIndex = seriesPosts.findIndex((item) => item.slug === params.slug);
+  const currentSeriesIndex = seriesPosts.findIndex((item) => item.slug === slug);
   const prevInSeries = currentSeriesIndex > 0 ? seriesPosts[currentSeriesIndex - 1] : null;
   const nextInSeries = currentSeriesIndex >= 0 && currentSeriesIndex < seriesPosts.length - 1
     ? seriesPosts[currentSeriesIndex + 1]
@@ -7238,11 +7240,11 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   })();
 
   const relatedPosts = Object.entries(POSTS)
-    .filter(([slug]) => slug !== params.slug)
-    .map(([slug, candidate]) => {
+    .filter(([candidateSlug]) => candidateSlug !== slug)
+    .map(([candidateSlug, candidate]) => {
       const sharedTagCount = candidate.tags.filter((tag) => post.tags.includes(tag)).length;
       return {
-        slug,
+        slug: candidateSlug,
         title: candidate.title,
         desc: candidate.desc,
         date: candidate.date,
@@ -7258,7 +7260,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const howToSteps = extractHowToSteps(normalizedContent);
   const operationalChecklist = buildOperationalChecklist(post.tags);
   const keyTakeaways = [post.desc, ...post.tags.map((tag) => `Use ${tag} as a practical execution lever this week.`)].slice(0, 4);
-  const ctaVariant = pickCtaVariant(params.slug);
+  const ctaVariant = pickCtaVariant(slug);
   const ctaConfig = ctaVariant === 'A'
     ? {
         label: 'NEXT_BEST_READ_A',
@@ -7278,7 +7280,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const wordCount = getWordCount(normalizedContent);
 
   const blogPostingJsonLd = generateBlogPostingSchema({
-    slug: params.slug,
+    slug,
     title: post.title,
     desc: post.desc,
     heroImage: post.heroImage,
@@ -7295,7 +7297,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const faqJsonLd = generateFAQSchema(faqItems);
 
   const breadcrumbJsonLd = generateBreadcrumbSchema(
-    params.slug,
+    slug,
     post.title,
     primaryCluster ? { title: primaryCluster.title, slug: primaryCluster.slug } : undefined
   );
@@ -7309,7 +7311,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
       )
     : null;
 
-  const speakableJsonLd = generateSpeakableSchema(post.title, params.slug);
+  const speakableJsonLd = generateSpeakableSchema(post.title, slug);
 
 
   // Render chart if placeholder is in content
@@ -7619,7 +7621,7 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
         <div className="mt-12 border border-orange-900/40 bg-orange-950/10 p-6 text-center">
           <p className="inline-flex items-center gap-2 font-mono text-sm font-bold text-zinc-200"><PixelIcon name="terminal" size={12} className="text-orange-500" />Ready to apply this?</p>
           <p className="mt-1 font-mono text-xs text-zinc-500">Resurgo makes it systematic.</p>
-          <a href={getPostCtaUrl(params.slug, post.tags)}
+          <a href={getPostCtaUrl(slug, post.tags)}
             className="mt-4 inline-block border border-orange-900 bg-orange-950/30 px-6 py-2 font-mono text-xs font-bold tracking-widest text-orange-500 transition hover:bg-orange-950/60">
             [START_FREE]
           </a>
