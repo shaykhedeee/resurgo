@@ -160,6 +160,8 @@ Do not try to completely rebuild your entire digital workspace this afternoon.
 
 Start with a single rule: every time you use an AI tool, convert the output into one immediate task, reference note, or strategic decision within two minutes.
 
+For a tighter version of this workflow, read the updated guide: [AI productivity tools in 2026 need a Life OS, not another dashboard](/blog/ai-productivity-tools-2026-life-os-focus-system).
+
 If you want a beautifully designed, highly unified home for your attention, [try Resurgo free today](/sign-up).
 `,
 };

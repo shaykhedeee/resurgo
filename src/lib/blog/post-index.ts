@@ -19,6 +19,16 @@ export type TopicCluster = {
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
   {
+    slug: 'ai-productivity-tools-2026-life-os-focus-system',
+    title: 'AI Productivity Tools in 2026 Need a Life OS, Not Another Dashboard',
+    desc: 'Turn AI productivity tools into calm focus blocks, next actions, and ADHD-friendly review loops with a Life OS built for execution.',
+    date: 'May 28, 2026',
+    lastModified: '2026-05-28T06:20:00.000Z',
+    readTime: '7 min',
+    tags: ['AI productivity', 'Life OS', 'ADHD focus'],
+    heroImage: '/blog/default-productivity-hero.svg',
+  },
+  {
     slug: 'indie-hackers-productivity-ai-habit-stacking',
     title: 'How Indie Hackers Ship Products 3x Faster with AI-Powered Habit Stacking',
     desc: 'Indie hackers and solopreneurs struggle with decision fatigue and context switching. Learn how AI-powered habit stacking and goal decomposition can help you ship products faster.',
