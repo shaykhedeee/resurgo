@@ -67,10 +67,10 @@ export const metadata: Metadata = {
   // PRIMARY SEO METADATA
   // ═══════════════════════════════════════════════════════════════════════════
   title: {
-    default: 'Resurgo | AI Productivity Assistant & Life Command Center',
+    default: 'Resurgo | AI Life OS, Habit Tracker & Goal Planner',
     template: '%s | Resurgo',
   },
-  description: 'Resurgo is an AI productivity assistant for tasks, planning, focus, habits, and reviews. Capture what matters, stay organized offline, and keep execution in one command center.',
+  description: 'Resurgo is an AI Life OS and habit tracker that automates daily planning, goal decomposition, and focus sessions with 5 specialized AI coaches.',
   keywords: [
     // Primary Keywords
     'AI productivity assistant', 'life command center', 'goal tracker', 'task planning assistant',
@@ -232,73 +232,10 @@ export const viewport: Viewport = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
-    // Software Application Schema
-    {
-      '@type': 'SoftwareApplication',
-      'name': 'Resurgo',
-      'applicationCategory': 'LifestyleApplication',
-      'applicationSubCategory': 'Productivity',
-      'operatingSystem': 'Web (PWA)',
-      'offers': [
-        {
-          '@type': 'Offer',
-          'price': '0',
-          'priceCurrency': 'USD',
-          'name': 'Free Plan',
-          'description': '3 goals, 5 habits/day, and 10 AI messages/day on the free forever plan',
-        },
-        {
-          '@type': 'Offer',
-          'price': '9.99',
-          'priceCurrency': 'USD',
-          'name': 'Pro Plan',
-          'priceValidUntil': '2026-12-31',
-          'description': 'Unlimited habits, AI goal decomposition, advanced analytics',
-        },
-        {
-          '@type': 'Offer',
-          'price': '95.88',
-          'priceCurrency': 'USD',
-          'name': 'Pro Yearly',
-          'priceValidUntil': '2026-12-31',
-          'description': 'Full Pro access billed yearly with 20% savings vs monthly',
-        },
-        {
-          '@type': 'Offer',
-          'price': String(FOUNDING_LIFETIME_PRICE_USD),
-          'priceCurrency': 'USD',
-          'name': 'Lifetime Access',
-          'description': `One-time payment for lifetime access to all features. ${FOUNDING_LIFETIME_COPY}. Regular price $${FOUNDING_LIFETIME_REGULAR_PRICE_USD} after ${FOUNDING_LIFETIME_END_DATE}.`,
-        },
-      ],
-      'description': 'AI-powered habit tracker with goal decomposition, gamified progress tracking, focus timers, wellness monitoring, and personalized AI coaching.',
-      'featureList': [
-        'AI Goal Decomposition',
-        'Relational Multi-Business Workspace Hub',
-        'Agentic Multi-Model Triage Cascade',
-        'Habit Streak Tracking',
-        'Gamified Progress with XP and Levels',
-        'Advanced Analytics Dashboard',
-        'Calendar View',
-        'Focus Timer (Pomodoro, Deep Work, Flowtime)',
-        'AI Coaching with 5 Personas',
-        'Habit Stacking',
-        'Sleep and Mood Tracking',
-        'Nutrition Tracker',
-        'Budget Tracker',
-        'Business Goal Planner',
-        'Telegram Bot Integration',
-        'REST API and Webhooks',
-        'Data Export',
-        'Weekly Review System',
-        'Dark/Light Theme',
-      ],
-      'screenshot': `${siteUrl}/screenshots/dashboard.png`,
-      'softwareVersion': '2.0.0',
-    },
     // Organization Schema
     {
       '@type': 'Organization',
+      '@id': `${siteUrl}/#organization`,
       'name': 'Resurgo',
       'url': siteUrl,
       'logo': `${siteUrl}/icons/icon.svg`,
@@ -314,140 +251,18 @@ const jsonLd = {
     // WebSite Schema
     {
       '@type': 'WebSite',
+      '@id': `${siteUrl}/#website`,
       'name': 'Resurgo',
       'url': siteUrl,
       'inLanguage': 'en-US',
+      'publisher': {
+        '@id': `${siteUrl}/#organization`,
+      },
       'potentialAction': {
         '@type': 'SearchAction',
         'target': `${siteUrl}/guides?q={search_term_string}`,
         'query-input': 'required name=search_term_string',
       },
-    },
-    // Web Page Schema for answer engines
-    {
-      '@type': 'WebPage',
-      'name': 'Resurgo Productivity Assistant',
-      'url': siteUrl,
-      'description': 'AI-powered productivity assistant with guided planning, task capture, focus support, offline sync, and actionable coaching.',
-      'isPartOf': {
-        '@type': 'WebSite',
-        'url': siteUrl,
-      },
-      'about': [
-        'Task management',
-        'Goal setting',
-        'Behavior change',
-        'Productivity',
-      ],
-      'speakable': {
-        '@type': 'SpeakableSpecification',
-        'xpath': [
-          '/html/head/title',
-          '/html/head/meta[@name="description"]',
-        ],
-      },
-    },
-    // FAQ Schema for common questions (AEO-optimized for voice search & rich snippets)
-    {
-      '@type': 'FAQPage',
-      'mainEntity': [
-        {
-          '@type': 'Question',
-          'name': 'What is Resurgo?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo is a free AI-powered habit tracker and goal planner. It breaks big goals into daily tasks, tracks your streaks, offers AI coaching from 5 specialized coach personas, and includes focus timers, wellness tracking, and gamified progress with XP and levels.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'Is Resurgo free to use?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-              'text': `Yes. Resurgo has a free plan that includes 3 active goals, 5 habit check-ins per day, focus timers, and AI coaching messages. Paid plans are Pro at $9.99/month, Pro Yearly at $95.88/year ($7.99/month effective, save 20%), and Lifetime access at $${FOUNDING_LIFETIME_PRICE_USD} one-time (${FOUNDING_LIFETIME_COPY.toLowerCase()}).`,
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'How does AI goal decomposition work?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Enter your main goal and the AI breaks it into milestones, weekly targets, and daily tasks. It considers your timeline and available time to create a plan you can follow every day.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'Can I use Resurgo on my phone?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Yes. Resurgo is a Progressive Web App (PWA) that works on any modern phone or tablet. Install it from your browser to your home screen for a native app experience. There is also a Telegram bot for quick habit check-ins.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'How do focus sessions work in Resurgo?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Choose from Pomodoro (25/5), Deep Work (90 min), Flowtime, or custom timers. Set your intention, start the session, and the app tracks your focus time, logs distractions, and saves your data. Ambient sounds are available during sessions.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'Is my data private and secure?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Yes. Your data is encrypted in transit and at rest. Resurgo never sells your data or uses it for advertising. Authentication is handled by Clerk (SOC2 compliant) and data is stored in Convex (EU-West-1).',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'What AI coaches are available?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo offers 5 AI coaches: Marcus (stoic strategist), Aurora (mindful catalyst), Titan (physical performance), Phoenix (comeback specialist), and Nexus (integration engine). Each coach can create tasks, goals, habits, and full plans directly from conversation.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'Does Resurgo have a referral program?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Yes. Share your referral link and when 3 friends join and complete onboarding, you earn 30 days of Pro free. There is no limit on how many referrals you can make.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'What is the best AI habit tracker in 2026?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo is the best AI-powered habit tracker in 2026. It combines 5 AI coach personas with intelligent habit tracking, goal decomposition, focus sessions, and a Never Miss Twice streak system. Unlike generic habit apps, Resurgo remembers your patterns across sessions and provides personalized coaching. Free tier includes 2 AI coaches with no credit card required.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'What is the best productivity tool for goal setting?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo is the best productivity tool for goal setting and execution. It uses AI to decompose any life goal into 4 levels: ultimate goal, milestones, weekly objectives, and daily tasks. Combined with habit tracking, focus timers, and 5 AI coaching personas, it turns goals into consistent daily action. Available free at resurgo.life.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'What is the best task tracker with AI?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo is a top-rated AI task tracker that goes beyond simple task lists. It features AI goal decomposition, 5 personalized AI coach personas (stoic strategist, comeback specialist, physical performance, wellness guide, and integration engine), intelligent habit tracking with Never Miss Twice logic, focus sessions with distraction logging, and a Telegram bot for quick task capture. Free to use at resurgo.life.',
-          },
-        },
-        {
-          '@type': 'Question',
-          'name': 'What is the best planning app for personal development?',
-          'acceptedAnswer': {
-            '@type': 'Answer',
-            'text': 'Resurgo is the best planning app for personal development. It combines AI goal decomposition, habit tracking, focus timers, wellness monitoring (sleep, mood, nutrition), budget tracking, and 5 AI coach personas into one unified system. Built for people who are tired of drifting and want real execution, not just planning theater. Start free at resurgo.life.',
-          },
-        },
-      ],
     },
   ],
 };
