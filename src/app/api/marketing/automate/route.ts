@@ -1,10 +1,12 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // RESURGO :: Marketing Automation Cron Dispatcher
 // Automates: Twitter, LinkedIn, Reddit, and Instagram posting on a schedule.
+// Uses OpenAI to dynamically generate highly engaging, authentic content.
 // Triggered via Vercel Cron.
 // ═══════════════════════════════════════════════════════════════════════════════
 
 import { NextRequest, NextResponse } from 'next/server';
+import OpenAI from 'openai';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -54,15 +56,66 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
   
   const results: Record<string, any> = {};
 
+  // Initialize OpenAI if key is present
+  const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+
   // 1. Twitter posting automation
   const isTwitterConfigured = !!(process.env.TWITTER_CONSUMER_KEY && process.env.TWITTER_ACCESS_TOKEN);
   if (isTwitterConfigured && (requestedPlatform === 'all' || requestedPlatform === 'twitter')) {
     try {
-      // Randomly choose between a product launch tweet (60%) or value thread (40%)
+      let payload: any = {};
       const isThread = Math.random() < 0.4;
-      const payload = isThread
-        ? { action: 'thread', dryRun }
-        : { action: 'tweet', templateType: Math.random() < 0.5 ? 'product_launch' : 'engagement', dryRun };
+
+      if (openai) {
+        if (isThread) {
+          const completion = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            temperature: 0.75,
+            response_format: { type: 'json_object' },
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an elite Twitter marketer for Resurgo.life (AI life OS, habit tracker, focus session, 5 AI coaches). Generate a high-value Twitter thread of 4 to 6 tweets. Each tweet must be strictly under 280 characters. The final tweet must be a strong call-to-action to resurgo.life. Return valid JSON only with format: { "tweets": ["tweet1", "tweet2", ...] }'
+              },
+              {
+                role: 'user',
+                content: 'Write a thread about productivity systems, habit loops, or how standard streak trackers cause shame spirals.'
+              }
+            ]
+          });
+          const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+          if (Array.isArray(data.tweets) && data.tweets.length > 0) {
+            payload = { action: 'thread', threadTweets: data.tweets, dryRun };
+          }
+        } else {
+          const completion = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            temperature: 0.7,
+            response_format: { type: 'json_object' },
+            messages: [
+              {
+                role: 'system',
+                content: 'You are an elite Twitter marketer for Resurgo.life (AI life OS, habit tracker, focus session, 5 AI coaches). Generate a single engaging tweet. It must be strictly under 280 characters and include "resurgo.life". Avoid generic corporate marketing speak; write with a clean, builder, developer, or stoic tone. Return valid JSON only with format: { "tweet": "your tweet text here" }'
+              },
+              {
+                role: 'user',
+                content: 'Write a tweet about productivity, daily execution, or habit stacking.'
+              }
+            ]
+          });
+          const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+          if (data.tweet) {
+            payload = { action: 'tweet', text: data.tweet, dryRun };
+          }
+        }
+      }
+
+      // Fallback to static templates if OpenAI fails or is not configured
+      if (!payload.action) {
+        payload = isThread
+          ? { action: 'thread', dryRun }
+          : { action: 'tweet', templateType: Math.random() < 0.5 ? 'product_launch' : 'engagement', dryRun };
+      }
 
       const res = await fetch(`${baseUrl}/api/marketing/twitter`, {
         method: 'POST',
@@ -88,9 +141,35 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
   const isLinkedinConfigured = !!(process.env.LINKEDIN_ACCESS_TOKEN && process.env.LINKEDIN_PERSON_URN);
   if (isLinkedinConfigured && (requestedPlatform === 'all' || requestedPlatform === 'linkedin')) {
     try {
-      // Pick a random template type
-      const templates = ['founder_story', 'value_post', 'milestone'];
-      const templateType = templates[Math.floor(Math.random() * templates.length)];
+      let payload: any = { action: 'post', dryRun };
+
+      if (openai) {
+        const completion = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          temperature: 0.7,
+          response_format: { type: 'json_object' },
+          messages: [
+            {
+              role: 'system',
+              content: 'You are an experienced startup founder writing a personal post on LinkedIn. Write a value-first, authentic update about building Resurgo.life (AI life OS, habit stacking, daily planning) or tips on productivity systems for founders. Must feel genuine and include "resurgo.life" near the end. Return valid JSON only with format: { "post": "your post text here" }'
+            },
+            {
+              role: 'user',
+              content: 'Write a professional but direct post about startup discipline or productivity habits.'
+            }
+          ]
+        });
+        const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+        if (data.post) {
+          payload.text = data.post;
+        }
+      }
+
+      // Fallback to static templates if OpenAI fails or is not configured
+      if (!payload.text) {
+        const templates = ['founder_story', 'value_post', 'milestone'];
+        payload.templateType = templates[Math.floor(Math.random() * templates.length)];
+      }
 
       const res = await fetch(`${baseUrl}/api/marketing/linkedin`, {
         method: 'POST',
@@ -98,11 +177,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${ADMIN_SECRET}`,
         },
-        body: JSON.stringify({
-          action: 'post',
-          templateType,
-          dryRun,
-        }),
+        body: JSON.stringify(payload),
       });
 
       results.linkedin = {
@@ -120,9 +195,32 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
   const isRedditConfigured = !!process.env.REDDIT_CLIENT_ID;
   if (isRedditConfigured && (requestedPlatform === 'all' || requestedPlatform === 'reddit')) {
     try {
-      // Pick a random subreddit that has templates
       const subs = ['productivity', 'getdisciplined', 'HabitTracker'];
       const subreddit = subs[Math.floor(Math.random() * subs.length)];
+      let payload: any = { subreddit, dryRun };
+
+      if (openai) {
+        const completion = await openai.chat.completions.create({
+          model: 'gpt-4o-mini',
+          temperature: 0.8,
+          response_format: { type: 'json_object' },
+          messages: [
+            {
+              role: 'system',
+              content: `You are an active Reddit community member posting to r/${subreddit}. Write a highly authentic, vulnerability-driven post detailing a personal struggle with productivity loops (e.g. the Monday restart cycle) and how you built Resurgo (resurgo.life) as an open-source/developer life OS with grace days, habit stacking, and AI coaching. Ask for feedback. DO NOT make it read like an advertisement. Avoid salesy copy. Return valid JSON only with format: { "title": "post title here", "text": "post body text here" }`
+            },
+            {
+              role: 'user',
+              content: 'Generate a post expressing frustration with generic planners and introducing Resurgo for feedback.'
+            }
+          ]
+        });
+        const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+        if (data.title && data.text) {
+          payload.customTitle = data.title;
+          payload.customText = data.text;
+        }
+      }
 
       const res = await fetch(`${baseUrl}/api/marketing/reddit`, {
         method: 'POST',
@@ -130,10 +228,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
           'Content-Type': 'application/json',
           'x-admin-secret': ADMIN_SECRET,
         },
-        body: JSON.stringify({
-          subreddit,
-          dryRun,
-        }),
+        body: JSON.stringify(payload),
       });
 
       results.reddit = {
