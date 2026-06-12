@@ -51,6 +51,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
   // dryRun is true by default to prevent accidental live postings during testing
   const dryRun = dryRunParam === 'false' || body.dryRun === false ? false : true;
   const requestedPlatform = searchParams.get('platform') || body.platform || 'all';
+  const requestedAction = searchParams.get('action') || body.action || 'post';
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
   
@@ -58,6 +59,167 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
 
   // Initialize OpenAI if key is present
   const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+
+  // scouting automation flow (backlinks and PR replies)
+  if (requestedAction === 'scout') {
+    if (!openai) {
+      return NextResponse.json({ error: 'OpenAI API key not configured for AI scouting replies' }, { status: 503 });
+    }
+
+    // 1. Twitter Scouting
+    const isTwitterConfigured = !!(process.env.TWITTER_CONSUMER_KEY && process.env.TWITTER_ACCESS_TOKEN && process.env.TWITTER_BEARER_TOKEN);
+    if (isTwitterConfigured && (requestedPlatform === 'all' || requestedPlatform === 'twitter')) {
+      try {
+        const query = '"habit streak fatigue" OR "ADHD planner" OR "streak fatigue" OR "habit app ADHD" OR "monday productivity restart"';
+        const searchRes = await fetch(`${baseUrl}/api/marketing/twitter`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${ADMIN_SECRET}`,
+          },
+          body: JSON.stringify({ action: 'search', searchQuery: query }),
+        });
+
+        const searchData = await searchRes.json().catch(() => ({}));
+        const tweets = searchData.results || [];
+        results.twitterScout = { foundCount: tweets.length, replies: [] };
+
+        for (const tweet of tweets.slice(0, 3)) {
+          const tweetText = tweet.text;
+          const tweetId = tweet.id;
+
+          const completion = await openai.chat.completions.create({
+            model: 'gpt-4o-mini',
+            temperature: 0.7,
+            response_format: { type: 'json_object' },
+            messages: [
+              {
+                role: 'system',
+                content: `You are an empathetic community builder representing Resurgo (resurgo.life). A user posted a tweet about habit struggles, ADHD, or productivity issues. Write a highly helpful, contextual, and completely non-salesy reply. Under 280 characters. Give genuine advice first. Mention Resurgo (resurgo.life) or its unique approach (phoenix coach restart recovery, streak freeze grace days) only if it naturally fits the context. Avoid all marketing buzzwords, emojis overload, and pushy sales copy. Write like a normal human developer/builder who wants to help. Return valid JSON only with format: { "reply": "your reply text here" }`
+              },
+              {
+                role: 'user',
+                content: `Analyze this tweet: "${tweetText}" and draft a reply.`
+              }
+            ]
+          });
+
+          const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+          if (data.reply) {
+            const replyRes = await fetch(`${baseUrl}/api/marketing/twitter`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${ADMIN_SECRET}`,
+              },
+              body: JSON.stringify({
+                action: 'tweet',
+                text: data.reply,
+                replyToId: tweetId,
+                dryRun,
+              }),
+            });
+
+            results.twitterScout.replies.push({
+              tweetId,
+              originalText: tweetText,
+              draftedReply: data.reply,
+              postResult: await replyRes.json().catch(() => ({})),
+            });
+          }
+        }
+      } catch (err: any) {
+        results.twitterScout = { error: err.message };
+      }
+    } else if (requestedPlatform === 'twitter') {
+      results.twitterScout = { error: 'Twitter keys not fully configured for search/post' };
+    }
+
+    // 2. Reddit Scouting
+    const isRedditConfigured = !!(process.env.REDDIT_CLIENT_ID && process.env.REDDIT_CLIENT_SECRET && process.env.REDDIT_USERNAME && process.env.REDDIT_PASSWORD);
+    if (isRedditConfigured && (requestedPlatform === 'all' || requestedPlatform === 'reddit')) {
+      try {
+        const subreddits = ['productivity', 'getdisciplined', 'HabitTracker'];
+        const query = 'streak fatigue OR ADHD planner OR habit spiral OR restart monday';
+        results.redditScout = { replies: [] };
+
+        for (const sub of subreddits) {
+          const searchRes = await fetch(`${baseUrl}/api/marketing/reddit`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-admin-secret': ADMIN_SECRET,
+            },
+            body: JSON.stringify({ action: 'search', subreddit: sub, query }),
+          });
+
+          const searchData = await searchRes.json().catch(() => ({}));
+          const posts = searchData.results || [];
+          
+          const targetPost = posts.find((p: any) => p.author !== process.env.REDDIT_USERNAME);
+          if (targetPost) {
+            const postTitle = targetPost.title;
+            const postText = targetPost.text;
+            const postId = targetPost.id;
+
+            const completion = await openai.chat.completions.create({
+              model: 'gpt-4o-mini',
+              temperature: 0.7,
+              response_format: { type: 'json_object' },
+              messages: [
+                {
+                  role: 'system',
+                  content: `You are an active, helpful Reddit community member. Write a response to a post titled "${postTitle}" with body: "${postText.substring(0, 1000)}". Your response must be highly empathetic, detailed, and directly answer/address their struggle. Mention Resurgo (resurgo.life) contextually as a product you built/use to address these specific struggles (like the restart shame cycle, rigid streak trackers, or ADHD executive dysfunction) only if it makes sense. Do NOT sound like an ad. Speak like a friend. Return valid JSON only with format: { "reply": "your markdown formatted comment here" }`
+                },
+                {
+                  role: 'user',
+                  content: 'Draft a helpful Reddit comment reply.'
+                }
+              ]
+            });
+
+            const data = JSON.parse(completion.choices[0]?.message.content || '{}');
+            if (data.reply) {
+              const commentRes = await fetch(`${baseUrl}/api/marketing/reddit`, {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'x-admin-secret': ADMIN_SECRET,
+                },
+                body: JSON.stringify({
+                  action: 'comment',
+                  thingId: postId,
+                  text: data.reply,
+                  dryRun,
+                }),
+              });
+
+              results.redditScout.replies.push({
+                subreddit: sub,
+                postId,
+                postTitle,
+                draftedReply: data.reply,
+                commentResult: await commentRes.json().catch(() => ({})),
+              });
+            }
+          }
+        }
+      } catch (err: any) {
+        results.redditScout = { error: err.message };
+      }
+    } else if (requestedPlatform === 'reddit') {
+      results.redditScout = { error: 'Reddit keys not configured' };
+    }
+
+    return NextResponse.json({
+      timestamp: new Date().toISOString(),
+      dryRun,
+      requestedAction,
+      requestedPlatform,
+      results,
+    });
+  }
+
 
   // 1. Twitter posting automation
   const isTwitterConfigured = !!(process.env.TWITTER_CONSUMER_KEY && process.env.TWITTER_ACCESS_TOKEN);

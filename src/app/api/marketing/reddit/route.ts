@@ -144,6 +144,50 @@ async function submitPost(token: string, subreddit: string, title: string, text:
   return res.json();
 }
 
+async function searchSubreddit(token: string, subreddit: string, query: string, limit = 5): Promise<any[]> {
+  const url = `${REDDIT_BASE}/r/${subreddit}/search.json?q=${encodeURIComponent(query)}&restrict_sr=1&sort=new&limit=${limit}`;
+  try {
+    const res = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'User-Agent': 'Resurgo/1.0 (marketing bot; /u/resurgo_app)',
+      },
+    });
+    if (!res.ok) {
+      console.error(`[Reddit API] Search failed in r/${subreddit}:`, res.status);
+      return [];
+    }
+    const json = await res.json();
+    return json.data?.children || [];
+  } catch (err) {
+    console.error(`[Reddit API] Search error in r/${subreddit}:`, err);
+    return [];
+  }
+}
+
+async function submitComment(token: string, thingId: string, text: string): Promise<any> {
+  const res = await fetch(`${REDDIT_BASE}/api/comment`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'User-Agent': 'Resurgo/1.0 (marketing bot; /u/resurgo_app)',
+    },
+    body: new URLSearchParams({
+      thing_id: thingId,
+      text,
+      api_type: 'json',
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error(`[Reddit API] Comment submit failed for ${thingId}:`, res.status, err);
+    return { error: 'Reddit API comment submit failed', status: res.status, details: err };
+  }
+  return res.json();
+}
+
 export async function GET(request: NextRequest) {
   const adminSecret = request.headers.get('x-admin-secret');
   if (adminSecret !== process.env.ADMIN_SECRET) {
@@ -172,7 +216,7 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  return NextResponse.json({ message: 'Reddit Marketing API', endpoints: ['GET ?action=status', 'POST to submit'] });
+  return NextResponse.json({ message: 'Reddit Marketing API', endpoints: ['GET ?action=status', 'POST to submit/search/comment'] });
 }
 
 export async function POST(request: NextRequest) {
@@ -183,7 +227,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { subreddit, customTitle, customText, dryRun = true } = body;
+  const { action, subreddit, query, thingId, text, customTitle, customText, dryRun = true } = body;
 
   const token = await getToken();
   if (!token) {
@@ -192,6 +236,50 @@ export async function POST(request: NextRequest) {
     }, { status: 503 });
   }
 
+  // Handle new action types: search and comment
+  if (action === 'search') {
+    if (!subreddit) {
+      return NextResponse.json({ error: 'Missing subreddit for search action' }, { status: 400 });
+    }
+    const searchQuery = query || 'ADHD OR streak OR habit';
+    const results = await searchSubreddit(token, subreddit, searchQuery);
+    
+    const parsed = results.map((child: any) => {
+      const d = child.data || {};
+      return {
+        id: d.name, // e.g. t3_abcdef (fullname)
+        title: d.title,
+        text: d.selftext,
+        author: d.author,
+        url: `https://www.reddit.com${d.permalink}`,
+        score: d.score,
+        num_comments: d.num_comments,
+        created_utc: d.created_utc,
+      };
+    });
+    
+    return NextResponse.json({ subreddit, query: searchQuery, results: parsed });
+  }
+
+  if (action === 'comment') {
+    if (!thingId || !text) {
+      return NextResponse.json({ error: 'Missing thingId or text for comment action' }, { status: 400 });
+    }
+    if (dryRun) {
+      return NextResponse.json({
+        dryRun: true,
+        wouldComment: { thingId, text: text.substring(0, 200) + (text.length > 200 ? '...' : '') },
+      });
+    }
+    try {
+      const result = await submitComment(token, thingId, text);
+      return NextResponse.json({ success: true, reddit: result });
+    } catch (err) {
+      return NextResponse.json({ error: 'Comment failed', details: String(err) }, { status: 500 });
+    }
+  }
+
+  // Fallback to original submitPost action
   const subInfo = RELEVANT_SUBREDDITS.find(s => s.sub === subreddit);
   if (!subInfo && !customTitle) {
     return NextResponse.json({ error: 'Unknown subreddit or missing customTitle' }, { status: 400 });
@@ -200,20 +288,21 @@ export async function POST(request: NextRequest) {
   const templates = POST_TEMPLATES[subreddit] || [];
   const template = templates[0];
   const title = customTitle || template?.title || 'Check out Resurgo — AI life OS';
-  const text = customText || template?.text || 'Check out resurgo.life for AI-powered goal execution.';
+  const postText = customText || template?.text || 'Check out resurgo.life for AI-powered goal execution.';
 
   if (dryRun) {
     return NextResponse.json({
       dryRun: true,
-      wouldPost: { subreddit, title, text: text.substring(0, 200) + '...' },
+      wouldPost: { subreddit, title, text: postText.substring(0, 200) + '...' },
       warning: 'Set dryRun: false to actually post. Build karma before posting to avoid bans.',
     });
   }
 
   try {
-    const result = await submitPost(token, subreddit, title, text);
+    const result = await submitPost(token, subreddit, title, postText);
     return NextResponse.json({ success: true, reddit: result });
   } catch (err) {
     return NextResponse.json({ error: 'Post failed', details: String(err) }, { status: 500 });
   }
 }
+

@@ -3,6 +3,7 @@ import { ConvexHttpClient } from 'convex/browser';
 import OpenAI from 'openai';
 import { z } from 'zod';
 import { api } from '../../../../../convex/_generated/api';
+import { pingSearchEngines } from '@/lib/marketing/seo-config';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -493,8 +494,15 @@ async function handleGenerate(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ status: 'rejected', article, research, quality: checks }, { status: 422 });
   }
 
+  let pingResults: { google: boolean; bing: boolean } | undefined = undefined;
+
   if (!parsed.data.dryRun) {
     await persistArticle(article, research, publish);
+    try {
+      pingResults = await pingSearchEngines();
+    } catch (err) {
+      console.error('[Blog Generate] Failed to ping search engines:', err);
+    }
   }
 
   return NextResponse.json({
@@ -502,6 +510,7 @@ async function handleGenerate(request: NextRequest): Promise<NextResponse> {
     slug: article.slug,
     title: article.title,
     quality: checks,
+    pingResults,
     research: {
       selectedTopic: research.selectedTopic,
       score: research.score,
