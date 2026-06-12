@@ -23,8 +23,7 @@ import {
 } from '@/lib/product-config';
 
 
-// Base URL for the application (update for production)
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 // Optimized font loading via next/font (eliminates render-blocking Google Fonts link)
 const inter = Inter({

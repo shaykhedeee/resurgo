@@ -1272,6 +1272,8 @@ export default defineSchema({
     name: v.string(),
     website: v.optional(v.string()),
     description: v.optional(v.string()),
+    webnessUrl: v.optional(v.string()),
+    webnessKey: v.optional(v.string()),
     createdAt: v.number(),
     updatedAt: v.number(),
   })

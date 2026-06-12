@@ -1,3 +1,5 @@
+import { organicGrowthBlogPosts } from './posts/organic-growth-batch-2026';
+
 export type BlogPostIndex = {
   slug: string;
   title: string;
@@ -18,6 +20,16 @@ export type TopicCluster = {
 };
 
 export const BLOG_POST_INDEX: Array<BlogPostIndex> = [
+  ...organicGrowthBlogPosts.map((post) => ({
+    slug: post.slug,
+    title: post.title,
+    desc: post.desc,
+    date: post.date,
+    lastModified: post.lastModified,
+    readTime: post.readTime,
+    tags: post.tags,
+    heroImage: post.heroImage,
+  })),
   {
     slug: 'adhd-focus-hacks-life-os-2026',
     title: 'ADHD Focus Hacks for 2026: A Calm Life OS for Getting Started',

@@ -13,7 +13,8 @@ import {
   FOUNDING_LIFETIME_REGULAR_PRICE_USD,
 } from '@/lib/product-config';
 
-const APP_URL = 'https://resurgo.life';
+import { siteUrl } from '@/lib/marketing/seo-config';
+const APP_URL = siteUrl;
 
 // ─── METADATA ────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {

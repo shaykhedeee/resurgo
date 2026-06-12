@@ -4,7 +4,7 @@ import { useMutation, useQuery, useAction } from 'convex/react';
 import { api } from '../../../../convex/_generated/api';
 import { Id } from '../../../../convex/_generated/dataModel';
 import { useEffect, useState, FormEvent } from 'react';
-import { Briefcase, TrendingUp, Plus, Trash2, CheckCircle, Zap, ChevronDown, ChevronUp, ExternalLink, Globe, Edit2, X, PlusCircle } from 'lucide-react';
+import { Briefcase, TrendingUp, Plus, Trash2, CheckCircle, Zap, ChevronDown, ChevronUp, ExternalLink, Globe, Edit2, X, PlusCircle, Settings, Key, RefreshCw, Layers, Wifi, WifiOff, Database, Sparkles, BookOpen, FileText, Check, AlertCircle, Play, Send } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const GOAL_TYPES = [
@@ -41,6 +41,26 @@ export default function BusinessPage() {
   const [savingBiz, setSavingBiz] = useState(false);
   const [savingGoal, setSavingGoal] = useState(false);
   const [editingBizId, setEditingBizId] = useState<string | null>(null);
+
+  // Webness Integration States
+  const [webnessUrl, setWebnessUrl] = useState('http://localhost:3001');
+  const [webnessKey, setWebnessKey] = useState('');
+  const [isTestingConn, setIsTestingConn] = useState(false);
+  const [connStatus, setConnStatus] = useState<'idle' | 'success' | 'failed'>('idle');
+  const [connError, setConnError] = useState('');
+
+  const [seoAuditLoading, setSeoAuditLoading] = useState(false);
+  const [seoAuditProgress, setSeoAuditProgress] = useState('');
+  const [seoAuditResult, setSeoAuditResult] = useState<any>(null);
+  const [seoAuditTaskId, setSeoAuditTaskId] = useState<string | null>(null);
+
+  const [syncMemoryLoading, setSyncMemoryLoading] = useState(false);
+  const [syncMemorySuccess, setSyncMemorySuccess] = useState(false);
+
+  const [blogTopic, setBlogTopic] = useState('');
+  const [blogWritingLoading, setBlogWritingLoading] = useState(false);
+  const [blogWritingSuccess, setBlogWritingSuccess] = useState(false);
+  const [blogWritingTaskId, setBlogWritingTaskId] = useState<string | null>(null);
 
   const [bizForm, setBizForm] = useState({
     name: '',
@@ -149,6 +169,210 @@ export default function BusinessPage() {
   const filteredGoals = goals?.filter((g: any) => g.businessId === selectedBizId) ?? [];
   const activeGoals = filteredGoals.filter((g: any) => g.status === 'active');
   const completedGoals = filteredGoals.filter((g: any) => g.status === 'completed');
+
+  useEffect(() => {
+    if (selectedBiz) {
+      setWebnessUrl(selectedBiz.webnessUrl ?? 'http://localhost:3001');
+      setWebnessKey(selectedBiz.webnessKey ?? '');
+      setConnStatus('idle');
+      setConnError('');
+      setSeoAuditResult(null);
+      setSeoAuditTaskId(null);
+      setSyncMemorySuccess(false);
+      setBlogWritingSuccess(false);
+      setBlogWritingTaskId(null);
+    }
+  }, [selectedBizId, selectedBiz]);
+
+  const testConnection = async () => {
+    if (!webnessUrl) return;
+    setIsTestingConn(true);
+    setConnStatus('idle');
+    setConnError('');
+    try {
+      const trimmedUrl = webnessUrl.trim().replace(/\/$/, '');
+      const res = await fetch(`${trimmedUrl}/api/health`, {
+        headers: {
+          'Authorization': `Bearer ${webnessKey}`,
+        },
+      });
+      if (res.ok) {
+        setConnStatus('success');
+      } else {
+        const errData = await res.json().catch(() => null);
+        setConnStatus('failed');
+        setConnError(errData?.error || `HTTP Error ${res.status}`);
+      }
+    } catch (err: any) {
+      setConnStatus('failed');
+      setConnError(err.message || 'Connection refused');
+    } finally {
+      setIsTestingConn(false);
+    }
+  };
+
+  const handleSaveConnection = async () => {
+    if (!selectedBizId) return;
+    try {
+      await updateBusiness({
+        id: selectedBizId as Id<'businesses'>,
+        webnessUrl: webnessUrl.trim(),
+        webnessKey: webnessKey.trim(),
+      });
+      alert('Sovereign connection configurations saved.');
+    } catch (err: any) {
+      alert(`Save error: ${err.message}`);
+    }
+  };
+
+  const handleSyncMemory = async () => {
+    if (!selectedBizId || !selectedBiz) return;
+    setSyncMemoryLoading(true);
+    setSyncMemorySuccess(false);
+    try {
+      const trimmedUrl = webnessUrl.trim().replace(/\/$/, '');
+      const res = await fetch(`${trimmedUrl}/api/ai-os/memory`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${webnessKey}`,
+        },
+        body: JSON.stringify({
+          content: `Venture Profile: ${selectedBiz.name}. Overview: ${selectedBiz.description || 'No description provided.'}. Address: ${selectedBiz.website || 'No website link'}. Current Business Priorities details: treat as active business lines, ensure marketing campaigns target high converting local opportunities.`,
+          contentType: 'brand_voice',
+          metadata: {
+            source: 'resurgo_business_hub',
+            businessId: selectedBizId,
+            name: selectedBiz.name,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSyncMemorySuccess(true);
+      } else {
+        alert(data.error || 'Failed to sync context');
+      }
+    } catch (err: any) {
+      alert(`Connection failed: ${err.message}`);
+    } finally {
+      setSyncMemoryLoading(false);
+    }
+  };
+
+  const handleRunSeoAudit = async () => {
+    if (!selectedBiz || !selectedBiz.website) {
+      alert('Please specify a Website Link for this Venture first.');
+      return;
+    }
+    setSeoAuditLoading(true);
+    setSeoAuditProgress('Connecting to Webness OS...');
+    setSeoAuditResult(null);
+    try {
+      const trimmedUrl = webnessUrl.trim().replace(/\/$/, '');
+      const res = await fetch(`${trimmedUrl}/api/tools/seo_auditor/execute`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${webnessKey}`,
+        },
+        body: JSON.stringify({
+          input: {
+            url: selectedBiz.website,
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to initialize SEO auditor');
+      }
+      
+      const taskId = data.data.taskId;
+      setSeoAuditTaskId(taskId);
+      setSeoAuditProgress('Task enqueued. Spinning up crawlers...');
+      
+      let attempts = 0;
+      const interval = setInterval(async () => {
+        attempts++;
+        if (attempts > 90) {
+          clearInterval(interval);
+          setSeoAuditLoading(false);
+          setSeoAuditProgress('SEO analysis timed out.');
+          return;
+        }
+        
+        try {
+          const taskRes = await fetch(`${trimmedUrl}/api/projects/${taskId}`, {
+            headers: {
+              'Authorization': `Bearer ${webnessKey}`,
+            },
+          });
+          const taskData = await taskRes.json();
+          if (taskRes.ok && taskData.success) {
+            const task = taskData.data;
+            if (task.status === 'COMPLETED') {
+              clearInterval(interval);
+              setSeoAuditResult(task.outputData);
+              setSeoAuditLoading(false);
+              setSeoAuditProgress('');
+            } else if (task.status === 'FAILED') {
+              clearInterval(interval);
+              setSeoAuditLoading(false);
+              setSeoAuditProgress(`Scrape failed: ${task.error || 'Check local API'}`);
+            } else if (task.status === 'PROCESSING') {
+              const steps = task.steps || [];
+              const runningStep = steps.find((s: any) => s.status === 'RUNNING');
+              if (runningStep) {
+                setSeoAuditProgress(`[Step ${runningStep.stepNumber}/2] ${runningStep.description}`);
+              } else {
+                setSeoAuditProgress('Webness dynamic council executing analysis...');
+              }
+            }
+          }
+        } catch (err) {
+          // ignore transient errors
+        }
+      }, 3000);
+      
+    } catch (err: any) {
+      setSeoAuditLoading(false);
+      setSeoAuditProgress(`Error: ${err.message}`);
+    }
+  };
+
+  const handleTriggerBlog = async () => {
+    const topic = blogTopic.trim() || `Content strategy for ${selectedBiz?.name}`;
+    setBlogWritingLoading(true);
+    setBlogWritingSuccess(false);
+    try {
+      const trimmedUrl = webnessUrl.trim().replace(/\/$/, '');
+      const res = await fetch(`${trimmedUrl}/api/tools/blog_writer/execute`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${webnessKey}`,
+        },
+        body: JSON.stringify({
+          input: {
+            topic,
+            domain: selectedBiz?.website || 'webness.in',
+          },
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || 'Failed to dispatch blog pipeline');
+      }
+      setBlogWritingTaskId(data.data.taskId);
+      setBlogWritingSuccess(true);
+      setBlogTopic('');
+      alert(`Content pipeline enqueued! Task ID: ${data.data.taskId}. Webness OS is writing this in the background.`);
+    } catch (err: any) {
+      alert(`Pipeline error: ${err.message}`);
+    } finally {
+      setBlogWritingLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-black p-4 md:p-6">
@@ -380,6 +604,293 @@ export default function BusinessPage() {
                         <p className="mt-0.5 font-mono text-lg font-bold text-orange-500">{value}</p>
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                {/* WEBNESS OS INTEGRATION COMMAND CENTER */}
+                <div className="border border-zinc-900 bg-zinc-950 p-5 rounded-[2px] space-y-4 shadow-xl">
+                  <div className="flex items-center gap-2 border-b border-zinc-900 pb-3 mb-2">
+                    <Layers className="h-4 w-4 text-orange-500" />
+                    <span className="font-mono text-xs text-orange-500 tracking-widest uppercase font-bold">// WEBNESS_SOVEREIGN_INTEGRATION_HUB</span>
+                    <span className="ml-auto font-mono text-[9px] text-zinc-650 bg-zinc-900 px-2 py-0.5 rounded-[2px] uppercase">
+                      API V1.4_STABLE
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    {/* Left Sub-Section: Connectivity */}
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="font-mono text-xs font-bold text-zinc-300 flex items-center gap-1.5 mb-2.5">
+                          <Settings className="h-3.5 w-3.5 text-zinc-500" />
+                          [CONNECTION_SETTINGS]
+                        </h4>
+                        <div className="space-y-3">
+                          <div className="flex flex-col gap-1">
+                            <label className="font-mono text-[9px] text-zinc-500">WEBNESS_API_ENDPOINT</label>
+                            <input
+                              value={webnessUrl}
+                              onChange={(e) => setWebnessUrl(e.target.value)}
+                              placeholder="e.g. http://localhost:3001"
+                              className="h-8 border border-zinc-800 bg-black px-3 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none rounded-[2px]"
+                            />
+                          </div>
+
+                          <div className="flex flex-col gap-1">
+                            <label className="font-mono text-[9px] text-zinc-500 flex items-center justify-between">
+                              <span>PROGRAMMATIC_API_KEY</span>
+                              <span className="text-[8px] text-zinc-600 tracking-normal">(wn_live_...)</span>
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="password"
+                                value={webnessKey}
+                                onChange={(e) => setWebnessKey(e.target.value)}
+                                placeholder="wn_live_xxxxxxxxxxxx"
+                                className="h-8 w-full border border-zinc-800 bg-black px-3 pr-8 font-mono text-xs text-zinc-200 focus:border-orange-800 focus:outline-none rounded-[2px]"
+                              />
+                              <Key className="absolute right-2.5 top-2.5 h-3 w-3 text-zinc-600" />
+                            </div>
+                          </div>
+
+                          <div className="flex gap-2 pt-1">
+                            <button
+                              onClick={handleSaveConnection}
+                              className="flex-1 h-8 border border-zinc-800 bg-zinc-900 px-3 font-mono text-[10px] tracking-wider text-zinc-300 rounded-[2px] transition hover:bg-zinc-800 hover:text-white"
+                            >
+                              [SAVE_CONFIG]
+                            </button>
+                            
+                            <button
+                              onClick={testConnection}
+                              disabled={isTestingConn}
+                              className="flex items-center justify-center gap-1.5 px-3 h-8 border border-orange-850 bg-orange-950/20 font-mono text-[10px] tracking-wider text-orange-500 rounded-[2px] transition hover:bg-orange-950/40 disabled:opacity-40"
+                            >
+                              {isTestingConn ? (
+                                <RefreshCw className="h-3 w-3 animate-spin" />
+                              ) : (
+                                <Play className="h-3 w-3" />
+                              )}
+                              [TEST_PING]
+                            </button>
+                          </div>
+
+                          {/* Ping status notification */}
+                          {connStatus !== 'idle' && (
+                            <div className={cn(
+                              "border p-2.5 rounded-[2px] font-mono text-[10px] flex items-start gap-2",
+                              connStatus === 'success' 
+                                ? "bg-green-950/10 border-green-900/50 text-green-500" 
+                                : "bg-red-950/10 border-red-900/50 text-red-400"
+                            )}>
+                              {connStatus === 'success' ? (
+                                <>
+                                  <Wifi className="h-3.5 w-3.5 shrink-0 text-green-500 animate-pulse" />
+                                  <div>
+                                    <span className="font-bold uppercase tracking-wider">STATUS: CONNECTED (OK)</span>
+                                    <p className="text-[9px] text-green-600 mt-0.5 leading-normal">Webness OS is fully synchronized. Ready to trigger technical tools and auto-memory updates.</p>
+                                  </div>
+                                </>
+                              ) : (
+                                <>
+                                  <WifiOff className="h-3.5 w-3.5 shrink-0 text-red-400 animate-pulse" />
+                                  <div>
+                                    <span className="font-bold uppercase tracking-wider">STATUS: OFFLINE</span>
+                                    <p className="text-[9px] text-red-500 mt-0.5 leading-normal">{connError || 'Refused to connect.'}</p>
+                                  </div>
+                                </>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Sub-Section: Brand Memory Sync & Content Pipelines */}
+                    <div className="space-y-4">
+                      {/* pgvector Brand Memory sync */}
+                      <div>
+                        <h4 className="font-mono text-xs font-bold text-zinc-300 flex items-center gap-1.5 mb-2.5">
+                          <Database className="h-3.5 w-3.5 text-zinc-500" />
+                          [SELF_LEARNING_MEMORY]
+                        </h4>
+                        <div className="border border-zinc-900 bg-black/40 p-3.5 rounded-[2px] space-y-3">
+                          <p className="font-mono text-[10px] text-zinc-550 leading-relaxed">
+                            Sync Resurgo venture overview facts directly to Webness pgvector memory, aligning the Sovereign AI council with your absolute brand voice.
+                          </p>
+                          <button
+                            onClick={handleSyncMemory}
+                            disabled={syncMemoryLoading}
+                            className="w-full flex items-center justify-center gap-1.5 h-8 border border-zinc-800 bg-zinc-900 px-3 font-mono text-[10px] tracking-wider text-zinc-300 rounded-[2px] transition hover:bg-zinc-800 disabled:opacity-40"
+                          >
+                            {syncMemoryLoading ? (
+                              <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                            ) : syncMemorySuccess ? (
+                              <Check className="h-3.5 w-3.5 text-green-500" />
+                            ) : (
+                              <Sparkles className="h-3.5 w-3.5 text-orange-550" />
+                            )}
+                            {syncMemoryLoading 
+                              ? '[SYNCING_VENTURE_CONTEXT...]' 
+                              : syncMemorySuccess 
+                                ? '[CONTEXT_SYNCHRONIZED_✓]' 
+                                : '[SYNC_BRAND_CONTEXT]'}
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Content generation triggers */}
+                      <div>
+                        <h4 className="font-mono text-xs font-bold text-zinc-300 flex items-center gap-1.5 mb-2.5">
+                          <BookOpen className="h-3.5 w-3.5 text-zinc-500" />
+                          [AI_CONTENT_WRITER_PIPELINE]
+                        </h4>
+                        <div className="border border-zinc-900 bg-black/40 p-3.5 rounded-[2px] space-y-3">
+                          <div className="flex gap-2">
+                            <input
+                              value={blogTopic}
+                              onChange={(e) => setBlogTopic(e.target.value)}
+                              placeholder="Define blog topic (e.g. 5 local bakery templates)"
+                              className="flex-1 h-8 border border-zinc-800 bg-black px-3 font-mono text-[10px] text-zinc-200 focus:border-orange-800 focus:outline-none rounded-[2px]"
+                            />
+                            <button
+                              onClick={handleTriggerBlog}
+                              disabled={blogWritingLoading}
+                              className="h-8 border border-orange-850 bg-orange-950/20 px-3.5 font-mono text-[10px] tracking-wider text-orange-500 rounded-[2px] transition hover:bg-orange-950/40 disabled:opacity-40"
+                            >
+                              [WRITE]
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* BOTTOM FULL-WIDTH WORKSPACE: Technical SEO Scraper & Audit Card */}
+                  <div className="mt-6 border-t border-zinc-900 pt-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+                      <div>
+                        <h4 className="font-mono text-xs font-bold text-zinc-300 flex items-center gap-1.5">
+                          <FileText className="h-3.5 w-3.5 text-orange-500" />
+                          [TECHNICAL_SEO_AUDITOR]
+                        </h4>
+                        <p className="mt-0.5 font-mono text-[10px] text-zinc-500">
+                          Runs technical crawls, image-alt scan, loading speed performance, and triggers Webness Multi-Model council report.
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRunSeoAudit}
+                        disabled={seoAuditLoading || !selectedBiz?.website}
+                        className="flex items-center justify-center gap-1.5 border border-orange-850 bg-orange-950/10 px-4 py-2 font-mono text-xs tracking-widest text-orange-500 rounded-[2px] transition hover:bg-orange-950/30 disabled:opacity-40 shrink-0"
+                      >
+                        {seoAuditLoading ? (
+                          <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <Send className="h-3.5 w-3.5" />
+                        )}
+                        {seoAuditLoading ? '[SCRAPING_&_ANALYZING...]' : '[RUN_TECHNICAL_SEO_AUDIT]'}
+                      </button>
+                    </div>
+
+                    {/* Loader Console */}
+                    {seoAuditLoading && (
+                      <div className="border border-zinc-900 bg-black/90 p-4 rounded-[2px] font-mono text-xs text-orange-500 space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="h-2 w-2 bg-orange-500 rounded-full animate-ping" />
+                          <span className="font-bold tracking-widest uppercase">// WEB_SCRAPE_CONSOLE_LINK:</span>
+                        </div>
+                        <p className="text-[11px] text-zinc-400 font-mono tracking-wider animate-pulse">{seoAuditProgress}</p>
+                      </div>
+                    )}
+
+                    {/* SEO Gauge results */}
+                    {seoAuditResult && (
+                      <div className="space-y-5 animate-fadeIn">
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                          {/* 1. Overall */}
+                          <div className="border border-zinc-900 bg-black/60 p-3.5 text-center rounded-[2px] relative overflow-hidden group">
+                            <span className="font-mono text-[9px] text-zinc-500 tracking-wider block mb-1">OVERALL_SCORE</span>
+                            <div className="my-2 flex items-center justify-center">
+                              <span className="font-mono text-3xl font-extrabold text-orange-500 animate-pulse">
+                                {seoAuditResult.scores.overall}%
+                              </span>
+                            </div>
+                            <div className="h-1 bg-zinc-900 rounded-[2px] overflow-hidden">
+                              <div className="h-1 bg-orange-500" style={{ width: `${seoAuditResult.scores.overall}%` }} />
+                            </div>
+                          </div>
+
+                          {/* 2. Technical */}
+                          <div className="border border-zinc-900 bg-black/60 p-3.5 text-center rounded-[2px]">
+                            <span className="font-mono text-[9px] text-zinc-500 tracking-wider block mb-1">TECHNICAL_SEO</span>
+                            <div className="my-2 flex items-center justify-center">
+                              <span className="font-mono text-xl font-bold text-zinc-300">
+                                {seoAuditResult.scores.technical}/100
+                              </span>
+                            </div>
+                            <div className="h-1 bg-zinc-900 rounded-[2px] overflow-hidden">
+                              <div className="h-1 bg-orange-600" style={{ width: `${seoAuditResult.scores.technical}%` }} />
+                            </div>
+                          </div>
+
+                          {/* 3. Performance */}
+                          <div className="border border-zinc-900 bg-black/60 p-3.5 text-center rounded-[2px]">
+                            <span className="font-mono text-[9px] text-zinc-500 tracking-wider block mb-1">LOAD_SPEED</span>
+                            <div className="my-2 flex items-center justify-center">
+                              <span className="font-mono text-xl font-bold text-zinc-300">
+                                {seoAuditResult.scores.performance}/100
+                              </span>
+                            </div>
+                            <div className="h-1 bg-zinc-900 rounded-[2px] overflow-hidden">
+                              <div className="h-1 bg-orange-600" style={{ width: `${seoAuditResult.scores.performance}%` }} />
+                            </div>
+                          </div>
+
+                          {/* 4. Organic Content */}
+                          <div className="border border-zinc-900 bg-black/60 p-3.5 text-center rounded-[2px]">
+                            <span className="font-mono text-[9px] text-zinc-500 tracking-wider block mb-1">CONTENT_QUALITY</span>
+                            <div className="my-2 flex items-center justify-center">
+                              <span className="font-mono text-xl font-bold text-zinc-300">
+                                {seoAuditResult.scores.content}/100
+                              </span>
+                            </div>
+                            <div className="h-1 bg-zinc-900 rounded-[2px] overflow-hidden">
+                              <div className="h-1 bg-orange-600" style={{ width: `${seoAuditResult.scores.content}%` }} />
+                            </div>
+                          </div>
+
+                          {/* 5. Workflow/Habit Score */}
+                          <div className="border border-zinc-900 bg-black/60 p-3.5 text-center rounded-[2px]">
+                            <span className="font-mono text-[9px] text-zinc-500 tracking-wider block mb-1">WORKFLOW_ALIGN</span>
+                            <div className="my-2 flex items-center justify-center">
+                              <span className="font-mono text-xl font-bold text-zinc-300">
+                                {seoAuditResult.scores.workflow}/100
+                              </span>
+                            </div>
+                            <div className="h-1 bg-zinc-900 rounded-[2px] overflow-hidden">
+                              <div className="h-1 bg-orange-600" style={{ width: `${seoAuditResult.scores.workflow}%` }} />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Executive Summary Markdown report */}
+                        <div className="border border-zinc-900 bg-zinc-950 p-4 rounded-[2px]">
+                          <div className="flex items-center justify-between border-b border-zinc-900 pb-2 mb-3">
+                            <span className="font-mono text-[10px] tracking-wider text-orange-500 uppercase">// SOVEREIGN_SEO_REPORT_CARD</span>
+                            <span className="font-mono text-[9px] text-zinc-600 uppercase">
+                              Target Site: {seoAuditResult.url}
+                            </span>
+                          </div>
+                          
+                          <div className="max-h-[300px] overflow-y-auto pr-2 space-y-3 font-mono text-xs text-zinc-300 leading-relaxed scrollbar-thin">
+                            {/* Parse simple markdown tags dynamically */}
+                            <div className="whitespace-pre-wrap font-sans text-xs text-zinc-300 tracking-wide">
+                              {seoAuditResult.report}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
 

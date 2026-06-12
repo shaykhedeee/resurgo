@@ -6,7 +6,7 @@ import NicheLandingPage, { type NicheFaq } from '@/components/marketing/NicheLan
 export const metadata: Metadata = {
   title: 'Best Productivity App for ADHD 2026 | RESURGO',
   description:
-    'Resurgo is the AI life OS built for ADHD brains. Low-friction brain dumps, micro-habits, streak recovery, dopamine-driven rewards, and an AI coach that adapts to your energy — not a generic schedule.',
+    'Resurgo is the AI life OS built for ADHD brains. Use low-friction brain dumps, micro-habits, streak recovery, and smart coaching to work without overwhelm.',
   keywords: [
     'best productivity app for ADHD',
     'ADHD goal tracker app',
@@ -67,7 +67,29 @@ export default async function AdhdPage() {
       page={page}
       heroHeadline="Built for How Your Brain Actually Works"
       heroCta="START_FREE -- ADHD EDITION"
+      openingAnswer={{
+        title: 'The best productivity app for ADHD is the one that reduces friction before motivation disappears.',
+        body:
+          'Resurgo is designed to turn a fast brain dump into one visible next step, a smaller task start, and a realistic recovery loop. That is the practical difference between an ADHD-friendly system and a prettier task list.',
+      }}
       faq={FAQ}
+      relatedReads={[
+        {
+          href: '/blog/best-ai-daily-planner-for-adhd',
+          title: 'Best AI Daily Planner for ADHD',
+          description: 'Commercial-intent guide on planning, executive function, and recovery after missed days.',
+        },
+        {
+          href: '/blog/best-ai-productivity-tools-2026-comprehensive-guide',
+          title: 'Best AI Productivity Tools in 2026',
+          description: 'Comparison content for evaluators weighing Resurgo against broader AI productivity stacks.',
+        },
+        {
+          href: '/blog/executive-function-goal-setting-guide-neurodivergent-adults',
+          title: 'Executive Function and Goal Setting',
+          description: 'Support article for neurodivergent adults who need structure without rigid routines.',
+        },
+      ]}
       stats={[
         { value: '2 min', label: 'Daily Check-in (Low Friction)' },
         { value: '87%', label: 'Maintain Streaks with Recovery' },

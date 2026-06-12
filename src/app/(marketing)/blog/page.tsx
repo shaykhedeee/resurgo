@@ -4,10 +4,14 @@ import Image from 'next/image';
 import { PixelIcon } from '@/components/PixelIcon';
 import { BLOG_POST_INDEX, BLOG_TOPIC_CLUSTERS } from '@/lib/blog/post-index';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { BlogFunnelTracker } from '@/components/BlogFunnelTracker';
+import { listGeneratedBlogPosts } from '@/lib/blog/generated-posts';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
-  title: 'Blog — Productivity Tips, Habit Science & Goal Setting | Resurgo',
-  description: 'Read evidence-based articles on habit formation, procrastination fixes, AI coaching, goal tracking systems, and deep work strategies. Resurgo blog — insights that help you build better habits.',
+  title: 'The Resurgo Blog — Science of Habit Formation & Focus',
+  description:
+    'Read evidence-based articles on habit formation, procrastination fixes, AI coaching, goal tracking systems, and deep work strategies on the Resurgo blog.',
   keywords: [
     'productivity blog', 'habit science', 'goal setting tips', 'procrastination help',
     'AI coaching blog', 'deep work strategies', 'habit tracker tips', 'Resurgo blog',
@@ -27,7 +31,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://resurgo.life/blog' },
 };
 
-const POSTS = [...BLOG_POST_INDEX].sort((a, b) => {
+const STATIC_POSTS = [...BLOG_POST_INDEX].sort((a, b) => {
   const aTime = new Date(a.lastModified ?? a.date).getTime();
   const bTime = new Date(b.lastModified ?? b.date).getTime();
   return bTime - aTime;
@@ -38,24 +42,49 @@ function toIsoDate(value: string): string {
   return Number.isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
 }
 
-export default function BlogPage() {
+function formatGeneratedDate(value?: number): string {
+  const date = value ? new Date(value) : new Date();
+  return new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(date);
+}
+
+export default async function BlogPage() {
+  const generatedPosts = await listGeneratedBlogPosts(20);
+  const POSTS = [
+    ...generatedPosts.map((post) => ({
+      ...post,
+      date: formatGeneratedDate(post.publishedAt ?? post.updatedAt),
+      lastModified: new Date(post.updatedAt).toISOString(),
+    })),
+    ...STATIC_POSTS,
+  ].sort((a, b) => {
+    const aTime = new Date(a.lastModified ?? a.date).getTime();
+    const bTime = new Date(b.lastModified ?? b.date).getTime();
+    return bTime - aTime;
+  });
+
   const blogJsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'Blog',
+        '@id': `${siteUrl}/blog/#webpage`,
+        'isPartOf': {
+          '@id': `${siteUrl}/#website`,
+        },
+        'publisher': {
+          '@id': `${siteUrl}/#organization`,
+        },
         name: 'Resurgo Blog',
         description: 'Evidence-based insights on productivity, habit science, goal tracking, and personal development.',
-        url: 'https://resurgo.life/blog',
-        publisher: { '@type': 'Organization', name: 'Resurgo', url: 'https://resurgo.life' },
+        url: `${siteUrl}/blog`,
         blogPost: POSTS.map((post) => ({
           '@type': 'BlogPosting',
           headline: post.title,
           description: post.desc,
           datePublished: toIsoDate(post.lastModified ?? post.date),
-          url: `https://resurgo.life/blog/${post.slug}`,
-          image: `https://resurgo.life${post.heroImage}`,
-          author: { '@type': 'Organization', name: 'Resurgo' },
+          url: `${siteUrl}/blog/${post.slug}`,
+          image: `${siteUrl}${post.heroImage}`,
+          author: { '@id': `${siteUrl}/#organization` },
           keywords: post.tags.join(', '),
         })),
       },
@@ -66,7 +95,7 @@ export default function BlogPage() {
         itemListElement: POSTS.map((post, i) => ({
           '@type': 'ListItem',
           position: i + 1,
-          url: `https://resurgo.life/blog/${post.slug}`,
+          url: `${siteUrl}/blog/${post.slug}`,
           name: post.title,
         })),
       },
@@ -75,6 +104,7 @@ export default function BlogPage() {
 
   return (
     <main className="min-h-screen bg-black">
+      <BlogFunnelTracker event="blog_visit" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}

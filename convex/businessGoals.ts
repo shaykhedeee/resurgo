@@ -32,6 +32,8 @@ export const createBusiness = mutation({
     name: v.string(),
     website: v.optional(v.string()),
     description: v.optional(v.string()),
+    webnessUrl: v.optional(v.string()),
+    webnessKey: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await requireUser(ctx);
@@ -41,6 +43,8 @@ export const createBusiness = mutation({
       name: args.name,
       website: args.website,
       description: args.description,
+      webnessUrl: args.webnessUrl,
+      webnessKey: args.webnessKey,
       createdAt: now,
       updatedAt: now,
     });
@@ -53,6 +57,8 @@ export const updateBusiness = mutation({
     name: v.optional(v.string()),
     website: v.optional(v.string()),
     description: v.optional(v.string()),
+    webnessUrl: v.optional(v.string()),
+    webnessKey: v.optional(v.string()),
   },
   handler: async (ctx, { id, ...updates }) => {
     const user = await requireUser(ctx);

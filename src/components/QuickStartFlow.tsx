@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import { QuickStartStep2 } from './QuickStartStep2';
 import { QuickStartPlannerStep } from './QuickStartPlannerStep';
 import { QuickStartFormAndAnalysisStep } from './QuickStartFormAndAnalysisStep';
+import { trackMarketingEvent } from '@/lib/marketing/analytics';
 
 export type Archetype = 'adhd' | 'ambitious' | 'student' | 'athlete' | 'other';
 
@@ -66,6 +67,13 @@ function QuickStartFlowInner() {
     brainDump: string,
     parsedData: QuickStartFlowState['parsedData']
   ) => {
+    trackMarketingEvent('brain_dump_submitted', {
+      brainDumpLength: brainDump.length,
+      extractedGoals: parsedData?.goals.length ?? 0,
+      extractedBlockers: parsedData?.blockers.length ?? 0,
+      archetype: parsedData?.archetype,
+    });
+
     setState((prev) => ({
       ...prev,
       brainDump,
@@ -113,4 +121,3 @@ function QuickStartFlowInner() {
     </div>
   );
 }
-

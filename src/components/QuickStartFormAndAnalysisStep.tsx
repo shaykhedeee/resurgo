@@ -25,6 +25,7 @@ import {
   HeartPulse
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { trackMarketingEvent } from '@/lib/marketing/analytics';
 
 interface QuickStartFormAndAnalysisStepProps {
   brainDump: string;
@@ -214,6 +215,16 @@ export function QuickStartFormAndAnalysisStep({
         goals: plannerSelections.goals,
         habits: plannerSelections.habits,
         tasks: plannerSelections.tasks
+      });
+
+      trackMarketingEvent('onboarding_completed', {
+        source: 'quick_start',
+        goalsSelected: plannerSelections.goals.length,
+        habitsSelected: plannerSelections.habits.length,
+        tasksSelected: plannerSelections.tasks.length,
+        archetype: mapArchetype(detectedArchetypeRaw),
+        brainDumpLength: brainDump.length,
+        hasBiometrics: Boolean(height && weight),
       });
 
       setPhase('launching');

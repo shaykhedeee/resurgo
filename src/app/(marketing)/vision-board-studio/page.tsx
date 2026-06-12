@@ -5,13 +5,12 @@
 
 import type { Metadata } from 'next';
 import Link from 'next/link';
-
-const APP_URL = 'https://resurgo.life';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'AI Vision Board Maker — Resurgo Vision Board Studio',
   description:
-    'The most accurate AI vision board generator. Powered by your personality, goals, and psychology — not generic stock photos. ImagineArt + Freepik quality. Free to try.',
+    'Create a personalized AI vision board. Resurgo designs images matching your core personality, long-term goals, and daily habits. Free to start.',
   keywords: [
     'AI vision board maker',
     'vision board generator',
@@ -22,13 +21,33 @@ export const metadata: Metadata = {
     'psychological vision board',
     'dream board creator',
   ],
-  alternates: { canonical: `${APP_URL}/vision-board-studio` },
+  alternates: { canonical: `${siteUrl}/vision-board-studio` },
   openGraph: {
     title: 'AI Vision Board Maker — Resurgo',
     description: 'Generate deeply personal vision boards powered by your personality type and life goals.',
-    url: `${APP_URL}/vision-board-studio`,
+    url: `${siteUrl}/vision-board-studio`,
     type: 'website',
   },
+};
+
+// Connected WebPage JSON-LD schema
+const visionBoardJsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/vision-board-studio/#webpage`,
+      'url': `${siteUrl}/vision-board-studio`,
+      'name': 'AI Vision Board Maker — Resurgo Vision Board Studio',
+      'description': 'Create a personalized AI vision board. Resurgo designs images matching your core personality, long-term goals, and daily habits. Free to start.',
+      'isPartOf': {
+        '@id': `${siteUrl}/#website`,
+      },
+      'publisher': {
+        '@id': `${siteUrl}/#organization`,
+      },
+    },
+  ],
 };
 
 const STEPS = [
@@ -111,6 +130,11 @@ const STYLES = [
 export default function VisionBoardStudioPage() {
   return (
     <main className="bg-black text-zinc-100 min-h-screen overflow-x-hidden">
+      {/* Connected structured schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(visionBoardJsonLd) }}
+      />
 
       {/* ══ HERO ══════════════════════════════════════════════════════════════ */}
       <section className="relative pt-24 pb-20 px-4 text-center overflow-hidden">

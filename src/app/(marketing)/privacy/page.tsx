@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy — Resurgo | How We Protect Your Data',
-  description: 'Resurgo privacy policy. Learn what data we collect, what we never sell, how we store it securely (EU-West-1, SOC2, TLS 1.3), and your rights to access, export, or delete your data.',
+  description:
+    'Resurgo privacy policy. Learn about our data collection practices, encryption standards (TLS 1.3/AES-256), and how you can export or delete your profile.',
   keywords: [
     'Resurgo privacy policy', 'data privacy', 'habit tracker privacy', 'GDPR',
     'data protection', 'Resurgo data security', 'privacy first app',

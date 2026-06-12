@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'Features — Resurgo Habit Tracker | AI Coaching, Focus Timers, Wellness & More',
   description:
-    'Explore all Resurgo features: AI goal decomposition, habit tracking with streaks, 5 AI coach personas, Pomodoro and Deep Work timers, mood and sleep tracking, budget planner, Telegram bot, REST API, and more.',
+    'Explore Resurgo features: AI goal planning, habit streaks, 5 AI coaches, Pomodoro, mood and sleep logs, budget planner, and Telegram bot in one place.',
   keywords: [
     'Resurgo features', 'habit tracker features', 'AI goal decomposition',
     'habit stacking app', 'focus timer app', 'Pomodoro tracker',
@@ -114,12 +115,16 @@ const FEATURE_FAQS = [
   },
 ];
 
-// JSON-LD ItemList + FAQPage structured data
+// JSON-LD ItemList + FAQPage structured data connected to layout organization & website
 const featuresJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'ItemList',
+      '@id': `${siteUrl}/features/#itemlist`,
+      'isPartOf': {
+        '@id': `${siteUrl}/features/#webpage`,
+      },
       'name': 'Resurgo Features',
       'description': 'Complete list of Resurgo habit tracker features across goal setting, habit building, AI coaching, focus timers, wellness, gamification, and integrations.',
       'numberOfItems': FEATURES.reduce((acc, cat) => acc + cat.features.length, 0),
@@ -134,6 +139,10 @@ const featuresJsonLd = {
     },
     {
       '@type': 'FAQPage',
+      '@id': `${siteUrl}/features/#faq`,
+      'isPartOf': {
+        '@id': `${siteUrl}/features/#webpage`,
+      },
       'mainEntity': FEATURE_FAQS.map((faq) => ({
         '@type': 'Question',
         'name': faq.q,
@@ -142,6 +151,16 @@ const featuresJsonLd = {
           'text': faq.a,
         },
       })),
+    },
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/features/#webpage`,
+      'isPartOf': {
+        '@id': `${siteUrl}/#website`,
+      },
+      'name': 'Features — Resurgo Habit Tracker | AI Coaching, Focus Timers, Wellness & More',
+      'description': 'Explore Resurgo features: AI goal planning, habit streaks, 5 AI coaches, Pomodoro, mood and sleep logs, budget planner, and Telegram bot in one place.',
+      'url': `${siteUrl}/features`,
     },
   ],
 };

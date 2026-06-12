@@ -21,10 +21,13 @@ import { bestFreeHabitTrackerPost } from '@/lib/blog/posts/best-free-habit-track
 import { howToBreakBadHabitsPost } from '@/lib/blog/posts/how-to-break-bad-habits';
 import { indieHackersProductivityPost } from '@/lib/blog/posts/indie-hackers-productivity';
 import { remoteDevelopersProductivityPost } from '@/lib/blog/posts/remote-developers-productivity';
+import { organicGrowthBlogPosts } from '@/lib/blog/posts/organic-growth-batch-2026';
 import {
   FOUNDING_LIFETIME_COPY,
   FOUNDING_LIFETIME_PRICE_USD,
 } from '@/lib/product-config';
+import { BlogFunnelTracker } from '@/components/BlogFunnelTracker';
+import { getGeneratedBlogPost } from '@/lib/blog/generated-posts';
 import {
   generateFAQSchema,
   generateBreadcrumbSchema,
@@ -70,6 +73,7 @@ const POSTS: Record<string, {
   alternateQuestions?: string[];
   citedSources?: CitedSource[];
 }> = {
+  ...Object.fromEntries(organicGrowthBlogPosts.map((post) => [post.slug, post])),
   'adhd-focus-hacks-life-os-2026': {
     title: adhdFocusHacksLifeOsPost.title,
     desc: adhdFocusHacksLifeOsPost.desc,
@@ -6991,6 +6995,37 @@ Three major trends: (1) **AI agent workflows** — tools that autonomously compl
   },
 };
 
+type BlogPostView = (typeof POSTS)[string];
+
+function formatGeneratedDate(value?: number): string {
+  const date = value ? new Date(value) : new Date();
+  return new Intl.DateTimeFormat('en-US', { month: 'long', day: 'numeric', year: 'numeric' }).format(date);
+}
+
+async function getPostForSlug(slug: string): Promise<BlogPostView | null> {
+  const staticPost = POSTS[slug];
+  if (staticPost) return staticPost;
+
+  const generated = await getGeneratedBlogPost(slug);
+  if (!generated) return null;
+
+  const sourceDate = generated.publishedAt ?? generated.updatedAt;
+  return {
+    title: generated.title,
+    desc: generated.desc,
+    date: formatGeneratedDate(sourceDate),
+    readTime: generated.readTime,
+    tags: generated.tags,
+    heroImage: generated.heroImage,
+    content: generated.content,
+    seoKeywords: generated.seoKeywords,
+    citedSources: [
+      { name: 'Google Trends and Reddit research scan', url: 'https://trends.google.com/trends/', type: 'research' },
+      { name: 'Resurgo editorial quality gate', url: 'https://resurgo.life/blog', type: 'editorial' },
+    ],
+  };
+}
+
 function extractFaqItemsFromContent(content: string): Array<FaqItem> {
   const faqStart = content.indexOf('## FAQ');
   if (faqStart === -1) return [];
@@ -7145,7 +7180,7 @@ function buildOperationalChecklist(tags: Array<string>): Array<string> {
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
-  const post = POSTS[slug];
+  const post = await getPostForSlug(slug);
   if (!post) return { title: 'Not Found' };
   const modifiedSource = LAST_MODIFIED_BY_SLUG.get(slug) ?? post.date;
   const isoModified = getIsoDate(modifiedSource);
@@ -7227,7 +7262,7 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const post = POSTS[slug];
+  const post = await getPostForSlug(slug);
   if (!post) notFound();
   const normalizedContent = normalizeLegacyCopy(post.content);
   const modifiedSource = LAST_MODIFIED_BY_SLUG.get(slug) ?? post.date;
@@ -7327,6 +7362,53 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const speakableJsonLd = generateSpeakableSchema(post.title, slug);
 
+  const renderInlineRichText = (text: string, keyPrefix: string) => {
+    const parts: Array<JSX.Element | string> = [];
+    const pattern = /\[([^\]]+)\]\((\/[^)\s]+)\)|(https?:\/\/[^\s)]+)|(\/[a-z0-9][a-z0-9-/]*)/gi;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = pattern.exec(text)) !== null) {
+      if (match.index > lastIndex) {
+        parts.push(text.slice(lastIndex, match.index));
+      }
+
+      if (match[1] && match[2]) {
+        parts.push(
+          <Link key={`${keyPrefix}-${match.index}`} href={match[2]} className="text-orange-400 hover:text-orange-300 hover:underline">
+            {match[1]}
+          </Link>
+        );
+      } else if (match[3]) {
+        parts.push(
+          <a
+            key={`${keyPrefix}-${match.index}`}
+            href={match[3]}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-orange-400 hover:text-orange-300 hover:underline"
+          >
+            {match[3]}
+          </a>
+        );
+      } else if (match[4]) {
+        parts.push(
+          <Link key={`${keyPrefix}-${match.index}`} href={match[4]} className="text-orange-400 hover:text-orange-300 hover:underline">
+            {match[4]}
+          </Link>
+        );
+      }
+
+      lastIndex = pattern.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.slice(lastIndex));
+    }
+
+    return parts;
+  };
+
 
   // Render chart if placeholder is in content
   const renderContent = (content: string, ChartComponent?: React.ComponentType) => {
@@ -7358,7 +7440,10 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <p className="mb-2 text-zinc-200 font-semibold">{title.replace(/\*\*/g, '')}</p>
               <ul className="space-y-1 pl-4">
                 {items.filter(Boolean).map((item, k) => (
-                  <li key={k} className="flex gap-2 text-xs text-zinc-400"><span className="text-orange-600">-</span>{item.replace(/^- /, '')}</li>
+                  <li key={k} className="flex gap-2 text-xs text-zinc-400">
+                    <span className="text-orange-600">-</span>
+                    <span>{renderInlineRichText(item.replace(/^- /, ''), `${key}-${k}`)}</span>
+                  </li>
                 ))}
               </ul>
             </div>
@@ -7375,7 +7460,11 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           );
         }
         if (paragraph.trim()) {
-          return <p key={key} className="mb-4 text-sm text-zinc-400 leading-relaxed">{paragraph.trim()}</p>;
+          return (
+            <p key={key} className="mb-4 text-sm text-zinc-400 leading-relaxed">
+              {renderInlineRichText(paragraph.trim(), key)}
+            </p>
+          );
         }
         return null;
       });
@@ -7384,6 +7473,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   return (
     <main className="min-h-screen bg-black">
+      <BlogFunnelTracker event="blog_visit" slug={slug} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}

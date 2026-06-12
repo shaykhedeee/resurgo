@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'Install Resurgo Web App — iOS Safari & Android Chrome PWA | AI Productivity',
   description:
-    'Install Resurgo instantly as a web app. Native standalone experience with push notifications, offline local caching, and 5 AI coaches. Safe, direct, and zero app store friction.',
+    'Install Resurgo instantly as a web app. Standalone experience with push notifications, offline local caching, and 5 AI coaches without app store friction.',
   keywords: [
     'Resurgo download', 'Resurgo APK', 'Resurgo Android download',
     'install Resurgo iPhone', 'iOS PWA install', 'Resurgo iOS',
@@ -373,16 +374,18 @@ export default function DownloadPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
+            '@id': `${siteUrl}/#software`,
             name: 'Resurgo',
             operatingSystem: 'Android, iOS, Windows, macOS',
             applicationCategory: 'LifestyleApplication',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-            downloadUrl: 'https://resurgo.life/downloads/resurgo-latest.apk',
+            downloadUrl: `${siteUrl}/downloads/resurgo-latest.apk`,
             softwareVersion: APK_VERSION,
             description:
               'AI-powered productivity assistant. Install on Android (APK), iPhone/iPad (PWA), Windows and macOS.',
-            url: 'https://resurgo.life',
-            author: { '@type': 'Organization', name: 'Resurgo', url: 'https://resurgo.life' },
+            url: `${siteUrl}`,
+            author: { '@id': `${siteUrl}/#organization` },
+            publisher: { '@id': `${siteUrl}/#organization` },
           }),
         }}
       />

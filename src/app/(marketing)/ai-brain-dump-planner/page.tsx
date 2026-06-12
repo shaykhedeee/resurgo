@@ -3,8 +3,9 @@ import Link from 'next/link';
 import EmailCapture from '@/components/marketing/EmailCapture';
 import MarketingPageBeacon from '@/components/marketing/MarketingPageBeacon';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
-const PAGE_URL = 'https://resurgo.life/ai-brain-dump-planner';
+const PAGE_URL = `${siteUrl}/ai-brain-dump-planner`;
 
 const planningSteps = [
   {
@@ -31,10 +32,46 @@ const proofPoints = [
   'Free plan available with no credit card required',
 ];
 
+const relatedGuides = [
+  {
+    href: '/blog/ai-brain-dump-planner-guide',
+    title: 'AI Brain Dump Planner Guide',
+    description: 'Answer-first breakdown of how to turn scattered thoughts into a daily plan.',
+  },
+  {
+    href: '/blog/goal-decomposition-examples',
+    title: 'Goal Decomposition Examples',
+    description: 'Concrete examples for turning a messy brain dump into milestones and today tasks.',
+  },
+  {
+    href: '/blog/best-ai-daily-planner-for-adhd',
+    title: 'Best AI Daily Planner for ADHD',
+    description: 'Useful follow-up if the real problem is executive function and task initiation.',
+  },
+];
+
+const faqItems = [
+  {
+    question: 'What is the best AI brain dump planner for messy thoughts and planning overwhelm?',
+    answer:
+      'The best AI brain dump planner should capture unstructured thoughts, separate goals from tasks, and hand you one calm next action. Resurgo is built around that workflow instead of expecting you to clean the mess manually first.',
+  },
+  {
+    question: 'Can an AI brain dump planner turn thoughts into goals, habits, and tasks automatically?',
+    answer:
+      'Yes. Resurgo classifies brain-dump input into outcomes, milestones, tasks, and supporting habits so the same capture session becomes an execution plan instead of another notes archive.',
+  },
+  {
+    question: 'Who benefits most from an AI brain dump planner?',
+    answer:
+      'Founders, ADHD adults, students, and overloaded solo operators benefit most because they often have high idea volume but low clarity on what should happen today.',
+  },
+];
+
 export const metadata: Metadata = {
   title: 'AI Brain Dump Planner That Turns Chaos Into Today’s Plan | Resurgo',
   description:
-    'Need an AI brain dump planner that turns scattered thoughts into a real execution plan? Resurgo converts messy goals, tasks, and ideas into today’s priorities in minutes.',
+    'Looking for an AI brain dump planner? Resurgo turns scattered thoughts, tasks, and chaotic goals into a prioritized execution plan in minutes.',
   keywords: [
     'ai brain dump planner',
     'brain dump planner',
@@ -54,8 +91,43 @@ export const metadata: Metadata = {
 };
 
 export default function AIBrainDumpPlannerPage() {
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'FAQPage',
+        '@id': `${PAGE_URL}/#faq`,
+        'isPartOf': {
+          '@id': `${PAGE_URL}/#webpage`,
+        },
+        'mainEntity': faqItems.map((item) => ({
+          '@type': 'Question',
+          'name': item.question,
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': item.answer,
+          },
+        })),
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${PAGE_URL}/#webpage`,
+        'isPartOf': {
+          '@id': `${siteUrl}/#website`,
+        },
+        'name': 'AI Brain Dump Planner That Turns Chaos Into Today\'s Plan | Resurgo',
+        'description': 'Looking for an AI brain dump planner? Resurgo turns scattered thoughts, tasks, and chaotic goals into a prioritized execution plan in minutes.',
+        'url': PAGE_URL,
+      },
+    ],
+  };
+
   return (
     <main className="min-h-screen bg-black text-zinc-100">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <MarketingPageBeacon
         event="marketing_page_view"
         properties={{ page: 'ai-brain-dump-planner', intent: 'seo' }}
@@ -75,6 +147,17 @@ export default function AIBrainDumpPlannerPage() {
               It takes your messy goal notes, random tasks, and half-clear priorities and
               turns them into one calm execution plan you can actually follow.
             </p>
+            <div className="mt-6 rounded-2xl border border-orange-900/50 bg-orange-950/10 p-5">
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-orange-400">
+                Quick Answer
+              </p>
+              <p className="mt-3 text-sm leading-7 text-zinc-200">
+                If you are searching for an AI brain dump planner, the practical need is
+                simple: capture mental clutter, identify the real priority, and leave with
+                one visible next step. Resurgo does that by converting the dump into goals,
+                tasks, habits, and a daily plan in the same workflow.
+              </p>
+            </div>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <TermLinkButton href="/sign-up" size="lg">
@@ -135,6 +218,57 @@ export default function AIBrainDumpPlannerPage() {
         </div>
       </section>
 
+      <section className="border-b border-zinc-900">
+        <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="font-mono text-xs uppercase tracking-[0.3em] text-orange-400">
+                Internal Guides
+              </p>
+              <h2 className="mt-3 text-3xl font-bold text-white">
+                Best next reads for brain-dump searchers
+              </h2>
+            </div>
+            <TermLinkButton href="/blog" variant="secondary" size="sm">
+              Browse Blog
+            </TermLinkButton>
+          </div>
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            {relatedGuides.map((guide) => (
+              <Link
+                key={guide.href}
+                href={guide.href}
+                className="rounded-2xl border border-zinc-800 bg-zinc-950/50 p-6 transition hover:border-zinc-700"
+              >
+                <h3 className="text-base font-semibold text-white">{guide.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-zinc-400">{guide.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-b border-zinc-900">
+        <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-bold text-white">Frequently asked questions</h2>
+          <div className="mt-8 space-y-4">
+            {faqItems.map((item) => (
+              <details
+                key={item.question}
+                className="rounded-2xl border border-zinc-800 bg-zinc-950/50"
+              >
+                <summary className="cursor-pointer px-6 py-5 text-left text-sm font-semibold text-white">
+                  {item.question}
+                </summary>
+                <p className="border-t border-zinc-800 px-6 py-5 text-sm leading-7 text-zinc-400">
+                  {item.answer}
+                </p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section>
         <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="rounded-2xl border border-orange-900/60 bg-orange-950/20 p-8">
@@ -160,6 +294,14 @@ export default function AIBrainDumpPlannerPage() {
               or compare Resurgo against other tools on the{' '}
               <Link className="text-orange-400 hover:text-orange-300" href="/compare">
                 alternatives page
+              </Link>
+              . If you are ready to turn the dump into a working system, start with{' '}
+              <Link className="text-orange-400 hover:text-orange-300" href="/goal-tracker-app">
+                goal tracking
+              </Link>{' '}
+              and{' '}
+              <Link className="text-orange-400 hover:text-orange-300" href="/habit-tracker-goals">
+                habit support
               </Link>
               .
             </p>

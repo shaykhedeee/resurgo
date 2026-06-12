@@ -10,6 +10,7 @@ import { getAllComparisons } from '@/lib/marketing/compare';
 import { getAllUseCases } from '@/lib/marketing/useCases';
 import { getAllLearnTerms } from '@/lib/marketing/learn';
 import { getAllTools } from '@/lib/marketing/tools';
+import { listGeneratedBlogPosts } from '@/lib/blog/generated-posts';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
@@ -21,6 +22,7 @@ function getIsoTimestamp(input?: string): string | null {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const currentDate = new Date().toISOString();
+  const generatedBlogPosts = await listGeneratedBlogPosts(100);
 
   const latestBlogTimestamp = BLOG_POST_INDEX
     .map((post) => getIsoTimestamp(post.lastModified) ?? getIsoTimestamp(post.date))
@@ -32,6 +34,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified: getIsoTimestamp(post.lastModified) ?? getIsoTimestamp(post.date) ?? currentDate,
     changeFrequency: 'monthly',
     priority: 0.8,
+  }));
+
+  const generatedBlogUrls: MetadataRoute.Sitemap = generatedBlogPosts.map((post) => ({
+    url: `${siteUrl}/blog/${post.slug}`,
+    lastModified: new Date(post.updatedAt).toISOString(),
+    changeFrequency: 'weekly',
+    priority: 0.82,
   }));
 
   const blogTopicUrls: MetadataRoute.Sitemap = [
@@ -409,6 +418,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticPages,
     ...blogTopicUrls,
     ...blogUrls,
+    ...generatedBlogUrls,
     ...templateUrls,
     ...comparisonUrls,
     ...useCaseUrls,

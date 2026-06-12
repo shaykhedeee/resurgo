@@ -6,10 +6,22 @@
 
 import Link from 'next/link';
 import type { UseCasePage } from '@/lib/marketing/types';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export interface NicheFaq {
   question: string;
   answer: string;
+}
+
+interface OpeningAnswer {
+  title: string;
+  body: string;
+}
+
+interface RelatedRead {
+  href: string;
+  title: string;
+  description: string;
 }
 
 interface Props {
@@ -19,9 +31,20 @@ interface Props {
   heroCta: string;
   faq?: NicheFaq[];
   stats?: Array<{ value: string; label: string }>;
+  openingAnswer?: OpeningAnswer;
+  relatedReads?: RelatedRead[];
 }
 
-export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta, faq, stats }: Props) {
+export default function NicheLandingPage({
+  page,
+  keywords,
+  heroHeadline,
+  heroCta,
+  faq,
+  stats,
+  openingAnswer,
+  relatedReads,
+}: Props) {
   const defaultStats = stats ?? [
     { value: '10,000+', label: 'Goals Tracked' },
     { value: '94%', label: 'Habit Consistency Rate' },
@@ -29,27 +52,53 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
     { value: '3 min', label: 'Daily Check-in Time' },
   ];
 
-  const faqJsonLd = faq && faq.length > 0 ? {
+  const pageUrl = `${siteUrl}/${page.slug}`;
+
+  // Connected semantic graph for WebPage + FAQPage
+  const graphJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    mainEntity: faq.map((item) => ({
-      '@type': 'Question',
-      name: item.question,
-      acceptedAnswer: {
-        '@type': 'Answer',
-        text: item.answer,
+    '@graph': [
+      {
+        '@type': 'WebPage',
+        '@id': `${pageUrl}/#webpage`,
+        'url': pageUrl,
+        'name': `${page.persona.charAt(0).toUpperCase() + page.persona.slice(1)} Productivity App & System | RESURGO`,
+        'description': page.summary,
+        'isPartOf': {
+          '@id': `${siteUrl}/#website`,
+        },
+        'publisher': {
+          '@id': `${siteUrl}/#organization`,
+        },
       },
-    })),
-  } : null;
+      ...(faq && faq.length > 0
+        ? [
+            {
+              '@type': 'FAQPage',
+              '@id': `${pageUrl}/#faq`,
+              'isPartOf': {
+                '@id': `${pageUrl}/#webpage`,
+              },
+              'mainEntity': faq.map((item) => ({
+                '@type': 'Question',
+                'name': item.question,
+                'acceptedAnswer': {
+                  '@type': 'Answer',
+                  'text': item.answer,
+                },
+              })),
+            },
+          ]
+        : []),
+    ],
+  };
 
   return (
     <main className="min-h-screen bg-black">
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(graphJsonLd) }}
+      />
       <article className="mx-auto max-w-4xl px-4 pb-20 pt-14">
 
         {/* ── HERO ── */}
@@ -78,6 +127,18 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
             </Link>
           </div>
         </header>
+
+        {openingAnswer && (
+          <section className="mb-10 border border-orange-900/40 bg-orange-950/10 p-5">
+            <p className="mb-3 font-mono text-xs font-bold tracking-widest text-orange-500">
+              QUICK_ANSWER
+            </p>
+            <h2 className="font-mono text-sm font-bold text-zinc-100">{openingAnswer.title}</h2>
+            <p className="mt-3 font-mono text-xs leading-relaxed text-zinc-300">
+              {openingAnswer.body}
+            </p>
+          </section>
+        )}
 
         {/* ── PAIN → SOLUTION ── */}
         <section className="mb-10 grid gap-4 md:grid-cols-2">
@@ -168,6 +229,41 @@ export default function NicheLandingPage({ page, keywords, heroHeadline, heroCta
                     {item.answer}
                   </p>
                 </details>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {relatedReads && relatedReads.length > 0 && (
+          <section className="mb-10">
+            <div className="mb-6 flex items-center justify-between gap-4">
+              <div>
+                <p className="font-mono text-xs font-bold tracking-widest text-orange-500">
+                  RELATED_READS
+                </p>
+                <h2 className="mt-2 font-mono text-sm font-bold text-zinc-100">
+                  Recent guides connected to this use case
+                </h2>
+              </div>
+              <Link
+                href="/blog"
+                className="border border-zinc-800 px-3 py-1.5 font-mono text-xs text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-200"
+              >
+                Browse Blog
+              </Link>
+            </div>
+            <div className="grid gap-3 md:grid-cols-3">
+              {relatedReads.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="border border-zinc-900 bg-zinc-950 p-4 transition hover:border-zinc-700"
+                >
+                  <p className="font-mono text-xs font-bold text-zinc-200">{item.title}</p>
+                  <p className="mt-2 font-mono text-[11px] leading-relaxed text-zinc-500">
+                    {item.description}
+                  </p>
+                </Link>
               ))}
             </div>
           </section>

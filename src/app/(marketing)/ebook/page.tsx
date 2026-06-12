@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import { EbookLandingClient } from '@/components/EbookLandingClient';
 import { BookOpen, Check } from 'lucide-react';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'UNSHACKLED: Free Productivity & Habit Blueprint — Resurgo',
-  description: 'Download the ultimate science-backed guide to habit loops, streak fatigue, ADHD executive function routines, chronobiology, and the Daily Synergy Score system. Free lead-magnet blueprint by Resurgo.',
+  description:
+    'Download our free science-backed guide to habit loops, streak fatigue, ADHD routines, and the Daily Synergy Score. Shift from planning to action.',
   keywords: [
     'free productivity ebook', 'Atomic Habits guide', 'ADHD productivity blueprint',
     'habit tracker systems', 'streak fatigue recovery', 'Daily Synergy Score formula', 'Resurgo Life OS',
@@ -22,21 +24,37 @@ export const metadata: Metadata = {
 export default function EbookLandingPage() {
   const bookJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Book',
-    name: 'UNSHACKLED: The Connected Cockpit for High-Output Solopreneurs, Devs, & Neurodivergent Builders',
-    author: {
-      '@type': 'Person',
-      name: 'Shay',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Resurgo',
-      url: 'https://resurgo.life',
-    },
-    genre: 'Productivity, Personal Development, Behavioral Psychology',
-    description: 'A comprehensive, science-backed guide to breaking streak fatigue, managing ADHD executive function loads, chronobiology focus syncing, and consolidating fragmented app subscriptions.',
-    url: 'https://resurgo.life/ebook',
-    bookFormat: 'https://schema.org/EBook',
+    '@graph': [
+      {
+        '@type': 'Book',
+        '@id': `${siteUrl}/ebook/#book`,
+        'isPartOf': {
+          '@id': `${siteUrl}/ebook/#webpage`,
+        },
+        'name': 'UNSHACKLED: The Connected Cockpit for High-Output Solopreneurs, Devs, & Neurodivergent Builders',
+        'author': {
+          '@type': 'Person',
+          'name': 'Shay',
+        },
+        'publisher': {
+          '@id': `${siteUrl}/#organization`,
+        },
+        'genre': 'Productivity, Personal Development, Behavioral Psychology',
+        'description': 'A comprehensive, science-backed guide to breaking streak fatigue, managing ADHD executive function loads, chronobiology focus syncing, and consolidating fragmented app subscriptions.',
+        'url': `${siteUrl}/ebook`,
+        'bookFormat': 'https://schema.org/EBook',
+      },
+      {
+        '@type': 'WebPage',
+        '@id': `${siteUrl}/ebook/#webpage`,
+        'isPartOf': {
+          '@id': `${siteUrl}/#website`,
+        },
+        'name': 'UNSHACKLED: Free Productivity & Habit Blueprint — Resurgo',
+        'description': 'Download the ultimate science-backed guide to habit loops, streak fatigue, ADHD executive function routines, chronobiology, and the Daily Synergy Score system. Free lead-magnet blueprint by Resurgo.',
+        'url': `${siteUrl}/ebook`,
+      },
+    ],
   };
 
   return (

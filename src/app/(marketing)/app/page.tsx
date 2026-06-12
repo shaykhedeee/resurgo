@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'Download Resurgo App — Android APK & iOS PWA | AI Productivity',
   description:
-    'Get Resurgo on your device. Android APK direct download with push notifications, offline mode, AI coaching. iOS available via Safari PWA. Install in under 60 seconds.',
+    'Get Resurgo on your device. Download the Android APK or install the iOS Safari PWA in under 60 seconds for offline productivity, habits, and AI coaching.',
   keywords: [
     'Resurgo APK download', 'Android productivity app', 'habit tracker app',
     'AI coach Android', 'focus timer app Android', 'habit stacking app',
@@ -413,16 +414,18 @@ export default function AppDownloadPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
+            '@id': `${siteUrl}/#software`,
             name: 'Resurgo',
             operatingSystem: 'Android 8.0+',
             applicationCategory: 'LifestyleApplication',
             offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
-            downloadUrl: `https://resurgo.life${APK_URL}`,
+            downloadUrl: `${siteUrl}${APK_URL}`,
             softwareVersion: APK_VERSION,
             description:
               'AI-powered productivity app for Android. Habit tracking, AI coaching, focus timers, offline sync, push notifications. Direct APK download.',
-            url: 'https://resurgo.life/app',
-            author: { '@type': 'Organization', name: 'Resurgo', url: 'https://resurgo.life' },
+            url: `${siteUrl}/app`,
+            author: { '@id': `${siteUrl}/#organization` },
+            publisher: { '@id': `${siteUrl}/#organization` },
             aggregateRating: {
               '@type': 'AggregateRating',
               ratingValue: '4.9',

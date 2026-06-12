@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { SignUp } from '@clerk/nextjs';
 import { AuthErrorBoundary } from '@/components/AuthErrorBoundary';
 import { clerkAppearance, hasValidClerkKey } from '@/lib/auth/clerkAppearance';
+import { BlogFunnelTracker } from '@/components/BlogFunnelTracker';
 
 export default function Page() {
   if (!hasValidClerkKey) {
@@ -27,6 +28,7 @@ export default function Page() {
 
   return (
     <main className="relative flex min-h-screen items-center justify-center bg-zinc-950 px-4 py-10 overflow-hidden">
+      <BlogFunnelTracker event="signup_page_view" />
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none" aria-hidden="true">
         <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-orange-600/6 rounded-full blur-[100px] animate-pulse" style={{ animationDuration: '4s' }} />

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // SEO-OPTIMIZED PILLAR PAGE - Atomic Habits Complete Guide
@@ -8,7 +9,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'The Complete Atomic Habits Guide (2026) | RESURGO',
-  description: 'Master Atomic Habits by James Clear. Learn the Four Laws of Behavior Change, habit stacking, the Two-Minute Rule, identity-based habits, and how to break bad habits. Free comprehensive guide.',
+  description: 'Master Atomic Habits by James Clear. Learn the Four Laws of Behavior Change, habit stacking, the Two-Minute Rule, and identity-driven routine tracking.',
   keywords: [
     'atomic habits', 'atomic habits summary', 'atomic habits guide',
     'james clear atomic habits', 'habit stacking', 'two minute rule',
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     authors: ['RESURGO Team'],
   },
   alternates: {
-    canonical: '/guides/atomic-habits-guide',
+    canonical: `${siteUrl}/guides/atomic-habits-guide`,
   },
 };
 
@@ -33,66 +34,82 @@ export const metadata: Metadata = {
 // JSON-LD STRUCTURED DATA
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const jsonLd = {
+const connectedJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'Article',
-  'headline': 'The Complete Atomic Habits Guide (2026)',
-  'description': 'Master Atomic Habits by James Clear. Learn the Four Laws of Behavior Change and how to build habits that stick.',
-  'author': {
-    '@type': 'Organization',
-    'name': 'RESURGO',
-  },
-  'publisher': {
-    '@type': 'Organization',
-    'name': 'RESURGO',
-    'logo': {
-      '@type': 'ImageObject',
-      'url': 'https://resurgo.life/icons/icon.svg',
-    },
-  },
-  'datePublished': '2026-01-01',
-  'dateModified': '2026-02-01',
-  'mainEntityOfPage': {
-    '@type': 'WebPage',
-    '@id': 'https://resurgo.life/guides/atomic-habits-guide',
-  },
-};
-
-const faqSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  'mainEntity': [
+  '@graph': [
     {
-      '@type': 'Question',
-      'name': 'What is the main idea of Atomic Habits?',
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': 'The main idea is that small, 1% improvements compound over time to create remarkable results. Instead of focusing on goals, focus on systems and identity change. Every action is a vote for the type of person you want to become.',
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/guides/atomic-habits-guide/#webpage`,
+      'url': `${siteUrl}/guides/atomic-habits-guide`,
+      'name': 'The Complete Atomic Habits Guide (2026) | RESURGO',
+      'description': 'Master Atomic Habits by James Clear. Learn the Four Laws of Behavior Change, habit stacking, the Two-Minute Rule, and identity-driven routine tracking.',
+      'isPartOf': {
+        '@id': `${siteUrl}/#website`,
+      },
+      'publisher': {
+        '@id': `${siteUrl}/#organization`,
       },
     },
     {
-      '@type': 'Question',
-      'name': 'What are the Four Laws of Behavior Change?',
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': 'The Four Laws are: 1) Make it Obvious (Cue), 2) Make it Attractive (Craving), 3) Make it Easy (Response), and 4) Make it Satisfying (Reward). To break bad habits, invert these laws.',
+      '@type': 'Article',
+      '@id': `${siteUrl}/guides/atomic-habits-guide/#article`,
+      'isPartOf': {
+        '@id': `${siteUrl}/guides/atomic-habits-guide/#webpage`,
+      },
+      'headline': 'The Complete Atomic Habits Guide (2026)',
+      'description': 'Master Atomic Habits by James Clear. Learn the Four Laws of Behavior Change and how to build habits that stick.',
+      'author': {
+        '@id': `${siteUrl}/#organization`,
+      },
+      'publisher': {
+        '@id': `${siteUrl}/#organization`,
+      },
+      'datePublished': '2026-01-01',
+      'dateModified': '2026-02-01',
+      'mainEntityOfPage': {
+        '@id': `${siteUrl}/guides/atomic-habits-guide/#webpage`,
       },
     },
     {
-      '@type': 'Question',
-      'name': 'What is the Two-Minute Rule?',
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': 'The Two-Minute Rule states: "When you start a new habit, it should take less than two minutes to do." This helps overcome resistance and establishes the habit of showing up. You can always do more after starting.',
+      '@type': 'FAQPage',
+      '@id': `${siteUrl}/guides/atomic-habits-guide/#faq`,
+      'isPartOf': {
+        '@id': `${siteUrl}/guides/atomic-habits-guide/#webpage`,
       },
-    },
-    {
-      '@type': 'Question',
-      'name': 'How long does it take to form a habit?',
-      'acceptedAnswer': {
-        '@type': 'Answer',
-        'text': 'Research shows it takes an average of 66 days to form a new habit, though this can range from 18 to 254 days. The key is consistency over perfection - never miss twice in a row.',
-      },
+      'mainEntity': [
+        {
+          '@type': 'Question',
+          'name': 'What is the main idea of Atomic Habits?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The main idea is that small, 1% improvements compound over time to create remarkable results. Instead of focusing on goals, focus on systems and identity change. Every action is a vote for the type of person you want to become.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'What are the Four Laws of Behavior Change?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The Four Laws are: 1) Make it Obvious (Cue), 2) Make it Attractive (Craving), 3) Make it Easy (Response), and 4) Make it Satisfying (Reward). To break bad habits, invert these laws.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'What is the Two-Minute Rule?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'The Two-Minute Rule states: "When you start a new habit, it should take less than two minutes to do." This helps overcome resistance and establishes the habit of showing up. You can always do more after starting.',
+          },
+        },
+        {
+          '@type': 'Question',
+          'name': 'How long does it take to form a habit?',
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': 'Research shows it takes an average of 66 days to form a new habit, though this can range from 18 to 254 days. The key is consistency over perfection—never miss twice in a row.',
+          },
+        },
+      ],
     },
   ],
 };
@@ -127,11 +144,7 @@ export default function AtomicHabitsGuidePage() {
       {/* JSON-LD */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(connectedJsonLd) }}
       />
 
       {/* Hero */}

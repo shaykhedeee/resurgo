@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import { TermLinkButton } from '@/components/ui/TermButton';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 export const metadata: Metadata = {
   title: 'About Resurgo — The Story Behind the Habit Tracker',
   description:
-    'Learn why Resurgo was built. A productivity app created for people who want one clear system to set goals, build habits, and stay consistent — without the clutter.',
+    'Learn why Resurgo was built: a productivity app for people who want one clear system to set goals, track habits, and execute daily without the clutter.',
   keywords: [
     'about Resurgo', 'Resurgo story', 'why Resurgo', 'habit tracker origin',
     'productivity app mission', 'Resurgo team', 'Resurgo philosophy',
@@ -20,32 +21,22 @@ export const metadata: Metadata = {
   },
 };
 
-// JSON-LD AboutPage + Organization schema
+// JSON-LD AboutPage schema connected to layout organization & website
 const aboutJsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'AboutPage',
+      '@id': `${siteUrl}/about/#webpage`,
+      'isPartOf': {
+        '@id': `${siteUrl}/#website`,
+      },
+      'about': {
+        '@id': `${siteUrl}/#organization`,
+      },
       'name': 'About Resurgo',
       'description': 'The origin story, philosophy, and mission behind Resurgo — an AI-powered habit tracker and goal planner.',
-      'url': 'https://resurgo.life/about',
-    },
-    {
-      '@type': 'Organization',
-      'name': 'Resurgo',
-      'url': 'https://resurgo.life',
-      'logo': 'https://resurgo.life/icons/icon.svg',
-      'description': 'Resurgo builds AI-powered productivity tools that help people build better habits, achieve goals, and stay consistent.',
-      'foundingDate': '2025',
-      'sameAs': [
-        'https://twitter.com/resurgolife',
-        'https://t.me/ResurgoApp',
-      ],
-      'contactPoint': {
-        '@type': 'ContactPoint',
-        'contactType': 'customer support',
-        'email': 'support@resurgo.life',
-      },
+      'url': `${siteUrl}/about`,
     },
   ],
 };

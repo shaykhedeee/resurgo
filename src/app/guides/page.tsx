@@ -1,16 +1,17 @@
-﻿import { Metadata } from 'next';
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { GuideSubscribeForm } from '@/components/GuideSubscribeForm';
 import { GuidesSearchBar } from '@/components/GuidesSearchBar';
 import { MarketingHeader } from '@/components/MarketingHeader';
 import { MarketingFooter } from '@/components/MarketingFooter';
+import { siteUrl } from '@/lib/marketing/seo-config';
 
 // SEO METADATA — Guides Hub
 
 export const metadata: Metadata = {
   title: 'Habit Building Guides & Goal Achievement Resources | RESURGO',
   description:
-    'Free science-backed guides on building habits, achieving goals, and personal productivity. Learn Atomic Habits principles, AI goal decomposition, habit stacking, and more.',
+    'Free science-backed guides on building habits, achieving goals, and productivity. Learn Atomic Habits principles, habit stacking, and AI goal planning.',
   keywords: [
     'habit building guide', 'how to build habits', 'atomic habits summary',
     'goal setting guide', 'productivity tips', 'habit tracker guide',
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Master habit building with comprehensive guides powered by Atomic Habits principles and AI coaching.',
     type: 'website',
   },
-  alternates: { canonical: '/guides' },
+  alternates: { canonical: `${siteUrl}/guides` },
 };
 
 // DATA
@@ -114,32 +115,57 @@ const FAQS = [
   },
 ];
 
-// JSON-LD structured data
-const jsonLd = {
+// JSON-LD structured data connected to layout organization & website
+const connectedJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'CollectionPage',
-  name: 'Habit Building Guides & Resources | RESURGO',
-  description: 'Free guides on building habits, achieving goals, and personal development.',
-  publisher: { '@type': 'Organization', name: 'RESURGO', logo: { '@type': 'ImageObject', url: 'https://resurgo.life/icons/icon.svg' } },
-  mainEntity: {
-    '@type': 'ItemList',
-    itemListElement: pillarPages.map((page, i) => ({
-      '@type': 'ListItem',
-      position: i + 1,
-      url: `https://resurgo.life/guides/${page.slug}`,
-      name: page.title,
-    })),
-  },
-};
-
-const faqJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'FAQPage',
-  mainEntity: FAQS.map((f) => ({
-    '@type': 'Question',
-    name: f.q,
-    acceptedAnswer: { '@type': 'Answer', text: f.a },
-  })),
+  '@graph': [
+    {
+      '@type': 'WebPage',
+      '@id': `${siteUrl}/guides/#webpage`,
+      'url': `${siteUrl}/guides`,
+      'name': 'Habit Building Guides & Goal Achievement Resources | RESURGO',
+      'description': 'Free science-backed guides on building habits, achieving goals, and productivity. Learn Atomic Habits principles, habit stacking, and AI goal planning.',
+      'isPartOf': {
+        '@id': `${siteUrl}/#website`,
+      },
+      'publisher': {
+        '@id': `${siteUrl}/#organization`,
+      },
+    },
+    {
+      '@type': 'CollectionPage',
+      '@id': `${siteUrl}/guides/#collection`,
+      'isPartOf': {
+        '@id': `${siteUrl}/guides/#webpage`,
+      },
+      'name': 'Habit Building Guides & Resources | RESURGO',
+      'description': 'Free guides on building habits, achieving goals, and personal development.',
+      'mainEntity': {
+        '@type': 'ItemList',
+        'itemListElement': pillarPages.map((page, i) => ({
+          '@type': 'ListItem',
+          'position': i + 1,
+          'url': `${siteUrl}/guides/${page.slug}`,
+          'name': page.title,
+        })),
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      '@id': `${siteUrl}/guides/#faq`,
+      'isPartOf': {
+        '@id': `${siteUrl}/guides/#webpage`,
+      },
+      'mainEntity': FAQS.map((f) => ({
+        '@type': 'Question',
+        'name': f.q,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': f.a,
+        },
+      })),
+    },
+  ],
 };
 
 // PAGE COMPONENT
@@ -156,8 +182,7 @@ export default function GuidesPage() {
   return (
     <div className="min-h-screen bg-black text-zinc-100">
       {/* JSON-LD */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(connectedJsonLd) }} />
 
       <MarketingHeader
         navLinks={[

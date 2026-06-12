@@ -3,7 +3,8 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'API Documentation — Resurgo Developer Docs | REST API, Webhooks & SDKs',
-  description: 'Complete Resurgo API documentation. REST endpoints for goals, habits, stats, AI coaching, webhooks, Telegram integration, and more. Quickstart guide, authentication, rate limits, and error codes.',
+  description:
+    'Complete Resurgo API documentation. Integrate goals, habits, and stats via REST endpoints. Access quickstart guides, authentication, and error codes.',
   keywords: [
     'Resurgo API', 'developer docs', 'REST API documentation', 'habit tracker API',
     'goal tracking API', 'webhooks', 'Telegram bot API', 'AI coaching API',

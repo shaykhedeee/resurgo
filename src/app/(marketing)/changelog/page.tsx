@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Changelog — Resurgo Product Updates, New Features & Improvements',
-  description: 'See every update to Resurgo — new features, improvements, and bug fixes. From v1.0 launch to v1.4 with AI coaching, business goals, referral system, and more.',
+  description:
+    'See every update to Resurgo. From v1.0 to v1.4, check out new features including AI coaching, business goals, referral system, and stability fixes.',
   keywords: [
     'Resurgo changelog', 'Resurgo updates', 'product updates', 'new features',
     'Resurgo version history', 'habit tracker updates', 'release notes',
@@ -17,6 +18,41 @@ export const metadata: Metadata = {
 };
 
 const RELEASES = [
+  {
+    version: '2026-W23',
+    date: 'May 29-30, 2026',
+    type: 'WEEKLY',
+    sources: [
+      {
+        label: 'feat(marketing): publish AI productivity Life OS blog campaign',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/c52352bce7767118dad16b6f7c57fded9a453023',
+      },
+      {
+        label: 'fix(blog): await dynamic slug params',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/ce0edce9a021c3c51ae0fe4895828b5629344251',
+      },
+      {
+        label: 'add ADHD focus Life OS blog post',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/50013fe914d566234b20cf47ffb3df96f60e44d9',
+      },
+      {
+        label: 'feat(marketing): add 3 SEO keyword pages, fix timezone brain dumps, correct free-plan claims, expand changelog & sitemap',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/62bdc3d7842346de65428fa021666ca974e57f0a',
+      },
+      {
+        label: 'seo(aeo/geo): refactor global and homepage metadata & connected JSON-LD graph',
+        href: 'https://github.com/shaykhedeee/resurgo/commit/74ab155632cc8e59e6c8a01d200284843e6a83b3',
+      },
+    ],
+    changes: [
+      { type: 'NEW', text: 'Published the AI productivity Life OS blog campaign and added the supporting blog index entries.' },
+      { type: 'NEW', text: 'Added the ADHD focus hacks Life OS blog post and wired it into the blog route and post index.' },
+      { type: 'FIX', text: 'Updated the blog slug page to await dynamic params before loading post content.' },
+      { type: 'NEW', text: 'Added new SEO landing pages for /ai-brain-dump-planner, /goal-tracker-app, and /habit-tracker-goals.' },
+      { type: 'IMPROVED', text: 'Expanded sitemap, compare-page copy, footer links, and free-plan messaging across marketing pages.' },
+      { type: 'IMPROVED', text: 'Refactored global metadata, homepage metadata, and connected JSON-LD graph markup.' },
+    ],
+  },
   {
     version: '2026-W22',
     date: 'May 23-26, 2026',
