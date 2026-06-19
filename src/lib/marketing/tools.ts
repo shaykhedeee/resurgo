@@ -55,6 +55,15 @@ export const TOOL_PAGES: ToolPage[] = [
     freeLimit: 10,
     cta: 'Sync sessions to your goals',
   },
+  {
+    slug: 'free-ai-marketing-finder',
+    title: 'Free AI Marketing & Launch Finder',
+    summary: 'Generate a custom stack of the best free Product Hunt marketing tools tailored to your AI startup category and launch timeline.',
+    promptLabel: 'Describe your product, category, and launch timeline',
+    outputLabel: 'Product Hunt Launch Stack',
+    freeLimit: 3,
+    cta: 'Deploy your launch stack in Resurgo',
+  },
 ];
 
 export async function getAllTools(): Promise<ToolPage[]> {

@@ -65,11 +65,11 @@ export default async function ToolsPage() {
               <p className="font-mono text-[11px] tracking-widest text-zinc-500">FREE LIMIT: {tool.freeLimit}</p>
               <h2 className="mt-3 font-mono text-xl font-semibold text-zinc-100">{tool.title}</h2>
               <p className="mt-3 flex-1 font-mono text-sm leading-relaxed text-zinc-400">{tool.summary}</p>
-              <div className="mt-5 flex items-center justify-between gap-3">
+              <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <span className="font-mono text-xs text-orange-400">{tool.cta}</span>
                 <Link
                   href={`/tools/${tool.slug}`}
-                  className="border border-zinc-700 px-4 py-2 font-mono text-xs tracking-widest text-zinc-300 transition hover:border-orange-700 hover:text-orange-400"
+                  className="border border-zinc-700 px-4 py-2 font-mono text-xs tracking-widest text-zinc-300 transition hover:border-orange-700 hover:text-orange-400 text-center sm:text-left"
                 >
                   OPEN TOOL
                 </Link>

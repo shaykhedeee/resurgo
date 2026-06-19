@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import DemoSandbox from '@/components/marketing/DemoSandbox';
+import InteractiveToolSandbox from '@/components/marketing/InteractiveToolSandbox';
 import EmailCapture from '@/components/marketing/EmailCapture';
 import { getAllTools, getToolBySlug } from '@/lib/marketing/tools';
 
@@ -50,22 +50,12 @@ export default async function ToolPage({ params }: ToolPageProps) {
           <h2 className="font-mono text-sm font-bold text-zinc-100">Try it now</h2>
 
           <div className="mt-4">
-            {showSandbox ? (
-              <DemoSandbox />
-            ) : (
-              <div className="grid gap-4 md:grid-cols-2">
-                <div className="rounded border border-zinc-800 bg-black p-4">
-                  <p className="font-mono text-xs tracking-widest text-zinc-500">INPUT</p>
-                  <h3 className="mt-2 font-mono text-sm font-semibold text-zinc-100">{tool.promptLabel}</h3>
-                  <p className="mt-2 font-mono text-xs text-zinc-400">Drop your raw details here and preview how this tool structures the work.</p>
-                </div>
-                <div className="rounded border border-zinc-800 bg-black p-4">
-                  <p className="font-mono text-xs tracking-widest text-zinc-500">OUTPUT</p>
-                  <h3 className="mt-2 font-mono text-sm font-semibold text-zinc-100">{tool.outputLabel}</h3>
-                  <p className="mt-2 font-mono text-xs text-zinc-400">Get a clean, action-ready result you can use immediately in your workflow.</p>
-                </div>
-              </div>
-            )}
+            <InteractiveToolSandbox
+              toolSlug={tool.slug}
+              promptLabel={tool.promptLabel}
+              outputLabel={tool.outputLabel}
+              ctaText={tool.cta}
+            />
           </div>
         </section>
 
