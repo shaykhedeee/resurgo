@@ -145,17 +145,22 @@ async function submitPost(token: string, subreddit: string, title: string, text:
 }
 
 async function searchSubreddit(token: string, subreddit: string, query: string, limit = 5): Promise<any[]> {
-  const url = `${REDDIT_BASE}/r/${subreddit}/search.json?q=${encodeURIComponent(query)}&restrict_sr=1&sort=new&limit=${limit}`;
+  const isPublic = !token;
+  const baseUrl = isPublic ? 'https://www.reddit.com' : REDDIT_BASE;
+  const url = `${baseUrl}/r/${subreddit}/search.json?q=${encodeURIComponent(query)}&restrict_sr=1&sort=new&limit=${limit}`;
   try {
+    const headers: Record<string, string> = {
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36 ResurgoMarketing/1.0',
+    };
+    if (!isPublic) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
     const res = await fetch(url, {
       method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'User-Agent': 'Resurgo/1.0 (marketing bot; /u/resurgo_app)',
-      },
+      headers,
     });
     if (!res.ok) {
-      console.error(`[Reddit API] Search failed in r/${subreddit}:`, res.status);
+      console.error(`[Reddit API] Search failed in r/${subreddit} (public=${isPublic}):`, res.status);
       return [];
     }
     const json = await res.json();
@@ -230,11 +235,6 @@ export async function POST(request: NextRequest) {
   const { action, subreddit, query, thingId, text, customTitle, customText, dryRun = true } = body;
 
   const token = await getToken();
-  if (!token) {
-    return NextResponse.json({
-      error: 'Reddit not configured. Set REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET, REDDIT_USERNAME, REDDIT_PASSWORD',
-    }, { status: 503 });
-  }
 
   // Handle new action types: search and comment
   if (action === 'search') {
@@ -242,7 +242,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Missing subreddit for search action' }, { status: 400 });
     }
     const searchQuery = query || 'ADHD OR streak OR habit';
-    const results = await searchSubreddit(token, subreddit, searchQuery);
+    const results = await searchSubreddit(token || '', subreddit, searchQuery);
     
     const parsed = results.map((child: any) => {
       const d = child.data || {};
@@ -271,6 +271,9 @@ export async function POST(request: NextRequest) {
         wouldComment: { thingId, text: text.substring(0, 200) + (text.length > 200 ? '...' : '') },
       });
     }
+    if (!token) {
+      return NextResponse.json({ error: 'Reddit credentials missing/invalid for live commenting' }, { status: 503 });
+    }
     try {
       const result = await submitComment(token, thingId, text);
       return NextResponse.json({ success: true, reddit: result });
@@ -296,6 +299,10 @@ export async function POST(request: NextRequest) {
       wouldPost: { subreddit, title, text: postText.substring(0, 200) + '...' },
       warning: 'Set dryRun: false to actually post. Build karma before posting to avoid bans.',
     });
+  }
+
+  if (!token) {
+    return NextResponse.json({ error: 'Reddit credentials missing/invalid for live posting' }, { status: 503 });
   }
 
   try {

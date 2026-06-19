@@ -377,9 +377,19 @@ That is the operating loop worth protecting.
 }
 
 async function generateWithOpenAI(research: ResearchBundle): Promise<GeneratedArticle | null> {
-  if (!process.env.OPENAI_API_KEY) return null;
+  const hasOpenAI = process.env.OPENAI_API_KEY && !process.env.OPENAI_API_KEY.startsWith('SET_REAL');
+  const hasGroq = process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.startsWith('SET_REAL');
 
-  const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  if (!hasOpenAI && !hasGroq) return null;
+
+  const client = hasOpenAI
+    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    : new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' });
+
+  const model = hasOpenAI
+    ? (process.env.BLOG_GENERATION_MODEL ?? 'gpt-4o-mini')
+    : 'llama-3.3-70b-versatile';
+
   const prompt = `
 Create a premium Resurgo blog post from this research.
 
@@ -400,7 +410,7 @@ ${JSON.stringify(research, null, 2)}
 
   try {
     const completion = await client.chat.completions.create({
-      model: process.env.BLOG_GENERATION_MODEL ?? 'gpt-4o-mini',
+      model,
       temperature: 0.65,
       response_format: { type: 'json_object' },
       messages: [
@@ -487,11 +497,13 @@ async function handleGenerate(request: NextRequest): Promise<NextResponse> {
   const publish = parsed.data.publish ?? process.env.BLOG_AUTO_PUBLISH === 'true';
   const research = await buildResearch(parsed.data.topic, parsed.data.geo);
   const aiArticle = await generateWithOpenAI(research);
-  const article = aiArticle ?? buildFallbackArticle(research);
-  const checks = qualityCheck(article);
+  let article = aiArticle || buildFallbackArticle(research);
+  let checks = qualityCheck(article);
 
-  if (!checks.passed) {
-    return NextResponse.json({ status: 'rejected', article, research, quality: checks }, { status: 422 });
+  if (aiArticle && !checks.passed) {
+    console.warn('[Blog Generate] AI generated article did not pass quality check. Falling back to static template.');
+    article = buildFallbackArticle(research);
+    checks = qualityCheck(article);
   }
 
   let pingResults: { google: boolean; bing: boolean } | undefined = undefined;

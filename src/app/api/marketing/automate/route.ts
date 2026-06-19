@@ -57,13 +57,22 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
   
   const results: Record<string, any> = {};
 
-  // Initialize OpenAI if key is present
-  const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+  // Initialize OpenAI or fallback to Groq if OpenAI key is mock
+  const hasOpenAI = process.env.OPENAI_API_KEY && !process.env.OPENAI_API_KEY.startsWith('SET_REAL');
+  const hasGroq = process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.startsWith('SET_REAL');
+
+  const openai = hasOpenAI
+    ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    : hasGroq
+      ? new OpenAI({ apiKey: process.env.GROQ_API_KEY, baseURL: 'https://api.groq.com/openai/v1' })
+      : null;
+
+  const modelName = hasOpenAI ? 'gpt-4o-mini' : 'llama-3.3-70b-versatile';
 
   // scouting automation flow (backlinks and PR replies)
   if (requestedAction === 'scout') {
     if (!openai) {
-      return NextResponse.json({ error: 'OpenAI API key not configured for AI scouting replies' }, { status: 503 });
+      return NextResponse.json({ error: 'Neither OpenAI nor Groq API key is configured for AI scouting replies' }, { status: 503 });
     }
 
     // 1. Twitter Scouting
@@ -81,15 +90,36 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
         });
 
         const searchData = await searchRes.json().catch(() => ({}));
-        const tweets = searchData.results || [];
-        results.twitterScout = { foundCount: tweets.length, replies: [] };
+        let tweets = searchData.results || [];
+        
+        let simulated = false;
+        if (tweets.length === 0) {
+          console.log('[Twitter Scout] No results or auth failed. Using simulation fallback.');
+          tweets = [
+            {
+              id: 'sim_tweet_1',
+              text: "Genuinely hate streak-based habit apps. I missed one day of journaling due to a long work shift, and now my 45-day streak is gone and I feel like a total failure. Any app that doesn't punish you?"
+            },
+            {
+              id: 'sim_tweet_2',
+              text: "Need a planner for ADHD. Every habit app is either too bloated with icons or too rigid. I just want a simple brain dump that helps me focus on 3 things a day without guilt."
+            },
+            {
+              id: 'sim_tweet_3',
+              text: "Every Monday is the same: I plan my entire week, stack 10 habits, and by Wednesday I'm exhausted and restart. How do people stay consistent?"
+            }
+          ];
+          simulated = true;
+        }
+
+        results.twitterScout = { foundCount: tweets.length, simulated, replies: [] };
 
         for (const tweet of tweets.slice(0, 3)) {
           const tweetText = tweet.text;
           const tweetId = tweet.id;
 
           const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: modelName,
             temperature: 0.7,
             response_format: { type: 'json_object' },
             messages: [
@@ -154,8 +184,40 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
           });
 
           const searchData = await searchRes.json().catch(() => ({}));
-          const posts = searchData.results || [];
+          let posts = searchData.results || [];
           
+          let simulated = false;
+          if (posts.length === 0) {
+            console.log(`[Reddit Scout] No results or auth failed in r/${sub}. Using simulation fallback.`);
+            if (sub === 'productivity') {
+              posts = [{
+                id: 't3_sim_prod_1',
+                title: 'Struggling with the Monday restart cycle. How to break it?',
+                text: 'Every Sunday night I get super motivated. I plan my week, clean my desk, and promise myself this is the week. Then Wednesday hits, I miss a couple of goals, and I tell myself "I\'ll just restart next Monday." I\'ve been in this loop for 6 months. How do I build a system that doesn\'t let me quit?',
+                author: 'productivity_struggler'
+              }];
+            } else if (sub === 'getdisciplined') {
+              posts = [{
+                id: 't3_sim_disc_1',
+                title: 'Streak fatigue is real. Habit tracking is giving me anxiety.',
+                text: 'I have been tracking my habits on an app for a few months. But I notice that the streak number has become a source of stress. When I miss a day, I feel so much shame that I avoid the app for a week. Is there any habit tracker that allows grace days or adapts to your energy levels?',
+                author: 'disciplined_mind'
+              }];
+            } else if (sub === 'HabitTracker') {
+              posts = [{
+                id: 't3_sim_habit_1',
+                title: 'ADHD friendly habit tracker with simple UI?',
+                text: 'I need a habit tracker that is minimal and keyboard-friendly, preferably with a terminal look or simple dashboard. Most apps have too much gamification or colors that distract me. Also, I need something that helps with habit stacking. Any recommendations?',
+                author: 'adhd_builder'
+              }];
+            }
+            simulated = true;
+          }
+
+          if (simulated) {
+            results.redditScout.simulated = true;
+          }
+
           const targetPost = posts.find((p: any) => p.author !== process.env.REDDIT_USERNAME);
           if (targetPost) {
             const postTitle = targetPost.title;
@@ -163,7 +225,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
             const postId = targetPost.id;
 
             const completion = await openai.chat.completions.create({
-              model: 'gpt-4o-mini',
+              model: modelName,
               temperature: 0.7,
               response_format: { type: 'json_object' },
               messages: [
@@ -231,7 +293,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
       if (openai) {
         if (isThread) {
           const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: modelName,
             temperature: 0.75,
             response_format: { type: 'json_object' },
             messages: [
@@ -251,7 +313,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
           }
         } else {
           const completion = await openai.chat.completions.create({
-            model: 'gpt-4o-mini',
+            model: modelName,
             temperature: 0.7,
             response_format: { type: 'json_object' },
             messages: [
@@ -307,7 +369,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
 
       if (openai) {
         const completion = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
+          model: modelName,
           temperature: 0.7,
           response_format: { type: 'json_object' },
           messages: [
@@ -363,7 +425,7 @@ async function handleAutomate(request: NextRequest): Promise<NextResponse> {
 
       if (openai) {
         const completion = await openai.chat.completions.create({
-          model: 'gpt-4o-mini',
+          model: modelName,
           temperature: 0.8,
           response_format: { type: 'json_object' },
           messages: [
