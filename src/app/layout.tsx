@@ -14,6 +14,7 @@ import ClerkProviderWrapper from '@/components/ClerkProviderWrapper';
 import { CookieConsent } from '@/components/CookieConsent';
 import OfflineSyncProvider from '@/components/OfflineSyncProvider';
 import { WebVitalsReporter } from '@/components/WebVitalsReporter';
+import { Analytics } from '@vercel/analytics/next';
 import { MARKETING_SOCIAL_URLS } from '@/lib/marketing/social-links';
 import {
   FOUNDING_LIFETIME_COPY,
@@ -407,6 +408,7 @@ export default function RootLayout({
             </ThemeProvider>
           </ConvexClientProvider>
         </ClerkProviderWrapper>
+        <Analytics />
       </body>
     </html>
   );
